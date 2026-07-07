@@ -21,11 +21,11 @@
     utils/
     routes/
   ```
-- [ ] ______Configurar variáveis de ambiente (`.env`, `.env.example`) para chaves/URLs de API______ (vamos usar Secrets)
+- [x] ______Configurar variáveis de ambiente (`.env`, `.env.example`) para chaves/URLs de API______ (vamos usar Secrets)
 - [x] Adicionar `.env` ao `.gitignore`
 - [x] Instalar dependências: `npm install react-router-dom`
 - [x] Primeiro commit: `feat: setup inicial do projeto com Vite + React + TypeScript`
-- [ ] Publicar repositório no GitHub
+- [x] Publicar repositório no GitHub
 
 **Commits sugeridos:** `feat: setup vite`, `chore: configura eslint e prettier`, `chore: estrutura de pastas`
 
