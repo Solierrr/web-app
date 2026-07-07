@@ -7,10 +7,10 @@
 
 ## Fase 0 — Setup do Projeto (Semana 1, dias 1-2)
 
-- [ ] Criar projeto com Vite: `npm create vite@latest meu-projeto -- --template react-ts`
-- [ ] Configurar ESLint + Prettier (garante nada de `.js`/`.jsx` em `src/`)
-- [ ] Criar estrutura de pastas:
-  ```
+- [x] Criar projeto com Vite: `npm create vite@latest meu-projeto -- --template react-ts`
+- [x] Configurar ESLint + Prettier (garante nada de `.js`/`.jsx` em `src/`)
+- [x] Criar estrutura de pastas:
+  ``
   src/
     components/
     pages/
@@ -21,10 +21,10 @@
     utils/
     routes/
   ```
-- [ ] Configurar variáveis de ambiente (`.env`, `.env.example`) para chaves/URLs de API
-- [ ] Adicionar `.env` ao `.gitignore`
-- [ ] Instalar dependências: `npm install react-router-dom`
-- [ ] Primeiro commit: `feat: setup inicial do projeto com Vite + React + TypeScript`
+- [ ] ______Configurar variáveis de ambiente (`.env`, `.env.example`) para chaves/URLs de API______ (vamos usar Secrets)
+- [x] Adicionar `.env` ao `.gitignore`
+- [x] Instalar dependências: `npm install react-router-dom`
+- [x] Primeiro commit: `feat: setup inicial do projeto com Vite + React + TypeScript`
 - [ ] Publicar repositório no GitHub
 
 **Commits sugeridos:** `feat: setup vite`, `chore: configura eslint e prettier`, `chore: estrutura de pastas`
