@@ -33,7 +33,7 @@
 
 ## Fase 1 — Tipagem e Fundação de Dados (Semana 1, dias 3-5)
 
-- [ ] Definir interfaces de domínio em `src/types/` (um arquivo por entidade, ex: `types/produto.ts`, `types/usuario.ts`)
+- [x] Definir interfaces de domínio em `src/types/` (um arquivo por entidade, ex: `types/produto.ts`, `types/usuario.ts`)
 - [ ] Definir interfaces de props de cada componente/página junto ao próprio componente ou em `types/`
 - [ ] Garantir **zero uso de `any`** — usar `unknown` + type guards quando necessário
 - [ ] Criar camada `src/services/` com um arquivo por recurso (ex: `services/produtoService.ts`)
@@ -120,17 +120,4 @@ Priorize os extras conforme o tempo restante; todos exigem demonstração oral/a
 - [ ] **Acessibilidade avançada**: ARIA em modais/menus/abas (`aria-expanded`, `aria-controls`, `aria-haspopup`, `aria-selected`), gerenciamento programático de foco, landmarks semânticos (`<header>`, `<main>`, `<nav>`, `<footer>`), teste com leitor de tela (NVDA/VoiceOver)
 
 **Commits sugeridos:** `feat: context de autenticacao`, `feat: useReducer no carrinho`, `feat: lazy loading de rotas`, `feat: private route`, `feat: aria em modal`
-
----
-
-## Fase 7 — Revisão Final e Apresentação (Semana 4, últimos dias)
-
-- [ ] Revisar checklist completo do mínimo (7,0) — nenhum item pendente
-- [ ] Conferir contagem de commits (mínimo 20, Conventional Commits, distribuídos em 4+ semanas reais — não concentrados no último dia)
-- [ ] Ensaiar demonstração ao vivo:
-  - [ ] Navegação 100% por teclado
-  - [ ] Remoção de uma dependência do `useEffect` para mostrar o efeito da mudança
-  - [ ] DevTools Network mostrando lazy loading (se implementado)
-  - [ ] Leitor de tela navegando sem perda de contexto (se implementado)
-- [ ] Testar aplicação publicada em ambiente limpo (aba anônima, sem cache)
 
