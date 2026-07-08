@@ -1,75 +1,123 @@
-# React + TypeScript + Vite
+# Roadmap de Implementação — Projeto Interdisciplinar (React + TypeScript)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> Baseado nos requisitos mínimos (nota 7,0) e itens extras do documento de solicitações por disciplina (14/05/2026).
+> Duração estimada: 4 semanas, com commits distribuídos (Conventional Commits) ao longo de todo o período.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Fase 0 — Setup do Projeto (Semana 1, dias 1-2)
 
-## React Compiler
+- [x] Criar projeto com Vite: `npm create vite@latest meu-projeto -- --template react-ts`
+- [x] Configurar ESLint + Prettier (garante nada de `.js`/`.jsx` em `src/`)
+- [x] Criar estrutura de pastas:
+  ``
+  src/
+    components/
+    pages/
+    types/
+    services/
+    hooks/
+    context/
+    utils/
+    routes/
+  ```
+- [x] ______Configurar variáveis de ambiente (`.env`, `.env.example`) para chaves/URLs de API______ (vamos usar Secrets)
+- [x] Adicionar `.env` ao `.gitignore`
+- [x] Instalar dependências: `npm install react-router-dom`
+- [x] Primeiro commit: `feat: setup inicial do projeto com Vite + React + TypeScript`
+- [x] Publicar repositório no GitHub
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+**Commits sugeridos:** `feat: setup vite`, `chore: configura eslint e prettier`, `chore: estrutura de pastas`
 
-Note: This will impact Vite dev & build performances.
+---
 
-## Expanding the ESLint configuration
+## Fase 1 — Tipagem e Fundação de Dados (Semana 1, dias 3-5)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- [x] Definir interfaces de domínio em `src/types/` (um arquivo por entidade, ex: `types/produto.ts`, `types/usuario.ts`)
+- [ ] Definir interfaces de props de cada componente/página junto ao próprio componente ou em `types/`
+- [ ] Garantir **zero uso de `any`** — usar `unknown` + type guards quando necessário
+- [ ] Criar camada `src/services/` com um arquivo por recurso (ex: `services/produtoService.ts`)
+  - [ ] Cada função retorna `Promise<Tipo>`
+  - [ ] `try/catch` em toda chamada de API
+  - [ ] Nenhum `fetch` direto em componentes/páginas
+- [ ] Criar funções de validação/sanitização em `src/utils/` (tipo, tamanho máximo, mensagem de erro por campo)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+**Commits sugeridos:** `feat: adiciona tipos de dominio`, `feat: cria camada de servicos`, `feat: adiciona validacao de formularios`
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Fase 2 — Roteamento (Semana 2, dias 1-2)
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- [ ] Envolver `App` com `BrowserRouter` no `main.tsx`
+- [ ] Criar `src/routes/AppRoutes.tsx` com no mínimo **3 rotas**
+- [ ] Rota curinga `path="*"` → página de erro (404) com botão de retorno (`useNavigate` ou `<Link to="/">`)
+- [ ] Navegação exclusivamente via `<Link>` ou `useNavigate` — **proibido `window.location.href`**
+- [ ] Implementar rota dinâmica com parâmetro (ex: `/produtos/:id`)
+  - [ ] Usar `useParams<{ id: string }>()`
+  - [ ] **Validar presença do parâmetro antes de usar** (ex: `if (!id) return <NotFound />`)
+- [ ] (Extra) Estruturar rotas aninhadas com layout + `<Outlet />`, se aplicável
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+**Commits sugeridos:** `feat: configura react router`, `feat: adiciona pagina 404`, `feat: rota dinamica de detalhe`
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+
+## Fase 3 — Componentes e Estado (Semana 2, dias 3-5)
+
+- [ ] Construir **mínimo de 6 componentes** com responsabilidade única (separar renderização / lógica / acesso a dados)
+- [ ] Estado local com `useState`, agrupando campos relacionados em objeto único (nunca mutar array/objeto diretamente — sempre spread/imutabilidade)
+- [ ] Implementar `useEffect` com array de dependências correto e explícito (testar removendo uma dependência para validar comportamento)
+- [ ] Renderizar listas dinâmicas com `key` de identificador único (nunca `key={index}` quando há add/remove/reorder)
+- [ ] Implementar os **3 estados visuais** para operações assíncronas em cada tela que consome API:
+  - [ ] Carregando (spinner / skeleton / `aria-live`)
+  - [ ] Sucesso
+  - [ ] Erro (com `role="alert"`)
+  - [ ] **Proibido `alert()` ou `console.log`** como único tratamento de erro
+
+**Commits sugeridos:** `feat: componente ListaProdutos`, `feat: estados de loading e erro`, `refactor: separa logica de renderizacao`
+
+---
+
+## Fase 4 — Acessibilidade Básica WCAG 2.1 AA (Semana 3, dias 1-2)
+
+- [ ] Trocar todo `<div onClick>` por `<button>`
+- [ ] Associar `<label htmlFor>` a cada `<input>`
+- [ ] Adicionar `alt` descritivo em imagens (ou `alt=""` se decorativa)
+- [ ] Validar contraste mínimo (4,5:1 texto normal / 3:1 texto grande) — usar ferramenta como Lighthouse ou axe DevTools
+- [ ] Garantir foco visível em todos os elementos interativos
+- [ ] Testar navegação completa **sem mouse** (Tab, Shift+Tab, Enter, Esc)
+- [ ] Erros de formulário anunciados com `role="alert"`
+
+**Commits sugeridos:** `fix: acessibilidade em formularios`, `fix: contraste de cores`, `feat: navegacao por teclado`
+
+---
+
+## Fase 5 — Deploy e Documentação (Semana 3, dias 3-4)
+
+- [ ] Configurar deploy (Vercel ou GitHub Pages)
+- [ ] Testar aplicação publicada em produção (rotas funcionando com refresh direto na URL)
+- [ ] Escrever `README.md` com:
+  - [ ] Descrição do projeto
+  - [ ] Link da aplicação publicada
+  - [ ] Instruções de instalação/execução local
+  - [ ] Variáveis de ambiente necessárias (sem valores reais)
+
+**Commits sugeridos:** `docs: adiciona readme`, `chore: configura deploy vercel`
+
+---
+
+## Fase 6 — Itens Extras (Semana 3 dia 5 → Semana 4)
+
+Priorize os extras conforme o tempo restante; todos exigem demonstração oral/ao vivo.
+
+- [ ] **Context API**: Provider dedicado + hook customizado de consumo + tipagem completa (demonstrar prop drilling resolvido)
+- [ ] **useReducer**: `State` e `Action` como union types tipados (justificar por que não múltiplos `useState`)
+- [ ] **Hook customizado de dados**: retorno tipado, loading, erro tratado, `AbortController` para cancelamento
+- [ ] **React.lazy + Suspense** por página (demonstrar na aba Network do DevTools)
+- [ ] **localStorage versionado**: campo `_versao`, verificação ao carregar, migração/descarte seguro
+- [ ] **useCallback / useMemo** com justificativa de performance (demonstrar no React DevTools Profiler)
+- [ ] **Proteção XSS**: nunca `dangerouslySetInnerHTML` com dados externos; tudo via `{variavel}` JSX
+- [ ] **PrivateRoute**: componente que redireciona para login se não autenticado, estado via Context (nunca checado direto na página)
+- [ ] **Acessibilidade avançada**: ARIA em modais/menus/abas (`aria-expanded`, `aria-controls`, `aria-haspopup`, `aria-selected`), gerenciamento programático de foco, landmarks semânticos (`<header>`, `<main>`, `<nav>`, `<footer>`), teste com leitor de tela (NVDA/VoiceOver)
+
+**Commits sugeridos:** `feat: context de autenticacao`, `feat: useReducer no carrinho`, `feat: lazy loading de rotas`, `feat: private route`, `feat: aria em modal`
+
