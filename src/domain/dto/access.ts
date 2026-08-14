@@ -1,21 +1,21 @@
 export interface Access {
-    id: string;
+    id:   string;
     name: string;
     email: string;
 }
 
 export interface LoginCredentials {
-    email: string;
+    email:    string;
     password: string;
 }
 
-export interface LoginResponse { // Resposta para API
+export interface LoginResponse {
     access: Access;
-    token: string;
+    token:  string;
 }
 
 export interface AuthState {
     access: Access | null;
-    token: string | null;
+    token: string  | null;
     authenticated: boolean;
 }

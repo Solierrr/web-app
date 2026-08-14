@@ -1,4 +1,4 @@
-import type { Address } from './shared/address';
+import type { Address } from '../shared/address';
 import type { Enterprise } from './enterprise';
 
 export interface unitPlace {
