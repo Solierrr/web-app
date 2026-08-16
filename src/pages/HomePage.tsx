@@ -1,14 +1,17 @@
+import { Button } from "@/components/ui/Button"
+import Colors from "@/domain/enum/colors"
+
 export function HomePage() {
   return (
-    <section className="space-y-4">
-      <p className="text-sm font-medium uppercase tracking-wide text-slate-500">
-        Home
-      </p>
-      <h1 className="text-3xl font-bold text-slate-950">Pagina inicial</h1>
-      <p className="max-w-2xl text-base leading-7 text-slate-600">
-        Esta e a rota principal da aplicacao. Use esta pagina como base para
-        montar a primeira tela do projeto.
-      </p>
+    <section className="flex flex-col items-start gap-4 ml-20">
+      <Button name="btn-orange" description="Ação principal" content="Orange" color={Colors.Orange} />
+      <Button name="btn-green" description="Ação de sucesso" content="Green" color={Colors.Green} />
+      <Button name="btn-hyperblue" description="Ação de link" content="HyperBlue" color={Colors.HyperBlue} />
+      <Button name="btn-black" description="Ação neutra" content="Black" color={Colors.Black} />
+
+      <Button name="btn-rounded" description="Botão arredondado" content="Rounded" color={Colors.Orange} className="rounded-full" />
+      <Button name="btn-disabled" description="Botão desabilitado" content="Disabled" color={Colors.Orange} disabled />
+      <Button name="btn-onclick" description="Botão com onClick" content="Click me" color={Colors.Green} onClick={() => console.log("clicked")} />
     </section>
   )
 }
