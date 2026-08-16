@@ -1,0 +1,50 @@
+import Colors from "@/domain/enum/colors";
+import Icon, { type IconName } from "@/components/ui/Icon";
+
+interface InputIconProps {
+  name: IconName;
+  inverse?: boolean;
+}
+
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  name:         string;
+  placeholder?: string;
+  rounded?:     boolean;
+  icon?:        InputIconProps;
+
+  className?: string;
+}
+
+/**
+ * Input text
+ *
+ * @param props - Propriedades do componente.
+ * @param props.name - Nome e rótulo acessível do campo.
+ * @param props.placeholder - Texto exibido quando o campo está vazio.
+ * @param props.rounded - Define se o campo terá bordas completamente arredondadas.
+ * @param props.icon - Configuração opcional do ícone.
+ * 
+ * @param props.icon.name - Nome do ícone.
+ * @param props.icon.inverse - Define se o ícone deve utilizar o modo invertido.
+ *
+ * @returns O componente de input renderizado.
+ */
+export function Input({ name, placeholder, icon, rounded = false, className, ...props }: InputProps) {
+  
+  const inverse = icon ? (icon.inverse ?? false) : undefined;
+
+  return (
+    <div className={`flex w-fit bg-input-bg ${rounded ? "rounded-full" : "rounded-lg"} ${inverse ? "flex-row" : "flex-row-reverse"} items-center-safe ${className ?? ""}`}>
+      {icon && (
+        <Icon
+          name={icon.name}
+          color={Colors.Input}
+          className={`${inverse ? "ml-2" : "mr-4"}`}
+        />)}
+      <input
+      {...props} placeholder={placeholder} aria-label={name} name={name}
+      className={`${inverse === undefined ? "px-4" : inverse ? "pr-4 pl-2" : "pr-2 pl-4"} py-2 text-black placeholder:text-input-ph-text focus:outline-0 medium`}
+      />
+    </div>
+  );
+}
