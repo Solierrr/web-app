@@ -4,6 +4,7 @@ import Icon, { type IconName } from "@/components/ui/Icon";
 interface InputIconProps {
   name: IconName;
   inverse?: boolean;
+  onClick?: () => void;
 }
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -36,15 +37,12 @@ export function Input({ name, placeholder, icon, rounded = false, className, ...
   return (
     <div className={`flex w-fit bg-input-bg ${rounded ? "rounded-full" : "rounded-lg"} ${inverse ? "flex-row" : "flex-row-reverse"} items-center-safe ${className ?? ""}`}>
       {icon && (
-        <Icon
-          name={icon.name}
-          color={Colors.Input}
-          className={`${inverse ? "ml-2" : "mr-4"}`}
-        />)}
-      <input
-      {...props} placeholder={placeholder} aria-label={name} name={name}
-      className={`${inverse === undefined ? "px-4" : inverse ? "pr-4 pl-2" : "pr-2 pl-4"} py-2 text-black placeholder:text-input-ph-text focus:outline-0 medium`}
-      />
+        icon.onClick ? 
+        <button type="button" onClick={icon.onClick} className={`flex cursor-pointer ${inverse ? "ml-2" : "mr-4"}`}> <Icon name={icon.name} color={Colors.Input} /> </button> :
+        <Icon className={`${inverse ? "ml-2" : "mr-4"}`} name={icon.name} color={Colors.Input} />
+      )}
+      <input className={`${inverse === undefined ? "px-4" : inverse ? "pr-4 pl-2" : "pr-2 pl-4"} py-2 text-black placeholder:text-input-ph-text placeholder:select-none focus:outline-0 medium`}
+      {...props} placeholder={placeholder} aria-label={name} name={name} />
     </div>
   );
 }
