@@ -1,0 +1,114 @@
+[
+    {
+        "id": "1",
+        "supplierId": "supplier-1",
+        "panel": {
+            "id": "panel-1",
+            "brand": "Canadian Solar",
+            "model": "CS6W-550MS",
+            "type": "Monocristalino",
+            "powerOutput": 550,
+            "efficiency": 21.3,
+            "dimension": 2261,
+            "weight": 27.5,
+            "status": "APPROVED"
+        },
+        "title": "Painel Solar Monocristalino 550W",
+        "description": "Painel solar de alta eficiência para uso residencial e comercial, com célula monocristalina PERC.",
+        "details": ["Certificação INMETRO", "Resistente a granizo", "Moldura em alumínio anodizado"],
+        "photos": ["https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"],
+        "unitPrice": 899.9,
+        "discountPercentage": 10,
+        "availableUnits": 42,
+        "serviceRegions": ["São Paulo", "Rio de Janeiro", "Minas Gerais"]
+    },
+    {
+        "id": "2",
+        "supplierId": "supplier-2",
+        "panel": {
+            "id": "panel-2",
+            "brand": "Jinko Solar",
+            "model": "JKM330P-72",
+            "type": "Policristalino",
+            "powerOutput": 330,
+            "efficiency": 17.1,
+            "dimension": 1956,
+            "weight": 22.5,
+            "status": "APPROVED"
+        },
+        "title": "Painel Solar Policristalino 330W",
+        "description": "Painel solar policristalino com ótimo custo-benefício, ideal para pequenos sistemas fotovoltaicos.",
+        "details": ["Vidro temperado anti-reflexivo", "Caixa de junção IP67"],
+        "photos": ["https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"],
+        "unitPrice": 549.0,
+        "availableUnits": 78,
+        "serviceRegions": ["Bahia", "Pernambuco", "Ceará"]
+    },
+    {
+        "id": "3",
+        "supplierId": "supplier-3",
+        "panel": {
+            "id": "panel-3",
+            "brand": "SunPower",
+            "model": "SPR-FLEX-120",
+            "type": "Filme Fino",
+            "powerOutput": 120,
+            "efficiency": 15.8,
+            "dimension": 1200,
+            "weight": 2.2,
+            "status": "APPROVED"
+        },
+        "title": "Painel Solar Filme Fino Flexível 120W",
+        "description": "Painel solar de filme fino flexível, leve e adaptável para superfícies curvas, como barcos e trailers.",
+        "details": ["Leve e flexível", "Resistente à água", "Ideal para uso móvel"],
+        "photos": ["https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"],
+        "unitPrice": 1299.9,
+        "discountPercentage": 15,
+        "availableUnits": 15,
+        "serviceRegions": ["Santa Catarina", "Paraná", "Rio Grande do Sul"]
+    },
+    {
+        "id": "4",
+        "supplierId": "supplier-1",
+        "panel": {
+            "id": "panel-4",
+            "brand": "LONGi Solar",
+            "model": "LR4-72HBD-450M",
+            "type": "Monocristalino",
+            "powerOutput": 450,
+            "efficiency": 20.6,
+            "dimension": 2094,
+            "weight": 24.8,
+            "status": "UNDER_ANALYSIS"
+        },
+        "title": "Painel Solar Monocristalino 450W Bifacial",
+        "description": "Painel bifacial que capta luz solar em ambos os lados, aumentando a geração de energia em até 25%.",
+        "details": ["Tecnologia bifacial", "Garantia de performance linear de 25 anos"],
+        "photos": ["https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"],
+        "unitPrice": 1049.9,
+        "availableUnits": 30,
+        "serviceRegions": ["Goiás", "Distrito Federal", "Mato Grosso"]
+    },
+    {
+        "id": "5",
+        "supplierId": "supplier-4",
+        "panel": {
+            "id": "panel-5",
+            "brand": "Trina Solar",
+            "model": "TSM-400PD14",
+            "type": "Policristalino",
+            "powerOutput": 400,
+            "efficiency": 18.4,
+            "dimension": 2008,
+            "weight": 22.0,
+            "status": "APPROVED"
+        },
+        "title": "Painel Solar Policristalino 400W",
+        "description": "Painel solar robusto e durável, indicado para instalações em grandes telhados comerciais.",
+        "photos": ["https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"],
+        "unitPrice": 729.5,
+        "discountPercentage": 5,
+        "availableUnits": 60,
+        "serviceRegions": ["Amazonas", "Pará"]
+    }
+]

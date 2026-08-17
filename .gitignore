@@ -24,6 +24,7 @@ lerna-debug.log*
 
 # Cache
 .cache/
+.claude/
 .parcel-cache/
 .vite/
 .eslintcache
