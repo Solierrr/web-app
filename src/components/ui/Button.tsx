@@ -13,7 +13,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 export function Button({ content, title, description, rounded = false, bgColor = Colors.Orange, txtColor = Colors.White, className, ...props}: ButtonProps) {
     return (
-        <button className={`px-4 py-2 medium cursor-pointer ${rounded ? "rounded-full" : "rounded-lg"} ${className ?? ""}`}
+        <button className={`px-4 py-2 medium cursor-pointer select-none ${rounded ? "rounded-full" : "rounded-lg"} ${className ?? ""}`}
         {...props} title={title} aria-label={description} style={{backgroundColor: bgColor, color: txtColor}}>
         {content}
         </button>
