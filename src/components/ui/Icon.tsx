@@ -1,4 +1,4 @@
-import { Home, User, Settings, Search, type LucideIcon } from "lucide-react";
+import { Home, User, Settings, Search, ChevronDown, X, Eye, EyeOff, type LucideIcon } from "lucide-react";
 import Colors from "@/domain/enum/colors";
 
 const icons: Record<string, LucideIcon> = {
@@ -6,6 +6,10 @@ const icons: Record<string, LucideIcon> = {
   user: User,
   settings: Settings,
   search: Search,
+  chevronDown: ChevronDown,
+  x: X,
+  eye: Eye,
+  eyeOff: EyeOff,
 };
 
 export type IconName = keyof typeof icons;
