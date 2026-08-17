@@ -5,9 +5,9 @@ enum Colors {
 
     Orange = "var(--color-orange)",
     Green  = "var(--color-green)",
-    Input  = "var(--color-input)",
-
-    HyperBlue = "var(--color-hyperlinkblue)",
+    
+    InputIcon = "var(--color-input-icon)",
+    HyperLink = "var(--color-hyperlink)",
 }
 
 export default Colors;

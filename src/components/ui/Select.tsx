@@ -89,7 +89,7 @@ export function Select<T = string>({ name, options, value, defaultValue, onChang
 
   return (
     <div ref={containerRef} className={`relative w-fit ${className ?? ""}`}>
-      <div className={`flex w-full items-center-safe justify-between gap-8 bg-input-bg ${selectedOption ? "pl-3 pr-4" : "px-4"} py-2 text-black medium focus:outline-0 cursor-pointer ${disabled ? "opacity-50 pointer-events-none" : ""} ${rounded ? "rounded-full" : "rounded-lg"}`}
+      <div className={`flex w-full items-center-safe justify-between gap-8 bg-input-bg ${selectedOption ? "pl-3 pr-4" : "px-4"} py-2 text-black medium cursor-pointer ${disabled ? "opacity-50 pointer-events-none" : ""} ${rounded ? "rounded-full" : "rounded-lg"}`}
         role="button"
         tabIndex={disabled ? -1 : 0}
         aria-label={name}
@@ -115,16 +115,16 @@ export function Select<T = string>({ name, options, value, defaultValue, onChang
               }}
               className="flex animate-fade-in"
             >
-              <Icon name="x" color={Colors.Input} className="cursor-pointer" />
+              <Icon name="x" color={Colors.InputIcon} className="cursor-pointer" />
             </button>
           )}
 
-          <span className={`medium ${selectedOption ? "" : "text-input-ph-text"} select-none`}>
+          <span className={`medium ${selectedOption ? "" : "text-input-text"} select-none`}>
             {selectedOption ? getOptionLabel(selectedOption) : placeholder}
           </span>
 
         </span>
-        <Icon className={`transition-transform ${open ? "rotate-180" : ""}`} name="chevronDown" color={Colors.Input} />
+        <Icon className={`transition-transform ${open ? "rotate-180" : ""}`} name="chevronDown" color={Colors.InputIcon} />
       </div>
 
       {open && (<ul className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg bg-white shadow-lg" role="listbox" aria-label={name} >
@@ -132,8 +132,17 @@ export function Select<T = string>({ name, options, value, defaultValue, onChang
             const isSelected = getOptionValue(option) === selectedValue;
 
             return (
-              <li className={`cursor-pointer px-4 py-2 medium hover:bg-input-bg ${isSelected ? "bg-input-bg" : ""}`} key={index} role="option" aria-selected={isSelected}
-                onClick={() => handleSelect(option)}>
+              <li className={`cursor-pointer px-4 py-2 medium hover:bg-input-bg focus:outline-none focus:bg-input-bg ${isSelected ? "bg-input-bg" : ""}`} key={index} role="option" aria-selected={isSelected}
+                tabIndex={0}
+                onClick={() => handleSelect(option)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    handleSelect(option);
+                  } else if (event.key === "Escape") {
+                    setOpen(false);
+                  }
+                }}>
                 {getOptionLabel(option)}
               </li>
             );

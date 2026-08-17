@@ -7,15 +7,23 @@
   --color-black: #444444;
 
   --color-orange: #F6821F;
+  --color-green:  #00AA57;
+  --color-purple: #8D1BFF;
 
-  --color-hyperlinkblue: #306EEE;
+  --color-hyperlink: #306EEE;
 
-  --color-green: #00AA57;
+  --color-input-bg:      #4444440D;
+  --color-input-text:    #44444466;
+  --color-input-icon:    #AFAFAF;
+  --color-input-outline: #44444426;
 
-  --color-input: #AFAFAF;
-  --color-input-bg: #4444440D;
-  --color-input-ph-text: #44444466;
+  --text-hero:     5.00rem;
+  --text-title:    2.10rem;
+  --text-subtitle: 1.65rem;
+  --text-label:    1.20rem;
+  --text-body:     1.00rem;
 
+  --shadow-soft: 0 0.125rem 0.5rem 0 #4444441A;
   --animate-fade-in: fade-in 150ms ease-out;
 }
 
@@ -29,10 +37,20 @@
     font-synthesis: none;
     font-style: normal;
     font-weight: 300;
+    @apply text-body;
   }
   
-  ::selection {
+  h1     { @apply text-title;    }
+  h2     { @apply text-subtitle; }
+  h3, h4 { @apply text-label;    }
+  h6, h5 { @apply text-body;     }
+  
+  ::selection, mark {
     @apply bg-orange-500 text-white;
+  }
+
+  :focus-visible {
+    @apply outline-[0.155rem] outline-offset-[0.165rem] rounded-md outline-input-outline;
   }
 }
 

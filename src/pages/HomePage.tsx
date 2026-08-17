@@ -1,13 +1,53 @@
 import { Button } from "@/components/ui/Button"
+import { PrimaryButton, SecondaryButton, IconButton } from "@/components/ui/Button.presets"
 import { Input } from "@/components/ui/Input"
 import { DefaultInput, SearchInput, PasswordInput } from "@/components/ui/Input.presets"
 import { Select } from "@/components/ui/Select"
+import { DefaultSelect, BooleanSelect } from "@/components/ui/Select.presets"
 import { Textarea } from "@/components/ui/Textarea"
+import { DefaultTextarea, CharCountTextarea } from "@/components/ui/Textarea.presets"
 import Colors from "@/domain/enum/colors"
 
 export function HomePage() {
   return (
     <section className="flex flex-col items-start gap-4 ml-20">
+      
+      <p className="text-hero">Hero</p>
+      <p className="text-display">Display</p>
+      <p className="text-heading">Heading</p>
+      <p className="text-title">Title</p>
+      <p className="text-subtitle">Subtitle</p>
+      <p className="text-body">Body</p>
+      <p className="text-caption">Caption</p>
+
+      <p className="text-hero">Lorem ipsum dolor sit amet.</p>
+      <p className="text-display">Lorem ipsum dolor sit amet.</p>
+      <p className="text-heading">Lorem ipsum dolor sit amet.</p>
+      <p className="text-title">Lorem ipsum dolor sit amet.</p>
+      <p className="text-subtitle">Lorem ipsum dolor sit amet.</p>
+      <p className="text-body">Lorem ipsum dolor sit amet.</p>
+      <p className="text-caption">Lorem ipsum dolor sit amet.</p>
+      
+      <h1>Teste h1 teste teste</h1>
+      <h2>Teste h2 teste teste</h2>
+      <h3>Teste h3 teste teste</h3>
+      <h4>Teste h4 teste teste</h4>
+      <h5>Teste h5 teste teste</h5>
+      <h6>Teste h6 teste teste</h6>
+
+      <sub>Teste subscrito teste teste</sub>
+      <sup>Teste sobrescrito teste teste</sup>
+      <p>Teste paragrafo teste teste</p>
+
+      <strong>Texto strong importante</strong>
+      <em>Texto enfatizado</em>
+      <b>Texto em negrito</b>
+      <i>Texto em itálico</i>
+      <u>Texto sublinhado</u>
+      <s>Texto riscado</s>
+      <mark>Texto destacado</mark>
+      <small>Texto pequeno</small>
+
       {/* Input */}
       <Input name="input-basico" placeholder="Digite algo..." />
       <Input name="input-rounded" placeholder="Busca..." rounded />
@@ -31,12 +71,21 @@ export function HomePage() {
       {/* Button */}
       <Button name="btn-orange" description="Ação principal" content="Orange" bgColor={Colors.Orange} />
       <Button name="btn-green" description="Ação de sucesso" content="Green" bgColor={Colors.Green} />
-      <Button name="btn-hyperblue" description="Ação de link" content="HyperBlue" bgColor={Colors.HyperBlue} />
+      <Button name="btn-hyperlink" description="Ação de link" content="HyperLink" bgColor={Colors.HyperLink} />
       <Button name="btn-black" description="Ação neutra" content="Black" bgColor={Colors.Black} txtColor={Colors.White} />
 
       <Button name="btn-rounded" description="Botão arredondado" content="Rounded" bgColor={Colors.Orange} rounded />
       <Button name="btn-disabled" description="Botão desabilitado" content="Disabled" bgColor={Colors.Orange} disabled />
       <Button name="btn-onclick" description="Botão com onClick" content="Click me" bgColor={Colors.Green} onClick={() => console.log("clicked")} />
+
+      <Button name="btn-icone" description="Botão com ícone" content="Buscar" bgColor={Colors.Green} icon={{ name: "search" }} />
+      <Button name="btn-icone-inverse" description="Botão com ícone invertido" content="Buscar" bgColor={Colors.Green} icon={{ name: "search", inverse: true }} />
+      <Button name="btn-icone-only" description="Botão só com ícone" bgColor={Colors.HyperLink} icon={{ name: "user" }} />
+
+      {/* Button presets */}
+      <PrimaryButton name="preset-btn-primary" description="Ação principal" content="Primary" />
+      <SecondaryButton name="preset-btn-secondary" description="Ação secundária" content="Secondary" />
+      <IconButton name="preset-btn-icon" description="Botão de ícone" icon="settings" />
 
       {/* Select */}
       <Select name="select-basico" options={["Opção A", "Opção B", "Opção C"]} />
@@ -65,6 +114,10 @@ export function HomePage() {
         ]}
       />
 
+      {/* Select presets */}
+      <DefaultSelect name="preset-select-default" options={["Opção A", "Opção B"]} />
+      <BooleanSelect name="preset-select-boolean" onChange={(value) => console.log("selecionado:", value)} />
+
       {/* Textarea */}
       <Textarea name="textarea-basico" placeholder="Escreva algo..." />
       <Textarea name="textarea-outro" placeholder="Escreva algo..." />
@@ -72,6 +125,10 @@ export function HomePage() {
       <Textarea name="textarea-rows" placeholder="Com mais linhas" rows={5} />
       <Textarea name="textarea-default-value" defaultValue="Valor inicial" />
       <Textarea name="textarea-required" placeholder="Obrigatório" required />
+
+      {/* Textarea presets */}
+      <DefaultTextarea name="preset-textarea-default" placeholder="Default" />
+      <CharCountTextarea name="preset-textarea-charcount" placeholder="Escreva algo..." maxLength={140} />
     </section>
   )
 }
