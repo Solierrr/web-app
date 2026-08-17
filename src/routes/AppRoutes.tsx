@@ -1,9 +1,12 @@
-import { Navigate, Route, Routes } from 'react-router-dom'
-import { AppLayout }    from '../components/AppLayout'
-import { AboutPage }    from '../pages/AboutPage'
-import { HomePage }     from '../pages/HomePage'
-import { NotFoundPage } from '../pages/NotFoundPage'
-import { SolarPanelFeed } from '@/pages/feed/SolarPanelFeed'
+import { Route, Routes }   from 'react-router-dom'
+// import { Navigate, Route, Routes } from 'react-router-dom'
+import { AppLayout }      from '../components/AppLayout'
+import { AboutPage }      from '../pages/AboutPage'
+import { HomePage }       from '../pages/HomePage'
+import { NotFoundPage }   from '../pages/NotFoundPage'
+
+import SolarPanelAnnouncement from '@/pages/announcement/SolarPanelAnnouncement'
+import SolarPanelFeed         from '@/pages/feed/SolarPanelFeed'
 
 export function AppRoutes() {
   return (
@@ -18,6 +21,10 @@ export function AppRoutes() {
         
         {/* Search Pages */}
         <Route path="/buscar/paineis-solares"  element={<AboutPage />} />
+        <Route path="/buscar/profissionais"  element={<AboutPage />} />
+        
+        {/* Announcemment Page */}
+        <Route path="/produto/:id" element={<SolarPanelAnnouncement />} />
         <Route path="/buscar/profissionais"  element={<AboutPage />} />
         
         {/* Informative Pages */}

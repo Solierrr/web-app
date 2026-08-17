@@ -1,4 +1,4 @@
-export function SolarPanelFeed() {
+export default function SolarPanelFeed() {
     return (
         <div>
             <h1>Olá</h1>
