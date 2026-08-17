@@ -15,19 +15,20 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     title?:      string;
     description: string;
     rounded?:    boolean;
+    disabled?:   boolean;
 
     className?: string;
 }
 
-export function Button({ content, icon, title, description, rounded = false, bgColor = Colors.Orange, txtColor = Colors.White, className, ...props}: ButtonProps) {
+export function Button({ content, icon, title, description, rounded = false, disabled = false, bgColor = Colors.Orange, txtColor = Colors.White, className, ...props}: ButtonProps) {
     if (!content && !icon) { throw InvalidPropError.missingProps("Button", ["content", "icon"]); }
 
     const iconOnly = !content;
     const inverse = icon?.inverse ?? false;
 
     return (
-        <button className={`flex items-center-safe justify-center gap-2 medium cursor-pointer select-none ${inverse ? "flex-row" : "flex-row-reverse"} ${iconOnly ? "aspect-square rounded-full p-2" : `px-4 py-2 ${rounded ? "rounded-full" : "rounded-lg"}`} ${className ?? ""}`}
-        {...props} title={title} aria-label={description} style={{backgroundColor: bgColor, color: txtColor}}>
+        <button className={`flex items-center-safe justify-center gap-2 medium cursor-pointer disabled:cursor-not-allowed select-none ${inverse ? "flex-row" : "flex-row-reverse"} ${iconOnly ? "aspect-square rounded-full p-2" : `px-4 py-2 ${rounded ? "rounded-full" : "rounded-lg"}`} ${className ?? ""}`}
+        {...props} disabled={disabled} title={title} aria-label={description} style={{backgroundColor: bgColor, color: txtColor}}>
         {icon && <Icon name={icon.name} color={txtColor} />}
         {content}
         </button>
