@@ -12,11 +12,11 @@ describe('Textarea', () => {
     expect(textarea).toHaveAttribute('name', 'bio')
   })
 
-  it('wraps the textarea in a rounded-lg container with bg-input-bg', () => {
+  it('wraps the textarea in a rounded-medium container with bg-input-bg', () => {
     render(<Textarea name="bio" />)
 
     const wrapper = screen.getByRole('textbox').parentElement
-    expect(wrapper).toHaveClass('bg-input-bg', 'rounded-lg')
+    expect(wrapper).toHaveClass('bg-input-bg', 'rounded-medium')
   })
 
   it('merges a custom className onto the wrapper', () => {

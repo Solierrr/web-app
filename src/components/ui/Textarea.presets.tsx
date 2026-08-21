@@ -39,7 +39,7 @@ export function CharCountTextarea({ maxLength, value, defaultValue, onChange, ..
           onChange?.(event);
         }}
       />
-      <span className="text-caption text-input-text self-end">{length}/{maxLength}</span>
+      <span className="text-caption font-medium text-input-text self-end">{length}/{maxLength}</span>
     </div>
   );
 }

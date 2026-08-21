@@ -25,10 +25,10 @@ describe('Button', () => {
     expect(screen.getByRole('button')).toHaveAttribute('title', 'Salvar tudo')
   })
 
-  it('defaults to rounded-lg', () => {
+  it('defaults to rounded-medium', () => {
     render(<Button content="Salvar" description="desc" />)
 
-    expect(screen.getByRole('button')).toHaveClass('rounded-lg')
+    expect(screen.getByRole('button')).toHaveClass('rounded-medium')
   })
 
   it('applies rounded-full when rounded is true', () => {
@@ -36,7 +36,7 @@ describe('Button', () => {
 
     const button = screen.getByRole('button')
     expect(button).toHaveClass('rounded-full')
-    expect(button).not.toHaveClass('rounded-lg')
+    expect(button).not.toHaveClass('rounded-medium')
   })
 
   it('defaults bgColor to Orange and txtColor to White', () => {

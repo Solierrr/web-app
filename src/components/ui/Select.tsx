@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Colors from "@/domain/enum/colors";
 import Icon from "@/components/ui/Icon";
+import { MenuList, MenuItem } from "@/components/overlay/Menu";
 
 export type SelectOption<T = string> = string | readonly [label: string, value: T];
 
@@ -89,7 +90,7 @@ export function Select<T = string>({ name, options, value, defaultValue, onChang
 
   return (
     <div ref={containerRef} className={`relative w-fit ${className ?? ""}`}>
-      <div className={`flex w-full items-center-safe justify-between gap-8 bg-input-bg ${selectedOption ? "pl-3 pr-4" : "px-4"} py-2 text-black medium cursor-pointer ${disabled ? "opacity-50 pointer-events-none" : ""} ${rounded ? "rounded-full" : "rounded-lg"}`}
+      <div className={`flex w-full items-center-safe justify-between gap-8 bg-input-bg ${selectedOption ? "pl-3 pr-4" : "px-4"} py-2 text-black font-medium cursor-pointer ${disabled ? "opacity-50 pointer-events-none" : ""} ${rounded ? "rounded-full" : "rounded-medium"}`}
         role="button"
         tabIndex={disabled ? -1 : 0}
         aria-label={name}
@@ -119,7 +120,7 @@ export function Select<T = string>({ name, options, value, defaultValue, onChang
             </button>
           )}
 
-          <span className={`medium ${selectedOption ? "" : "text-input-text"} select-none`}>
+          <span className={`font-medium ${selectedOption ? "" : "text-input-text"} select-none`}>
             {selectedOption ? getOptionLabel(selectedOption) : placeholder}
           </span>
 
@@ -127,27 +128,21 @@ export function Select<T = string>({ name, options, value, defaultValue, onChang
         <Icon className={`transition-transform ${open ? "rotate-180" : ""}`} name="chevronDown" color={Colors.InputIcon} />
       </div>
 
-      {open && (<ul className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg bg-white shadow-lg" role="listbox" aria-label={name} >
+      {open && (<MenuList className="absolute z-10 mt-1 w-full" role="listbox" aria-label={name}>
           {options.map((option, index) => {
             const isSelected = getOptionValue(option) === selectedValue;
 
             return (
-              <li className={`cursor-pointer px-4 py-2 medium hover:bg-input-bg focus:outline-none focus:bg-input-bg ${isSelected ? "bg-input-bg" : ""}`} key={index} role="option" aria-selected={isSelected}
-                tabIndex={0}
-                onClick={() => handleSelect(option)}
+              <MenuItem key={index} role="option" selected={isSelected}
+                onSelect={() => handleSelect(option)}
                 onKeyDown={(event) => {
-                  if (event.key === "Enter" || event.key === " ") {
-                    event.preventDefault();
-                    handleSelect(option);
-                  } else if (event.key === "Escape") {
-                    setOpen(false);
-                  }
+                  if (event.key === "Escape") setOpen(false);
                 }}>
                 {getOptionLabel(option)}
-              </li>
+              </MenuItem>
             );
           })}
-        </ul>
+        </MenuList>
       )}
     </div>
   );

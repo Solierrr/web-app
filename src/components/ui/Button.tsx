@@ -27,7 +27,7 @@ export function Button({ content, icon, title, description, rounded = false, dis
     const inverse = icon?.inverse ?? false;
 
     return (
-        <button className={`flex items-center-safe justify-center gap-2 medium cursor-pointer disabled:cursor-not-allowed select-none ${inverse ? "flex-row" : "flex-row-reverse"} ${iconOnly ? "aspect-square rounded-full p-2" : `px-4 py-2 ${rounded ? "rounded-full" : "rounded-lg"}`} ${className ?? ""}`}
+        <button className={`flex items-center-safe justify-center gap-2 font-medium cursor-pointer disabled:cursor-not-allowed select-none ${inverse ? "flex-row" : "flex-row-reverse"} ${iconOnly ? "aspect-square rounded-full p-2" : `px-4 py-2 ${rounded ? "rounded-full" : "rounded-medium"}`} ${className ?? ""}`}
         {...props} disabled={disabled} title={title} aria-label={description} style={{backgroundColor: bgColor, color: txtColor}}>
         {icon && <Icon name={icon.name} color={txtColor} />}
         {content}
