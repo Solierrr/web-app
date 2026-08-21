@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 export function NotFoundPage() {
   return (
     <section className="space-y-5">
-      <p className="text-sm font-medium uppercase tracking-wide text-slate-500">
+      <p className="text-sm  font-medium  uppercase tracking-wide text-slate-500">
         404
       </p>
       <div className="space-y-3">
@@ -16,7 +16,7 @@ export function NotFoundPage() {
       </div>
       <Link
         to="/"
-        className="inline-flex rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-slate-700"
+        className="inline-flex rounded-md bg-slate-900 px-4 py-2 text-sm  font-medium  text-white transition-colors hover:bg-slate-700"
       >
         Voltar para o inicio
       </Link>

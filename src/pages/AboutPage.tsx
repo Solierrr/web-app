@@ -1,7 +1,7 @@
 export function AboutPage() {
   return (
     <section className="space-y-4">
-      <p className="text-sm font-medium uppercase tracking-wide text-slate-500">
+      <p className="text-sm  font-medium  uppercase tracking-wide text-slate-500">
         Sobre
       </p>
       <h1 className="text-3xl font-bold text-slate-950">Sobre o projeto</h1>
