@@ -1,4 +1,10 @@
 import type { SolarPanel } from '@/domain/models/products/solarPanel';
+import type { Image      } from '@/domain/models/shared/image';
+
+export interface SolarPannelPhotos {
+    heroImage:   Image;
+    otherImages: Image[];
+}
 
 export interface SolarPanelAnnouncement {
     id: string;
@@ -8,7 +14,7 @@ export interface SolarPanelAnnouncement {
     title: string;
     description: string;
     details?: string[];
-    photos: string[];
+    photos: SolarPannelPhotos;
 
     unitPrice: number;
     discountPercentage?: number;
@@ -17,5 +23,4 @@ export interface SolarPanelAnnouncement {
     expirationDate?: string;
 }
 
-export type SolarPanelFeedSummary = Pick< SolarPanelAnnouncement,
-    'id' | 'title' | 'unitPrice' | 'discountPercentage' | 'photos' >;
+export type SolarPanelFeedSummary = Pick< SolarPanelAnnouncement, 'id' | 'title' | 'unitPrice' | 'discountPercentage' | 'photos' >;

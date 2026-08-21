@@ -41,12 +41,12 @@ export function Input({ name, placeholder, icon, rounded = false, className, ...
   );
 
   const inputElement = (
-    <input className={`${inverse === undefined ? "px-4" : inverse ? "pr-4 pl-2" : "pr-2 pl-4"} py-2 text-black placeholder:text-input-text placeholder:select-none focus:outline-0 medium`}
+    <input className={`${inverse === undefined ? "px-4" : inverse ? "pr-4 pl-2" : "pr-2 pl-4"} py-2 text-black font-medium placeholder:text-input-text placeholder:select-none focus:outline-0 medium`}
     {...props} placeholder={placeholder} aria-label={name} name={name} />
   );
 
   return (
-    <div className={`flex w-fit bg-input-bg ${rounded ? "rounded-full" : "rounded-lg"} flex-row items-center-safe ${className ?? ""}`}>
+    <div className={`flex w-fit bg-input-bg ${rounded ? "rounded-full" : "rounded-medium"} flex-row items-center-safe ${className ?? ""}`}>
       {inverse ? (
         <>
           {iconElement}

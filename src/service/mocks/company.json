@@ -1,0 +1,66 @@
+[
+    {
+        "id": "company-1",
+        "status": "APPROVED",
+        "cnpj": "12345678000190",
+        "tradeName": "Solaria Energia",
+        "corporateName": "Solaria Energia Solar Ltda",
+        "address": {
+            "street": "Avenida das Nações",
+            "number": "1200",
+            "complement": "Galpão 3",
+            "neighborhood": "Distrito Industrial",
+            "city": "Belo Horizonte",
+            "state": "MG",
+            "country": "Brasil",
+            "zipCode": "31170000"
+        },
+        "businessContact": {
+            "companyEmail": "contato@solariaenergia.com.br",
+            "phone": "31999998888",
+            "website": "https://www.solariaenergia.com.br"
+        }
+    },
+    {
+        "id": "company-2",
+        "status": "UNDER_ANALYSIS",
+        "cnpj": "98765432000155",
+        "tradeName": "Helios Instalações Solares",
+        "corporateName": "Helios Instalações Solares Ltda",
+        "address": {
+            "street": "Rua dos Andradas",
+            "number": "455",
+            "neighborhood": "Centro",
+            "city": "Curitiba",
+            "state": "PR",
+            "country": "Brasil",
+            "zipCode": "80010001"
+        },
+        "businessContact": {
+            "companyEmail": "financeiro@heliossolar.com.br",
+            "phone": "41998887777"
+        }
+    },
+    {
+        "id": "company-3",
+        "status": "REJECTED",
+        "cnpj": "11222333000144",
+        "tradeName": "Lumina Painéis Fotovoltaicos",
+        "corporateName": "Lumina Comércio de Painéis Fotovoltaicos Ltda",
+        "address": {
+            "street": "Rua Sete de Setembro",
+            "number": "88",
+            "complement": "Sala 12",
+            "neighborhood": "Boa Vista",
+            "city": "Recife",
+            "state": "PE",
+            "country": "Brasil",
+            "zipCode": "50060000"
+        },
+        "businessContact": {
+            "companyEmail": "contato@luminafv.com.br",
+            "phone": "81997776666",
+            "website": "https://www.luminafv.com.br"
+        }
+    }
+]

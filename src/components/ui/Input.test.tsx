@@ -12,11 +12,11 @@ describe('Input', () => {
     expect(input).toHaveAttribute('name', 'email')
   })
 
-  it('defaults to rounded-lg and flex-row-reverse (no icon)', () => {
+  it('defaults to rounded-medium and flex-row-reverse (no icon)', () => {
     render(<Input name="email" />)
 
     const wrapper = screen.getByRole('textbox').parentElement
-    expect(wrapper).toHaveClass('rounded-lg', 'flex-row-reverse')
+    expect(wrapper).toHaveClass('rounded-medium', 'flex-row-reverse')
     expect(wrapper?.querySelector('svg')).not.toBeInTheDocument()
   })
 
@@ -25,7 +25,7 @@ describe('Input', () => {
 
     const wrapper = screen.getByRole('textbox').parentElement
     expect(wrapper).toHaveClass('rounded-full')
-    expect(wrapper).not.toHaveClass('rounded-lg')
+    expect(wrapper).not.toHaveClass('rounded-medium')
   })
 
   it('renders the icon when icon prop is provided', () => {

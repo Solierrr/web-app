@@ -1,5 +1,6 @@
-import { Home, User, Settings, Search, ChevronDown, X, Eye, EyeOff, type LucideIcon } from "lucide-react";
+import { Home, User, Settings, Search, ChevronDown, X, Eye, EyeOff, ShoppingCart, type LucideIcon } from "lucide-react";
 import Colors from "@/domain/enum/colors";
+import { InvalidIconError } from "@/domain/errors/InvalidIconError";
 
 const icons: Record<string, LucideIcon> = {
   home: Home,
@@ -10,6 +11,7 @@ const icons: Record<string, LucideIcon> = {
   x: X,
   eye: Eye,
   eyeOff: EyeOff,
+  shoppingCart: ShoppingCart,
 };
 
 export type IconName = keyof typeof icons;
@@ -26,7 +28,7 @@ interface IconProps {
 
 function Icon({ name, color = Colors.Black, size = 24, strokeWidth = 2, absoluteStrokeWidth = false, className }: IconProps) {
   const IconComponent = icons[name];
-  if (!IconComponent) return null;
+  if (!IconComponent) throw InvalidIconError.notFound(name);
 
   return <IconComponent size={size} color={color}
     strokeWidth={strokeWidth} absoluteStrokeWidth={absoluteStrokeWidth} className={className} />;

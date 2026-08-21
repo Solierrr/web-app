@@ -4,7 +4,7 @@ import type { IconName } from "./Icon";
 import Colors from "@/domain/enum/colors";
 
 type ButtonPresetProps = Omit<ComponentProps<typeof Button>, "bgColor" | "txtColor">;
-type IconButtonProps = Omit<ComponentProps<typeof Button>, "content" | "icon"> & { icon: IconName };
+type IconButtonProps = Omit<ButtonPresetProps, "content" | "icon"> & { icon: IconName };
 
 /**
  * Primary
@@ -31,10 +31,29 @@ export function SecondaryButton(props: ButtonPresetProps) {
 /**
  * Icon
  *
- * Botão redondo apenas com ícone, sem texto.
+ * Botão redondo apenas com ícone, fundo laranja e ícone branco.
  *
  * @param props - description, icon (nome do ícone), rounded, disabled e demais propriedades do Button (exceto `content`).
  */
 export function IconButton({ icon, ...props }: IconButtonProps) {
-  return <Button {...props} icon={{ name: icon }} />;
+  return <Button {...props} icon={{ name: icon }} bgColor={Colors.Orange} txtColor={Colors.White} />;
+}
+
+/**
+ * Light Icon
+ *
+ * Botão redondo apenas com ícone, fundo branco, ícone laranja e sombra suave.
+ *
+ * @param props - description, icon (nome do ícone), rounded, disabled e demais propriedades do Button (exceto `content`).
+ */
+export function LightIconButton({ icon, className, ...props }: IconButtonProps) {
+  return (
+    <Button
+      {...props}
+      icon={{ name: icon }}
+      bgColor={Colors.White}
+      txtColor={Colors.Orange}
+      className={`shadow-soft ${className ?? ""}`}
+    />
+  );
 }
