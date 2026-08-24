@@ -1,6 +1,7 @@
 import type { SolarPanelAnnouncement } from '@/domain/models/announcemnt/solarPanel';
 import type { Company } from '@/domain/models/profiles/company';
 import type { User } from '@/domain/models/profiles/user';
+
 import solarPanelAnnouncements from './solarPanel.json';
 import companies from './company.json';
 import users from './users.json';
