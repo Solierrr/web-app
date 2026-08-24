@@ -1,9 +1,90 @@
+# Environment variables / secrets
+.env
+.env.*
+!.env.example
+
+# VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# JetBrains
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Eclipse
+.classpath
+.project
+.settings/
+.factorypath
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/.nb-gradle/
+
+# Visual Studio
+.vs/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+# Visual Studio Code / Cursor
+.cursor/
+
+# Claude Code
+.claude/
+
+# Fleet
+.fleet/
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Linux
+.directory
+
 # Dependencies
 node_modules/
+jspm_packages/
+.pnpm-store/
+.npm/
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 
-# Production
+# Production build
 dist/
 dist-ssr/
+build/
+out/
+.next/
+.nuxt/
+.output/
 
 # Logs
 logs/
@@ -14,55 +95,19 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Environment variables
-.env
-.env.*
-!.env.example
-
-# Local files
-*.local
-
 # Cache
 .cache/
-.claude/
 .parcel-cache/
 .vite/
 .eslintcache
 .stylelintcache
-
-# Coverage
-coverage/
-
-# TypeScript
 *.tsbuildinfo
 
-# Package managers
-.pnpm-store/
-.npm/
-
-# Optional (Yarn Berry)
-.yarn/*
-!.yarn/releases
-!.yarn/plugins
-!.yarn/sdks
-!.yarn/versions
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-*.swp
-
-# OS files
-.DS_Store
-Thumbs.db
-desktop.ini
+# Test / coverage
+coverage/
+.nyc_output/
 
 # Misc
+*.local
 tmp/
 temp/
