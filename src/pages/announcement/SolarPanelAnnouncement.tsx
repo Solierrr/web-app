@@ -1,11 +1,11 @@
-import { useParams } from "react-router-dom";
-import { useState }  from "react";
+import { useParams }          from "react-router-dom";
+import { useEffect, useState } from "react";
 
 import type { SolarPanelAnnouncement } from "@/domain/models/announcemnt/solarPanel"
 import type { SolarPanel }             from "@/domain/models/products/solarPanel"
 import type { Image }                  from "@/domain/models/shared/image";
 
-import { getSolarPanel }   from "@/service/solarPanel";
+import { getSolarPanel }   from "@/service/solarPanel.service";
 import { Button }          from "@/components/ui/Button"
 import { LightIconButton } from "@/components/ui/Button.presets";
 import { useContextMenu }  from "@/config/interface/useContextMenu";
@@ -110,10 +110,24 @@ function Characteristics({ panel }: { panel: SolarPanel }) {
 
 export default function SolarPanelAnnouncement() {
     const { id } = useParams<{ id: string }>();
+    const [product, setProduct] = useState<SolarPanelAnnouncement | null>(null);
+    const [error, setError] = useState(false);
+
+    useEffect(() => {
+        if (!id) { return; }
+
+        let active = true;
+
+        getSolarPanel(id)
+            .then((result) => { if (active) { setProduct(result); } })
+            .catch(() => { if (active) { setError(true); } });
+
+        return () => { active = false; };
+    }, [id]);
 
     if (!id) { return <div>Produto não encontrado</div>; }
-
-    const product = getSolarPanel(id)
+    if (error) { return <div>Não foi possível carregar o produto</div>; }
+    if (!product) { return <div>Carregando...</div>; }
 
     return (
         <div className="flex flex-col">
