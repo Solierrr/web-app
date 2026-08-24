@@ -12,24 +12,24 @@ export function AppRoutes() {
   return (
     <Routes>
       <Route element={<AppLayout />}>
-        <Route index element={<HomePage />} />
+        <Route index    element={<HomePage />} />
         <Route path="*" element={<NotFoundPage />} />
 
         {/* Feed Pages */}
-        <Route path="/paineis-solares"  element={ <SolarPanelFeed />} />
-        <Route path="/profissionais"    element={ <SolarPanelFeed />} />
+        <Route path="/paineis-solares" element={ <SolarPanelFeed />} />
+        <Route path="/profissionais"   element={ <SolarPanelFeed />} />
         
         {/* Search Pages */}
-        <Route path="/buscar/paineis-solares"  element={<AboutPage />} />
-        <Route path="/buscar/profissionais"  element={<AboutPage />} />
+        <Route path="/buscar/paineis-solares" element={<AboutPage />} />
+        <Route path="/buscar/profissionais"   element={<AboutPage />} />
         
         {/* Announcemment Page */}
-        <Route path="/produto/:id" element={<SolarPanelAnnouncement />} />
+        <Route path="/produto/:id"           element={<SolarPanelAnnouncement />} />
         <Route path="/buscar/profissionais"  element={<AboutPage />} />
         
         {/* Informative Pages */}
         <Route path="/sobre" element={<AboutPage />} />
-        <Route path="" element={<AboutPage />} />
+        <Route path=""       element={<AboutPage />} />
       </Route>
     </Routes>
   )
