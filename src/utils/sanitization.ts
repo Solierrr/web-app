@@ -1,6 +1,7 @@
 export function cleanString(input: string): string {
   let cleaned = input.trim();
   cleaned = cleaned.replace(/\s+/g, " ");
+  // eslint-disable-next-line no-control-regex -- intentional: stripping ASCII control characters during sanitization
   cleaned = cleaned.replace(/[\x00-\x1F\x7F]/g, "");
 
   return cleaned;
