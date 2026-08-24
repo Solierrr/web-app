@@ -2,6 +2,7 @@ import { render } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import Icon, { type IconName } from './Icon'
 import Colors from '@/domain/enum/colors'
+import { InvalidIconError } from '@/domain/errors/InvalidIconError'
 
 describe('Icon', () => {
   it('renders an svg for a known icon name', () => {
@@ -10,10 +11,8 @@ describe('Icon', () => {
     expect(container.querySelector('svg')).toBeInTheDocument()
   })
 
-  it('renders nothing for an unknown icon name', () => {
-    const { container } = render(<Icon name={'not-an-icon' as IconName} />)
-
-    expect(container).toBeEmptyDOMElement()
+  it('throws InvalidIconError for an unknown icon name', () => {
+    expect(() => render(<Icon name={'not-an-icon' as IconName} />)).toThrow(InvalidIconError)
   })
 
   it('applies default size, color and strokeWidth', () => {

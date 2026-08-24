@@ -12,11 +12,11 @@ describe('Input', () => {
     expect(input).toHaveAttribute('name', 'email')
   })
 
-  it('defaults to rounded-medium and flex-row-reverse (no icon)', () => {
+  it('defaults to rounded-medium and flex-row (no icon)', () => {
     render(<Input name="email" />)
 
     const wrapper = screen.getByRole('textbox').parentElement
-    expect(wrapper).toHaveClass('rounded-medium', 'flex-row-reverse')
+    expect(wrapper).toHaveClass('rounded-medium', 'flex-row')
     expect(wrapper?.querySelector('svg')).not.toBeInTheDocument()
   })
 
@@ -39,7 +39,7 @@ describe('Input', () => {
     render(<Input name="search" icon={{ name: 'search' }} />)
 
     const wrapper = screen.getByRole('textbox').parentElement
-    expect(wrapper).toHaveClass('flex-row-reverse')
+    expect(wrapper).toHaveClass('flex-row')
     expect(wrapper?.querySelector('svg')).toHaveClass('mr-4')
   })
 
