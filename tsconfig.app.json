@@ -9,7 +9,8 @@
 
     /* Path aliases */
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*":  ["./src/*"],
+      "@@/*": ["./src/components/*"]
     },
 
     /* Bundler mode */
