@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import type { SolarPanelFeedSummary } from "@/domain/models/announcemnt/solarPanelAnnouncement";
 
 interface CorridorProps {
@@ -11,9 +12,12 @@ interface CorridorProps {
 export default function Corridor({
   title,
   items,
-  actionLabel = "acessar todas as peças",
+  actionLabel,
   onActionClick,
 }: CorridorProps) {
+  const { t } = useTranslation("commons");
+  const resolvedActionLabel = actionLabel ?? t("corridor.viewAll");
+
   return (
     <section className="flex flex-col gap-4">
       <div className="flex items-baseline justify-between">
@@ -23,7 +27,7 @@ export default function Corridor({
           onClick={onActionClick}
           className="cursor-pointer text-input-text"
         >
-          {actionLabel}
+          {resolvedActionLabel}
         </button>
       </div>
 
@@ -41,7 +45,7 @@ export default function Corridor({
             />
             <p className="font-medium">{item.title}</p>
             <p className="text-input-text">
-              R$ {item.unitPrice.toFixed(2)} / uni
+              R$ {item.unitPrice.toFixed(2)} {t("units.perUnitShort")}
             </p>
           </Link>
         ))}

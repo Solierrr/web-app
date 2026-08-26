@@ -4,6 +4,7 @@
   "not": "not",
   "yes": "yes",
   "no": "no",
+  "language": "Language",
 
   "actions": {
     "add": "add",
@@ -49,7 +50,31 @@
   "units": {
     "unit": "unit",
     "units": "units",
-    "perUnit": "per unit"
+    "perUnit": "per unit",
+    "perUnitShort": "/ unit"
+  },
+
+  "select": {
+    "placeholder": "Select...",
+    "clearSelection": "Clear selection"
+  },
+
+  "errorBoundary": {
+    "label": "Error",
+    "title": "Something went wrong",
+    "reload": "Reload page"
+  },
+
+  "navbar": {
+    "app": "App",
+    "solarPanels": "Solar Panels",
+    "professionals": "Professionals",
+    "accredit": "Become a partner",
+    "support": "Support"
+  },
+
+  "corridor": {
+    "viewAll": "view all items"
   },
 
   "time": {

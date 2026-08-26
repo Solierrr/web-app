@@ -1,10 +1,6 @@
 import type { ComponentProps } from "react";
+import { useTranslation } from "react-i18next";
 import Select, { type SelectOption } from "./Select";
-
-const YES_NO_OPTIONS: SelectOption<boolean>[] = [
-  ["Sim", true],
-  ["Não", false],
-];
 
 /**
  * Default
@@ -25,5 +21,11 @@ export function DefaultSelect<T = string>(props: ComponentProps<typeof Select<T>
  * @param props - name, value/defaultValue, onChange, placeholder, rounded, disabled e demais propriedades do Select (exceto `options`).
  */
 export function BooleanSelect(props: Omit<ComponentProps<typeof Select<boolean>>, "options">) {
-  return <Select {...props} options={YES_NO_OPTIONS} />;
+  const { t } = useTranslation("commons");
+  const options: SelectOption<boolean>[] = [
+    [t("yes"), true],
+    [t("no"), false],
+  ];
+
+  return <Select {...props} options={options} />;
 }
