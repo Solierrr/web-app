@@ -1,19 +1,28 @@
-import Log from "./logs";
+import Log, { LogsMode } from "./logs";
+
+const mode = import.meta.env.VITE_LOGS as LogsMode;
 
 const logger = {
   info(message: string, data?: unknown) {
-    console.info(`${Log.INFO} ${message}`, data ?? "");
+    if (mode !== LogsMode.DEACTIVATED) {
+        console.info(`${Log.INFO} ${message}`, data ?? "");
+    }
   },
 
   warn(message: string, data?: unknown) {
-    console.warn(`${Log.WARN} ${message}`, data ?? "");
+    if (mode !== LogsMode.DEACTIVATED) {
+        console.warn(`${Log.WARN} ${message}`, data ?? "");
+    }
   },
 
   error(message: string, error?: unknown) {
-    console.error(`${Log.ERROR} ${message}`, error ?? "");
+    if (mode !== LogsMode.DEACTIVATED) {
+        console.error(`${Log.ERROR} ${message}`, error ?? "");
+    }
   },
 
   debug(message: string, data?: unknown) {
+    (mode === LogsMode.DEBUG)
     console.info(`${Log.DEBUG} ${message}`, data ?? "");
   },
 };

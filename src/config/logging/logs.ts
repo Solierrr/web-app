@@ -5,4 +5,10 @@ enum Log {
     ERROR = "[ERROR]",
 }
 
+export enum LogsMode {
+    DEBUG = "debug",
+    ACTIVATED = "activated",
+    DEACTIVATED = "deactivated",
+}
+
 export default Log;
