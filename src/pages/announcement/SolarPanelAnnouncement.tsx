@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import type SolarPanel from "@/domain/models/products/solarPanel";
+import type { SolarPanel } from "@/domain/models/products/solarPanel";
 import type { SolarPanelAnnouncement } from "@/domain/models/announcemnt/solarPanelAnnouncement";
 import SolarPanelAnnouncementPlaceholder from "@/domain/models/announcemnt/solarPanelAnnouncement.placeholder";
 import type { Image } from "@/domain/models/shared/image";
