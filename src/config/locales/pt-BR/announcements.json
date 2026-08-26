@@ -9,6 +9,7 @@
 
     "actions": {
       "contactSupplier": "Entrar em contato",
+      "contactSupplierDescription": "Entrar em contato com o fornecedor",
       "addToCart": "Adicionar ao carrinho"
     },
 

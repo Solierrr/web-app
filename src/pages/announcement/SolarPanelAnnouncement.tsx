@@ -23,7 +23,7 @@ function regionsService(regions: string[], { message, and }: regionsServiceI18n)
   let result = "";
   if (regions.length == 1) result = regions[0];
   else if (regions.length == 2) result = `${regions[0]} ${and} ${regions[1]}`;
-  else if (regions.length  > 2) result = `${regions[0]}, ${regions[1]} e ${regions[2]}`;
+  else if (regions.length  > 2) result = `${regions[0]}, ${regions[1]} ${and} ${regions[2]}`;
 
   return `${Capitalize(message)} ${result}`;
 }
@@ -49,6 +49,7 @@ interface ImagesProps {
 
 function ProductImages({ images }: ImagesProps) {
   const contextMenu = useContextMenu();
+  const { t } = useTranslation("announcements", { keyPrefix: "solarPanel.images" });
 
   function handleContextMenu(event: React.MouseEvent, image: Image) {
     event.preventDefault();
@@ -56,12 +57,12 @@ function ProductImages({ images }: ImagesProps) {
     contextMenu.open(
       [
         {
-          label: "Abrir em nova aba",
+          label: t("openInNewTab"),
           icon: "eye",
           onClick: () => window.open(image.url, "_blank"),
         },
         {
-          label: "Copiar link da imagem",
+          label: t("copyLink"),
           onClick: () => navigator.clipboard.writeText(image.url),
         },
       ],
@@ -145,10 +146,22 @@ function panelCharacteristics(panel: SolarPanel, { widthAndLength, weight, brand
 }
 
 function Characteristics({ panel }: { panel: SolarPanel }) {
-  const characteristics = panelCharacteristics(panel, {...});
+  const { t } = useTranslation("announcements", { keyPrefix: "solarPanel.characteristics" });
+  const { t: c } = useTranslation("commons", { keyPrefix: "units" });
+
+  const characteristics = panelCharacteristics(panel, {
+    widthAndLength: t("dimensions"),
+    weight: t("weight"),
+    brand: t("brand"),
+    model: t("model"),
+    solarPanelType: t("type"),
+    potency: t("power"),
+    efficiency: t("efficiency"),
+    unity: c("unit"),
+  });
 
   if (characteristics.length === 0) {
-    return <p>Nenhuma característica informada pelo fornecedor.</p>;
+    return <p>{t("empty")}</p>;
   }
 
   return (
@@ -173,8 +186,8 @@ interface SolarPanelAnnouncementProps {
 
 function SolarPanelAnnouncementPacked({ product, loading = false }: SolarPanelAnnouncementProps) {
     if (loading) { product = SolarPanelAnnouncementPlaceholder; }
-    const { t:t } = useTranslation("translation", { keyPrefix: "announcements.solarPanel" });
-    const { t:c } = useTranslation("commons");
+    const { t } = useTranslation("announcements", { keyPrefix: "solarPanel" });
+    const { t: c } = useTranslation("commons");
 
     return (
     <div className="flex flex-col">
@@ -188,12 +201,12 @@ function SolarPanelAnnouncementPacked({ product, loading = false }: SolarPanelAn
         </div>
 
         <section className="w-[60%] flex flex-col gap-announcement">
-          <section title="Informações gerais">
+          <section title={t("general.information")}>
             <div className="flex flex-col gap-6">
               <div className="flex flex-col gap-2">
                 <h1>{product.title}</h1>
                 <h3 className="text-black/90">
-                  {regionsService(product.serviceRegions, {and: c("and"), message: t("message")})}
+                  {regionsService(product.serviceRegions, {and: c("and"), message: t("general.service")})}
                 </h3>
               </div>
               <div className="flex flex-col gap-8">
@@ -206,21 +219,21 @@ function SolarPanelAnnouncementPacked({ product, loading = false }: SolarPanelAn
                     <div className="flex flex-row gap-1 h-min items-baseline">
                       <h5 className="font-semi-bold no-leading">R$</h5>
                       <h3 className="no-leading leading-none">
-                        {product.unitPrice} / unidade
+                        {product.unitPrice} {t("general.perUnit")}
                       </h3>
                     </div>
                   </div>
-                  <h3>{product.availableUnits} unidades</h3>
+                  <h3>{product.availableUnits} {t("general.units")}</h3>
                 </div>
                 <div className="flex gap-2">
                   <Button
-                    content="Entrar em contato"
-                    description="Entrar em contato com o fornecedor"
+                    content={t("actions.contactSupplier")}
+                    description={t("actions.contactSupplierDescription")}
                     className="px-8"
                     rounded
                   />
                   <LightIconButton
-                    description="Adicionar ao carrinho"
+                    description={t("actions.addToCart")}
                     icon="shoppingCart"
                   />
                 </div>
@@ -228,8 +241,8 @@ function SolarPanelAnnouncementPacked({ product, loading = false }: SolarPanelAn
             </div>
           </section>
           <Wrapper
-            title="Descrição"
-            aria-labelledby="Descrição"
+            title={t("sections.description")}
+            aria-labelledby={t("sections.description")}
             children={
               <p className="flex max-h-60 text-black/90 overflow-auto">
                 {product.description}
@@ -237,14 +250,14 @@ function SolarPanelAnnouncementPacked({ product, loading = false }: SolarPanelAn
             }
           />
           <Wrapper
-            title="Características"
-            aria-labelledby="Características"
+            title={t("sections.characteristics")}
+            aria-labelledby={t("sections.characteristics")}
             children={<Characteristics panel={product.panel} />}
             className="gap-4"
           />
           <Wrapper
-            title="Detalhes"
-            aria-labelledby="Detalhes"
+            title={t("sections.details")}
+            aria-labelledby={t("sections.details")}
             children={
               <p className="flex max-h-60 text-black/90 overflow-auto">
                 {product.details}
@@ -254,8 +267,8 @@ function SolarPanelAnnouncementPacked({ product, loading = false }: SolarPanelAn
         </section>
       </div>
       <Wrapper
-        title="Imagens do produto"
-        aria-labelledby="Detalhes"
+        title={t("sections.productImages")}
+        aria-labelledby={t("sections.productImages")}
         className="flex"
         children={<ProductImages images={product.photos.otherImages} />}
       />
@@ -265,6 +278,7 @@ function SolarPanelAnnouncementPacked({ product, loading = false }: SolarPanelAn
 
 export default function SolarPanelAnnouncement() {
   const { id } = useParams<{ id: string }>();
+  const { t } = useTranslation("announcements", { keyPrefix: "solarPanel.errors" });
 
   const [product, setProduct] = useState<SolarPanelAnnouncement | null>(null);
   const [loading, setLoading] = useState(true);
@@ -284,7 +298,7 @@ export default function SolarPanelAnnouncement() {
   }, [id]);
 
   if (error || !product) {
-    return <p>Não foi possível carregar o produto.</p>;
+    return <p>{t("load")}</p>;
   }
 
   return <SolarPanelAnnouncementPacked product={product} loading={loading} />;

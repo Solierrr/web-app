@@ -1,0 +1,64 @@
+{
+  "and": "y",
+  "or": "o",
+  "not": "no",
+  "yes": "sí",
+  "no": "no",
+
+  "actions": {
+    "add": "añadir",
+    "back": "volver",
+    "cancel": "cancelar",
+    "close": "cerrar",
+    "confirm": "confirmar",
+    "continue": "continuar",
+    "delete": "eliminar",
+    "edit": "editar",
+    "next": "siguiente",
+    "previous": "anterior",
+    "remove": "quitar",
+    "save": "guardar",
+    "search": "buscar",
+    "send": "enviar",
+    "view": "ver"
+  },
+
+  "status": {
+    "loading": "cargando...",
+    "success": "éxito",
+    "error": "error",
+    "active": "activo",
+    "inactive": "inactivo",
+    "available": "disponible",
+    "unavailable": "no disponible"
+  },
+
+  "navigation": {
+    "home": "inicio",
+    "next": "siguiente",
+    "previous": "anterior"
+  },
+
+  "form": {
+    "required": "obligatorio",
+    "optional": "opcional",
+    "invalid": "valor inválido",
+    "invalidEmail": "correo electrónico inválido"
+  },
+
+  "units": {
+    "unit": "unidad",
+    "units": "unidades",
+    "perUnit": "por unidad"
+  },
+
+  "time": {
+    "today": "hoy",
+    "yesterday": "ayer",
+    "tomorrow": "mañana"
+  },
+
+  "empty": {
+    "default": "no se encontraron resultados."
+  }
+}

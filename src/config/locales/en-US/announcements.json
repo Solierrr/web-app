@@ -1,0 +1,49 @@
+{
+  "solarPanel": {
+    "general": {
+      "information": "General information",
+      "service": "Serving",
+      "units": "units",
+      "perUnit": "per unit"
+    },
+
+    "actions": {
+      "contactSupplier": "Contact",
+      "contactSupplierDescription": "Contact the supplier",
+      "addToCart": "Add to cart"
+    },
+
+    "sections": {
+      "description": "Description",
+      "characteristics": "Characteristics",
+      "details": "Details",
+      "productImages": "Product images"
+    },
+
+    "characteristics": {
+      "dimensions": "Width x Length",
+      "weight": "Weight",
+      "brand": "Brand",
+      "model": "Model",
+      "type": "Solar Panel Type",
+      "power": "Power",
+      "efficiency": "Efficiency",
+      "empty": "No characteristics provided by the supplier."
+    },
+
+    "images": {
+      "openInNewTab": "Open in new tab",
+      "copyLink": "Copy image link"
+    },
+
+    "errors": {
+      "load": "Unable to load the product."
+    }
+  },
+
+  "inverter": {
+    "general": {
+      "information": "General information"
+    }
+  }
+}
