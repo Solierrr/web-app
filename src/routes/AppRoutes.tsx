@@ -6,6 +6,7 @@ import { NotFoundPage }  from '../pages/NotFoundPage'
 
 import SolarPanelAnnouncement from '@/pages/announcement/SolarPanelAnnouncement'
 import SolarPanelFeed         from '@/pages/feed/SolarPanelFeed'
+import SolarPanelSearch       from '@/pages/search/SolarPanelSearch'
 import EnterpriseProfile      from '@/pages/profile/EnterpriseProfile'
 import LoginPage              from '@/pages/access/LoginPage'
 import RegisterPage           from '@/pages/access/RegisterPage'
@@ -28,7 +29,7 @@ export function AppRoutes() {
         <Route path="/profissionais"   element={ <SolarPanelFeed />} />
 
         {/* Search Pages */}
-        <Route path="/buscar/paineis-solares" element={<AboutPage />} />
+        <Route path="/buscar/paineis-solares" element={<SolarPanelSearch />} />
         <Route path="/buscar/profissionais"   element={<AboutPage />} />
         
         {/* Announcemment Page */}
