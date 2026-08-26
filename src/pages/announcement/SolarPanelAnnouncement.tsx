@@ -285,11 +285,7 @@ export default function SolarPanelAnnouncement() {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    if (!id) {
-      setError(true);
-      setLoading(false);
-      return;
-    }
+    if (!id) return;
 
     getSolarPanel(id)
         .then((product) => { setProduct(product); })
@@ -297,7 +293,7 @@ export default function SolarPanelAnnouncement() {
         .finally(() => { setLoading(false); });
   }, [id]);
 
-  if (error || !product) {
+  if (!id || error || !product) {
     return <p>{t("load")}</p>;
   }
 
