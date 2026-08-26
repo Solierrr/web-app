@@ -1,7 +1,7 @@
 enum MocksMode {
-    Always      = "ALWAYS",
-    Fallback    = "FALLBACK",
-    Deactivated = "DEACTIVATED",
+    ALWAYS     = "ALWAYS",
+    FALLBACK    = "FALLBACK",
+    DEACTIVATED = "DEACTIVATED",
 }
 
 export default MocksMode;
