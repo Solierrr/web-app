@@ -22,8 +22,9 @@ const logger = {
   },
 
   debug(message: string, data?: unknown) {
-    (mode === LogsMode.DEBUG)
-    console.info(`${Log.DEBUG} ${message}`, data ?? "");
+    if (mode === LogsMode.DEBUG) {
+      console.info(`${Log.DEBUG} ${message}`, data ?? "");
+    }
   },
 };
 
