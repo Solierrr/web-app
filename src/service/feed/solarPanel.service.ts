@@ -1,4 +1,4 @@
-import type { SolarPanelAnnouncement } from "@/domain/models/announcemnt/solarPanel";
+import type { SolarPanelAnnouncement } from "@/domain/models/announcemnt/solarPanelAnnouncement";
 
 import { solarPanelAnnouncementMocks } from "../mocks/registry";
 import { resolveWithMocks } from "../mocks/fallback.service";
