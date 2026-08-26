@@ -1,6 +1,6 @@
 import { useMemo, useRef } from "react";
-import { ContextMenu, type ContextMenuHandle } from "@/config/interface/ContextMenu";
-import { ContextMenuContext, type ContextMenuContextValue } from "@/config/interface/ContextMenuContext";
+import { ContextMenu, type ContextMenuHandle } from "@/config/contextMenu/ContextMenu";
+import { ContextMenuContext, type ContextMenuContextValue } from "@/config/contextMenu/ContextMenuContext";
 
 interface ContextMenuProviderProps {
   children: React.ReactNode;

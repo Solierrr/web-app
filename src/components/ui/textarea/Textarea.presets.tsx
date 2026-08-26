@@ -1,5 +1,5 @@
 import { useState, type ComponentProps } from "react";
-import { Textarea } from "./Textarea";
+import Textarea from "./Textarea";
 
 type TextareaPresetProps = ComponentProps<typeof Textarea>;
 type CharCountTextareaProps = Omit<TextareaPresetProps, "value" | "defaultValue"> & {

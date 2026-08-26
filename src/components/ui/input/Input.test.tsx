@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import { Input } from './Input'
+import Input from './Input'
 
 describe('Input', () => {
   it('renders the native input with name and placeholder', () => {

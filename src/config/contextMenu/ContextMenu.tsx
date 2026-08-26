@@ -1,8 +1,8 @@
 import { forwardRef, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Colors from "@/domain/enum/colors";
-import Icon, { type IconName } from "@/components/ui/Icon";
-import { MenuList, MenuItem } from "@/components/overlay/Menu";
+import Icon, { type IconName } from "@@/ui/icon/Icon";
+import { MenuList, MenuItem } from "@@/overlay/Menu";
 
 export interface ContextMenuItem {
   label:      string;

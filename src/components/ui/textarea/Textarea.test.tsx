@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import { Textarea } from './Textarea'
+import Textarea from './Textarea'
 
 describe('Textarea', () => {
   it('renders the native textarea with name and placeholder', () => {

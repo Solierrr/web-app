@@ -2,7 +2,7 @@ import { render, screen, fireEvent, renderHook } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import { act } from 'react'
 import { ContextMenuProvider } from './ContextMenuProvider'
-import { useContextMenu } from './useContextMenu'
+import { useContextMenu } from '../useContextMenu'
 
 function Trigger() {
   const contextMenu = useContextMenu()

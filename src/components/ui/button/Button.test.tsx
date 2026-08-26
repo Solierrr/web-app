@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import { Button } from './Button'
+import Button from './Button'
 import Colors from '@/domain/enum/colors'
 import { InvalidPropError } from '@/domain/errors/InvalidPropError'
 

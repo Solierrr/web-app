@@ -2,7 +2,7 @@ import { Home, User, Settings, Search, ChevronDown, X, Eye, EyeOff, ShoppingCart
 import Colors from "@/domain/enum/colors";
 import { InvalidIconError } from "@/domain/errors/InvalidIconError";
 
-const icons: Record<string, LucideIcon> = {
+const icons = {
   home: Home,
   user: User,
   settings: Settings,
@@ -12,7 +12,7 @@ const icons: Record<string, LucideIcon> = {
   eye: Eye,
   eyeOff: EyeOff,
   shoppingCart: ShoppingCart,
-};
+} satisfies Record<string, LucideIcon>;
 
 export type IconName = keyof typeof icons;
 
@@ -26,12 +26,10 @@ interface IconProps {
   className?: string;
 }
 
-function Icon({ name, color = Colors.Black, size = 24, strokeWidth = 2, absoluteStrokeWidth = false, className }: IconProps) {
+export default function Icon({ name, color = Colors.Black, size = 24, strokeWidth = 2, absoluteStrokeWidth = false, className }: IconProps) {
   const IconComponent = icons[name];
   if (!IconComponent) throw InvalidIconError.notFound(name);
 
   return <IconComponent size={size} color={color}
     strokeWidth={strokeWidth} absoluteStrokeWidth={absoluteStrokeWidth} className={className} />;
 }
-
-export default Icon;

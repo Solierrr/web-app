@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Colors from "@/domain/enum/colors";
-import Icon from "@/components/ui/Icon";
-import { MenuList, MenuItem } from "@/components/overlay/Menu";
+import Icon from "@@/ui/icon/Icon";
+import { MenuList, MenuItem } from "@@/overlay/Menu";
 
 export type SelectOption<T = string> = string | readonly [label: string, value: T];
 
@@ -44,7 +44,7 @@ interface SelectProps<T> {
  *
  * @returns O componente de select renderizado.
  */
-export function Select<T = string>({ name, options, value, defaultValue, onChange,
+export default function Select<T = string>({ name, options, value, defaultValue, onChange,
   placeholder = "Selecione...", rounded = false, disabled = false, className, }: SelectProps<T>) {
 
   const [open, setOpen] = useState(false);

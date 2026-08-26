@@ -1,5 +1,5 @@
 import Colors from "@/domain/enum/colors";
-import Icon, { type IconName } from "@/components/ui/Icon";
+import Icon, { type IconName } from "@@/ui/icon/Icon";
 
 interface InputIconProps {
   name: IconName;
@@ -30,7 +30,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
  *
  * @returns O componente de input renderizado.
  */
-export function Input({ name, placeholder, icon, rounded = false, className, ...props }: InputProps) {
+export default function Input({ name, placeholder, icon, rounded = false, className, ...props }: InputProps) {
 
   const inverse = icon ? (icon.inverse ?? false) : undefined;
 

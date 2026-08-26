@@ -1,5 +1,5 @@
 import type { ComponentProps } from "react";
-import { Select, type SelectOption } from "./Select";
+import Select, { type SelectOption } from "./Select";
 
 const YES_NO_OPTIONS: SelectOption<boolean>[] = [
   ["Sim", true],

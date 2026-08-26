@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import MocksMode from "@/domain/enum/mocksMode";
 
-import { solarPanelAnnouncementMocks } from "./mocks/handler.service";
+import { solarPanelAnnouncementMocks } from "../mocks/handler.service";
 import { getSolarPanel, getSolarPanels } from "./solarPanel.service";
 
 describe("solarPanel.service", () => {

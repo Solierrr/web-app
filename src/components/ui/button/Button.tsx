@@ -1,5 +1,5 @@
 import Colors from "@/domain/enum/colors"
-import Icon, { type IconName } from "@/components/ui/Icon"
+import Icon, { type IconName } from "@@/ui/icon/Icon"
 import { InvalidPropError } from "@/domain/errors/InvalidPropError"
 
 interface ButtonIconProps {
@@ -20,7 +20,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     className?: string;
 }
 
-export function Button({ content, icon, title, description, rounded = false, disabled = false, bgColor = Colors.Orange, txtColor = Colors.White, className, ...props}: ButtonProps) {
+export default function Button({ content, icon, title, description, rounded = false, disabled = false, bgColor = Colors.Orange, txtColor = Colors.White, className, ...props}: ButtonProps) {
     if (!content && !icon) { throw InvalidPropError.missingProps("Button", ["content", "icon"]); }
 
     const iconOnly = !content;

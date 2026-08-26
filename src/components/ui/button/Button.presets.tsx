@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
-import { Button } from "./Button";
-import type { IconName } from "./Icon";
+import Button from "./Button";
+import type { IconName } from "../icon/Icon";
 import Colors from "@/domain/enum/colors";
 
 type ButtonPresetProps = Omit<ComponentProps<typeof Button>, "bgColor" | "txtColor">;

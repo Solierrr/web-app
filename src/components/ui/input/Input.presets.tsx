@@ -1,5 +1,5 @@
 import { useState, type ComponentProps } from "react";
-import { Input } from "./Input";
+import Input from "./Input";
 
 type InputPresetProps = Omit<ComponentProps<typeof Input>, "icon">;
 type PasswordInputProps = Omit<InputPresetProps, "type"> & { showIcon?: boolean };
