@@ -12,7 +12,7 @@ import { useContextMenu } from "@/config/contextMenu/useContextMenu";
 import Button from "@@/ui/button/Button";
 
 import { useTranslation } from "react-i18next";
-import { Capitalize } from "@/locales/utils";
+import { Capitalize } from "@/config/locales/utils";
 
 interface regionsServiceI18n {
     message: string;
