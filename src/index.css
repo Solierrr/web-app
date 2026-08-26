@@ -54,15 +54,15 @@
     font-synthesis: none;
     font-style: normal;
     font-weight: 300;
-    @apply text-body;
+    @apply text-body text-black;
   }
   
-  h1     { @apply text-title    font-bold;      }
-  h2     { @apply text-subtitle font-semi-bold; }
-  h3, h4 { @apply text-label    font-medium;    }
-  h6, h5 { @apply text-body     font-medium;    }
-  p      { @apply font-regular;                 }
-  
+  h1     { @apply text-title    font-bold       leading-9; }
+  h2     { @apply text-subtitle font-semi-bold  leading-7; }
+  h3, h4 { @apply text-label    font-medium     leading-6; }
+  h6, h5 { @apply text-body     font-medium     leading-6; }
+  p      { @apply font-regular  leading-6; }
+
   ::-webkit-scrollbar             { @apply w-2 cursor-default!;      }
   ::-webkit-scrollbar-track       { @apply bg-transparent;           }
   ::-webkit-scrollbar-thumb       { @apply bg-orange rounded-full; }
@@ -70,6 +70,11 @@
 
   ::selection, mark { @apply bg-orange-500 text-white; }
   :focus-visible { @apply outline-[0.155rem] outline-offset-[0.165rem] rounded-md outline-input-outline;}
+}
+
+@utility no-leading {
+  line-height: 1;
+  padding-bottom: 1px;
 }
 
 * {

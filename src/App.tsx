@@ -1,7 +1,10 @@
 import { AppRoutes } from './routes/AppRoutes'
+import ErrorBoundary from '@@/error/ErrorBoundary'
 
-function App() {
-  return <AppRoutes />
+export default function App() {
+  return (
+    <ErrorBoundary>
+      <AppRoutes />
+    </ErrorBoundary>
+  )
 }
-
-export default App
