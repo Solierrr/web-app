@@ -6,7 +6,7 @@ export interface SolarPanelDimension {
     length: number;
 }
 
-export interface SolarPanel {
+export default interface SolarPanel {
     id: string;
 
     // Vendor-supplied characteristics: often incomplete, so all of them are optional.
