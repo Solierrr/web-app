@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Icon from "@@/ui/icon/Icon";
+import LanguageSwitcher from "@@/layout/navbar/LanguageSwitcher";
 
 export default function Navbar() {
     return (
@@ -12,6 +13,7 @@ export default function Navbar() {
                 <Link to={"/"}>Suporte</Link>
                 <Link to={"/"}><Icon name="search" /></Link>
                 <Link to={"/"}><Icon name="shoppingCart" /></Link>
+                <LanguageSwitcher />
             </div>
         </header>
     );
