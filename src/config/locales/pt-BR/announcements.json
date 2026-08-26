@@ -1,0 +1,48 @@
+{
+  "solarPanel": {
+    "general": {
+      "information": "Informações gerais",
+      "service": "Atendimento em",
+      "units": "unidades",
+      "perUnit": "por unidade"
+    },
+
+    "actions": {
+      "contactSupplier": "Entrar em contato",
+      "addToCart": "Adicionar ao carrinho"
+    },
+
+    "sections": {
+      "description": "Descrição",
+      "characteristics": "Características",
+      "details": "Detalhes",
+      "productImages": "Imagens do produto"
+    },
+
+    "characteristics": {
+      "dimensions": "Largura x Comprimento",
+      "weight": "Peso",
+      "brand": "Marca",
+      "model": "Modelo",
+      "type": "Tipo de Placa Solar",
+      "power": "Potência",
+      "efficiency": "Eficiência",
+      "empty": "Nenhuma característica informada pelo fornecedor."
+    },
+
+    "images": {
+      "openInNewTab": "Abrir em nova aba",
+      "copyLink": "Copiar link da imagem"
+    },
+
+    "errors": {
+      "load": "Não foi possível carregar o produto."
+    }
+  },
+
+  "inverter": {
+    "general": {
+      "information": "Informações gerais"
+    }
+  }
+}

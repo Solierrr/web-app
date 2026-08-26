@@ -5,11 +5,9 @@ import type { BusinessContact } from '@/domain/models/shared/businessContact';
 export interface Company {
     id: string;
     status: CompanyStatus;
-
     cnpj: string;
     tradeName: string;
     corporateName: string;
-
     address?: Address;
     businessContact?: BusinessContact;
 }
