@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { ContextMenuContext, type ContextMenuContextValue } from "@/config/contextMenu/ContextMenuContext";
+import { ContextMenuContext, type ContextMenuContextValue } from "@@/overlay/contextMenu/ContextMenuContext";
 
 /**
  * useContextMenu

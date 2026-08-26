@@ -8,7 +8,7 @@ import type { Image } from "@/domain/models/shared/image";
 
 import { getSolarPanel } from "@/service/feed/solarPanel.service";
 import { LightIconButton } from "@@/ui/button/Button.presets";
-import { useContextMenu } from "@/config/contextMenu/useContextMenu";
+import { useContextMenu } from "@@/overlay/contextMenu/useContextMenu";
 import Button from "@@/ui/button/Button";
 
 import { useTranslation } from "react-i18next";

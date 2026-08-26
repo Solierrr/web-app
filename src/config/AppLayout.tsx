@@ -1,6 +1,6 @@
 import { Outlet, useNavigate } from 'react-router-dom'
-import { ContextMenuProvider } from '@/config/contextMenu/provider/ContextMenuProvider'
-import { useContextMenu } from '@/config/contextMenu/useContextMenu'
+import { ContextMenuProvider } from '@@/overlay/contextMenu/provider/ContextMenuProvider'
+import { useContextMenu } from '@@/overlay/contextMenu/useContextMenu'
 
 import Navbar from '@@/layout/navbar/Navbar'
 
