@@ -5,10 +5,10 @@ import type { SolarPanelAnnouncement } from "@/domain/models/announcemnt/solarPa
 import type { SolarPanel }             from "@/domain/models/products/solarPanel"
 import type { Image }                  from "@/domain/models/shared/image";
 
-import { getSolarPanel }   from "@/service/solarPanel.service";
-import { Button }          from "@/components/ui/Button"
-import { LightIconButton } from "@/components/ui/Button.presets";
-import { useContextMenu }  from "@/config/interface/useContextMenu";
+import { getSolarPanel }   from "@/service/feed/solarPanel.service";
+import Button              from "@@/ui/button/Button"
+import { LightIconButton } from "@@/ui/button/Button.presets";
+import { useContextMenu }  from "@/config/contextMenu/useContextMenu";
 
 
 function regionsService(regions: string[]): string {
@@ -31,7 +31,7 @@ interface WrapperProps extends React.ComponentPropsWithoutRef<"section"> {
 
 function Wrapper({ title, children, className }: WrapperProps) {
     return (
-        <section className={`flex flex-col gap-1 ${className}`}>
+        <section className={`flex flex-col gap-2 ${className}`}>
             <h2 className="text-black/90">{title}</h2>
             {children}
         </section>
@@ -139,17 +139,17 @@ export default function SolarPanelAnnouncement() {
                 <section className="w-[60%] flex flex-col gap-announcement">
                     <section title="Informações gerais">
                         <div className="flex flex-col gap-6">
-                            <div>
+                            <div className="flex flex-col gap-2">
                                 <h1>{product.title}</h1>
                                 <h3 className="text-black/90">{regionsService(product.serviceRegions)}</h3>
                             </div>
                             <div className="flex flex-col gap-8">
                                 <div className="flex flex-row gap-6 items-baseline justify-between">
                                     <div className="flex flex-row gap-4 items-baseline">
-                                        <h2>{product.discountPercentage} %</h2>
+                                        <span className="flex flex-row items-baseline gap-1"><h2>{product.discountPercentage}</h2><span className="font-bold">%</span></span>
                                         <div className="flex flex-row gap-1 h-min items-baseline">
-                                            <span className="text-lower font-regular">R$</span>
-                                            <h3>{product.unitPrice} / unidade</h3>
+                                            <h5 className="font-semi-bold no-leading">R$</h5>
+                                            <h3 className="no-leading leading-none">{product.unitPrice} / unidade</h3>
                                         </div>
                                     </div>
                                     <h3>{product.availableUnits} unidades</h3>
@@ -162,7 +162,7 @@ export default function SolarPanelAnnouncement() {
                         </div>
                     </section>
                     <Wrapper title="Descrição"       aria-labelledby="Descrição"       children={<p className="flex max-h-60 text-black/90 overflow-auto">{product.description}</p>} />
-                    <Wrapper title="Características" aria-labelledby="Características" children={<Characteristics panel={product.panel} />} />
+                    <Wrapper title="Características" aria-labelledby="Características" children={<Characteristics panel={product.panel} />} className="gap-4" />
                     <Wrapper title="Detalhes"        aria-labelledby="Detalhes"        children={<p className="flex max-h-60 text-black/90 overflow-auto">{product.details}</p>} />
                 </section>
             </div>

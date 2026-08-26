@@ -1,12 +1,12 @@
-import { Route, Routes }   from 'react-router-dom'
-// import { Navigate, Route, Routes } from 'react-router-dom'
-import { AppLayout }      from '../components/AppLayout'
-import { AboutPage }      from '../pages/AboutPage'
-import { HomePage }       from '../pages/HomePage'
-import { NotFoundPage }   from '../pages/NotFoundPage'
+import { Route, Routes } from 'react-router-dom'
+import { AppLayout }     from '../config/AppLayout'
+import { AboutPage }     from '../pages/AboutPage'
+import { HomePage }      from '../pages/HomePage'
+import { NotFoundPage }  from '../pages/NotFoundPage'
 
 import SolarPanelAnnouncement from '@/pages/announcement/SolarPanelAnnouncement'
 import SolarPanelFeed         from '@/pages/feed/SolarPanelFeed'
+import EnterpriseProfile      from '@/pages/profile/EnterpriseProfile'
 
 export function AppRoutes() {
   return (
@@ -30,6 +30,10 @@ export function AppRoutes() {
         {/* Informative Pages */}
         <Route path="/sobre" element={<AboutPage />} />
         <Route path=""       element={<AboutPage />} />
+       
+        {/* Profile Pages */}
+        <Route path="/empresa/id" element={<EnterpriseProfile />} />
+        {/* <Route path=""       element={<AboutPage />} /> */}
       </Route>
     </Routes>
   )

@@ -44,7 +44,7 @@ interface SelectProps<T> {
  *
  * @returns O componente de select renderizado.
  */
-function Select<T = string>({ name, options, value, defaultValue, onChange,
+export default function Select<T = string>({ name, options, value, defaultValue, onChange,
   placeholder = "Selecione...", rounded = false, disabled = false, className, }: SelectProps<T>) {
 
   const [open, setOpen] = useState(false);
@@ -147,5 +147,3 @@ function Select<T = string>({ name, options, value, defaultValue, onChange,
     </div>
   );
 }
-
-export default Select;

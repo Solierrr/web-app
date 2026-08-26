@@ -20,7 +20,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     className?: string;
 }
 
-function Button({ content, icon, title, description, rounded = false, disabled = false, bgColor = Colors.Orange, txtColor = Colors.White, className, ...props}: ButtonProps) {
+export default function Button({ content, icon, title, description, rounded = false, disabled = false, bgColor = Colors.Orange, txtColor = Colors.White, className, ...props}: ButtonProps) {
     if (!content && !icon) { throw InvalidPropError.missingProps("Button", ["content", "icon"]); }
 
     const iconOnly = !content;
@@ -34,5 +34,3 @@ function Button({ content, icon, title, description, rounded = false, disabled =
         </button>
     )
 }
-
-export default Button;

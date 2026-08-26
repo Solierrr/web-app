@@ -30,7 +30,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
  *
  * @returns O componente de input renderizado.
  */
-function Input({ name, placeholder, icon, rounded = false, className, ...props }: InputProps) {
+export default function Input({ name, placeholder, icon, rounded = false, className, ...props }: InputProps) {
 
   const inverse = icon ? (icon.inverse ?? false) : undefined;
 
@@ -61,5 +61,3 @@ function Input({ name, placeholder, icon, rounded = false, className, ...props }
     </div>
   );
 }
-
-export default Input;

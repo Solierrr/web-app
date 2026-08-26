@@ -14,7 +14,7 @@ interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
  *
  * @returns O componente de textarea renderizado.
  */
-function Textarea({ name, placeholder, className, ...props }: TextareaProps) {
+export default function Textarea({ name, placeholder, className, ...props }: TextareaProps) {
   return (
     <div className={`flex w-fit bg-input-bg rounded-medium items-center-safe ${className ?? ""}`}>
       <textarea className="px-4 py-2 text-black placeholder:text-input-text placeholder:select-none focus:outline-0 font-medium resize-none input-scrollbar"
@@ -22,5 +22,3 @@ function Textarea({ name, placeholder, className, ...props }: TextareaProps) {
     </div>
   );
 }
-
-export default Textarea;
