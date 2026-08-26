@@ -10,7 +10,7 @@ describe("resolveWithMocks", () => {
   });
 
   it("returns the mock without calling the API when mode is ALWAYS", async () => {
-    vi.stubEnv("VITE_MOCKS", MocksMode.Always);
+    vi.stubEnv("VITE_MOCKS", MocksMode.ALWAYS);
     const apiCall = vi.fn();
     const mockCall = vi.fn().mockReturnValue("mock");
 
@@ -21,7 +21,7 @@ describe("resolveWithMocks", () => {
   });
 
   it("calls only the API and propagates errors when mode is DEACTIVATED", async () => {
-    vi.stubEnv("VITE_MOCKS", MocksMode.Deactivated);
+    vi.stubEnv("VITE_MOCKS", MocksMode.DEACTIVATED);
     const apiCall = vi.fn().mockRejectedValue(new Error("boom"));
     const mockCall = vi.fn();
 
@@ -30,7 +30,7 @@ describe("resolveWithMocks", () => {
   });
 
   it("returns the API result when mode is FALLBACK and the API succeeds", async () => {
-    vi.stubEnv("VITE_MOCKS", MocksMode.Fallback);
+    vi.stubEnv("VITE_MOCKS", MocksMode.FALLBACK);
     const apiCall = vi.fn().mockResolvedValue("api");
     const mockCall = vi.fn();
 
@@ -41,7 +41,7 @@ describe("resolveWithMocks", () => {
   });
 
   it("falls back to the mock when mode is FALLBACK and the API fails", async () => {
-    vi.stubEnv("VITE_MOCKS", MocksMode.Fallback);
+    vi.stubEnv("VITE_MOCKS", MocksMode.FALLBACK);
     const apiCall = vi.fn().mockRejectedValue(new Error("boom"));
     const mockCall = vi.fn().mockReturnValue("mock");
 
