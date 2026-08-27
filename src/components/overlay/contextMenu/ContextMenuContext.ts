@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import type { ContextMenuItem } from "@/config/contextMenu/ContextMenu";
+import type { ContextMenuItem } from "@@/overlay/contextMenu/ContextMenu";
 
 export interface ContextMenuContextValue {
   open:  (items: ContextMenuItem[], x: number, y: number) => void;

@@ -19,7 +19,7 @@ describe("solarPanel.service", () => {
   });
 
   it("does not call the API and returns the mock when VITE_MOCKS is ALWAYS", async () => {
-    vi.stubEnv("VITE_MOCKS", MocksMode.Always);
+    vi.stubEnv("VITE_MOCKS", MocksMode.ALWAYS);
 
     const result = await getSolarPanel("0");
 
@@ -28,7 +28,7 @@ describe("solarPanel.service", () => {
   });
 
   it("returns the API response when VITE_MOCKS is FALLBACK and the API succeeds", async () => {
-    vi.stubEnv("VITE_MOCKS", MocksMode.Fallback);
+    vi.stubEnv("VITE_MOCKS", MocksMode.FALLBACK);
     const apiPanel = { id: "from-api" };
     fetchMock.mockResolvedValue({ ok: true, json: async () => apiPanel });
 
@@ -38,7 +38,7 @@ describe("solarPanel.service", () => {
   });
 
   it("falls back to the mock when VITE_MOCKS is FALLBACK and the API fails", async () => {
-    vi.stubEnv("VITE_MOCKS", MocksMode.Fallback);
+    vi.stubEnv("VITE_MOCKS", MocksMode.FALLBACK);
     fetchMock.mockResolvedValue({ ok: false });
 
     const result = await getSolarPanel("0");
@@ -47,14 +47,14 @@ describe("solarPanel.service", () => {
   });
 
   it("propagates the error when VITE_MOCKS is DEACTIVATED and the API fails", async () => {
-    vi.stubEnv("VITE_MOCKS", MocksMode.Deactivated);
+    vi.stubEnv("VITE_MOCKS", MocksMode.DEACTIVATED);
     fetchMock.mockResolvedValue({ ok: false });
 
     await expect(getSolarPanel("0")).rejects.toThrow();
   });
 
   it("does not call the API and returns all mocks when VITE_MOCKS is ALWAYS for getSolarPanels", async () => {
-    vi.stubEnv("VITE_MOCKS", MocksMode.Always);
+    vi.stubEnv("VITE_MOCKS", MocksMode.ALWAYS);
 
     const result = await getSolarPanels(["0", "1"]);
 

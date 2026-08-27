@@ -1,7 +1,7 @@
-import type { FormEvent, ReactNode } from "react"
-import Input from "@@/ui/input/Input"
-import { PasswordInput } from "@@/ui/input/Input.presets"
-import { PrimaryButton } from "@@/ui/button/Button.presets"
+import type { FormEvent, ReactNode } from "react";
+import Input from "@@/ui/input/Input";
+import { PasswordInput } from "@@/ui/input/Input.presets";
+import { PrimaryButton } from "@@/ui/button/Button.presets";
 
 export interface AccessField {
     name:        string
@@ -21,8 +21,8 @@ interface AccessProps {
 
 export default function Access({ heading, helperText, fields, submitLabel, footer, onSubmit }: AccessProps) {
     function handleSubmit(event: FormEvent<HTMLFormElement>) {
-        event.preventDefault()
-        onSubmit?.(event)
+        event.preventDefault();
+        onSubmit?.(event);
     }
 
     return (
@@ -49,5 +49,5 @@ export default function Access({ heading, helperText, fields, submitLabel, foote
 
             <div className="hidden bg-orange lg:block lg:w-1/2" />
         </div>
-    )
+    );
 }

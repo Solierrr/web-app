@@ -1,4 +1,4 @@
-import type SolarPanel from '@/domain/models/products/solarPanel';
+import type { SolarPanel } from '@/domain/models/products/solarPanel';
 import type { Image }  from '@/domain/models/shared/image';
 
 export interface SolarPannelPhotos {

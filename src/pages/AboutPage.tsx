@@ -9,5 +9,5 @@ export function AboutPage() {
         Esta rota serve como exemplo para novas paginas dentro da aplicacao.
       </p>
     </section>
-  )
+  );
 }
