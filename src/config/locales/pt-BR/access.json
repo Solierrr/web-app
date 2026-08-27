@@ -1,0 +1,31 @@
+{
+  "fields": {
+    "email": { "placeholder": "seuemailaqui@email.com" },
+    "password": { "placeholder": "suasenhaaqui" },
+    "name": { "placeholder": "seunomeaqui" },
+    "confirmPassword": { "placeholder": "confirmesuasenha" }
+  },
+
+  "login": {
+    "helperTextPrefix": "Não encontrou sua empresa?",
+    "contactSupport": "Contatar o suporte",
+    "submit": "Prosseguir",
+    "forgotPassword": "Esqueci minha senha",
+    "noAccountPrefix": "Não tem uma conta?",
+    "register": "Cadastre-se"
+  },
+
+  "register": {
+    "helperText": "Crie sua conta para acessar o marketplace",
+    "submit": "Cadastrar",
+    "hasAccountPrefix": "Já tem uma conta?",
+    "login": "Entrar"
+  },
+
+  "forgotPassword": {
+    "helperText": "Informe seu e-mail para receber as instruções de recuperação",
+    "submit": "Enviar",
+    "rememberedPasswordPrefix": "Lembrou a senha?",
+    "backToLogin": "Voltar para o login"
+  }
+}
