@@ -4,6 +4,7 @@
   "not": "não",
   "yes": "sim",
   "no": "não",
+  "language": "Idioma",
 
   "actions": {
     "add": "adicionar",
@@ -49,7 +50,31 @@
   "units": {
     "unit": "unidade",
     "units": "unidades",
-    "perUnit": "por unidade"
+    "perUnit": "por unidade",
+    "perUnitShort": "/ uni"
+  },
+
+  "select": {
+    "placeholder": "Selecione...",
+    "clearSelection": "Limpar seleção"
+  },
+
+  "errorBoundary": {
+    "label": "Erro",
+    "title": "Algo deu errado",
+    "reload": "Recarregar página"
+  },
+
+  "navbar": {
+    "app": "Aplicativo",
+    "solarPanels": "Placas Solares",
+    "professionals": "Profissionais",
+    "accredit": "Credenciar-se",
+    "support": "Suporte"
+  },
+
+  "corridor": {
+    "viewAll": "acessar todas as peças"
   },
 
   "time": {

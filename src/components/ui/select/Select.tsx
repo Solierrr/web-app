@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Colors from "@/domain/enum/colors";
 import Icon from "@@/ui/icon/Icon";
 import { MenuList, MenuItem } from "@@/overlay/Menu";
@@ -45,7 +46,10 @@ interface SelectProps<T> {
  * @returns O componente de select renderizado.
  */
 export default function Select<T = string>({ name, options, value, defaultValue, onChange,
-  placeholder = "Selecione...", rounded = false, disabled = false, className, }: SelectProps<T>) {
+  placeholder, rounded = false, disabled = false, className, }: SelectProps<T>) {
+
+  const { t } = useTranslation("commons", { keyPrefix: "select" });
+  const resolvedPlaceholder = placeholder ?? t("placeholder");
 
   const [open, setOpen] = useState(false);
   const [internalValue, setInternalValue] = useState<T | undefined>(defaultValue);
@@ -109,7 +113,7 @@ export default function Select<T = string>({ name, options, value, defaultValue,
           {selectedOption && (
             <button
               type="button"
-              aria-label="Limpar seleção"
+              aria-label={t("clearSelection")}
               onClick={(event) => {
                 event.stopPropagation();
                 handleClear();
@@ -121,7 +125,7 @@ export default function Select<T = string>({ name, options, value, defaultValue,
           )}
 
           <span className={`font-medium ${selectedOption ? "" : "text-input-text"} select-none`}>
-            {selectedOption ? getOptionLabel(selectedOption) : placeholder}
+            {selectedOption ? getOptionLabel(selectedOption) : resolvedPlaceholder}
           </span>
 
         </span>
