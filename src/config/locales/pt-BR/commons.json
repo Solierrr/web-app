@@ -1,0 +1,89 @@
+{
+  "and": "e",
+  "or": "ou",
+  "not": "não",
+  "yes": "sim",
+  "no": "não",
+  "language": "Idioma",
+
+  "actions": {
+    "add": "adicionar",
+    "back": "voltar",
+    "cancel": "cancelar",
+    "close": "fechar",
+    "confirm": "confirmar",
+    "continue": "continuar",
+    "delete": "excluir",
+    "edit": "editar",
+    "next": "próximo",
+    "previous": "anterior",
+    "remove": "remover",
+    "save": "salvar",
+    "search": "pesquisar",
+    "send": "enviar",
+    "view": "visualizar"
+  },
+
+  "status": {
+    "loading": "carregando...",
+    "success": "sucesso",
+    "error": "erro",
+    "active": "ativo",
+    "inactive": "inativo",
+    "available": "disponível",
+    "unavailable": "indisponível"
+  },
+
+  "navigation": {
+    "home": "início",
+    "next": "próximo",
+    "previous": "anterior"
+  },
+
+  "form": {
+    "required": "obrigatório",
+    "optional": "opcional",
+    "invalid": "valor inválido",
+    "invalidEmail": "e-mail inválido"
+  },
+
+  "units": {
+    "unit": "unidade",
+    "units": "unidades",
+    "perUnit": "por unidade",
+    "perUnitShort": "/ uni"
+  },
+
+  "select": {
+    "placeholder": "Selecione...",
+    "clearSelection": "Limpar seleção"
+  },
+
+  "errorBoundary": {
+    "label": "Erro",
+    "title": "Algo deu errado",
+    "reload": "Recarregar página"
+  },
+
+  "navbar": {
+    "app": "Aplicativo",
+    "solarPanels": "Placas Solares",
+    "professionals": "Profissionais",
+    "accredit": "Credenciar-se",
+    "support": "Suporte"
+  },
+
+  "corridor": {
+    "viewAll": "acessar todas as peças"
+  },
+
+  "time": {
+    "today": "hoje",
+    "yesterday": "ontem",
+    "tomorrow": "amanhã"
+  },
+
+  "empty": {
+    "default": "nenhum resultado encontrado."
+  }
+}

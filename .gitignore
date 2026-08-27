@@ -39,6 +39,11 @@
 # Claude Code
 .claude/
 
+# AI-assisted development
+.sdd/
+docs/specs
+specs
+
 # Fleet
 .fleet/
 
