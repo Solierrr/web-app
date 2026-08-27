@@ -1,4 +1,4 @@
-import type SolarPanel  from "@/domain/models/products/solarPanel";
+import type { SolarPanel } from "@/domain/models/products/solarPanel";
 import type ModelStatus from "@/domain/enum/modelStatus";
 import SolarPanelType   from "@/domain/enum/solarPanelType";
 

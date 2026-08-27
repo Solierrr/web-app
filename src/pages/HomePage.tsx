@@ -1,12 +1,12 @@
-import Button from "@@/ui/button/Button"
-import { PrimaryButton, SecondaryButton, IconButton } from "@@/ui/button/Button.presets"
-import Input from "@@/ui/input/Input"
-import { DefaultInput, SearchInput, PasswordInput } from "@@/ui/input/Input.presets"
-import Select from "@@/ui/select/Select"
-import { DefaultSelect, BooleanSelect } from "@@/ui/select/Select.presets"
-import Textarea from "@@/ui/textarea/Textarea"
-import { DefaultTextarea, CharCountTextarea } from "@@/ui/textarea/Textarea.presets"
-import Colors from "@/domain/enum/colors"
+import Button from "@@/ui/button/Button";
+import { PrimaryButton, SecondaryButton, IconButton } from "@@/ui/button/Button.presets";
+import Input from "@@/ui/input/Input";
+import { DefaultInput, SearchInput, PasswordInput } from "@@/ui/input/Input.presets";
+import Select from "@@/ui/select/Select";
+import { DefaultSelect, BooleanSelect } from "@@/ui/select/Select.presets";
+import Textarea from "@@/ui/textarea/Textarea";
+import { DefaultTextarea, CharCountTextarea } from "@@/ui/textarea/Textarea.presets";
+import Colors from "@/domain/enum/colors";
 
 export function HomePage() {
   return (
@@ -130,5 +130,5 @@ export function HomePage() {
       <DefaultTextarea name="preset-textarea-default" placeholder="Default" />
       <CharCountTextarea name="preset-textarea-charcount" placeholder="Escreva algo..." maxLength={140} />
     </section>
-  )
+  );
 }

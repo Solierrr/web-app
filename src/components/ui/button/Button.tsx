@@ -1,6 +1,6 @@
-import Colors from "@/domain/enum/colors"
-import Icon, { type IconName } from "@@/ui/icon/Icon"
-import { InvalidPropError } from "@/domain/errors/InvalidPropError"
+import Colors from "@/domain/enum/colors";
+import Icon, { type IconName } from "@@/ui/icon/Icon";
+import { InvalidPropError } from "@/domain/errors/InvalidPropError";
 
 interface ButtonIconProps {
     name:     IconName;
@@ -32,5 +32,5 @@ export default function Button({ content, icon, title, description, rounded = fa
         {icon && <Icon name={icon.name} color={txtColor} />}
         {content}
         </button>
-    )
+    );
 }

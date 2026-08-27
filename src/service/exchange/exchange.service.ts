@@ -1,7 +1,7 @@
 import CurrencyCode from "@/domain/enum/currency";
-import type { ExchangeRateResponse } from "@/service/exchange/exchange.interface"
+import type { ExchangeRateResponse } from "@/service/exchange/exchange.interface";
 
-const API = import.meta.env.VITE_EXCHANGE_API
+const API = import.meta.env.VITE_EXCHANGE_API;
 
 export async function getExchangeRate(from: CurrencyCode, to: CurrencyCode): Promise<number> {
   if (from === to) { return 1; }

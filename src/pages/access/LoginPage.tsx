@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom"
-import Access from "@/components/access/Access"
+import { Link } from "react-router-dom";
+import Access from "@/components/access/Access";
 
 export default function LoginPage() {
     return (
@@ -18,5 +18,5 @@ export default function LoginPage() {
                 </div>
             }
         />
-    )
+    );
 }

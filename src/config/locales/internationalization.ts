@@ -2,10 +2,10 @@ import i18n from "i18next";
 import { initReactI18next, useTranslation } from "react-i18next";
 
 function namespacesFromGlob(modules: Record<string, unknown>) {
-  const namespaces: Record<string, unknown> = {};
+  const namespaces: Record<string, object> = {};
   for (const [path, content] of Object.entries(modules)) {
     const name = path.match(/([^/]+)\.json$/)?.[1];
-    if (name) namespaces[name] = content;
+    if (name) namespaces[name] = content as object;
   }
   return namespaces;
 }

@@ -4,15 +4,15 @@ import logger from "@/config/logging/logger";
 
 export async function resolveWithMocks<T>(apiCall: () => Promise<T>, mockCall: () => T | Promise<T>): Promise<T> {
     const mode = import.meta.env.VITE_MOCKS as MocksMode;
-    const naptime = 2000
+    const naptime = 2000;
 
     async function takeNap() {
         await sleep(naptime);
-        logger.info(`Mocks called before ${naptime} ms`)
+        logger.info(`Mocks called before ${naptime} ms`);
     }
 
     if (mode === MocksMode.ALWAYS) {
-        takeNap()
+        takeNap();
         return mockCall();
     }
     
@@ -25,7 +25,7 @@ export async function resolveWithMocks<T>(apiCall: () => Promise<T>, mockCall: (
     }
     
     catch {
-        takeNap()
+        takeNap();
         return mockCall();
     }
 }
