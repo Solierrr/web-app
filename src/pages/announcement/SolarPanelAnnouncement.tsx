@@ -28,6 +28,10 @@ function regionsService(regions: string[], { message, and }: regionsServiceI18n)
   return `${Capitalize(message)} ${result}`;
 }
 
+function skeletonClass(loading: boolean, className = ""): string {
+  return loading ? `skeleton rounded-soft ${className}`.trim() : className;
+}
+
 interface WrapperProps extends React.ComponentPropsWithoutRef<"section"> {
   title: string;
   children: React.ReactNode;
@@ -45,9 +49,10 @@ function Wrapper({ title, children, className }: WrapperProps) {
 
 interface ImagesProps {
   images: Image[];
+  loading?: boolean;
 }
 
-function ProductImages({ images }: ImagesProps) {
+function ProductImages({ images, loading = false }: ImagesProps) {
   const contextMenu = useContextMenu();
   const { t } = useTranslation("announcements", { keyPrefix: "solarPanel.images" });
 
@@ -68,6 +73,16 @@ function ProductImages({ images }: ImagesProps) {
       ],
       event.clientX,
       event.clientY,
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="flex flex-row gap-8 overflow-auto scrollbar-none">
+        {images.map((_, index) => (
+          <div key={index} className="w-40 h-40 shrink-0 rounded-medium skeleton" />
+        ))}
+      </div>
     );
   }
 
@@ -145,7 +160,7 @@ function panelCharacteristics(panel: SolarPanel, { widthAndLength, weight, brand
   return characteristics;
 }
 
-function Characteristics({ panel }: { panel: SolarPanel }) {
+function Characteristics({ panel, loading = false }: { panel: SolarPanel; loading?: boolean }) {
   const { t } = useTranslation("announcements", { keyPrefix: "solarPanel.characteristics" });
   const { t: c } = useTranslation("commons", { keyPrefix: "units" });
 
@@ -172,7 +187,7 @@ function Characteristics({ panel }: { panel: SolarPanel }) {
           className="flex justify-between py-4 px-6 rounded-soft bg-input-bg"
         >
           <p className="font-medium">{label}</p>
-          <p className="font-medium">{value}</p>
+          <p className={skeletonClass(loading, "font-medium")}>{value}</p>
         </li>
       ))}
     </ul>
@@ -185,7 +200,6 @@ interface SolarPanelAnnouncementProps {
 }
 
 function SolarPanelAnnouncementPacked({ product, loading = false }: SolarPanelAnnouncementProps) {
-    if (loading) { product = SolarPanelAnnouncementPlaceholder; }
     const { t } = useTranslation("announcements", { keyPrefix: "solarPanel" });
     const { t: c } = useTranslation("commons");
 
@@ -193,37 +207,41 @@ function SolarPanelAnnouncementPacked({ product, loading = false }: SolarPanelAn
     <div className="flex flex-col">
       <div className="flex flex-row relative gap-12">
         <div className="w-[40%] flex justify-center">
-          <img
-            className="w-[80%] h-fit sticky top-10 pb-10 object-cover"
-            src={product.photos.heroImage.url}
-            alt={product.photos.heroImage.description}
-          />
+          {loading ? (
+            <div className="w-[80%] aspect-square rounded-medium skeleton" />
+          ) : (
+            <img
+              className="w-[80%] h-fit sticky top-10 pb-10 object-cover"
+              src={product.photos.heroImage.url}
+              alt={product.photos.heroImage.description}
+            />
+          )}
         </div>
 
         <section className="w-[60%] flex flex-col gap-announcement">
           <section title={t("general.information")}>
             <div className="flex flex-col gap-6">
               <div className="flex flex-col gap-2">
-                <h1>{product.title}</h1>
-                <h3 className="text-black/90">
+                <h1 className={skeletonClass(loading)}>{product.title}</h1>
+                <h3 className={skeletonClass(loading, "text-black/90")}>
                   {regionsService(product.serviceRegions, {and: c("and"), message: t("general.service")})}
                 </h3>
               </div>
               <div className="flex flex-col gap-8">
                 <div className="flex flex-row gap-6 items-baseline justify-between">
                   <div className="flex flex-row gap-4 items-baseline">
-                    <span className="flex flex-row items-baseline gap-1">
+                    <span className={skeletonClass(loading, "flex flex-row items-baseline gap-1")}>
                       <h2>{product.discountPercentage}</h2>
                       <span className="font-bold">%</span>
                     </span>
-                    <div className="flex flex-row gap-1 h-min items-baseline">
+                    <div className={skeletonClass(loading, "flex flex-row gap-1 h-min items-baseline")}>
                       <h5 className="font-semi-bold no-leading">R$</h5>
                       <h3 className="no-leading leading-none">
                         {product.unitPrice} {t("general.perUnit")}
                       </h3>
                     </div>
                   </div>
-                  <h3>{product.availableUnits} {t("general.units")}</h3>
+                  <h3 className={skeletonClass(loading)}>{product.availableUnits} {t("general.units")}</h3>
                 </div>
                 <div className="flex gap-2">
                   <Button
@@ -231,10 +249,12 @@ function SolarPanelAnnouncementPacked({ product, loading = false }: SolarPanelAn
                     description={t("actions.contactSupplierDescription")}
                     className="px-8"
                     rounded
+                    disabled={loading}
                   />
                   <LightIconButton
                     description={t("actions.addToCart")}
                     icon="shoppingCart"
+                    disabled={loading}
                   />
                 </div>
               </div>
@@ -244,7 +264,7 @@ function SolarPanelAnnouncementPacked({ product, loading = false }: SolarPanelAn
             title={t("sections.description")}
             aria-labelledby={t("sections.description")}
             children={
-              <p className="flex max-h-60 text-black/90 overflow-auto">
+              <p className={skeletonClass(loading, "flex max-h-60 text-black/90 overflow-auto")}>
                 {product.description}
               </p>
             }
@@ -252,14 +272,14 @@ function SolarPanelAnnouncementPacked({ product, loading = false }: SolarPanelAn
           <Wrapper
             title={t("sections.characteristics")}
             aria-labelledby={t("sections.characteristics")}
-            children={<Characteristics panel={product.panel} />}
+            children={<Characteristics panel={product.panel} loading={loading} />}
             className="gap-4"
           />
           <Wrapper
             title={t("sections.details")}
             aria-labelledby={t("sections.details")}
             children={
-              <p className="flex max-h-60 text-black/90 overflow-auto">
+              <p className={skeletonClass(loading, "flex max-h-60 text-black/90 overflow-auto")}>
                 {product.details}
               </p>
             }
@@ -270,7 +290,7 @@ function SolarPanelAnnouncementPacked({ product, loading = false }: SolarPanelAn
         title={t("sections.productImages")}
         aria-labelledby={t("sections.productImages")}
         className="flex"
-        children={<ProductImages images={product.photos.otherImages} />}
+        children={<ProductImages images={product.photos.otherImages} loading={loading} />}
       />
     </div>
   );
@@ -293,9 +313,13 @@ export default function SolarPanelAnnouncement() {
         .finally(() => { setLoading(false); });
   }, [id]);
 
-  if (!id || error || !product) {
+  if (!id || error) {
     return <p>{t("load")}</p>;
   }
 
-  return <SolarPanelAnnouncementPacked product={product} loading={loading} />;
+  if (loading || !product) {
+    return <SolarPanelAnnouncementPacked product={SolarPanelAnnouncementPlaceholder} loading />;
+  }
+
+  return <SolarPanelAnnouncementPacked product={product} loading={false} />;
 }

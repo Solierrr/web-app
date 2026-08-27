@@ -19,6 +19,9 @@
   --color-input-icon:    #AFAFAF;
   --color-input-outline: #44444426;
 
+  --color-skeleton:           #4444441A;
+  --color-skeleton-highlight: #44444433;
+
   --text-hero:     5.00rem;
   --text-title:    2.10rem;
   --text-subtitle: 1.65rem;
@@ -42,6 +45,7 @@
 
   --shadow-soft: 0 0.125rem 0.5rem 0 #4444441A;
   --animate-fade-in: fade-in 150ms ease-out;
+  --animate-skeleton-pulse: skeleton-pulse 1.5s ease-in-out infinite;
 }
 
 @layer base {
@@ -77,6 +81,11 @@
   padding-bottom: 1px;
 }
 
+@utility skeleton {
+  color: transparent;
+  @apply bg-skeleton animate-skeleton-pulse select-none pointer-events-none;
+}
+
 * {
   font-family: "Plus Jakarta Sans", sans-serif;
 }
@@ -97,4 +106,9 @@ body {
     opacity: 1;
     transform: scale(1);
   }
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% { background-color: var(--color-skeleton); }
+  50%      { background-color: var(--color-skeleton-highlight); }
 }
