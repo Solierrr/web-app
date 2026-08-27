@@ -4,6 +4,7 @@
   "not": "no",
   "yes": "sí",
   "no": "no",
+  "language": "Idioma",
 
   "actions": {
     "add": "añadir",
@@ -49,7 +50,31 @@
   "units": {
     "unit": "unidad",
     "units": "unidades",
-    "perUnit": "por unidad"
+    "perUnit": "por unidad",
+    "perUnitShort": "/ ud"
+  },
+
+  "select": {
+    "placeholder": "Seleccionar...",
+    "clearSelection": "Limpiar selección"
+  },
+
+  "errorBoundary": {
+    "label": "Error",
+    "title": "Algo salió mal",
+    "reload": "Recargar página"
+  },
+
+  "navbar": {
+    "app": "Aplicación",
+    "solarPanels": "Paneles Solares",
+    "professionals": "Profesionales",
+    "accredit": "Acreditarse",
+    "support": "Soporte"
+  },
+
+  "corridor": {
+    "viewAll": "acceder a todas las piezas"
   },
 
   "time": {

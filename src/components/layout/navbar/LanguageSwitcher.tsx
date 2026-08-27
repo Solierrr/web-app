@@ -10,7 +10,7 @@ const LANGUAGES = [
 ] as const;
 
 export default function LanguageSwitcher() {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation("commons");
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -44,7 +44,7 @@ export default function LanguageSwitcher() {
     <div ref={containerRef} className="relative">
       <button
         type="button"
-        aria-label="Idioma"
+        aria-label={t("language")}
         aria-haspopup="listbox"
         aria-expanded={open}
         className="flex items-center-safe gap-1 cursor-pointer"
@@ -55,7 +55,7 @@ export default function LanguageSwitcher() {
       </button>
 
       {open && (
-        <MenuList className="absolute right-0 z-10 mt-1" role="listbox" aria-label="Idioma">
+        <MenuList className="absolute right-0 z-10 mt-1" role="listbox" aria-label={t("language")}>
           {LANGUAGES.map(([code, label]) => (
             <MenuItem
               key={code}
