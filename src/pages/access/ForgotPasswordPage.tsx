@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom"
-import Access from "@/components/access/Access"
+import { Link } from "react-router-dom";
+import Access from "@/components/access/Access";
 
 export default function ForgotPasswordPage() {
     return (
@@ -12,5 +12,5 @@ export default function ForgotPasswordPage() {
             submitLabel="Enviar"
             footer={<p>Lembrou a senha? <Link to="/login" className="text-hyperlink">Voltar para o login</Link></p>}
         />
-    )
+    );
 }

@@ -1,26 +1,26 @@
-import { Outlet, useNavigate } from 'react-router-dom'
-import { ContextMenuProvider } from '@@/overlay/contextMenu/provider/ContextMenuProvider'
-import { useContextMenu } from '@@/overlay/contextMenu/useContextMenu'
+import { Outlet, useNavigate } from 'react-router-dom';
+import { ContextMenuProvider } from '@@/overlay/contextMenu/provider/ContextMenuProvider';
+import { useContextMenu } from '@@/overlay/contextMenu/useContextMenu';
 
-import Navbar from '@@/layout/navbar/Navbar'
+import Navbar from '@@/layout/navbar/Navbar';
 
 export function AppLayout() {
   return (
     <ContextMenuProvider>
       <AppLayoutContent />
     </ContextMenuProvider>
-  )
+  );
 }
 
 function AppLayoutContent() {
-  const navigate = useNavigate()
-  const contextMenu = useContextMenu()
+  const navigate = useNavigate();
+  const contextMenu = useContextMenu();
 
   function handleContextMenu(event: React.MouseEvent) {
-    event.preventDefault()
+    event.preventDefault();
     contextMenu.open([
       { label: 'Voltar', onClick: () => navigate(-1) },
-    ], event.clientX, event.clientY)
+    ], event.clientX, event.clientY);
   }
 
   return (
@@ -30,5 +30,5 @@ function AppLayoutContent() {
         <Outlet />
       </main>
     </div>
-  )
+  );
 }

@@ -1,11 +1,11 @@
 import PanelPlaceholder from "@/domain/models/products/solarPanel.placeholder";
-import ImagePlaceholder from "@/domain/models/shared/image.placeholder"
+import ImagePlaceholder from "@/domain/models/shared/image.placeholder";
 import type { SolarPanelAnnouncement } from "./solarPanelAnnouncement";
 
 export const SolarPannelPhotosPlaceholder = {
     heroImage:   ImagePlaceholder,
     otherImages: Array(5).fill(ImagePlaceholder),
-}
+};
 
 const SolarPanelPlaceholder: SolarPanelAnnouncement = {
     id:                 "12345",

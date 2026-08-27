@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom"
-import Access from "@/components/access/Access"
+import { Link } from "react-router-dom";
+import Access from "@/components/access/Access";
 
 export default function RegisterPage() {
     return (
@@ -15,5 +15,5 @@ export default function RegisterPage() {
             submitLabel="Cadastrar"
             footer={<p>Já tem uma conta? <Link to="/login" className="text-hyperlink">Entrar</Link></p>}
         />
-    )
+    );
 }
