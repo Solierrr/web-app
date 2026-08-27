@@ -1,16 +1,19 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Access from "@/components/access/Access";
 
 export default function ForgotPasswordPage() {
+    const { t } = useTranslation("access");
+
     return (
         <Access
             heading="Solaria"
-            helperText="Informe seu e-mail para receber as instruções de recuperação"
+            helperText={t("forgotPassword.helperText")}
             fields={[
-                { name: "email", type: "email", placeholder: "seuemailaqui@email.com" },
+                { name: "email", type: "email", placeholder: t("fields.email.placeholder") },
             ]}
-            submitLabel="Enviar"
-            footer={<p>Lembrou a senha? <Link to="/login" className="text-hyperlink">Voltar para o login</Link></p>}
+            submitLabel={t("forgotPassword.submit")}
+            footer={<p>{t("forgotPassword.rememberedPasswordPrefix")} <Link to="/login" className="text-hyperlink">{t("forgotPassword.backToLogin")}</Link></p>}
         />
     );
 }
