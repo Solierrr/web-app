@@ -1,10 +1,15 @@
 import type { ComponentProps } from "react";
 import Button from "./Button";
 import type { IconName } from "../icon/Icon";
-import Colors from "@/domain/enum/colors";
+import Colors from "@/shared/styles/colors/colors.enum";
 
-type ButtonPresetProps = Omit<ComponentProps<typeof Button>, "bgColor" | "txtColor">;
-type IconButtonProps = Omit<ButtonPresetProps, "content" | "icon"> & { icon: IconName };
+type ButtonPresetProps = Omit<
+  ComponentProps<typeof Button>,
+  "bgColor" | "txtColor"
+>;
+type IconButtonProps = Omit<ButtonPresetProps, "content" | "icon"> & {
+  icon: IconName;
+};
 
 /**
  * Primary
@@ -36,7 +41,14 @@ export function SecondaryButton(props: ButtonPresetProps) {
  * @param props - description, icon (nome do ícone), rounded, disabled e demais propriedades do Button (exceto `content`).
  */
 export function IconButton({ icon, ...props }: IconButtonProps) {
-  return <Button {...props} icon={{ name: icon }} bgColor={Colors.Orange} txtColor={Colors.White} />;
+  return (
+    <Button
+      {...props}
+      icon={{ name: icon }}
+      bgColor={Colors.Orange}
+      txtColor={Colors.White}
+    />
+  );
 }
 
 /**
@@ -46,7 +58,11 @@ export function IconButton({ icon, ...props }: IconButtonProps) {
  *
  * @param props - description, icon (nome do ícone), rounded, disabled e demais propriedades do Button (exceto `content`).
  */
-export function LightIconButton({ icon, className, ...props }: IconButtonProps) {
+export function LightIconButton({
+  icon,
+  className,
+  ...props
+}: IconButtonProps) {
   return (
     <Button
       {...props}

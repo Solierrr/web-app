@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 import Corridor from "./Corridor";
-import type { SolarPanelFeedSummary } from "@/domain/models/announcemnt/solarPanelAnnouncement";
+import type { SolarPanelFeedSummary } from "@/features/products/solar-panel/solarPanelAnnouncement";
 
 const items: SolarPanelFeedSummary[] = [
   {
