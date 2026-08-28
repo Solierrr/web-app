@@ -41,7 +41,7 @@ export default function Button({
 
   return (
     <button
-      className={`flex items-center-safe justify-center gap-2 font-medium cursor-pointer text-nowrap disabled:cursor-not-allowed select-none transition-all duration-350 ${inverse ? "flex-row" : "flex-row-reverse"} ${iconOnly ? `aspect-square ${rounded ? "rounded-full" : "rounded-medium"} p-2` : `px-4 py-2 ${rounded ? "rounded-full" : "rounded-medium"}`} ${className ?? ""}`}
+      className={`flex items-center-safe justify-center gap-2 font-medium cursor-pointer text-nowrap disabled:cursor-not-allowed select-none transition-all duration-350 ${inverse ? "flex-row" : "flex-row-reverse"} ${iconOnly ? "aspect-square rounded-full p-2" : `px-4 py-2 ${rounded ? "rounded-full" : "rounded-medium"}`} ${className ?? ""}`}
       {...props}
       disabled={disabled}
       title={title}
