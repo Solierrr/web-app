@@ -10,3 +10,11 @@ export interface Enterprise {
     centerUnityAddress: Address;
     geolocation: Geolocation;
 }
+
+export interface unitPlace {
+    id: string;
+    name: string;
+    enterprise: Enterprise;
+    address: Address;
+    geolocation: Geolocation;
+}

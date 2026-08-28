@@ -61,7 +61,7 @@ export default function Input({
 
   const inputElement = (
     <input
-      className={`${inverse === undefined ? "px-4" : inverse ? "pr-4 pl-2" : "pr-2 pl-4"} py-2 text-black font-medium placeholder:text-input-text placeholder:select-none focus:outline-0 medium`}
+      className={`${inverse === undefined ? "px-4" : inverse ? "pr-4 pl-2" : "pr-2 pl-4"} py-2 text-black font-medium placeholder:text-input-text placeholder:select-none caret-orange caret focus:outline-0 medium`}
       {...props}
       placeholder={placeholder}
       aria-label={name}

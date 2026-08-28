@@ -1,6 +1,6 @@
 export interface Access {
-    id:   string;
-    name: string;
+    id:    string;
+    name:  string;
     email: string;
 }
 
@@ -14,8 +14,13 @@ export interface LoginResponse {
     token:  string;
 }
 
+export interface RegisterCredentials {
+    loginCredentials: LoginCredentials;
+    accessToken: number;
+}
+
 export interface AuthState {
     access: Access | null;
-    token: string  | null;
+    token:  string | null;
     authenticated: boolean;
 }
