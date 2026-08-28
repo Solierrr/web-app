@@ -3,11 +3,13 @@ import { useEffect, useState } from "react";
 
 import type { SolarPanel } from "@/features/products/solar-panel/solarPanel";
 import type { SolarPanelAnnouncement } from "@/features/products/solar-panel/solarPanelAnnouncement";
-import SolarPanelAnnouncementPlaceholder from "@/features/products/solar-panel/solarPanelAnnouncement.d.mock";
 import type { Image } from "@/shared/types/image/image";
 
+import Skeleton from "@@/feedbacks/skeleton/Skeleton";
+import { ImageSkeleton } from "@@/feedbacks/skeleton/Skeleton.presets";
+
 import { getSolarPanel } from "@/features/products/solar-panel/solarPanel.service";
-import { LightIconButton } from "@@/ui/button/Button.presets";
+import { SoftIconButton } from "@@/ui/button/Button.presets";
 import { useContextMenu } from "@@/overlay/contextMenu/useContextMenu";
 import Button from "@@/ui/button/Button";
 
@@ -32,10 +34,6 @@ function regionsService(
   return `${Capitalize(message)} ${result}`;
 }
 
-function skeletonClass(loading: boolean, className = ""): string {
-  return loading ? `skeleton rounded-soft ${className}`.trim() : className;
-}
-
 interface WrapperProps extends React.ComponentPropsWithoutRef<"section"> {
   title: string;
   children: React.ReactNode;
@@ -53,10 +51,9 @@ function Wrapper({ title, children, className }: WrapperProps) {
 
 interface ImagesProps {
   images: Image[];
-  loading?: boolean;
 }
 
-function ProductImages({ images, loading = false }: ImagesProps) {
+function ProductImages({ images }: ImagesProps) {
   const contextMenu = useContextMenu();
   const { t } = useTranslation("announcements", {
     keyPrefix: "solarPanel.images",
@@ -79,19 +76,6 @@ function ProductImages({ images, loading = false }: ImagesProps) {
       ],
       event.clientX,
       event.clientY,
-    );
-  }
-
-  if (loading) {
-    return (
-      <div className="flex flex-row gap-8 overflow-auto scrollbar-none">
-        {images.map((_, index) => (
-          <div
-            key={index}
-            className="w-40 h-40 shrink-0 rounded-medium skeleton"
-          />
-        ))}
-      </div>
     );
   }
 
@@ -181,13 +165,7 @@ function panelCharacteristics(
   return characteristics;
 }
 
-function Characteristics({
-  panel,
-  loading = false,
-}: {
-  panel: SolarPanel;
-  loading?: boolean;
-}) {
+function Characteristics({ panel }: { panel: SolarPanel }) {
   const { t } = useTranslation("announcements", {
     keyPrefix: "solarPanel.characteristics",
   });
@@ -216,7 +194,7 @@ function Characteristics({
           className="flex justify-between py-4 px-6 rounded-soft bg-input-bg"
         >
           <p className="font-medium">{label}</p>
-          <p className={skeletonClass(loading, "font-medium")}>{value}</p>
+          <p className="font-medium">{value}</p>
         </li>
       ))}
     </ul>
@@ -225,13 +203,9 @@ function Characteristics({
 
 interface SolarPanelAnnouncementProps {
   product: SolarPanelAnnouncement;
-  loading?: boolean;
 }
 
-function SolarPanelAnnouncementPacked({
-  product,
-  loading = false,
-}: SolarPanelAnnouncementProps) {
+function SolarPanelAnnouncementPacked({ product }: SolarPanelAnnouncementProps) {
   const { t } = useTranslation("announcements", { keyPrefix: "solarPanel" });
   const { t: c } = useTranslation("commons");
 
@@ -239,23 +213,19 @@ function SolarPanelAnnouncementPacked({
     <div className="flex flex-col">
       <div className="flex flex-row relative gap-12">
         <div className="w-[40%] flex justify-center">
-          {loading ? (
-            <div className="w-[80%] aspect-square rounded-medium skeleton" />
-          ) : (
-            <img
-              className="w-[80%] h-fit sticky top-10 pb-10 object-cover"
-              src={product.photos.heroImage.url}
-              alt={product.photos.heroImage.description}
-            />
-          )}
+          <img
+            className="w-[80%] h-fit sticky top-10 pb-10 object-cover"
+            src={product.photos.heroImage.url}
+            alt={product.photos.heroImage.description}
+          />
         </div>
 
         <section className="w-[60%] flex flex-col gap-announcement">
           <section title={t("general.information")}>
             <div className="flex flex-col gap-6">
               <div className="flex flex-col gap-2">
-                <h1 className={skeletonClass(loading)}>{product.title}</h1>
-                <h3 className={skeletonClass(loading, "text-black/90")}>
+                <h1>{product.title}</h1>
+                <h3 className="text-black/90">
                   {regionsService(product.serviceRegions, {
                     and: c("and"),
                     message: t("general.service"),
@@ -265,43 +235,35 @@ function SolarPanelAnnouncementPacked({
               <div className="flex flex-col gap-8">
                 <div className="flex flex-row gap-6 items-baseline justify-between">
                   <div className="flex flex-row gap-4 items-baseline">
-                    <span
-                      className={skeletonClass(
-                        loading,
-                        "flex flex-row items-baseline gap-1",
-                      )}
-                    >
+                    <span className="flex flex-row items-baseline gap-1">
                       <h2>{product.discountPercentage}</h2>
                       <span className="font-bold">%</span>
                     </span>
-                    <div
-                      className={skeletonClass(
-                        loading,
-                        "flex flex-row gap-1 h-min items-baseline",
-                      )}
-                    >
+                    <div className="flex flex-row gap-1 h-min items-baseline">
                       <h5 className="font-semi-bold no-leading">R$</h5>
-                      <h3 className="no-leading leading-none">
+                      <h3 className="no-leading leading-none text-nowrap">
                         {product.unitPrice} {t("general.perUnit")}
                       </h3>
                     </div>
                   </div>
-                  <h3 className={skeletonClass(loading)}>
+                  <h3 className="text-nowrap">
                     {product.availableUnits} {t("general.units")}
                   </h3>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex flex-row gap-2">
                   <Button
                     content={t("actions.contactSupplier")}
                     description={t("actions.contactSupplierDescription")}
                     className="px-8"
                     rounded
-                    disabled={loading}
                   />
-                  <LightIconButton
+                  <SoftIconButton
                     description={t("actions.addToCart")}
                     icon="shoppingCart"
-                    disabled={loading}
+                  />
+                  <SoftIconButton
+                    description={t("actions.addToCart")}
+                    icon="heart"
                   />
                 </div>
               </div>
@@ -310,52 +272,92 @@ function SolarPanelAnnouncementPacked({
           <Wrapper
             title={t("sections.description")}
             aria-labelledby={t("sections.description")}
-            children={
-              <p
-                className={skeletonClass(
-                  loading,
-                  "flex max-h-60 text-black/90 overflow-auto",
-                )}
-              >
-                {product.description}
-              </p>
-            }
-          />
+          >
+            <p className="flex max-h-60 text-black/90 overflow-auto">
+              {product.description}
+            </p>
+          </Wrapper>
           <Wrapper
             title={t("sections.characteristics")}
             aria-labelledby={t("sections.characteristics")}
-            children={
-              <Characteristics panel={product.panel} loading={loading} />
-            }
             className="gap-4"
-          />
+          >
+            <Characteristics panel={product.panel} />
+          </Wrapper>
           <Wrapper
             title={t("sections.details")}
             aria-labelledby={t("sections.details")}
-            children={
-              <p
-                className={skeletonClass(
-                  loading,
-                  "flex max-h-60 text-black/90 overflow-auto",
-                )}
-              >
-                {product.details}
-              </p>
-            }
-          />
+          >
+            <p className="flex max-h-60 text-black/90 overflow-auto">
+              {product.details}
+            </p>
+          </Wrapper>
         </section>
       </div>
       <Wrapper
         title={t("sections.productImages")}
         aria-labelledby={t("sections.productImages")}
         className="flex"
-        children={
-          <ProductImages
-            images={product.photos.otherImages}
-            loading={loading}
-          />
-        }
-      />
+      >
+        <ProductImages images={product.photos.otherImages} />
+      </Wrapper>
+    </div>
+  );
+}
+
+function SolarPanelAnnouncementSkeleton() {
+  return (
+    <div className="flex flex-col" aria-busy="true">
+      <div className="flex flex-row relative gap-12">
+        <div className="w-[40%] flex justify-center">
+          <ImageSkeleton className="w-[80%] max-h-80! sticky top-10 pb-10" />
+        </div>
+        <section className="w-[60%] flex flex-col gap-announcement">
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-2">
+              <Skeleton height="6.25rem" width="100%" />
+              <Skeleton height="1.5rem" width="65%" />
+            </div>
+            <div className="flex flex-col gap-8">
+              <div className="flex justify-between items-baseline">
+                <Skeleton height="1.5rem" width="100%" />
+              </div>
+              <div className="flex gap-2">
+                <Skeleton height="2.5rem" width="12rem" className="rounded-full" />
+                <Skeleton height="2.5rem" width="2.5rem" className="rounded-full" />
+                <Skeleton height="2.5rem" width="2.5rem" className="rounded-full" />
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col gap-2">
+            <Skeleton height="1.65rem" width="10rem" />
+            <Skeleton height="1.5rem" />
+            <Skeleton height="1.5rem" width="85%" />
+            <Skeleton height="1.5rem" width="70%" />
+            <Skeleton height="1.5rem" width="85%" />
+            <Skeleton height="1.5rem" width="70%" />
+          </div>
+          <div className="flex flex-col gap-4">
+            <Skeleton height="1.65rem" width="12rem" />
+            {Array.from({ length: 4 }, (_, index) => (
+              <Skeleton key={index} height="3.5rem" className="rounded-soft" />
+            ))}
+          </div>
+          <div className="flex flex-col gap-2">
+            <Skeleton height="1.65rem" width="8rem" />
+            <Skeleton height="1.5rem" />
+            <Skeleton height="1.5rem" width="78%" />
+          </div>
+        </section>
+      </div>
+      <div className="flex flex-col gap-2">
+        <Skeleton height="1.65rem" width="11rem" />
+        <div className="flex gap-8 overflow-hidden">
+          {Array.from({ length: 3 }, (_, index) => (
+            <ImageSkeleton key={index} width="10rem" className="shrink-0" />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
@@ -390,13 +392,8 @@ export default function SolarPanelAnnouncement() {
   }
 
   if (loading || !product) {
-    return (
-      <SolarPanelAnnouncementPacked
-        product={SolarPanelAnnouncementPlaceholder[0]}
-        loading
-      />
-    );
+    return <SolarPanelAnnouncementSkeleton />;
   }
 
-  return <SolarPanelAnnouncementPacked product={product} loading={false} />;
+  return <SolarPanelAnnouncementPacked product={product} />;
 }

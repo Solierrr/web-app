@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import Button from "./Button";
 import Colors from "@/shared/styles/colors/colors.enum";
-import { InvalidPropError } from "@/components/ui/button/InvalidProp.error";
+import { InvalidPropError } from "@/config/error/InvalidProp.error";
 
 describe("Button", () => {
   it("renders content as the button label and description as aria-label", () => {

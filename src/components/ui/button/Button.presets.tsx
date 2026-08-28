@@ -69,7 +69,31 @@ export function LightIconButton({
       icon={{ name: icon }}
       bgColor={Colors.White}
       txtColor={Colors.Orange}
-      className={`shadow-soft ${className ?? ""}`}
+      className={`shadow-soft-black ${className ?? ""}`}
+    />
+  );
+}
+
+/**
+ * Light Icon
+ *
+ * Botão redondo apenas com ícone, fundo branco, ícone laranja e sombra suave.
+ *
+ * @param props - description, icon (nome do ícone), rounded, disabled e demais propriedades do Button (exceto `content`).
+ */
+export function SoftIconButton({
+  icon,
+  className,
+  ...props
+}: IconButtonProps) {
+  return (
+    <Button
+      {...props}
+      icon={{ name: icon }}
+      bgColor={Colors.White}
+      txtColor={Colors.Orange}
+      rounded={false}
+      className={`hover:bg-black/5! ${className ?? ""}`}
     />
   );
 }

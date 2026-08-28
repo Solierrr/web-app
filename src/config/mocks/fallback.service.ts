@@ -17,7 +17,7 @@ export async function resolveWithMocks<T>(
   }
 
   if (mode === MocksMode.ALWAYS) {
-    takeNap();
+    await takeNap();
     return mockCall();
   }
 
@@ -33,7 +33,7 @@ export async function resolveWithMocks<T>(
       operation: "resolveWithMocks",
       error,
     });
-    takeNap();
+    await takeNap();
     return mockCall();
   }
 }

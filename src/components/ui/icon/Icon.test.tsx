@@ -2,7 +2,7 @@ import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import Icon, { type IconName } from "./Icon";
 import Colors from "@/shared/styles/colors/colors.enum";
-import { InvalidIconError } from "@/components/ui/icon/InvalidIcon.error";
+import { InvalidIconError } from "@/config/error/InvalidIcon.error";
 
 describe("Icon", () => {
   it("renders an svg for a known icon name", () => {

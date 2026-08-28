@@ -10,9 +10,10 @@ import {
   ShoppingCart,
   Globe,
   type LucideIcon,
+  Heart,
 } from "lucide-react";
 import Colors from "@/shared/styles/colors/colors.enum";
-import { InvalidIconError } from "@/components/ui/icon/InvalidIcon.error";
+import { InvalidIconError } from "@/config/error/InvalidIcon.error";
 
 const icons = {
   home: Home,
@@ -25,6 +26,7 @@ const icons = {
   eyeOff: EyeOff,
   shoppingCart: ShoppingCart,
   globe: Globe,
+  heart: Heart
 } satisfies Record<string, LucideIcon>;
 
 export type IconName = keyof typeof icons;
