@@ -61,6 +61,8 @@
     @apply text-body text-black;
   }
   
+  body { @apply overflow-x-hidden }
+
   h1     { @apply text-title    font-bold       leading-9; }
   h2     { @apply text-subtitle font-semi-bold  leading-7; }
   h3, h4 { @apply text-label    font-medium     leading-6; }
@@ -88,10 +90,6 @@
 
 * {
   font-family: "Plus Jakarta Sans", sans-serif;
-}
-
-body {
-  overflow-x: hidden;
 }
 
 .input-scrollbar::-webkit-scrollbar-thumb       { @apply bg-input-outline rounded-full; }
