@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Corridor from "@@/layout/corridor/Corridor";
-import { getSolarPanels } from "@/service/feed/solarPanel.service";
-import type { SolarPanelFeedSummary } from "@/domain/models/announcemnt/solarPanelAnnouncement";
+import { getSolarPanels } from "@/features/products/solar-panel/solarPanel.service";
+import type { SolarPanelFeedSummary } from "@/features/products/solar-panel/solarPanelAnnouncement";
 
 const MOCK_IDS = ["1", "2", "3", "4", "5"];
 

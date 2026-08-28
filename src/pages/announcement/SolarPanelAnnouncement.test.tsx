@@ -5,13 +5,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import "@/config/locales/internationalization";
 import { ContextMenuProvider } from "@@/overlay/contextMenu/provider/ContextMenuProvider";
 
-vi.mock("@/service/feed/solarPanel.service", () => ({
+vi.mock("@/features/products/solar-panel/solarPanel.service", () => ({
   getSolarPanel: vi.fn(),
 }));
 
-import { getSolarPanel } from "@/service/feed/solarPanel.service";
-import type { SolarPanelAnnouncement as SolarPanelAnnouncementModel } from "@/domain/models/announcemnt/solarPanelAnnouncement";
-import ModelStatus from "@/domain/enum/modelStatus";
+import { getSolarPanel } from "@/features/products/solar-panel/solarPanel.service";
+import type { SolarPanelAnnouncement as SolarPanelAnnouncementModel } from "@/features/products/solar-panel/solarPanelAnnouncement";
+import { SolarPanelModelStatus as ModelStatus } from "@/features/products/solar-panel/solarPanel.enum";
 import SolarPanelAnnouncement from "./SolarPanelAnnouncement";
 
 const mockedGetSolarPanel = vi.mocked(getSolarPanel);
@@ -57,7 +57,9 @@ describe("SolarPanelAnnouncement", () => {
     renderAt("/produto");
 
     expect(mockedGetSolarPanel).not.toHaveBeenCalled();
-    expect(screen.getByText("Não foi possível carregar o produto.")).toBeInTheDocument();
+    expect(
+      screen.getByText("Não foi possível carregar o produto."),
+    ).toBeInTheDocument();
   });
 
   it("shows the error message when the service call fails", async () => {

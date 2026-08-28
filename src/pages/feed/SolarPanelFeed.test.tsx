@@ -3,13 +3,13 @@ import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import SolarPanelFeed from "./SolarPanelFeed";
 
-vi.mock("@/service/feed/solarPanel.service", () => ({
+vi.mock("@/features/products/solar-panel/solarPanel.service", () => ({
   getSolarPanels: vi.fn(),
 }));
 
-import { getSolarPanels } from "@/service/feed/solarPanel.service";
-import type { SolarPanelAnnouncement } from "@/domain/models/announcemnt/solarPanelAnnouncement";
-import ModelStatus from "@/domain/enum/modelStatus";
+import { getSolarPanels } from "@/features/products/solar-panel/solarPanel.service";
+import type { SolarPanelAnnouncement } from "@/features/products/solar-panel/solarPanelAnnouncement";
+import { SolarPanelModelStatus as ModelStatus } from "@/features/products/solar-panel/solarPanel.enum";
 
 const mockedGetSolarPanels = vi.mocked(getSolarPanels);
 

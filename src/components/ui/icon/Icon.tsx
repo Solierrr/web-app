@@ -1,6 +1,18 @@
-import { Home, User, Settings, Search, ChevronDown, X, Eye, EyeOff, ShoppingCart, Globe, type LucideIcon } from "lucide-react";
-import Colors from "@/domain/enum/colors";
-import { InvalidIconError } from "@/domain/errors/InvalidIconError";
+import {
+  Home,
+  User,
+  Settings,
+  Search,
+  ChevronDown,
+  X,
+  Eye,
+  EyeOff,
+  ShoppingCart,
+  Globe,
+  type LucideIcon,
+} from "lucide-react";
+import Colors from "@/shared/styles/colors/colors.enum";
+import { InvalidIconError } from "@/components/ui/icon/InvalidIcon.error";
 
 const icons = {
   home: Home,
@@ -23,14 +35,28 @@ interface IconProps {
   size?: number;
   strokeWidth?: number;
   absoluteStrokeWidth?: boolean;
-  
+
   className?: string;
 }
 
-export default function Icon({ name, color = Colors.Black, size = 24, strokeWidth = 2, absoluteStrokeWidth = false, className }: IconProps) {
+export default function Icon({
+  name,
+  color = Colors.Black,
+  size = 24,
+  strokeWidth = 2,
+  absoluteStrokeWidth = false,
+  className,
+}: IconProps) {
   const IconComponent = icons[name];
   if (!IconComponent) throw InvalidIconError.notFound(name);
 
-  return <IconComponent size={size} color={color}
-    strokeWidth={strokeWidth} absoluteStrokeWidth={absoluteStrokeWidth} className={className} />;
+  return (
+    <IconComponent
+      size={size}
+      color={color}
+      strokeWidth={strokeWidth}
+      absoluteStrokeWidth={absoluteStrokeWidth}
+      className={className}
+    />
+  );
 }

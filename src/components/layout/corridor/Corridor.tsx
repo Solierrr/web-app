@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import type { SolarPanelFeedSummary } from "@/domain/models/announcemnt/solarPanelAnnouncement";
+import type { SolarPanelFeedSummary } from "@/features/products/solar-panel/solarPanelAnnouncement";
 
 interface CorridorProps {
   title: string;
