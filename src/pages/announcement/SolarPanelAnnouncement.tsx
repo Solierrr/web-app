@@ -392,7 +392,7 @@ export default function SolarPanelAnnouncement() {
   if (loading || !product) {
     return (
       <SolarPanelAnnouncementPacked
-        product={SolarPanelAnnouncementPlaceholder}
+        product={SolarPanelAnnouncementPlaceholder[0]}
         loading
       />
     );

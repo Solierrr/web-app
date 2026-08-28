@@ -1,6 +1,6 @@
 import logger from "@/config/logging/logger";
 
-import CurrencyCode from "../currency/currency.enum";
+import CurrencyCode from "./exchange.enum";
 import type { ExchangeRateResponse } from "./exchange";
 
 const SERVICE_NAME = "exchange";

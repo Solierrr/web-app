@@ -6,11 +6,11 @@ const { loggerMock } = vi.hoisted(() => ({
   },
 }));
 
-vi.mock("@/infrastructure/logging/logger", () => ({
+vi.mock("@/config/logging/logger", () => ({
   default: loggerMock,
 }));
 
-import CurrencyCode from "../currency/currency.enum";
+import CurrencyCode from "./exchange.enum";
 import { convertCurrency, getExchangeRate } from "./exchange.service";
 
 describe("exchange.service", () => {
