@@ -1,5 +1,5 @@
 import type { Access } from "./access";
 
-function register(access: Access) {
-    
+export function register(access: Access): never {
+    throw new Error(`Not implemented: register(${access.email})`);
 }

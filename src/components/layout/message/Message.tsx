@@ -6,11 +6,11 @@ interface MessageProps {
     owner:   User;
 }
 
-export default function Message({ message, owner }: MessageProps) {
-    const hour = `${message.time.getHours()}:${message.time.getMinutes()}`
-    
+export default function Message({ message }: MessageProps) {
+    const hour = `${message.time.getHours()}:${message.time.getMinutes()}`;
+
     return (
-        <div className={message.user === owner ? "" : ""}>
+        <div>
             <div>
                 <p>{message.message}<span>{hour}</span></p>
             </div>

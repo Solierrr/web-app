@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
 
 import type { User } from "@/features/users/user/user";
 import type { Message as MessageInterface } from "@/features/messages/messages";
@@ -10,11 +9,11 @@ interface ChatLayoutProps {
     messages: MessageInterface[];
 }
 
-function ChatLayout({ owner, messages }: ChatLayoutProps) {
+export function ChatLayout({ owner, messages }: ChatLayoutProps) {
     return (
         <section>
-            { messages.map((message) => (
-                <Message message={message} owner={owner} />
+            { messages.map((message, index) => (
+                <Message key={index} message={message} owner={owner} />
             ))}
         </section>
     );
@@ -23,5 +22,5 @@ function ChatLayout({ owner, messages }: ChatLayoutProps) {
 export default function Chat() {
   const { id } = useParams<{ id: string }>();
 
-  return
+  return <section>{id}</section>;
 }
