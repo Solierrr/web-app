@@ -4,19 +4,28 @@ import MocksMode from "@/config/mocks/mocksMode.enum";
 
 import { resolveWithMocks } from "./fallback.service";
 
+const NAP_TIME_MS = 2000;
+
 describe("resolveWithMocks", () => {
   afterEach(() => {
+    vi.useRealTimers();
     vi.unstubAllEnvs();
   });
 
-  it("returns the mock without calling the API when mode is ALWAYS", async () => {
+  it("waits before returning the mock when mode is ALWAYS", async () => {
+    vi.useFakeTimers();
     vi.stubEnv("VITE_MOCKS", MocksMode.ALWAYS);
     const apiCall = vi.fn();
     const mockCall = vi.fn().mockReturnValue("mock");
 
-    const result = await resolveWithMocks(apiCall, mockCall);
+    const resultPromise = resolveWithMocks(apiCall, mockCall);
+    await vi.advanceTimersByTimeAsync(NAP_TIME_MS - 1);
 
-    expect(result).toBe("mock");
+    expect(mockCall).not.toHaveBeenCalled();
+
+    await vi.advanceTimersByTimeAsync(1);
+
+    await expect(resultPromise).resolves.toBe("mock");
     expect(apiCall).not.toHaveBeenCalled();
   });
 
@@ -40,14 +49,20 @@ describe("resolveWithMocks", () => {
     expect(mockCall).not.toHaveBeenCalled();
   });
 
-  it("falls back to the mock when mode is FALLBACK and the API fails", async () => {
+  it("waits before falling back to the mock when the API fails", async () => {
+    vi.useFakeTimers();
     vi.stubEnv("VITE_MOCKS", MocksMode.FALLBACK);
     const apiCall = vi.fn().mockRejectedValue(new Error("boom"));
     const mockCall = vi.fn().mockReturnValue("mock");
 
-    const result = await resolveWithMocks(apiCall, mockCall);
+    const resultPromise = resolveWithMocks(apiCall, mockCall);
+    await vi.advanceTimersByTimeAsync(NAP_TIME_MS - 1);
 
-    expect(result).toBe("mock");
+    expect(mockCall).not.toHaveBeenCalled();
+
+    await vi.advanceTimersByTimeAsync(1);
+
+    await expect(resultPromise).resolves.toBe("mock");
   });
 
   it("defaults to the FALLBACK behavior when VITE_MOCKS is unset or invalid", async () => {
