@@ -1,2 +1,2 @@
 import "@testing-library/jest-dom";
-import "@/config/locales/internationalization";
+import "@/config/i18n/internationalization";
