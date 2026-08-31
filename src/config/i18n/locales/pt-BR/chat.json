@@ -1,0 +1,12 @@
+{
+  "draftPlaceholder": "Escreva uma mensagem...",
+  "send": "Enviar",
+  "sendDescription": "Enviar mensagem",
+  "typing": "Digitando...",
+  "chatbot": {
+    "greeting": "Olá! Como posso te ajudar hoje?",
+    "draftPlaceholder": "Pergunte algo ao assistente...",
+    "sendDescription": "Enviar mensagem ao assistente",
+    "assistantName": "Assistente Solaria"
+  }
+}

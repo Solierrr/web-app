@@ -6,20 +6,18 @@
       "units": "unidades",
       "perUnit": "por unidade"
     },
-
     "actions": {
       "contactSupplier": "Entrar em contato",
       "contactSupplierDescription": "Entrar em contato com o fornecedor",
-      "addToCart": "Adicionar ao carrinho"
+      "addToCart": "Adicionar ao carrinho",
+      "viewSupplierProfile": "Ver perfil do fornecedor"
     },
-
     "sections": {
       "description": "Descrição",
       "characteristics": "Características",
       "details": "Detalhes",
       "productImages": "Imagens do produto"
     },
-
     "characteristics": {
       "dimensions": "Largura x Comprimento",
       "weight": "Peso",
@@ -30,17 +28,14 @@
       "efficiency": "Eficiência",
       "empty": "Nenhuma característica informada pelo fornecedor."
     },
-
     "images": {
       "openInNewTab": "Abrir em nova aba",
       "copyLink": "Copiar link da imagem"
     },
-
     "errors": {
       "load": "Não foi possível carregar o produto."
     }
   },
-
   "inverter": {
     "general": {
       "information": "Informações gerais"

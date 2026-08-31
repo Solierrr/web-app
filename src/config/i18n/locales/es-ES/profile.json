@@ -1,0 +1,19 @@
+{
+  "onboarding": {
+    "previewFallbackName": "Vista previa",
+    "bannerPlaceholder": "URL de la imagen de banner",
+    "avatarPlaceholder": "URL de la foto de perfil",
+    "complete": "Concluir",
+    "completeDescription": "Concluir la personalización del perfil",
+    "skip": "Omitir",
+    "skipDescription": "Omitir la personalización del perfil",
+    "company": {
+      "bannerHeading": "Personaliza el banner de la empresa",
+      "avatarHeading": "Elige el logo de la empresa"
+    },
+    "user": {
+      "bannerHeading": "Personaliza el banner del perfil",
+      "avatarHeading": "Elige la foto del perfil"
+    }
+  }
+}

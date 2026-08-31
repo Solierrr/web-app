@@ -1,0 +1,23 @@
+{
+  "professional": {
+    "title": "Profissionais",
+    "description": "Encontre profissionais credenciados para o seu projeto.",
+    "filters": {
+      "electricalEngineering": "Engenharia Elétrica",
+      "installation": "Instalação",
+      "maintenance": "Manutenção",
+      "inspection": "Vistoria"
+    }
+  },
+  "company": {
+    "title": "Empresas",
+    "description": "Encontre empresas credenciadas na plataforma.",
+    "filters": {
+      "supplier": "Fornecedor",
+      "installer": "Instaladora",
+      "distributor": "Distribuidora",
+      "maintenance": "Manutenção"
+    }
+  },
+  "filterPlaceholder": "Filtrar busca"
+}

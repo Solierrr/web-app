@@ -1,0 +1,34 @@
+{
+  "solarPanelModel": {
+    "title": "Modelos de placa solar",
+    "description": "Gerencie o catálogo de modelos disponíveis para oferta.",
+    "createHeading": "Novo modelo",
+    "editHeading": "Editar modelo",
+    "fields": {
+      "brand": "Marca",
+      "model": "Modelo",
+      "type": "Tipo",
+      "status": "Status",
+      "powerOutput": "Potência (Wp)",
+      "efficiency": "Eficiência (%)",
+      "weight": "Peso (kg)",
+      "width": "Largura (m)",
+      "length": "Comprimento (m)"
+    },
+    "actions": {
+      "save": "Salvar",
+      "saveDescription": "Salvar modelo",
+      "add": "Adicionar",
+      "cancel": "Cancelar",
+      "cancelDescription": "Cancelar edição",
+      "edit": "Editar",
+      "remove": "Remover"
+    },
+    "table": {
+      "brandModel": "Marca / Modelo",
+      "type": "Tipo",
+      "power": "Potência",
+      "status": "Status"
+    }
+  }
+}
