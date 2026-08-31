@@ -9,14 +9,14 @@ import Skeleton from "@@/feedbacks/skeleton/Skeleton";
 import { ImageSkeleton } from "@@/feedbacks/skeleton/Skeleton.presets";
 
 import { getSolarPanelBySlug } from "@/features/products/solar-panel/solarPanel.service";
-import { DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/locales/languages";
-import { routePaths } from "@/config/locales/routePaths";
+import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
+import { routePaths } from "@/config/i18n/routePaths";
 import { SoftIconButton } from "@@/ui/button/Button.presets";
 import { useContextMenu } from "@@/overlay/contextMenu/useContextMenu";
 import Button from "@@/ui/button/Button";
 
 import { useTranslation } from "react-i18next";
-import { Capitalize } from "@/config/locales/utils";
+import { Capitalize } from "@/config/i18n/utils";
 import WrapperLayout from "@/config/WrapperLayout";
 
 interface regionsServiceI18n {

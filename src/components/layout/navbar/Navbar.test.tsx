@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it } from "vitest";
 
-import "@/config/locales/internationalization";
+import "@/config/i18n/internationalization";
 import Navbar from "./Navbar";
 
 describe("Navbar", () => {

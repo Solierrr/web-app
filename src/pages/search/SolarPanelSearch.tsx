@@ -3,8 +3,8 @@ import { Link, useParams } from "react-router-dom";
 import Select from "@@/ui/select/Select";
 import { getSolarPanels } from "@/features/products/solar-panel/solarPanel.service";
 import type { SolarPanelFeedSummary } from "@/features/products/solar-panel/solarPanelAnnouncement";
-import { DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/locales/languages";
-import { routePaths } from "@/config/locales/routePaths";
+import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
+import { routePaths } from "@/config/i18n/routePaths";
 
 const MOCK_IDS = ["1", "2", "3", "4", "5", "6", "7", "8"];
 const FILTER_CHIPS = [

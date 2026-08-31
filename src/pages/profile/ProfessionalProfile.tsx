@@ -4,8 +4,8 @@ import { useTranslation } from "react-i18next";
 import ProfilePage from "@/pages/profile/ProfilePage";
 import { getProfessionalBySlug } from "@/features/professionals/professional.service";
 import type { Professional } from "@/features/professionals/professional";
-import { DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/locales/languages";
-import { routePaths } from "@/config/locales/routePaths";
+import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
+import { routePaths } from "@/config/i18n/routePaths";
 
 export default function ProfessionalProfile() {
     const { lang: langParam, professionalSlug = "" } = useParams<{ lang: string; professionalSlug: string }>();

@@ -6,8 +6,8 @@ import { AboutPage } from '../pages/AboutPage';
 import { HomePage } from '../pages/HomePage';
 import { NotFoundPage } from '../pages/NotFoundPage';
 
-import { SUPPORTED_LANGUAGES, type SupportedLanguage } from '@/config/locales/languages';
-import { joinSegments } from '@/config/locales/routePaths';
+import { SUPPORTED as SUPPORTED_LANGUAGES, type SupportedLanguage } from '@/config/i18n/browser/languages';
+import { joinSegments } from '@/config/i18n/routePaths';
 
 import SolarPanelAnnouncement from '@/pages/announcement/SolarPanelAnnouncement';
 import SolarPanelFeed         from '@/pages/feed/SolarPanelFeed';

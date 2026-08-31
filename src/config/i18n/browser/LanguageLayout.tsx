@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Navigate, Outlet, useLocation, useParams } from "react-router-dom";
-import i18n from "@/config/locales/internationalization";
-import { detectLanguage, isSupportedLanguage } from "@/config/locales/languages";
+import i18n from "@/config/i18n/internationalization";
+import { detectLanguage, isSupportedLanguage } from "@/config/i18n/browser/languages";
 
 /**
  * LanguageLayout

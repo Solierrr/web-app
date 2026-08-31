@@ -2,8 +2,8 @@ import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Access from "@/components/layout/access/Access";
 import { Hyperlink } from "@/components/ui/link/Hyperlink";
-import { DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/locales/languages";
-import { routePaths } from "@/config/locales/routePaths";
+import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
+import { routePaths } from "@/config/i18n/routePaths";
 
 export default function LoginPage() {
   const { t } = useTranslation("access");

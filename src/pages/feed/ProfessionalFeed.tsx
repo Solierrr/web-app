@@ -5,8 +5,8 @@ import EntityCorridor from "@@/layout/corridor/EntityCorridor";
 import { getProfessionals } from "@/features/professionals/professional.service";
 import type { Professional } from "@/features/professionals/professional";
 import type { EntityCardItem } from "@@/layout/entityCard/EntityCard";
-import { DEFAULT_LANGUAGE, isSupportedLanguage, type SupportedLanguage } from "@/config/locales/languages";
-import { routePaths } from "@/config/locales/routePaths";
+import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage, type SupportedLanguage } from "@/config/i18n/browser/languages";
+import { routePaths } from "@/config/i18n/routePaths";
 
 const MOCK_IDS = ["professional-1", "professional-2", "professional-3"];
 

@@ -4,8 +4,8 @@ import { useTranslation } from "react-i18next";
 import ProfilePage from "@/pages/profile/ProfilePage";
 import { getCompanyBySlug } from "@/features/companies/company.service";
 import type { Company } from "@/features/companies/company";
-import { DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/locales/languages";
-import { routePaths } from "@/config/locales/routePaths";
+import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
+import { routePaths } from "@/config/i18n/routePaths";
 
 export default function CompanyProfile() {
     const { lang: langParam, companySlug = "" } = useParams<{ lang: string; companySlug: string }>();

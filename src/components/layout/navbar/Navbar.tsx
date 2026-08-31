@@ -2,8 +2,8 @@ import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Icon from "@@/ui/icon/Icon";
 import LanguageSwitcher from "@@/layout/navbar/LanguageSwitcher";
-import { DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/locales/languages";
-import { routePaths } from "@/config/locales/routePaths";
+import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
+import { routePaths } from "@/config/i18n/routePaths";
 
 export default function Navbar() {
     const { t } = useTranslation("commons", { keyPrefix: "navbar" });

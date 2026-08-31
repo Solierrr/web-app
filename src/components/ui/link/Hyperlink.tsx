@@ -10,10 +10,12 @@ interface HyperlinkProps {
 }
 
 export function Hyperlink({ content, url, type = HyperlinkUrlType.COMPLETE, className }: HyperlinkProps) {
+    const { pathname } = useLocation();
+
     let redirect: string;
-    if (type === HyperlinkUrlType.COMPLETE) { redirect = url }
-    else if (type === HyperlinkUrlType.CONCAT) { redirect = `${useLocation().pathname}/${url}` }
-    else { throw new Error() }
+    if (type === HyperlinkUrlType.COMPLETE) { redirect = url; }
+    else if (type === HyperlinkUrlType.CONCAT) { redirect = `${pathname}/${url}`; }
+    else { throw new Error(); }
 
     return (
         <div className="flex w-fit px-1 bg-interactive rounded-small">

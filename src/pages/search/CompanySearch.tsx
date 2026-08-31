@@ -6,8 +6,8 @@ import EntityCard from "@@/layout/entityCard/EntityCard";
 import { getCompanies } from "@/features/companies/company.service";
 import type { Company } from "@/features/companies/company";
 import type { EntityCardItem } from "@@/layout/entityCard/EntityCard";
-import { DEFAULT_LANGUAGE, isSupportedLanguage, type SupportedLanguage } from "@/config/locales/languages";
-import { routePaths } from "@/config/locales/routePaths";
+import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage, type SupportedLanguage } from "@/config/i18n/browser/languages";
+import { routePaths } from "@/config/i18n/routePaths";
 
 const MOCK_IDS = ["company-1", "company-2", "company-3"];
 
