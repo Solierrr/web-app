@@ -1,12 +1,15 @@
-import type { Company } from "./company/company";
+import type { Company } from "./company";
+import { slugNormalization } from "@/utils/normalization";
 
-const companyMock = [
+const companyMockData = [
   {
     id: "company-1",
     status: "APPROVED",
     cnpj: "12345678000190",
     tradeName: "Solaria Energia",
     corporateName: "Solaria Energia Solar Ltda",
+    logoUrl: "https://i.pravatar.cc/150?img=68",
+    bannerUrl: "https://fastly.picsum.photos/id/918/1600/400.jpg?hmac=1gEvFp6O-XDh4848VnlwyOIrVy8s_aJNhYyTzxN9_JA",
     address: {
       street: "Avenida das Nações",
       number: "1200",
@@ -66,5 +69,12 @@ const companyMock = [
     },
   },
 ] as Company[];
+
+// `slug` não existe em `company` no schema-api-core.sql: gerado aqui a partir
+// de `tradeName` até existir essa coluna (ou rota amigável equivalente) na API.
+const companyMock = companyMockData.map((company) => ({
+  ...company,
+  slug: slugNormalization(company.tradeName),
+})) as Company[];
 
 export default companyMock;

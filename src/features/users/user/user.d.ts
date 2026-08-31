@@ -9,4 +9,8 @@ export interface User {
     cpf: string;
     birthDate: string;
     contact?: Contact;
+
+    // NOTE: `users` só tem a coluna `avatar` em schema-api-core.sql, sem banner.
+    // Mantido como mock até existir campo equivalente na API.
+    bannerUrl?: string;
 }
