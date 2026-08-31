@@ -5,7 +5,6 @@
   "yes": "yes",
   "no": "no",
   "language": "Language",
-
   "actions": {
     "add": "add",
     "back": "back",
@@ -21,11 +20,11 @@
     "save": "save",
     "search": "search",
     "send": "send",
-    "view": "view"
+    "view": "view",
+    "contact": "contact"
   },
-
   "status": {
-    "loading": "loading...",
+    "loading": "loading",
     "success": "success",
     "error": "error",
     "active": "active",
@@ -33,56 +32,48 @@
     "available": "available",
     "unavailable": "unavailable"
   },
-
   "navigation": {
     "home": "home",
     "next": "next",
     "previous": "previous"
   },
-
   "form": {
     "required": "required",
     "optional": "optional",
     "invalid": "invalid value",
     "invalidEmail": "invalid email"
   },
-
   "units": {
     "unit": "unit",
     "units": "units",
     "perUnit": "per unit",
     "perUnitShort": "/ unit"
   },
-
   "select": {
     "placeholder": "Select...",
     "clearSelection": "Clear selection"
   },
-
   "errorBoundary": {
     "label": "Error",
     "title": "Something went wrong",
     "reload": "Reload page"
   },
-
   "navbar": {
     "app": "App",
     "solarPanels": "Solar Panels",
     "professionals": "Professionals",
     "accredit": "Become a partner",
-    "support": "Support"
+    "support": "Support",
+    "companies": "Companies"
   },
-
   "corridor": {
     "viewAll": "view all items"
   },
-
   "time": {
     "today": "today",
     "yesterday": "yesterday",
     "tomorrow": "tomorrow"
   },
-
   "empty": {
     "default": "no results found."
   }

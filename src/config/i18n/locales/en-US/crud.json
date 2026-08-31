@@ -1,0 +1,34 @@
+{
+  "solarPanelModel": {
+    "title": "Solar panel models",
+    "description": "Manage the catalog of models available for listing.",
+    "createHeading": "New model",
+    "editHeading": "Edit model",
+    "fields": {
+      "brand": "Brand",
+      "model": "Model",
+      "type": "Type",
+      "status": "Status",
+      "powerOutput": "Power output (Wp)",
+      "efficiency": "Efficiency (%)",
+      "weight": "Weight (kg)",
+      "width": "Width (m)",
+      "length": "Length (m)"
+    },
+    "actions": {
+      "save": "Save",
+      "saveDescription": "Save model",
+      "add": "Add",
+      "cancel": "Cancel",
+      "cancelDescription": "Cancel editing",
+      "edit": "Edit",
+      "remove": "Remove"
+    },
+    "table": {
+      "brandModel": "Brand / Model",
+      "type": "Type",
+      "power": "Power",
+      "status": "Status"
+    }
+  }
+}

@@ -22,6 +22,6 @@ describe('ForgotPasswordPage', () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByRole('link', { name: 'Voltar para o login' })).toHaveAttribute('href', '/login');
+    expect(screen.getByRole('link', { name: 'Voltar para o login' })).toHaveAttribute('href', '/pt-BR/login');
   });
 });

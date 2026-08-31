@@ -30,7 +30,7 @@ export default function Access({ heading, helperText, fields, submitLabel, foote
             <div className="flex w-full flex-col justify-center gap-10 px-10 sm:px-20 lg:w-1/2">
                 <div className="flex flex-col gap-2">
                     <h1 className="text-hero font-bold text-orange">{heading}</h1>
-                    {helperText && <p className="text-black/70">{helperText}</p>}
+                    {helperText && <div className="text-black/70">{helperText}</div>}
                 </div>
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">

@@ -33,6 +33,9 @@
 *.suo
 *.userprefs
 
+# SonarQube
+.sonar/
+
 # Visual Studio Code / Cursor
 .cursor/
 

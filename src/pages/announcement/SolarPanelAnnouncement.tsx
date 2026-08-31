@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import type { SolarPanel } from "@/features/products/solar-panel/solarPanel";
@@ -8,13 +8,16 @@ import type { Image } from "@/shared/types/image/image";
 import Skeleton from "@@/feedbacks/skeleton/Skeleton";
 import { ImageSkeleton } from "@@/feedbacks/skeleton/Skeleton.presets";
 
-import { getSolarPanel } from "@/features/products/solar-panel/solarPanel.service";
+import { getSolarPanelBySlug } from "@/features/products/solar-panel/solarPanel.service";
+import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
+import { routePaths } from "@/config/i18n/routePaths";
 import { SoftIconButton } from "@@/ui/button/Button.presets";
 import { useContextMenu } from "@@/overlay/contextMenu/useContextMenu";
 import Button from "@@/ui/button/Button";
 
 import { useTranslation } from "react-i18next";
-import { Capitalize } from "@/config/locales/utils";
+import { Capitalize } from "@/config/i18n/utils";
+import WrapperLayout from "@/config/WrapperLayout";
 
 interface regionsServiceI18n {
   message: string;
@@ -208,6 +211,8 @@ interface SolarPanelAnnouncementProps {
 function SolarPanelAnnouncementPacked({ product }: SolarPanelAnnouncementProps) {
   const { t } = useTranslation("announcements", { keyPrefix: "solarPanel" });
   const { t: c } = useTranslation("commons");
+  const { lang: langParam } = useParams<{ lang: string }>();
+  const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
 
   return (
     <div className="flex flex-col">
@@ -231,6 +236,9 @@ function SolarPanelAnnouncementPacked({ product }: SolarPanelAnnouncementProps) 
                     message: t("general.service"),
                   })}
                 </h3>
+                <Link to={routePaths.companyProfile(lang, product.companySlug)} className="w-fit text-hyperlink">
+                  {t("actions.viewSupplierProfile")}
+                </Link>
               </div>
               <div className="flex flex-col gap-8">
                 <div className="flex flex-row gap-6 items-baseline justify-between">
@@ -310,7 +318,7 @@ function SolarPanelAnnouncementSkeleton() {
     <div className="flex flex-col" aria-busy="true">
       <div className="flex flex-row relative gap-12">
         <div className="w-[40%] flex justify-center">
-          <ImageSkeleton className="w-[80%] max-h-80! sticky top-10 pb-10" />
+          <ImageSkeleton className="w-[80%]! max-h-[80vh]! sticky top-10 pb-10" />
         </div>
         <section className="w-[60%] flex flex-col gap-announcement">
           <div className="flex flex-col gap-6">
@@ -363,7 +371,7 @@ function SolarPanelAnnouncementSkeleton() {
 }
 
 export default function SolarPanelAnnouncement() {
-  const { id } = useParams<{ id: string }>();
+  const { companySlug, productSlug } = useParams<{ companySlug: string; productSlug: string }>();
   const { t } = useTranslation("announcements", {
     keyPrefix: "solarPanel.errors",
   });
@@ -373,9 +381,9 @@ export default function SolarPanelAnnouncement() {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    if (!id) return;
+    if (!companySlug || !productSlug) return;
 
-    getSolarPanel(id)
+    getSolarPanelBySlug(companySlug, productSlug)
       .then((product) => {
         setProduct(product);
       })
@@ -385,15 +393,23 @@ export default function SolarPanelAnnouncement() {
       .finally(() => {
         setLoading(false);
       });
-  }, [id]);
+  }, [companySlug, productSlug]);
 
-  if (!id || error) {
+  if (!companySlug || !productSlug || error) {
     return <p>{t("load")}</p>;
   }
 
   if (loading || !product) {
-    return <SolarPanelAnnouncementSkeleton />;
+    return (
+      <WrapperLayout ptop>
+        <SolarPanelAnnouncementSkeleton />
+      </WrapperLayout>
+    );
   }
 
-  return <SolarPanelAnnouncementPacked product={product} />;
+  return (
+    <WrapperLayout ptop>
+      <SolarPanelAnnouncementPacked product={product} />
+    </WrapperLayout>
+  );
 }

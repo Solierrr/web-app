@@ -39,6 +39,7 @@
 
   --spacing-announcement: 3rem;
 
+  --radius-small:   0.25rem;
   --radius-soft:   0.35rem;
   --radius-medium: 0.50rem;
   --radius-hard:   0.80rem;
@@ -73,6 +74,35 @@
   ::-webkit-scrollbar-thumb       { @apply bg-orange rounded-full; }
   ::-webkit-scrollbar-thumb:hover { @apply bg-dark-orange;         }
 
+  /*
+   * Scrollbar da página (a maior): fica invisível parada, aparece ao passar
+   * o mouse ou ao rolar, e some com um pequeno atraso depois que a rolagem
+   * para. A classe `scroll-active` é alternada via JS em `App.tsx` (em
+   * `document.scrollingElement`, evento de scroll na window + timeout).
+   *
+   * Miramos tanto `html` quanto `body` porque, com `overflow-x: hidden` no
+   * body e nada declarado em `overflow` no html (como logo abaixo), quem
+   * vira a caixa de rolagem de verdade — a que o navegador propaga pro
+   * viewport — é o `body`, não o `html`. Cobrir os dois evita quebrar de
+   * novo se essa regra de overflow mudar no futuro.
+   */
+  html, body {
+    scrollbar-gutter: stable;
+  }
+
+  html::-webkit-scrollbar-thumb,
+  body::-webkit-scrollbar-thumb {
+    opacity: 0;
+    transition: opacity 300ms ease-in-out;
+  }
+
+  html:hover::-webkit-scrollbar-thumb,
+  body:hover::-webkit-scrollbar-thumb,
+  html.scroll-active::-webkit-scrollbar-thumb,
+  body.scroll-active::-webkit-scrollbar-thumb {
+    opacity: 1;
+  }
+
   ::selection, mark { @apply bg-orange-500 text-white; }
   :focus-visible { @apply outline-[0.155rem] outline-offset-[0.165rem] rounded-md outline-input-outline;}
 }
@@ -95,6 +125,14 @@
 
 @utility shadow-soft-* {
   box-shadow: 0 0.125rem 0.5rem 0 color-mix(in srgb, --value(--color-*) 12%, transparent);
+}
+
+@utility bg-interactive {
+  @apply bg-black/8 hover:bg-black/14 active:bg-black/20 transition duration-350
+}
+
+@utility no-bg-interactive {
+  @apply hover:bg-black/6 active:bg-black/10 transition duration-350
 }
 
 * {

@@ -3,7 +3,9 @@ import type { SolarPanelAnnouncement } from "./solarPanelAnnouncement";
 const solarPanelAnnouncementMock = [
     {
         "id": "1",
-        "supplierId": "supplier-1",
+        "slug": "painel-solar-monocristalino-517w-canadian-solar-cs6w-550ms",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-1",
             "brand": "Canadian Solar",
@@ -25,13 +27,31 @@ const solarPanelAnnouncementMock = [
             "Resistente a cargas de vento e neve"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 1432.6,
@@ -45,7 +65,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "2",
-        "supplierId": "supplier-2",
+        "slug": "painel-solar-monocristalino-383w-jinko-solar-jkm330p-72",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-2",
             "brand": "Jinko Solar",
@@ -69,13 +91,31 @@ const solarPanelAnnouncementMock = [
             "Vidro temperado anti-reflexivo"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 648.8,
@@ -87,7 +127,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "3",
-        "supplierId": "supplier-3",
+        "slug": "painel-solar-filme-fino-205w-sunpower-spr-flex-120",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-3",
             "brand": "SunPower",
@@ -110,13 +152,31 @@ const solarPanelAnnouncementMock = [
             "Vidro temperado anti-reflexivo"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 420.4,
@@ -130,7 +190,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "4",
-        "supplierId": "supplier-4",
+        "slug": "painel-solar-filme-fino-167w-longi-solar-lr4-72hbd-450m",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-4",
             "brand": "LONGi Solar",
@@ -152,13 +214,31 @@ const solarPanelAnnouncementMock = [
             "Leve e flexível"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 304.6,
@@ -171,7 +251,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "5",
-        "supplierId": "supplier-5",
+        "slug": "painel-solar-filme-fino-95w-trina-solar-tsm-400pd14",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-5",
             "brand": "Trina Solar",
@@ -192,13 +274,31 @@ const solarPanelAnnouncementMock = [
             "Garantia de performance linear de 25 anos"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 180.4,
@@ -212,7 +312,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "6",
-        "supplierId": "supplier-6",
+        "slug": "painel-solar-policristalino-462w-ja-solar-jam72s30-545-mr",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-6",
             "brand": "JA Solar",
@@ -235,13 +337,31 @@ const solarPanelAnnouncementMock = [
             "Garantia de performance linear de 25 anos"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 1219,
@@ -254,7 +374,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "7",
-        "supplierId": "supplier-7",
+        "slug": "painel-solar-policristalino-360w-risen-energy-rsm110-8-545m",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-7",
             "model": "RSM110-8-545M",
@@ -276,13 +398,31 @@ const solarPanelAnnouncementMock = [
             "Diodos de bypass de alta eficiência"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 980.4,
@@ -297,7 +437,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "8",
-        "supplierId": "supplier-8",
+        "slug": "painel-solar-monocristalino-478w-astronergy-chsm72m-hc-545",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-8",
             "brand": "Astronergy",
@@ -318,13 +460,31 @@ const solarPanelAnnouncementMock = [
             "Vidro temperado anti-reflexivo"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 1107.6,
@@ -337,7 +497,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "9",
-        "supplierId": "supplier-9",
+        "slug": "painel-solar-policristalino-373w-rec-solar-rec400aa-pure",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-9",
             "brand": "REC Solar",
@@ -356,13 +518,31 @@ const solarPanelAnnouncementMock = [
             "Garantia de performance linear de 25 anos"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 730.5,
@@ -375,7 +555,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "10",
-        "supplierId": "supplier-10",
+        "slug": "painel-solar-policristalino-330w-q-cells-q-peak-duo-ml-g10-400",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-10",
             "brand": "Q CELLS",
@@ -398,13 +580,31 @@ const solarPanelAnnouncementMock = [
             "Vidro temperado anti-reflexivo"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 532,
@@ -418,7 +618,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "11",
-        "supplierId": "supplier-11",
+        "slug": "painel-solar-filme-fino-135w-first-solar-series-6-plus-460",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-11",
             "brand": "First Solar",
@@ -439,13 +641,31 @@ const solarPanelAnnouncementMock = [
             "Certificação INMETRO"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 326.2,
@@ -458,7 +678,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "12",
-        "supplierId": "supplier-12",
+        "slug": "painel-solar-filme-fino-120w-yingli-solar-yl340d-36b",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-12",
             "brand": "Yingli Solar",
@@ -480,13 +702,31 @@ const solarPanelAnnouncementMock = [
             "Resistente à água"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 329.9,
@@ -498,7 +738,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "13",
-        "supplierId": "supplier-1",
+        "slug": "painel-solar-policristalino-393w-znshine-solar-zxm7-uhld144-545",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-13",
             "brand": "ZNShine Solar",
@@ -519,13 +761,31 @@ const solarPanelAnnouncementMock = [
             "Testado contra névoa salina"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 855.9,
@@ -537,7 +797,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "14",
-        "supplierId": "supplier-2",
+        "slug": "painel-solar-monocristalino-497w-talesun-tp672m-540",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-14",
             "model": "TP672M-540",
@@ -559,13 +821,31 @@ const solarPanelAnnouncementMock = [
             "Processo de fabricação com controle estatístico"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 1180.5,
@@ -579,7 +859,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "15",
-        "supplierId": "supplier-3",
+        "slug": "painel-solar-policristalino-265w-suntech-power-stp450s-c72-vmh",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-15",
             "brand": "Suntech Power",
@@ -601,13 +883,31 @@ const solarPanelAnnouncementMock = [
             "Resistente a granizo"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 705,
@@ -620,7 +920,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "16",
-        "supplierId": "supplier-4",
+        "slug": "painel-solar-policristalino-388w-boviet-solar-bvm6612m-435",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-16",
             "brand": "Boviet Solar",
@@ -643,13 +945,31 @@ const solarPanelAnnouncementMock = [
             "Processo de fabricação com controle estatístico"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 1072.9,
@@ -664,7 +984,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "17",
-        "supplierId": "supplier-5",
+        "slug": "painel-solar-policristalino-462w-waaree-energies-wsm-540-bifacial",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-17",
             "brand": "Waaree Energies",
@@ -688,13 +1010,31 @@ const solarPanelAnnouncementMock = [
             "Resistente a cargas de vento e neve"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 770.6,
@@ -708,7 +1048,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "18",
-        "supplierId": "supplier-6",
+        "slug": "painel-solar-monocristalino-418w-adani-solar-elan-540-wp",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-18",
             "brand": "Adani Solar",
@@ -725,13 +1067,31 @@ const solarPanelAnnouncementMock = [
             "Leve e flexível"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 981.5,
@@ -745,7 +1105,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "19",
-        "supplierId": "supplier-7",
+        "slug": "painel-solar-monocristalino-572w-hanwha-q-cells-q-peak-duo-xl-g11-590",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-19",
             "brand": "Hanwha Q CELLS",
@@ -767,13 +1129,31 @@ const solarPanelAnnouncementMock = [
             "Testado contra névoa salina"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 1178.5,
@@ -786,7 +1166,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "20",
-        "supplierId": "supplier-8",
+        "slug": "painel-solar-filme-fino-95w-gcl-system-gcl-m10-72gdf-540",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-20",
             "brand": "GCL System",
@@ -808,13 +1190,31 @@ const solarPanelAnnouncementMock = [
             "Resistente à água"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 264.6,
@@ -828,7 +1228,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "21",
-        "supplierId": "supplier-9",
+        "slug": "painel-solar-policristalino-367w-canadian-solar-cs3w-410p",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-21",
             "model": "CS3W-410P",
@@ -849,13 +1251,31 @@ const solarPanelAnnouncementMock = [
             "Conectores MC4 padrão de mercado"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 973.4,
@@ -870,7 +1290,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "22",
-        "supplierId": "supplier-10",
+        "slug": "painel-solar-filme-fino-167w-jinko-solar-jkm540m-72hl4",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-22",
             "brand": "Jinko Solar",
@@ -893,13 +1315,31 @@ const solarPanelAnnouncementMock = [
             "Resistente à água"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 297.1,
@@ -913,7 +1353,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "23",
-        "supplierId": "supplier-11",
+        "slug": "painel-solar-policristalino-301w-sunpower-spr-max3-400",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-23",
             "brand": "SunPower",
@@ -935,13 +1377,31 @@ const solarPanelAnnouncementMock = [
             "Compatível com sistemas de 1500V"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 820.6,
@@ -955,7 +1415,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "24",
-        "supplierId": "supplier-12",
+        "slug": "painel-solar-monocristalino-455w-longi-solar-lr5-54hth-435m",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-24",
             "brand": "LONGi Solar",
@@ -975,13 +1437,31 @@ const solarPanelAnnouncementMock = [
             "Garantia de performance linear de 25 anos"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 875,
@@ -995,7 +1475,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "25",
-        "supplierId": "supplier-1",
+        "slug": "painel-solar-filme-fino-143w-trina-solar-tsm-de19-500",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-25",
             "brand": "Trina Solar",
@@ -1016,13 +1498,31 @@ const solarPanelAnnouncementMock = [
             "Tecnologia bifacial"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 372.9,
@@ -1034,7 +1534,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "26",
-        "supplierId": "supplier-2",
+        "slug": "painel-solar-policristalino-358w-ja-solar-jam60s21-380-mr",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-26",
             "brand": "JA Solar",
@@ -1055,13 +1557,31 @@ const solarPanelAnnouncementMock = [
             "Ideal para uso móvel"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 941,
@@ -1074,7 +1594,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "27",
-        "supplierId": "supplier-3",
+        "slug": "painel-solar-filme-fino-206w-risen-energy-rsm40-8-390m",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-27",
             "brand": "Risen Energy",
@@ -1093,13 +1615,31 @@ const solarPanelAnnouncementMock = [
             "Testado contra névoa salina"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 574.5,
@@ -1112,7 +1652,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "28",
-        "supplierId": "supplier-4",
+        "slug": "painel-solar-filme-fino-91w-astronergy-chsm60m-hc-410",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-28",
             "model": "CHSM60M-HC-410",
@@ -1133,13 +1675,31 @@ const solarPanelAnnouncementMock = [
             "Backsheet multicamadas"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 251.8,
@@ -1154,7 +1714,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "29",
-        "supplierId": "supplier-5",
+        "slug": "painel-solar-policristalino-426w-rec-solar-alpha-pure-r-430",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-29",
             "brand": "REC Solar",
@@ -1176,13 +1738,31 @@ const solarPanelAnnouncementMock = [
             "Conectores MC4 padrão de mercado"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 836.4,
@@ -1195,7 +1775,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "30",
-        "supplierId": "supplier-6",
+        "slug": "painel-solar-policristalino-457w-q-cells-q-tron-m-g2-425",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-30",
             "brand": "Q CELLS",
@@ -1217,13 +1799,31 @@ const solarPanelAnnouncementMock = [
             "Resistente a granizo"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 1262.6,
@@ -1237,7 +1837,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "31",
-        "supplierId": "supplier-7",
+        "slug": "painel-solar-filme-fino-120w-first-solar-series-7-550",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-31",
             "brand": "First Solar",
@@ -1261,13 +1863,31 @@ const solarPanelAnnouncementMock = [
             "Testado contra névoa salina"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 278,
@@ -1281,7 +1901,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "32",
-        "supplierId": "supplier-8",
+        "slug": "painel-solar-monocristalino-383w-yingli-solar-ylm-410m-54",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-32",
             "brand": "Yingli Solar",
@@ -1304,13 +1926,31 @@ const solarPanelAnnouncementMock = [
             "Moldura em alumínio anodizado"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 833.2,
@@ -1323,7 +1963,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "33",
-        "supplierId": "supplier-9",
+        "slug": "painel-solar-monocristalino-560w-znshine-solar-zxp6-60-330",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-33",
             "brand": "ZNShine Solar",
@@ -1345,13 +1987,31 @@ const solarPanelAnnouncementMock = [
             "Vidro temperado anti-reflexivo"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 1370.6,
@@ -1363,7 +2023,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "34",
-        "supplierId": "supplier-10",
+        "slug": "painel-solar-filme-fino-91w-talesun-tp660m-450",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-34",
             "brand": "Talesun",
@@ -1385,13 +2047,31 @@ const solarPanelAnnouncementMock = [
             "Resistente a cargas de vento e neve"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 189.8,
@@ -1405,7 +2085,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "35",
-        "supplierId": "supplier-11",
+        "slug": "painel-solar-monocristalino-494w-suntech-power-stp395s-b60-whm",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-35",
             "model": "STP395S-B60/Whm",
@@ -1427,13 +2109,31 @@ const solarPanelAnnouncementMock = [
             "Leve e flexível"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 1196.5,
@@ -1446,7 +2146,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "36",
-        "supplierId": "supplier-12",
+        "slug": "painel-solar-monocristalino-433w-boviet-solar-bvm7615m-540",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-36",
             "brand": "Boviet Solar",
@@ -1465,13 +2167,31 @@ const solarPanelAnnouncementMock = [
             "Diodos de bypass de alta eficiência"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 1095.2,
@@ -1483,7 +2203,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "37",
-        "supplierId": "supplier-1",
+        "slug": "painel-solar-policristalino-479w-waaree-energies-wsm-395",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-37",
             "brand": "Waaree Energies",
@@ -1505,13 +2227,31 @@ const solarPanelAnnouncementMock = [
             "Resistente à água"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 1250.6,
@@ -1524,7 +2264,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "38",
-        "supplierId": "supplier-2",
+        "slug": "painel-solar-monocristalino-637w-adani-solar-elan-445-wp",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-38",
             "brand": "Adani Solar",
@@ -1548,13 +2290,31 @@ const solarPanelAnnouncementMock = [
             "Conectores MC4 padrão de mercado"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 1208.1,
@@ -1567,7 +2327,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "39",
-        "supplierId": "supplier-3",
+        "slug": "painel-solar-filme-fino-173w-hanwha-q-cells-q-tron-g3-435",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-39",
             "brand": "Hanwha Q CELLS",
@@ -1588,13 +2350,31 @@ const solarPanelAnnouncementMock = [
             "Conectores MC4 padrão de mercado"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 346.4,
@@ -1608,7 +2388,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "40",
-        "supplierId": "supplier-4",
+        "slug": "painel-solar-monocristalino-384w-gcl-system-gcl-m6-60gh-405",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-40",
             "brand": "GCL System",
@@ -1628,13 +2410,31 @@ const solarPanelAnnouncementMock = [
             "Processo de fabricação com controle estatístico"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 970.1,
@@ -1647,7 +2447,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "41",
-        "supplierId": "supplier-5",
+        "slug": "painel-solar-policristalino-431w-canadian-solar-cs7n-660mb",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-41",
             "brand": "Canadian Solar",
@@ -1670,13 +2472,31 @@ const solarPanelAnnouncementMock = [
             "Certificação INMETRO"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 865.2,
@@ -1691,7 +2511,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "42",
-        "supplierId": "supplier-6",
+        "slug": "painel-solar-monocristalino-403w-jinko-solar-jkm460n-60hl4",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-42",
             "model": "JKM460N-60HL4",
@@ -1712,13 +2534,31 @@ const solarPanelAnnouncementMock = [
             "Compatível com sistemas de 1500V"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 887.4,
@@ -1732,7 +2572,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "43",
-        "supplierId": "supplier-7",
+        "slug": "painel-solar-policristalino-293w-sunpower-spr-a650-com",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-43",
             "brand": "SunPower",
@@ -1755,13 +2597,31 @@ const solarPanelAnnouncementMock = [
             "Resistente a granizo"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 737.5,
@@ -1775,7 +2635,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "44",
-        "supplierId": "supplier-8",
+        "slug": "painel-solar-filme-fino-85w-longi-solar-lr4-60hph-370m",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-44",
             "brand": "LONGi Solar",
@@ -1798,13 +2660,31 @@ const solarPanelAnnouncementMock = [
             "Compatível com sistemas de 1500V"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 167.5,
@@ -1817,7 +2697,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "45",
-        "supplierId": "supplier-9",
+        "slug": "painel-solar-monocristalino-520w-trina-solar-tsm-550neg21c",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-45",
             "brand": "Trina Solar",
@@ -1835,13 +2717,31 @@ const solarPanelAnnouncementMock = [
             "Tecnologia bifacial"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 1388.5,
@@ -1855,7 +2755,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "46",
-        "supplierId": "supplier-10",
+        "slug": "painel-solar-filme-fino-147w-ja-solar-jam54d40-440-lb",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-46",
             "brand": "JA Solar",
@@ -1878,13 +2780,31 @@ const solarPanelAnnouncementMock = [
             "Baixo coeficiente de temperatura"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 378.7,
@@ -1899,7 +2819,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "47",
-        "supplierId": "supplier-11",
+        "slug": "painel-solar-filme-fino-229w-risen-energy-rsm144-9-500m",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-47",
             "brand": "Risen Energy",
@@ -1922,13 +2844,31 @@ const solarPanelAnnouncementMock = [
             "Compatível com microinversores e inversores string"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 461.3,
@@ -1941,7 +2881,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "48",
-        "supplierId": "supplier-12",
+        "slug": "painel-solar-monocristalino-645w-astronergy-chsm66m-hc-500",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-48",
             "brand": "Astronergy",
@@ -1961,13 +2903,31 @@ const solarPanelAnnouncementMock = [
             "Baixo coeficiente de temperatura"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 1630.9,
@@ -1979,7 +2939,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "49",
-        "supplierId": "supplier-1",
+        "slug": "painel-solar-filme-fino-184w-rec-solar-n-peak-2-365",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-49",
             "model": "N-Peak 2 365",
@@ -2000,13 +2962,31 @@ const solarPanelAnnouncementMock = [
             "Moldura em alumínio anodizado"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 309.9,
@@ -2020,7 +3000,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "50",
-        "supplierId": "supplier-2",
+        "slug": "painel-solar-policristalino-296w-q-cells-q-peak-duo-blk-g6-340",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-50",
             "brand": "Q CELLS",
@@ -2043,13 +3025,31 @@ const solarPanelAnnouncementMock = [
             "Baixo coeficiente de temperatura"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 504.7,
@@ -2061,7 +3061,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "51",
-        "supplierId": "supplier-3",
+        "slug": "painel-solar-filme-fino-102w-first-solar-series-6-cure-445",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-51",
             "brand": "First Solar",
@@ -2084,13 +3086,31 @@ const solarPanelAnnouncementMock = [
             "Ideal para uso móvel"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 216.8,
@@ -2103,7 +3123,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "52",
-        "supplierId": "supplier-4",
+        "slug": "painel-solar-monocristalino-397w-yingli-solar-panda3-400",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-52",
             "brand": "Yingli Solar",
@@ -2124,13 +3146,31 @@ const solarPanelAnnouncementMock = [
             "Moldura em alumínio anodizado"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 835.4,
@@ -2143,7 +3183,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "53",
-        "supplierId": "supplier-5",
+        "slug": "painel-solar-monocristalino-464w-znshine-solar-zxm6-nh120-410",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-53",
             "brand": "ZNShine Solar",
@@ -2165,13 +3207,31 @@ const solarPanelAnnouncementMock = [
             "Caixa de junção IP68"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 746.8,
@@ -2185,7 +3245,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "54",
-        "supplierId": "supplier-6",
+        "slug": "painel-solar-monocristalino-354w-talesun-tp672m-bifacial-555",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-54",
             "brand": "Talesun",
@@ -2204,13 +3266,31 @@ const solarPanelAnnouncementMock = [
             "Moldura em alumínio anodizado"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 917.4,
@@ -2223,7 +3303,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "55",
-        "supplierId": "supplier-7",
+        "slug": "painel-solar-policristalino-422w-suntech-power-stp550s-c72-vmh",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-55",
             "brand": "Suntech Power",
@@ -2245,13 +3327,31 @@ const solarPanelAnnouncementMock = [
             "Certificação INMETRO"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 929.9,
@@ -2263,7 +3363,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "56",
-        "supplierId": "supplier-8",
+        "slug": "painel-solar-policristalino-341w-boviet-solar-bvm6610m-400",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-56",
             "model": "BVM6610M-400",
@@ -2284,13 +3386,31 @@ const solarPanelAnnouncementMock = [
             "Resistente à água"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 557.4,
@@ -2304,7 +3424,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "57",
-        "supplierId": "supplier-9",
+        "slug": "painel-solar-monocristalino-556w-waaree-energies-wsm-585-mono-perc",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-57",
             "brand": "Waaree Energies",
@@ -2326,13 +3448,31 @@ const solarPanelAnnouncementMock = [
             "Resistente à água"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 994.6,
@@ -2347,7 +3487,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "58",
-        "supplierId": "supplier-10",
+        "slug": "painel-solar-policristalino-474w-adani-solar-elan-590-wp-bifacial",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-58",
             "brand": "Adani Solar",
@@ -2369,13 +3511,31 @@ const solarPanelAnnouncementMock = [
             "Caixa de junção IP68"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 1317.5,
@@ -2389,7 +3549,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "59",
-        "supplierId": "supplier-11",
+        "slug": "painel-solar-monocristalino-426w-hanwha-q-cells-q-peak-duo-l-g9-385",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-59",
             "brand": "Hanwha Q CELLS",
@@ -2411,13 +3573,31 @@ const solarPanelAnnouncementMock = [
             "Certificação INMETRO"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 796.4,
@@ -2431,7 +3611,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "60",
-        "supplierId": "supplier-12",
+        "slug": "painel-solar-policristalino-426w-gcl-system-gcl-m12-78gdf-590",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-60",
             "brand": "GCL System",
@@ -2452,13 +3634,31 @@ const solarPanelAnnouncementMock = [
             "Baixo coeficiente de temperatura"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 946.6,
@@ -2473,7 +3673,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "61",
-        "supplierId": "supplier-1",
+        "slug": "painel-solar-policristalino-314w-canadian-solar-cs6r-395ms",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-61",
             "brand": "Canadian Solar",
@@ -2496,13 +3698,31 @@ const solarPanelAnnouncementMock = [
             "Vidro temperado anti-reflexivo"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 795.9,
@@ -2515,7 +3735,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "62",
-        "supplierId": "supplier-2",
+        "slug": "painel-solar-monocristalino-650w-jinko-solar-jkm600n-78hl4-bdv",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-62",
             "brand": "Jinko Solar",
@@ -2537,13 +3759,31 @@ const solarPanelAnnouncementMock = [
             "Backsheet multicamadas"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 1100.7,
@@ -2555,7 +3795,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "63",
-        "supplierId": "supplier-3",
+        "slug": "painel-solar-policristalino-459w-sunpower-spr-p19-350-com",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-63",
             "model": "SPR-P19-350-COM",
@@ -2573,13 +3815,31 @@ const solarPanelAnnouncementMock = [
             "Diodos de bypass de alta eficiência"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 982.9,
@@ -2591,7 +3851,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "64",
-        "supplierId": "supplier-4",
+        "slug": "painel-solar-filme-fino-176w-longi-solar-lr5-72hth-580m",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-64",
             "brand": "LONGi Solar",
@@ -2613,13 +3875,31 @@ const solarPanelAnnouncementMock = [
             "Tecnologia bifacial"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 281.6,
@@ -2633,7 +3913,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "65",
-        "supplierId": "supplier-5",
+        "slug": "painel-solar-policristalino-276w-trina-solar-tsm-660neg21c-20",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-65",
             "brand": "Trina Solar",
@@ -2653,13 +3935,31 @@ const solarPanelAnnouncementMock = [
             "Certificação INMETRO"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 724.6,
@@ -2672,7 +3972,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "66",
-        "supplierId": "supplier-6",
+        "slug": "painel-solar-filme-fino-237w-ja-solar-jam72d30-565-gb",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-66",
             "brand": "JA Solar",
@@ -2694,13 +3996,31 @@ const solarPanelAnnouncementMock = [
             "Caixa de junção IP68"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 405,
@@ -2712,7 +4032,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "67",
-        "supplierId": "supplier-7",
+        "slug": "painel-solar-filme-fino-174w-risen-energy-rsm132-8-580m",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-67",
             "brand": "Risen Energy",
@@ -2736,13 +4058,31 @@ const solarPanelAnnouncementMock = [
             "Resistente a cargas de vento e neve"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 469.3,
@@ -2755,7 +4095,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "68",
-        "supplierId": "supplier-8",
+        "slug": "painel-solar-filme-fino-142w-astronergy-chsm54n-hc-435",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-68",
             "brand": "Astronergy",
@@ -2779,13 +4121,31 @@ const solarPanelAnnouncementMock = [
             "Tecnologia bifacial"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 283,
@@ -2797,7 +4157,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "69",
-        "supplierId": "supplier-9",
+        "slug": "painel-solar-policristalino-415w-rec-solar-twinpeak-4-380",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-69",
             "brand": "REC Solar",
@@ -2819,13 +4181,31 @@ const solarPanelAnnouncementMock = [
             "Ideal para uso móvel"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 1009.5,
@@ -2839,7 +4219,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "70",
-        "supplierId": "supplier-10",
+        "slug": "painel-solar-filme-fino-146w-q-cells-q-tron-blk-m-g2-420",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-70",
             "model": "Q.TRON BLK M-G2+ 420",
@@ -2861,13 +4243,31 @@ const solarPanelAnnouncementMock = [
             "Conectores MC4 padrão de mercado"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 348.5,
@@ -2879,7 +4279,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "71",
-        "supplierId": "supplier-11",
+        "slug": "painel-solar-policristalino-285w-first-solar-series-6-490",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-71",
             "brand": "First Solar",
@@ -2901,13 +4303,31 @@ const solarPanelAnnouncementMock = [
             "Garantia de performance linear de 25 anos"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 599.3,
@@ -2921,7 +4341,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "72",
-        "supplierId": "supplier-12",
+        "slug": "painel-solar-monocristalino-651w-yingli-solar-yge-72-cell-395",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-72",
             "brand": "Yingli Solar",
@@ -2938,13 +4360,31 @@ const solarPanelAnnouncementMock = [
             "Moldura em alumínio anodizado"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 1508.5,
@@ -2957,7 +4397,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "73",
-        "supplierId": "supplier-1",
+        "slug": "painel-solar-filme-fino-91w-znshine-solar-zxm7-hldm-505",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-73",
             "brand": "ZNShine Solar",
@@ -2979,13 +4421,31 @@ const solarPanelAnnouncementMock = [
             "Garantia de performance linear de 25 anos"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 179.6,
@@ -2999,7 +4459,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "74",
-        "supplierId": "supplier-2",
+        "slug": "painel-solar-policristalino-319w-talesun-tp660p-395",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-74",
             "brand": "Talesun",
@@ -3022,13 +4484,31 @@ const solarPanelAnnouncementMock = [
             "Tecnologia half-cut cell"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 764.9,
@@ -3043,7 +4523,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "75",
-        "supplierId": "supplier-3",
+        "slug": "painel-solar-filme-fino-110w-suntech-power-stp410s-b60-whm",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-75",
             "brand": "Suntech Power",
@@ -3064,13 +4546,31 @@ const solarPanelAnnouncementMock = [
             "Garantia de performance linear de 25 anos"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 196.3,
@@ -3082,7 +4582,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "76",
-        "supplierId": "supplier-4",
+        "slug": "painel-solar-monocristalino-467w-boviet-solar-bvm7621m-660",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-76",
             "brand": "Boviet Solar",
@@ -3104,13 +4606,31 @@ const solarPanelAnnouncementMock = [
             "Garantia de performance linear de 25 anos"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 959.6,
@@ -3123,7 +4643,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "77",
-        "supplierId": "supplier-5",
+        "slug": "painel-solar-policristalino-479w-waaree-energies-wsm-450-half-cut",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-77",
             "type": "Policristalino",
@@ -3144,13 +4666,31 @@ const solarPanelAnnouncementMock = [
             "Resistente à água"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 972.2,
@@ -3164,7 +4704,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "78",
-        "supplierId": "supplier-6",
+        "slug": "painel-solar-monocristalino-508w-adani-solar-elan-395-wp",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-78",
             "brand": "Adani Solar",
@@ -3186,13 +4728,31 @@ const solarPanelAnnouncementMock = [
             "Conectores MC4 padrão de mercado"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 1121.1,
@@ -3206,7 +4766,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "79",
-        "supplierId": "supplier-7",
+        "slug": "painel-solar-filme-fino-205w-hanwha-q-cells-q-tron-xl-g3-605",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-79",
             "brand": "Hanwha Q CELLS",
@@ -3230,13 +4792,31 @@ const solarPanelAnnouncementMock = [
             "Resistente a cargas de vento e neve"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 331.7,
@@ -3250,7 +4830,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "80",
-        "supplierId": "supplier-8",
+        "slug": "painel-solar-policristalino-430w-gcl-system-gcl-m10-60gdf-450",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-80",
             "brand": "GCL System",
@@ -3272,13 +4854,31 @@ const solarPanelAnnouncementMock = [
             "Compatível com microinversores e inversores string"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 961.5,
@@ -3291,7 +4891,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "81",
-        "supplierId": "supplier-9",
+        "slug": "painel-solar-monocristalino-632w-canadian-solar-cs6w-550ms",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-81",
             "brand": "Canadian Solar",
@@ -3309,13 +4911,31 @@ const solarPanelAnnouncementMock = [
             "Backsheet multicamadas"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 1695.7,
@@ -3329,7 +4949,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "82",
-        "supplierId": "supplier-10",
+        "slug": "painel-solar-filme-fino-219w-jinko-solar-jkm330p-72",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-82",
             "brand": "Jinko Solar",
@@ -3351,13 +4973,31 @@ const solarPanelAnnouncementMock = [
             "Garantia de performance linear de 25 anos"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 449.7,
@@ -3372,7 +5012,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "83",
-        "supplierId": "supplier-11",
+        "slug": "painel-solar-filme-fino-105w-sunpower-spr-flex-120",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-83",
             "brand": "SunPower",
@@ -3395,13 +5037,31 @@ const solarPanelAnnouncementMock = [
             "Compatível com sistemas de 1500V"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 209.2,
@@ -3415,7 +5075,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "84",
-        "supplierId": "supplier-12",
+        "slug": "painel-solar-filme-fino-170w-longi-solar-lr4-72hbd-450m",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-84",
             "model": "LR4-72HBD-450M",
@@ -3435,13 +5097,31 @@ const solarPanelAnnouncementMock = [
             "Tecnologia bifacial"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 306.7,
@@ -3453,7 +5133,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "85",
-        "supplierId": "supplier-1",
+        "slug": "painel-solar-filme-fino-119w-trina-solar-tsm-400pd14",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-85",
             "brand": "Trina Solar",
@@ -3476,13 +5158,31 @@ const solarPanelAnnouncementMock = [
             "Conectores MC4 padrão de mercado"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 198.1,
@@ -3495,7 +5195,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "86",
-        "supplierId": "supplier-2",
+        "slug": "painel-solar-policristalino-354w-ja-solar-jam72s30-545-mr",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-86",
             "brand": "JA Solar",
@@ -3519,13 +5221,31 @@ const solarPanelAnnouncementMock = [
             "Backsheet multicamadas"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 887.6,
@@ -3540,7 +5260,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "87",
-        "supplierId": "supplier-3",
+        "slug": "painel-solar-policristalino-423w-risen-energy-rsm110-8-545m",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-87",
             "brand": "Risen Energy",
@@ -3563,13 +5285,31 @@ const solarPanelAnnouncementMock = [
             "Compatível com microinversores e inversores string"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 768.4,
@@ -3584,7 +5324,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "88",
-        "supplierId": "supplier-4",
+        "slug": "painel-solar-monocristalino-536w-astronergy-chsm72m-hc-545",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-88",
             "brand": "Astronergy",
@@ -3605,13 +5347,31 @@ const solarPanelAnnouncementMock = [
             "Backsheet multicamadas"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 915.9,
@@ -3623,7 +5383,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "89",
-        "supplierId": "supplier-5",
+        "slug": "painel-solar-filme-fino-231w-rec-solar-rec400aa-pure",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-89",
             "brand": "REC Solar",
@@ -3646,13 +5408,31 @@ const solarPanelAnnouncementMock = [
             "Resistente a granizo"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 641.8,
@@ -3665,7 +5445,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "90",
-        "supplierId": "supplier-6",
+        "slug": "painel-solar-policristalino-442w-q-cells-q-peak-duo-ml-g10-400",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-90",
             "brand": "Q CELLS",
@@ -3682,13 +5464,31 @@ const solarPanelAnnouncementMock = [
             "Vidro temperado anti-reflexivo"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 1199.5,
@@ -3700,7 +5500,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "91",
-        "supplierId": "supplier-7",
+        "slug": "painel-solar-monocristalino-554w-first-solar-series-6-plus-460",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-91",
             "model": "Series 6 Plus 460",
@@ -3722,13 +5524,31 @@ const solarPanelAnnouncementMock = [
             "Moldura em alumínio anodizado"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 1038.6,
@@ -3742,7 +5562,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "92",
-        "supplierId": "supplier-8",
+        "slug": "painel-solar-filme-fino-97w-yingli-solar-yl340d-36b",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-92",
             "brand": "Yingli Solar",
@@ -3766,13 +5588,31 @@ const solarPanelAnnouncementMock = [
             "Resistente a cargas de vento e neve"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 220.4,
@@ -3785,7 +5625,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "93",
-        "supplierId": "supplier-9",
+        "slug": "painel-solar-filme-fino-234w-znshine-solar-zxm7-uhld144-545",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-93",
             "brand": "ZNShine Solar",
@@ -3807,13 +5649,31 @@ const solarPanelAnnouncementMock = [
             "Conectores MC4 padrão de mercado"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 441.5,
@@ -3826,7 +5686,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "94",
-        "supplierId": "supplier-10",
+        "slug": "painel-solar-filme-fino-224w-talesun-tp672m-540",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-94",
             "brand": "Talesun",
@@ -3850,13 +5712,31 @@ const solarPanelAnnouncementMock = [
             "Tecnologia bifacial"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 489.7,
@@ -3871,7 +5751,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "95",
-        "supplierId": "supplier-11",
+        "slug": "painel-solar-filme-fino-203w-suntech-power-stp450s-c72-vmh",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-95",
             "brand": "Suntech Power",
@@ -3894,13 +5776,31 @@ const solarPanelAnnouncementMock = [
             "Resistente a cargas de vento e neve"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 547.2,
@@ -3914,7 +5814,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "96",
-        "supplierId": "supplier-12",
+        "slug": "painel-solar-policristalino-455w-boviet-solar-bvm6612m-435",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-96",
             "brand": "Boviet Solar",
@@ -3935,13 +5837,31 @@ const solarPanelAnnouncementMock = [
             "Backsheet multicamadas"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 956.9,
@@ -3954,7 +5874,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "97",
-        "supplierId": "supplier-1",
+        "slug": "painel-solar-monocristalino-439w-waaree-energies-wsm-540-bifacial",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-97",
             "brand": "Waaree Energies",
@@ -3976,13 +5898,31 @@ const solarPanelAnnouncementMock = [
             "Conectores MC4 padrão de mercado"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 787.1,
@@ -3997,7 +5937,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "98",
-        "supplierId": "supplier-2",
+        "slug": "painel-solar-policristalino-442w-adani-solar-elan-540-wp",
+        "supplierId": "company-2",
+        "companySlug": "helios-instalacoes-solares",
         "panel": {
             "id": "panel-98",
             "model": "ELAN 540 Wp",
@@ -4018,13 +5960,31 @@ const solarPanelAnnouncementMock = [
             "Garantia de performance linear de 25 anos"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 1061.7,
@@ -4039,7 +5999,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "99",
-        "supplierId": "supplier-3",
+        "slug": "painel-solar-monocristalino-584w-hanwha-q-cells-q-peak-duo-xl-g11-590",
+        "supplierId": "company-3",
+        "companySlug": "lumina-paineis-fotovoltaicos",
         "panel": {
             "id": "panel-99",
             "brand": "Hanwha Q CELLS",
@@ -4058,13 +6020,31 @@ const solarPanelAnnouncementMock = [
             "Ideal para uso móvel"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 1299.8,
@@ -4079,7 +6059,9 @@ const solarPanelAnnouncementMock = [
     },
     {
         "id": "100",
-        "supplierId": "supplier-4",
+        "slug": "painel-solar-monocristalino-632w-gcl-system-gcl-m10-72gdf-540",
+        "supplierId": "company-1",
+        "companySlug": "solaria-energia",
         "panel": {
             "id": "panel-100",
             "brand": "GCL System",
@@ -4101,13 +6083,31 @@ const solarPanelAnnouncementMock = [
             "Baixo coeficiente de temperatura"
         ],
         "photos": {
-            "heroImage": { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
+            "heroImage": {
+                "description": "",
+                "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+            },
             "otherImages": [
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" },
-                { "description" : "", "url" : "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp" }
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                },
+                {
+                    "description": "",
+                    "url": "https://http2.mlstatic.com/D_NQ_NP_2X_761771-MLA85163610673_052025-F.webp"
+                }
             ]
         },
         "unitPrice": 1121.5,

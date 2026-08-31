@@ -19,9 +19,17 @@ export interface SolarPanelAnnouncement {
   availableUnits: number;
   serviceRegions: string[];
   expirationDate?: string;
+
+  // NOTE: `model`/`announcement` (schema-api-core.sql) não têm coluna de
+  // slug. `slug` é gerado a partir de `title`; `companySlug` é uma
+  // denormalização do slug da empresa dona de `supplierId` (`company.slug`),
+  // só para montar a URL amigável do produto (/placa-solar/{companySlug}/{slug})
+  // sem precisar de outra consulta. Ambos ficam mock até existir suporte na API.
+  slug: string;
+  companySlug: string;
 }
 
 export type SolarPanelFeedSummary = Pick<
   SolarPanelAnnouncement,
-  "id" | "title" | "unitPrice" | "discountPercentage" | "photos"
+  "id" | "slug" | "companySlug" | "title" | "unitPrice" | "discountPercentage" | "photos"
 >;

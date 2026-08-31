@@ -11,6 +11,7 @@ import {
   Globe,
   type LucideIcon,
   Heart,
+  LoaderCircle,
 } from "lucide-react";
 import Colors from "@/shared/styles/colors/colors.enum";
 import { InvalidIconError } from "@/config/error/InvalidIcon.error";
@@ -26,7 +27,8 @@ const icons = {
   eyeOff: EyeOff,
   shoppingCart: ShoppingCart,
   globe: Globe,
-  heart: Heart
+  heart: Heart,
+  loader: LoaderCircle,
 } satisfies Record<string, LucideIcon>;
 
 export type IconName = keyof typeof icons;
@@ -43,7 +45,7 @@ interface IconProps {
 
 export default function Icon({
   name,
-  color = Colors.Black,
+  color = Colors.BLACK,
   size = 24,
   strokeWidth = 2,
   absoluteStrokeWidth = false,

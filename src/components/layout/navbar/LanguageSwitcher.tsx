@@ -1,16 +1,21 @@
 import { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Icon from "@@/ui/icon/Icon";
 import { MenuList, MenuItem } from "@@/overlay/Menu";
+import { SUPPORTED as SUPPORTED_LANGUAGES, type SupportedLanguage } from "@/config/i18n/browser/languages";
+import { translatePathToLanguage } from "@/config/i18n/routePaths";
 
-const LANGUAGES = [
-  ["pt-BR", "Português"],
-  ["en-US", "English"],
-  ["es-ES", "Español"],
-] as const;
+const LANGUAGE_LABELS: Record<SupportedLanguage, string> = {
+  "pt-BR": "Português",
+  "en-US": "English",
+  "es-ES": "Español",
+};
 
 export default function LanguageSwitcher() {
   const { t, i18n } = useTranslation("commons");
+  const location = useLocation();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -35,8 +40,13 @@ export default function LanguageSwitcher() {
     };
   }, [open]);
 
-  function handleSelect(language: string) {
-    i18n.changeLanguage(language);
+  // Troca de idioma navega para a URL traduzida (mesma página, segmentos
+  // literais trocados) em vez de só trocar o idioma do i18next — é a URL
+  // quem manda no idioma atual (ver LanguageLayout), então precisamos mudar
+  // ela pra refletir a escolha.
+  function handleSelect(language: SupportedLanguage) {
+    const translatedPath = translatePathToLanguage(location.pathname, language);
+    navigate(translatedPath);
     setOpen(false);
   }
 
@@ -56,14 +66,14 @@ export default function LanguageSwitcher() {
 
       {open && (
         <MenuList className="absolute right-0 z-10 mt-1" role="listbox" aria-label={t("language")}>
-          {LANGUAGES.map(([code, label]) => (
+          {SUPPORTED_LANGUAGES.map((code) => (
             <MenuItem
               key={code}
               role="option"
               selected={i18n.language === code}
               onSelect={() => handleSelect(code)}
             >
-              {label}
+              {LANGUAGE_LABELS[code]}
             </MenuItem>
           ))}
         </MenuList>

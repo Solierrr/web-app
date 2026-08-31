@@ -5,7 +5,6 @@
   "yes": "sí",
   "no": "no",
   "language": "Idioma",
-
   "actions": {
     "add": "añadir",
     "back": "volver",
@@ -21,11 +20,11 @@
     "save": "guardar",
     "search": "buscar",
     "send": "enviar",
-    "view": "ver"
+    "view": "ver",
+    "contact": "contactar"
   },
-
   "status": {
-    "loading": "cargando...",
+    "loading": "cargando",
     "success": "éxito",
     "error": "error",
     "active": "activo",
@@ -33,56 +32,48 @@
     "available": "disponible",
     "unavailable": "no disponible"
   },
-
   "navigation": {
     "home": "inicio",
     "next": "siguiente",
     "previous": "anterior"
   },
-
   "form": {
     "required": "obligatorio",
     "optional": "opcional",
     "invalid": "valor inválido",
     "invalidEmail": "correo electrónico inválido"
   },
-
   "units": {
     "unit": "unidad",
     "units": "unidades",
     "perUnit": "por unidad",
     "perUnitShort": "/ ud"
   },
-
   "select": {
     "placeholder": "Seleccionar...",
     "clearSelection": "Limpiar selección"
   },
-
   "errorBoundary": {
     "label": "Error",
     "title": "Algo salió mal",
     "reload": "Recargar página"
   },
-
   "navbar": {
     "app": "Aplicación",
     "solarPanels": "Paneles Solares",
     "professionals": "Profesionales",
     "accredit": "Acreditarse",
-    "support": "Soporte"
+    "support": "Soporte",
+    "companies": "Empresas"
   },
-
   "corridor": {
     "viewAll": "acceder a todas las piezas"
   },
-
   "time": {
     "today": "hoy",
     "yesterday": "ayer",
     "tomorrow": "mañana"
   },
-
   "empty": {
     "default": "no se encontraron resultados."
   }

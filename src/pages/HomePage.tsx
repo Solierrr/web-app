@@ -104,47 +104,47 @@ export function HomePage() {
         name="btn-orange"
         description="Ação principal"
         content="Orange"
-        bgColor={Colors.Orange}
+        bgColor={Colors.ORANGE}
       />
       <Button
         name="btn-green"
         description="Ação de sucesso"
         content="Green"
-        bgColor={Colors.Green}
+        bgColor={Colors.GREEN}
       />
       <Button
         name="btn-hyperlink"
         description="Ação de link"
         content="HyperLink"
-        bgColor={Colors.HyperLink}
+        bgColor={Colors.HYPERLINK}
       />
       <Button
         name="btn-black"
         description="Ação neutra"
         content="Black"
-        bgColor={Colors.Black}
-        txtColor={Colors.White}
+        bgColor={Colors.BLACK}
+        txtColor={Colors.WHITE}
       />
 
       <Button
         name="btn-rounded"
         description="Botão arredondado"
         content="Rounded"
-        bgColor={Colors.Orange}
+        bgColor={Colors.ORANGE}
         rounded
       />
       <Button
         name="btn-disabled"
         description="Botão desabilitado"
         content="Disabled"
-        bgColor={Colors.Orange}
+        bgColor={Colors.ORANGE}
         disabled
       />
       <Button
         name="btn-onclick"
         description="Botão com onClick"
         content="Click me"
-        bgColor={Colors.Green}
+        bgColor={Colors.GREEN}
         onClick={() => console.log("clicked")}
       />
 
@@ -152,20 +152,20 @@ export function HomePage() {
         name="btn-icone"
         description="Botão com ícone"
         content="Buscar"
-        bgColor={Colors.Green}
+        bgColor={Colors.GREEN}
         icon={{ name: "search" }}
       />
       <Button
         name="btn-icone-inverse"
         description="Botão com ícone invertido"
         content="Buscar"
-        bgColor={Colors.Green}
+        bgColor={Colors.GREEN}
         icon={{ name: "search", inverse: true }}
       />
       <Button
         name="btn-icone-only"
         description="Botão só com ícone"
-        bgColor={Colors.HyperLink}
+        bgColor={Colors.HYPERLINK}
         icon={{ name: "user" }}
       />
 

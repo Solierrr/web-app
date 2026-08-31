@@ -23,19 +23,19 @@ describe("Icon", () => {
     const svg = container.querySelector("svg");
     expect(svg).toHaveAttribute("width", "24");
     expect(svg).toHaveAttribute("height", "24");
-    expect(svg).toHaveAttribute("stroke", Colors.Black);
+    expect(svg).toHaveAttribute("stroke", Colors.BLACK);
     expect(svg).toHaveAttribute("stroke-width", "2");
   });
 
   it("respects custom size, color and strokeWidth", () => {
     const { container } = render(
-      <Icon name="user" size={48} color={Colors.Orange} strokeWidth={1.5} />,
+      <Icon name="user" size={48} color={Colors.ORANGE} strokeWidth={1.5} />,
     );
 
     const svg = container.querySelector("svg");
     expect(svg).toHaveAttribute("width", "48");
     expect(svg).toHaveAttribute("height", "48");
-    expect(svg).toHaveAttribute("stroke", Colors.Orange);
+    expect(svg).toHaveAttribute("stroke", Colors.ORANGE);
     expect(svg).toHaveAttribute("stroke-width", "1.5");
   });
 

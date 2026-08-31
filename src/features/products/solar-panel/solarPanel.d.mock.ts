@@ -1,6 +1,5 @@
 import type { SolarPanel } from "./solarPanel";
-import type { SolarPanelModelStatus as ModelStatus } from "./solarPanel.enum";
-import SolarPanelType from "../solarPanelType.enum";
+import type { SolarPanelModelStatus as ModelStatus, SolarPanelType } from "./solarPanel.enum";
 
 export const SolarPanelDimensionPlaceholder = {
   width: 0,

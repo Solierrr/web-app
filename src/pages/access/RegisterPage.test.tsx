@@ -25,6 +25,6 @@ describe('RegisterPage', () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByRole('link', { name: 'Entrar' })).toHaveAttribute('href', '/login');
+    expect(screen.getByRole('link', { name: 'Entrar' })).toHaveAttribute('href', '/pt-BR/login');
   });
 });

@@ -5,7 +5,6 @@
   "yes": "sim",
   "no": "não",
   "language": "Idioma",
-
   "actions": {
     "add": "adicionar",
     "back": "voltar",
@@ -21,11 +20,11 @@
     "save": "salvar",
     "search": "pesquisar",
     "send": "enviar",
-    "view": "visualizar"
+    "view": "visualizar",
+    "contact": "entrar em contato"
   },
-
   "status": {
-    "loading": "carregando...",
+    "loading": "carregando",
     "success": "sucesso",
     "error": "erro",
     "active": "ativo",
@@ -33,56 +32,48 @@
     "available": "disponível",
     "unavailable": "indisponível"
   },
-
   "navigation": {
     "home": "início",
     "next": "próximo",
     "previous": "anterior"
   },
-
   "form": {
     "required": "obrigatório",
     "optional": "opcional",
     "invalid": "valor inválido",
     "invalidEmail": "e-mail inválido"
   },
-
   "units": {
     "unit": "unidade",
     "units": "unidades",
     "perUnit": "por unidade",
     "perUnitShort": "/ uni"
   },
-
   "select": {
     "placeholder": "Selecione...",
     "clearSelection": "Limpar seleção"
   },
-
   "errorBoundary": {
     "label": "Erro",
     "title": "Algo deu errado",
     "reload": "Recarregar página"
   },
-
   "navbar": {
     "app": "Aplicativo",
     "solarPanels": "Placas Solares",
     "professionals": "Profissionais",
     "accredit": "Credenciar-se",
-    "support": "Suporte"
+    "support": "Suporte",
+    "companies": "Empresas"
   },
-
   "corridor": {
     "viewAll": "acessar todas as peças"
   },
-
   "time": {
     "today": "hoje",
     "yesterday": "ontem",
     "tomorrow": "amanhã"
   },
-
   "empty": {
     "default": "nenhum resultado encontrado."
   }

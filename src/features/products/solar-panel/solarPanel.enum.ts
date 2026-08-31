@@ -1,11 +1,11 @@
 export enum SolarPanelType {
-    Monocrystalline = "Monocristalino",
-    Polycrystalline = "Policristalino",
-    ThinFilm        = "Filme Fino",
+    MONOCRYSTALLINE = "Monocristalino",
+    POLYCRYSTALLINE = "Policristalino",
+    THINFILM        = "Filme Fino",
 }
 
 export enum SolarPanelModelStatus {
-    Approved      = "APPROVED",
-    Rejected      = "REJECTED",
-    UnderAnalysis = "UNDER_ANALYSIS",
+    APPROVED      = "APPROVED",
+    REJECTED      = "REJECTED",
+    UNDERANALYSIS = "UNDER_ANALYSIS",
 }

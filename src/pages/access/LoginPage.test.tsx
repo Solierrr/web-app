@@ -23,7 +23,7 @@ describe('LoginPage', () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByRole('link', { name: 'Cadastre-se' })).toHaveAttribute('href', '/cadastro');
-    expect(screen.getByRole('link', { name: 'Esqueci minha senha' })).toHaveAttribute('href', '/esqueci-senha');
+    expect(screen.getByRole('link', { name: 'Cadastre-se' })).toHaveAttribute('href', '/pt-BR/cadastro');
+    expect(screen.getByRole('link', { name: 'Esqueci minha senha' })).toHaveAttribute('href', '/pt-BR/esqueci-senha');
   });
 });
