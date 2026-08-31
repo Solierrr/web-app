@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Select from "@@/ui/select/Select";
 import { getSolarPanels } from "@/features/products/solar-panel/solarPanel.service";
 import type { SolarPanelFeedSummary } from "@/features/products/solar-panel/solarPanelAnnouncement";
+import { DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/locales/languages";
+import { routePaths } from "@/config/locales/routePaths";
 
 const MOCK_IDS = ["1", "2", "3", "4", "5", "6", "7", "8"];
 const FILTER_CHIPS = [
@@ -14,6 +16,8 @@ const FILTER_CHIPS = [
 
 export default function SolarPanelSearch() {
   const [items, setItems] = useState<SolarPanelFeedSummary[]>([]);
+  const { lang: langParam } = useParams<{ lang: string }>();
+  const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
 
   useEffect(() => {
     let active = true;
@@ -70,7 +74,7 @@ export default function SolarPanelSearch() {
         {items.map((item) => (
           <Link
             key={item.id}
-            to={`/produto/${item.id}`}
+            to={routePaths.productDetail(lang, item.companySlug, item.slug)}
             className="flex flex-col gap-2"
           >
             <img

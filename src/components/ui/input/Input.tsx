@@ -49,13 +49,13 @@ export default function Input({
         className={`flex cursor-pointer ${inverse ? "ml-2" : "mr-4"}`}
       >
         {" "}
-        <Icon name={icon.name} color={Colors.InputIcon} />{" "}
+        <Icon name={icon.name} color={Colors.INPUTICON} />{" "}
       </button>
     ) : (
       <Icon
         className={`${inverse ? "ml-2" : "mr-4"}`}
         name={icon.name}
-        color={Colors.InputIcon}
+        color={Colors.INPUTICON}
       />
     ));
 

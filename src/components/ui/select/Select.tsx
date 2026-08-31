@@ -141,7 +141,7 @@ export default function Select<T = string>({
             >
               <Icon
                 name="x"
-                color={Colors.InputIcon}
+                color={Colors.INPUTICON}
                 className="cursor-pointer"
               />
             </button>
@@ -158,7 +158,7 @@ export default function Select<T = string>({
         <Icon
           className={`transition-transform ${open ? "rotate-180" : ""}`}
           name="chevronDown"
-          color={Colors.InputIcon}
+          color={Colors.INPUTICON}
         />
       </div>
 

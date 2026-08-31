@@ -1,25 +1,58 @@
-import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import Access from "@/components/access/Access";
+import Access from "@/components/layout/access/Access";
+import { Hyperlink } from "@/components/ui/link/Hyperlink";
+import { DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/locales/languages";
+import { routePaths } from "@/config/locales/routePaths";
 
 export default function LoginPage() {
-    const { t } = useTranslation("access");
+  const { t } = useTranslation("access");
+  const { lang: langParam } = useParams<{ lang: string }>();
+  const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
 
-    return (
-        <Access
-            heading="Solaria"
-            helperText={<>{t("login.helperTextPrefix")} <Link to="/" className="text-hyperlink">{t("login.contactSupport")}</Link></>}
-            fields={[
-                { name: "email", type: "email", placeholder: t("fields.email.placeholder") },
-                { name: "password", placeholder: t("fields.password.placeholder"), password: true },
-            ]}
-            submitLabel={t("login.submit")}
-            footer={
-                <div className="flex flex-col gap-2">
-                    <Link to="/esqueci-senha" className="text-hyperlink">{t("login.forgotPassword")}</Link>
-                    <p>{t("login.noAccountPrefix")} <Link to="/cadastro" className="text-hyperlink">{t("login.register")}</Link></p>
-                </div>
-            }
-        />
-    );
+  return (
+    <Access
+      heading="Solaria"
+      helperText={
+        <div className="flex flex-wrap items-center gap-1">
+          <span>{t("login.helperTextPrefix")}</span>
+          <Hyperlink
+            content={t("login.contactSupport")}
+            url={routePaths.home(lang)}
+            className="text-hyperlink"
+          />
+        </div>
+      }
+      fields={[
+        {
+          name: "email",
+          type: "email",
+          placeholder: t("fields.email.placeholder"),
+        },
+        {
+          name: "password",
+          placeholder: t("fields.password.placeholder"),
+          password: true,
+        },
+      ]}
+      submitLabel={t("login.submit")}
+      footer={
+        <div className="flex flex-col gap-2">
+          <Hyperlink
+            content={t("login.forgotPassword")}
+            url={routePaths.forgotPassword(lang)}
+            className="text-hyperlink"
+          />
+          <div className="flex flex-wrap items-center gap-1">
+            <span>{t("login.noAccountPrefix")}</span>
+            <Hyperlink
+              content={t("login.register")}
+              url={routePaths.register(lang)}
+              className="text-hyperlink"
+            />
+          </div>
+        </div>
+      }
+    />
+  );
 }

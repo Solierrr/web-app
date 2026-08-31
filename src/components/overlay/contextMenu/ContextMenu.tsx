@@ -127,7 +127,7 @@ export const ContextMenu = forwardRef<ContextMenuHandle, ContextMenuProps>(
               <Icon
                 name={item.icon}
                 size={18}
-                color={item.disabled ? Colors.InputIcon : Colors.Black}
+                color={item.disabled ? Colors.INPUTICON : Colors.BLACK}
               />
             )}
             {item.label}

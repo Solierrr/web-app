@@ -19,7 +19,7 @@ type IconButtonProps = Omit<ButtonPresetProps, "content" | "icon"> & {
  * @param props - description, content/icon, rounded, disabled e demais propriedades do Button (exceto `bgColor`/`txtColor`).
  */
 export function PrimaryButton(props: ButtonPresetProps) {
-  return <Button {...props} bgColor={Colors.Orange} txtColor={Colors.White} />;
+  return <Button {...props} bgColor={Colors.ORANGE} txtColor={Colors.WHITE} />;
 }
 
 /**
@@ -30,7 +30,7 @@ export function PrimaryButton(props: ButtonPresetProps) {
  * @param props - description, content/icon, rounded, disabled e demais propriedades do Button (exceto `bgColor`/`txtColor`).
  */
 export function SecondaryButton(props: ButtonPresetProps) {
-  return <Button {...props} bgColor={Colors.Black} txtColor={Colors.White} />;
+  return <Button {...props} bgColor={Colors.BLACK} txtColor={Colors.WHITE} />;
 }
 
 /**
@@ -45,8 +45,8 @@ export function IconButton({ icon, ...props }: IconButtonProps) {
     <Button
       {...props}
       icon={{ name: icon }}
-      bgColor={Colors.Orange}
-      txtColor={Colors.White}
+      bgColor={Colors.ORANGE}
+      txtColor={Colors.WHITE}
     />
   );
 }
@@ -67,8 +67,8 @@ export function LightIconButton({
     <Button
       {...props}
       icon={{ name: icon }}
-      bgColor={Colors.White}
-      txtColor={Colors.Orange}
+      bgColor={Colors.WHITE}
+      txtColor={Colors.ORANGE}
       className={`shadow-soft-black ${className ?? ""}`}
     />
   );
@@ -90,10 +90,10 @@ export function SoftIconButton({
     <Button
       {...props}
       icon={{ name: icon }}
-      bgColor={Colors.White}
-      txtColor={Colors.Orange}
+      bgColor={Colors.WHITE}
+      txtColor={Colors.ORANGE}
       rounded={false}
-      className={`hover:bg-black/5! ${className ?? ""}`}
+      className={`no-bg-interactive! ${className ?? ""}`}
     />
   );
 }

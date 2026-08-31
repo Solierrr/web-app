@@ -16,8 +16,10 @@ const mockedGetSolarPanels = vi.mocked(getSolarPanels);
 const items: SolarPanelAnnouncement[] = [
   {
     id: "1",
-    supplierId: "supplier-1",
-    panel: { id: "panel-1", status: ModelStatus.Approved },
+    slug: "coletor-solar-termico-vertical-de-cobre",
+    companySlug: "solaria-energia",
+    supplierId: "company-1",
+    panel: { id: "panel-1", status: ModelStatus.APPROVED },
     title: "Coletor Solar Térmico Vertical De Cobre",
     description: "Descrição",
     unitPrice: 200,
@@ -69,6 +71,9 @@ describe("SolarPanelSearch", () => {
       await screen.findByRole("link", {
         name: /Coletor Solar Térmico Vertical De Cobre/,
       }),
-    ).toHaveAttribute("href", "/produto/1");
+    ).toHaveAttribute(
+      "href",
+      "/pt-BR/placa-solar/solaria-energia/coletor-solar-termico-vertical-de-cobre",
+    );
   });
 });

@@ -7,6 +7,8 @@ import type { SolarPanelFeedSummary } from "@/features/products/solar-panel/sola
 const items: SolarPanelFeedSummary[] = [
   {
     id: "1",
+    slug: "coletor-solar-termico-vertical-de-cobre",
+    companySlug: "solaria-energia",
     title: "Coletor Solar Térmico Vertical De Cobre",
     unitPrice: 200,
     photos: {
@@ -19,6 +21,8 @@ const items: SolarPanelFeedSummary[] = [
   },
   {
     id: "2",
+    slug: "painel-solar-monocristalino-517w",
+    companySlug: "helios-instalacoes-solares",
     title: "Painel Solar Monocristalino 517W",
     unitPrice: 1432.6,
     photos: {
@@ -63,7 +67,10 @@ describe("Corridor", () => {
 
     expect(
       screen.getByRole("link", { name: /Painel Solar Monocristalino 517W/ }),
-    ).toHaveAttribute("href", "/produto/2");
+    ).toHaveAttribute(
+      "href",
+      "/pt-BR/placa-solar/helios-instalacoes-solares/painel-solar-monocristalino-517w",
+    );
   });
 
   it("renders no cards when items is empty", () => {

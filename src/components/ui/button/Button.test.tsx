@@ -1,8 +1,9 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { render, screen, fireEvent, act } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import Button from "./Button";
 import Colors from "@/shared/styles/colors/colors.enum";
 import { InvalidPropError } from "@/config/error/InvalidProp.error";
+import MocksMode from "@/config/mocks/mocksMode.enum";
 
 describe("Button", () => {
   it("renders content as the button label and description as aria-label", () => {
@@ -49,8 +50,8 @@ describe("Button", () => {
     render(<Button content="Salvar" description="desc" />);
 
     expect(screen.getByRole("button")).toHaveStyle({
-      backgroundColor: Colors.Orange,
-      color: Colors.White,
+      backgroundColor: Colors.ORANGE,
+      color: Colors.WHITE,
     });
   });
 
@@ -59,14 +60,14 @@ describe("Button", () => {
       <Button
         content="Salvar"
         description="desc"
-        bgColor={Colors.Green}
-        txtColor={Colors.Black}
+        bgColor={Colors.GREEN}
+        txtColor={Colors.BLACK}
       />,
     );
 
     expect(screen.getByRole("button")).toHaveStyle({
-      backgroundColor: Colors.Green,
-      color: Colors.Black,
+      backgroundColor: Colors.GREEN,
+      color: Colors.BLACK,
     });
   });
 
@@ -116,14 +117,14 @@ describe("Button", () => {
       <Button
         content="Buscar"
         description="desc"
-        txtColor={Colors.Black}
+        txtColor={Colors.BLACK}
         icon={{ name: "search" }}
       />,
     );
 
     expect(container.querySelector("svg")).toHaveAttribute(
       "stroke",
-      Colors.Black,
+      Colors.BLACK,
     );
   });
 
@@ -165,5 +166,91 @@ describe("Button", () => {
     const button = screen.getByRole("button");
     expect(button).toHaveClass("px-4", "py-2");
     expect(button).not.toHaveClass("aspect-square");
+  });
+
+  describe("action", () => {
+    afterEach(() => {
+      vi.unstubAllEnvs();
+      vi.useRealTimers();
+    });
+
+    it("calls action and shows the animated loading label while it resolves", async () => {
+      vi.useFakeTimers();
+      let resolveAction!: () => void;
+      const action = vi.fn(
+        () =>
+          new Promise<void>((resolve) => {
+            resolveAction = resolve;
+          }),
+      );
+
+      render(<Button content="Salvar" description="desc" action={action} />);
+      const button = screen.getByRole("button");
+
+      await act(async () => {
+        fireEvent.click(button);
+      });
+
+      expect(action).toHaveBeenCalledTimes(1);
+      expect(button).toBeDisabled();
+      expect(button).toHaveTextContent("carregando.");
+
+      await act(async () => {
+        vi.advanceTimersByTime(400);
+      });
+      expect(button).toHaveTextContent("carregando..");
+
+      await act(async () => {
+        vi.advanceTimersByTime(400);
+      });
+      expect(button).toHaveTextContent("carregando...");
+
+      await act(async () => {
+        resolveAction();
+        await Promise.resolve();
+      });
+
+      expect(button).not.toBeDisabled();
+      expect(button).toHaveTextContent("Salvar");
+    });
+
+    it("forces at least a 2s wait when VITE_MOCKS is ALWAYS, even if the action resolves sooner", async () => {
+      vi.stubEnv("VITE_MOCKS", MocksMode.ALWAYS);
+      vi.useFakeTimers();
+      const action = vi.fn(() => Promise.resolve());
+
+      render(<Button content="Salvar" description="desc" action={action} />);
+      const button = screen.getByRole("button");
+
+      await act(async () => {
+        fireEvent.click(button);
+      });
+
+      expect(button).toBeDisabled();
+
+      await act(async () => {
+        vi.advanceTimersByTime(1999);
+      });
+      expect(button).toBeDisabled();
+
+      await act(async () => {
+        vi.advanceTimersByTime(1);
+      });
+      expect(button).not.toBeDisabled();
+    });
+
+    it("does not force a wait when VITE_MOCKS is DEACTIVATED", async () => {
+      vi.stubEnv("VITE_MOCKS", MocksMode.DEACTIVATED);
+      const action = vi.fn(() => Promise.resolve());
+
+      render(<Button content="Salvar" description="desc" action={action} />);
+      const button = screen.getByRole("button");
+
+      await act(async () => {
+        fireEvent.click(button);
+      });
+
+      expect(button).not.toBeDisabled();
+    });
   });
 });

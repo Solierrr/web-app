@@ -1,6 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import type { SolarPanelFeedSummary } from "@/features/products/solar-panel/solarPanelAnnouncement";
+import { DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/locales/languages";
+import { routePaths } from "@/config/locales/routePaths";
 
 interface CorridorProps {
   title: string;
@@ -16,6 +18,8 @@ export default function Corridor({
   onActionClick,
 }: CorridorProps) {
   const { t } = useTranslation("commons");
+  const { lang: langParam } = useParams<{ lang: string }>();
+  const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
   const resolvedActionLabel = actionLabel ?? t("corridor.viewAll");
 
   return (
@@ -35,7 +39,7 @@ export default function Corridor({
         {items.map((item) => (
           <Link
             key={item.id}
-            to={`/produto/${item.id}`}
+            to={routePaths.productDetail(lang, item.companySlug, item.slug)}
             className="flex w-60 shrink-0 flex-col gap-2"
           >
             <img
