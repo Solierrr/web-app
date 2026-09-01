@@ -1,5 +1,5 @@
 import type { Company } from "@/features/companies/company";
-import type { EntityCardItem } from "@@/layout/entityCard/EntityCard";
+import type { EntityCardItem } from "@/components/layout/entity-card/EntityCard";
 import type { SupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Select from "@@/ui/select/Select";
-import EntityCard from "@@/layout/entityCard/EntityCard";
+import EntityCard from "@/components/layout/entity-card/EntityCard";
 import Skeleton from "@@/feedbacks/skeleton/Skeleton";
 import { ImageSkeleton } from "@@/feedbacks/skeleton/Skeleton.presets";
 import { getCompanies } from "@/features/companies/company.service";
