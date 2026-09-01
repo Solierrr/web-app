@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Access from "@/components/layout/access/Access";
-import { Hyperlink } from "@/components/ui/link/Hyperlink";
+import Hyperlink from "@/components/ui/link/Hyperlink";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
 

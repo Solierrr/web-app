@@ -9,6 +9,7 @@ import { listSolarPanelModels, createSolarPanel, updateSolarPanel, deleteSolarPa
 import type { SolarPanel } from "@/features/products/solar-panel/solarPanel";
 import { SolarPanelType, SolarPanelModelStatus } from "@/features/products/solar-panel/solarPanel.enum";
 import { EMPTY_DIMENSION, EMPTY_FORM } from "@/pages/crud/SolarPanelModelCrud.utils";
+import WrapperLayout from "@/config/WrapperLayout";
 
 interface SolarPanelModelCrudTableProps {
   items: SolarPanel[];
@@ -130,6 +131,7 @@ export default function SolarPanelModelCrud() {
   }
 
   return (
+    <WrapperLayout ptop>
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-2">
         <h1>{t("title")}</h1>
@@ -231,5 +233,6 @@ export default function SolarPanelModelCrud() {
         )}
       </table>
     </div>
+    </WrapperLayout>
   );
 }

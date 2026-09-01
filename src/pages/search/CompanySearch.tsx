@@ -9,6 +9,7 @@ import { getCompanies } from "@/features/companies/company.service";
 import type { Company } from "@/features/companies/company";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { toCardItem } from "./CompanySearch.utils";
+import WrapperLayout from "@/config/WrapperLayout";
 
 const MOCK_IDS = ["company-1", "company-2", "company-3"];
 
@@ -85,5 +86,5 @@ export default function CompanySearch() {
     };
   }, []);
 
-  return items ? <CompanySearchContent items={items} /> : <CompanySearchSkeleton />;
+  return <WrapperLayout ptop>{items ? <CompanySearchContent items={items} /> : <CompanySearchSkeleton />}</WrapperLayout>;
 }

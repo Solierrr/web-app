@@ -9,7 +9,7 @@ interface HyperlinkProps {
   className?: string;
 }
 
-export function Hyperlink({ content, url, type = HyperlinkUrlType.COMPLETE, className }: HyperlinkProps) {
+export default function Hyperlink({ content, url, type = HyperlinkUrlType.COMPLETE, className }: HyperlinkProps) {
   const { pathname } = useLocation();
 
   let redirect: string;

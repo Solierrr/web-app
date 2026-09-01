@@ -9,6 +9,7 @@ import { getProfessionals } from "@/features/professionals/professional.service"
 import type { Professional } from "@/features/professionals/professional";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { toCardItem } from "./ProfessionalSearch.utils";
+import WrapperLayout from "@/config/WrapperLayout";
 
 const MOCK_IDS = ["professional-1", "professional-2", "professional-3"];
 
@@ -85,5 +86,5 @@ export default function ProfessionalSearch() {
     };
   }, []);
 
-  return items ? <ProfessionalSearchContent items={items} /> : <ProfessionalSearchSkeleton />;
+  return <WrapperLayout ptop>{items ? <ProfessionalSearchContent items={items} /> : <ProfessionalSearchSkeleton />}</WrapperLayout>;
 }

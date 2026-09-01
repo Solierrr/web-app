@@ -1,6 +1,6 @@
 import type { Message } from "./messages";
 
-import messagesMock from "./messages.d.mock";
+import { messagesMocks } from "@/config/mocks/registry";
 import { resolveWithMocks } from "@/config/mocks/fallback.service";
 import { httpJson } from "@/shared/http/http.service";
 
@@ -15,7 +15,7 @@ export function getMessages(chatId: string): Promise<Message[]> {
         operation: "getMessages",
         errorMessage: `Não foi possível obter as mensagens do chat ${chatId}`,
       }),
-    () => messagesMock,
+    () => messagesMocks,
   );
 }
 
