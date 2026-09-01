@@ -5,9 +5,9 @@ import Input from "@@/ui/input/Input";
 import Select from "@@/ui/select/Select";
 import { PrimaryButton, SecondaryButton, IconButton } from "@@/ui/button/Button.presets";
 import Skeleton from "@@/feedbacks/skeleton/Skeleton";
-import { listSolarPanelModels, createSolarPanel, updateSolarPanel, deleteSolarPanel } from "@/features/products/solar-panel/solarPanel.service";
-import type { SolarPanel } from "@/features/products/solar-panel/solarPanel";
-import { SolarPanelType, SolarPanelModelStatus } from "@/features/products/solar-panel/solarPanel.enum";
+import { listSolarPanelModels, createSolarPanel, updateSolarPanel, deleteSolarPanel } from "@/features/solar-panel/solarPanel.service";
+import type { SolarPanel } from "@/features/solar-panel/solarPanel";
+import { SolarPanelType, SolarPanelModelStatus } from "@/features/solar-panel/solarPanel.enum";
 import { EMPTY_DIMENSION, EMPTY_FORM } from "@/pages/crud/SolarPanelModelCrud.utils";
 import WrapperLayout from "@/config/WrapperLayout";
 
@@ -132,107 +132,103 @@ export default function SolarPanelModelCrud() {
 
   return (
     <WrapperLayout ptop>
-    <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-2">
-        <h1>{t("title")}</h1>
-        <p className="text-black/70">{t("description")}</p>
-      </div>
-
-      <div className="flex flex-col gap-4 rounded-medium bg-input-bg p-4">
-        <h2>{editingId ? t("editHeading") : t("createHeading")}</h2>
-
-        <div className="flex flex-row flex-wrap gap-4">
-          <Input
-            name="brand"
-            placeholder={t("fields.brand")}
-            value={form.brand}
-            onChange={(event) => setForm({ ...form, brand: event.target.value })}
-          />
-          <Input
-            name="model"
-            placeholder={t("fields.model")}
-            value={form.model}
-            onChange={(event) => setForm({ ...form, model: event.target.value })}
-          />
-          <Select
-            name="type"
-            placeholder={t("fields.type")}
-            value={form.type}
-            options={Object.values(SolarPanelType)}
-            onChange={(value) => setForm({ ...form, type: value as SolarPanelType })}
-          />
-          <Select
-            name="status"
-            placeholder={t("fields.status")}
-            value={form.status}
-            options={Object.values(SolarPanelModelStatus)}
-            onChange={(value) => setForm({ ...form, status: value as SolarPanelModelStatus })}
-          />
-          <Input
-            name="powerOutput"
-            type="number"
-            placeholder={t("fields.powerOutput")}
-            value={form.powerOutput}
-            onChange={(event) => setForm({ ...form, powerOutput: Number(event.target.value) })}
-          />
-          <Input
-            name="efficiency"
-            type="number"
-            placeholder={t("fields.efficiency")}
-            value={form.efficiency}
-            onChange={(event) => setForm({ ...form, efficiency: Number(event.target.value) })}
-          />
-          <Input
-            name="weight"
-            type="number"
-            placeholder={t("fields.weight")}
-            value={form.weight}
-            onChange={(event) => setForm({ ...form, weight: Number(event.target.value) })}
-          />
-          <Input
-            name="width"
-            type="number"
-            placeholder={t("fields.width")}
-            value={form.dimension?.width}
-            onChange={(event) => setForm({ ...form, dimension: { ...(form.dimension ?? EMPTY_DIMENSION), width: Number(event.target.value) } })}
-          />
-          <Input
-            name="length"
-            type="number"
-            placeholder={t("fields.length")}
-            value={form.dimension?.length}
-            onChange={(event) => setForm({ ...form, dimension: { ...(form.dimension ?? EMPTY_DIMENSION), length: Number(event.target.value) } })}
-          />
+      <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-2">
+          <h1>{t("title")}</h1>
+          <p className="text-black/70">{t("description")}</p>
         </div>
 
-        <div className="flex flex-row gap-2">
-          <PrimaryButton
-            content={editingId ? t("actions.save") : t("actions.add")}
-            description={t("actions.saveDescription")}
-            action={handleSave}
-            disabled={saving}
-          />
-          {editingId && <SecondaryButton content={t("actions.cancel")} description={t("actions.cancelDescription")} onClick={startCreate} />}
-        </div>
-      </div>
+        <div className="flex flex-col gap-4 rounded-medium bg-input-bg p-4">
+          <h2>{editingId ? t("editHeading") : t("createHeading")}</h2>
 
-      <table className="w-full text-left">
-        <thead>
-          <tr className="text-input-text">
-            <th className="pb-2 font-medium">{t("table.brandModel")}</th>
-            <th className="pb-2 font-medium">{t("table.type")}</th>
-            <th className="pb-2 font-medium">{t("table.power")}</th>
-            <th className="pb-2 font-medium">{t("table.status")}</th>
-            <th className="pb-2 font-medium"></th>
-          </tr>
-        </thead>
-        {items ? (
-          <SolarPanelModelCrudTable items={items} t={t} onEdit={startEdit} onDelete={handleDelete} />
-        ) : (
-          <SolarPanelModelCrudTableSkeleton />
-        )}
-      </table>
-    </div>
+          <div className="flex flex-row flex-wrap gap-4">
+            <Input
+              name="brand"
+              placeholder={t("fields.brand")}
+              value={form.brand}
+              onChange={(event) => setForm({ ...form, brand: event.target.value })}
+            />
+            <Input
+              name="model"
+              placeholder={t("fields.model")}
+              value={form.model}
+              onChange={(event) => setForm({ ...form, model: event.target.value })}
+            />
+            <Select
+              name="type"
+              placeholder={t("fields.type")}
+              value={form.type}
+              options={Object.values(SolarPanelType)}
+              onChange={(value) => setForm({ ...form, type: value as SolarPanelType })}
+            />
+            <Select
+              name="status"
+              placeholder={t("fields.status")}
+              value={form.status}
+              options={Object.values(SolarPanelModelStatus)}
+              onChange={(value) => setForm({ ...form, status: value as SolarPanelModelStatus })}
+            />
+            <Input
+              name="powerOutput"
+              type="number"
+              placeholder={t("fields.powerOutput")}
+              value={form.powerOutput}
+              onChange={(event) => setForm({ ...form, powerOutput: Number(event.target.value) })}
+            />
+            <Input
+              name="efficiency"
+              type="number"
+              placeholder={t("fields.efficiency")}
+              value={form.efficiency}
+              onChange={(event) => setForm({ ...form, efficiency: Number(event.target.value) })}
+            />
+            <Input
+              name="weight"
+              type="number"
+              placeholder={t("fields.weight")}
+              value={form.weight}
+              onChange={(event) => setForm({ ...form, weight: Number(event.target.value) })}
+            />
+            <Input
+              name="width"
+              type="number"
+              placeholder={t("fields.width")}
+              value={form.dimension?.width}
+              onChange={(event) => setForm({ ...form, dimension: { ...(form.dimension ?? EMPTY_DIMENSION), width: Number(event.target.value) } })}
+            />
+            <Input
+              name="length"
+              type="number"
+              placeholder={t("fields.length")}
+              value={form.dimension?.length}
+              onChange={(event) => setForm({ ...form, dimension: { ...(form.dimension ?? EMPTY_DIMENSION), length: Number(event.target.value) } })}
+            />
+          </div>
+
+          <div className="flex flex-row gap-2">
+            <PrimaryButton
+              content={editingId ? t("actions.save") : t("actions.add")}
+              description={t("actions.saveDescription")}
+              action={handleSave}
+              disabled={saving}
+            />
+            {editingId && <SecondaryButton content={t("actions.cancel")} description={t("actions.cancelDescription")} onClick={startCreate} />}
+          </div>
+        </div>
+
+        <table className="w-full text-left">
+          <thead>
+            <tr className="text-input-text">
+              <th className="pb-2 font-medium">{t("table.brandModel")}</th>
+              <th className="pb-2 font-medium">{t("table.type")}</th>
+              <th className="pb-2 font-medium">{t("table.power")}</th>
+              <th className="pb-2 font-medium">{t("table.status")}</th>
+              <th className="pb-2 font-medium"></th>
+            </tr>
+          </thead>
+          {items ? <SolarPanelModelCrudTable items={items} t={t} onEdit={startEdit} onDelete={handleDelete} /> : <SolarPanelModelCrudTableSkeleton />}
+        </table>
+      </div>
     </WrapperLayout>
   );
 }

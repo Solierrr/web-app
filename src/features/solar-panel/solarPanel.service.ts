@@ -20,9 +20,6 @@ export function getSolarPanel(id: string): Promise<SolarPanelAnnouncement> {
   );
 }
 
-// `slug`/`companySlug` ainda não existem em `model`/`announcement` no
-// schema-api-core.sql (ver NOTE em `solarPanelAnnouncement.d.ts`) — usados
-// pela rota amigável do anúncio (/placa-solar/{companySlug}/{slug}).
 export function getSolarPanelBySlug(companySlug: string, slug: string): Promise<SolarPanelAnnouncement> {
   return resolveWithMocks(
     () =>
@@ -48,11 +45,6 @@ export function getSolarPanels(ids: string[]): Promise<SolarPanelAnnouncement[]>
     () => solarPanelAnnouncementMocks,
   );
 }
-
-// A seguir: CRUD dos modelos de placa solar (tabela `model` do schema).
-// Ainda não existe endpoint real para essas operações — o fallback apenas
-// ecoa o payload recebido (`resolveWithMocks`), então nada persiste entre
-// recarregamentos até a API de fato existir.
 
 export function listSolarPanelModels(): Promise<SolarPanel[]> {
   return resolveWithMocks(

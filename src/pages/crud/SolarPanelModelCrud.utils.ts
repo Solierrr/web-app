@@ -1,5 +1,5 @@
-import { SolarPanelType, SolarPanelModelStatus } from "@/features/products/solar-panel/solarPanel.enum";
-import type { SolarPanel, SolarPanelDimension } from "@/features/products/solar-panel/solarPanel";
+import { SolarPanelType, SolarPanelModelStatus } from "@/features/solar-panel/solarPanel.enum";
+import type { SolarPanel, SolarPanelDimension } from "@/features/solar-panel/solarPanel";
 
 export const EMPTY_DIMENSION: SolarPanelDimension = { width: 0, length: 0 };
 

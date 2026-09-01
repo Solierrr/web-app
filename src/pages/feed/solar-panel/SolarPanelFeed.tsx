@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import Corridor from "@@/layout/corridor/Corridor";
 import Skeleton from "@@/feedbacks/skeleton/Skeleton";
 import { ImageSkeleton } from "@@/feedbacks/skeleton/Skeleton.presets";
-import { getSolarPanels } from "@/features/products/solar-panel/solarPanel.service";
-import type { SolarPanelFeedSummary } from "@/features/products/solar-panel/solarPanelAnnouncement";
+import { getSolarPanels } from "@/features/solar-panel/solarPanel.service";
+import type { SolarPanelFeedSummary } from "@/features/solar-panel/solarPanelAnnouncement";
 import WrapperLayout from "@/config/WrapperLayout";
 
 const MOCK_IDS = ["1", "2", "3", "4", "5"];
@@ -75,9 +75,7 @@ export default function SolarPanelFeed() {
         <SolarPanelFeedContent items={items} />
       </WrapperLayout>
     );
-  }
-
-  else {
+  } else {
     return (
       <WrapperLayout>
         <SolarPanelFeedSkeleton />

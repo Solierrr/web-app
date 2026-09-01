@@ -1,6 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import type { SolarPanelFeedSummary } from "@/features/products/solar-panel/solarPanelAnnouncement";
+import type { SolarPanelFeedSummary } from "@/features/solar-panel/solarPanelAnnouncement";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
 

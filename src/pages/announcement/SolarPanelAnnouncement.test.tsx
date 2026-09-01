@@ -5,13 +5,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import "@/config/inter/internationalization";
 import { ContextMenuProvider } from "@@/overlay/contextMenu/provider/ContextMenuProvider";
 
-vi.mock("@/features/products/solar-panel/solarPanel.service", () => ({
+vi.mock("@/features/solar-panel/solarPanel.service", () => ({
   getSolarPanelBySlug: vi.fn(),
 }));
 
-import { getSolarPanelBySlug } from "@/features/products/solar-panel/solarPanel.service";
-import type { SolarPanelAnnouncement as SolarPanelAnnouncementModel } from "@/features/products/solar-panel/solarPanelAnnouncement";
-import { SolarPanelModelStatus as ModelStatus } from "@/features/products/solar-panel/solarPanel.enum";
+import { getSolarPanelBySlug } from "@/features/solar-panel/solarPanel.service";
+import type { SolarPanelAnnouncement as SolarPanelAnnouncementModel } from "@/features/solar-panel/solarPanelAnnouncement";
+import { SolarPanelModelStatus as ModelStatus } from "@/features/solar-panel/solarPanel.enum";
 import SolarPanelAnnouncement from "./SolarPanelAnnouncement";
 
 const mockedGetSolarPanelBySlug = vi.mocked(getSolarPanelBySlug);
