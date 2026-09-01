@@ -59,15 +59,11 @@ describe("useTypingStatus", () => {
     act(() => result.current.stopTyping());
 
     expect(setTypingStatusMock).toHaveBeenLastCalledWith("chat-1", "user-1", false);
-    const callsToFalseBeforeAdvance = setTypingStatusMock.mock.calls.filter(
-      (call) => call[2] === false,
-    ).length;
+    const callsToFalseBeforeAdvance = setTypingStatusMock.mock.calls.filter((call) => call[2] === false).length;
 
     act(() => vi.advanceTimersByTime(3000));
 
-    const callsToFalseAfterAdvance = setTypingStatusMock.mock.calls.filter(
-      (call) => call[2] === false,
-    ).length;
+    const callsToFalseAfterAdvance = setTypingStatusMock.mock.calls.filter((call) => call[2] === false).length;
     expect(callsToFalseAfterAdvance).toBe(callsToFalseBeforeAdvance);
   });
 

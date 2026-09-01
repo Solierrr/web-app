@@ -12,9 +12,7 @@ describe("Icon", () => {
   });
 
   it("throws InvalidIconError for an unknown icon name", () => {
-    expect(() => render(<Icon name={"not-an-icon" as IconName} />)).toThrow(
-      InvalidIconError,
-    );
+    expect(() => render(<Icon name={"not-an-icon" as IconName} />)).toThrow(InvalidIconError);
   });
 
   it("applies default size, color and strokeWidth", () => {
@@ -28,9 +26,7 @@ describe("Icon", () => {
   });
 
   it("respects custom size, color and strokeWidth", () => {
-    const { container } = render(
-      <Icon name="user" size={48} color={Colors.ORANGE} strokeWidth={1.5} />,
-    );
+    const { container } = render(<Icon name="user" size={48} color={Colors.ORANGE} strokeWidth={1.5} />);
 
     const svg = container.querySelector("svg");
     expect(svg).toHaveAttribute("width", "48");
@@ -40,9 +36,7 @@ describe("Icon", () => {
   });
 
   it("scales strokeWidth relative to size when absoluteStrokeWidth is true", () => {
-    const { container } = render(
-      <Icon name="settings" size={48} strokeWidth={2} absoluteStrokeWidth />,
-    );
+    const { container } = render(<Icon name="settings" size={48} strokeWidth={2} absoluteStrokeWidth />);
 
     const svg = container.querySelector("svg");
     // absoluteStrokeWidth keeps the *visual* stroke width constant: strokeWidth * 24 / size
@@ -59,9 +53,6 @@ describe("Icon", () => {
   it("is aria-hidden by default (decorative icon)", () => {
     const { container } = render(<Icon name="home" />);
 
-    expect(container.querySelector("svg")).toHaveAttribute(
-      "aria-hidden",
-      "true",
-    );
+    expect(container.querySelector("svg")).toHaveAttribute("aria-hidden", "true");
   });
 });

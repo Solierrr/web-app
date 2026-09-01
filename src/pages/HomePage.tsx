@@ -1,22 +1,11 @@
 import Button from "@@/ui/button/Button";
-import {
-  PrimaryButton,
-  SecondaryButton,
-  IconButton,
-} from "@@/ui/button/Button.presets";
+import { PrimaryButton, SecondaryButton, IconButton } from "@@/ui/button/Button.presets";
 import Input from "@@/ui/input/Input";
-import {
-  DefaultInput,
-  SearchInput,
-  PasswordInput,
-} from "@@/ui/input/Input.presets";
+import { DefaultInput, SearchInput, PasswordInput } from "@@/ui/input/Input.presets";
 import Select from "@@/ui/select/Select";
 import { DefaultSelect, BooleanSelect } from "@@/ui/select/Select.presets";
 import Textarea from "@@/ui/textarea/Textarea";
-import {
-  DefaultTextarea,
-  CharCountTextarea,
-} from "@@/ui/textarea/Textarea.presets";
+import { DefaultTextarea, CharCountTextarea } from "@@/ui/textarea/Textarea.presets";
 import Colors from "@/shared/styles/colors/colors.enum";
 
 export function HomePage() {
@@ -62,36 +51,15 @@ export function HomePage() {
       <Input name="input-basico" placeholder="Digite algo..." />
       <Input name="input-rounded" placeholder="Busca..." rounded />
 
-      <Input
-        name="input-icone"
-        placeholder="Buscar..."
-        icon={{ name: "search" }}
-      />
-      <Input
-        name="input-icone-inverse"
-        placeholder="Buscar..."
-        icon={{ name: "search", inverse: true }}
-      />
-      <Input
-        name="input-rounded-inverse"
-        placeholder="Buscar..."
-        rounded
-        icon={{ name: "user", inverse: true }}
-      />
+      <Input name="input-icone" placeholder="Buscar..." icon={{ name: "search" }} />
+      <Input name="input-icone-inverse" placeholder="Buscar..." icon={{ name: "search", inverse: true }} />
+      <Input name="input-rounded-inverse" placeholder="Buscar..." rounded icon={{ name: "user", inverse: true }} />
 
-      <Input
-        name="input-icone-button"
-        placeholder="Clique no ícone"
-        icon={{ name: "x", onClick: () => console.log("ícone clicado") }}
-      />
+      <Input name="input-icone-button" placeholder="Clique no ícone" icon={{ name: "x", onClick: () => console.log("ícone clicado") }} />
 
       <Input name="input-disabled" placeholder="Desabilitado" disabled />
       <Input name="input-password" placeholder="Senha" type="password" />
-      <Input
-        name="input-default-value"
-        placeholder="Com valor inicial"
-        defaultValue="valor inicial"
-      />
+      <Input name="input-default-value" placeholder="Com valor inicial" defaultValue="valor inicial" />
       <Input name="input-required" placeholder="Obrigatório" required />
 
       {/* Input presets */}
@@ -100,61 +68,16 @@ export function HomePage() {
       <PasswordInput name="preset-password" placeholder="Senha" />
 
       {/* Button */}
-      <Button
-        name="btn-orange"
-        description="Ação principal"
-        content="Orange"
-        bgColor={Colors.ORANGE}
-      />
-      <Button
-        name="btn-green"
-        description="Ação de sucesso"
-        content="Green"
-        bgColor={Colors.GREEN}
-      />
-      <Button
-        name="btn-hyperlink"
-        description="Ação de link"
-        content="HyperLink"
-        bgColor={Colors.HYPERLINK}
-      />
-      <Button
-        name="btn-black"
-        description="Ação neutra"
-        content="Black"
-        bgColor={Colors.BLACK}
-        txtColor={Colors.WHITE}
-      />
+      <Button name="btn-orange" description="Ação principal" content="Orange" bgColor={Colors.ORANGE} />
+      <Button name="btn-green" description="Ação de sucesso" content="Green" bgColor={Colors.GREEN} />
+      <Button name="btn-hyperlink" description="Ação de link" content="HyperLink" bgColor={Colors.HYPERLINK} />
+      <Button name="btn-black" description="Ação neutra" content="Black" bgColor={Colors.BLACK} txtColor={Colors.WHITE} />
 
-      <Button
-        name="btn-rounded"
-        description="Botão arredondado"
-        content="Rounded"
-        bgColor={Colors.ORANGE}
-        rounded
-      />
-      <Button
-        name="btn-disabled"
-        description="Botão desabilitado"
-        content="Disabled"
-        bgColor={Colors.ORANGE}
-        disabled
-      />
-      <Button
-        name="btn-onclick"
-        description="Botão com onClick"
-        content="Click me"
-        bgColor={Colors.GREEN}
-        onClick={() => console.log("clicked")}
-      />
+      <Button name="btn-rounded" description="Botão arredondado" content="Rounded" bgColor={Colors.ORANGE} rounded />
+      <Button name="btn-disabled" description="Botão desabilitado" content="Disabled" bgColor={Colors.ORANGE} disabled />
+      <Button name="btn-onclick" description="Botão com onClick" content="Click me" bgColor={Colors.GREEN} onClick={() => console.log("clicked")} />
 
-      <Button
-        name="btn-icone"
-        description="Botão com ícone"
-        content="Buscar"
-        bgColor={Colors.GREEN}
-        icon={{ name: "search" }}
-      />
+      <Button name="btn-icone" description="Botão com ícone" content="Buscar" bgColor={Colors.GREEN} icon={{ name: "search" }} />
       <Button
         name="btn-icone-inverse"
         description="Botão com ícone invertido"
@@ -162,35 +85,15 @@ export function HomePage() {
         bgColor={Colors.GREEN}
         icon={{ name: "search", inverse: true }}
       />
-      <Button
-        name="btn-icone-only"
-        description="Botão só com ícone"
-        bgColor={Colors.HYPERLINK}
-        icon={{ name: "user" }}
-      />
+      <Button name="btn-icone-only" description="Botão só com ícone" bgColor={Colors.HYPERLINK} icon={{ name: "user" }} />
 
       {/* Button presets */}
-      <PrimaryButton
-        name="preset-btn-primary"
-        description="Ação principal"
-        content="Primary"
-      />
-      <SecondaryButton
-        name="preset-btn-secondary"
-        description="Ação secundária"
-        content="Secondary"
-      />
-      <IconButton
-        name="preset-btn-icon"
-        description="Botão de ícone"
-        icon="settings"
-      />
+      <PrimaryButton name="preset-btn-primary" description="Ação principal" content="Primary" />
+      <SecondaryButton name="preset-btn-secondary" description="Ação secundária" content="Secondary" />
+      <IconButton name="preset-btn-icon" description="Botão de ícone" icon="settings" />
 
       {/* Select */}
-      <Select
-        name="select-basico"
-        options={["Opção A", "Opção B", "Opção C"]}
-      />
+      <Select name="select-basico" options={["Opção A", "Opção B", "Opção C"]} />
 
       <Select
         name="select-tupla"
@@ -203,19 +106,9 @@ export function HomePage() {
         onChange={(value) => console.log("selecionado:", value)}
       />
 
-      <Select
-        name="select-rounded"
-        rounded
-        defaultValue="b"
-        options={["Opção A", "Opção B", "Opção C"]}
-      />
+      <Select name="select-rounded" rounded defaultValue="b" options={["Opção A", "Opção B", "Opção C"]} />
 
-      <Select
-        name="select-disabled"
-        disabled
-        defaultValue="a"
-        options={["Opção A", "Opção B"]}
-      />
+      <Select name="select-disabled" disabled defaultValue="a" options={["Opção A", "Opção B"]} />
 
       <Select
         name="select-controlado"
@@ -227,14 +120,8 @@ export function HomePage() {
       />
 
       {/* Select presets */}
-      <DefaultSelect
-        name="preset-select-default"
-        options={["Opção A", "Opção B"]}
-      />
-      <BooleanSelect
-        name="preset-select-boolean"
-        onChange={(value) => console.log("selecionado:", value)}
-      />
+      <DefaultSelect name="preset-select-default" options={["Opção A", "Opção B"]} />
+      <BooleanSelect name="preset-select-boolean" onChange={(value) => console.log("selecionado:", value)} />
 
       {/* Textarea */}
       <Textarea name="textarea-basico" placeholder="Escreva algo..." />
@@ -246,11 +133,7 @@ export function HomePage() {
 
       {/* Textarea presets */}
       <DefaultTextarea name="preset-textarea-default" placeholder="Default" />
-      <CharCountTextarea
-        name="preset-textarea-charcount"
-        placeholder="Escreva algo..."
-        maxLength={140}
-      />
+      <CharCountTextarea name="preset-textarea-charcount" placeholder="Escreva algo..." maxLength={140} />
     </section>
   );
 }

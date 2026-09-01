@@ -21,10 +21,13 @@ interface ContextMenuProviderProps {
 export function ContextMenuProvider({ children }: ContextMenuProviderProps) {
   const menuRef = useRef<ContextMenuHandle>(null);
 
-  const value = useMemo<ContextMenuContextValue>(() => ({
-    open: (items, x, y) => menuRef.current?.open(items, x, y),
-    close: () => menuRef.current?.close(),
-  }), []);
+  const value = useMemo<ContextMenuContextValue>(
+    () => ({
+      open: (items, x, y) => menuRef.current?.open(items, x, y),
+      close: () => menuRef.current?.close(),
+    }),
+    [],
+  );
 
   return (
     <ContextMenuContext.Provider value={value}>

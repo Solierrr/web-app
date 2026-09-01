@@ -1,8 +1,8 @@
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import type { SolarPanelFeedSummary } from "@/features/products/solar-panel/solarPanelAnnouncement";
-import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
-import { routePaths } from "@/config/i18n/routePaths";
+import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
+import { routePaths } from "@/config/inter/paths";
 
 interface CorridorProps {
   title: string;
@@ -11,12 +11,7 @@ interface CorridorProps {
   onActionClick?: () => void;
 }
 
-export default function Corridor({
-  title,
-  items,
-  actionLabel,
-  onActionClick,
-}: CorridorProps) {
+export default function Corridor({ title, items, actionLabel, onActionClick }: CorridorProps) {
   const { t } = useTranslation("commons");
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
@@ -26,22 +21,14 @@ export default function Corridor({
     <section className="flex flex-col gap-4">
       <div className="flex items-baseline justify-between">
         <h2>{title}</h2>
-        <button
-          type="button"
-          onClick={onActionClick}
-          className="cursor-pointer text-input-text"
-        >
+        <button type="button" onClick={onActionClick} className="cursor-pointer text-input-text">
           {resolvedActionLabel}
         </button>
       </div>
 
       <div className="flex flex-row gap-6 overflow-x-auto scrollbar-none">
         {items.map((item) => (
-          <Link
-            key={item.id}
-            to={routePaths.productDetail(lang, item.companySlug, item.slug)}
-            className="flex w-60 shrink-0 flex-col gap-2"
-          >
+          <Link key={item.id} to={routePaths.productDetail(lang, item.companySlug, item.slug)} className="flex w-60 shrink-0 flex-col gap-2">
             <img
               src={item.photos.heroImage.url}
               alt={item.photos.heroImage.description}

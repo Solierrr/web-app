@@ -21,13 +21,7 @@ describe("Button", () => {
   });
 
   it("sets the title attribute when provided", () => {
-    render(
-      <Button
-        content="Salvar"
-        description="Salvar formulário"
-        title="Salvar tudo"
-      />,
-    );
+    render(<Button content="Salvar" description="Salvar formulário" title="Salvar tudo" />);
 
     expect(screen.getByRole("button")).toHaveAttribute("title", "Salvar tudo");
   });
@@ -56,14 +50,7 @@ describe("Button", () => {
   });
 
   it("respects custom bgColor and txtColor", () => {
-    render(
-      <Button
-        content="Salvar"
-        description="desc"
-        bgColor={Colors.GREEN}
-        txtColor={Colors.BLACK}
-      />,
-    );
+    render(<Button content="Salvar" description="desc" bgColor={Colors.GREEN} txtColor={Colors.BLACK} />);
 
     expect(screen.getByRole("button")).toHaveStyle({
       backgroundColor: Colors.GREEN,
@@ -78,9 +65,7 @@ describe("Button", () => {
   });
 
   it("passes through native button attributes", () => {
-    render(
-      <Button content="Salvar" description="desc" disabled type="submit" />,
-    );
+    render(<Button content="Salvar" description="desc" disabled type="submit" />);
 
     const button = screen.getByRole("button");
     expect(button).toBeDisabled();
@@ -89,9 +74,7 @@ describe("Button", () => {
 
   it("fires onClick when clicked", () => {
     const handleClick = vi.fn();
-    render(
-      <Button content="Salvar" description="desc" onClick={handleClick} />,
-    );
+    render(<Button content="Salvar" description="desc" onClick={handleClick} />);
 
     fireEvent.click(screen.getByRole("button"));
 
@@ -99,59 +82,35 @@ describe("Button", () => {
   });
 
   it("throws InvalidPropError when neither content nor icon is provided", () => {
-    expect(() => render(<Button description="desc" />)).toThrow(
-      InvalidPropError,
-    );
+    expect(() => render(<Button description="desc" />)).toThrow(InvalidPropError);
   });
 
   it("renders an icon alongside content", () => {
-    const { container } = render(
-      <Button content="Buscar" description="desc" icon={{ name: "search" }} />,
-    );
+    const { container } = render(<Button content="Buscar" description="desc" icon={{ name: "search" }} />);
 
     expect(container.querySelector("svg")).toBeInTheDocument();
   });
 
   it("colors the icon with the same value as txtColor", () => {
-    const { container } = render(
-      <Button
-        content="Buscar"
-        description="desc"
-        txtColor={Colors.BLACK}
-        icon={{ name: "search" }}
-      />,
-    );
+    const { container } = render(<Button content="Buscar" description="desc" txtColor={Colors.BLACK} icon={{ name: "search" }} />);
 
-    expect(container.querySelector("svg")).toHaveAttribute(
-      "stroke",
-      Colors.BLACK,
-    );
+    expect(container.querySelector("svg")).toHaveAttribute("stroke", Colors.BLACK);
   });
 
   it("defaults to icon after content (flex-row-reverse) when inverse is not set", () => {
-    render(
-      <Button content="Buscar" description="desc" icon={{ name: "search" }} />,
-    );
+    render(<Button content="Buscar" description="desc" icon={{ name: "search" }} />);
 
     expect(screen.getByRole("button")).toHaveClass("flex-row-reverse");
   });
 
   it("places the icon before content (flex-row) when icon.inverse is true", () => {
-    render(
-      <Button
-        content="Buscar"
-        description="desc"
-        icon={{ name: "search", inverse: true }}
-      />,
-    );
+    render(<Button content="Buscar" description="desc" icon={{ name: "search", inverse: true }} />);
 
     expect(screen.getByRole("button")).toHaveClass("flex-row");
   });
 
   it("forces a 1:1 rounded shape when there is no content, ignoring the rounded prop", () => {
-    render(
-      <Button description="desc" icon={{ name: "search" }} rounded={false} />,
-    );
+    render(<Button description="desc" icon={{ name: "search" }} rounded={false} />);
 
     const button = screen.getByRole("button");
     expect(button).toHaveClass("aspect-square", "rounded-full");
@@ -159,9 +118,7 @@ describe("Button", () => {
   });
 
   it("keeps the regular px-4/py-2 sizing when content is present, even with an icon", () => {
-    render(
-      <Button content="Buscar" description="desc" icon={{ name: "search" }} />,
-    );
+    render(<Button content="Buscar" description="desc" icon={{ name: "search" }} />);
 
     const button = screen.getByRole("button");
     expect(button).toHaveClass("px-4", "py-2");

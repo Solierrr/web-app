@@ -6,21 +6,13 @@ import type { ExchangeRateResponse } from "./exchange";
 const SERVICE_NAME = "exchange";
 
 function isExchangeRateResponse(value: unknown): value is ExchangeRateResponse {
-  if (typeof value !== "object" || value === null) {
-    return false;
-  }
-
+  if (typeof value !== "object" || value === null) { return false; }
   const { rate } = value as Record<string, unknown>;
   return typeof rate === "number" && Number.isFinite(rate) && rate > 0;
 }
 
-export async function getExchangeRate(
-  from: CurrencyCode,
-  to: CurrencyCode,
-): Promise<number> {
-  if (from === to) {
-    return 1;
-  }
+export async function getExchangeRate(from: CurrencyCode, to: CurrencyCode): Promise<number> {
+  if (from === to) { return 1; }
 
   const api = import.meta.env.VITE_EXCHANGE_API;
 
@@ -92,11 +84,7 @@ export async function getExchangeRate(
   return data.rate;
 }
 
-export async function convertCurrency(
-  amount: number,
-  from: CurrencyCode,
-  to: CurrencyCode,
-): Promise<number> {
+export async function convertCurrency(amount: number, from: CurrencyCode, to: CurrencyCode): Promise<number> {
   const rate = await getExchangeRate(from, to);
 
   return amount * rate;

@@ -4,7 +4,7 @@ import Colors from "@/shared/styles/colors/colors.enum";
 import Icon, { type IconName } from "@@/ui/icon/Icon";
 import { InvalidPropError } from "@/config/error/InvalidProp.error";
 import MocksMode from "@/config/mocks/mocksMode.enum";
-import sleep from "@/utils/sleep";
+import sleep from "@/utils/sleep.utils";
 
 const MOCKED_ACTION_DELAY_MS = 2000;
 
@@ -54,15 +54,11 @@ export default function Button({
     onClick?.(event);
     if (!action) return;
 
-    const mocksActive =
-      (import.meta.env.VITE_MOCKS as MocksMode) === MocksMode.ALWAYS;
+    const mocksActive = (import.meta.env.VITE_MOCKS as MocksMode) === MocksMode.ALWAYS;
 
     setIsLoading(true);
     try {
-      await Promise.all([
-        action(),
-        ...(mocksActive ? [sleep(MOCKED_ACTION_DELAY_MS)] : []),
-      ]);
+      await Promise.all([action(), ...(mocksActive ? [sleep(MOCKED_ACTION_DELAY_MS)] : [])]);
     } finally {
       setIsLoading(false);
     }
@@ -81,11 +77,8 @@ export default function Button({
       title={title}
       aria-label={description}
       aria-busy={isLoading}
-      style={{ backgroundColor: bgColor, color: txtColor }}
-    >
-      <span
-        className={`flex items-center-safe justify-center gap-2 ${inverse ? "flex-row" : "flex-row-reverse"} ${isLoading ? "invisible" : ""}`}
-      >
+      style={{ backgroundColor: bgColor, color: txtColor }}>
+      <span className={`flex items-center-safe justify-center gap-2 ${inverse ? "flex-row" : "flex-row-reverse"} ${isLoading ? "invisible" : ""}`}>
         {icon && <Icon name={icon.name} color={txtColor} />}
         {content}
       </span>

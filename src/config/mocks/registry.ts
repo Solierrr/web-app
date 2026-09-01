@@ -8,8 +8,7 @@ import companies from "@/features/companies/company.d.mock";
 import users from "@/features/users/user/user.d.mock";
 import professionals from "@/features/professionals/professional.d.mock";
 
-export const solarPanelAnnouncementMocks =
-  solarPanelAnnouncements as SolarPanelAnnouncement[];
+export const solarPanelAnnouncementMocks = solarPanelAnnouncements as SolarPanelAnnouncement[];
 export const companyMocks = companies as Company[];
 export const userMocks = users as User[];
 export const professionalMocks = professionals as Professional[];

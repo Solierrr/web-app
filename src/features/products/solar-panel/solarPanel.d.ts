@@ -1,7 +1,4 @@
-import type {
-  SolarPanelModelStatus as ModelStatus,
-  SolarPanelType,
-} from "./solarPanel.enum";
+import type { SolarPanelModelStatus as ModelStatus, SolarPanelType } from "./solarPanel.enum";
 
 export interface SolarPanelDimension {
   width: number;

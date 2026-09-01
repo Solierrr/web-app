@@ -3,10 +3,7 @@ import Button from "./Button";
 import type { IconName } from "../icon/Icon";
 import Colors from "@/shared/styles/colors/colors.enum";
 
-type ButtonPresetProps = Omit<
-  ComponentProps<typeof Button>,
-  "bgColor" | "txtColor"
->;
+type ButtonPresetProps = Omit<ComponentProps<typeof Button>, "bgColor" | "txtColor">;
 type IconButtonProps = Omit<ButtonPresetProps, "content" | "icon"> & {
   icon: IconName;
 };
@@ -41,13 +38,19 @@ export function SecondaryButton(props: ButtonPresetProps) {
  * @param props - description, icon (nome do ícone), rounded, disabled e demais propriedades do Button (exceto `content`).
  */
 export function IconButton({ icon, ...props }: IconButtonProps) {
+  return <Button {...props} icon={{ name: icon }} bgColor={Colors.ORANGE} txtColor={Colors.WHITE} />;
+}
+
+/**
+ * Light Icon
+ *
+ * Botão redondo apenas com ícone, fundo branco, ícone laranja e sombra suave.
+ *
+ * @param props - description, icon (nome do ícone), rounded, disabled e demais propriedades do Button (exceto `content`).
+ */
+export function LightIconButton({ icon, className, ...props }: IconButtonProps) {
   return (
-    <Button
-      {...props}
-      icon={{ name: icon }}
-      bgColor={Colors.ORANGE}
-      txtColor={Colors.WHITE}
-    />
+    <Button {...props} icon={{ name: icon }} bgColor={Colors.WHITE} txtColor={Colors.ORANGE} className={`shadow-soft-black ${className ?? ""}`} />
   );
 }
 
@@ -58,34 +61,7 @@ export function IconButton({ icon, ...props }: IconButtonProps) {
  *
  * @param props - description, icon (nome do ícone), rounded, disabled e demais propriedades do Button (exceto `content`).
  */
-export function LightIconButton({
-  icon,
-  className,
-  ...props
-}: IconButtonProps) {
-  return (
-    <Button
-      {...props}
-      icon={{ name: icon }}
-      bgColor={Colors.WHITE}
-      txtColor={Colors.ORANGE}
-      className={`shadow-soft-black ${className ?? ""}`}
-    />
-  );
-}
-
-/**
- * Light Icon
- *
- * Botão redondo apenas com ícone, fundo branco, ícone laranja e sombra suave.
- *
- * @param props - description, icon (nome do ícone), rounded, disabled e demais propriedades do Button (exceto `content`).
- */
-export function SoftIconButton({
-  icon,
-  className,
-  ...props
-}: IconButtonProps) {
+export function SoftIconButton({ icon, className, ...props }: IconButtonProps) {
   return (
     <Button
       {...props}

@@ -39,10 +39,7 @@ describe("Corridor", () => {
   it("renders the title", () => {
     render(
       <MemoryRouter>
-        <Corridor
-          title="Principais placas solares presentes no mercado"
-          items={items}
-        />
+        <Corridor title="Principais placas solares presentes no mercado" items={items} />
       </MemoryRouter>,
     );
 
@@ -60,14 +57,10 @@ describe("Corridor", () => {
       </MemoryRouter>,
     );
 
-    expect(
-      screen.getByText("Coletor Solar Térmico Vertical De Cobre"),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Coletor Solar Térmico Vertical De Cobre")).toBeInTheDocument();
     expect(screen.getByText("R$ 200.00 / uni")).toBeInTheDocument();
 
-    expect(
-      screen.getByRole("link", { name: /Painel Solar Monocristalino 517W/ }),
-    ).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /Painel Solar Monocristalino 517W/ })).toHaveAttribute(
       "href",
       "/pt-BR/placa-solar/helios-instalacoes-solares/painel-solar-monocristalino-517w",
     );
@@ -87,11 +80,7 @@ describe("Corridor", () => {
     const handleActionClick = vi.fn();
     render(
       <MemoryRouter>
-        <Corridor
-          title="Placas"
-          items={items}
-          onActionClick={handleActionClick}
-        />
+        <Corridor title="Placas" items={items} onActionClick={handleActionClick} />
       </MemoryRouter>,
     );
 
@@ -110,8 +99,6 @@ describe("Corridor", () => {
       </MemoryRouter>,
     );
 
-    expect(
-      screen.getByRole("button", { name: "ver mais" }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "ver mais" })).toBeInTheDocument();
   });
 });

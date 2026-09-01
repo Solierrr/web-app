@@ -11,34 +11,24 @@ import { getMessages, sendMessage } from "@/features/messages/messages.service";
 import { useTypingStatus } from "@/config/firebase/useTypingStatus";
 import userMock from "@/features/users/user/user.d.mock";
 
+
 interface ChatLayoutProps {
-    owner: User;
-    messages: MessageInterface[];
+  owner: User;
+  messages: MessageInterface[];
 }
 
-/**
- * ChatLayout
- *
- * Lista de mensagens compartilhada pelo chat entre usuários e pelo chatbot
- * (`ChatbotPage`). Sem estilo definitivo ainda — estrutura genérica.
- */
+
 export function ChatLayout({ owner, messages }: ChatLayoutProps) {
-    return (
-        <section className="flex flex-col gap-2">
-            { messages.map((message, index) => (
-                <Message key={index} message={message} owner={owner} />
-            ))}
-        </section>
-    );
+  return (
+    <section className="flex flex-col gap-2">
+      {messages.map((message, index) => (
+        <Message key={index} message={message} owner={owner} />
+      ))}
+    </section>
+  );
 }
 
-/**
- * Chat
- *
- * Página genérica de conversa 1:1 (`/{lang}/mensagens/:contactId`). Carrega o histórico via
- * `messages.service` e permite enviar novas mensagens; layout final fica
- * para uma próxima etapa.
- */
+
 export default function Chat() {
   const { contactId = "" } = useParams<{ contactId: string }>();
   const { t } = useTranslation("chat");
@@ -53,7 +43,9 @@ export default function Chat() {
       if (active) setMessages(result);
     });
 
-    return () => { active = false; };
+    return () => {
+      active = false;
+    };
   }, [contactId]);
 
   function handleDraftChange(value: string) {
@@ -79,9 +71,7 @@ export default function Chat() {
     <section className="flex flex-col gap-4">
       <ChatLayout owner={userMock[0]} messages={messages} />
 
-      { typingUserIds.length > 0 && (
-        <p className="text-sm text-gray-500">{t("typing")}</p>
-      )}
+      {typingUserIds.length > 0 && <p className="text-sm text-gray-500">{t("typing")}</p>}
 
       <div className="flex flex-row gap-2">
         <Textarea

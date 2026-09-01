@@ -24,10 +24,10 @@ export const MenuList = forwardRef<HTMLUListElement, MenuListProps>(function Men
 });
 
 interface MenuItemProps extends Omit<React.LiHTMLAttributes<HTMLLIElement>, "onClick"> {
-  onSelect?:   () => void;
-  disabled?:   boolean;
-  selected?:   boolean;
-  className?:  string;
+  onSelect?: () => void;
+  disabled?: boolean;
+  selected?: boolean;
+  className?: string;
 }
 
 /**
@@ -50,7 +50,8 @@ export function MenuItem({ onSelect, disabled = false, selected, className, onKe
   }
 
   return (
-    <li {...props}
+    <li
+      {...props}
       tabIndex={disabled ? -1 : 0}
       aria-disabled={disabled}
       aria-selected={selected}

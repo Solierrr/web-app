@@ -3,43 +3,20 @@ import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Select from "@@/ui/select/Select";
 import EntityCard from "@@/layout/entityCard/EntityCard";
+import Skeleton from "@@/feedbacks/skeleton/Skeleton";
+import { ImageSkeleton } from "@@/feedbacks/skeleton/Skeleton.presets";
 import { getCompanies } from "@/features/companies/company.service";
 import type { Company } from "@/features/companies/company";
-import type { EntityCardItem } from "@@/layout/entityCard/EntityCard";
-import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage, type SupportedLanguage } from "@/config/i18n/browser/languages";
-import { routePaths } from "@/config/i18n/routePaths";
+import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
+import { toCardItem } from "./CompanySearch.utils";
 
 const MOCK_IDS = ["company-1", "company-2", "company-3"];
 
-function toCardItem(company: Company, lang: SupportedLanguage): EntityCardItem {
-  return {
-    id: company.id,
-    name: company.tradeName,
-    avatarUrl: company.logoUrl,
-    subtitle: company.address ? `${company.address.city}/${company.address.state}` : undefined,
-    href: routePaths.companyProfile(lang, company.slug),
-  };
-}
-
-export default function CompanySearch() {
+function CompanySearchContent({ items }: { items: Company[] }) {
   const { t } = useTranslation("search");
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
-  const [items, setItems] = useState<Company[]>([]);
-
-  const filterChips = Object.values(
-    t("company.filters", { returnObjects: true }) as Record<string, string>,
-  );
-
-  useEffect(() => {
-    let active = true;
-
-    getCompanies(MOCK_IDS).then((result) => {
-      if (active) setItems(result);
-    });
-
-    return () => { active = false; };
-  }, []);
+  const filterChips = Object.values(t("company.filters", { returnObjects: true }) as Record<string, string>);
 
   return (
     <div className="flex flex-col gap-8">
@@ -49,17 +26,9 @@ export default function CompanySearch() {
       </div>
 
       <div className="flex flex-row flex-wrap items-center gap-4">
-        <Select
-          name="filtrar-busca"
-          placeholder={t("filterPlaceholder")}
-          options={filterChips}
-          className="min-w-60"
-        />
+        <Select name="filtrar-busca" placeholder={t("filterPlaceholder")} options={filterChips} className="min-w-60" />
         {filterChips.map((chip) => (
-          <span
-            key={chip}
-            className="rounded-full bg-input-bg px-4 py-2 font-medium text-black/70"
-          >
+          <span key={chip} className="rounded-full bg-input-bg px-4 py-2 font-medium text-black/70">
             {chip}
           </span>
         ))}
@@ -72,4 +41,49 @@ export default function CompanySearch() {
       </div>
     </div>
   );
+}
+
+function CompanySearchSkeleton() {
+  return (
+    <div className="flex flex-col gap-8" aria-busy="true">
+      <div className="flex flex-col gap-2">
+        <Skeleton height="2.25rem" width="12rem" />
+        <Skeleton height="1.5rem" width="60%" />
+      </div>
+
+      <div className="flex flex-row flex-wrap items-center gap-4">
+        <Skeleton height="2.5rem" width="15rem" />
+        {Array.from({ length: 3 }, (_, index) => (
+          <Skeleton key={index} height="2.5rem" width="8rem" className="rounded-full" />
+        ))}
+      </div>
+
+      <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
+        {Array.from({ length: 8 }, (_, index) => (
+          <div key={index} className="flex flex-col items-center gap-2">
+            <ImageSkeleton className="rounded-full" />
+            <Skeleton height="1.25rem" width="80%" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default function CompanySearch() {
+  const [items, setItems] = useState<Company[] | null>(null);
+
+  useEffect(() => {
+    let active = true;
+
+    getCompanies(MOCK_IDS).then((result) => {
+      if (active) setItems(result);
+    });
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  return items ? <CompanySearchContent items={items} /> : <CompanySearchSkeleton />;
 }

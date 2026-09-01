@@ -49,12 +49,8 @@ describe("SolarPanelSearch", () => {
       </MemoryRouter>,
     );
 
-    expect(
-      screen.getByRole("heading", { name: "Placas Solares" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: "filtrar-busca" }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Placas Solares" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "filtrar-busca" })).toBeInTheDocument();
     expect(screen.getByText("Vertical")).toBeInTheDocument();
   });
 
@@ -71,9 +67,6 @@ describe("SolarPanelSearch", () => {
       await screen.findByRole("link", {
         name: /Coletor Solar Térmico Vertical De Cobre/,
       }),
-    ).toHaveAttribute(
-      "href",
-      "/pt-BR/placa-solar/solaria-energia/coletor-solar-termico-vertical-de-cobre",
-    );
+    ).toHaveAttribute("href", "/pt-BR/placa-solar/solaria-energia/coletor-solar-termico-vertical-de-cobre");
   });
 });
