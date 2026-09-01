@@ -1,4 +1,4 @@
-import { cleanString } from "./sanitization";
+import { cleanString } from "./sanitization.utils";
 
 export function emailNormalization(input: string): string {
   let cleaned = cleanString(input);
@@ -14,9 +14,6 @@ export function phoneNormalization(input: string): string {
   return cleaned;
 }
 
-// Usado para montar segmentos de URL amigáveis (ex.: nome da empresa/produto
-// na rota do anúncio). Remove acentos, baixa a caixa e troca tudo que não é
-// [a-z0-9] por hífen.
 export function slugNormalization(input: string): string {
   let cleaned = cleanString(input);
   cleaned = cleaned.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
