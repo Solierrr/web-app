@@ -58,6 +58,10 @@
     "title": "Algo deu errado",
     "reload": "Recarregar página"
   },
+  "notFound": {
+    "title": "Opssss...",
+    "subtitle": "Algo de errado não está certo..."
+  },
   "navbar": {
     "app": "Aplicativo",
     "solarPanels": "Placas Solares",

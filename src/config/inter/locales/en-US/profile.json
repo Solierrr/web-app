@@ -3,6 +3,7 @@
     "previewFallbackName": "Preview",
     "bannerPlaceholder": "Banner image URL",
     "avatarPlaceholder": "Profile photo URL",
+    "avatarAlt": "",
     "complete": "Finish",
     "completeDescription": "Finish profile customization",
     "skip": "Skip",

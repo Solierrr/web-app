@@ -58,6 +58,10 @@
     "title": "Something went wrong",
     "reload": "Reload page"
   },
+  "notFound": {
+    "title": "Oops...",
+    "subtitle": "Something's not right..."
+  },
   "navbar": {
     "app": "App",
     "solarPanels": "Solar Panels",

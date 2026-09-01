@@ -15,17 +15,17 @@ const esES = import.meta.glob("./es-ES/*.json", { eager: true, import: "default"
 const enUS = import.meta.glob("./en-US/*.json", { eager: true, import: "default" });
 
 i18n.use(initReactI18next).init({
-    resources: {
-      "pt-BR": namespacesFromGlob(ptBR),
-      "en-US": namespacesFromGlob(enUS),
-      "es-ES": namespacesFromGlob(esES),
-    },
-    lng: "pt-BR",
-    fallbackLng: "en-US",
-    interpolation: {
-      escapeValue: false,
-    },
-  });
+  resources: {
+    "pt-BR": namespacesFromGlob(ptBR),
+    "en-US": namespacesFromGlob(enUS),
+    "es-ES": namespacesFromGlob(esES),
+  },
+  lng: "pt-BR",
+  fallbackLng: "en-US",
+  interpolation: {
+    escapeValue: false,
+  },
+});
 
 export { useTranslation };
 export default i18n;

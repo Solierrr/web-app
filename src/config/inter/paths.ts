@@ -1,10 +1,8 @@
-import i18n from "@/config/i18n/internationalization";
-import { isSupportedLanguage, type SupportedLanguage } from "@/config/i18n/browser/languages";
+import i18n from "@/config/inter/internationalization";
+import { isSupportedLanguage, type SupportedLanguage } from "@/config/inter/browser/languages";
 
-// Chaves do namespace i18n "routes" — cada uma é um segmento de URL
-// traduzido por idioma (ex.: "solarPanel" -> "placa-solar" / "solar-panel" /
-// "panel-solar"). Ver src/config/locales/{lang}/routes.json.
-export const ROUTE_SEGMENT_KEYS = [
+
+export const SEGMENT = [
   "solarPanels",
   "professionals",
   "companies",
@@ -25,14 +23,9 @@ export const ROUTE_SEGMENT_KEYS = [
   "chatbot",
 ] as const;
 
-export type RouteSegmentKey = (typeof ROUTE_SEGMENT_KEYS)[number];
 
-/**
- * Traduz um único segmento de rota para o idioma informado. Usa
- * `i18n.getFixedT` (em vez do hook `useTranslation`) porque a montagem de
- * rotas roda fora do ciclo de render de um componente específico (dentro de
- * `AppRoutes` e de utilitários como `translatePathToLanguage`).
- */
+export type RouteSegmentKey = (typeof SEGMENT)[number];
+
 export function routeSegment(lang: SupportedLanguage, key: RouteSegmentKey): string {
   return i18n.getFixedT(lang, "routes")(key);
 }
@@ -41,12 +34,6 @@ export function joinSegments(lang: SupportedLanguage, ...keys: RouteSegmentKey[]
   return keys.map((key) => routeSegment(lang, key)).join("/");
 }
 
-/**
- * URLs "idiomáticas" (com prefixo de idioma e, para empresa/profissional/
- * produto, com slug em vez de id) usadas pelas páginas para linkar entre si.
- * Os padrões de rota registrados em `AppRoutes.tsx` usam os mesmos
- * `joinSegments`/`routeSegment` para garantir que fiquem sempre em sincronia.
- */
 export const routePaths = {
   home: (lang: SupportedLanguage) => `/${lang}`,
 
@@ -69,12 +56,10 @@ export const routePaths = {
   forgotPassword: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "forgotPassword")}`,
 
   ownCompanyProfile: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "company")}`,
-  companyProfile: (lang: SupportedLanguage, companySlug: string) =>
-    `/${lang}/${joinSegments(lang, "company")}/${companySlug}`,
+  companyProfile: (lang: SupportedLanguage, companySlug: string) => `/${lang}/${joinSegments(lang, "company")}/${companySlug}`,
 
   ownUserProfile: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "user")}`,
-  professionalProfile: (lang: SupportedLanguage, professionalSlug: string) =>
-    `/${lang}/${joinSegments(lang, "professional")}/${professionalSlug}`,
+  professionalProfile: (lang: SupportedLanguage, professionalSlug: string) => `/${lang}/${joinSegments(lang, "professional")}/${professionalSlug}`,
 
   profileOnboardingUser: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "profileSetup", "user")}`,
   profileOnboardingCompany: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "profileSetup", "company")}`,
@@ -85,19 +70,14 @@ export const routePaths = {
   chatbot: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "chatbot")}`,
 };
 
-/**
- * Troca o idioma da URL atual, traduzindo cada segmento literal para o novo
- * idioma (usado pelo `LanguageSwitcher`). Segmentos que não batem com
- * nenhuma chave conhecida — slugs, ids, parâmetros — são mantidos como
- * estão, já que não fazem parte do dicionário de rotas.
- */
+
 export function translatePathToLanguage(pathname: string, targetLang: SupportedLanguage): string {
   const [, currentLang, ...rest] = pathname.split("/");
 
   if (!isSupportedLanguage(currentLang)) return `/${targetLang}`;
 
   const translatedRest = rest.map((segment) => {
-    const matchedKey = ROUTE_SEGMENT_KEYS.find((key) => routeSegment(currentLang, key) === segment);
+    const matchedKey = SEGMENT.find((key) => routeSegment(currentLang, key) === segment);
     return matchedKey ? routeSegment(targetLang, matchedKey) : segment;
   });
 

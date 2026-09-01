@@ -58,6 +58,10 @@
     "title": "Algo salió mal",
     "reload": "Recargar página"
   },
+  "notFound": {
+    "title": "Uy...",
+    "subtitle": "Algo no está bien..."
+  },
   "navbar": {
     "app": "Aplicación",
     "solarPanels": "Paneles Solares",
