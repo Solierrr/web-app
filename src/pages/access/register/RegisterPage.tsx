@@ -2,8 +2,8 @@ import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Access from "@/components/layout/access/Access";
 import { Hyperlink } from "@/components/ui/link/Hyperlink";
-import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
-import { routePaths } from "@/config/i18n/routePaths";
+import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
+import { routePaths } from "@/config/inter/paths";
 
 export default function RegisterPage() {
   const { t } = useTranslation("access");
@@ -36,11 +36,7 @@ export default function RegisterPage() {
       footer={
         <div className="flex flex-wrap items-center gap-1">
           <span>{t("register.hasAccountPrefix")}</span>
-          <Hyperlink
-            content={t("register.login")}
-            url={routePaths.login(lang)}
-            className="text-hyperlink"
-          />
+          <Hyperlink content={t("register.login")} url={routePaths.login(lang)} className="text-hyperlink" />
         </div>
       }
     />

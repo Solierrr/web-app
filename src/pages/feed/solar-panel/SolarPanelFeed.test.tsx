@@ -49,9 +49,7 @@ describe("SolarPanelFeed", () => {
       </MemoryRouter>,
     );
 
-    expect(
-      screen.getByRole("heading", { name: "Placas Solares" }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Placas Solares" })).toBeInTheDocument();
     expect(screen.getByText("placas solares")).toBeInTheDocument();
     expect(screen.getByText("serviços")).toBeInTheDocument();
     expect(screen.getByText("fornecedores")).toBeInTheDocument();
@@ -66,8 +64,6 @@ describe("SolarPanelFeed", () => {
       </MemoryRouter>,
     );
 
-    expect(
-      await screen.findAllByText("Coletor Solar Térmico Vertical De Cobre"),
-    ).toHaveLength(2);
+    expect(await screen.findAllByText("Coletor Solar Térmico Vertical De Cobre")).toHaveLength(2);
   });
 });
