@@ -1,5 +1,5 @@
 export enum TechnicalAffiliationType {
-    INDEPENDENT = "INDEPENDENT",
-    AFFILIATED  = "AFFILIATED",
-    PARTNER     = "PARTNER",
+  INDEPENDENT = "INDEPENDENT",
+  AFFILIATED = "AFFILIATED",
+  PARTNER = "PARTNER",
 }

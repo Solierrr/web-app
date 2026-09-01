@@ -74,18 +74,6 @@
   ::-webkit-scrollbar-thumb       { @apply bg-orange rounded-full; }
   ::-webkit-scrollbar-thumb:hover { @apply bg-dark-orange;         }
 
-  /*
-   * Scrollbar da página (a maior): fica invisível parada, aparece ao passar
-   * o mouse ou ao rolar, e some com um pequeno atraso depois que a rolagem
-   * para. A classe `scroll-active` é alternada via JS em `App.tsx` (em
-   * `document.scrollingElement`, evento de scroll na window + timeout).
-   *
-   * Miramos tanto `html` quanto `body` porque, com `overflow-x: hidden` no
-   * body e nada declarado em `overflow` no html (como logo abaixo), quem
-   * vira a caixa de rolagem de verdade — a que o navegador propaga pro
-   * viewport — é o `body`, não o `html`. Cobrir os dois evita quebrar de
-   * novo se essa regra de overflow mudar no futuro.
-   */
   html, body {
     scrollbar-gutter: stable;
   }

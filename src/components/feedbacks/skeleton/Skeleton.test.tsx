@@ -30,8 +30,6 @@ describe("Skeleton", () => {
   it("should render the image preset with an aspect ratio", () => {
     render(<ImageSkeleton data-testid="image-skeleton" />);
 
-    expect(
-      screen.getByTestId("image-skeleton").classList.contains("aspect-square"),
-    ).toBe(true);
+    expect(screen.getByTestId("image-skeleton").classList.contains("aspect-square")).toBe(true);
   });
 });

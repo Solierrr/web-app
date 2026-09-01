@@ -30,33 +30,18 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
  *
  * @returns O componente de input renderizado.
  */
-export default function Input({
-  name,
-  placeholder,
-  icon,
-  rounded = false,
-  className,
-  ...props
-}: InputProps) {
+export default function Input({ name, placeholder, icon, rounded = false, className, ...props }: InputProps) {
   const inverse = icon ? (icon.inverse ?? false) : undefined;
 
   const iconElement =
     icon &&
     (icon.onClick ? (
-      <button
-        type="button"
-        onClick={icon.onClick}
-        className={`flex cursor-pointer ${inverse ? "ml-2" : "mr-4"}`}
-      >
+      <button type="button" onClick={icon.onClick} className={`flex cursor-pointer ${inverse ? "ml-2" : "mr-4"}`}>
         {" "}
         <Icon name={icon.name} color={Colors.INPUTICON} />{" "}
       </button>
     ) : (
-      <Icon
-        className={`${inverse ? "ml-2" : "mr-4"}`}
-        name={icon.name}
-        color={Colors.INPUTICON}
-      />
+      <Icon className={`${inverse ? "ml-2" : "mr-4"}`} name={icon.name} color={Colors.INPUTICON} />
     ));
 
   const inputElement = (
@@ -70,9 +55,7 @@ export default function Input({
   );
 
   return (
-    <div
-      className={`flex w-fit bg-input-bg ${rounded ? "rounded-full" : "rounded-medium"} flex-row items-center-safe ${className ?? ""}`}
-    >
+    <div className={`flex w-fit bg-input-bg ${rounded ? "rounded-full" : "rounded-medium"} flex-row items-center-safe ${className ?? ""}`}>
       {inverse ? (
         <>
           {iconElement}

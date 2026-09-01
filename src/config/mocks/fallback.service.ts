@@ -1,14 +1,11 @@
 import logger from "@/config/logging/logger";
-import sleep from "@/utils/sleep";
+import sleep from "@/utils/sleep.utils";
 
 import MocksMode from "./mocksMode.enum";
 
 const NAP_TIME_MS = 2000;
 
-export async function resolveWithMocks<T>(
-  apiCall: () => Promise<T>,
-  mockCall: () => T | Promise<T>,
-): Promise<T> {
+export async function resolveWithMocks<T>(apiCall: () => Promise<T>, mockCall: () => T | Promise<T>): Promise<T> {
   const mode = import.meta.env.VITE_MOCKS as MocksMode;
 
   async function takeNap() {

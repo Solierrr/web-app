@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { AppRoutes } from './routes/AppRoutes';
-import ErrorBoundary from '@/config/error/boundary/ErrorBoundary';
+import { AppRoutes } from "./routes/AppRoutes";
+import ErrorBoundary from "@/config/error/boundary/ErrorBoundary";
 
 const SCROLL_IDLE_DELAY_MS = 800;
 

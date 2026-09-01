@@ -1,4 +1,4 @@
 export enum HyperlinkUrlType {
-    COMPLETE = "COMPLETE",
-    CONCAT   = "CONCAT"
+  COMPLETE = "COMPLETE",
+  CONCAT = "CONCAT",
 }

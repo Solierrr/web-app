@@ -49,18 +49,14 @@ describe("exchange.service", () => {
 
       const result = await getExchangeRate(CurrencyCode.BRL, CurrencyCode.USD);
 
-      expect(fetchMock).toHaveBeenCalledWith(
-        expect.stringContaining("/rate/BRL/USD"),
-      );
+      expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining("/rate/BRL/USD"));
       expect(result).toBe(5.5);
     });
 
     it("logs and throws when the API responds with an error status", async () => {
       fetchMock.mockResolvedValue({ ok: false, status: 503 });
 
-      await expect(
-        getExchangeRate(CurrencyCode.BRL, CurrencyCode.USD),
-      ).rejects.toThrow("Unable to get exchange rate for BRL/USD");
+      await expect(getExchangeRate(CurrencyCode.BRL, CurrencyCode.USD)).rejects.toThrow("Unable to get exchange rate for BRL/USD");
 
       expect(loggerMock.serviceError).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -74,9 +70,7 @@ describe("exchange.service", () => {
     it("logs and throws when the network request fails", async () => {
       fetchMock.mockRejectedValue(new Error("Network unavailable"));
 
-      await expect(
-        getExchangeRate(CurrencyCode.BRL, CurrencyCode.USD),
-      ).rejects.toThrow("Unable to get exchange rate for BRL/USD");
+      await expect(getExchangeRate(CurrencyCode.BRL, CurrencyCode.USD)).rejects.toThrow("Unable to get exchange rate for BRL/USD");
 
       expect(loggerMock.serviceError).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -92,9 +86,7 @@ describe("exchange.service", () => {
         json: async () => ({ rate: 0 }),
       });
 
-      await expect(
-        getExchangeRate(CurrencyCode.BRL, CurrencyCode.USD),
-      ).rejects.toThrow("Unable to get exchange rate for BRL/USD");
+      await expect(getExchangeRate(CurrencyCode.BRL, CurrencyCode.USD)).rejects.toThrow("Unable to get exchange rate for BRL/USD");
 
       expect(loggerMock.serviceError).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -112,21 +104,13 @@ describe("exchange.service", () => {
         json: async () => ({ rate: 2 }),
       });
 
-      const result = await convertCurrency(
-        10,
-        CurrencyCode.BRL,
-        CurrencyCode.USD,
-      );
+      const result = await convertCurrency(10, CurrencyCode.BRL, CurrencyCode.USD);
 
       expect(result).toBe(20);
     });
 
     it("returns the same amount without calling the API when currencies match", async () => {
-      const result = await convertCurrency(
-        10,
-        CurrencyCode.EUR,
-        CurrencyCode.EUR,
-      );
+      const result = await convertCurrency(10, CurrencyCode.EUR, CurrencyCode.EUR);
 
       expect(fetchMock).not.toHaveBeenCalled();
       expect(result).toBe(10);

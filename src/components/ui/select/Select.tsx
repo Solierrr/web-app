@@ -4,9 +4,7 @@ import Colors from "@/shared/styles/colors/colors.enum";
 import Icon from "@@/ui/icon/Icon";
 import { MenuList, MenuItem } from "@@/overlay/Menu";
 
-export type SelectOption<T = string> =
-  | string
-  | readonly [label: string, value: T];
+export type SelectOption<T = string> = string | readonly [label: string, value: T];
 
 function getOptionLabel<T>(option: SelectOption<T>): string {
   return typeof option === "string" ? option : option[0];
@@ -62,24 +60,17 @@ export default function Select<T = string>({
   const resolvedPlaceholder = placeholder ?? t("placeholder");
 
   const [open, setOpen] = useState(false);
-  const [internalValue, setInternalValue] = useState<T | undefined>(
-    defaultValue,
-  );
+  const [internalValue, setInternalValue] = useState<T | undefined>(defaultValue);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const selectedValue = value !== undefined ? value : internalValue;
-  const selectedOption = options.find(
-    (option) => getOptionValue(option) === selectedValue,
-  );
+  const selectedOption = options.find((option) => getOptionValue(option) === selectedValue);
 
   useEffect(() => {
     if (!open) return;
 
     function handlePointerDown(event: MouseEvent) {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setOpen(false);
       }
     }
@@ -126,8 +117,7 @@ export default function Select<T = string>({
             event.preventDefault();
             setOpen((isOpen) => !isOpen);
           }
-        }}
-      >
+        }}>
         <span className="flex items-center-safe gap-2">
           {selectedOption && (
             <button
@@ -137,37 +127,20 @@ export default function Select<T = string>({
                 event.stopPropagation();
                 handleClear();
               }}
-              className="flex animate-fade-in"
-            >
-              <Icon
-                name="x"
-                color={Colors.INPUTICON}
-                className="cursor-pointer"
-              />
+              className="flex animate-fade-in">
+              <Icon name="x" color={Colors.INPUTICON} className="cursor-pointer" />
             </button>
           )}
 
-          <span
-            className={`font-medium ${selectedOption ? "" : "text-input-text"} select-none`}
-          >
-            {selectedOption
-              ? getOptionLabel(selectedOption)
-              : resolvedPlaceholder}
+          <span className={`font-medium ${selectedOption ? "" : "text-input-text"} select-none`}>
+            {selectedOption ? getOptionLabel(selectedOption) : resolvedPlaceholder}
           </span>
         </span>
-        <Icon
-          className={`transition-transform ${open ? "rotate-180" : ""}`}
-          name="chevronDown"
-          color={Colors.INPUTICON}
-        />
+        <Icon className={`transition-transform ${open ? "rotate-180" : ""}`} name="chevronDown" color={Colors.INPUTICON} />
       </div>
 
       {open && (
-        <MenuList
-          className="absolute z-10 mt-1 w-full"
-          role="listbox"
-          aria-label={name}
-        >
+        <MenuList className="absolute z-10 mt-1 w-full" role="listbox" aria-label={name}>
           {options.map((option, index) => {
             const isSelected = getOptionValue(option) === selectedValue;
 
@@ -179,8 +152,7 @@ export default function Select<T = string>({
                 onSelect={() => handleSelect(option)}
                 onKeyDown={(event) => {
                   if (event.key === "Escape") setOpen(false);
-                }}
-              >
+                }}>
                 {getOptionLabel(option)}
               </MenuItem>
             );

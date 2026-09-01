@@ -3,8 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Icon from "@@/ui/icon/Icon";
 import { MenuList, MenuItem } from "@@/overlay/Menu";
-import { SUPPORTED as SUPPORTED_LANGUAGES, type SupportedLanguage } from "@/config/i18n/browser/languages";
-import { translatePathToLanguage } from "@/config/i18n/routePaths";
+import { SUPPORTED as SUPPORTED_LANGUAGES, type SupportedLanguage } from "@/config/inter/browser/languages";
+import { translatePathToLanguage } from "@/config/inter/paths";
 
 const LANGUAGE_LABELS: Record<SupportedLanguage, string> = {
   "pt-BR": "Português",
@@ -58,8 +58,7 @@ export default function LanguageSwitcher() {
         aria-haspopup="listbox"
         aria-expanded={open}
         className="flex items-center-safe gap-1 cursor-pointer"
-        onClick={() => setOpen((isOpen) => !isOpen)}
-      >
+        onClick={() => setOpen((isOpen) => !isOpen)}>
         <Icon name="globe" />
         <Icon name="chevronDown" size={16} className={`transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
@@ -67,12 +66,7 @@ export default function LanguageSwitcher() {
       {open && (
         <MenuList className="absolute right-0 z-10 mt-1" role="listbox" aria-label={t("language")}>
           {SUPPORTED_LANGUAGES.map((code) => (
-            <MenuItem
-              key={code}
-              role="option"
-              selected={i18n.language === code}
-              onSelect={() => handleSelect(code)}
-            >
+            <MenuItem key={code} role="option" selected={i18n.language === code} onSelect={() => handleSelect(code)}>
               {LANGUAGE_LABELS[code]}
             </MenuItem>
           ))}

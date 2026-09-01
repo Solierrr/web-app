@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import "@/config/i18n/internationalization";
+import "@/config/inter/internationalization";
 import { ContextMenuProvider } from "@@/overlay/contextMenu/provider/ContextMenuProvider";
 
 vi.mock("@/features/products/solar-panel/solarPanel.service", () => ({
@@ -59,9 +59,7 @@ describe("SolarPanelAnnouncement", () => {
     renderAt("/placa-solar");
 
     expect(mockedGetSolarPanelBySlug).not.toHaveBeenCalled();
-    expect(
-      screen.getByText("Não foi possível carregar o produto."),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Não foi possível carregar o produto.")).toBeInTheDocument();
   });
 
   it("shows the error message when the service call fails", async () => {
@@ -69,9 +67,7 @@ describe("SolarPanelAnnouncement", () => {
 
     renderAt("/placa-solar/solaria-energia/coletor-solar-termico-vertical-de-cobre");
 
-    expect(
-      await screen.findByText("Não foi possível carregar o produto."),
-    ).toBeInTheDocument();
+    expect(await screen.findByText("Não foi possível carregar o produto.")).toBeInTheDocument();
   });
 
   it("renders the product once it is loaded", async () => {
@@ -79,10 +75,7 @@ describe("SolarPanelAnnouncement", () => {
 
     renderAt("/placa-solar/solaria-energia/coletor-solar-termico-vertical-de-cobre");
 
-    expect(mockedGetSolarPanelBySlug).toHaveBeenCalledWith(
-      "solaria-energia",
-      "coletor-solar-termico-vertical-de-cobre",
-    );
+    expect(mockedGetSolarPanelBySlug).toHaveBeenCalledWith("solaria-energia", "coletor-solar-termico-vertical-de-cobre");
     expect(await screen.findByText(product.title)).toBeInTheDocument();
     expect(screen.getByText("Marca X")).toBeInTheDocument();
   });

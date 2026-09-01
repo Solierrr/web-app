@@ -11,9 +11,7 @@ export function setTypingStatus(chatId: string, userId: string, isTyping: boolea
 
 export function subscribeToTypingUsers(chatId: string, callback: (userIds: string[]) => void): Unsubscribe {
   return onSnapshot(collection(db, "chats", chatId, "typing"), (snapshot) => {
-    const typingUserIds = snapshot.docs
-      .filter((docSnapshot) => docSnapshot.data().isTyping === true)
-      .map((docSnapshot) => docSnapshot.id);
+    const typingUserIds = snapshot.docs.filter((docSnapshot) => docSnapshot.data().isTyping === true).map((docSnapshot) => docSnapshot.id);
 
     callback(typingUserIds);
   });
