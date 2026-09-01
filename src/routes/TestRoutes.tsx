@@ -47,7 +47,7 @@ export function TestRoutes() {
 
         <Route path={`products/solar-panels/${COMPANY_SLUG}/${PRODUCT_SLUG}`} element={<SolarPanelAnnouncement />} />
 
-        <Route path="profiles/template" element={<ProfilePage />} />
+        <Route path="profiles/template" element={<ProfilePage name="Template" />} />
 
         <Route path="onboarding/user" element={<ProfileOnboarding kind="user" />} />
         <Route path="onboarding/company" element={<ProfileOnboarding kind="company" />} />

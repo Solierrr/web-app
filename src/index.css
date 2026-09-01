@@ -43,6 +43,7 @@
   --radius-soft:   0.35rem;
   --radius-medium: 0.50rem;
   --radius-hard:   0.80rem;
+  --radius-full:   9999px;
 
   --animate-fade-in: fade-in 150ms ease-out;
   --animate-skeleton-shimmer: skeleton-shimmer 1.5s ease-in-out infinite;

@@ -7,6 +7,7 @@ import { getSolarPanels } from "@/features/products/solar-panel/solarPanel.servi
 import type { SolarPanelFeedSummary } from "@/features/products/solar-panel/solarPanelAnnouncement";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
+import WrapperLayout from "@/config/WrapperLayout";
 
 const MOCK_IDS = ["1", "2", "3", "4", "5", "6", "7", "8"];
 const FILTER_CHIPS = ["Foto Voltáica", "Vertical", "Produção Limpa", "Horizontal"];
@@ -99,5 +100,5 @@ export default function SolarPanelSearch() {
     };
   }, []);
 
-  return items ? <SolarPanelSearchContent items={items} /> : <SolarPanelSearchSkeleton />;
+  return <WrapperLayout ptop>{items ? <SolarPanelSearchContent items={items} /> : <SolarPanelSearchSkeleton />}</WrapperLayout>;
 }

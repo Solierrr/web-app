@@ -1,9 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import type { SolarPanel } from "@/features/products/solar-panel/solarPanel";
 import type { SolarPanelAnnouncement } from "@/features/products/solar-panel/solarPanelAnnouncement";
-import type { Image } from "@/shared/types/image/image";
 
 import Skeleton from "@@/feedbacks/skeleton/Skeleton";
 import { ImageSkeleton } from "@@/feedbacks/skeleton/Skeleton.presets";
@@ -12,99 +10,12 @@ import { getSolarPanelBySlug } from "@/features/products/solar-panel/solarPanel.
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
 import { SoftIconButton } from "@@/ui/button/Button.presets";
-import { useContextMenu } from "@@/overlay/contextMenu/useContextMenu";
 import Button from "@@/ui/button/Button";
 
 import { useTranslation } from "react-i18next";
 import WrapperLayout from "@/config/WrapperLayout";
-import { regionsService, panelCharacteristics } from "@/pages/announcement/SolarPanelAnnouncement.utils";
-
-interface WrapperProps extends React.ComponentPropsWithoutRef<"section"> {
-  title: string;
-  children: React.ReactNode;
-  className?: string;
-}
-
-function Wrapper({ title, children, className }: WrapperProps) {
-  return (
-    <section className={`flex flex-col gap-2 ${className}`}>
-      <h2 className="text-black/90">{title}</h2>
-      {children}
-    </section>
-  );
-}
-
-interface ImagesProps {
-  images: Image[];
-}
-
-function ProductImages({ images }: ImagesProps) {
-  const contextMenu = useContextMenu();
-  const { t } = useTranslation("announcements", {
-    keyPrefix: "solarPanel.images",
-  });
-
-  function handleContextMenu(event: React.MouseEvent, image: Image) {
-    event.preventDefault();
-    event.stopPropagation();
-    contextMenu.open(
-      [
-        {
-          label: t("openInNewTab"),
-          icon: "eye",
-          onClick: () => window.open(image.url, "_blank"),
-        },
-        {
-          label: t("copyLink"),
-          onClick: () => navigator.clipboard.writeText(image.url),
-        },
-      ],
-      event.clientX,
-      event.clientY,
-    );
-  }
-
-  return (
-    <div className="flex flex-row gap-8 overflow-auto scrollbar-none">
-      {images.map((image) => (
-        <img key={image.url} src={image.url} alt={image.description} onContextMenu={(event) => handleContextMenu(event, image)} />
-      ))}
-    </div>
-  );
-}
-
-function Characteristics({ panel }: { panel: SolarPanel }) {
-  const { t } = useTranslation("announcements", {
-    keyPrefix: "solarPanel.characteristics",
-  });
-  const { t: c } = useTranslation("commons", { keyPrefix: "units" });
-
-  const characteristics = panelCharacteristics(panel, {
-    widthAndLength: t("dimensions"),
-    weight: t("weight"),
-    brand: t("brand"),
-    model: t("model"),
-    solarPanelType: t("type"),
-    potency: t("power"),
-    efficiency: t("efficiency"),
-    unity: c("unit"),
-  });
-
-  if (characteristics.length === 0) {
-    return <p>{t("empty")}</p>;
-  }
-
-  return (
-    <ul className="flex flex-col gap-2">
-      {characteristics.map(({ label, value }) => (
-        <li key={label} className="flex justify-between py-4 px-6 rounded-soft bg-input-bg">
-          <p className="font-medium">{label}</p>
-          <p className="font-medium">{value}</p>
-        </li>
-      ))}
-    </ul>
-  );
-}
+import { regionsService } from "./SolarPanelAnnouncement.utils";
+import { Wrapper, ProductImages, Characteristics } from "./SolarPanelAnnouncement.reusable";
 
 interface SolarPanelAnnouncementProps {
   product: SolarPanelAnnouncement;
