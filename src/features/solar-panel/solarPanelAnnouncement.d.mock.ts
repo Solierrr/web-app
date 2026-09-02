@@ -1,6 +1,7 @@
 import type { SolarPanelAnnouncement } from "./solarPanelAnnouncement";
+import companyMock from "@/features/companies/company.d.mock";
 
-const solarPanelAnnouncementMock = [
+const solarPanelAnnouncementMockData = [
   {
     id: "1",
     slug: "painel-solar-monocristalino-517w-canadian-solar-cs6w-550ms",
@@ -5499,6 +5500,13 @@ const solarPanelAnnouncementMock = [
     availableUnits: 113,
     serviceRegions: ["Rio Grande do Norte", "Acre", "Paraná", "Mato Grosso do Sul"],
   },
-] as SolarPanelAnnouncement[];
+];
+
+// `company` é derivada aqui a partir de `companySlug` + `companyMock` em vez
+// de duplicar os dados da empresa em cada anúncio (ver `company.d.mock.ts`).
+const solarPanelAnnouncementMock = solarPanelAnnouncementMockData.map((announcement) => ({
+  ...announcement,
+  company: companyMock.find((company) => company.slug === announcement.companySlug) ?? companyMock[0],
+})) as SolarPanelAnnouncement[];
 
 export default solarPanelAnnouncementMock;

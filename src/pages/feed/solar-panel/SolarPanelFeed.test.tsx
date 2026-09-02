@@ -19,6 +19,7 @@ const items: SolarPanelAnnouncement[] = [
     slug: "coletor-solar-termico-vertical-de-cobre",
     companySlug: "solaria-energia",
     supplierId: "company-1",
+    company: { id: "company-1", tradeName: "Solaria Energia", slug: "solaria-energia" },
     panel: { id: "panel-1", status: ModelStatus.APPROVED },
     title: "Coletor Solar Térmico Vertical De Cobre",
     description: "Descrição",

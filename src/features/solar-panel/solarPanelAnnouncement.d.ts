@@ -1,4 +1,5 @@
 import type { SolarPanel } from "@/features/solar-panel/solarPanel";
+import type { Company } from "@/features/companies/company";
 import type { Image } from "@/shared/types/image/image";
 
 export interface SolarPannelPhotos {
@@ -9,6 +10,7 @@ export interface SolarPannelPhotos {
 export interface SolarPanelAnnouncement {
   id: string;
   supplierId: string;
+  company: Pick<Company, "id" | "tradeName" | "slug" | "logoUrl">;
   panel: SolarPanel;
   title: string;
   description: string;
@@ -20,11 +22,11 @@ export interface SolarPanelAnnouncement {
   serviceRegions: string[];
   expirationDate?: string;
 
-  // NOTE: `model`/`announcement` (schema-api-core.sql) não têm coluna de
-  // slug. `slug` é gerado a partir de `title`; `companySlug` é uma
-  // denormalização do slug da empresa dona de `supplierId` (`company.slug`),
+  // NOTE: `model`/`offer` (api-core) não têm coluna de slug. `slug` é gerado
+  // a partir de `title`; `companySlug` é uma denormalização de `company.slug`,
   // só para montar a URL amigável do produto (/placa-solar/{companySlug}/{slug})
-  // sem precisar de outra consulta. Ambos ficam mock até existir suporte na API.
+  // sem precisar de outra consulta. Ambos ficam mock até existir rota por slug
+  // na API (hoje `api-core` só busca `Offer`/`Company` por id).
   slug: string;
   companySlug: string;
 }

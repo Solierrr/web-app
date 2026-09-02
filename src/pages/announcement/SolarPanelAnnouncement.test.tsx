@@ -21,6 +21,7 @@ const product: SolarPanelAnnouncementModel = {
   slug: "coletor-solar-termico-vertical-de-cobre",
   supplierId: "company-1",
   companySlug: "solaria-energia",
+  company: { id: "company-1", tradeName: "Solaria Energia", slug: "solaria-energia" },
   panel: { id: "panel-1", status: ModelStatus.APPROVED, brand: "Marca X" },
   title: "Coletor Solar Térmico Vertical De Cobre",
   description: "Descrição do produto",
@@ -78,5 +79,6 @@ describe("SolarPanelAnnouncement", () => {
     expect(mockedGetSolarPanelBySlug).toHaveBeenCalledWith("solaria-energia", "coletor-solar-termico-vertical-de-cobre");
     expect(await screen.findByText(product.title)).toBeInTheDocument();
     expect(screen.getByText("Marca X")).toBeInTheDocument();
+    expect(screen.getByText("Anunciado por Solaria Energia")).toBeInTheDocument();
   });
 });

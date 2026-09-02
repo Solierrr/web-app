@@ -6,8 +6,6 @@ import AppMode from "@/config/vite/mode.enum";
 import { TestRoutes } from "./TestRoutes";
 import { AppLayout } from "../config/AppLayout";
 import LanguageLayout, { RootRedirect } from "../config/inter/browser/LanguageLayout";
-import { AboutPage } from "../pages/AboutPage";
-import { HomePage } from "../pages/Cases";
 import { NotFoundPage } from "../pages/error/not-found/NotFound";
 
 import { SUPPORTED, type SupportedLanguage } from "@/config/inter/browser/languages";
@@ -54,9 +52,6 @@ const APP: RouteDefinition[] = [
   { key: "searchCompanies", path: (lang) => joinSegments(lang, "search", "companies"), element: <CompanySearch /> },
 
   { key: "productDetail", path: (lang) => `${joinSegments(lang, "solarPanel")}/:companySlug/:productSlug`, element: <SolarPanelAnnouncement /> },
-
-  { key: "about", path: (lang) => joinSegments(lang, "about"), element: <AboutPage /> },
-  { key: "designSystem", path: (lang) => joinSegments(lang, "designSystem"), element: <HomePage /> },
 
   { key: "ownCompanyProfile", path: (lang) => joinSegments(lang, "company"), element: <EnterpriseProfile /> },
   { key: "companyProfile", path: (lang) => `${joinSegments(lang, "company")}/:companySlug`, element: <CompanyProfile /> },

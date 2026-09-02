@@ -4,13 +4,13 @@
       "information": "General information",
       "service": "Serving",
       "units": "units",
-      "perUnit": "per unit"
+      "perUnit": "per unit",
+      "announcedBy": "Announced by {{company}}"
     },
     "actions": {
       "contactSupplier": "Contact",
       "contactSupplierDescription": "Contact the supplier",
-      "addToCart": "Add to cart",
-      "viewSupplierProfile": "View supplier profile"
+      "addToCart": "Add to cart"
     },
     "sections": {
       "description": "Description",

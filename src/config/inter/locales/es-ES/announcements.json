@@ -4,13 +4,13 @@
       "information": "Información general",
       "service": "Atención en",
       "units": "unidades",
-      "perUnit": "por unidad"
+      "perUnit": "por unidad",
+      "announcedBy": "Anunciado por {{company}}"
     },
     "actions": {
       "contactSupplier": "Contactar",
       "contactSupplierDescription": "Contactar con el proveedor",
-      "addToCart": "Añadir al carrito",
-      "viewSupplierProfile": "Ver perfil del proveedor"
+      "addToCart": "Añadir al carrito"
     },
     "sections": {
       "description": "Descripción",
