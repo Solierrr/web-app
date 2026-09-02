@@ -5,13 +5,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import "@/config/inter/internationalization";
 import { ContextMenuProvider } from "@@/overlay/contextMenu/provider/ContextMenuProvider";
 
-vi.mock("@/features/products/solar-panel/solarPanel.service", () => ({
+vi.mock("@/features/solar-panel/solarPanel.service", () => ({
   getSolarPanelBySlug: vi.fn(),
 }));
 
-import { getSolarPanelBySlug } from "@/features/products/solar-panel/solarPanel.service";
-import type { SolarPanelAnnouncement as SolarPanelAnnouncementModel } from "@/features/products/solar-panel/solarPanelAnnouncement";
-import { SolarPanelModelStatus as ModelStatus } from "@/features/products/solar-panel/solarPanel.enum";
+import { getSolarPanelBySlug } from "@/features/solar-panel/solarPanel.service";
+import type { SolarPanelAnnouncement as SolarPanelAnnouncementModel } from "@/features/solar-panel/solarPanelAnnouncement";
+import { SolarPanelModelStatus as ModelStatus } from "@/features/solar-panel/solarPanel.enum";
 import SolarPanelAnnouncement from "./SolarPanelAnnouncement";
 
 const mockedGetSolarPanelBySlug = vi.mocked(getSolarPanelBySlug);
@@ -21,6 +21,7 @@ const product: SolarPanelAnnouncementModel = {
   slug: "coletor-solar-termico-vertical-de-cobre",
   supplierId: "company-1",
   companySlug: "solaria-energia",
+  company: { id: "company-1", tradeName: "Solaria Energia", slug: "solaria-energia" },
   panel: { id: "panel-1", status: ModelStatus.APPROVED, brand: "Marca X" },
   title: "Coletor Solar Térmico Vertical De Cobre",
   description: "Descrição do produto",
@@ -78,5 +79,6 @@ describe("SolarPanelAnnouncement", () => {
     expect(mockedGetSolarPanelBySlug).toHaveBeenCalledWith("solaria-energia", "coletor-solar-termico-vertical-de-cobre");
     expect(await screen.findByText(product.title)).toBeInTheDocument();
     expect(screen.getByText("Marca X")).toBeInTheDocument();
+    expect(screen.getByText("Anunciado por Solaria Energia")).toBeInTheDocument();
   });
 });

@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import EntityCorridor from "@@/layout/corridor/EntityCorridor";
-import Skeleton from "@@/feedbacks/skeleton/Skeleton";
+import EntityCorridor from "@/components/layout/announcement/corridor/EntityCorridor";
+import Skeleton from "@@/feedback/skeleton/Skeleton";
 
-import { ImageSkeleton } from "@@/feedbacks/skeleton/Skeleton.presets";
+import { ImageSkeleton } from "@@/feedback/skeleton/Skeleton.presets";
 import { getCompanies } from "@/features/companies/company.service";
 import type { Company } from "@/features/companies/company";
 

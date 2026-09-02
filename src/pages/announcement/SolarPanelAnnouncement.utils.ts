@@ -1,4 +1,4 @@
-import type { SolarPanel } from "@/features/products/solar-panel/solarPanel";
+import type { SolarPanel } from "@/features/solar-panel/solarPanel";
 import { Capitalize } from "@/config/inter/utils";
 
 export interface RegionsServiceI18n {

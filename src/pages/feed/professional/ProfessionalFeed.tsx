@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import EntityCorridor from "@@/layout/corridor/EntityCorridor";
-import Skeleton from "@@/feedbacks/skeleton/Skeleton";
-import { ImageSkeleton } from "@@/feedbacks/skeleton/Skeleton.presets";
+import EntityCorridor from "@/components/layout/announcement/corridor/EntityCorridor";
+import Skeleton from "@@/feedback/skeleton/Skeleton";
+import { ImageSkeleton } from "@@/feedback/skeleton/Skeleton.presets";
 import { getProfessionals } from "@/features/professionals/professional.service";
 import type { Professional } from "@/features/professionals/professional";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";

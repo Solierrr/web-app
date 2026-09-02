@@ -8,6 +8,15 @@ import sleep from "@/utils/sleep.utils";
 
 const MOCKED_ACTION_DELAY_MS = 2000;
 
+// Classes escritas por extenso (não interpoladas) para o Tailwind conseguir
+// gerar `aspect-button-*`/`shadow-medium-*` em build — ver uso análogo em
+// `Switcher.tsx`. Só cobre as cores usadas com fundo sólido (texto branco);
+// `bgColor`s claros (ex.: `Colors.WHITE`) não usam o relevo do `aspect-button-*`.
+const ASPECT_BUTTON_CLASSES: Partial<Record<Colors, string>> = {
+  [Colors.ORANGE]: "aspect-button-orange shadow-medium-orange",
+  [Colors.BLACK]: "aspect-button-black shadow-medium-black",
+};
+
 interface ButtonIconProps {
   name: IconName;
   inverse?: boolean;
@@ -66,11 +75,7 @@ export default function Button({
 
   return (
     <button
-      // `relative` aqui é o que permite o spinner de loading (abaixo) ficar
-      // posicionado em cima do conteúdo real sem alterar o tamanho do botão:
-      // o conteúdo real continua ocupando espaço (só fica `invisible`), então
-      // as dimensões do botão nunca mudam entre os estados idle/loading.
-      className={`relative flex items-center-safe justify-center font-medium cursor-pointer text-nowrap disabled:cursor-not-allowed select-none transition-all duration-350 ${rounded ? "rounded-full" : "rounded-medium"} ${iconOnly ? "aspect-square p-2" : `px-4 py-2`} ${className ?? ""}`}
+      className={`relative flex items-center-safe justify-center font-medium cursor-pointer text-nowrap disabled:cursor-not-allowed select-none transition-all duration-350 ${rounded ? "rounded-full" : "rounded-medium"} ${iconOnly ? "aspect-square p-2" : `px-4 py-2`} ${ASPECT_BUTTON_CLASSES[bgColor] ?? ""} ${className ?? ""}`}
       {...props}
       onClick={handleClick}
       disabled={disabled || isLoading}
@@ -78,13 +83,13 @@ export default function Button({
       aria-label={description}
       aria-busy={isLoading}
       style={{ backgroundColor: bgColor, color: txtColor }}>
-      <span className={`flex items-center-safe justify-center gap-2 ${inverse ? "flex-row" : "flex-row-reverse"} ${isLoading ? "invisible" : ""}`}>
+      <span className={`flex items-center-safe font-medium justify-center gap-2 ${inverse ? "flex-row" : "flex-row-reverse"} ${isLoading ? "invisible" : ""}`} style={{ color: txtColor }}>
         {icon && <Icon name={icon.name} color={txtColor} />}
         {content}
       </span>
 
       {isLoading && (
-        <span className="absolute inset-0 flex items-center justify-center">
+        <span className="absolute inset-0 font-medium flex items-center justify-center" style={{ color: txtColor }}>
           <Icon name="loader" color={txtColor} className="animate-spin" />
         </span>
       )}

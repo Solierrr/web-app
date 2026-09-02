@@ -3,14 +3,13 @@ import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import type { Message as MessageInterface } from "@/features/messages/messages";
-import ChatLayout from "@@/layout/chatLayout/ChatLayout";
+import ChatLayout from "@/components/layout/chat/chat-layout/ChatLayout";
 import Textarea from "@@/ui/textarea/Textarea";
 import { PrimaryButton } from "@@/ui/button/Button.presets";
 import { getMessages, sendMessage } from "@/features/messages/messages.service";
 import { useTypingStatus } from "@/config/firebase/useTypingStatus";
 import userMock from "@/features/users/user/user.d.mock";
 import WrapperLayout from "@/config/WrapperLayout";
-
 
 export default function Chat() {
   const { contactId = "" } = useParams<{ contactId: string }>();

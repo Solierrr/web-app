@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Select from "@@/ui/select/Select";
-import Skeleton from "@@/feedbacks/skeleton/Skeleton";
-import { ImageSkeleton } from "@@/feedbacks/skeleton/Skeleton.presets";
-import { getSolarPanels } from "@/features/products/solar-panel/solarPanel.service";
-import type { SolarPanelFeedSummary } from "@/features/products/solar-panel/solarPanelAnnouncement";
+import Skeleton from "@@/feedback/skeleton/Skeleton";
+import { ImageSkeleton } from "@@/feedback/skeleton/Skeleton.presets";
+import { getSolarPanels } from "@/features/solar-panel/solarPanel.service";
+import type { SolarPanelFeedSummary } from "@/features/solar-panel/solarPanelAnnouncement";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
 import WrapperLayout from "@/config/WrapperLayout";

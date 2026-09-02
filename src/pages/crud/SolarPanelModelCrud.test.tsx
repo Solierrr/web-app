@@ -2,16 +2,16 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import SolarPanelModelCrud from "./SolarPanelModelCrud";
 
-vi.mock("@/features/products/solar-panel/solarPanel.service", () => ({
+vi.mock("@/features/solar-panel/solarPanel.service", () => ({
   listSolarPanelModels: vi.fn(),
   createSolarPanel: vi.fn(),
   updateSolarPanel: vi.fn(),
   deleteSolarPanel: vi.fn(),
 }));
 
-import { listSolarPanelModels } from "@/features/products/solar-panel/solarPanel.service";
-import { SolarPanelType, SolarPanelModelStatus } from "@/features/products/solar-panel/solarPanel.enum";
-import type { SolarPanel } from "@/features/products/solar-panel/solarPanel";
+import { listSolarPanelModels } from "@/features/solar-panel/solarPanel.service";
+import { SolarPanelType, SolarPanelModelStatus } from "@/features/solar-panel/solarPanel.enum";
+import type { SolarPanel } from "@/features/solar-panel/solarPanel";
 
 const mockedListSolarPanelModels = vi.mocked(listSolarPanelModels);
 

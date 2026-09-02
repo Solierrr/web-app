@@ -1,4 +1,4 @@
-import Skeleton from "@@/feedbacks/skeleton/Skeleton";
+import Skeleton from "@@/feedback/skeleton/Skeleton";
 import WrapperLayout from "@/config/WrapperLayout";
 
 /**

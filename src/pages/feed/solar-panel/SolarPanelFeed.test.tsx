@@ -3,13 +3,13 @@ import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import SolarPanelFeed from "./SolarPanelFeed";
 
-vi.mock("@/features/products/solar-panel/solarPanel.service", () => ({
+vi.mock("@/features/solar-panel/solarPanel.service", () => ({
   getSolarPanels: vi.fn(),
 }));
 
-import { getSolarPanels } from "@/features/products/solar-panel/solarPanel.service";
-import type { SolarPanelAnnouncement } from "@/features/products/solar-panel/solarPanelAnnouncement";
-import { SolarPanelModelStatus as ModelStatus } from "@/features/products/solar-panel/solarPanel.enum";
+import { getSolarPanels } from "@/features/solar-panel/solarPanel.service";
+import type { SolarPanelAnnouncement } from "@/features/solar-panel/solarPanelAnnouncement";
+import { SolarPanelModelStatus as ModelStatus } from "@/features/solar-panel/solarPanel.enum";
 
 const mockedGetSolarPanels = vi.mocked(getSolarPanels);
 
@@ -19,6 +19,7 @@ const items: SolarPanelAnnouncement[] = [
     slug: "coletor-solar-termico-vertical-de-cobre",
     companySlug: "solaria-energia",
     supplierId: "company-1",
+    company: { id: "company-1", tradeName: "Solaria Energia", slug: "solaria-energia" },
     panel: { id: "panel-1", status: ModelStatus.APPROVED },
     title: "Coletor Solar Térmico Vertical De Cobre",
     description: "Descrição",
