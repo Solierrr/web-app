@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import EntityCard, { type EntityCardItem } from "@/components/layout/entity-card/EntityCard";
+import EntityCard, { type EntityCardItem } from "@/components/layout/announcement/entity-card/EntityCard";
 
 interface EntityCorridorProps {
   title: string;
