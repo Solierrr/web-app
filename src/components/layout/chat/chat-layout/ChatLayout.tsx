@@ -1,6 +1,6 @@
 import type { User } from "@/features/users/user/user";
 import type { Message as MessageInterface } from "@/features/messages/messages";
-import Message from "@/components/layout/message/Message";
+import Message from "@/components/layout/chat/message/Message";
 
 interface ChatLayoutProps {
   owner: User;
