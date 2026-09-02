@@ -1,9 +1,7 @@
 import { Route } from "react-router-dom";
 
 import { AppLayout } from "@/config/AppLayout";
-import { AboutPage } from "@/pages/AboutPage";
-import { HomePage } from "@/pages/HomePage";
-import { NotFoundPage } from "@/pages/NotFoundPage";
+import { NotFoundPage } from "@/pages/error/not-found/NotFound";
 import ForgotPasswordPage from "@/pages/access/forgot-password/ForgotPasswordPage";
 import LoginPage from "@/pages/access/login/LoginPage";
 import RegisterPage from "@/pages/access/register/RegisterPage";
@@ -32,11 +30,6 @@ export function TestRoutes() {
       <Route path="test/forgot-password" element={<ForgotPasswordPage />} />
 
       <Route path="test" element={<AppLayout />}>
-        <Route index element={<HomePage />} />
-        <Route path="about" element={<AboutPage />} />
-        <Route path="not-found" element={<NotFoundPage />} />
-        <Route path="design-system" element={<HomePage />} />
-
         <Route path="feeds/solar-panels" element={<SolarPanelFeed />} />
         <Route path="feeds/professionals" element={<ProfessionalFeed />} />
         <Route path="feeds/companies" element={<CompanyFeed />} />

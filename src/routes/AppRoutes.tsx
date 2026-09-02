@@ -7,8 +7,8 @@ import { TestRoutes } from "./TestRoutes";
 import { AppLayout } from "../config/AppLayout";
 import LanguageLayout, { RootRedirect } from "../config/inter/browser/LanguageLayout";
 import { AboutPage } from "../pages/AboutPage";
-import { HomePage } from "../pages/HomePage";
-import { NotFoundPage } from "../pages/NotFoundPage";
+import { HomePage } from "../pages/Cases";
+import { NotFoundPage } from "../pages/error/not-found/NotFound";
 
 import { SUPPORTED, type SupportedLanguage } from "@/config/inter/browser/languages";
 import { joinSegments } from "@/config/inter/paths";
