@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import EntityCorridor from "@/components/layout/announcement/corridor/EntityCorridor";
+import EntityCorridor from "@/components/layout/announcement/corridor/entity/EntityCorridor";
 import Skeleton from "@@/feedback/skeleton/Skeleton";
 
 import { ImageSkeleton } from "@@/feedback/skeleton/Skeleton.presets";

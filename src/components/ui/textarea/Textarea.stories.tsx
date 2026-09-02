@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { ComponentProps } from "react";
 import Textarea from "./Textarea";
 import { DefaultTextarea, CharCountTextarea } from "./Textarea.presets";
 
@@ -24,5 +25,5 @@ export const Default: Story = {
 
 export const CharCount: Story = {
   args: { maxLength: 140 },
-  render: (args) => <CharCountTextarea {...args} />,
+  render: (args) => <CharCountTextarea {...(args as ComponentProps<typeof CharCountTextarea>)} />,
 };

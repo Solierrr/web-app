@@ -31,6 +31,17 @@ export function SecondaryButton(props: ButtonPresetProps) {
 }
 
 /**
+ * Aspect
+ *
+ * Botão de ação principal com relevo 3D (gradiente e sombra), fundo laranja.
+ *
+ * @param props - description, content/icon, rounded, disabled e demais propriedades do Button (exceto `bgColor`/`txtColor`).
+ */
+export function AspectButton(props: ButtonPresetProps) {
+  return <Button {...props} aspect bgColor={Colors.ORANGE} txtColor={Colors.WHITE} />;
+}
+
+/**
  * Icon
  *
  * Botão redondo apenas com ícone, fundo laranja e ícone branco.

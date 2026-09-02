@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { ComponentProps } from "react";
 import Select from "./Select";
 import { DefaultSelect, BooleanSelect } from "./Select.presets";
 import { SolarPanelType } from "@/features/solar-panel/solarPanel.enum";
@@ -39,5 +40,5 @@ export const Disabled: Story = {
 
 export const Boolean: Story = {
   args: { name: "active" },
-  render: (args) => <BooleanSelect {...args} />,
+  render: (args) => <BooleanSelect {...(args as ComponentProps<typeof BooleanSelect>)} />,
 };

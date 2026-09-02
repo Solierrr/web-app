@@ -1,7 +1,6 @@
 import { Route } from "react-router-dom";
 
 import { AppLayout } from "@/config/AppLayout";
-import { NotFoundPage } from "@/pages/error/not-found/NotFound";
 import ForgotPasswordPage from "@/pages/access/forgot-password/ForgotPasswordPage";
 import LoginPage from "@/pages/access/login/LoginPage";
 import RegisterPage from "@/pages/access/register/RegisterPage";

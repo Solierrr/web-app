@@ -2,8 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import Sidebar from "./Sidebar";
 import { SidebarOption } from "./Sidebar.reusables";
 import { routePaths } from "@/config/inter/paths";
-
-const LANG = "pt-BR";
+import { DEFAULT as LANG } from "@/config/inter/browser/languages";
 
 const meta = {
   title: "Layout/Sidebar",
@@ -28,6 +27,7 @@ function Options() {
 }
 
 export const Default: Story = {
+  args: { children: <Options /> },
   render: () => (
     <div className="flex h-screen">
       <Sidebar>
@@ -38,6 +38,7 @@ export const Default: Story = {
 };
 
 export const Collapsed: Story = {
+  args: { children: <Options /> },
   render: () => (
     <div className="flex h-screen">
       <Sidebar defaultCollapsed>
