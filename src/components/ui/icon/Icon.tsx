@@ -1,4 +1,4 @@
-import { Home, User, Settings, Search, ChevronDown, X, Eye, EyeOff, ShoppingCart, Globe, type LucideIcon, Heart, LoaderCircle } from "lucide-react";
+import { Home, User, Settings, Search, ChevronDown, ChevronLeft, X, Eye, EyeOff, ShoppingCart, Globe, type LucideIcon, Heart, LoaderCircle } from "lucide-react";
 import Colors from "@/shared/styles/colors/colors.enum";
 import { InvalidIconError } from "@/config/error/InvalidIcon.error";
 
@@ -8,6 +8,7 @@ const icons = {
   settings: Settings,
   search: Search,
   chevronDown: ChevronDown,
+  chevronLeft: ChevronLeft,
   x: X,
   eye: Eye,
   eyeOff: EyeOff,

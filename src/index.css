@@ -127,7 +127,7 @@
     inset 0 0.1rem 0.2rem 0 color-mix(in srgb, --value(--color-*) 50%, var(--color-white)),
     inset 0 -0.2rem 0.8rem 0 color-mix(in srgb, --value(--color-*) 60%, var(--color-black)) !important;
   border-color: color-mix(in srgb, --value(--color-*) 85%, var(--color-black));
-  @apply relative rounded-medium *:font-semi-bold text-white border-2 cursor-pointer after:opacity-0 after:transition-opacity after:duration-150;
+  @apply relative rounded-medium *:font-semi-bold! text-white border-2 cursor-pointer after:opacity-0 after:transition-opacity after:duration-150;
   &::after {
     content: "";
     background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.05) 40%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0.05) 60%, transparent 100%);
