@@ -8,6 +8,15 @@ import sleep from "@/utils/sleep.utils";
 
 const MOCKED_ACTION_DELAY_MS = 2000;
 
+// Classes escritas por extenso (não interpoladas) para o Tailwind conseguir
+// gerar `aspect-button-*`/`shadow-medium-*` em build — ver uso análogo em
+// `Switcher.tsx`. Só cobre as cores usadas com fundo sólido (texto branco);
+// `bgColor`s claros (ex.: `Colors.WHITE`) não usam o relevo do `aspect-button-*`.
+const ASPECT_BUTTON_CLASSES: Partial<Record<Colors, string>> = {
+  [Colors.ORANGE]: "aspect-button-orange shadow-medium-orange",
+  [Colors.BLACK]: "aspect-button-black shadow-medium-black",
+};
+
 interface ButtonIconProps {
   name: IconName;
   inverse?: boolean;
@@ -66,7 +75,7 @@ export default function Button({
 
   return (
     <button
-      className={`relative flex items-center-safe justify-center font-medium cursor-pointer text-nowrap disabled:cursor-not-allowed select-none transition-all duration-350 ${rounded ? "rounded-full" : "rounded-medium"} ${iconOnly ? "aspect-square p-2" : `px-4 py-2`} ${className ?? ""}`}
+      className={`relative flex items-center-safe justify-center font-medium cursor-pointer text-nowrap disabled:cursor-not-allowed select-none transition-all duration-350 ${rounded ? "rounded-full" : "rounded-medium"} ${iconOnly ? "aspect-square p-2" : `px-4 py-2`} ${ASPECT_BUTTON_CLASSES[bgColor] ?? ""} ${className ?? ""}`}
       {...props}
       onClick={handleClick}
       disabled={disabled || isLoading}

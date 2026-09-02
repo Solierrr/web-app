@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import Select from "./Select";
 import { DefaultSelect, BooleanSelect } from "./Select.presets";
+import { SolarPanelType } from "@/features/solar-panel/solarPanel.enum";
 
 const meta = {
   title: "UI/Select",
@@ -10,7 +11,7 @@ const meta = {
   },
   args: {
     name: "type",
-    options: ["Monocristalino", "Policristalino", "Filme fino"],
+    options: Object.values(SolarPanelType),
   },
 } satisfies Meta<typeof Select>;
 
@@ -27,7 +28,7 @@ export const Rounded: Story = {
 };
 
 export const WithDefaultValue: Story = {
-  args: { defaultValue: "Policristalino" },
+  args: { defaultValue: SolarPanelType.POLYCRYSTALLINE },
   render: (args) => <DefaultSelect {...args} />,
 };
 
