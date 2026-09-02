@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import Input from "@@/ui/input/Input";
 import Select from "@@/ui/select/Select";
 import { PrimaryButton, SecondaryButton, IconButton } from "@@/ui/button/Button.presets";
-import Skeleton from "@@/feedbacks/skeleton/Skeleton";
+import Skeleton from "@@/feedback/skeleton/Skeleton";
 import { listSolarPanelModels, createSolarPanel, updateSolarPanel, deleteSolarPanel } from "@/features/solar-panel/solarPanel.service";
 import type { SolarPanel } from "@/features/solar-panel/solarPanel";
 import { SolarPanelType, SolarPanelModelStatus } from "@/features/solar-panel/solarPanel.enum";

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import Corridor from "@@/layout/corridor/Corridor";
-import Skeleton from "@@/feedbacks/skeleton/Skeleton";
-import { ImageSkeleton } from "@@/feedbacks/skeleton/Skeleton.presets";
+import Corridor from "@/components/layout/announcement/corridor/Corridor";
+import Skeleton from "@@/feedback/skeleton/Skeleton";
+import { ImageSkeleton } from "@@/feedback/skeleton/Skeleton.presets";
 import { getSolarPanels } from "@/features/solar-panel/solarPanel.service";
 import type { SolarPanelFeedSummary } from "@/features/solar-panel/solarPanelAnnouncement";
 import WrapperLayout from "@/config/WrapperLayout";

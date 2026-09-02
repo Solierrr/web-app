@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 
 import type { SolarPanelAnnouncement } from "@/features/solar-panel/solarPanelAnnouncement";
 
-import Skeleton from "@@/feedbacks/skeleton/Skeleton";
-import { ImageSkeleton } from "@@/feedbacks/skeleton/Skeleton.presets";
+import Skeleton from "@@/feedback/skeleton/Skeleton";
+import { ImageSkeleton } from "@@/feedback/skeleton/Skeleton.presets";
 
 import { getSolarPanelBySlug } from "@/features/solar-panel/solarPanel.service";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";

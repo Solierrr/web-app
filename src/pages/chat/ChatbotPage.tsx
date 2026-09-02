@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { Message as MessageInterface } from "@/features/messages/messages";
-import ChatLayout from "@/components/layout/chat-layout/ChatLayout";
+import ChatLayout from "@/components/layout/chat/chat-layout/ChatLayout";
 import Textarea from "@@/ui/textarea/Textarea";
 import { PrimaryButton } from "@@/ui/button/Button.presets";
 import userMock from "@/features/users/user/user.d.mock";
