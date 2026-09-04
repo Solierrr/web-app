@@ -1,10 +1,12 @@
 import type { ComponentProps } from "react";
 import Button from "./Button";
 import type { IconName } from "../icon/Icon";
-import Colors from "@/domain/enum/colors";
+import Colors from "@/shared/styles/colors/colors.enum";
 
 type ButtonPresetProps = Omit<ComponentProps<typeof Button>, "bgColor" | "txtColor">;
-type IconButtonProps = Omit<ButtonPresetProps, "content" | "icon"> & { icon: IconName };
+type IconButtonProps = Omit<ButtonPresetProps, "content" | "icon"> & {
+  icon: IconName;
+};
 
 /**
  * Primary
@@ -14,7 +16,7 @@ type IconButtonProps = Omit<ButtonPresetProps, "content" | "icon"> & { icon: Ico
  * @param props - description, content/icon, rounded, disabled e demais propriedades do Button (exceto `bgColor`/`txtColor`).
  */
 export function PrimaryButton(props: ButtonPresetProps) {
-  return <Button {...props} bgColor={Colors.Orange} txtColor={Colors.White} />;
+  return <Button {...props} bgColor={Colors.ORANGE} txtColor={Colors.WHITE} />;
 }
 
 /**
@@ -25,7 +27,7 @@ export function PrimaryButton(props: ButtonPresetProps) {
  * @param props - description, content/icon, rounded, disabled e demais propriedades do Button (exceto `bgColor`/`txtColor`).
  */
 export function SecondaryButton(props: ButtonPresetProps) {
-  return <Button {...props} bgColor={Colors.Black} txtColor={Colors.White} />;
+  return <Button {...props} bgColor={Colors.BLACK} txtColor={Colors.WHITE} />;
 }
 
 /**
@@ -36,7 +38,7 @@ export function SecondaryButton(props: ButtonPresetProps) {
  * @param props - description, icon (nome do ícone), rounded, disabled e demais propriedades do Button (exceto `content`).
  */
 export function IconButton({ icon, ...props }: IconButtonProps) {
-  return <Button {...props} icon={{ name: icon }} bgColor={Colors.Orange} txtColor={Colors.White} />;
+  return <Button {...props} icon={{ name: icon }} bgColor={Colors.ORANGE} txtColor={Colors.WHITE} />;
 }
 
 /**
@@ -48,12 +50,26 @@ export function IconButton({ icon, ...props }: IconButtonProps) {
  */
 export function LightIconButton({ icon, className, ...props }: IconButtonProps) {
   return (
+    <Button {...props} icon={{ name: icon }} bgColor={Colors.WHITE} txtColor={Colors.ORANGE} className={`shadow-soft-black ${className ?? ""}`} />
+  );
+}
+
+/**
+ * Light Icon
+ *
+ * Botão redondo apenas com ícone, fundo branco, ícone laranja e sombra suave.
+ *
+ * @param props - description, icon (nome do ícone), rounded, disabled e demais propriedades do Button (exceto `content`).
+ */
+export function SoftIconButton({ icon, className, ...props }: IconButtonProps) {
+  return (
     <Button
       {...props}
       icon={{ name: icon }}
-      bgColor={Colors.White}
-      txtColor={Colors.Orange}
-      className={`shadow-soft ${className ?? ""}`}
+      bgColor={Colors.WHITE}
+      txtColor={Colors.ORANGE}
+      rounded={false}
+      className={`no-bg-interactive! ${className ?? ""}`}
     />
   );
 }

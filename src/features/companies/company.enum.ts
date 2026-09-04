@@ -1,0 +1,5 @@
+export enum CompanyStatus {
+  APPROVED = "APPROVED",
+  REJECTED = "REJECTED",
+  UNDERANALYSIS = "UNDER_ANALYSIS",
+}

@@ -1,18 +1,18 @@
 import { forwardRef, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import Colors from "@/domain/enum/colors";
+import Colors from "@/shared/styles/colors/colors.enum";
 import Icon, { type IconName } from "@@/ui/icon/Icon";
 import { MenuList, MenuItem } from "@@/overlay/Menu";
 
 export interface ContextMenuItem {
-  label:      string;
-  icon?:      IconName;
-  onClick:    () => void;
-  disabled?:  boolean;
+  label: string;
+  icon?: IconName;
+  onClick: () => void;
+  disabled?: boolean;
 }
 
 export interface ContextMenuHandle {
-  open:  (items: ContextMenuItem[], x: number, y: number) => void;
+  open: (items: ContextMenuItem[], x: number, y: number) => void;
   close: () => void;
 }
 
@@ -45,13 +45,17 @@ export const ContextMenu = forwardRef<ContextMenuHandle, ContextMenuProps>(funct
   const [items, setItems] = useState<ContextMenuItem[]>([]);
   const menuRef = useRef<HTMLUListElement>(null);
 
-  useImperativeHandle(ref, () => ({
-    open: (items, x, y) => {
-      setItems(items);
-      setPosition({ x, y });
-    },
-    close: () => setPosition(null),
-  }), []);
+  useImperativeHandle(
+    ref,
+    () => ({
+      open: (items, x, y) => {
+        setItems(items);
+        setPosition({ x, y });
+      },
+      close: () => setPosition(null),
+    }),
+    [],
+  );
 
   useEffect(() => {
     if (!position) return;
@@ -95,15 +99,18 @@ export const ContextMenu = forwardRef<ContextMenuHandle, ContextMenuProps>(funct
   if (!position) return null;
 
   return createPortal(
-    <MenuList ref={menuRef} role="menu" className={`fixed z-50 min-w-40 py-1 animate-fade-in ${className ?? ""}`}
+    <MenuList
+      ref={menuRef}
+      role="menu"
+      className={`fixed z-50 min-w-40 py-1 animate-fade-in ${className ?? ""}`}
       style={{ left: position.x, top: position.y }}>
       {items.map((item, index) => (
         <MenuItem key={index} role="menuitem" disabled={item.disabled} onSelect={() => handleSelect(item)}>
-          {item.icon && <Icon name={item.icon} size={18} color={item.disabled ? Colors.InputIcon : Colors.Black} />}
+          {item.icon && <Icon name={item.icon} size={18} color={item.disabled ? Colors.INPUTICON : Colors.BLACK} />}
           {item.label}
         </MenuItem>
       ))}
     </MenuList>,
-    document.body
+    document.body,
   );
 });

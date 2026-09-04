@@ -1,0 +1,17 @@
+# Global
+/*
+!/*/
+
+# Github
+.github/
+.git/
+
+# React
+dist/
+coverage/
+node_modules/
+
+# TypeScript
+*.css
+*.d.ts
+*.enum.ts
