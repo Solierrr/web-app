@@ -1,6 +1,6 @@
-import type { Contact } from "@/shared/types/contact/contact";
-import type { Address } from "@/shared/types/address/address";
-import type { Geolocalization } from "@/shared/types/geolocation/geolocalization";
+import type { Contact } from "@lib/shared/types/contact/contact";
+import type { Address } from "@lib/shared/types/address/address";
+import type { Geolocalization } from "@lib/shared/types/geolocation/geolocalization";
 import type { TechnicalAffiliationType } from "./professional.enum";
 
 // Corresponde a `professional_registration` + `profession` no schema-api-core.sql.

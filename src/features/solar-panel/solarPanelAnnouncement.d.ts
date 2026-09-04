@@ -1,6 +1,6 @@
 import type { SolarPanel } from "@/features/solar-panel/solarPanel";
 import type { Company } from "@/features/companies/company";
-import type { Image } from "@/shared/types/image/image";
+import type { Image } from "@lib/shared/types/image/image";
 
 export interface SolarPannelPhotos {
   heroImage: Image;

@@ -1,4 +1,4 @@
-import type { Contact } from "@/shared/types/contact/contact";
+import type { Contact } from "@lib/shared/types/contact/contact";
 
 export interface User {
   id: string;

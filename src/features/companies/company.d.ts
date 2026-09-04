@@ -1,6 +1,6 @@
 import type CompanyStatus from "@/features/companies/company.enum";
-import type { Address } from "@/shared/types/address/address";
-import type { BusinessContact } from "@/shared/types/business-contact/businessContact";
+import type { Address } from "@lib/shared/types/address/address";
+import type { BusinessContact } from "@lib/shared/types/business-contact/businessContact";
 
 export interface Company {
   id: string;

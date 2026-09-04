@@ -1,5 +1,5 @@
 import logger from "@/config/logging/logger";
-import sleep from "@/utils/sleep.utils";
+import sleep from "@lib/utils/sleep.utils";
 
 import MocksMode from "./mocksMode.enum";
 

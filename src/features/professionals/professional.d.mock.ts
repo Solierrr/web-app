@@ -1,6 +1,6 @@
 import type { Professional } from "./professional";
 import { TechnicalAffiliationType } from "./professional.enum";
-import { slugNormalization } from "@/utils/normalization.utils";
+import { slugNormalization } from "@lib/utils/normalization.utils";
 
 const professionalMockData = [
   {

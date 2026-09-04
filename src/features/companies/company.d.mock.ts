@@ -1,5 +1,5 @@
 import type { Company } from "./company";
-import { slugNormalization } from "@/utils/normalization.utils";
+import { slugNormalization } from "@lib/utils/normalization.utils";
 
 const companyMockData = [
   {
