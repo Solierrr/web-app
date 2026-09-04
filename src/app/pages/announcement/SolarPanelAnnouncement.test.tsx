@@ -11,7 +11,7 @@ vi.mock("@/features/solar-panel/solarPanel.service", () => ({
 
 import { getSolarPanelBySlug } from "@/features/solar-panel/solarPanel.service";
 import type { SolarPanelAnnouncement as SolarPanelAnnouncementModel } from "@/features/solar-panel/solarPanelAnnouncement";
-import { SolarPanelModelStatus as ModelStatus } from "@/features/solar-panel/solarPanel.enum";
+import { SolarPanelModelStatus as ModelStatus, SolarPanelType } from "@/features/solar-panel/solarPanel.enum";
 import SolarPanelAnnouncement from "./SolarPanelAnnouncement";
 
 const mockedGetSolarPanelBySlug = vi.mocked(getSolarPanelBySlug);
@@ -22,7 +22,7 @@ const product: SolarPanelAnnouncementModel = {
   supplierId: "company-1",
   companySlug: "solaria-energia",
   company: { id: "company-1", tradeName: "Solaria Energia", slug: "solaria-energia" },
-  panel: { id: "panel-1", status: ModelStatus.APPROVED, brand: "Marca X" },
+  panel: { id: "panel-1", status: ModelStatus.APPROVED, brand: "Marca X", type: SolarPanelType.MONOCRYSTALLINE },
   title: "Coletor Solar Térmico Vertical De Cobre",
   description: "Descrição do produto",
   unitPrice: 200,
@@ -78,7 +78,18 @@ describe("SolarPanelAnnouncement", () => {
 
     expect(mockedGetSolarPanelBySlug).toHaveBeenCalledWith("solaria-energia", "coletor-solar-termico-vertical-de-cobre");
     expect(await screen.findByText(product.title)).toBeInTheDocument();
-    expect(screen.getByText("Marca X")).toBeInTheDocument();
+    expect(screen.getAllByText("Marca X").length).toBeGreaterThan(0);
     expect(screen.getByText("Anunciado por Solaria Energia")).toBeInTheDocument();
+  });
+
+  it("shows brand and type as badges next to the title", async () => {
+    mockedGetSolarPanelBySlug.mockResolvedValue(product);
+
+    renderAt("/placa-solar/solaria-energia/coletor-solar-termico-vertical-de-cobre");
+
+    await screen.findByText(product.title);
+
+    expect(screen.getAllByText("Marca X").length).toBe(2);
+    expect(screen.getAllByText(SolarPanelType.MONOCRYSTALLINE).length).toBe(2);
   });
 });

@@ -60,6 +60,17 @@ export function ProductImages({ images }: ImagesProps) {
   );
 }
 
+export function PanelBadges({ panel }: { panel: SolarPanel }) {
+  if (!panel.brand && !panel.type) return null;
+
+  return (
+    <div className="flex flex-row flex-wrap gap-2">
+      {panel.brand && <span className="rounded-full bg-input-bg px-3 py-1 text-lower font-medium">{panel.brand}</span>}
+      {panel.type && <span className="rounded-full bg-input-bg px-3 py-1 text-lower font-medium">{panel.type}</span>}
+    </div>
+  );
+}
+
 export function Characteristics({ panel }: { panel: SolarPanel }) {
   const { t } = useTranslation("announcements", {
     keyPrefix: "solarPanel.characteristics",

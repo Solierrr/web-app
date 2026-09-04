@@ -15,7 +15,7 @@ import Button from "@@/ui/button/Button";
 import { useTranslation } from "react-i18next";
 import WrapperLayout from "@@/layout/wrappers/WrapperLayout";
 import { regionsService } from "./SolarPanelAnnouncement.utils";
-import { Wrapper, ProductImages, Characteristics } from "./SolarPanelAnnouncement.reusable";
+import { Wrapper, ProductImages, Characteristics, PanelBadges } from "./SolarPanelAnnouncement.reusable";
 
 interface SolarPanelAnnouncementProps {
   product: SolarPanelAnnouncement;
@@ -45,6 +45,7 @@ function SolarPanelAnnouncementPacked({ product }: SolarPanelAnnouncementProps) 
                 <div className="flex flex-col gap-6">
                   <div className="flex flex-col gap-2">
                     <h1>{product.title}</h1>
+                    <PanelBadges panel={product.panel} />
                     <Link to={routePaths.companyProfile(lang, product.companySlug)} className="flex w-fit flex-row items-center gap-2">
                       {product.company.logoUrl && (
                         <img src={product.company.logoUrl} alt={product.company.tradeName} className="size-6 rounded-full object-cover" />
