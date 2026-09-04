@@ -7,59 +7,57 @@ import { getCompanyBySlug } from "@/features/companies/company.service";
 import type { Company } from "@/features/companies/company";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
+import { useAuth } from "@/features/access/auth/Auth.utils";
 
 interface CompanyProfilePackedProps {
-    company: Company;
+  company: Company;
 }
 
 function CompanyProfilePacked({ company }: CompanyProfilePackedProps) {
-    const { lang: langParam } = useParams<{ lang: string }>();
-    const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
-    const { t } = useTranslation("commons");
+  const { lang: langParam } = useParams<{ lang: string }>();
+  const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
+  const { t } = useTranslation("commons");
+  const { authenticated } = useAuth();
 
-    return (
-        <ProfilePage
-            bannerUrl={company.bannerUrl}
-            avatarUrl={company.logoUrl}
-            name={company.tradeName}
-            subtitle={company.address ? `${company.address.city}/${company.address.state}` : undefined}
-            actions={
-                <Link
-                    to={routePaths.chat(lang, company.id)}
-                    className="rounded-medium bg-orange px-4 py-2 font-medium text-white"
-                >
-                    {t("actions.contact")}
-                </Link>
-            }
-        >
-            <div className="flex flex-col gap-2">
-                <h2>{company.corporateName}</h2>
-                {company.businessContact?.companyEmail && (
-                    <p className="text-input-text">{company.businessContact.companyEmail}</p>
-                )}
-                {company.businessContact?.website && (
-                    <p className="text-input-text">{company.businessContact.website}</p>
-                )}
-            </div>
-        </ProfilePage>
-    );
+  return (
+    <ProfilePage
+      bannerUrl={company.bannerUrl}
+      avatarUrl={company.logoUrl}
+      name={company.tradeName}
+      subtitle={company.address ? `${company.address.city}/${company.address.state}` : undefined}
+      actions={
+        authenticated && (
+          <Link to={routePaths.chat(lang, company.id)} className="rounded-medium bg-orange px-4 py-2 font-medium text-white">
+            {t("actions.contact")}
+          </Link>
+        )
+      }>
+      <div className="flex flex-col gap-2">
+        <h2>{company.corporateName}</h2>
+        {company.businessContact?.companyEmail && <p className="text-input-text">{company.businessContact.companyEmail}</p>}
+        {company.businessContact?.website && <p className="text-input-text">{company.businessContact.website}</p>}
+      </div>
+    </ProfilePage>
+  );
 }
 
 export default function CompanyProfile() {
-    const { companySlug = "" } = useParams<{ companySlug: string }>();
-    const [company, setCompany] = useState<Company | null>(null);
+  const { companySlug = "" } = useParams<{ companySlug: string }>();
+  const [company, setCompany] = useState<Company | null>(null);
 
-    useEffect(() => {
-        let active = true;
+  useEffect(() => {
+    let active = true;
 
-        getCompanyBySlug(companySlug).then((result) => {
-            if (active) setCompany(result);
-        });
+    getCompanyBySlug(companySlug).then((result) => {
+      if (active) setCompany(result);
+    });
 
-        return () => { active = false; };
-    }, [companySlug]);
+    return () => {
+      active = false;
+    };
+  }, [companySlug]);
 
-    if (!company) return <ProfilePageSkeleton />;
+  if (!company) return <ProfilePageSkeleton />;
 
-    return <CompanyProfilePacked company={company} />;
+  return <CompanyProfilePacked company={company} />;
 }

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { AppRoutes } from "@app/routes/AppRoutes";
 import ErrorBoundary from "@app/pages/error/boundary/ErrorBoundary";
+import Auth from "@/features/access/auth/Auth";
 
 const SCROLL_IDLE_DELAY_MS = 800;
 
@@ -27,8 +28,10 @@ export default function App() {
   }, []);
 
   return (
-    <ErrorBoundary>
-      <AppRoutes />
-    </ErrorBoundary>
+    <Auth>
+      <ErrorBoundary>
+        <AppRoutes />
+      </ErrorBoundary>
+    </Auth>
   );
 }

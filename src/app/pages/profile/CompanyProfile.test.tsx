@@ -2,6 +2,8 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import CompanyProfile from "./CompanyProfile";
+import Auth from "@/features/access/auth/Auth";
+import { AuthContext } from "@/features/access/auth/Auth.utils";
 
 vi.mock("@/features/companies/company.service", () => ({
   getCompanyBySlug: vi.fn(),
@@ -10,6 +12,17 @@ vi.mock("@/features/companies/company.service", () => ({
 import { getCompanyBySlug } from "@/features/companies/company.service";
 import { CompanyStatus } from "@/features/companies/company.enum";
 import type { Company } from "@/features/companies/company";
+
+function renderAuthenticated(ui: React.ReactNode) {
+  return render(
+    <MemoryRouter>
+      <AuthContext.Provider
+        value={{ authenticated: true, access: { id: "1", name: "Você", email: "you@inter.com" }, login: vi.fn(), logout: vi.fn() }}>
+        {ui}
+      </AuthContext.Provider>
+    </MemoryRouter>,
+  );
+}
 
 const mockedGetCompanyBySlug = vi.mocked(getCompanyBySlug);
 
@@ -32,7 +45,9 @@ describe("CompanyProfile", () => {
 
     render(
       <MemoryRouter>
-        <CompanyProfile />
+        <Auth>
+          <CompanyProfile />
+        </Auth>
       </MemoryRouter>,
     );
 
@@ -44,11 +59,37 @@ describe("CompanyProfile", () => {
 
     render(
       <MemoryRouter>
-        <CompanyProfile />
+        <Auth>
+          <CompanyProfile />
+        </Auth>
       </MemoryRouter>,
     );
 
     expect(await screen.findByRole("heading", { name: "Solaria Energia" })).toBeInTheDocument();
     expect(screen.getByText("Solaria Energia Solar Ltda")).toBeInTheDocument();
+  });
+
+  it("hides the contact action when the visitor is not authenticated", async () => {
+    mockedGetCompanyBySlug.mockResolvedValue(company);
+
+    render(
+      <MemoryRouter>
+        <Auth>
+          <CompanyProfile />
+        </Auth>
+      </MemoryRouter>,
+    );
+
+    await screen.findByRole("heading", { name: "Solaria Energia" });
+
+    expect(screen.queryByRole("link", { name: /contato/i })).not.toBeInTheDocument();
+  });
+
+  it("shows the contact action when the visitor is authenticated", async () => {
+    mockedGetCompanyBySlug.mockResolvedValue(company);
+
+    renderAuthenticated(<CompanyProfile />);
+
+    expect(await screen.findByRole("link", { name: /contato/i })).toBeInTheDocument();
   });
 });
