@@ -4,5 +4,14 @@
   },
   "company": {
     "description": "Empresas acreditadas disponibles en la plataforma."
+  },
+  "solarPanel": {
+    "description": "Los principales paneles solares disponibles en el mercado, de los proveedores más reconocidos del sector",
+    "services": "Servicios",
+    "sections": {
+      "bestSellers": "Más vendidos",
+      "onSale": "En oferta",
+      "newArrivals": "Novedades"
+    }
   }
 }

@@ -29,9 +29,15 @@ export interface SolarPanelAnnouncement {
   // na API (hoje `api-core` só busca `Offer`/`Company` por id).
   slug: string;
   companySlug: string;
+
+  // NOTE: sem coluna equivalente em `api-core` ainda — derivados no mock
+  // (`solarPanelAnnouncementMock`) só para sustentar as variações do feed
+  // (mais vendidos / novidades) até existir a métrica/data real na API.
+  soldUnits?: number;
+  createdAt?: string;
 }
 
 export type SolarPanelFeedSummary = Pick<
   SolarPanelAnnouncement,
-  "id" | "slug" | "companySlug" | "title" | "unitPrice" | "discountPercentage" | "photos"
+  "id" | "slug" | "companySlug" | "title" | "unitPrice" | "discountPercentage" | "photos" | "soldUnits" | "createdAt"
 >;

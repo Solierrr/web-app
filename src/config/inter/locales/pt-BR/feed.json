@@ -4,5 +4,14 @@
   },
   "company": {
     "description": "Empresas credenciadas disponíveis na plataforma."
+  },
+  "solarPanel": {
+    "description": "As principais placas solares disponíveis no mercado, com os principais e mais famosos fornecedores do cenário",
+    "services": "Serviços",
+    "sections": {
+      "bestSellers": "Mais vendidos",
+      "onSale": "Em oferta",
+      "newArrivals": "Novidades"
+    }
   }
 }

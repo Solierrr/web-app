@@ -8,41 +8,36 @@ vi.mock("@/features/solar-panel/solarPanel.service", () => ({
 }));
 
 import { getSolarPanels } from "@/features/solar-panel/solarPanel.service";
-import type { SolarPanelAnnouncement } from "@/features/solar-panel/solarPanelAnnouncement";
-import { SolarPanelModelStatus as ModelStatus } from "@/features/solar-panel/solarPanel.enum";
+import type { SolarPanelAnnouncement, SolarPanelFeedSummary } from "@/features/solar-panel/solarPanelAnnouncement";
 
 const mockedGetSolarPanels = vi.mocked(getSolarPanels);
 
-const items: SolarPanelAnnouncement[] = [
-  {
-    id: "1",
-    slug: "coletor-solar-termico-vertical-de-cobre",
+// A service resolve `SolarPanelAnnouncement[]` completo, mas o feed só usa o
+// subconjunto `SolarPanelFeedSummary` — os fixtures abaixo só precisam desse
+// subconjunto.
+function mockFeedItems(items: SolarPanelFeedSummary[]) {
+  mockedGetSolarPanels.mockResolvedValue(items as SolarPanelAnnouncement[]);
+}
+
+function summary(overrides: Partial<SolarPanelFeedSummary>): SolarPanelFeedSummary {
+  return {
+    id: overrides.id ?? "1",
+    slug: overrides.slug ?? "produto",
     companySlug: "solaria-energia",
-    supplierId: "company-1",
-    company: { id: "company-1", tradeName: "Solaria Energia", slug: "solaria-energia" },
-    panel: { id: "panel-1", status: ModelStatus.APPROVED },
-    title: "Coletor Solar Térmico Vertical De Cobre",
-    description: "Descrição",
+    title: overrides.title ?? "Produto",
     unitPrice: 200,
-    availableUnits: 10,
-    serviceRegions: [],
-    photos: {
-      heroImage: {
-        description: "Placa solar",
-        url: "https://example.com/1.png",
-      },
-      otherImages: [],
-    },
-  },
-];
+    photos: { heroImage: { description: "Placa solar", url: "https://example.com/1.png" }, otherImages: [] },
+    ...overrides,
+  };
+}
 
 describe("SolarPanelFeed", () => {
   beforeEach(() => {
     mockedGetSolarPanels.mockReset();
   });
 
-  it("renders the page heading and tabs", () => {
-    mockedGetSolarPanels.mockResolvedValue([]);
+  it("renders the page heading and tabs", async () => {
+    mockFeedItems([]);
 
     render(
       <MemoryRouter>
@@ -50,14 +45,17 @@ describe("SolarPanelFeed", () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByRole("heading", { name: "Placas Solares" })).toBeInTheDocument();
-    expect(screen.getByText("placas solares")).toBeInTheDocument();
-    expect(screen.getByText("serviços")).toBeInTheDocument();
-    expect(screen.getByText("fornecedores")).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Placas Solares" })).toBeInTheDocument();
+    expect(screen.getByText("Serviços")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Empresas" })).toBeInTheDocument();
   });
 
-  it("renders the mocked solar panels inside the feed corridors", async () => {
-    mockedGetSolarPanels.mockResolvedValue(items);
+  it("only renders the best sellers and new arrivals corridors when nothing is on sale", async () => {
+    const items = [
+      summary({ id: "1", title: "Placa Mais Vendida", soldUnits: 100 }),
+      summary({ id: "2", title: "Placa Pouco Vendida", soldUnits: 1 }),
+    ];
+    mockFeedItems(items);
 
     render(
       <MemoryRouter>
@@ -65,6 +63,24 @@ describe("SolarPanelFeed", () => {
       </MemoryRouter>,
     );
 
-    expect(await screen.findAllByText("Coletor Solar Térmico Vertical De Cobre")).toHaveLength(2);
+    expect(await screen.findByText("Mais vendidos")).toBeInTheDocument();
+    expect(screen.getByText("Novidades")).toBeInTheDocument();
+    expect(screen.queryByText("Em oferta")).not.toBeInTheDocument();
+  });
+
+  it("renders the on-sale corridor only for items with a discount", async () => {
+    const items = [summary({ id: "1", title: "Placa Sem Desconto" }), summary({ id: "2", title: "Placa Com Desconto", discountPercentage: 15 })];
+    mockFeedItems(items);
+
+    render(
+      <MemoryRouter>
+        <SolarPanelFeed />
+      </MemoryRouter>,
+    );
+
+    await screen.findByText("Mais vendidos");
+
+    expect(screen.getByText("Em oferta")).toBeInTheDocument();
+    expect(screen.getAllByText("Placa Com Desconto").length).toBeGreaterThan(0);
   });
 });

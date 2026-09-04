@@ -4,5 +4,14 @@
   },
   "company": {
     "description": "Accredited companies available on the platform."
+  },
+  "solarPanel": {
+    "description": "The leading solar panels available on the market, from the most well-known suppliers in the industry",
+    "services": "Services",
+    "sections": {
+      "bestSellers": "Best sellers",
+      "onSale": "On sale",
+      "newArrivals": "New arrivals"
+    }
   }
 }

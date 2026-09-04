@@ -5502,11 +5502,31 @@ const solarPanelAnnouncementMockData = [
   },
 ];
 
-// `company` é derivada aqui a partir de `companySlug` + `companyMock` em vez
-// de duplicar os dados da empresa em cada anúncio (ver `company.d.mock.ts`).
-const solarPanelAnnouncementMock = solarPanelAnnouncementMockData.map((announcement) => ({
-  ...announcement,
-  company: companyMock.find((company) => company.slug === announcement.companySlug) ?? companyMock[0],
-})) as SolarPanelAnnouncement[];
+// hash determinístico (id -> inteiro) só para derivar `soldUnits`/`createdAt`
+// abaixo de forma estável, sem precisar de um valor por entrada no mock.
+function hashToInt(value: string): number {
+  let hash = 0;
+  for (let index = 0; index < value.length; index++) {
+    hash = (hash * 31 + value.charCodeAt(index)) | 0;
+  }
+  return Math.abs(hash);
+}
+
+const MOCK_ANCHOR_DATE = new Date("2026-01-01T00:00:00.000Z");
+const DAY_IN_MS = 24 * 60 * 60 * 1000;
+
+// `company`/`soldUnits`/`createdAt` são derivados aqui a partir de
+// `companySlug`/`id` em vez de duplicar dado em cada anúncio (ver
+// `company.d.mock.ts` e a NOTE em `solarPanelAnnouncement.d.ts`).
+const solarPanelAnnouncementMock = solarPanelAnnouncementMockData.map((announcement) => {
+  const hash = hashToInt(announcement.id);
+
+  return {
+    ...announcement,
+    company: companyMock.find((company) => company.slug === announcement.companySlug) ?? companyMock[0],
+    soldUnits: hash % 500,
+    createdAt: new Date(MOCK_ANCHOR_DATE.getTime() - (hash % 365) * DAY_IN_MS).toISOString(),
+  };
+}) as SolarPanelAnnouncement[];
 
 export default solarPanelAnnouncementMock;
