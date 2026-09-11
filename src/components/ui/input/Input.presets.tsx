@@ -39,7 +39,8 @@ export function PasswordInput({ showIcon = true, ...props }: PasswordInputProps)
 
   return (
     <Input
-      {...props} type={visible ? "text" : "password"}
+      {...props}
+      type={visible ? "text" : "password"}
       icon={showIcon ? { name: visible ? "eyeOff" : "eye", inverse: false, onClick: () => setVisible((isVisible) => !isVisible) } : undefined}
     />
   );

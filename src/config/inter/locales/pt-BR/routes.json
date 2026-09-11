@@ -1,0 +1,20 @@
+{
+  "solarPanels": "placas-solares",
+  "professionals": "profissionais",
+  "companies": "empresas",
+  "search": "buscar",
+  "solarPanel": "placa-solar",
+  "company": "empresa",
+  "professional": "profissional",
+  "about": "sobre",
+  "designSystem": "design-system",
+  "login": "login",
+  "register": "cadastro",
+  "forgotPassword": "esqueci-senha",
+  "profileSetup": "personalizar-perfil",
+  "user": "usuario",
+  "admin": "admin",
+  "solarPanelModels": "modelos-de-placa-solar",
+  "messages": "mensagens",
+  "chatbot": "chatbot"
+}

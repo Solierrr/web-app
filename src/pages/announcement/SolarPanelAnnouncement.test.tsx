@@ -2,24 +2,27 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import "@/config/locales/internationalization";
+import "@/config/inter/internationalization";
 import { ContextMenuProvider } from "@@/overlay/contextMenu/provider/ContextMenuProvider";
 
-vi.mock("@/service/feed/solarPanel.service", () => ({
-  getSolarPanel: vi.fn(),
+vi.mock("@/features/solar-panel/solarPanel.service", () => ({
+  getSolarPanelBySlug: vi.fn(),
 }));
 
-import { getSolarPanel } from "@/service/feed/solarPanel.service";
-import type { SolarPanelAnnouncement as SolarPanelAnnouncementModel } from "@/domain/models/announcemnt/solarPanelAnnouncement";
-import ModelStatus from "@/domain/enum/modelStatus";
+import { getSolarPanelBySlug } from "@/features/solar-panel/solarPanel.service";
+import type { SolarPanelAnnouncement as SolarPanelAnnouncementModel } from "@/features/solar-panel/solarPanelAnnouncement";
+import { SolarPanelModelStatus as ModelStatus } from "@/features/solar-panel/solarPanel.enum";
 import SolarPanelAnnouncement from "./SolarPanelAnnouncement";
 
-const mockedGetSolarPanel = vi.mocked(getSolarPanel);
+const mockedGetSolarPanelBySlug = vi.mocked(getSolarPanelBySlug);
 
 const product: SolarPanelAnnouncementModel = {
   id: "1",
-  supplierId: "supplier-1",
-  panel: { id: "panel-1", status: ModelStatus.Approved, brand: "Marca X" },
+  slug: "coletor-solar-termico-vertical-de-cobre",
+  supplierId: "company-1",
+  companySlug: "solaria-energia",
+  company: { id: "company-1", tradeName: "Solaria Energia", slug: "solaria-energia" },
+  panel: { id: "panel-1", status: ModelStatus.APPROVED, brand: "Marca X" },
   title: "Coletor Solar Térmico Vertical De Cobre",
   description: "Descrição do produto",
   unitPrice: 200,
@@ -36,8 +39,8 @@ function renderAt(path: string) {
     <ContextMenuProvider>
       <MemoryRouter initialEntries={[path]}>
         <Routes>
-          <Route path="/produto/:id" element={<SolarPanelAnnouncement />} />
-          <Route path="/produto" element={<SolarPanelAnnouncement />} />
+          <Route path="/placa-solar/:companySlug/:productSlug" element={<SolarPanelAnnouncement />} />
+          <Route path="/placa-solar" element={<SolarPanelAnnouncement />} />
         </Routes>
       </MemoryRouter>
     </ContextMenuProvider>,
@@ -46,37 +49,36 @@ function renderAt(path: string) {
 
 describe("SolarPanelAnnouncement", () => {
   beforeEach(() => {
-    mockedGetSolarPanel.mockReset();
+    mockedGetSolarPanelBySlug.mockReset();
   });
 
   afterEach(() => {
     vi.unstubAllGlobals();
   });
 
-  it("shows the error message when there is no id in the route", () => {
-    renderAt("/produto");
+  it("shows the error message when there is no company/product slug in the route", () => {
+    renderAt("/placa-solar");
 
-    expect(mockedGetSolarPanel).not.toHaveBeenCalled();
+    expect(mockedGetSolarPanelBySlug).not.toHaveBeenCalled();
     expect(screen.getByText("Não foi possível carregar o produto.")).toBeInTheDocument();
   });
 
   it("shows the error message when the service call fails", async () => {
-    mockedGetSolarPanel.mockRejectedValue(new Error("network error"));
+    mockedGetSolarPanelBySlug.mockRejectedValue(new Error("network error"));
 
-    renderAt("/produto/1");
+    renderAt("/placa-solar/solaria-energia/coletor-solar-termico-vertical-de-cobre");
 
-    expect(
-      await screen.findByText("Não foi possível carregar o produto."),
-    ).toBeInTheDocument();
+    expect(await screen.findByText("Não foi possível carregar o produto.")).toBeInTheDocument();
   });
 
   it("renders the product once it is loaded", async () => {
-    mockedGetSolarPanel.mockResolvedValue(product);
+    mockedGetSolarPanelBySlug.mockResolvedValue(product);
 
-    renderAt("/produto/1");
+    renderAt("/placa-solar/solaria-energia/coletor-solar-termico-vertical-de-cobre");
 
-    expect(mockedGetSolarPanel).toHaveBeenCalledWith("1");
+    expect(mockedGetSolarPanelBySlug).toHaveBeenCalledWith("solaria-energia", "coletor-solar-termico-vertical-de-cobre");
     expect(await screen.findByText(product.title)).toBeInTheDocument();
     expect(screen.getByText("Marca X")).toBeInTheDocument();
+    expect(screen.getByText("Anunciado por Solaria Energia")).toBeInTheDocument();
   });
 });

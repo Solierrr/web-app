@@ -1,12 +1,12 @@
-import { render } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
-import { describe, expect, it } from 'vitest';
-import App from './App';
+import { render } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+import { describe, expect, it } from "vitest";
+import App from "./App";
 
-describe('App', () => {
-  it('renders the home route without crashing', () => {
+describe("App", () => {
+  it("renders the home route without crashing", () => {
     render(
-      <MemoryRouter initialEntries={['/']}>
+      <MemoryRouter initialEntries={["/"]}>
         <App />
       </MemoryRouter>,
     );

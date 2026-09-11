@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import Colors from "@/domain/enum/colors";
+import Colors from "@/shared/styles/colors/colors.enum";
 import Icon from "@@/ui/icon/Icon";
 import { MenuList, MenuItem } from "@@/overlay/Menu";
 
@@ -15,14 +15,14 @@ function getOptionValue<T>(option: SelectOption<T>): T {
 }
 
 interface SelectProps<T> {
-  name:          string;
-  options:       SelectOption<T>[];
-  value?:        T;
+  name: string;
+  options: SelectOption<T>[];
+  value?: T;
   defaultValue?: T;
-  onChange?:     (value: T | undefined) => void;
-  placeholder?:  string;
-  rounded?:      boolean;
-  disabled?:     boolean;
+  onChange?: (value: T | undefined) => void;
+  placeholder?: string;
+  rounded?: boolean;
+  disabled?: boolean;
 
   className?: string;
 }
@@ -45,9 +45,17 @@ interface SelectProps<T> {
  *
  * @returns O componente de select renderizado.
  */
-export default function Select<T = string>({ name, options, value, defaultValue, onChange,
-  placeholder, rounded = false, disabled = false, className, }: SelectProps<T>) {
-
+export default function Select<T = string>({
+  name,
+  options,
+  value,
+  defaultValue,
+  onChange,
+  placeholder,
+  rounded = false,
+  disabled = false,
+  className,
+}: SelectProps<T>) {
   const { t } = useTranslation("commons", { keyPrefix: "select" });
   const resolvedPlaceholder = placeholder ?? t("placeholder");
 
@@ -94,7 +102,8 @@ export default function Select<T = string>({ name, options, value, defaultValue,
 
   return (
     <div ref={containerRef} className={`relative w-fit ${className ?? ""}`}>
-      <div className={`flex w-full items-center-safe justify-between gap-8 bg-input-bg ${selectedOption ? "pl-3 pr-4" : "px-4"} py-2 text-black font-medium cursor-pointer ${disabled ? "opacity-50 pointer-events-none" : ""} ${rounded ? "rounded-full" : "rounded-medium"}`}
+      <div
+        className={`flex w-full items-center-safe justify-between gap-8 bg-input-bg ${selectedOption ? "pl-3 pr-4" : "px-4"} py-2 text-black font-medium cursor-pointer ${disabled ? "opacity-50 pointer-events-none" : ""} ${rounded ? "rounded-full" : "rounded-medium"}`}
         role="button"
         tabIndex={disabled ? -1 : 0}
         aria-label={name}
@@ -118,26 +127,28 @@ export default function Select<T = string>({ name, options, value, defaultValue,
                 event.stopPropagation();
                 handleClear();
               }}
-              className="flex animate-fade-in"
-            >
-              <Icon name="x" color={Colors.InputIcon} className="cursor-pointer" />
+              className="flex animate-fade-in">
+              <Icon name="x" color={Colors.INPUTICON} className="cursor-pointer" />
             </button>
           )}
 
           <span className={`font-medium ${selectedOption ? "" : "text-input-text"} select-none`}>
             {selectedOption ? getOptionLabel(selectedOption) : resolvedPlaceholder}
           </span>
-
         </span>
-        <Icon className={`transition-transform ${open ? "rotate-180" : ""}`} name="chevronDown" color={Colors.InputIcon} />
+        <Icon className={`transition-transform ${open ? "rotate-180" : ""}`} name="chevronDown" color={Colors.INPUTICON} />
       </div>
 
-      {open && (<MenuList className="absolute z-10 mt-1 w-full" role="listbox" aria-label={name}>
+      {open && (
+        <MenuList className="absolute z-10 mt-1 w-full" role="listbox" aria-label={name}>
           {options.map((option, index) => {
             const isSelected = getOptionValue(option) === selectedValue;
 
             return (
-              <MenuItem key={index} role="option" selected={isSelected}
+              <MenuItem
+                key={index}
+                role="option"
+                selected={isSelected}
                 onSelect={() => handleSelect(option)}
                 onKeyDown={(event) => {
                   if (event.key === "Escape") setOpen(false);

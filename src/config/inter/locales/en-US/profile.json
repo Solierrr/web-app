@@ -1,0 +1,20 @@
+{
+  "onboarding": {
+    "previewFallbackName": "Preview",
+    "bannerPlaceholder": "Banner image URL",
+    "avatarPlaceholder": "Profile photo URL",
+    "avatarAlt": "",
+    "complete": "Finish",
+    "completeDescription": "Finish profile customization",
+    "skip": "Skip",
+    "skipDescription": "Skip profile customization",
+    "company": {
+      "bannerHeading": "Customize the company banner",
+      "avatarHeading": "Choose the company logo"
+    },
+    "user": {
+      "bannerHeading": "Customize the profile banner",
+      "avatarHeading": "Choose the profile photo"
+    }
+  }
+}

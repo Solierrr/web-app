@@ -3,21 +3,24 @@ import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import SolarPanelSearch from "./SolarPanelSearch";
 
-vi.mock("@/service/feed/solarPanel.service", () => ({
+vi.mock("@/features/solar-panel/solarPanel.service", () => ({
   getSolarPanels: vi.fn(),
 }));
 
-import { getSolarPanels } from "@/service/feed/solarPanel.service";
-import type { SolarPanelAnnouncement } from "@/domain/models/announcemnt/solarPanelAnnouncement";
-import ModelStatus from "@/domain/enum/modelStatus";
+import { getSolarPanels } from "@/features/solar-panel/solarPanel.service";
+import type { SolarPanelAnnouncement } from "@/features/solar-panel/solarPanelAnnouncement";
+import { SolarPanelModelStatus as ModelStatus } from "@/features/solar-panel/solarPanel.enum";
 
 const mockedGetSolarPanels = vi.mocked(getSolarPanels);
 
 const items: SolarPanelAnnouncement[] = [
   {
     id: "1",
-    supplierId: "supplier-1",
-    panel: { id: "panel-1", status: ModelStatus.Approved },
+    slug: "coletor-solar-termico-vertical-de-cobre",
+    companySlug: "solaria-energia",
+    supplierId: "company-1",
+    company: { id: "company-1", tradeName: "Solaria Energia", slug: "solaria-energia" },
+    panel: { id: "panel-1", status: ModelStatus.APPROVED },
     title: "Coletor Solar Térmico Vertical De Cobre",
     description: "Descrição",
     unitPrice: 200,
@@ -47,12 +50,8 @@ describe("SolarPanelSearch", () => {
       </MemoryRouter>,
     );
 
-    expect(
-      screen.getByRole("heading", { name: "Placas Solares" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: "filtrar-busca" }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Placas Solares" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "filtrar-busca" })).toBeInTheDocument();
     expect(screen.getByText("Vertical")).toBeInTheDocument();
   });
 
@@ -69,6 +68,6 @@ describe("SolarPanelSearch", () => {
       await screen.findByRole("link", {
         name: /Coletor Solar Térmico Vertical De Cobre/,
       }),
-    ).toHaveAttribute("href", "/produto/1");
+    ).toHaveAttribute("href", "/pt-BR/placa-solar/solaria-energia/coletor-solar-termico-vertical-de-cobre");
   });
 });

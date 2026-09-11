@@ -1,0 +1,84 @@
+{
+  "and": "and",
+  "or": "or",
+  "not": "not",
+  "yes": "yes",
+  "no": "no",
+  "language": "Language",
+  "actions": {
+    "add": "add",
+    "back": "back",
+    "cancel": "cancel",
+    "close": "close",
+    "confirm": "confirm",
+    "continue": "continue",
+    "delete": "delete",
+    "edit": "edit",
+    "next": "next",
+    "previous": "previous",
+    "remove": "remove",
+    "save": "save",
+    "search": "search",
+    "send": "send",
+    "view": "view",
+    "contact": "contact"
+  },
+  "status": {
+    "loading": "loading",
+    "success": "success",
+    "error": "error",
+    "active": "active",
+    "inactive": "inactive",
+    "available": "available",
+    "unavailable": "unavailable"
+  },
+  "navigation": {
+    "home": "home",
+    "next": "next",
+    "previous": "previous"
+  },
+  "form": {
+    "required": "required",
+    "optional": "optional",
+    "invalid": "invalid value",
+    "invalidEmail": "invalid email"
+  },
+  "units": {
+    "unit": "unit",
+    "units": "units",
+    "perUnit": "per unit",
+    "perUnitShort": "/ unit"
+  },
+  "select": {
+    "placeholder": "Select...",
+    "clearSelection": "Clear selection"
+  },
+  "errorBoundary": {
+    "label": "Error",
+    "title": "Something went wrong",
+    "reload": "Reload page"
+  },
+  "notFound": {
+    "title": "Oops...",
+    "subtitle": "Something's not right..."
+  },
+  "navbar": {
+    "app": "App",
+    "solarPanels": "Solar Panels",
+    "professionals": "Professionals",
+    "accredit": "Become a partner",
+    "support": "Support",
+    "companies": "Companies"
+  },
+  "corridor": {
+    "viewAll": "view all items"
+  },
+  "time": {
+    "today": "today",
+    "yesterday": "yesterday",
+    "tomorrow": "tomorrow"
+  },
+  "empty": {
+    "default": "no results found."
+  }
+}

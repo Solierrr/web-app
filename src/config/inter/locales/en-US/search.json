@@ -1,0 +1,23 @@
+{
+  "professional": {
+    "title": "Professionals",
+    "description": "Find accredited professionals for your project.",
+    "filters": {
+      "electricalEngineering": "Electrical Engineering",
+      "installation": "Installation",
+      "maintenance": "Maintenance",
+      "inspection": "Inspection"
+    }
+  },
+  "company": {
+    "title": "Companies",
+    "description": "Find accredited companies on the platform.",
+    "filters": {
+      "supplier": "Supplier",
+      "installer": "Installer",
+      "distributor": "Distributor",
+      "maintenance": "Maintenance"
+    }
+  },
+  "filterPlaceholder": "Filter search"
+}

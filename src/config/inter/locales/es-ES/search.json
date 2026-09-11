@@ -1,0 +1,23 @@
+{
+  "professional": {
+    "title": "Profesionales",
+    "description": "Encuentra profesionales acreditados para tu proyecto.",
+    "filters": {
+      "electricalEngineering": "Ingeniería Eléctrica",
+      "installation": "Instalación",
+      "maintenance": "Mantenimiento",
+      "inspection": "Inspección"
+    }
+  },
+  "company": {
+    "title": "Empresas",
+    "description": "Encuentra empresas acreditadas en la plataforma.",
+    "filters": {
+      "supplier": "Proveedor",
+      "installer": "Instaladora",
+      "distributor": "Distribuidora",
+      "maintenance": "Mantenimiento"
+    }
+  },
+  "filterPlaceholder": "Filtrar búsqueda"
+}

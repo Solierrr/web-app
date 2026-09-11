@@ -33,6 +33,9 @@
 *.suo
 *.userprefs
 
+# SonarQube
+.sonar/
+
 # Visual Studio Code / Cursor
 .cursor/
 
@@ -116,3 +119,6 @@ coverage/
 *.local
 tmp/
 temp/
+
+*storybook.log
+storybook-static

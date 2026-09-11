@@ -1,0 +1,20 @@
+{
+  "solarPanels": "solar-panels",
+  "professionals": "professionals",
+  "companies": "companies",
+  "search": "search",
+  "solarPanel": "solar-panel",
+  "company": "company",
+  "professional": "professional",
+  "about": "about",
+  "designSystem": "design-system",
+  "login": "login",
+  "register": "register",
+  "forgotPassword": "forgot-password",
+  "profileSetup": "profile-setup",
+  "user": "user",
+  "admin": "admin",
+  "solarPanelModels": "solar-panel-models",
+  "messages": "messages",
+  "chatbot": "chatbot"
+}
