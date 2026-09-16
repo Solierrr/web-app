@@ -53,4 +53,10 @@ describe("Access", () => {
 
     expect(screen.getByText("Não tem uma conta?")).toBeInTheDocument();
   });
+
+  it("renders the error message when provided", () => {
+    render(<Access heading="Solaria" fields={[]} submitLabel="Prosseguir" error="Credenciais inválidas" />);
+
+    expect(screen.getByText("Credenciais inválidas")).toBeInTheDocument();
+  });
 });

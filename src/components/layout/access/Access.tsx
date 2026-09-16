@@ -16,10 +16,11 @@ interface AccessProps {
   fields: AccessField[];
   submitLabel: string;
   footer?: ReactNode;
+  error?: ReactNode;
   onSubmit?: (event: FormEvent<HTMLFormElement>) => void;
 }
 
-export default function Access({ heading, helperText, fields, submitLabel, footer, onSubmit }: AccessProps) {
+export default function Access({ heading, helperText, fields, submitLabel, footer, error, onSubmit }: AccessProps) {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     onSubmit?.(event);
@@ -34,6 +35,7 @@ export default function Access({ heading, helperText, fields, submitLabel, foote
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          {error && <div className="text-orange">{error}</div>}
           {fields.map((field) =>
             field.password ? (
               <PasswordInput key={field.name} name={field.name} placeholder={field.placeholder} className="w-full" />
