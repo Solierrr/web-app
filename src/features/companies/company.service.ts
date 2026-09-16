@@ -3,14 +3,14 @@ import type { Company } from "./company";
 import { companyMocks } from "@/config/mocks/registry";
 import { resolveWithMocks } from "@/config/mocks/fallback.service";
 import { httpJson } from "@/shared/http/http.service";
+import { API_CORE_URL } from "@/shared/http/apiCore.utils";
 
-const API = import.meta.env.VITE_API_CORE;
 const SERVICE_NAME = "company";
 
 export function getCompany(id: string): Promise<Company> {
   return resolveWithMocks(
     () =>
-      httpJson<Company>(`${API}/companies/${id}`, {
+      httpJson<Company>(`${API_CORE_URL}/companies/${id}`, {
         service: SERVICE_NAME,
         operation: "getCompany",
         errorMessage: `Não foi possível obter a empresa ${id}`,
@@ -22,7 +22,7 @@ export function getCompany(id: string): Promise<Company> {
 export function getCompanyBySlug(slug: string): Promise<Company> {
   return resolveWithMocks(
     () =>
-      httpJson<Company>(`${API}/companies/slug/${slug}`, {
+      httpJson<Company>(`${API_CORE_URL}/companies/slug/${slug}`, {
         service: SERVICE_NAME,
         operation: "getCompanyBySlug",
         errorMessage: `Não foi possível obter a empresa ${slug}`,
@@ -34,11 +34,11 @@ export function getCompanyBySlug(slug: string): Promise<Company> {
 export function getCompanies(ids: string[]): Promise<Company[]> {
   return resolveWithMocks(
     () =>
-      httpJson<Company[]>(`${API}/companies?ids=${ids.join(",")}`, {
+      httpJson<Company[]>(`${API_CORE_URL}/companies`, {
         service: SERVICE_NAME,
         operation: "getCompanies",
         errorMessage: "Não foi possível obter as empresas",
-      }),
+      }).then((companies) => companies.filter((company) => ids.includes(company.id))),
     () => companyMocks,
   );
 }
