@@ -42,7 +42,7 @@ cp .env.example .env.local
 - `VITE_MOCKS`, `ALWAYS` | `FALLBACK` | `DEACTIVATED`, controla se as chamadas de API usam dado mockado sempre, apenas como fallback em caso de erro, ou nunca.
 - `VITE_LOGS`, `DEBUG` | `ACTIVATED` | `DEACTIVATED`, nível de logging da aplicação.
 - `VITE_EXCHANGE_API`, URL da API pública de câmbio consumida pela feature `exchange`.
-- `VITE_API_PERSISTENCE`, URL da API de persistência própria do backend, `{a confirmar}` valor real usado em produção.
+- `VITE_API_CORE`, URL base do `api-core` (backend principal do domínio); o front acrescenta o prefixo `/api` das rotas por cima disso.
 
 ### Instalando dependências necessárias para rodar o projeto localmente
 

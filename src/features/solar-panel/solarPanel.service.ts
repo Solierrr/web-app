@@ -5,7 +5,7 @@ import { solarPanelAnnouncementMocks } from "@/config/mocks/registry";
 import { resolveWithMocks } from "@/config/mocks/fallback.service";
 import { httpJson } from "@/shared/http/http.service";
 
-const API = import.meta.env.VITE_API_PERSISTENCE;
+const API = import.meta.env.VITE_API_CORE;
 const SERVICE_NAME = "solarPanel";
 
 export function getSolarPanel(id: string): Promise<SolarPanelAnnouncement> {
