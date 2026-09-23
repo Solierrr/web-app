@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import ProfilePage from "@/pages/profile/ProfilePage";
-import ProfilePageSkeleton from "@/pages/profile/ProfilePageSkeleton";
+import ProfilePage from "@/components/layout/profile/ProfilePage";
+import ProfilePageSkeleton from "@/components/layout/profile/ProfilePageSkeleton";
 import { PrimaryButton } from "@@/ui/button/Button.presets";
 import { getUser } from "@/features/users/user/user.service";
 import type { User } from "@/features/users/user/user";

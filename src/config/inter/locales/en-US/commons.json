@@ -70,6 +70,11 @@
     "support": "Support",
     "companies": "Companies"
   },
+  "saasSidebar": {
+    "userProfile": "My profile",
+    "companyProfile": "My company",
+    "solarPanelModels": "Solar panel models"
+  },
   "corridor": {
     "viewAll": "view all items"
   },

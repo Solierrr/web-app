@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import ProfilePage from "@/pages/profile/ProfilePage";
-import ProfilePageSkeleton from "@/pages/profile/ProfilePageSkeleton";
+import ProfilePage from "@/components/layout/profile/ProfilePage";
+import ProfilePageSkeleton from "@/components/layout/profile/ProfilePageSkeleton";
 import { getProfessionalBySlug } from "@/features/professionals/professional.service";
 import type { Professional } from "@/features/professionals/professional";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
