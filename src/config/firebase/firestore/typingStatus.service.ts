@@ -1,6 +1,6 @@
 import { collection, doc, onSnapshot, serverTimestamp, setDoc, type Unsubscribe } from "firebase/firestore";
 
-import { db } from "./firebase";
+import { db } from "../firebase";
 
 export function setTypingStatus(chatId: string, userId: string, isTyping: boolean): Promise<void> {
   return setDoc(doc(db, "chats", chatId, "typing", userId), {
