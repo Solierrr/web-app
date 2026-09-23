@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import ProfilePage from "@/pages/profile/ProfilePage";
+import ProfilePage from "@/components/layout/profile/ProfilePage";
 import Input from "@@/ui/input/Input";
 import { PrimaryButton, SecondaryButton } from "@@/ui/button/Button.presets";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";

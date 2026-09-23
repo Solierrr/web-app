@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import EntityCard from "./EntityCard";
 import professionalMock from "@/features/professionals/professional.d.mock";
-import { toCardItem } from "@/pages/feed/professional/ProfessionalFeed.utils";
+import { toCardItem } from "@/features/professionals/pages/feed/ProfessionalFeed.utils";
 import { DEFAULT as DEFAULT_LANGUAGE } from "@/config/inter/browser/languages";
 
 const item = toCardItem(professionalMock[0], DEFAULT_LANGUAGE);
