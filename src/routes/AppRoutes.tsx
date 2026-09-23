@@ -5,6 +5,7 @@ import AppMode from "@/config/vite/mode.enum";
 
 import { TestRoutes } from "./TestRoutes";
 import { AppLayout } from "../config/AppLayout";
+import { SaaSLayout } from "@/components/layout/saas/SaaSLayout";
 import LanguageLayout, { RootRedirect } from "../config/inter/browser/LanguageLayout";
 import { NotFoundPage } from "../pages/error/not-found/NotFound";
 
@@ -53,18 +54,20 @@ const APP: RouteDefinition[] = [
 
   { key: "productDetail", path: (lang) => `${joinSegments(lang, "solarPanel")}/:companySlug/:productSlug`, element: <SolarPanelAnnouncement /> },
 
-  { key: "ownCompanyProfile", path: (lang) => joinSegments(lang, "company"), element: <EnterpriseProfile /> },
   { key: "companyProfile", path: (lang) => `${joinSegments(lang, "company")}/:companySlug`, element: <CompanyProfile /> },
-  { key: "ownUserProfile", path: (lang) => joinSegments(lang, "user"), element: <UserProfile /> },
   { key: "professionalProfile", path: (lang) => `${joinSegments(lang, "professional")}/:professionalSlug`, element: <ProfessionalProfile /> },
 
   { key: "profileOnboardingUser", path: (lang) => joinSegments(lang, "profileSetup", "user"), element: <ProfileOnboarding kind="user" /> },
   { key: "profileOnboardingCompany", path: (lang) => joinSegments(lang, "profileSetup", "company"), element: <ProfileOnboarding kind="company" /> },
 
-  { key: "solarPanelModelsCrud", path: (lang) => joinSegments(lang, "admin", "solarPanelModels"), element: <SolarPanelModelCrud /> },
-
   { key: "chat", path: (lang) => `${joinSegments(lang, "messages")}/:contactId`, element: <Chat /> },
   { key: "chatbot", path: (lang) => joinSegments(lang, "chatbot"), element: <ChatbotPage /> },
+];
+
+const SAAS: RouteDefinition[] = [
+  { key: "ownCompanyProfile", path: (lang) => joinSegments(lang, "company"), element: <EnterpriseProfile /> },
+  { key: "ownUserProfile", path: (lang) => joinSegments(lang, "user"), element: <UserProfile /> },
+  { key: "solarPanelModelsCrud", path: (lang) => joinSegments(lang, "admin", "solarPanelModels"), element: <SolarPanelModelCrud /> },
 ];
 
 export function AppRoutes() {
@@ -81,6 +84,10 @@ export function AppRoutes() {
           <Route index element={<SolarPanelFeed />} />
 
           {SUPPORTED.flatMap((lang) => APP.map(({ key, path, element }) => <Route key={`${lang}-${key}`} path={path(lang)} element={element} />))}
+
+          <Route element={<SaaSLayout />}>
+            {SUPPORTED.flatMap((lang) => SAAS.map(({ key, path, element }) => <Route key={`${lang}-${key}`} path={path(lang)} element={element} />))}
+          </Route>
 
           <Route path="*" element={<NotFoundPage />} />
         </Route>

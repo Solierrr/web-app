@@ -1,4 +1,4 @@
-import { Home, User, Settings, Search, ChevronDown, ChevronLeft, X, Eye, EyeOff, ShoppingCart, Globe, type LucideIcon, Heart, LoaderCircle } from "lucide-react";
+import { Home, User, Settings, Search, ChevronDown, ChevronLeft, X, Eye, EyeOff, ShoppingCart, Globe, type LucideIcon, Heart, LoaderCircle, Building2 } from "lucide-react";
 import Colors from "@/shared/styles/colors/colors.enum";
 import { InvalidIconError } from "@/config/error/InvalidIcon.error";
 
@@ -16,6 +16,7 @@ const icons = {
   globe: Globe,
   heart: Heart,
   loader: LoaderCircle,
+  building: Building2,
 } satisfies Record<string, LucideIcon>;
 
 export type IconName = keyof typeof icons;
