@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/Solierrr/web-app/compare/web-app-v0.2.0...web-app-v0.2.1) (2026-09-24)
+
+
+### Bug Fixes
+
+* trigger releases by command ([b856201](https://github.com/Solierrr/web-app/commit/b856201dfc5a1b40256fef7ae2e7014b6165e417))
+
 ## [0.2.0](https://github.com/Solierrr/web-app/compare/web-app-v0.1.0...web-app-v0.2.0) (2026-09-23)
 
 
