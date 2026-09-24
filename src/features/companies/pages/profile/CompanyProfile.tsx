@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import ProfilePage from "@/pages/profile/ProfilePage";
-import ProfilePageSkeleton from "@/pages/profile/ProfilePageSkeleton";
+import ProfilePage from "@/components/layout/profile/ProfilePage";
+import ProfilePageSkeleton from "@/components/layout/profile/ProfilePageSkeleton";
 import { getCompanyBySlug } from "@/features/companies/company.service";
 import type { Company } from "@/features/companies/company";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";

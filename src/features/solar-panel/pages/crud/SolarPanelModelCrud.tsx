@@ -8,7 +8,7 @@ import Skeleton from "@@/feedback/skeleton/Skeleton";
 import { listSolarPanelModels, createSolarPanel, updateSolarPanel, deleteSolarPanel } from "@/features/solar-panel/solarPanel.service";
 import type { SolarPanel } from "@/features/solar-panel/solarPanel";
 import { SolarPanelType, SolarPanelModelStatus } from "@/features/solar-panel/solarPanel.enum";
-import { EMPTY_DIMENSION, EMPTY_FORM } from "@/pages/crud/SolarPanelModelCrud.utils";
+import { EMPTY_DIMENSION, EMPTY_FORM } from "@/features/solar-panel/pages/crud/SolarPanelModelCrud.utils";
 import WrapperLayout from "@/config/WrapperLayout";
 
 interface SolarPanelModelCrudTableProps {
