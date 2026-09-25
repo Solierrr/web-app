@@ -2,14 +2,18 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import Sidebar from "./Sidebar";
 import { SidebarOption } from "./Sidebar.reusables";
 import { routePaths } from "@/config/inter/paths";
+import SupportedLanguages from "@/config/inter/supported.enum";
 
-const LANG = "pt-BR";
+const LANG = SupportedLanguages.PTBR;
 
 const meta = {
   title: "Layout/Sidebar",
   component: Sidebar,
   parameters: {
     layout: "fullscreen",
+  },
+  args: {
+    children: null,
   },
 } satisfies Meta<typeof Sidebar>;
 
