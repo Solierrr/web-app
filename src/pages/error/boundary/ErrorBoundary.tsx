@@ -9,7 +9,7 @@ interface ErrorBoundaryState {
   error: Error | null;
 }
 
-function ErrorFallback({ error }: { error: Error }) {
+function ErrorFallback({ error: _error }: { error: Error }) {
   const { t } = useTranslation("commons", { keyPrefix: "errorBoundary" });
 
   return (
