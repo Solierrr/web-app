@@ -24,5 +24,7 @@ export const Default: Story = {
 
 export const CharCount: Story = {
   args: { maxLength: 140 },
-  render: (args) => <CharCountTextarea {...args} />,
+  render: ({ maxLength, value: _value, defaultValue: _defaultValue, ...args }) => (
+    <CharCountTextarea {...args} maxLength={maxLength ?? 140} />
+  ),
 };
