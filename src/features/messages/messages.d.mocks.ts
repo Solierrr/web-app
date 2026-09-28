@@ -1,5 +1,5 @@
 import type { Message } from "./messages";
-import userMock from "@/features/users/user/user.d.mock";
+import userMock from "@/features/users/user/user.d.mocks";
 
 const messagesMock = [
   {

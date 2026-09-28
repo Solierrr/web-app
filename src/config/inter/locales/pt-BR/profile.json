@@ -1,4 +1,62 @@
 {
+  "shared": {
+    "brand": "Solaria",
+    "brandMessage": "Conectando energia limpa a quem faz a transição acontecer."
+  },
+  "edit": {
+    "description": "Atualize seus dados. Este formulário está em modo de prévia local.",
+    "mockNotice": "As alterações aparecem nesta prévia, mas ainda não são enviadas nem salvas no servidor.",
+    "save": "salvar alterações",
+    "cancel": "cancelar"
+  },
+  "user": {
+    "kind": "Perfil pessoal",
+    "editTitle": "Editar perfil",
+    "contactTitle": "Informações de contato",
+    "contactDescription": "Como entrar em contato com você.",
+    "fields": {
+      "name": "Nome",
+      "email": "E-mail",
+      "phone": "Telefone",
+      "avatar": "URL da foto de perfil",
+      "banner": "URL do banner"
+    }
+  },
+  "company": {
+    "kind": "Empresa",
+    "supplier": "Fornecedor",
+    "demandant": "Demandante",
+    "editTitle": "Editar perfil da empresa",
+    "identityTitle": "Sobre a empresa",
+    "identityDescription": "Identificação e presença comercial.",
+    "contactTitle": "Contato e localização",
+    "fields": {
+      "tradeName": "Nome fantasia",
+      "corporateName": "Razão social",
+      "cnpj": "CNPJ",
+      "email": "E-mail comercial",
+      "phone": "Telefone comercial",
+      "website": "Site",
+      "address": "Endereço",
+      "street": "Rua",
+      "number": "Número",
+      "city": "Cidade",
+      "state": "Estado",
+      "logo": "URL do logo",
+      "banner": "URL do banner"
+    }
+  },
+  "professional": {
+    "kind": "Profissional",
+    "professionalTitle": "Atuação profissional",
+    "professionalDescription": "Informações apresentadas no seu perfil público.",
+    "fields": {
+      "location": "Localização",
+      "email": "E-mail",
+      "profession": "Profissão",
+      "registration": "Registro profissional"
+    }
+  },
   "onboarding": {
     "previewFallbackName": "Pré-visualização",
     "bannerPlaceholder": "URL da imagem de banner",

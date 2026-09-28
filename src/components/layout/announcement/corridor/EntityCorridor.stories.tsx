@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import EntityCorridor from "./EntityCorridor";
-import professionalMock from "@/features/professionals/professional.d.mock";
-import companyMock from "@/features/companies/company.d.mock";
+import professionalMock from "@/features/professionals/professional.d.mocks";
+import companyMock from "@/features/companies/company.d.mocks";
 import { toCardItem as toProfessionalCardItem } from "@/features/professionals/pages/feed/ProfessionalFeed.utils";
 import { toCardItem as toCompanyCardItem } from "@/features/companies/pages/feed/CompanyFeed.utils";
 import { DEFAULT as DEFAULT_LANGUAGE } from "@/config/inter/browser/languages";

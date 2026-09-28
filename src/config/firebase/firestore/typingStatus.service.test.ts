@@ -1,4 +1,5 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import MocksMode from "@/config/mocks/mocksMode.enum";
 
 const { docMock, setDocMock, collectionMock, onSnapshotMock, serverTimestampMock, dbMock } = vi.hoisted(() => ({
   docMock: vi.fn(() => "doc-ref"),
@@ -24,7 +25,12 @@ vi.mock("./firebase", () => ({
 import { setTypingStatus, subscribeToTypingUsers } from "./typingStatus.service";
 
 describe("typingStatus.service", () => {
+  beforeEach(() => {
+    vi.stubEnv("VITE_MOCKS", MocksMode.DEACTIVATED);
+  });
+
   afterEach(() => {
+    vi.unstubAllEnvs();
     docMock.mockClear();
     setDocMock.mockClear();
     collectionMock.mockClear();

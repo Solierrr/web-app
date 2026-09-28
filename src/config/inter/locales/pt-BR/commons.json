@@ -67,7 +67,10 @@
     "solarPanels": "Placas Solares",
     "professionals": "Profissionais",
     "accredit": "Credenciar-se",
+    "operationalArea": "Área operacional",
     "support": "Suporte",
+    "myProfile": "Meu perfil",
+    "logout": "Sair",
     "companies": "Empresas"
   },
   "saasSidebar": {

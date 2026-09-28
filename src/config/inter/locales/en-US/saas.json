@@ -1,0 +1,36 @@
+{
+  "roles": {
+    "admin": "Administration",
+    "demandant": "Requester",
+    "supplier": "Supplier"
+  },
+  "shell": {
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "collapseSidebar": "Collapse sidebar",
+    "expandSidebar": "Expand sidebar"
+  },
+  "navigation": {
+    "label": "Main navigation",
+    "groups": {
+      "overview": "Overview",
+      "catalog": "Catalog"
+    },
+    "items": {
+      "dashboard": "Home",
+      "solarPanelModels": "Solar panel models"
+    }
+  },
+  "dashboard": {
+    "title": "Overview",
+    "placeholder": "The global administration dashboard will be defined in a later stage.",
+    "demandant": {
+      "title": "Overview",
+      "placeholder": "The requester dashboard will be defined in a later stage."
+    },
+    "supplier": {
+      "title": "Overview",
+      "placeholder": "The supplier dashboard will be defined in a later stage."
+    }
+  }
+}

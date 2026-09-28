@@ -1,11 +1,19 @@
 import type { SolarPanel } from "./solarPanel";
 import type { SolarPanelAnnouncement } from "./solarPanelAnnouncement";
 
-import { solarPanelAnnouncementMocks } from "@/config/mocks/registry";
 import { resolveWithMocks } from "@/config/mocks/fallback.service";
+import {
+  createMockSolarPanel,
+  deleteMockSolarPanel,
+  getMockSolarPanel,
+  getMockSolarPanelBySlug,
+  getMockSolarPanelModels,
+  getMockSolarPanels,
+  updateMockSolarPanel,
+} from "@/config/mocks/mockState.service";
 import { httpJson } from "@/shared/http/http.service";
 
-const API = import.meta.env.VITE_API_PERSISTENCE;
+const API = import.meta.env.VITE_API_CORE;
 const SERVICE_NAME = "solarPanel";
 
 export function getSolarPanel(id: string): Promise<SolarPanelAnnouncement> {
@@ -16,7 +24,7 @@ export function getSolarPanel(id: string): Promise<SolarPanelAnnouncement> {
         operation: "getSolarPanel",
         errorMessage: `Não foi possível obter o painel solar ${id}`,
       }),
-    () => solarPanelAnnouncementMocks.find((announcement) => announcement.id === id) ?? solarPanelAnnouncementMocks[0],
+    () => getMockSolarPanel(id),
   );
 }
 
@@ -28,9 +36,7 @@ export function getSolarPanelBySlug(companySlug: string, slug: string): Promise<
         operation: "getSolarPanelBySlug",
         errorMessage: `Não foi possível obter o painel solar ${companySlug}/${slug}`,
       }),
-    () =>
-      solarPanelAnnouncementMocks.find((announcement) => announcement.companySlug === companySlug && announcement.slug === slug) ??
-      solarPanelAnnouncementMocks[0],
+    () => getMockSolarPanelBySlug(companySlug, slug),
   );
 }
 
@@ -42,7 +48,7 @@ export function getSolarPanels(ids: string[]): Promise<SolarPanelAnnouncement[]>
         operation: "getSolarPanels",
         errorMessage: "Não foi possível obter os painéis solares",
       }),
-    () => solarPanelAnnouncementMocks,
+    () => getMockSolarPanels(),
   );
 }
 
@@ -54,7 +60,7 @@ export function listSolarPanelModels(): Promise<SolarPanel[]> {
         operation: "listSolarPanelModels",
         errorMessage: "Não foi possível obter os modelos de placa solar",
       }),
-    () => solarPanelAnnouncementMocks.map((announcement) => announcement.panel),
+    () => getMockSolarPanelModels(),
   );
 }
 
@@ -68,7 +74,7 @@ export function createSolarPanel(payload: Omit<SolarPanel, "id">): Promise<Solar
         body: payload,
         errorMessage: "Não foi possível criar o modelo de placa solar",
       }),
-    () => ({ ...payload, id: crypto.randomUUID() }) as SolarPanel,
+    () => createMockSolarPanel(payload),
   );
 }
 
@@ -82,7 +88,7 @@ export function updateSolarPanel(id: string, payload: Omit<SolarPanel, "id">): P
         body: payload,
         errorMessage: `Não foi possível atualizar o modelo ${id}`,
       }),
-    () => ({ ...payload, id }) as SolarPanel,
+    () => updateMockSolarPanel(id, payload),
   );
 }
 
@@ -95,6 +101,6 @@ export function deleteSolarPanel(id: string): Promise<void> {
         method: "DELETE",
         errorMessage: `Não foi possível remover o modelo ${id}`,
       }),
-    () => undefined,
+    () => deleteMockSolarPanel(id),
   );
 }

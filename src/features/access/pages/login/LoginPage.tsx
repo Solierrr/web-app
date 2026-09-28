@@ -1,14 +1,39 @@
-import { useParams } from "react-router-dom";
+import { type FormEvent, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Access from "@/components/layout/access/Access";
 import Hyperlink from "@/components/ui/link/Hyperlink";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
+import { login, loginWithMockProvider } from "@/features/access/access.service";
+import type { LoginProvider } from "@/config/firebase/auth/layout/LoginWithProvider";
 
 export default function LoginPage() {
   const { t } = useTranslation("access");
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
+  const navigate = useNavigate();
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    const data = new FormData(event.currentTarget);
+    setError(null);
+
+    try {
+      await login({
+        email: String(data.get("email") ?? ""),
+        password: String(data.get("password") ?? ""),
+      });
+      navigate(routePaths.home(lang));
+    } catch {
+      setError(t("login.error"));
+    }
+  }
+
+  async function handleMockProviderLogin(provider: LoginProvider) {
+    await loginWithMockProvider(provider);
+    navigate(routePaths.home(lang));
+  }
 
   return (
     <Access
@@ -32,6 +57,9 @@ export default function LoginPage() {
         },
       ]}
       submitLabel={t("login.submit")}
+      error={error}
+      onSubmit={handleSubmit}
+      onMockProviderLogin={handleMockProviderLogin}
       footer={
         <div className="flex flex-col gap-2">
           <Hyperlink content={t("login.forgotPassword")} url={routePaths.forgotPassword(lang)} className="text-hyperlink" />

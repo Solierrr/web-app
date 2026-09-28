@@ -1,4 +1,62 @@
 {
+  "shared": {
+    "brand": "Solaria",
+    "brandMessage": "Conectamos la energía limpia con quienes impulsan la transición."
+  },
+  "edit": {
+    "description": "Actualiza tus datos. Este formulario está en modo de vista previa local.",
+    "mockNotice": "Los cambios aparecen en esta vista previa, pero todavía no se envían ni se guardan en el servidor.",
+    "save": "guardar cambios",
+    "cancel": "cancelar"
+  },
+  "user": {
+    "kind": "Perfil personal",
+    "editTitle": "Editar perfil",
+    "contactTitle": "Información de contacto",
+    "contactDescription": "Cómo pueden ponerse en contacto contigo.",
+    "fields": {
+      "name": "Nombre",
+      "email": "Correo electrónico",
+      "phone": "Teléfono",
+      "avatar": "URL de la foto de perfil",
+      "banner": "URL del banner"
+    }
+  },
+  "company": {
+    "kind": "Empresa",
+    "supplier": "Proveedor",
+    "demandant": "Comprador",
+    "editTitle": "Editar perfil de la empresa",
+    "identityTitle": "Sobre la empresa",
+    "identityDescription": "Identidad y presencia comercial.",
+    "contactTitle": "Contacto y ubicación",
+    "fields": {
+      "tradeName": "Nombre comercial",
+      "corporateName": "Razón social",
+      "cnpj": "CNPJ",
+      "email": "Correo comercial",
+      "phone": "Teléfono comercial",
+      "website": "Sitio web",
+      "address": "Dirección",
+      "street": "Calle",
+      "number": "Número",
+      "city": "Ciudad",
+      "state": "Estado",
+      "logo": "URL del logo",
+      "banner": "URL del banner"
+    }
+  },
+  "professional": {
+    "kind": "Profesional",
+    "professionalTitle": "Actividad profesional",
+    "professionalDescription": "Información que aparece en tu perfil público.",
+    "fields": {
+      "location": "Ubicación",
+      "email": "Correo electrónico",
+      "profession": "Profesión",
+      "registration": "Registro profesional"
+    }
+  },
   "onboarding": {
     "previewFallbackName": "Vista previa",
     "bannerPlaceholder": "URL de la imagen de banner",

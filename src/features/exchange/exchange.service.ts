@@ -1,9 +1,17 @@
 import logger from "@/config/logging/logger";
+import { resolveWithMocks } from "@/config/mocks/fallback.service";
 
 import CurrencyCode from "./exchange.enum";
 import type { ExchangeRateResponse } from "./exchange";
 
 const SERVICE_NAME = "exchange";
+const BRL_PER_CURRENCY_UNIT: Record<CurrencyCode, number> = {
+  [CurrencyCode.BRL]: 1,
+  [CurrencyCode.USD]: 5.5,
+  [CurrencyCode.EUR]: 6,
+  [CurrencyCode.GBP]: 7,
+  [CurrencyCode.JPY]: 0.037,
+};
 
 function isExchangeRateResponse(value: unknown): value is ExchangeRateResponse {
   if (typeof value !== "object" || value === null) { return false; }
@@ -11,9 +19,7 @@ function isExchangeRateResponse(value: unknown): value is ExchangeRateResponse {
   return typeof rate === "number" && Number.isFinite(rate) && rate > 0;
 }
 
-export async function getExchangeRate(from: CurrencyCode, to: CurrencyCode): Promise<number> {
-  if (from === to) { return 1; }
-
+async function getExchangeRateFromApi(from: CurrencyCode, to: CurrencyCode): Promise<number> {
   const api = import.meta.env.VITE_EXCHANGE_API;
 
   if (!api) {
@@ -82,6 +88,15 @@ export async function getExchangeRate(from: CurrencyCode, to: CurrencyCode): Pro
   }
 
   return data.rate;
+}
+
+export async function getExchangeRate(from: CurrencyCode, to: CurrencyCode): Promise<number> {
+  if (from === to) return 1;
+
+  return resolveWithMocks(
+    () => getExchangeRateFromApi(from, to),
+    () => BRL_PER_CURRENCY_UNIT[from] / BRL_PER_CURRENCY_UNIT[to],
+  );
 }
 
 export async function convertCurrency(amount: number, from: CurrencyCode, to: CurrencyCode): Promise<number> {

@@ -12,19 +12,34 @@
     "submit": "Proceed",
     "forgotPassword": "Forgot my password",
     "noAccountPrefix": "Don't have an account?",
-    "register": "Sign up"
+    "register": "Sign up",
+    "error": "Invalid email or password"
   },
 
   "register": {
-    "helperText": "Create your account to access the marketplace",
+    "helperText": "Create a professional or company account to access Solaria",
+    "accountType": "Account type",
+    "accountTypeRequired": "Select an account type and, for companies, a company profile",
+    "company": "Company",
+    "professional": "Professional",
+    "companyType": "Company profile",
+    "supplier": "Supplier",
+    "demandant": "Demandant",
+    "cnpj": "CNPJ",
+    "tradeName": "Trade name",
+    "corporateName": "Corporate name",
     "submit": "Register",
     "hasAccountPrefix": "Already have an account?",
-    "login": "Sign in"
+    "login": "Sign in",
+    "passwordMismatch": "Passwords do not match",
+    "error": "Could not complete the registration"
   },
 
   "forgotPassword": {
     "helperText": "Enter your email to receive recovery instructions",
     "submit": "Send",
+    "success": "Password recovery request completed successfully",
+    "error": "Could not submit the password recovery request",
     "rememberedPasswordPrefix": "Remembered your password?",
     "backToLogin": "Back to login"
   }

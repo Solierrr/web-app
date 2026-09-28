@@ -5,6 +5,7 @@ const companyMockData = [
   {
     id: "company-1",
     status: "APPROVED",
+    type: "SUPPLIER",
     cnpj: "12345678000190",
     tradeName: "Solaria Energia",
     corporateName: "Solaria Energia Solar Ltda",
@@ -29,6 +30,7 @@ const companyMockData = [
   {
     id: "company-2",
     status: "UNDER_ANALYSIS",
+    type: "SUPPLIER",
     cnpj: "98765432000155",
     tradeName: "Helios Instalações Solares",
     corporateName: "Helios Instalações Solares Ltda",
@@ -49,6 +51,7 @@ const companyMockData = [
   {
     id: "company-3",
     status: "REJECTED",
+    type: "SUPPLIER",
     cnpj: "11222333000144",
     tradeName: "Lumina Painéis Fotovoltaicos",
     corporateName: "Lumina Comércio de Painéis Fotovoltaicos Ltda",

@@ -7,8 +7,8 @@ import ChatLayout from "@/components/layout/chat/chat-layout/ChatLayout";
 import Textarea from "@@/ui/textarea/Textarea";
 import { PrimaryButton } from "@@/ui/button/Button.presets";
 import { getMessages, sendMessage } from "@/features/messages/messages.service";
-import { useTypingStatus } from "@/config/firebase/useTypingStatus";
-import userMock from "@/features/users/user/user.d.mock";
+import { useTypingStatus } from "@/config/firebase/firestore/useTypingStatus";
+import userMock from "@/features/users/user/user.d.mocks";
 import WrapperLayout from "@/config/WrapperLayout";
 
 export default function Chat() {
