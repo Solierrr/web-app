@@ -12,14 +12,17 @@
     "submit": "Prosseguir",
     "forgotPassword": "Esqueci minha senha",
     "noAccountPrefix": "Não tem uma conta?",
-    "register": "Cadastre-se"
+    "register": "Cadastre-se",
+    "error": "E-mail ou senha inválidos"
   },
 
   "register": {
     "helperText": "Crie sua conta para acessar o marketplace",
     "submit": "Cadastrar",
     "hasAccountPrefix": "Já tem uma conta?",
-    "login": "Entrar"
+    "login": "Entrar",
+    "passwordMismatch": "As senhas não coincidem",
+    "error": "Não foi possível concluir o cadastro"
   },
 
   "forgotPassword": {

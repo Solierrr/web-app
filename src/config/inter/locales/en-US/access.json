@@ -12,14 +12,17 @@
     "submit": "Proceed",
     "forgotPassword": "Forgot my password",
     "noAccountPrefix": "Don't have an account?",
-    "register": "Sign up"
+    "register": "Sign up",
+    "error": "Invalid email or password"
   },
 
   "register": {
     "helperText": "Create your account to access the marketplace",
     "submit": "Register",
     "hasAccountPrefix": "Already have an account?",
-    "login": "Sign in"
+    "login": "Sign in",
+    "passwordMismatch": "Passwords do not match",
+    "error": "Could not complete the registration"
   },
 
   "forgotPassword": {
