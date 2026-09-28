@@ -67,7 +67,10 @@
     "solarPanels": "Solar Panels",
     "professionals": "Professionals",
     "accredit": "Become a partner",
+    "operationalArea": "Operational area",
     "support": "Support",
+    "myProfile": "My profile",
+    "logout": "Log out",
     "companies": "Companies"
   },
   "saasSidebar": {

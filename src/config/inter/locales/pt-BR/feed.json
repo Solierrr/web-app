@@ -3,6 +3,23 @@
     "description": "Profissionais credenciados disponíveis para os seus projetos."
   },
   "company": {
-    "description": "Empresas credenciadas disponíveis na plataforma."
+    "eyebrow": "Encontre seu próximo parceiro",
+    "title": "Empresas que fazem a energia solar acontecer",
+    "description": "Conheça fornecedores de equipamentos e soluções para levar seus projetos mais longe.",
+    "collectionLabel": "Coleção de empresas",
+    "featuredLabel": "Destaque",
+    "empty": "Ainda não há empresas para exibir.",
+    "tabs": {
+      "featured": "Destaques",
+      "recent": "Recentes"
+    },
+    "highlights": {
+      "solarProjects": "Projetos solares",
+      "residential": "Residencial",
+      "installation": "Instalação",
+      "commercial": "Comercial",
+      "equipment": "Equipamentos",
+      "solarPanels": "Painéis solares"
+    }
   }
 }

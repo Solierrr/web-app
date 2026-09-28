@@ -17,7 +17,17 @@
   },
 
   "register": {
-    "helperText": "Crea tu cuenta para acceder al marketplace",
+    "helperText": "Crea una cuenta profesional o empresarial para acceder a Solaria",
+    "accountType": "Tipo de cuenta",
+    "accountTypeRequired": "Selecciona el tipo de cuenta y, para empresas, el perfil empresarial",
+    "company": "Empresa",
+    "professional": "Profesional",
+    "companyType": "Perfil de la empresa",
+    "supplier": "Proveedora",
+    "demandant": "Demandante",
+    "cnpj": "CNPJ",
+    "tradeName": "Nombre comercial",
+    "corporateName": "Razón social",
     "submit": "Registrarse",
     "hasAccountPrefix": "¿Ya tienes una cuenta?",
     "login": "Iniciar sesión",
@@ -28,6 +38,8 @@
   "forgotPassword": {
     "helperText": "Indica tu correo electrónico para recibir las instrucciones de recuperación",
     "submit": "Enviar",
+    "success": "La solicitud de recuperación de contraseña se completó correctamente",
+    "error": "No se pudo enviar la solicitud de recuperación de contraseña",
     "rememberedPasswordPrefix": "¿Recordaste tu contraseña?",
     "backToLogin": "Volver al inicio de sesión"
   }

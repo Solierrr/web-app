@@ -5,7 +5,8 @@ import Access from "@/components/layout/access/Access";
 import Hyperlink from "@/components/ui/link/Hyperlink";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
-import { login } from "@/features/access/access.service";
+import { login, loginWithMockProvider } from "@/features/access/access.service";
+import type { LoginProvider } from "@/config/firebase/auth/layout/LoginWithProvider";
 
 export default function LoginPage() {
   const { t } = useTranslation("access");
@@ -27,6 +28,11 @@ export default function LoginPage() {
     } catch {
       setError(t("login.error"));
     }
+  }
+
+  async function handleMockProviderLogin(provider: LoginProvider) {
+    await loginWithMockProvider(provider);
+    navigate(routePaths.home(lang));
   }
 
   return (
@@ -53,6 +59,7 @@ export default function LoginPage() {
       submitLabel={t("login.submit")}
       error={error}
       onSubmit={handleSubmit}
+      onMockProviderLogin={handleMockProviderLogin}
       footer={
         <div className="flex flex-col gap-2">
           <Hyperlink content={t("login.forgotPassword")} url={routePaths.forgotPassword(lang)} className="text-hyperlink" />

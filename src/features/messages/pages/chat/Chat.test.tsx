@@ -8,7 +8,7 @@ vi.mock("@/features/messages/messages.service", () => ({
   sendMessage: vi.fn(),
 }));
 
-vi.mock("@/config/firebase/useTypingStatus", () => ({
+vi.mock("@/config/firebase/firestore/useTypingStatus", () => ({
   useTypingStatus: () => ({
     notifyTyping: vi.fn(),
     stopTyping: vi.fn(),
@@ -18,7 +18,7 @@ vi.mock("@/config/firebase/useTypingStatus", () => ({
 
 import { getMessages } from "@/features/messages/messages.service";
 import type { Message } from "@/features/messages/messages";
-import userMock from "@/features/users/user/user.d.mock";
+import userMock from "@/features/users/user/user.d.mocks";
 
 const mockedGetMessages = vi.mocked(getMessages);
 

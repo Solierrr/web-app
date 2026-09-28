@@ -1,23 +1,41 @@
+import { FaMicrosoft } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
+import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
 import { loginWithGoogle } from "../auth.service";
-import { FcGoogle } from 'react-icons/fc';
-import { FaMicrosoft, FaApple } from 'react-icons/fa';
 
-const classes = "flex w-fit h-fit aspect-square cursor-pointer"
+export type LoginProvider = "google" | "microsoft";
 
-export function LoginWithGoogle() {
-    async function handleLogin() {
-        try { await loginWithGoogle(); }
-        catch (error) { console.error(error); }
-    }
-
-    return (<button className={classes} onClick={handleLogin}><FcGoogle size="40" /></button>);
+interface LoginWithProviderProps {
+  onMockLogin?: () => Promise<void>;
 }
 
-export function LoginWithMicrosoft() {
-    async function handleLogin() {
-        try { await loginWithGoogle(); }
-        catch (error) { console.error(error); }
+const classes = "flex w-fit h-fit aspect-square cursor-pointer";
+
+async function handleLogin(onMockLogin: LoginWithProviderProps["onMockLogin"]) {
+  try {
+    if (isAlwaysMockMode()) {
+      await onMockLogin?.();
+      return;
     }
 
-    return (<button className={classes} onClick={handleLogin}><FaMicrosoft size="40" /></button>);
+    await loginWithGoogle();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export function LoginWithGoogle({ onMockLogin }: LoginWithProviderProps) {
+  return (
+    <button type="button" className={classes} aria-label="Continue with Google" onClick={() => handleLogin(onMockLogin)}>
+      <FcGoogle size="40" />
+    </button>
+  );
+}
+
+export function LoginWithMicrosoft({ onMockLogin }: LoginWithProviderProps) {
+  return (
+    <button type="button" className={classes} aria-label="Continue with Microsoft" onClick={() => handleLogin(onMockLogin)}>
+      <FaMicrosoft size="40" />
+    </button>
+  );
 }

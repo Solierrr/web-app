@@ -3,10 +3,6 @@ import { useState } from "react";
 import Colors from "@/shared/styles/colors/colors.enum";
 import Icon, { type IconName } from "@@/ui/icon/Icon";
 import { InvalidPropError } from "@/config/error/InvalidProp.error";
-import MocksMode from "@/config/mocks/mocksMode.enum";
-import sleep from "@/utils/sleep.utils";
-
-const MOCKED_ACTION_DELAY_MS = 2000;
 
 // Classes escritas por extenso (não interpoladas) para o Tailwind conseguir
 // gerar `aspect-button-*`/`shadow-medium-*` em build — ver uso análogo em
@@ -63,11 +59,9 @@ export default function Button({
     onClick?.(event);
     if (!action) return;
 
-    const mocksActive = (import.meta.env.VITE_MOCKS as MocksMode) === MocksMode.ALWAYS;
-
     setIsLoading(true);
     try {
-      await Promise.all([action(), ...(mocksActive ? [sleep(MOCKED_ACTION_DELAY_MS)] : [])]);
+      await action();
     } finally {
       setIsLoading(false);
     }

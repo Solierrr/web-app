@@ -1,0 +1,36 @@
+{
+  "roles": {
+    "admin": "Administração",
+    "demandant": "Demandante",
+    "supplier": "Fornecedor"
+  },
+  "shell": {
+    "openMenu": "Abrir menu",
+    "closeMenu": "Fechar menu",
+    "collapseSidebar": "Recolher menu lateral",
+    "expandSidebar": "Expandir menu lateral"
+  },
+  "navigation": {
+    "label": "Navegação principal",
+    "groups": {
+      "overview": "Visão geral",
+      "catalog": "Catálogo"
+    },
+    "items": {
+      "dashboard": "Início",
+      "solarPanelModels": "Modelos de placas solares"
+    }
+  },
+  "dashboard": {
+    "title": "Visão geral",
+    "placeholder": "O painel global de administração será definido em uma próxima etapa.",
+    "demandant": {
+      "title": "Visão geral",
+      "placeholder": "O painel do Demandante será definido em uma próxima etapa."
+    },
+    "supplier": {
+      "title": "Visão geral",
+      "placeholder": "O painel do Fornecedor será definido em uma próxima etapa."
+    }
+  }
+}

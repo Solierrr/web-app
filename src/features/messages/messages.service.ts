@@ -1,7 +1,7 @@
 import type { Message } from "./messages";
 
-import { messagesMocks } from "@/config/mocks/registry";
 import { resolveWithMocks } from "@/config/mocks/fallback.service";
+import { addMockMessage, getMockMessages } from "@/config/mocks/mockState.service";
 import { httpJson } from "@/shared/http/http.service";
 
 const API = import.meta.env.VITE_API_CORE;
@@ -15,7 +15,7 @@ export function getMessages(chatId: string): Promise<Message[]> {
         operation: "getMessages",
         errorMessage: `Não foi possível obter as mensagens do chat ${chatId}`,
       }),
-    () => messagesMocks,
+    () => getMockMessages(chatId),
   );
 }
 
@@ -29,6 +29,9 @@ export function sendMessage(chatId: string, message: Message): Promise<Message> 
         body: message,
         errorMessage: `Não foi possível enviar a mensagem no chat ${chatId}`,
       }),
-    () => message,
+    () => {
+      addMockMessage(chatId, message);
+      return message;
+    },
   );
 }

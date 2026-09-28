@@ -1,22 +1,23 @@
 import { Route } from "react-router-dom";
 
 import { AppLayout } from "@/config/AppLayout";
-import { NotFoundPage } from "@/pages/error/not-found/NotFound";
 import ForgotPasswordPage from "@/features/access/pages/forgot-password/ForgotPasswordPage";
 import LoginPage from "@/features/access/pages/login/LoginPage";
 import RegisterPage from "@/features/access/pages/register/RegisterPage";
 import SolarPanelAnnouncement from "@/features/solar-panel/pages/announcement/SolarPanelAnnouncement";
-import Chat from "@/features/messages/pages/Chat";
-import ChatbotPage from "@/features/messages/pages/ChatbotPage";
-import SolarPanelModelCrud from "@/features/solar-panel/pages/crud/SolarPanelModelCrud";
+import Chat from "@/features/messages/pages/chat/Chat";
+import ChatbotPage from "@/features/messages/pages/chatbot/ChatbotPage";
+import SolarPanelModelCrud from "@/features/solar-panel/pages/model-crud/SolarPanelModelCrud";
 import CompanyFeed from "@/features/companies/pages/feed/CompanyFeed";
 import ProfessionalFeed from "@/features/professionals/pages/feed/ProfessionalFeed";
 import SolarPanelFeed from "@/features/solar-panel/pages/feed/SolarPanelFeed";
-import ProfileOnboarding from "@/components/layout/profile/ProfileOnboarding";
+import ProfileOnboarding from "@/features/users/user/pages/onboarding/ProfileOnboarding";
 import ProfilePage from "@/components/layout/profile/ProfilePage";
 import ProfessionalSearch from "@/features/professionals/pages/search/ProfessionalSearch";
 import SolarPanelSearch from "@/features/solar-panel/pages/search/SolarPanelSearch";
 import CompanySearch from "@/features/companies/pages/search/CompanySearch";
+import AdminDashboardPage from "@/features/admin/pages/dashboard/AdminDashboardPage";
+import SaaSLayout from "@/components/layout/saas/SaaSLayout";
 
 const COMPANY_SLUG = "solaria-energia";
 const PRODUCT_SLUG = "painel-monocristalino";
@@ -28,6 +29,11 @@ export function TestRoutes() {
       <Route path="test/login" element={<LoginPage />} />
       <Route path="test/register" element={<RegisterPage />} />
       <Route path="test/forgot-password" element={<ForgotPasswordPage />} />
+
+      <Route path="test/admin" element={<SaaSLayout role="admin" />}>
+        <Route index element={<AdminDashboardPage />} />
+        <Route path="solar-panel-models" element={<SolarPanelModelCrud />} />
+      </Route>
 
       <Route path="test" element={<AppLayout />}>
         <Route path="feeds/solar-panels" element={<SolarPanelFeed />} />
@@ -45,7 +51,6 @@ export function TestRoutes() {
         <Route path="onboarding/user" element={<ProfileOnboarding kind="user" />} />
         <Route path="onboarding/company" element={<ProfileOnboarding kind="company" />} />
 
-        <Route path="admin/solar-panel-models" element={<SolarPanelModelCrud />} />
         <Route path={`messages/${CONTACT_ID}`} element={<Chat />} />
         <Route path="chatbot" element={<ChatbotPage />} />
       </Route>
