@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.1](https://github.com/Solierrr/web-app/compare/v3.0.0...v3.0.1) (2026-09-27)
+
+
+### Bug Fixes
+
+* grant pull-requests write permission to release workflow ([2d5ced7](https://github.com/Solierrr/web-app/commit/2d5ced73df6c03b98711bb99e658db9e6063a969))
+
 ## [3.0.0](https://github.com/Solierrr/web-app/compare/v0.2.0...v3.0.0) (2026-09-24)
 
 
