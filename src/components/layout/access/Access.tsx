@@ -3,7 +3,6 @@ import Input from "@@/ui/input/Input";
 import { PasswordInput } from "@@/ui/input/Input.presets";
 import { PrimaryButton } from "@@/ui/button/Button.presets";
 import Logo from "@/components/brand/logo/Logo";
-import { LoginWithGoogle, LoginWithMicrosoft } from "@/config/firebase/auth/layout/LoginWithProvider";
 import { AnimatedBackground } from "./Access.helper";
 
 export interface AccessField {
@@ -11,6 +10,7 @@ export interface AccessField {
   placeholder: string;
   type?: string;
   password?: boolean;
+  minLength?: number;
 }
 
 interface AccessProps {
@@ -19,10 +19,11 @@ interface AccessProps {
   fields: AccessField[];
   submitLabel: string;
   error?: ReactNode;
+  footer?: ReactNode;
   onSubmit?: (event: FormEvent<HTMLFormElement>) => void;
 }
 
-export default function Access({ helperText, fields, submitLabel, error, onSubmit }: AccessProps) {
+export default function Access({ helperText, fields, submitLabel, error, footer, onSubmit }: AccessProps) {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     onSubmit?.(event);
@@ -38,21 +39,17 @@ export default function Access({ helperText, fields, submitLabel, error, onSubmi
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
               {fields.map((field) =>
                 field.password ? (
-                  <PasswordInput key={field.name} name={field.name} placeholder={field.placeholder} className="w-full" />
+                  <PasswordInput key={field.name} name={field.name} placeholder={field.placeholder} minLength={field.minLength} required className="w-full" />
                 ) : (
-                  <Input key={field.name} name={field.name} type={field.type ?? "text"} placeholder={field.placeholder} className="w-full" />
+                  <Input key={field.name} name={field.name} type={field.type ?? "text"} placeholder={field.placeholder} required className="w-full" />
                 ),
               )}
               <PrimaryButton type="submit" content={submitLabel} description={submitLabel} rounded className="w-full" />
               {error && <div className="text-orange">{error}</div>}
             </form>
           </div>
-          <div className="flex row items-center-safe justify-center gap-4">
-            <LoginWithGoogle/>
-            <LoginWithGoogle/>
-            <LoginWithMicrosoft/>
-          </div>
           {helperText && <div className="text-black/70">{helperText}</div>}
+          {footer}
         </div>
       </div>
 

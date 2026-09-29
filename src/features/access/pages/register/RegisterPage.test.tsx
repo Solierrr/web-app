@@ -14,7 +14,6 @@ const mockedRegister = vi.mocked(register);
 const mockedLogin = vi.mocked(login);
 
 function fillForm({ password, confirmPassword }: { password: string; confirmPassword: string }) {
-  fireEvent.change(screen.getByPlaceholderText("seunomeaqui"), { target: { value: "Fulano" } });
   fireEvent.change(screen.getByPlaceholderText("seuemailaqui@email.com"), { target: { value: "user@solaria.com" } });
   fireEvent.change(screen.getByPlaceholderText("suasenhaaqui"), { target: { value: password } });
   fireEvent.change(screen.getByPlaceholderText("confirmesuasenha"), { target: { value: confirmPassword } });
@@ -34,7 +33,6 @@ describe("RegisterPage", () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByPlaceholderText("seunomeaqui")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("seuemailaqui@email.com")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("suasenhaaqui")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("confirmesuasenha")).toBeInTheDocument();

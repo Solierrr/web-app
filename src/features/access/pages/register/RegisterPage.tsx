@@ -1,5 +1,5 @@
 import { type FormEvent, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Access from "@/components/layout/access/Access";
 import Hyperlink from "@/components/ui/link/Hyperlink";
@@ -12,6 +12,7 @@ export default function RegisterPage() {
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
   const navigate = useNavigate();
+  const location = useLocation();
   const [error, setError] = useState<string | null>(null);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -29,7 +30,8 @@ export default function RegisterPage() {
     try {
       await register({ email, password });
       await login({ email, password });
-      navigate(routePaths.home(lang));
+      const returnTo = (location.state as { returnTo?: string } | null)?.returnTo;
+      navigate(returnTo?.startsWith(`/${lang}/`) ? returnTo : routePaths.ownUserProfile(lang), { replace: true });
     } catch {
       setError(t("register.error"));
     }
@@ -40,7 +42,6 @@ export default function RegisterPage() {
       heading="Solaria"
       helperText={t("register.helperText")}
       fields={[
-        { name: "name", placeholder: t("fields.name.placeholder") },
         {
           name: "email",
           type: "email",
@@ -50,11 +51,13 @@ export default function RegisterPage() {
           name: "password",
           placeholder: t("fields.password.placeholder"),
           password: true,
+          minLength: 12,
         },
         {
           name: "confirmPassword",
           placeholder: t("fields.confirmPassword.placeholder"),
           password: true,
+          minLength: 12,
         },
       ]}
       submitLabel={t("register.submit")}
@@ -63,7 +66,7 @@ export default function RegisterPage() {
       footer={
         <div className="flex flex-wrap items-center gap-1">
           <span>{t("register.hasAccountPrefix")}</span>
-          <Hyperlink content={t("register.login")} url={routePaths.login(lang)} className="text-hyperlink" />
+          <Hyperlink content={t("register.login")} url={routePaths.login(lang)} state={location.state} className="text-hyperlink" />
         </div>
       }
     />

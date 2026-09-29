@@ -12,6 +12,7 @@ export async function login(credentials: LoginCredentials): Promise<AuthSession>
     operation: "login",
     method: "POST",
     body: credentials,
+    authenticated: false,
     errorMessage: "Não foi possível fazer login",
   });
   setAuthSession(session);
@@ -24,23 +25,38 @@ export function register(credentials: RegisterCredentials): Promise<RegisterResu
     operation: "register",
     method: "POST",
     body: credentials,
+    authenticated: false,
     errorMessage: "Não foi possível concluir o cadastro",
   });
 }
 
-export async function refresh(): Promise<AuthSession | null> {
-  const currentSession = getAuthSession();
-  if (!currentSession) return null;
+let pendingRefresh: Promise<AuthSession | null> | null = null;
 
-  const session = await httpJson<AuthSession>(`${API}/refresh`, {
-    service: SERVICE_NAME,
-    operation: "refresh",
-    method: "POST",
-    body: { refreshToken: currentSession.refreshToken },
-    errorMessage: "Não foi possível renovar a sessão",
-  });
-  setAuthSession(session);
-  return session;
+export function refresh(): Promise<AuthSession | null> {
+  if (pendingRefresh) return pendingRefresh;
+  const currentSession = getAuthSession();
+  if (!currentSession) return Promise.resolve(null);
+
+  const renew = async () => {
+    const latest = getAuthSession();
+    if (!latest || latest.refreshToken !== currentSession.refreshToken) return latest;
+    const session = await httpJson<AuthSession>(`${API}/refresh`, {
+      service: SERVICE_NAME,
+      operation: "refresh",
+      method: "POST",
+      body: { refreshToken: latest.refreshToken },
+      authenticated: false,
+      errorMessage: "Não foi possível renovar a sessão",
+    });
+    // A resposta de uma renovação anterior não deve desfazer logout ou outro login.
+    if (getAuthSession()?.refreshToken !== latest.refreshToken) return getAuthSession();
+    setAuthSession(session);
+    return session;
+  };
+  // O token é rotativo; serializar também entre abas evita revogar a sessão por reuso.
+  pendingRefresh = (navigator.locks ? navigator.locks.request("solaria.auth.refresh", renew) : renew())
+    .finally(() => { pendingRefresh = null; });
+  return pendingRefresh;
 }
 
 export async function logout(): Promise<void> {

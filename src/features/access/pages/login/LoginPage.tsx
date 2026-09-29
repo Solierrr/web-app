@@ -1,5 +1,5 @@
 import { type FormEvent, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Access from "@/components/layout/access/Access";
 import Hyperlink from "@/components/ui/link/Hyperlink";
@@ -12,6 +12,7 @@ export default function LoginPage() {
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
   const navigate = useNavigate();
+  const location = useLocation();
   const [error, setError] = useState<string | null>(null);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -23,7 +24,8 @@ export default function LoginPage() {
         email: String(data.get("email") ?? ""),
         password: String(data.get("password") ?? ""),
       });
-      navigate(routePaths.home(lang));
+      const returnTo = (location.state as { returnTo?: string } | null)?.returnTo;
+      navigate(returnTo?.startsWith(`/${lang}/`) ? returnTo : routePaths.home(lang), { replace: true });
     } catch {
       setError(t("login.error"));
     }
@@ -58,7 +60,7 @@ export default function LoginPage() {
           <Hyperlink content={t("login.forgotPassword")} url={routePaths.forgotPassword(lang)} className="text-hyperlink" />
           <div className="flex flex-wrap items-center gap-1">
             <span>{t("login.noAccountPrefix")}</span>
-            <Hyperlink content={t("login.register")} url={routePaths.register(lang)} className="text-hyperlink" />
+            <Hyperlink content={t("login.register")} url={routePaths.register(lang)} state={location.state} className="text-hyperlink" />
           </div>
         </div>
       }
