@@ -32,6 +32,97 @@ export function createCompany(payload: {
   });
 }
 
+interface AddressPayload {
+  state: string;
+  city: string;
+  neighborhood?: string;
+  zipCode: string;
+  street: string;
+  number?: string;
+}
+
+interface BusinessContactPayload {
+  companyEmail: string;
+  phone?: string;
+  website?: string;
+}
+
+interface AdminPosition {
+  id: string;
+  name: string;
+}
+
+export function createAddress(payload: AddressPayload): Promise<{ id: string }> {
+  return httpJson<{ id: string }>(`${API_CORE_URL}/addresses`, {
+    service: SERVICE_NAME,
+    operation: "createAddress",
+    method: "POST",
+    body: payload,
+    errorMessage: "Não foi possível cadastrar o endereço",
+  });
+}
+
+export function createBusinessContact(payload: BusinessContactPayload): Promise<{ id: string }> {
+  return httpJson<{ id: string }>(`${API_CORE_URL}/business-contacts`, {
+    service: SERVICE_NAME,
+    operation: "createBusinessContact",
+    method: "POST",
+    body: payload,
+    errorMessage: "Não foi possível cadastrar o contato comercial",
+  });
+}
+
+export function attachCompanyAddress(companyId: string, addressId: string): Promise<Company> {
+  return httpJson<Company>(`${API_CORE_URL}/companies/${encodeURIComponent(companyId)}/address`, {
+    service: SERVICE_NAME,
+    operation: "attachCompanyAddress",
+    method: "PATCH",
+    body: { addressId },
+    errorMessage: "Não foi possível vincular o endereço à empresa",
+  });
+}
+
+export function attachCompanyBusinessContact(companyId: string, businessContactId: string): Promise<Company> {
+  return httpJson<Company>(`${API_CORE_URL}/companies/${encodeURIComponent(companyId)}/business-contact`, {
+    service: SERVICE_NAME,
+    operation: "attachCompanyBusinessContact",
+    method: "PATCH",
+    body: { businessContactId },
+    errorMessage: "Não foi possível vincular o contato comercial à empresa",
+  });
+}
+
+export async function findAdminPosition(): Promise<AdminPosition> {
+  const positions = await httpJson<AdminPosition[]>(`${API_CORE_URL}/positions`, {
+    service: SERVICE_NAME,
+    operation: "findAdminPosition",
+    errorMessage: "Não foi possível carregar os cargos",
+  });
+  const admin = positions.find((position) => position.name === "ADMIN");
+  if (!admin) throw new Error("Cargo ADMIN não encontrado");
+  return admin;
+}
+
+export function createCompanyPosition(companyId: string, positionId: string): Promise<{ id: string }> {
+  return httpJson<{ id: string }>(`${API_CORE_URL}/company-positions`, {
+    service: SERVICE_NAME,
+    operation: "createCompanyPosition",
+    method: "POST",
+    body: { companyId, positionId },
+    errorMessage: "Não foi possível disponibilizar o cargo para a empresa",
+  });
+}
+
+export function createUserCompany(companyId: string, userId: string, positionId: string): Promise<{ id: string }> {
+  return httpJson<{ id: string }>(`${API_CORE_URL}/user-companies`, {
+    service: SERVICE_NAME,
+    operation: "createUserCompany",
+    method: "POST",
+    body: { companyId, userId, positionId },
+    errorMessage: "Não foi possível vincular você à empresa",
+  });
+}
+
 function mockCatalogCompany(company: Company): CatalogCompany {
   return {
     id: company.id,
