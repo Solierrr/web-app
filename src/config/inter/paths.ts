@@ -15,12 +15,15 @@ export const SEGMENT = [
   "login",
   "register",
   "forgotPassword",
+  "verifyEmail",
   "profileSetup",
   "user",
   "admin",
   "solarPanelModels",
   "messages",
   "chatbot",
+  "settings",
+  "security",
 ] as const;
 
 
@@ -54,6 +57,7 @@ export const routePaths = {
   login: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "login")}`,
   register: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "register")}`,
   forgotPassword: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "forgotPassword")}`,
+  verifyEmail: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "verifyEmail")}`,
 
   ownCompanyProfile: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "company")}`,
   companyProfile: (lang: SupportedLanguage, companySlug: string) => `/${lang}/${joinSegments(lang, "company")}/${companySlug}`,
@@ -71,6 +75,9 @@ export const routePaths = {
     `/${lang}/${joinSegments(lang, "messages", "company")}/${companyId}${productTitle ? `?product=${encodeURIComponent(productTitle)}` : ""}`,
   chat: (lang: SupportedLanguage, conversationId: string) => `/${lang}/${joinSegments(lang, "messages")}/${conversationId}`,
   chatbot: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "chatbot")}`,
+
+  settings: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "settings")}`,
+  settingsSecurity: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "settings", "security")}`,
 };
 
 

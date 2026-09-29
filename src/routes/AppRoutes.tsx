@@ -33,6 +33,9 @@ import ChatbotPage from "@/features/messages/pages/ChatbotPage";
 import LoginPage from "@/features/access/pages/login/LoginPage";
 import RegisterPage from "@/features/access/pages/register/RegisterPage";
 import ForgotPasswordPage from "@/features/access/pages/forgot-password/ForgotPasswordPage";
+import VerifyEmailPage from "@/features/access/pages/verify-email/VerifyEmailPage";
+import SettingsPage from "@/features/settings/pages/SettingsPage";
+import SettingsSecurityPage from "@/features/settings/pages/security/SettingsSecurityPage";
 import RequireAuth from "@/features/access/RequireAuth";
 import RequireCompany from "@/features/access/RequireCompany";
 
@@ -68,6 +71,9 @@ const APP: RouteDefinition[] = [
 ];
 
 const SAAS: RouteDefinition[] = [
+  { key: "verifyEmail", path: (lang) => joinSegments(lang, "verifyEmail"), element: <VerifyEmailPage /> },
+  { key: "settings", path: (lang) => joinSegments(lang, "settings"), element: <SettingsPage /> },
+  { key: "settingsSecurity", path: (lang) => joinSegments(lang, "settings", "security"), element: <SettingsSecurityPage /> },
   { key: "profileOnboardingCompany", path: (lang) => joinSegments(lang, "profileSetup", "company"), element: <CompanyOnboarding /> },
   { key: "contactCompany", path: (lang) => `${joinSegments(lang, "messages", "company")}/:companyId`, element: <ContactCompany /> },
   { key: "inbox", path: (lang) => joinSegments(lang, "messages"), element: <RequireCompany><Inbox /></RequireCompany> },
