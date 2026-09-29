@@ -9,7 +9,7 @@ interface ErrorBoundaryState {
   error: Error | null;
 }
 
-function ErrorFallback({ error }: { error: Error }) {
+function ErrorFallback() {
   const { t } = useTranslation("commons", { keyPrefix: "errorBoundary" });
 
   return (
@@ -38,7 +38,7 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
     const { error } = this.state;
 
     if (error) {
-      return <ErrorFallback error={error} />;
+      return <ErrorFallback />;
     }
 
     return this.props.children;

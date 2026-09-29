@@ -1,6 +1,6 @@
 import { loginWithGoogle } from "../auth.service";
 import { FcGoogle } from 'react-icons/fc';
-import { FaMicrosoft, FaApple } from 'react-icons/fa';
+import { FaMicrosoft } from 'react-icons/fa';
 
 const classes = "flex w-fit h-fit aspect-square cursor-pointer"
 

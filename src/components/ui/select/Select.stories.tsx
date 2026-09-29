@@ -39,5 +39,5 @@ export const Disabled: Story = {
 
 export const Boolean: Story = {
   args: { name: "active" },
-  render: (args) => <BooleanSelect {...args} />,
+  render: () => <BooleanSelect name="active" />,
 };
