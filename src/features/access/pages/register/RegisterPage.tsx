@@ -40,7 +40,7 @@ export default function RegisterPage() {
         logger.error("Falha ao criar/verificar conta Firebase no cadastro", firebaseError);
       }
       const returnTo = (location.state as { returnTo?: string } | null)?.returnTo;
-      navigate(returnTo?.startsWith(`/${lang}/`) ? returnTo : routePaths.ownUserProfile(lang), { replace: true });
+      navigate(returnTo?.startsWith(`/${lang}/`) ? returnTo : routePaths.accountSetup(lang), { replace: true });
     } catch {
       setError(t("register.error"));
     }
