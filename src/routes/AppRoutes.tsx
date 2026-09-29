@@ -40,6 +40,7 @@ import VerifyEmailPage from "@/features/access/pages/verify-email/VerifyEmailPag
 import SettingsPage from "@/features/settings/pages/SettingsPage";
 import SettingsSecurityPage from "@/features/settings/pages/security/SettingsSecurityPage";
 import DashboardPage from "@/features/dashboard/pages/DashboardPage";
+import EmployeesPage from "@/features/companies/pages/employees/EmployeesPage";
 import RequireAuth from "@/features/access/RequireAuth";
 import RequireCompany from "@/features/access/RequireCompany";
 
@@ -89,6 +90,7 @@ const SAAS: RouteDefinition[] = [
   { key: "ownCompanyProfile", path: (lang) => joinSegments(lang, "company"), element: <EnterpriseProfile /> },
   { key: "ownUserProfile", path: (lang) => joinSegments(lang, "user"), element: <UserProfile /> },
   { key: "solarPanelModelsCrud", path: (lang) => joinSegments(lang, "admin", "solarPanelModels"), element: <RequireCompany type="SUPPLIER"><SolarPanelModelCrud /></RequireCompany> },
+  { key: "employeesManagement", path: (lang) => joinSegments(lang, "admin", "employees"), element: <RequireCompany><EmployeesPage /></RequireCompany> },
 ];
 
 export function AppRoutes() {
