@@ -170,6 +170,35 @@ export function listApprovedSolarPanelModels(): Promise<SolarPanel[]> {
   }).then((models) => models.map(toSolarPanel));
 }
 
+export function listSolarPanelModelsByStatus(status: SolarPanelModelStatus): Promise<SolarPanel[]> {
+  return httpJson<ModelDTO[]>(`${API}/api/models/status/${encodeURIComponent(status)}`, {
+    service: SERVICE_NAME,
+    operation: "listSolarPanelModelsByStatus",
+    errorMessage: "Não foi possível obter os modelos de placa solar",
+  }).then((models) => models.map(toSolarPanel));
+}
+
+// Admin Solaria: aprovação/rejeição de modelos fica restrita ao platform admin
+// no backend (ver RbacAuthorizationService.PLATFORM_ADMIN_ONLY_ENDPOINTS) — Model
+// é um catálogo compartilhado, não pertence a nenhum fornecedor específico.
+export function approveSolarPanel(id: string): Promise<SolarPanel> {
+  return httpJson<ModelDTO>(`${API}/api/models/${encodeURIComponent(id)}/approval`, {
+    service: SERVICE_NAME,
+    operation: "approveSolarPanel",
+    method: "POST",
+    errorMessage: `Não foi possível aprovar o modelo ${id}`,
+  }).then(toSolarPanel);
+}
+
+export function rejectSolarPanel(id: string): Promise<SolarPanel> {
+  return httpJson<ModelDTO>(`${API}/api/models/${encodeURIComponent(id)}/rejection`, {
+    service: SERVICE_NAME,
+    operation: "rejectSolarPanel",
+    method: "POST",
+    errorMessage: `Não foi possível rejeitar o modelo ${id}`,
+  }).then(toSolarPanel);
+}
+
 export function createSolarPanel(payload: Omit<SolarPanel, "id" | "status">): Promise<SolarPanel> {
   return httpJson<ModelDTO>(`${API}/api/models`, {
     service: SERVICE_NAME,

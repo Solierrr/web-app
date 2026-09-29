@@ -80,7 +80,8 @@
     "dashboard": "Painel",
     "employees": "Funcionários",
     "offers": "Ofertas",
-    "units": "Unidades"
+    "units": "Unidades",
+    "registrations": "Cadastros"
   },
   "saasContext": {
     "personal": "Pessoal",
@@ -92,9 +93,25 @@
     "loading": "Carregando...",
     "greetingCompany": "Olá, {{name}}",
     "greetingPersonal": "Olá!",
+    "greetingPlatformAdmin": "Painel do Admin Solaria",
     "offers": "Ofertas ativas",
     "moreMetricsSoon": "Mais métricas chegam nas próximas fases.",
-    "personalHint": "Use o menu para acessar seu perfil, mensagens ou cadastrar uma empresa."
+    "personalHint": "Use o menu para acessar seu perfil, mensagens ou cadastrar uma empresa.",
+    "approvedCompanies": "Empresas aprovadas",
+    "pendingCompanies": "Empresas pendentes",
+    "approvedModels": "Modelos aprovados",
+    "pendingModels": "Modelos pendentes"
+  },
+  "registrations": {
+    "title": "Gerência de cadastros",
+    "loading": "Carregando...",
+    "loadError": "Não foi possível carregar os cadastros pendentes.",
+    "companiesTitle": "Empresas pendentes",
+    "modelsTitle": "Modelos pendentes",
+    "approve": "Aprovar",
+    "reject": "Rejeitar",
+    "noCompanies": "Nenhuma empresa pendente.",
+    "noModels": "Nenhum modelo pendente."
   },
   "settings": {
     "title": "Configurações",

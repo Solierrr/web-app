@@ -24,5 +24,6 @@
   "dashboard": "painel",
   "employees": "funcionarios",
   "offers": "ofertas",
-  "units": "unidades"
+  "units": "unidades",
+  "registrations": "cadastros"
 }

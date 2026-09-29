@@ -80,7 +80,8 @@
     "dashboard": "Dashboard",
     "employees": "Employees",
     "offers": "Offers",
-    "units": "Units"
+    "units": "Units",
+    "registrations": "Registrations"
   },
   "saasContext": {
     "personal": "Personal",
@@ -92,9 +93,25 @@
     "loading": "Loading...",
     "greetingCompany": "Hi, {{name}}",
     "greetingPersonal": "Hi!",
+    "greetingPlatformAdmin": "Platform Admin Dashboard",
     "offers": "Active offers",
     "moreMetricsSoon": "More metrics are coming in the next phases.",
-    "personalHint": "Use the menu to access your profile, messages, or register a company."
+    "personalHint": "Use the menu to access your profile, messages, or register a company.",
+    "approvedCompanies": "Approved companies",
+    "pendingCompanies": "Pending companies",
+    "approvedModels": "Approved models",
+    "pendingModels": "Pending models"
+  },
+  "registrations": {
+    "title": "Registrations management",
+    "loading": "Loading...",
+    "loadError": "Could not load the pending registrations.",
+    "companiesTitle": "Pending companies",
+    "modelsTitle": "Pending models",
+    "approve": "Approve",
+    "reject": "Reject",
+    "noCompanies": "No pending companies.",
+    "noModels": "No pending models."
   },
   "settings": {
     "title": "Settings",

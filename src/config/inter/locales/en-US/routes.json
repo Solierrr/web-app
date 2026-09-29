@@ -24,5 +24,6 @@
   "dashboard": "dashboard",
   "employees": "employees",
   "offers": "offers",
-  "units": "units"
+  "units": "units",
+  "registrations": "registrations"
 }

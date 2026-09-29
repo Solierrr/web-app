@@ -80,7 +80,8 @@
     "dashboard": "Panel",
     "employees": "Empleados",
     "offers": "Ofertas",
-    "units": "Unidades"
+    "units": "Unidades",
+    "registrations": "Registros"
   },
   "saasContext": {
     "personal": "Personal",
@@ -92,9 +93,25 @@
     "loading": "Cargando...",
     "greetingCompany": "Hola, {{name}}",
     "greetingPersonal": "¡Hola!",
+    "greetingPlatformAdmin": "Panel del Admin Solaria",
     "offers": "Ofertas activas",
     "moreMetricsSoon": "Más métricas llegarán en las próximas fases.",
-    "personalHint": "Usa el menú para acceder a tu perfil, mensajes o registrar una empresa."
+    "personalHint": "Usa el menú para acceder a tu perfil, mensajes o registrar una empresa.",
+    "approvedCompanies": "Empresas aprobadas",
+    "pendingCompanies": "Empresas pendientes",
+    "approvedModels": "Modelos aprobados",
+    "pendingModels": "Modelos pendientes"
+  },
+  "registrations": {
+    "title": "Gestión de registros",
+    "loading": "Cargando...",
+    "loadError": "No fue posible cargar los registros pendientes.",
+    "companiesTitle": "Empresas pendientes",
+    "modelsTitle": "Modelos pendientes",
+    "approve": "Aprobar",
+    "reject": "Rechazar",
+    "noCompanies": "No hay empresas pendientes.",
+    "noModels": "No hay modelos pendientes."
   },
   "settings": {
     "title": "Configuración",

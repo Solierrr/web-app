@@ -45,6 +45,8 @@ import OffersPage from "@/features/offers/pages/OffersPage";
 import UnitsPage from "@/features/units/pages/UnitsPage";
 import RequireAuth from "@/features/access/RequireAuth";
 import RequireCompany from "@/features/access/RequireCompany";
+import RequirePlatformAdmin from "@/features/access/RequirePlatformAdmin";
+import RegistrationsPage from "@/features/platform-admin/pages/registrations/RegistrationsPage";
 
 interface RouteDefinition {
   key: string;
@@ -95,6 +97,7 @@ const SAAS: RouteDefinition[] = [
   { key: "employeesManagement", path: (lang) => joinSegments(lang, "admin", "employees"), element: <RequireCompany><EmployeesPage /></RequireCompany> },
   { key: "offersManagement", path: (lang) => joinSegments(lang, "admin", "offers"), element: <RequireCompany type="SUPPLIER"><OffersPage /></RequireCompany> },
   { key: "unitsManagement", path: (lang) => joinSegments(lang, "admin", "units"), element: <RequireCompany type="DEMANDANT"><UnitsPage /></RequireCompany> },
+  { key: "registrationsManagement", path: (lang) => joinSegments(lang, "admin", "registrations"), element: <RequirePlatformAdmin><RegistrationsPage /></RequirePlatformAdmin> },
 ];
 
 export function AppRoutes() {

@@ -20,7 +20,7 @@ const company = { id: "company-1", status: "APPROVED", type: "SUPPLIER", cnpj: "
 describe("OffersPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(useActiveContext).mockReturnValue({ loading: false, kind: "company", setKind: vi.fn(), company, isAdmin: true, hasCompany: true });
+    vi.mocked(useActiveContext).mockReturnValue({ loading: false, kind: "company", setKind: vi.fn(), company, isAdmin: true, hasCompany: true, isPlatformAdmin: false });
     vi.mocked(offerService.getMySupplier).mockResolvedValue({ id: "supplier-1", companyId: "company-1" });
   });
 

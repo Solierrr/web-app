@@ -175,6 +175,34 @@ export function getCompanyBySlug(slug: string): Promise<Company> {
   );
 }
 
+// Admin Solaria: aprovação/rejeição de empresas fica restrita ao platform admin
+// no backend (ver RbacAuthorizationService.PLATFORM_ADMIN_ONLY_ENDPOINTS).
+export function approveCompany(id: string): Promise<Company> {
+  return httpJson<Company>(`${API_CORE_URL}/companies/${encodeURIComponent(id)}/approval`, {
+    service: SERVICE_NAME,
+    operation: "approveCompany",
+    method: "PATCH",
+    errorMessage: `Não foi possível aprovar a empresa ${id}`,
+  });
+}
+
+export function rejectCompany(id: string): Promise<Company> {
+  return httpJson<Company>(`${API_CORE_URL}/companies/${encodeURIComponent(id)}/rejection`, {
+    service: SERVICE_NAME,
+    operation: "rejectCompany",
+    method: "PATCH",
+    errorMessage: `Não foi possível rejeitar a empresa ${id}`,
+  });
+}
+
+export function listAllCompanies(): Promise<Company[]> {
+  return httpJson<Company[]>(`${API_CORE_URL}/companies`, {
+    service: SERVICE_NAME,
+    operation: "listAllCompanies",
+    errorMessage: "Não foi possível obter as empresas",
+  });
+}
+
 export function getCompanies(ids: string[]): Promise<Company[]> {
   return resolveWithMocks(
     () =>

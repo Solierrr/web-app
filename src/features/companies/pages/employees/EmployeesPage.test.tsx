@@ -35,7 +35,7 @@ describe("EmployeesPage", () => {
   });
 
   it("lists employees with their names and positions", async () => {
-    vi.mocked(useActiveContext).mockReturnValue({ loading: false, kind: "company", setKind: vi.fn(), company, isAdmin: true, hasCompany: true });
+    vi.mocked(useActiveContext).mockReturnValue({ loading: false, kind: "company", setKind: vi.fn(), company, isAdmin: true, hasCompany: true, isPlatformAdmin: false });
     vi.mocked(managementService.listEmployees).mockResolvedValue([
       { id: "uc-1", companyId: "company-1", userId: "user-1", position: memberPosition },
     ]);
@@ -47,7 +47,7 @@ describe("EmployeesPage", () => {
   });
 
   it("hides management controls for non-admins", async () => {
-    vi.mocked(useActiveContext).mockReturnValue({ loading: false, kind: "company", setKind: vi.fn(), company, isAdmin: false, hasCompany: true });
+    vi.mocked(useActiveContext).mockReturnValue({ loading: false, kind: "company", setKind: vi.fn(), company, isAdmin: false, hasCompany: true, isPlatformAdmin: false });
     vi.mocked(managementService.listEmployees).mockResolvedValue([
       { id: "uc-1", companyId: "company-1", userId: "user-1", position: memberPosition },
     ]);
@@ -60,7 +60,7 @@ describe("EmployeesPage", () => {
   });
 
   it("generates an access code for a selected existing position", async () => {
-    vi.mocked(useActiveContext).mockReturnValue({ loading: false, kind: "company", setKind: vi.fn(), company, isAdmin: true, hasCompany: true });
+    vi.mocked(useActiveContext).mockReturnValue({ loading: false, kind: "company", setKind: vi.fn(), company, isAdmin: true, hasCompany: true, isPlatformAdmin: false });
     vi.mocked(managementService.listEmployees).mockResolvedValue([]);
     vi.mocked(managementService.generateAccessCode).mockResolvedValue({ id: "code-1", companyId: "company-1", code: "ABC12345", status: "ACTIVE", expiresAt: "2027-01-01", position: memberPosition });
 
@@ -75,7 +75,7 @@ describe("EmployeesPage", () => {
   });
 
   it("creates a new position before generating a code when none is selected", async () => {
-    vi.mocked(useActiveContext).mockReturnValue({ loading: false, kind: "company", setKind: vi.fn(), company, isAdmin: true, hasCompany: true });
+    vi.mocked(useActiveContext).mockReturnValue({ loading: false, kind: "company", setKind: vi.fn(), company, isAdmin: true, hasCompany: true, isPlatformAdmin: false });
     vi.mocked(managementService.listEmployees).mockResolvedValue([]);
     vi.mocked(managementService.createPosition).mockResolvedValue({ id: "new-position", name: "Instalador", accesses: "" });
     vi.mocked(managementService.linkPositionToCompany).mockResolvedValue({ id: "link-3" });

@@ -29,6 +29,7 @@ export const SEGMENT = [
   "employees",
   "offers",
   "units",
+  "registrations",
 ] as const;
 
 
@@ -80,6 +81,7 @@ export const routePaths = {
   employeesManagement: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin", "employees")}`,
   offersManagement: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin", "offers")}`,
   unitsManagement: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin", "units")}`,
+  registrationsManagement: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin", "registrations")}`,
 
   inbox: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "messages")}`,
   contactCompany: (lang: SupportedLanguage, companyId: string, productTitle?: string) =>

@@ -47,7 +47,7 @@ function SaaSSidebar() {
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
   const navigate = useNavigate();
-  const { kind, company, hasCompany } = useActiveContext();
+  const { kind, company, hasCompany, isPlatformAdmin } = useActiveContext();
   const companyType = kind === "company" ? company?.type ?? null : null;
 
   async function handleLogout() {
@@ -71,6 +71,7 @@ function SaaSSidebar() {
       {companyType === "SUPPLIER" && <SidebarOption to={routePaths.offersManagement(lang)} icon="settings" content={t("offers")} />}
       {companyType === "DEMANDANT" && <SidebarOption to={routePaths.unitsManagement(lang)} icon="settings" content={t("units")} />}
       {hasCompany && kind === "company" && <SidebarOption to={routePaths.employeesManagement(lang)} icon="user" content={t("employees")} />}
+      {isPlatformAdmin && <SidebarOption to={routePaths.registrationsManagement(lang)} icon="settings" content={t("registrations")} />}
       <SidebarOption to={routePaths.settings(lang)} icon="settings" content={t("settings")} />
       <li><button type="button" onClick={() => void handleLogout()} className="px-3 py-2 hover:text-orange">{t("logout")}</button></li>
     </Sidebar>

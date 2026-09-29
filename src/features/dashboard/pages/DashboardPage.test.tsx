@@ -9,7 +9,7 @@ vi.mock("@/features/solar-panel/solarPanel.service", () => ({ getCatalogSolarPan
 
 describe("DashboardPage", () => {
   it("shows a loading state", () => {
-    vi.mocked(useActiveContext).mockReturnValue({ loading: true, kind: "personal", setKind: vi.fn(), company: null, isAdmin: false, hasCompany: false });
+    vi.mocked(useActiveContext).mockReturnValue({ loading: true, kind: "personal", setKind: vi.fn(), company: null, isAdmin: false, hasCompany: false, isPlatformAdmin: false });
 
     render(<DashboardPage />);
 
@@ -17,7 +17,7 @@ describe("DashboardPage", () => {
   });
 
   it("shows the personal hint when there is no company", () => {
-    vi.mocked(useActiveContext).mockReturnValue({ loading: false, kind: "personal", setKind: vi.fn(), company: null, isAdmin: false, hasCompany: false });
+    vi.mocked(useActiveContext).mockReturnValue({ loading: false, kind: "personal", setKind: vi.fn(), company: null, isAdmin: false, hasCompany: false, isPlatformAdmin: false });
 
     render(<DashboardPage />);
 
@@ -27,7 +27,7 @@ describe("DashboardPage", () => {
 
   it("shows the offer count for a supplier company", async () => {
     vi.mocked(useActiveContext).mockReturnValue({
-      loading: false, kind: "company", setKind: vi.fn(), isAdmin: true, hasCompany: true,
+      loading: false, kind: "company", setKind: vi.fn(), isAdmin: true, hasCompany: true, isPlatformAdmin: false,
       company: { id: "c1", status: "APPROVED", type: "SUPPLIER", cnpj: "1", tradeName: "Solaria", corporateName: "Solaria Ltda", slug: "solaria" } as never,
     });
     vi.mocked(getCatalogSolarPanels).mockResolvedValue([
@@ -43,7 +43,7 @@ describe("DashboardPage", () => {
 
   it("shows the more-metrics-soon note for a demandant company", () => {
     vi.mocked(useActiveContext).mockReturnValue({
-      loading: false, kind: "company", setKind: vi.fn(), isAdmin: true, hasCompany: true,
+      loading: false, kind: "company", setKind: vi.fn(), isAdmin: true, hasCompany: true, isPlatformAdmin: false,
       company: { id: "c1", status: "APPROVED", type: "DEMANDANT", cnpj: "1", tradeName: "Solaria", corporateName: "Solaria Ltda", slug: "solaria" } as never,
     });
 
