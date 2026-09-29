@@ -25,6 +25,7 @@ export const SEGMENT = [
   "settings",
   "security",
   "access",
+  "dashboard",
 ] as const;
 
 
@@ -82,6 +83,7 @@ export const routePaths = {
 
   settings: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "settings")}`,
   settingsSecurity: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "settings", "security")}`,
+  dashboard: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "dashboard")}`,
 };
 
 

@@ -39,6 +39,7 @@ import ForgotPasswordPage from "@/features/access/pages/forgot-password/ForgotPa
 import VerifyEmailPage from "@/features/access/pages/verify-email/VerifyEmailPage";
 import SettingsPage from "@/features/settings/pages/SettingsPage";
 import SettingsSecurityPage from "@/features/settings/pages/security/SettingsSecurityPage";
+import DashboardPage from "@/features/dashboard/pages/DashboardPage";
 import RequireAuth from "@/features/access/RequireAuth";
 import RequireCompany from "@/features/access/RequireCompany";
 
@@ -74,6 +75,7 @@ const APP: RouteDefinition[] = [
 ];
 
 const SAAS: RouteDefinition[] = [
+  { key: "dashboard", path: (lang) => joinSegments(lang, "dashboard"), element: <DashboardPage /> },
   { key: "verifyEmail", path: (lang) => joinSegments(lang, "verifyEmail"), element: <VerifyEmailPage /> },
   { key: "settings", path: (lang) => joinSegments(lang, "settings"), element: <SettingsPage /> },
   { key: "settingsSecurity", path: (lang) => joinSegments(lang, "settings", "security"), element: <SettingsSecurityPage /> },
