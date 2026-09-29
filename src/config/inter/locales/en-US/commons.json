@@ -79,7 +79,8 @@
     "settings": "Settings",
     "dashboard": "Dashboard",
     "employees": "Employees",
-    "offers": "Offers"
+    "offers": "Offers",
+    "units": "Units"
   },
   "saasContext": {
     "personal": "Personal",
@@ -139,6 +140,37 @@
   },
   "companyOffers": {
     "title": "Offers"
+  },
+  "unitsManagement": {
+    "title": "Units",
+    "loading": "Loading...",
+    "error": "Could not complete the operation.",
+    "createHeading": "New unit",
+    "editHeading": "Edit unit",
+    "zipCode": "ZIP code",
+    "state": "State",
+    "city": "City",
+    "neighborhood": "Neighborhood",
+    "street": "Street",
+    "number": "Number",
+    "complement": "Complement",
+    "locationType": "Location type",
+    "locationTypes": {
+      "house": "House",
+      "building": "Building",
+      "complex": "Complex"
+    },
+    "mapUnavailable": "Interactive map unavailable (no Google Maps key configured) — enter latitude/longitude manually if you know them.",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "add": "Register unit",
+    "save": "Save",
+    "cancel": "Cancel",
+    "listTitle": "Your units",
+    "noAddress": "No address provided",
+    "edit": "Edit",
+    "remove": "Remove",
+    "empty": "No units registered yet."
   },
   "offers": {
     "title": "Offers",

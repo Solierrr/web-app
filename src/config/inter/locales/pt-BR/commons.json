@@ -79,7 +79,8 @@
     "settings": "Configurações",
     "dashboard": "Painel",
     "employees": "Funcionários",
-    "offers": "Ofertas"
+    "offers": "Ofertas",
+    "units": "Unidades"
   },
   "saasContext": {
     "personal": "Pessoal",
@@ -139,6 +140,37 @@
   },
   "companyOffers": {
     "title": "Ofertas"
+  },
+  "unitsManagement": {
+    "title": "Unidades",
+    "loading": "Carregando...",
+    "error": "Não foi possível concluir a operação.",
+    "createHeading": "Nova unidade",
+    "editHeading": "Editar unidade",
+    "zipCode": "CEP",
+    "state": "UF",
+    "city": "Cidade",
+    "neighborhood": "Bairro",
+    "street": "Rua",
+    "number": "Número",
+    "complement": "Complemento",
+    "locationType": "Tipo de local",
+    "locationTypes": {
+      "house": "Casa",
+      "building": "Prédio",
+      "complex": "Condomínio"
+    },
+    "mapUnavailable": "Mapa interativo indisponível (nenhuma chave do Google Maps configurada) — informe a latitude/longitude manualmente, se souber.",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "add": "Cadastrar unidade",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "listTitle": "Suas unidades",
+    "noAddress": "Endereço não informado",
+    "edit": "Editar",
+    "remove": "Remover",
+    "empty": "Nenhuma unidade cadastrada ainda."
   },
   "offers": {
     "title": "Ofertas",

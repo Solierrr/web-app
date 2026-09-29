@@ -79,7 +79,8 @@
     "settings": "Configuración",
     "dashboard": "Panel",
     "employees": "Empleados",
-    "offers": "Ofertas"
+    "offers": "Ofertas",
+    "units": "Unidades"
   },
   "saasContext": {
     "personal": "Personal",
@@ -139,6 +140,37 @@
   },
   "companyOffers": {
     "title": "Ofertas"
+  },
+  "unitsManagement": {
+    "title": "Unidades",
+    "loading": "Cargando...",
+    "error": "No se pudo completar la operación.",
+    "createHeading": "Nueva unidad",
+    "editHeading": "Editar unidad",
+    "zipCode": "Código postal",
+    "state": "Estado",
+    "city": "Ciudad",
+    "neighborhood": "Barrio",
+    "street": "Calle",
+    "number": "Número",
+    "complement": "Complemento",
+    "locationType": "Tipo de lugar",
+    "locationTypes": {
+      "house": "Casa",
+      "building": "Edificio",
+      "complex": "Conjunto residencial"
+    },
+    "mapUnavailable": "Mapa interactivo no disponible (sin clave de Google Maps configurada) — indica la latitud/longitud manualmente si la conoces.",
+    "latitude": "Latitud",
+    "longitude": "Longitud",
+    "add": "Registrar unidad",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "listTitle": "Tus unidades",
+    "noAddress": "Dirección no informada",
+    "edit": "Editar",
+    "remove": "Eliminar",
+    "empty": "Todavía no hay unidades registradas."
   },
   "offers": {
     "title": "Ofertas",
