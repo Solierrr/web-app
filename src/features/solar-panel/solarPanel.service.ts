@@ -83,18 +83,6 @@ export function getCatalogSolarPanels(lang: SupportedLanguage): Promise<SolarPan
   );
 }
 
-export function getSolarPanel(id: string): Promise<SolarPanelAnnouncement> {
-  return resolveWithMocks(
-    () =>
-      httpJson<SolarPanelAnnouncement>(`${API}/solar-panels/${id}`, {
-        service: SERVICE_NAME,
-        operation: "getSolarPanel",
-        errorMessage: `Não foi possível obter o painel solar ${id}`,
-      }),
-    () => solarPanelAnnouncementMocks.find((announcement) => announcement.id === id) ?? solarPanelAnnouncementMocks[0],
-  );
-}
-
 export function getSolarPanelBySlug(companySlug: string, slug: string, lang: SupportedLanguage = DEFAULT_LANGUAGE): Promise<SolarPanelAnnouncement> {
   return resolveWithMocks(
     () =>
@@ -112,67 +100,101 @@ export function getSolarPanelBySlug(companySlug: string, slug: string, lang: Sup
   );
 }
 
-export function getSolarPanels(ids: string[]): Promise<SolarPanelAnnouncement[]> {
-  return resolveWithMocks(
-    () =>
-      httpJson<SolarPanelAnnouncement[]>(`${API}/solar-panels?ids=${ids.join(",")}`, {
-        service: SERVICE_NAME,
-        operation: "getSolarPanels",
-        errorMessage: "Não foi possível obter os painéis solares",
-      }),
-    () => solarPanelAnnouncementMocks,
-  );
+interface ModelDTO {
+  id: string;
+  brand: string;
+  model: string;
+  type: "MONOCRYSTALLINE" | "POLYCRYSTALLINE" | "THIN_FILM";
+  powerWp: number;
+  efficiency: number;
+  width: number;
+  length: number;
+  weight: number;
+  status: "APPROVED" | "REJECTED" | "UNDER_ANALYSIS";
 }
 
+function toBackendType(type?: SolarPanelType): ModelDTO["type"] {
+  if (type === SolarPanelType.THINFILM) return "THIN_FILM";
+  if (type === SolarPanelType.POLYCRYSTALLINE) return "POLYCRYSTALLINE";
+  return "MONOCRYSTALLINE";
+}
+
+function fromBackendType(type: ModelDTO["type"]): SolarPanelType {
+  if (type === "THIN_FILM") return SolarPanelType.THINFILM;
+  if (type === "POLYCRYSTALLINE") return SolarPanelType.POLYCRYSTALLINE;
+  return SolarPanelType.MONOCRYSTALLINE;
+}
+
+function toSolarPanel(dto: ModelDTO): SolarPanel {
+  return {
+    id: dto.id,
+    brand: dto.brand,
+    model: dto.model,
+    type: fromBackendType(dto.type),
+    powerOutput: dto.powerWp,
+    efficiency: dto.efficiency,
+    dimension: { width: dto.width, length: dto.length },
+    weight: dto.weight,
+    status: dto.status as SolarPanelModelStatus,
+  };
+}
+
+function toModelPayload(payload: Omit<SolarPanel, "id" | "status">) {
+  return {
+    brand: payload.brand,
+    model: payload.model,
+    type: toBackendType(payload.type),
+    powerWp: payload.powerOutput,
+    efficiency: payload.efficiency,
+    width: payload.dimension?.width,
+    length: payload.dimension?.length,
+    weight: payload.weight,
+  };
+}
+
+// `Model` é um catálogo compartilhado (sem dono/empresa) — qualquer fornecedor
+// pode cadastrar ou editar. A vinculação com uma empresa acontece via `Offer`.
 export function listSolarPanelModels(): Promise<SolarPanel[]> {
-  return resolveWithMocks(
-    () =>
-      httpJson<SolarPanel[]>(`${API}/solar-panel-models`, {
-        service: SERVICE_NAME,
-        operation: "listSolarPanelModels",
-        errorMessage: "Não foi possível obter os modelos de placa solar",
-      }),
-    () => solarPanelAnnouncementMocks.map((announcement) => announcement.panel),
-  );
+  return httpJson<ModelDTO[]>(`${API}/api/models`, {
+    service: SERVICE_NAME,
+    operation: "listSolarPanelModels",
+    errorMessage: "Não foi possível obter os modelos de placa solar",
+  }).then((models) => models.map(toSolarPanel));
 }
 
-export function createSolarPanel(payload: Omit<SolarPanel, "id">): Promise<SolarPanel> {
-  return resolveWithMocks(
-    () =>
-      httpJson<SolarPanel>(`${API}/solar-panel-models`, {
-        service: SERVICE_NAME,
-        operation: "createSolarPanel",
-        method: "POST",
-        body: payload,
-        errorMessage: "Não foi possível criar o modelo de placa solar",
-      }),
-    () => ({ ...payload, id: crypto.randomUUID() }) as SolarPanel,
-  );
+export function listApprovedSolarPanelModels(): Promise<SolarPanel[]> {
+  return httpJson<ModelDTO[]>(`${API}/api/models/status/APPROVED`, {
+    service: SERVICE_NAME,
+    operation: "listApprovedSolarPanelModels",
+    errorMessage: "Não foi possível obter os modelos aprovados",
+  }).then((models) => models.map(toSolarPanel));
 }
 
-export function updateSolarPanel(id: string, payload: Omit<SolarPanel, "id">): Promise<SolarPanel> {
-  return resolveWithMocks(
-    () =>
-      httpJson<SolarPanel>(`${API}/solar-panel-models/${id}`, {
-        service: SERVICE_NAME,
-        operation: "updateSolarPanel",
-        method: "PUT",
-        body: payload,
-        errorMessage: `Não foi possível atualizar o modelo ${id}`,
-      }),
-    () => ({ ...payload, id }) as SolarPanel,
-  );
+export function createSolarPanel(payload: Omit<SolarPanel, "id" | "status">): Promise<SolarPanel> {
+  return httpJson<ModelDTO>(`${API}/api/models`, {
+    service: SERVICE_NAME,
+    operation: "createSolarPanel",
+    method: "POST",
+    body: toModelPayload(payload),
+    errorMessage: "Não foi possível criar o modelo de placa solar",
+  }).then(toSolarPanel);
+}
+
+export function updateSolarPanel(id: string, payload: Omit<SolarPanel, "id" | "status">): Promise<SolarPanel> {
+  return httpJson<ModelDTO>(`${API}/api/models/${encodeURIComponent(id)}`, {
+    service: SERVICE_NAME,
+    operation: "updateSolarPanel",
+    method: "PUT",
+    body: toModelPayload(payload),
+    errorMessage: `Não foi possível atualizar o modelo ${id}`,
+  }).then(toSolarPanel);
 }
 
 export function deleteSolarPanel(id: string): Promise<void> {
-  return resolveWithMocks(
-    () =>
-      httpJson<void>(`${API}/solar-panel-models/${id}`, {
-        service: SERVICE_NAME,
-        operation: "deleteSolarPanel",
-        method: "DELETE",
-        errorMessage: `Não foi possível remover o modelo ${id}`,
-      }),
-    () => undefined,
-  );
+  return httpJson<void>(`${API}/api/models/${encodeURIComponent(id)}`, {
+    service: SERVICE_NAME,
+    operation: "deleteSolarPanel",
+    method: "DELETE",
+    errorMessage: `Não foi possível remover o modelo ${id}`,
+  });
 }

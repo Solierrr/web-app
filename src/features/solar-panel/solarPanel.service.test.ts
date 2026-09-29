@@ -1,64 +1,76 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
-import MocksMode from "@/config/mocks/mocksMode.enum";
+import {
+  createSolarPanel,
+  deleteSolarPanel,
+  listApprovedSolarPanelModels,
+  listSolarPanelModels,
+  updateSolarPanel,
+} from "./solarPanel.service";
+import { SolarPanelType } from "./solarPanel.enum";
+import { httpJson } from "@/shared/http/http.service";
 
-import { solarPanelAnnouncementMocks } from "@/config/mocks/registry";
-import { getSolarPanel, getSolarPanels } from "./solarPanel.service";
+vi.mock("@/shared/http/http.service", () => ({ httpJson: vi.fn() }));
 
-describe("solarPanel.service", () => {
-  const fetchMock = vi.fn();
+const modelDto = {
+  id: "model-1", brand: "SolarTech", model: "ST-450W", type: "MONOCRYSTALLINE" as const,
+  powerWp: 450, efficiency: 21.5, width: 1, length: 2.1, weight: 23.5, status: "APPROVED" as const,
+};
 
-  beforeEach(() => {
-    vi.stubGlobal("fetch", fetchMock);
+describe("solarPanel.service models", () => {
+  it("lists all models and maps the backend type to the display enum", async () => {
+    vi.mocked(httpJson).mockResolvedValue([modelDto]);
+
+    const result = await listSolarPanelModels();
+
+    expect(httpJson).toHaveBeenCalledWith(expect.stringContaining("/api/models"), expect.anything());
+    expect(result).toEqual([{
+      id: "model-1", brand: "SolarTech", model: "ST-450W", type: SolarPanelType.MONOCRYSTALLINE,
+      powerOutput: 450, efficiency: 21.5, dimension: { width: 1, length: 2.1 }, weight: 23.5, status: "APPROVED",
+    }]);
   });
 
-  afterEach(() => {
-    vi.unstubAllEnvs();
-    vi.unstubAllGlobals();
-    fetchMock.mockReset();
+  it("lists only approved models", async () => {
+    vi.mocked(httpJson).mockResolvedValue([modelDto]);
+
+    await listApprovedSolarPanelModels();
+
+    expect(httpJson).toHaveBeenCalledWith(expect.stringContaining("/api/models/status/APPROVED"), expect.anything());
   });
 
-  it("does not call the API and returns the mock when VITE_MOCKS is ALWAYS", async () => {
-    vi.stubEnv("VITE_MOCKS", MocksMode.ALWAYS);
+  it("creates a model translating the display type back to the backend enum", async () => {
+    vi.mocked(httpJson).mockResolvedValue(modelDto);
 
-    const result = await getSolarPanel("0");
+    await createSolarPanel({
+      brand: "SolarTech", model: "ST-450W", type: SolarPanelType.MONOCRYSTALLINE,
+      powerOutput: 450, efficiency: 21.5, dimension: { width: 1, length: 2.1 }, weight: 23.5,
+    });
 
-    expect(fetchMock).not.toHaveBeenCalled();
-    expect(result).toEqual(solarPanelAnnouncementMocks[0]);
+    expect(httpJson).toHaveBeenCalledWith(expect.stringContaining("/api/models"), expect.objectContaining({
+      method: "POST",
+      body: { brand: "SolarTech", model: "ST-450W", type: "MONOCRYSTALLINE", powerWp: 450, efficiency: 21.5, width: 1, length: 2.1, weight: 23.5 },
+    }));
   });
 
-  it("returns the API response when VITE_MOCKS is FALLBACK and the API succeeds", async () => {
-    vi.stubEnv("VITE_MOCKS", MocksMode.FALLBACK);
-    const apiPanel = { id: "from-api" };
-    fetchMock.mockResolvedValue({ ok: true, json: async () => apiPanel });
+  it("updates a model", async () => {
+    vi.mocked(httpJson).mockResolvedValue(modelDto);
 
-    const result = await getSolarPanel("0");
+    await updateSolarPanel("model-1", {
+      brand: "SolarTech", model: "ST-450W", type: SolarPanelType.THINFILM,
+      powerOutput: 450, efficiency: 21.5, dimension: { width: 1, length: 2.1 }, weight: 23.5,
+    });
 
-    expect(result).toEqual(apiPanel);
+    expect(httpJson).toHaveBeenCalledWith(expect.stringContaining("/api/models/model-1"), expect.objectContaining({
+      method: "PUT",
+      body: expect.objectContaining({ type: "THIN_FILM" }),
+    }));
   });
 
-  it("falls back to the mock when VITE_MOCKS is FALLBACK and the API fails", async () => {
-    vi.stubEnv("VITE_MOCKS", MocksMode.FALLBACK);
-    fetchMock.mockResolvedValue({ ok: false });
+  it("deletes a model", async () => {
+    vi.mocked(httpJson).mockResolvedValue(undefined);
 
-    const result = await getSolarPanel("0");
+    await deleteSolarPanel("model-1");
 
-    expect(result).toEqual(solarPanelAnnouncementMocks[0]);
-  });
-
-  it("propagates the error when VITE_MOCKS is DEACTIVATED and the API fails", async () => {
-    vi.stubEnv("VITE_MOCKS", MocksMode.DEACTIVATED);
-    fetchMock.mockResolvedValue({ ok: false });
-
-    await expect(getSolarPanel("0")).rejects.toThrow();
-  });
-
-  it("does not call the API and returns all mocks when VITE_MOCKS is ALWAYS for getSolarPanels", async () => {
-    vi.stubEnv("VITE_MOCKS", MocksMode.ALWAYS);
-
-    const result = await getSolarPanels(["0", "1"]);
-
-    expect(fetchMock).not.toHaveBeenCalled();
-    expect(result).toEqual(solarPanelAnnouncementMocks);
+    expect(httpJson).toHaveBeenCalledWith(expect.stringContaining("/api/models/model-1"), expect.objectContaining({ method: "DELETE" }));
   });
 });
