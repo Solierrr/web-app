@@ -77,7 +77,8 @@
     "companyProfile": "Mi empresa",
     "solarPanelModels": "Modelos de paneles solares",
     "settings": "Configuración",
-    "dashboard": "Panel"
+    "dashboard": "Panel",
+    "employees": "Empleados"
   },
   "saasContext": {
     "personal": "Personal",
@@ -115,6 +116,25 @@
     "username": "Nombre de usuario",
     "loadError": "No se pudo cargar tu perfil.",
     "saveError": "No se pudo guardar el nombre de usuario. Comprueba si está disponible."
+  },
+  "employees": {
+    "title": "Empleados",
+    "loading": "Cargando...",
+    "loadError": "No se pudieron cargar los empleados.",
+    "listTitle": "Equipo",
+    "empty": "Todavía no hay empleados.",
+    "remove": "Desvincular",
+    "inviteTitle": "Invitar empleado",
+    "existingPosition": "Cargo existente",
+    "selectPosition": "Selecciona un cargo",
+    "or": "o",
+    "newPosition": "Nuevo cargo",
+    "newPositionPlaceholder": "Nombre del cargo",
+    "generate": "Generar código",
+    "generatedCode": "Código generado: {{code}} — compártelo con el nuevo empleado.",
+    "activeCodesTitle": "Códigos activos",
+    "noActiveCodes": "No hay códigos activos.",
+    "revoke": "Revocar"
   },
   "companyOffers": {
     "title": "Ofertas"
@@ -176,9 +196,11 @@
     }
   },
   "accessInfo": {
-    "title": "Aún no disponible",
-    "description": "Para acceder como colaborador de una empresa, necesitarás un código de acceso generado por un administrador de ella. Esta funcionalidad todavía se está construyendo.",
-    "back": "Volver"
+    "title": "Entrar con código de acceso",
+    "description": "Pide el código de acceso a un administrador de la empresa y pégalo aquí.",
+    "code": "Código de acceso",
+    "submit": "Entrar",
+    "error": "Código inválido, vencido o ya utilizado."
   },
   "professionalOnboarding": {
     "title": "Registra tu perfil profesional",

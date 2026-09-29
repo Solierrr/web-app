@@ -21,5 +21,8 @@
   "settings": "settings",
   "security": "security",
   "access": "access",
-  "dashboard": "dashboard"
+  "dashboard": "dashboard",
+  "employees": "employees",
+  "offers": "offers",
+  "units": "units"
 }

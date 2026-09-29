@@ -21,5 +21,8 @@
   "settings": "configuracion",
   "security": "seguridad",
   "access": "acceso",
-  "dashboard": "panel"
+  "dashboard": "panel",
+  "employees": "empleados",
+  "offers": "ofertas",
+  "units": "unidades"
 }
