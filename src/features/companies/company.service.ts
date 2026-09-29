@@ -126,13 +126,23 @@ export function getCatalogCompanyBySlug(slug: string): Promise<CatalogCompany> {
   );
 }
 
-export async function getMyCompany(): Promise<Company | null> {
+export interface MyMembership {
+  companyId: string;
+  position: { id: string; name: string };
+}
+
+export async function getMyMembership(): Promise<MyMembership | null> {
   await getMyUser();
-  const membership = await httpJson<{ companyId: string } | undefined>(`${API_CORE_URL}/user-companies/me`, {
+  const membership = await httpJson<MyMembership | undefined>(`${API_CORE_URL}/user-companies/me`, {
     service: SERVICE_NAME,
     operation: "getMyCompanyMembership",
     errorMessage: "Não foi possível carregar o vínculo com a empresa",
   });
+  return membership ?? null;
+}
+
+export async function getMyCompany(): Promise<Company | null> {
+  const membership = await getMyMembership();
   if (!membership) return null;
   return httpJson<Company>(`${API_CORE_URL}/companies/${encodeURIComponent(membership.companyId)}`, {
     service: SERVICE_NAME,
