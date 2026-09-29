@@ -43,6 +43,7 @@ describe("Access", () => {
       />,
     );
 
+    fireEvent.change(screen.getByRole("textbox", { name: "email" }), { target: { value: "user@example.com" } });
     fireEvent.click(screen.getByRole("button", { name: "Prosseguir" }));
 
     expect(handleSubmit).toHaveBeenCalledTimes(1);
