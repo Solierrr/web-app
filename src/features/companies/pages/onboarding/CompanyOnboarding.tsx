@@ -10,11 +10,7 @@ import {
   createAddress,
   createBusinessContact,
   createCompany,
-  createCompanyPosition,
-  createUserCompany,
-  findAdminPosition,
 } from "@/features/companies/company.service";
-import { getMyUser } from "@/features/users/user/user.service";
 import { validateCnpj } from "@/utils/validation.utils";
 import { validateCnpjCategory, type CnpjValidationResult } from "@/shared/validation/aiValidation.service";
 import RegistrationStatus, { type RegistrationStatusKind } from "@/components/feedback/registration-status/RegistrationStatus";
@@ -52,8 +48,8 @@ export default function CompanyOnboarding() {
     setSaving(true);
     setError(null);
     try {
-      const myUser = await getMyUser();
-
+      // POST /api/companies já cria o cargo ADMIN da empresa e vincula o usuário criador
+      // atomicamente (ver api-core CompanyService.save) — não precisa repetir isso aqui.
       const company = await createCompany({
         type,
         cnpj,
@@ -77,10 +73,6 @@ export default function CompanyOnboarding() {
         website: String(data.get("website") ?? "").trim() || undefined,
       });
       await attachCompanyBusinessContact(company.id, businessContact.id);
-
-      const adminPosition = await findAdminPosition();
-      await createCompanyPosition(company.id, adminPosition.id);
-      await createUserCompany(company.id, myUser.id, adminPosition.id);
 
       let categoryCheck: CnpjValidationResult | undefined;
       if (type === "SUPPLIER") {

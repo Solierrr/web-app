@@ -3,7 +3,6 @@ import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import CompanyOnboarding from "./CompanyOnboarding";
 import * as companyService from "@/features/companies/company.service";
-import { getMyUser } from "@/features/users/user/user.service";
 import { validateCnpjCategory } from "@/shared/validation/aiValidation.service";
 
 vi.mock("@/features/companies/company.service", () => ({
@@ -12,11 +11,7 @@ vi.mock("@/features/companies/company.service", () => ({
   createBusinessContact: vi.fn(),
   attachCompanyAddress: vi.fn(),
   attachCompanyBusinessContact: vi.fn(),
-  findAdminPosition: vi.fn(),
-  createCompanyPosition: vi.fn(),
-  createUserCompany: vi.fn(),
 }));
-vi.mock("@/features/users/user/user.service", () => ({ getMyUser: vi.fn() }));
 vi.mock("@/shared/validation/aiValidation.service", () => ({ validateCnpjCategory: vi.fn() }));
 
 const VALID_CNPJ = "11.444.777/0001-61";
@@ -52,12 +47,10 @@ describe("CompanyOnboarding", () => {
     expect(companyService.createCompany).not.toHaveBeenCalled();
   });
 
-  it("creates the company, address, contact, admin link and shows the cnpj category result for suppliers", async () => {
-    vi.mocked(getMyUser).mockResolvedValue({ id: "user-1", authId: "auth-1", username: "solar", avatar: null, banner: null, active: true });
+  it("creates the company, address and contact, then shows the cnpj category result for suppliers", async () => {
     vi.mocked(companyService.createCompany).mockResolvedValue({ id: "company-1", status: "UNDER_ANALYSIS" } as never);
     vi.mocked(companyService.createAddress).mockResolvedValue({ id: "address-1" });
     vi.mocked(companyService.createBusinessContact).mockResolvedValue({ id: "contact-1" });
-    vi.mocked(companyService.findAdminPosition).mockResolvedValue({ id: "position-1", name: "ADMIN" });
     vi.mocked(validateCnpjCategory).mockResolvedValue({
       status: "VALID", cnpj: "11444777000161", company_name: "Solar XPTO", trade_name: "Solar XPTO",
       is_active: true, matched_category: "ENGENHARIA", error_code: null, reason: "Compatível",
@@ -77,19 +70,15 @@ describe("CompanyOnboarding", () => {
     }));
     expect(companyService.attachCompanyAddress).toHaveBeenCalledWith("company-1", "address-1");
     expect(companyService.attachCompanyBusinessContact).toHaveBeenCalledWith("company-1", "contact-1");
-    expect(companyService.createCompanyPosition).toHaveBeenCalledWith("company-1", "position-1");
-    expect(companyService.createUserCompany).toHaveBeenCalledWith("company-1", "user-1", "position-1");
 
     expect(await screen.findByText("Em análise")).toBeInTheDocument();
     expect(screen.getByText("CNPJ compatível com o setor solar/elétrico.")).toBeInTheDocument();
   });
 
   it("does not call the cnpj category validation for demandant companies", async () => {
-    vi.mocked(getMyUser).mockResolvedValue({ id: "user-1", authId: "auth-1", username: "solar", avatar: null, banner: null, active: true });
     vi.mocked(companyService.createCompany).mockResolvedValue({ id: "company-1", status: "UNDER_ANALYSIS" } as never);
     vi.mocked(companyService.createAddress).mockResolvedValue({ id: "address-1" });
     vi.mocked(companyService.createBusinessContact).mockResolvedValue({ id: "contact-1" });
-    vi.mocked(companyService.findAdminPosition).mockResolvedValue({ id: "position-1", name: "ADMIN" });
 
     render(
       <MemoryRouter>
