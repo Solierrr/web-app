@@ -1,14 +1,13 @@
-import type { Professional } from "@/features/professionals/professional";
+import type { CatalogTechnician } from "@/features/professionals/professional.service";
 import type { EntityCardItem } from "@/components/layout/announcement/entity-card/EntityCard";
 import type { SupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
 
-export function toCardItem(professional: Professional, lang: SupportedLanguage): EntityCardItem {
+export function toCardItem(professional: CatalogTechnician, lang: SupportedLanguage): EntityCardItem {
   return {
     id: professional.id,
     name: professional.name,
-    avatarUrl: professional.avatar,
-    subtitle: professional.registrations?.[0]?.profession,
+    subtitle: professional.professions[0],
     href: routePaths.professionalProfile(lang, professional.slug),
   };
 }

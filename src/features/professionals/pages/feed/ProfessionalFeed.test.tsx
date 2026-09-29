@@ -4,32 +4,24 @@ import { describe, expect, it, vi, beforeEach } from "vitest";
 import ProfessionalFeed from "./ProfessionalFeed";
 
 vi.mock("@/features/professionals/professional.service", () => ({
-  getProfessionals: vi.fn(),
+  getCatalogTechnicians: vi.fn(),
 }));
 
-import { getProfessionals } from "@/features/professionals/professional.service";
-import type { Professional } from "@/features/professionals/professional";
+import { getCatalogTechnicians, type CatalogTechnician } from "@/features/professionals/professional.service";
 
-const mockedGetProfessionals = vi.mocked(getProfessionals);
+const mockedGetCatalogTechnicians = vi.mocked(getCatalogTechnicians);
 
-const items: Professional[] = [
-  {
-    id: "professional-1",
-    name: "Carlos Eduardo Lima",
-    contact: { number: "31991112222", email: "carlos.lima@gmail.com" },
-    address: { street: "Rua das Palmeiras", number: "220", neighborhood: "Savassi", city: "Belo Horizonte", state: "MG", country: "Brasil", zipCode: "30130-000" },
-    geolocation: { latitude: 0, longitude: 0 },
-    slug: "carlos-eduardo-lima",
-  },
+const items: CatalogTechnician[] = [
+  { id: "professional-1", name: "Carlos Eduardo Lima", slug: "carlos-eduardo-lima", crea: "MG-123456", professions: ["Engenheiro Eletricista"] },
 ];
 
 describe("ProfessionalFeed", () => {
   beforeEach(() => {
-    mockedGetProfessionals.mockReset();
+    mockedGetCatalogTechnicians.mockReset();
   });
 
   it("renders a skeleton while the professionals are loading", () => {
-    mockedGetProfessionals.mockReturnValue(new Promise(() => {}));
+    mockedGetCatalogTechnicians.mockReturnValue(new Promise(() => {}));
 
     render(
       <MemoryRouter>
@@ -41,7 +33,7 @@ describe("ProfessionalFeed", () => {
   });
 
   it("renders the mocked professionals once loaded", async () => {
-    mockedGetProfessionals.mockResolvedValue(items);
+    mockedGetCatalogTechnicians.mockResolvedValue(items);
 
     render(
       <MemoryRouter>
@@ -50,5 +42,17 @@ describe("ProfessionalFeed", () => {
     );
 
     expect(await screen.findByText("Carlos Eduardo Lima")).toBeInTheDocument();
+  });
+
+  it("shows an error message when loading fails", async () => {
+    mockedGetCatalogTechnicians.mockRejectedValue(new Error("offline"));
+
+    render(
+      <MemoryRouter>
+        <ProfessionalFeed />
+      </MemoryRouter>,
+    );
+
+    expect(await screen.findByRole("alert")).toBeInTheDocument();
   });
 });

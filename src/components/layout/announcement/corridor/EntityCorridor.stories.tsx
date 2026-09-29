@@ -20,7 +20,13 @@ type Story = StoryObj<typeof meta>;
 export const Professionals: Story = {
   args: {
     title: "Profissionais credenciados",
-    items: professionalMock.map((professional) => toProfessionalCardItem(professional, DEFAULT_LANGUAGE)),
+    items: professionalMock.map((professional) => toProfessionalCardItem({
+      id: professional.id,
+      slug: professional.slug,
+      name: professional.name,
+      crea: professional.registrations?.[0]?.council ?? "",
+      professions: professional.registrations?.map((registration) => registration.profession) ?? [],
+    }, DEFAULT_LANGUAGE)),
   },
 };
 
