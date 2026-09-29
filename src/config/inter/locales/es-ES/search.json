@@ -1,5 +1,6 @@
 {
   "professional": {
+    "loadError": "No se pudieron cargar los profesionales.",
     "title": "Profesionales",
     "description": "Encuentra profesionales acreditados para tu proyecto.",
     "filters": {

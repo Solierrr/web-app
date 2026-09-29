@@ -1,5 +1,6 @@
 {
   "professional": {
+    "loadError": "Could not load professionals.",
     "title": "Professionals",
     "description": "Find accredited professionals for your project.",
     "filters": {

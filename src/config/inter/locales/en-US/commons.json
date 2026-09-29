@@ -92,10 +92,17 @@
     "changeError": "Could not change your password. Check the current password and try again.",
     "changeSuccess": "Password changed successfully."
   },
+  "professionalProfile": {
+    "crea": "CREA",
+    "loadError": "Could not load the professional."
+  },
   "myProfile": {
     "username": "Username",
     "loadError": "Could not load your profile.",
     "saveError": "Could not save your username. Check whether it is available."
+  },
+  "companyOffers": {
+    "title": "Offers"
   },
   "myCompany": {
     "loadError": "Could not load your company.",

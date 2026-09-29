@@ -92,10 +92,17 @@
     "changeError": "Não foi possível trocar a senha. Verifique a senha atual e tente novamente.",
     "changeSuccess": "Senha alterada com sucesso."
   },
+  "professionalProfile": {
+    "crea": "CREA",
+    "loadError": "Não foi possível carregar o profissional."
+  },
   "myProfile": {
     "username": "Nome de usuário",
     "loadError": "Não foi possível carregar seu perfil.",
     "saveError": "Não foi possível salvar o nome de usuário. Verifique se ele está disponível."
+  },
+  "companyOffers": {
+    "title": "Ofertas"
   },
   "myCompany": {
     "loadError": "Não foi possível carregar sua empresa.",

@@ -1,6 +1,7 @@
 {
   "professional": {
-    "description": "Profissionais credenciados disponíveis para os seus projetos."
+    "description": "Profissionais credenciados disponíveis para os seus projetos.",
+    "loadError": "Não foi possível carregar os profissionais."
   },
   "company": {
     "loadError": "Não foi possível carregar as empresas.",

@@ -1,6 +1,7 @@
 {
   "professional": {
-    "description": "Accredited professionals available for your projects."
+    "description": "Accredited professionals available for your projects.",
+    "loadError": "Could not load professionals."
   },
   "company": {
     "loadError": "Could not load companies.",

@@ -92,10 +92,17 @@
     "changeError": "No se pudo cambiar la contraseña. Verifica la contraseña actual e inténtalo de nuevo.",
     "changeSuccess": "Contraseña cambiada correctamente."
   },
+  "professionalProfile": {
+    "crea": "CREA",
+    "loadError": "No se pudo cargar el profesional."
+  },
   "myProfile": {
     "username": "Nombre de usuario",
     "loadError": "No se pudo cargar tu perfil.",
     "saveError": "No se pudo guardar el nombre de usuario. Comprueba si está disponible."
+  },
+  "companyOffers": {
+    "title": "Ofertas"
   },
   "myCompany": {
     "loadError": "No se pudo cargar tu empresa.",
