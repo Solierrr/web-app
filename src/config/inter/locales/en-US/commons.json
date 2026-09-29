@@ -76,7 +76,22 @@
     "userProfile": "My profile",
     "companyProfile": "My company",
     "solarPanelModels": "Solar panel models",
-    "settings": "Settings"
+    "settings": "Settings",
+    "dashboard": "Dashboard"
+  },
+  "saasContext": {
+    "personal": "Personal",
+    "admin": "Admin",
+    "member": "Employee",
+    "company": "Company"
+  },
+  "dashboard": {
+    "loading": "Loading...",
+    "greetingCompany": "Hi, {{name}}",
+    "greetingPersonal": "Hi!",
+    "offers": "Active offers",
+    "moreMetricsSoon": "More metrics are coming in the next phases.",
+    "personalHint": "Use the menu to access your profile, messages, or register a company."
   },
   "settings": {
     "title": "Settings",

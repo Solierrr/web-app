@@ -20,5 +20,6 @@
   "chatbot": "chatbot",
   "settings": "configuracion",
   "security": "seguridad",
-  "access": "acceso"
+  "access": "acceso",
+  "dashboard": "panel"
 }

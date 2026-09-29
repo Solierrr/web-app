@@ -76,7 +76,22 @@
     "userProfile": "Meu perfil",
     "companyProfile": "Minha empresa",
     "solarPanelModels": "Modelos de placas solares",
-    "settings": "Configurações"
+    "settings": "Configurações",
+    "dashboard": "Painel"
+  },
+  "saasContext": {
+    "personal": "Pessoal",
+    "admin": "Admin",
+    "member": "Funcionário",
+    "company": "Empresa"
+  },
+  "dashboard": {
+    "loading": "Carregando...",
+    "greetingCompany": "Olá, {{name}}",
+    "greetingPersonal": "Olá!",
+    "offers": "Ofertas ativas",
+    "moreMetricsSoon": "Mais métricas chegam nas próximas fases.",
+    "personalHint": "Use o menu para acessar seu perfil, mensagens ou cadastrar uma empresa."
   },
   "settings": {
     "title": "Configurações",
