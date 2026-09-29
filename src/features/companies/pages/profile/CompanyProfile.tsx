@@ -3,7 +3,10 @@ import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import ProfilePage from "@/components/layout/profile/ProfilePage";
 import ProfilePageSkeleton from "@/components/layout/profile/ProfilePageSkeleton";
+import EntityCard from "@/components/layout/announcement/entity-card/EntityCard";
 import { getCatalogCompanyBySlug, type CatalogCompany } from "@/features/companies/company.service";
+import { getCatalogSolarPanels } from "@/features/solar-panel/solarPanel.service";
+import type { SolarPanelAnnouncement } from "@/features/solar-panel/solarPanelAnnouncement";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
 
@@ -15,6 +18,17 @@ function CompanyProfilePacked({ company }: CompanyProfilePackedProps) {
     const { lang: langParam } = useParams<{ lang: string }>();
     const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
     const { t } = useTranslation("commons");
+    const [offers, setOffers] = useState<SolarPanelAnnouncement[] | null>(null);
+
+    useEffect(() => {
+        let active = true;
+        getCatalogSolarPanels(lang).then((result) => {
+            if (active) setOffers(result.filter((offer) => offer.companySlug === company.slug));
+        }).catch(() => {
+            if (active) setOffers([]);
+        });
+        return () => { active = false; };
+    }, [company.slug, lang]);
 
     return (
         <ProfilePage
@@ -29,7 +43,27 @@ function CompanyProfilePacked({ company }: CompanyProfilePackedProps) {
                     {t("actions.contact")}
                 </Link>
             }
-        />
+        >
+            {offers && offers.length > 0 ? (
+                <div className="flex flex-col gap-3">
+                    <h2>{t("companyOffers.title")}</h2>
+                    <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
+                        {offers.map((offer) => (
+                            <EntityCard
+                                key={offer.id}
+                                item={{
+                                    id: offer.id,
+                                    name: offer.title,
+                                    avatarUrl: offer.photos.heroImage.url,
+                                    subtitle: offer.panel.brand,
+                                    href: routePaths.productDetail(lang, offer.companySlug, offer.slug),
+                                }}
+                            />
+                        ))}
+                    </div>
+                </div>
+            ) : null}
+        </ProfilePage>
     );
 }
 
