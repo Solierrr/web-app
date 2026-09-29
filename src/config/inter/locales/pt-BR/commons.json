@@ -71,9 +71,33 @@
     "companies": "Empresas"
   },
   "saasSidebar": {
+    "logout": "Sair",
+    "messages": "Mensagens",
     "userProfile": "Meu perfil",
     "companyProfile": "Minha empresa",
     "solarPanelModels": "Modelos de placas solares"
+  },
+  "myProfile": {
+    "username": "Nome de usuário",
+    "loadError": "Não foi possível carregar seu perfil.",
+    "saveError": "Não foi possível salvar o nome de usuário. Verifique se ele está disponível."
+  },
+  "myCompany": {
+    "loadError": "Não foi possível carregar sua empresa.",
+    "empty": "Você ainda não tem uma empresa vinculada à sua conta.",
+    "register": "Cadastrar empresa"
+  },
+  "companyOnboarding": {
+    "title": "Cadastrar empresa",
+    "description": "Escolha a atuação da empresa. O cadastro será analisado antes de aparecer no marketplace.",
+    "type": "Tipo de empresa",
+    "supplier": "Fornecedor",
+    "demandant": "Demandante",
+    "cnpj": "CNPJ",
+    "tradeName": "Nome fantasia",
+    "corporateName": "Razão social",
+    "submit": "Cadastrar empresa",
+    "error": "Não foi possível cadastrar a empresa. Revise os dados e tente novamente."
   },
   "corridor": {
     "viewAll": "acessar todas as peças"

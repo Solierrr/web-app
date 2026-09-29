@@ -71,9 +71,33 @@
     "companies": "Companies"
   },
   "saasSidebar": {
+    "logout": "Sign out",
+    "messages": "Messages",
     "userProfile": "My profile",
     "companyProfile": "My company",
     "solarPanelModels": "Solar panel models"
+  },
+  "myProfile": {
+    "username": "Username",
+    "loadError": "Could not load your profile.",
+    "saveError": "Could not save your username. Check whether it is available."
+  },
+  "myCompany": {
+    "loadError": "Could not load your company.",
+    "empty": "There is no company linked to your account yet.",
+    "register": "Register a company"
+  },
+  "companyOnboarding": {
+    "title": "Register a company",
+    "description": "Choose the company's role. The registration will be reviewed before it appears in the marketplace.",
+    "type": "Company type",
+    "supplier": "Supplier",
+    "demandant": "Buyer",
+    "cnpj": "CNPJ",
+    "tradeName": "Trade name",
+    "corporateName": "Legal name",
+    "submit": "Register company",
+    "error": "Could not register the company. Review the details and try again."
   },
   "corridor": {
     "viewAll": "view all items"

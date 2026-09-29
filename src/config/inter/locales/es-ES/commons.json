@@ -71,9 +71,33 @@
     "companies": "Empresas"
   },
   "saasSidebar": {
+    "logout": "Cerrar sesión",
+    "messages": "Mensajes",
     "userProfile": "Mi perfil",
     "companyProfile": "Mi empresa",
     "solarPanelModels": "Modelos de paneles solares"
+  },
+  "myProfile": {
+    "username": "Nombre de usuario",
+    "loadError": "No se pudo cargar tu perfil.",
+    "saveError": "No se pudo guardar el nombre de usuario. Comprueba si está disponible."
+  },
+  "myCompany": {
+    "loadError": "No se pudo cargar tu empresa.",
+    "empty": "Todavía no hay ninguna empresa vinculada a tu cuenta.",
+    "register": "Registrar empresa"
+  },
+  "companyOnboarding": {
+    "title": "Registrar empresa",
+    "description": "Elige la función de la empresa. Se revisará el registro antes de que aparezca en el mercado.",
+    "type": "Tipo de empresa",
+    "supplier": "Proveedor",
+    "demandant": "Demandante",
+    "cnpj": "CNPJ",
+    "tradeName": "Nombre comercial",
+    "corporateName": "Razón social",
+    "submit": "Registrar empresa",
+    "error": "No se pudo registrar la empresa. Revisa los datos e inténtalo de nuevo."
   },
   "corridor": {
     "viewAll": "acceder a todas las piezas"
