@@ -19,5 +19,6 @@
   "messages": "mensajes",
   "chatbot": "chatbot",
   "settings": "configuracion",
-  "security": "seguridad"
+  "security": "seguridad",
+  "access": "acceso"
 }

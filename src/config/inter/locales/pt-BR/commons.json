@@ -111,11 +111,79 @@
     "cnpj": "CNPJ",
     "tradeName": "Nome fantasia",
     "corporateName": "Razão social",
+    "addressSection": "Endereço",
+    "zipCode": "CEP",
+    "state": "UF",
+    "city": "Cidade",
+    "neighborhood": "Bairro",
+    "street": "Rua",
+    "number": "Número",
+    "contactSection": "Contato comercial",
+    "companyEmail": "E-mail corporativo",
+    "phone": "Telefone",
+    "website": "Site",
     "submit": "Cadastrar empresa",
-    "error": "Não foi possível cadastrar a empresa. Revise os dados e tente novamente."
+    "error": "Não foi possível cadastrar a empresa. Revise os dados e tente novamente.",
+    "resultTitle": "Cadastro enviado",
+    "categoryValid": "CNPJ compatível com o setor solar/elétrico.",
+    "categoryInvalid": "CNPJ com ramo de atividade não relacionado ao setor solar/elétrico — seu cadastro será revisado manualmente.",
+    "continue": "Continuar"
   },
   "corridor": {
     "viewAll": "acessar todas as peças"
+  },
+  "registrationStatus": {
+    "pending": "Em análise",
+    "approved": "Aprovado",
+    "rejected": "Reprovado"
+  },
+  "accountSetup": {
+    "title": "Como você quer usar a Solaria?",
+    "description": "Escolha o tipo de conta que melhor descreve você.",
+    "company": {
+      "title": "Empresa",
+      "description": "Cadastre sua empresa como fornecedora de placas solares ou como demandante de serviços."
+    },
+    "professional": {
+      "title": "Profissional autônomo",
+      "description": "Cadastre-se como técnico/profissional independente, com validação de CPF e certificados."
+    },
+    "access": {
+      "title": "Acesso vinculado a uma empresa",
+      "description": "Entre com um código de acesso fornecido por uma empresa já cadastrada."
+    }
+  },
+  "accessInfo": {
+    "title": "Ainda não disponível",
+    "description": "Para acessar como colaborador de uma empresa, você vai precisar de um código de acesso gerado por um administrador dela. Essa funcionalidade ainda está sendo construída.",
+    "back": "Voltar"
+  },
+  "professionalOnboarding": {
+    "title": "Cadastrar perfil profissional",
+    "description": "Cadastre seus dados como profissional autônomo. Seu cadastro passará por análise antes de aparecer no marketplace.",
+    "personalSection": "Dados pessoais",
+    "name": "Nome completo",
+    "cpf": "CPF",
+    "birthDate": "Data de nascimento",
+    "email": "E-mail",
+    "phone": "Telefone",
+    "registrationSection": "Registro profissional",
+    "crea": "CREA/registro profissional",
+    "profession": "Profissão",
+    "professionPlaceholder": "Selecione uma profissão",
+    "council": "Conselho",
+    "number": "Número do registro",
+    "expirationDate": "Validade do registro",
+    "certificatesSection": "Certificados",
+    "certificatesDescription": "Envie os links dos seus certificados NR-10 e NR-35 para validação automática.",
+    "certNr10": "Certificado NR-10 (URL)",
+    "certNr35": "Certificado NR-35 (URL)",
+    "submit": "Concluir cadastro",
+    "error": "Não foi possível concluir o cadastro. Revise os dados e tente novamente.",
+    "resultTitle": "Cadastro enviado",
+    "certificatesValid": "Certificados válidos.",
+    "certificatesInvalid": "Certificados reprovados na validação automática — seu cadastro será revisado manualmente.",
+    "continue": "Continuar"
   },
   "time": {
     "today": "hoje",

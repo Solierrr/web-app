@@ -19,5 +19,6 @@
   "messages": "messages",
   "chatbot": "chatbot",
   "settings": "settings",
-  "security": "security"
+  "security": "security",
+  "access": "access"
 }
