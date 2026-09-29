@@ -30,6 +30,32 @@ export function register(credentials: RegisterCredentials): Promise<RegisterResu
   });
 }
 
+export async function loginWithFirebase(idToken: string): Promise<AuthSession> {
+  const session = await httpJson<AuthSession>(`${API}/firebase`, {
+    service: SERVICE_NAME,
+    operation: "loginWithFirebase",
+    method: "POST",
+    body: { idToken },
+    authenticated: false,
+    errorMessage: "Não foi possível fazer login",
+  });
+  setAuthSession(session);
+  return session;
+}
+
+export async function linkFirebase(email: string, password: string, idToken: string): Promise<AuthSession> {
+  const session = await httpJson<AuthSession>(`${API}/firebase/link`, {
+    service: SERVICE_NAME,
+    operation: "linkFirebase",
+    method: "POST",
+    body: { email, password, idToken },
+    authenticated: false,
+    errorMessage: "Não foi possível vincular sua conta ao Firebase",
+  });
+  setAuthSession(session);
+  return session;
+}
+
 let pendingRefresh: Promise<AuthSession | null> | null = null;
 
 export function refresh(): Promise<AuthSession | null> {
