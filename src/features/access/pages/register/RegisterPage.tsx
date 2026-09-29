@@ -6,6 +6,8 @@ import Hyperlink from "@/components/ui/link/Hyperlink";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
 import { login, register } from "@/features/access/access.service";
+import { register as registerFirebase, sendVerificationEmail } from "@/config/firebase/auth/auth.service";
+import logger from "@/config/logging/logger";
 
 export default function RegisterPage() {
   const { t } = useTranslation("access");
@@ -30,6 +32,13 @@ export default function RegisterPage() {
     try {
       await register({ email, password });
       await login({ email, password });
+      try {
+        const { user } = await registerFirebase(email, password);
+        await sendVerificationEmail(user);
+      } catch (firebaseError) {
+        // Não bloqueia o cadastro local; a verificação de e-mail pode ser retomada depois em VerifyEmailPage.
+        logger.error("Falha ao criar/verificar conta Firebase no cadastro", firebaseError);
+      }
       const returnTo = (location.state as { returnTo?: string } | null)?.returnTo;
       navigate(returnTo?.startsWith(`/${lang}/`) ? returnTo : routePaths.ownUserProfile(lang), { replace: true });
     } catch {
