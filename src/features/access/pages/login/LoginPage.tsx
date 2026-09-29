@@ -5,7 +5,8 @@ import Access from "@/components/layout/access/Access";
 import Hyperlink from "@/components/ui/link/Hyperlink";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
-import { login } from "@/features/access/access.service";
+import { login, loginWithFirebase } from "@/features/access/access.service";
+import { login as loginFirebase } from "@/config/firebase/auth/auth.service";
 
 export default function LoginPage() {
   const { t } = useTranslation("access");
@@ -19,16 +20,26 @@ export default function LoginPage() {
     const data = new FormData(event.currentTarget);
     setError(null);
 
+    const email = String(data.get("email") ?? "");
+    const password = String(data.get("password") ?? "");
+
     try {
-      await login({
-        email: String(data.get("email") ?? ""),
-        password: String(data.get("password") ?? ""),
-      });
-      const returnTo = (location.state as { returnTo?: string } | null)?.returnTo;
-      navigate(returnTo?.startsWith(`/${lang}/`) ? returnTo : routePaths.home(lang), { replace: true });
+      await login({ email, password });
     } catch {
-      setError(t("login.error"));
+      // A senha local pode ter divergido da senha do Firebase depois de um reset via
+      // sendPasswordResetEmail — quem já vinculou a conta consegue entrar assim mesmo.
+      try {
+        const { user } = await loginFirebase(email, password);
+        const idToken = await user.getIdToken();
+        await loginWithFirebase(idToken);
+      } catch {
+        setError(t("login.error"));
+        return;
+      }
     }
+
+    const returnTo = (location.state as { returnTo?: string } | null)?.returnTo;
+    navigate(returnTo?.startsWith(`/${lang}/`) ? returnTo : routePaths.home(lang), { replace: true });
   }
 
   return (
