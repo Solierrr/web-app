@@ -24,6 +24,7 @@ export const SEGMENT = [
   "chatbot",
   "settings",
   "security",
+  "access",
 ] as const;
 
 
@@ -65,8 +66,11 @@ export const routePaths = {
   ownUserProfile: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "user")}`,
   professionalProfile: (lang: SupportedLanguage, professionalSlug: string) => `/${lang}/${joinSegments(lang, "professional")}/${professionalSlug}`,
 
+  accountSetup: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "profileSetup")}`,
   profileOnboardingUser: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "profileSetup", "user")}`,
   profileOnboardingCompany: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "profileSetup", "company")}`,
+  profileOnboardingProfessional: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "profileSetup", "professional")}`,
+  profileOnboardingAccess: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "profileSetup", "access")}`,
 
   solarPanelModelsCrud: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin", "solarPanelModels")}`,
 

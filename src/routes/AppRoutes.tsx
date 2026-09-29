@@ -21,6 +21,9 @@ import ProfessionalSearch from "@/features/professionals/pages/search/Profession
 import CompanySearch from "@/features/companies/pages/search/CompanySearch";
 import ProfileOnboarding from "@/components/layout/profile/ProfileOnboarding";
 import CompanyOnboarding from "@/features/companies/pages/onboarding/CompanyOnboarding";
+import ProfessionalOnboarding from "@/features/professionals/pages/onboarding/ProfessionalOnboarding";
+import AccountSetupPage from "@/features/access/pages/account-setup/AccountSetupPage";
+import AccessInfoPage from "@/features/access/pages/access-info/AccessInfoPage";
 import EnterpriseProfile from "@/features/companies/pages/profile/EnterpriseProfile";
 import CompanyProfile from "@/features/companies/pages/profile/CompanyProfile";
 import UserProfile from "@/features/users/pages/profile/UserProfile";
@@ -74,7 +77,10 @@ const SAAS: RouteDefinition[] = [
   { key: "verifyEmail", path: (lang) => joinSegments(lang, "verifyEmail"), element: <VerifyEmailPage /> },
   { key: "settings", path: (lang) => joinSegments(lang, "settings"), element: <SettingsPage /> },
   { key: "settingsSecurity", path: (lang) => joinSegments(lang, "settings", "security"), element: <SettingsSecurityPage /> },
+  { key: "accountSetup", path: (lang) => joinSegments(lang, "profileSetup"), element: <AccountSetupPage /> },
   { key: "profileOnboardingCompany", path: (lang) => joinSegments(lang, "profileSetup", "company"), element: <CompanyOnboarding /> },
+  { key: "profileOnboardingProfessional", path: (lang) => joinSegments(lang, "profileSetup", "professional"), element: <ProfessionalOnboarding /> },
+  { key: "profileOnboardingAccess", path: (lang) => joinSegments(lang, "profileSetup", "access"), element: <AccessInfoPage /> },
   { key: "contactCompany", path: (lang) => `${joinSegments(lang, "messages", "company")}/:companyId`, element: <ContactCompany /> },
   { key: "inbox", path: (lang) => joinSegments(lang, "messages"), element: <RequireCompany><Inbox /></RequireCompany> },
   { key: "chat", path: (lang) => `${joinSegments(lang, "messages")}/:conversationId`, element: <RequireCompany><Chat /></RequireCompany> },
