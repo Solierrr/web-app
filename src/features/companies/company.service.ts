@@ -4,8 +4,87 @@ import { companyMocks } from "@/config/mocks/registry";
 import { resolveWithMocks } from "@/config/mocks/fallback.service";
 import { httpJson } from "@/shared/http/http.service";
 import { API_CORE_URL } from "@/shared/http/apiCore.utils";
+import { getMyUser } from "@/features/users/user/user.service";
 
 const SERVICE_NAME = "company";
+
+export interface CatalogCompany {
+  id: string;
+  tradeName: string;
+  slug: string;
+  city: string | null;
+  state: string | null;
+  logoUrl?: string;
+}
+
+export function createCompany(payload: {
+  type: "SUPPLIER" | "DEMANDANT";
+  cnpj: string;
+  tradeName: string;
+  corporateName: string;
+}): Promise<Company> {
+  return httpJson<Company>(`${API_CORE_URL}/companies`, {
+    service: SERVICE_NAME,
+    operation: "createCompany",
+    method: "POST",
+    body: payload,
+    errorMessage: "Não foi possível cadastrar a empresa",
+  });
+}
+
+function mockCatalogCompany(company: Company): CatalogCompany {
+  return {
+    id: company.id,
+    tradeName: company.tradeName,
+    slug: company.slug,
+    city: company.address?.city ?? null,
+    state: company.address?.state ?? null,
+    logoUrl: company.logoUrl,
+  };
+}
+
+export function getCatalogCompanies(): Promise<CatalogCompany[]> {
+  return resolveWithMocks(
+    () => httpJson<CatalogCompany[]>(`${API_CORE_URL}/catalog/companies`, {
+      service: SERVICE_NAME,
+      operation: "getCatalogCompanies",
+      authenticated: false,
+      errorMessage: "Não foi possível carregar os fornecedores",
+    }),
+    () => companyMocks.filter((company) => company.status === "APPROVED").map(mockCatalogCompany),
+  );
+}
+
+export function getCatalogCompanyBySlug(slug: string): Promise<CatalogCompany> {
+  return resolveWithMocks(
+    () => httpJson<CatalogCompany>(`${API_CORE_URL}/catalog/companies/${encodeURIComponent(slug)}`, {
+      service: SERVICE_NAME,
+      operation: "getCatalogCompanyBySlug",
+      authenticated: false,
+      errorMessage: "Não foi possível carregar o fornecedor",
+    }),
+    () => {
+      const company = companyMocks.find((item) => item.slug === slug && item.status === "APPROVED");
+      if (!company) throw new Error(`Fornecedor não encontrado: ${slug}`);
+      return mockCatalogCompany(company);
+    },
+  );
+}
+
+export async function getMyCompany(): Promise<Company | null> {
+  await getMyUser();
+  const membership = await httpJson<{ companyId: string } | undefined>(`${API_CORE_URL}/user-companies/me`, {
+    service: SERVICE_NAME,
+    operation: "getMyCompanyMembership",
+    errorMessage: "Não foi possível carregar o vínculo com a empresa",
+  });
+  if (!membership) return null;
+  return httpJson<Company>(`${API_CORE_URL}/companies/${encodeURIComponent(membership.companyId)}`, {
+    service: SERVICE_NAME,
+    operation: "getMyCompany",
+    errorMessage: "Não foi possível carregar sua empresa",
+  });
+}
 
 export function getCompany(id: string): Promise<Company> {
   return resolveWithMocks(

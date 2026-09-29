@@ -27,6 +27,13 @@ export const Professionals: Story = {
 export const Companies: Story = {
   args: {
     title: "Empresas credenciadas",
-    items: companyMock.map((company) => toCompanyCardItem(company, DEFAULT_LANGUAGE)),
+    items: companyMock.map((company) => toCompanyCardItem({
+      id: company.id,
+      tradeName: company.tradeName,
+      slug: company.slug,
+      city: company.address?.city ?? null,
+      state: company.address?.state ?? null,
+      logoUrl: company.logoUrl,
+    }, DEFAULT_LANGUAGE)),
   },
 };

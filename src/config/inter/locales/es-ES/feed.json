@@ -3,6 +3,7 @@
     "description": "Profesionales acreditados disponibles para tus proyectos."
   },
   "company": {
+    "loadError": "No se pudieron cargar las empresas.",
     "description": "Empresas acreditadas disponibles en la plataforma."
   }
 }

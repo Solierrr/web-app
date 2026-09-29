@@ -10,6 +10,9 @@
     }
   },
   "company": {
+    "loadError": "Não foi possível carregar as empresas.",
+    "queryPlaceholder": "Buscar por empresa ou cidade",
+    "noResults": "Nenhuma empresa encontrada.",
     "title": "Empresas",
     "description": "Encontre empresas credenciadas na plataforma.",
     "filters": {

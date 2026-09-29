@@ -7,6 +7,33 @@ import { httpJson } from "@/shared/http/http.service";
 const API = import.meta.env.VITE_API_CORE;
 const SERVICE_NAME = "user";
 
+export interface MyUser {
+  id: string;
+  authId: string;
+  username: string;
+  avatar: string | null;
+  banner: string | null;
+  active: boolean;
+}
+
+export function getMyUser(): Promise<MyUser> {
+  return httpJson<MyUser>(`${import.meta.env.VITE_API_CORE}/api/users/me`, {
+    service: SERVICE_NAME,
+    operation: "getMyUser",
+    errorMessage: "Não foi possível carregar seu perfil",
+  });
+}
+
+export function updateMyUser(username: string): Promise<MyUser> {
+  return httpJson<MyUser>(`${import.meta.env.VITE_API_CORE}/api/users/me`, {
+    service: SERVICE_NAME,
+    operation: "updateMyUser",
+    method: "PATCH",
+    body: { username },
+    errorMessage: "Não foi possível salvar seu perfil",
+  });
+}
+
 export function getUser(id: string): Promise<User> {
   return resolveWithMocks(
     () =>

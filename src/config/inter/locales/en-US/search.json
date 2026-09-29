@@ -10,6 +10,9 @@
     }
   },
   "company": {
+    "loadError": "Could not load companies.",
+    "queryPlaceholder": "Search companies or cities",
+    "noResults": "No companies found.",
     "title": "Companies",
     "description": "Find accredited companies on the platform.",
     "filters": {

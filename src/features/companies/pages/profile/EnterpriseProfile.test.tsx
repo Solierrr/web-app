@@ -3,14 +3,14 @@ import { describe, expect, it, vi, beforeEach } from "vitest";
 import EnterpriseProfile from "./EnterpriseProfile";
 
 vi.mock("@/features/companies/company.service", () => ({
-  getCompany: vi.fn(),
+  getMyCompany: vi.fn(),
 }));
 
-import { getCompany } from "@/features/companies/company.service";
+import { getMyCompany } from "@/features/companies/company.service";
 import { CompanyStatus } from "@/features/companies/company.enum";
 import type { Company } from "@/features/companies/company";
 
-const mockedGetCompany = vi.mocked(getCompany);
+const mockedGetCompany = vi.mocked(getMyCompany);
 
 const company: Company = {
   id: "company-1",

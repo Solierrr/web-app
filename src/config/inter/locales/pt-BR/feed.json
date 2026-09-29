@@ -3,6 +3,7 @@
     "description": "Profissionais credenciados disponíveis para os seus projetos."
   },
   "company": {
+    "loadError": "Não foi possível carregar as empresas.",
     "description": "Empresas credenciadas disponíveis na plataforma."
   }
 }

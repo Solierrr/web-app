@@ -4,21 +4,19 @@ import { describe, expect, it, vi, beforeEach } from "vitest";
 import CompanyProfile from "./CompanyProfile";
 
 vi.mock("@/features/companies/company.service", () => ({
-  getCompanyBySlug: vi.fn(),
+  getCatalogCompanyBySlug: vi.fn(),
 }));
 
-import { getCompanyBySlug } from "@/features/companies/company.service";
-import { CompanyStatus } from "@/features/companies/company.enum";
-import type { Company } from "@/features/companies/company";
+import { getCatalogCompanyBySlug } from "@/features/companies/company.service";
+import type { CatalogCompany } from "@/features/companies/company.service";
 
-const mockedGetCompanyBySlug = vi.mocked(getCompanyBySlug);
+const mockedGetCompanyBySlug = vi.mocked(getCatalogCompanyBySlug);
 
-const company: Company = {
+const company: CatalogCompany = {
   id: "company-1",
-  status: CompanyStatus.APPROVED,
-  cnpj: "12345678000190",
+  city: "São Paulo",
+  state: "SP",
   tradeName: "Solaria Energia",
-  corporateName: "Solaria Energia Solar Ltda",
   slug: "solaria-energia",
 };
 
@@ -49,6 +47,7 @@ describe("CompanyProfile", () => {
     );
 
     expect(await screen.findByRole("heading", { name: "Solaria Energia" })).toBeInTheDocument();
-    expect(screen.getByText("Solaria Energia Solar Ltda")).toBeInTheDocument();
+    expect(screen.getByText("São Paulo/SP")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "entrar em contato" })).toHaveAttribute("href", "/pt-BR/mensagens/empresa/company-1");
   });
 });
