@@ -20,16 +20,21 @@ import SolarPanelSearch from "@/features/solar-panel/pages/search/SolarPanelSear
 import ProfessionalSearch from "@/features/professionals/pages/search/ProfessionalSearch";
 import CompanySearch from "@/features/companies/pages/search/CompanySearch";
 import ProfileOnboarding from "@/components/layout/profile/ProfileOnboarding";
+import CompanyOnboarding from "@/features/companies/pages/onboarding/CompanyOnboarding";
 import EnterpriseProfile from "@/features/companies/pages/profile/EnterpriseProfile";
 import CompanyProfile from "@/features/companies/pages/profile/CompanyProfile";
 import UserProfile from "@/features/users/pages/profile/UserProfile";
 import ProfessionalProfile from "@/features/professionals/pages/profile/ProfessionalProfile";
 import SolarPanelModelCrud from "@/features/solar-panel/pages/crud/SolarPanelModelCrud";
 import Chat from "@/features/messages/pages/Chat";
+import Inbox from "@/features/messages/pages/Inbox";
+import ContactCompany from "@/features/messages/pages/ContactCompany";
 import ChatbotPage from "@/features/messages/pages/ChatbotPage";
 import LoginPage from "@/features/access/pages/login/LoginPage";
 import RegisterPage from "@/features/access/pages/register/RegisterPage";
 import ForgotPasswordPage from "@/features/access/pages/forgot-password/ForgotPasswordPage";
+import RequireAuth from "@/features/access/RequireAuth";
+import RequireCompany from "@/features/access/RequireCompany";
 
 interface RouteDefinition {
   key: string;
@@ -58,16 +63,18 @@ const APP: RouteDefinition[] = [
   { key: "professionalProfile", path: (lang) => `${joinSegments(lang, "professional")}/:professionalSlug`, element: <ProfessionalProfile /> },
 
   { key: "profileOnboardingUser", path: (lang) => joinSegments(lang, "profileSetup", "user"), element: <ProfileOnboarding kind="user" /> },
-  { key: "profileOnboardingCompany", path: (lang) => joinSegments(lang, "profileSetup", "company"), element: <ProfileOnboarding kind="company" /> },
 
-  { key: "chat", path: (lang) => `${joinSegments(lang, "messages")}/:contactId`, element: <Chat /> },
   { key: "chatbot", path: (lang) => joinSegments(lang, "chatbot"), element: <ChatbotPage /> },
 ];
 
 const SAAS: RouteDefinition[] = [
+  { key: "profileOnboardingCompany", path: (lang) => joinSegments(lang, "profileSetup", "company"), element: <CompanyOnboarding /> },
+  { key: "contactCompany", path: (lang) => `${joinSegments(lang, "messages", "company")}/:companyId`, element: <ContactCompany /> },
+  { key: "inbox", path: (lang) => joinSegments(lang, "messages"), element: <RequireCompany><Inbox /></RequireCompany> },
+  { key: "chat", path: (lang) => `${joinSegments(lang, "messages")}/:conversationId`, element: <RequireCompany><Chat /></RequireCompany> },
   { key: "ownCompanyProfile", path: (lang) => joinSegments(lang, "company"), element: <EnterpriseProfile /> },
   { key: "ownUserProfile", path: (lang) => joinSegments(lang, "user"), element: <UserProfile /> },
-  { key: "solarPanelModelsCrud", path: (lang) => joinSegments(lang, "admin", "solarPanelModels"), element: <SolarPanelModelCrud /> },
+  { key: "solarPanelModelsCrud", path: (lang) => joinSegments(lang, "admin", "solarPanelModels"), element: <RequireCompany type="SUPPLIER"><SolarPanelModelCrud /></RequireCompany> },
 ];
 
 export function AppRoutes() {
@@ -85,8 +92,10 @@ export function AppRoutes() {
 
           {SUPPORTED.flatMap((lang) => APP.map(({ key, path, element }) => <Route key={`${lang}-${key}`} path={path(lang)} element={element} />))}
 
-          <Route element={<SaaSLayout />}>
-            {SUPPORTED.flatMap((lang) => SAAS.map(({ key, path, element }) => <Route key={`${lang}-${key}`} path={path(lang)} element={element} />))}
+          <Route element={<RequireAuth />}>
+            <Route element={<SaaSLayout />}>
+              {SUPPORTED.flatMap((lang) => SAAS.map(({ key, path, element }) => <Route key={`${lang}-${key}`} path={path(lang)} element={element} />))}
+            </Route>
           </Route>
 
           <Route path="*" element={<NotFoundPage />} />

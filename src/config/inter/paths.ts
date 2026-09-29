@@ -66,7 +66,10 @@ export const routePaths = {
 
   solarPanelModelsCrud: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin", "solarPanelModels")}`,
 
-  chat: (lang: SupportedLanguage, contactId: string) => `/${lang}/${joinSegments(lang, "messages")}/${contactId}`,
+  inbox: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "messages")}`,
+  contactCompany: (lang: SupportedLanguage, companyId: string, productTitle?: string) =>
+    `/${lang}/${joinSegments(lang, "messages", "company")}/${companyId}${productTitle ? `?product=${encodeURIComponent(productTitle)}` : ""}`,
+  chat: (lang: SupportedLanguage, conversationId: string) => `/${lang}/${joinSegments(lang, "messages")}/${conversationId}`,
   chatbot: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "chatbot")}`,
 };
 
