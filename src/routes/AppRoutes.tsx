@@ -42,6 +42,7 @@ import SettingsSecurityPage from "@/features/settings/pages/security/SettingsSec
 import DashboardPage from "@/features/dashboard/pages/DashboardPage";
 import EmployeesPage from "@/features/companies/pages/employees/EmployeesPage";
 import OffersPage from "@/features/offers/pages/OffersPage";
+import UnitsPage from "@/features/units/pages/UnitsPage";
 import RequireAuth from "@/features/access/RequireAuth";
 import RequireCompany from "@/features/access/RequireCompany";
 
@@ -93,6 +94,7 @@ const SAAS: RouteDefinition[] = [
   { key: "solarPanelModelsCrud", path: (lang) => joinSegments(lang, "admin", "solarPanelModels"), element: <RequireCompany type="SUPPLIER"><SolarPanelModelCrud /></RequireCompany> },
   { key: "employeesManagement", path: (lang) => joinSegments(lang, "admin", "employees"), element: <RequireCompany><EmployeesPage /></RequireCompany> },
   { key: "offersManagement", path: (lang) => joinSegments(lang, "admin", "offers"), element: <RequireCompany type="SUPPLIER"><OffersPage /></RequireCompany> },
+  { key: "unitsManagement", path: (lang) => joinSegments(lang, "admin", "units"), element: <RequireCompany type="DEMANDANT"><UnitsPage /></RequireCompany> },
 ];
 
 export function AppRoutes() {

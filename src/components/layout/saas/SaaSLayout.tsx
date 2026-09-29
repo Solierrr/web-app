@@ -69,6 +69,7 @@ function SaaSSidebar() {
       {hasCompany && kind === "company" && <SidebarOption to={routePaths.ownCompanyProfile(lang)} icon="building" content={t("companyProfile")} />}
       {companyType === "SUPPLIER" && <SidebarOption to={routePaths.solarPanelModelsCrud(lang)} icon="settings" content={t("solarPanelModels")} />}
       {companyType === "SUPPLIER" && <SidebarOption to={routePaths.offersManagement(lang)} icon="settings" content={t("offers")} />}
+      {companyType === "DEMANDANT" && <SidebarOption to={routePaths.unitsManagement(lang)} icon="settings" content={t("units")} />}
       {hasCompany && kind === "company" && <SidebarOption to={routePaths.employeesManagement(lang)} icon="user" content={t("employees")} />}
       <SidebarOption to={routePaths.settings(lang)} icon="settings" content={t("settings")} />
       <li><button type="button" onClick={() => void handleLogout()} className="px-3 py-2 hover:text-orange">{t("logout")}</button></li>
