@@ -75,7 +75,22 @@
     "messages": "Messages",
     "userProfile": "My profile",
     "companyProfile": "My company",
-    "solarPanelModels": "Solar panel models"
+    "solarPanelModels": "Solar panel models",
+    "settings": "Settings"
+  },
+  "settings": {
+    "title": "Settings",
+    "profile": "Profile",
+    "security": "Security"
+  },
+  "settingsSecurity": {
+    "title": "Security",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "submit": "Save",
+    "unlinkedError": "You need to verify your email before you can change your password.",
+    "changeError": "Could not change your password. Check the current password and try again.",
+    "changeSuccess": "Password changed successfully."
   },
   "myProfile": {
     "username": "Username",

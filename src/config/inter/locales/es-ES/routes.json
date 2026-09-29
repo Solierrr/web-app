@@ -11,10 +11,13 @@
   "login": "iniciar-sesion",
   "register": "registro",
   "forgotPassword": "olvide-mi-contrasena",
+  "verifyEmail": "verificar-correo",
   "profileSetup": "personalizar-perfil",
   "user": "usuario",
   "admin": "admin",
   "solarPanelModels": "modelos-de-panel-solar",
   "messages": "mensajes",
-  "chatbot": "chatbot"
+  "chatbot": "chatbot",
+  "settings": "configuracion",
+  "security": "seguridad"
 }

@@ -75,7 +75,22 @@
     "messages": "Mensagens",
     "userProfile": "Meu perfil",
     "companyProfile": "Minha empresa",
-    "solarPanelModels": "Modelos de placas solares"
+    "solarPanelModels": "Modelos de placas solares",
+    "settings": "Configurações"
+  },
+  "settings": {
+    "title": "Configurações",
+    "profile": "Perfil",
+    "security": "Segurança"
+  },
+  "settingsSecurity": {
+    "title": "Segurança",
+    "currentPassword": "Senha atual",
+    "newPassword": "Nova senha",
+    "submit": "Salvar",
+    "unlinkedError": "Você precisa verificar seu e-mail antes de poder trocar a senha.",
+    "changeError": "Não foi possível trocar a senha. Verifique a senha atual e tente novamente.",
+    "changeSuccess": "Senha alterada com sucesso."
   },
   "myProfile": {
     "username": "Nome de usuário",

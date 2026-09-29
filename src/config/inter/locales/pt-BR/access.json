@@ -28,7 +28,25 @@
   "forgotPassword": {
     "helperText": "Informe seu e-mail para receber as instruções de recuperação",
     "submit": "Enviar",
+    "sent": "Se esse e-mail estiver cadastrado, você vai receber um link para redefinir sua senha.",
+    "error": "Não foi possível enviar o e-mail de recuperação. Tente novamente.",
     "rememberedPasswordPrefix": "Lembrou a senha?",
     "backToLogin": "Voltar para o login"
+  },
+
+  "verifyEmail": {
+    "title": "Verifique seu e-mail",
+    "pending": "Enviamos um link de verificação para o seu e-mail. Verifique sua caixa de entrada.",
+    "verified": "Seu e-mail já foi verificado.",
+    "resend": "Reenviar e-mail",
+    "resendCooldown": "Aguarde {{seconds}}s para reenviar",
+    "resendError": "Não foi possível reenviar o e-mail de verificação.",
+    "checking": "Verificando...",
+    "linkTitle": "Confirme sua senha para concluir",
+    "linkDescription": "Digite sua senha atual para vincular a verificação à sua conta.",
+    "linkSubmit": "Confirmar",
+    "linkError": "Não foi possível confirmar a verificação. Verifique sua senha e tente novamente.",
+    "linkSuccess": "E-mail verificado e vinculado com sucesso.",
+    "noFirebaseAccount": "Não encontramos uma verificação em andamento. Volte para o cadastro ou fale com o suporte."
   }
 }

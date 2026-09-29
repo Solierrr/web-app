@@ -75,7 +75,22 @@
     "messages": "Mensajes",
     "userProfile": "Mi perfil",
     "companyProfile": "Mi empresa",
-    "solarPanelModels": "Modelos de paneles solares"
+    "solarPanelModels": "Modelos de paneles solares",
+    "settings": "Configuración"
+  },
+  "settings": {
+    "title": "Configuración",
+    "profile": "Perfil",
+    "security": "Seguridad"
+  },
+  "settingsSecurity": {
+    "title": "Seguridad",
+    "currentPassword": "Contraseña actual",
+    "newPassword": "Nueva contraseña",
+    "submit": "Guardar",
+    "unlinkedError": "Necesitas verificar tu correo antes de poder cambiar la contraseña.",
+    "changeError": "No se pudo cambiar la contraseña. Verifica la contraseña actual e inténtalo de nuevo.",
+    "changeSuccess": "Contraseña cambiada correctamente."
   },
   "myProfile": {
     "username": "Nombre de usuario",

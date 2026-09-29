@@ -28,7 +28,25 @@
   "forgotPassword": {
     "helperText": "Enter your email to receive recovery instructions",
     "submit": "Send",
+    "sent": "If that email is registered, you will receive a link to reset your password.",
+    "error": "Could not send the recovery email. Please try again.",
     "rememberedPasswordPrefix": "Remembered your password?",
     "backToLogin": "Back to login"
+  },
+
+  "verifyEmail": {
+    "title": "Verify your email",
+    "pending": "We sent a verification link to your email. Check your inbox.",
+    "verified": "Your email is already verified.",
+    "resend": "Resend email",
+    "resendCooldown": "Wait {{seconds}}s to resend",
+    "resendError": "Could not resend the verification email.",
+    "checking": "Checking...",
+    "linkTitle": "Confirm your password to finish",
+    "linkDescription": "Enter your current password to link the verification to your account.",
+    "linkSubmit": "Confirm",
+    "linkError": "Could not confirm the verification. Check your password and try again.",
+    "linkSuccess": "Email verified and linked successfully.",
+    "noFirebaseAccount": "We couldn't find a verification in progress. Go back to registration or contact support."
   }
 }
