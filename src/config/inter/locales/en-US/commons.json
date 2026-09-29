@@ -78,7 +78,8 @@
     "solarPanelModels": "Solar panel models",
     "settings": "Settings",
     "dashboard": "Dashboard",
-    "employees": "Employees"
+    "employees": "Employees",
+    "offers": "Offers"
   },
   "saasContext": {
     "personal": "Personal",
@@ -138,6 +139,30 @@
   },
   "companyOffers": {
     "title": "Offers"
+  },
+  "offers": {
+    "title": "Offers",
+    "loading": "Loading...",
+    "error": "Could not complete the operation.",
+    "createHeading": "New offer",
+    "editHeading": "Edit offer",
+    "noApprovedModels": "No approved solar panel model yet — register one in Products and wait for the review.",
+    "model": "Panel model",
+    "selectModel": "Select a model",
+    "offerTitle": "Title",
+    "offerDescription": "Description",
+    "unitPrice": "Unit price ($)",
+    "availability": "Availability",
+    "discount": "Discount (%)",
+    "serviceRegions": "Service regions",
+    "add": "Create offer",
+    "save": "Save",
+    "cancel": "Cancel",
+    "listTitle": "Your offers",
+    "units": "units",
+    "edit": "Edit",
+    "remove": "Remove",
+    "empty": "No offers registered yet."
   },
   "myCompany": {
     "loadError": "Could not load your company.",

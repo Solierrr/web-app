@@ -78,7 +78,8 @@
     "solarPanelModels": "Modelos de placas solares",
     "settings": "Configurações",
     "dashboard": "Painel",
-    "employees": "Funcionários"
+    "employees": "Funcionários",
+    "offers": "Ofertas"
   },
   "saasContext": {
     "personal": "Pessoal",
@@ -138,6 +139,30 @@
   },
   "companyOffers": {
     "title": "Ofertas"
+  },
+  "offers": {
+    "title": "Ofertas",
+    "loading": "Carregando...",
+    "error": "Não foi possível concluir a operação.",
+    "createHeading": "Nova oferta",
+    "editHeading": "Editar oferta",
+    "noApprovedModels": "Nenhum modelo de placa solar aprovado ainda — cadastre um em Produtos e aguarde a análise.",
+    "model": "Modelo de placa",
+    "selectModel": "Selecione um modelo",
+    "offerTitle": "Título",
+    "offerDescription": "Descrição",
+    "unitPrice": "Preço unitário (R$)",
+    "availability": "Disponibilidade",
+    "discount": "Desconto (%)",
+    "serviceRegions": "Regiões atendidas",
+    "add": "Cadastrar oferta",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "listTitle": "Suas ofertas",
+    "units": "unidades",
+    "edit": "Editar",
+    "remove": "Remover",
+    "empty": "Nenhuma oferta cadastrada ainda."
   },
   "myCompany": {
     "loadError": "Não foi possível carregar sua empresa.",
