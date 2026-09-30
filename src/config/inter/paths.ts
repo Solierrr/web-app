@@ -19,6 +19,8 @@ export const SEGMENT = [
   "profileSetup",
   "user",
   "admin",
+  "supplier",
+  "demandant",
   "solarPanelModels",
   "messages",
   "chatbot",
@@ -78,6 +80,9 @@ export const routePaths = {
   profileOnboardingAccess: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "profileSetup", "access")}`,
 
   solarPanelModelsCrud: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin", "solarPanelModels")}`,
+  adminDashboard: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin")}`,
+  supplierDashboard: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "supplier")}`,
+  demandantDashboard: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "demandant")}`,
   employeesManagement: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin", "employees")}`,
   offersManagement: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin", "offers")}`,
   unitsManagement: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin", "units")}`,

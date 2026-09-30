@@ -1,0 +1,36 @@
+{
+  "roles": {
+    "admin": "Administración",
+    "demandant": "Solicitante",
+    "supplier": "Proveedor"
+  },
+  "shell": {
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú",
+    "collapseSidebar": "Contraer menú lateral",
+    "expandSidebar": "Expandir menú lateral"
+  },
+  "navigation": {
+    "label": "Navegación principal",
+    "groups": {
+      "overview": "Vista general",
+      "catalog": "Catálogo"
+    },
+    "items": {
+      "dashboard": "Inicio",
+      "solarPanelModels": "Modelos de panel solar"
+    }
+  },
+  "dashboard": {
+    "title": "Vista general",
+    "placeholder": "El panel global de administración se definirá en una próxima etapa.",
+    "demandant": {
+      "title": "Vista general",
+      "placeholder": "El panel del solicitante se definirá en una próxima etapa."
+    },
+    "supplier": {
+      "title": "Vista general",
+      "placeholder": "El panel del proveedor se definirá en una próxima etapa."
+    }
+  }
+}

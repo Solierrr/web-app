@@ -14,6 +14,7 @@ export interface AuthSession {
   accessTokenExpiresAt: string;
   userId: string;
   email: string;
+  isMock?: boolean;
 }
 
 export interface RegisterResult {
