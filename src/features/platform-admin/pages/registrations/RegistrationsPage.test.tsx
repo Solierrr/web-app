@@ -1,8 +1,10 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import RegistrationsPage from "./RegistrationsPage";
-import { approveCompany, listAllCompanies, rejectCompany } from "@/features/companies/company.service";
-import { approveSolarPanel, listSolarPanelModelsByStatus, rejectSolarPanel } from "@/features/solar-panel/solarPanel.service";
+import type { Company } from "@/features/companies/company";
+import { approveCompany, listAllCompanies } from "@/features/companies/company.service";
+import type { SolarPanel } from "@/features/solar-panel/solarPanel";
+import { listSolarPanelModelsByStatus, rejectSolarPanel } from "@/features/solar-panel/solarPanel.service";
 
 vi.mock("@/features/companies/company.service", () => ({
   listAllCompanies: vi.fn(),
@@ -19,16 +21,16 @@ vi.mock("@/features/solar-panel/solarPanel.service", () => ({
 const pendingCompany = {
   id: "company-1", status: "UNDER_ANALYSIS", type: "SUPPLIER",
   cnpj: "12345678000199", tradeName: "Fornecedora Solar", corporateName: "Fornecedora Solar Ltda", slug: "fornecedora-solar",
-} as never;
+} as unknown as Company;
 
 const approvedCompany = {
   id: "company-2", status: "APPROVED", type: "SUPPLIER",
   cnpj: "98765432000188", tradeName: "Já Aprovada", corporateName: "Já Aprovada Ltda", slug: "ja-aprovada",
-} as never;
+} as unknown as Company;
 
 const pendingModel = {
   id: "model-1", brand: "Marca", model: "Modelo X", status: "UNDER_ANALYSIS", powerOutput: 550,
-} as never;
+} as unknown as SolarPanel;
 
 describe("RegistrationsPage", () => {
   beforeEach(() => {
