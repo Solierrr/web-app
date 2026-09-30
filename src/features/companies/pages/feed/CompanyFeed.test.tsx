@@ -4,22 +4,20 @@ import { describe, expect, it, vi, beforeEach } from "vitest";
 import CompanyFeed from "./CompanyFeed";
 
 vi.mock("@/features/companies/company.service", () => ({
-  getCompanies: vi.fn(),
+  getCatalogCompanies: vi.fn(),
 }));
 
-import { getCompanies } from "@/features/companies/company.service";
-import { CompanyStatus } from "@/features/companies/company.enum";
-import type { Company } from "@/features/companies/company";
+import { getCatalogCompanies } from "@/features/companies/company.service";
+import type { CatalogCompany } from "@/features/companies/company.service";
 
-const mockedGetCompanies = vi.mocked(getCompanies);
+const mockedGetCompanies = vi.mocked(getCatalogCompanies);
 
-const items: Company[] = [
+const items: CatalogCompany[] = [
   {
     id: "company-1",
-    status: CompanyStatus.APPROVED,
-    cnpj: "12345678000190",
+    city: "São Paulo",
+    state: "SP",
     tradeName: "Solaria Energia",
-    corporateName: "Solaria Energia Solar Ltda",
     slug: "solaria-energia",
   },
 ];

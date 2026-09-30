@@ -1,5 +1,4 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import MocksMode from "@/config/mocks/mocksMode.enum";
 
 const { loggerMock } = vi.hoisted(() => ({
   loggerMock: {
@@ -18,7 +17,6 @@ describe("exchange.service", () => {
   const fetchMock = vi.fn();
 
   beforeEach(() => {
-    vi.stubEnv("VITE_MOCKS", MocksMode.DEACTIVATED);
     vi.stubEnv("VITE_EXCHANGE_API", "https://exchange.test");
     vi.stubGlobal("fetch", fetchMock);
   });

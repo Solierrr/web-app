@@ -17,17 +17,7 @@
   },
 
   "register": {
-    "helperText": "Create a professional or company account to access Solaria",
-    "accountType": "Account type",
-    "accountTypeRequired": "Select an account type and, for companies, a company profile",
-    "company": "Company",
-    "professional": "Professional",
-    "companyType": "Company profile",
-    "supplier": "Supplier",
-    "demandant": "Demandant",
-    "cnpj": "CNPJ",
-    "tradeName": "Trade name",
-    "corporateName": "Corporate name",
+    "helperText": "Create your account to access the marketplace",
     "submit": "Register",
     "hasAccountPrefix": "Already have an account?",
     "login": "Sign in",
@@ -38,9 +28,25 @@
   "forgotPassword": {
     "helperText": "Enter your email to receive recovery instructions",
     "submit": "Send",
-    "success": "Password recovery request completed successfully",
-    "error": "Could not submit the password recovery request",
+    "sent": "If that email is registered, you will receive a link to reset your password.",
+    "error": "Could not send the recovery email. Please try again.",
     "rememberedPasswordPrefix": "Remembered your password?",
     "backToLogin": "Back to login"
+  },
+
+  "verifyEmail": {
+    "title": "Verify your email",
+    "pending": "We sent a verification link to your email. Check your inbox.",
+    "verified": "Your email is already verified.",
+    "resend": "Resend email",
+    "resendCooldown": "Wait {{seconds}}s to resend",
+    "resendError": "Could not resend the verification email.",
+    "checking": "Checking...",
+    "linkTitle": "Confirm your password to finish",
+    "linkDescription": "Enter your current password to link the verification to your account.",
+    "linkSubmit": "Confirm",
+    "linkError": "Could not confirm the verification. Check your password and try again.",
+    "linkSuccess": "Email verified and linked successfully.",
+    "noFirebaseAccount": "We couldn't find a verification in progress. Go back to registration or contact support."
   }
 }

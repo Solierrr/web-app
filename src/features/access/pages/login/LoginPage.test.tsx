@@ -5,6 +5,10 @@ import LoginPage from "./LoginPage";
 
 vi.mock("@/features/access/access.service", () => ({
   login: vi.fn(),
+  loginWithFirebase: vi.fn(),
+}));
+vi.mock("@/config/firebase/auth/auth.service", () => ({
+  login: vi.fn().mockRejectedValue(new Error("no firebase account")),
 }));
 
 import { login } from "@/features/access/access.service";

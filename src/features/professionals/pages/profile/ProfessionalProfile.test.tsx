@@ -4,31 +4,28 @@ import { describe, expect, it, vi, beforeEach } from "vitest";
 import ProfessionalProfile from "./ProfessionalProfile";
 
 vi.mock("@/features/professionals/professional.service", () => ({
-  getProfessionalBySlug: vi.fn(),
+  getCatalogTechnicianBySlug: vi.fn(),
 }));
 
-import { getProfessionalBySlug } from "@/features/professionals/professional.service";
-import type { Professional } from "@/features/professionals/professional";
+import { getCatalogTechnicianBySlug, type CatalogTechnician } from "@/features/professionals/professional.service";
 
-const mockedGetProfessionalBySlug = vi.mocked(getProfessionalBySlug);
+const mockedGetCatalogTechnicianBySlug = vi.mocked(getCatalogTechnicianBySlug);
 
-const professional: Professional = {
+const professional: CatalogTechnician = {
   id: "professional-1",
   name: "Carlos Eduardo Lima",
-  contact: { number: "31991112222", email: "carlos.lima@gmail.com" },
-  address: { street: "Rua das Palmeiras", number: "220", neighborhood: "Savassi", city: "Belo Horizonte", state: "MG", country: "Brasil", zipCode: "30130-000" },
-  geolocation: { latitude: 0, longitude: 0 },
-  registrations: [{ profession: "Engenheiro Eletricista", council: "CREA-MG", number: "123456", expirationDate: "2027-01-01" }],
   slug: "carlos-eduardo-lima",
+  crea: "MG-123456",
+  professions: ["Engenheiro Eletricista"],
 };
 
 describe("ProfessionalProfile", () => {
   beforeEach(() => {
-    mockedGetProfessionalBySlug.mockReset();
+    mockedGetCatalogTechnicianBySlug.mockReset();
   });
 
   it("renders a skeleton while the professional is loading", () => {
-    mockedGetProfessionalBySlug.mockReturnValue(new Promise(() => {}));
+    mockedGetCatalogTechnicianBySlug.mockReturnValue(new Promise(() => {}));
 
     render(
       <MemoryRouter>
@@ -40,7 +37,7 @@ describe("ProfessionalProfile", () => {
   });
 
   it("renders the mocked professional once loaded", async () => {
-    mockedGetProfessionalBySlug.mockResolvedValue(professional);
+    mockedGetCatalogTechnicianBySlug.mockResolvedValue(professional);
 
     render(
       <MemoryRouter>
@@ -49,6 +46,18 @@ describe("ProfessionalProfile", () => {
     );
 
     expect(await screen.findByRole("heading", { name: "Carlos Eduardo Lima" })).toBeInTheDocument();
-    expect(screen.getByText("Belo Horizonte/MG")).toBeInTheDocument();
+    expect(screen.getByText("CREA: MG-123456")).toBeInTheDocument();
+  });
+
+  it("shows an error message when loading fails", async () => {
+    mockedGetCatalogTechnicianBySlug.mockRejectedValue(new Error("not found"));
+
+    render(
+      <MemoryRouter>
+        <ProfessionalProfile />
+      </MemoryRouter>,
+    );
+
+    expect(await screen.findByRole("alert")).toBeInTheDocument();
   });
 });

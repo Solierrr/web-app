@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import Corridor from "./Corridor";
-import solarPanelAnnouncementMock from "@/features/solar-panel/solarPanelAnnouncement.d.mocks";
+import solarPanelAnnouncementMock from "@/features/solar-panel/solarPanelAnnouncement.d.mock";
 
 const meta = {
   title: "Layout/Announcement/Corridor",

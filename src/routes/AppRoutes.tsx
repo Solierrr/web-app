@@ -5,8 +5,9 @@ import AppMode from "@/config/vite/mode.enum";
 
 import { TestRoutes } from "./TestRoutes";
 import { AppLayout } from "../config/AppLayout";
+import { SaaSLayout } from "@/components/layout/saas/SaaSLayout";
 import LanguageLayout, { RootRedirect } from "../config/inter/browser/LanguageLayout";
-import { NotFoundPage } from "@/shared/pages/error/not-found/NotFound";
+import { NotFoundPage } from "../pages/error/not-found/NotFound";
 
 import { SUPPORTED, type SupportedLanguage } from "@/config/inter/browser/languages";
 import { joinSegments } from "@/config/inter/paths";
@@ -18,19 +19,34 @@ import CompanyFeed from "@/features/companies/pages/feed/CompanyFeed";
 import SolarPanelSearch from "@/features/solar-panel/pages/search/SolarPanelSearch";
 import ProfessionalSearch from "@/features/professionals/pages/search/ProfessionalSearch";
 import CompanySearch from "@/features/companies/pages/search/CompanySearch";
-import ProfileOnboarding from "@/features/users/user/pages/onboarding/ProfileOnboarding";
+import ProfileOnboarding from "@/components/layout/profile/ProfileOnboarding";
+import CompanyOnboarding from "@/features/companies/pages/onboarding/CompanyOnboarding";
+import ProfessionalOnboarding from "@/features/professionals/pages/onboarding/ProfessionalOnboarding";
+import AccountSetupPage from "@/features/access/pages/account-setup/AccountSetupPage";
+import AccessInfoPage from "@/features/access/pages/access-info/AccessInfoPage";
 import EnterpriseProfile from "@/features/companies/pages/profile/EnterpriseProfile";
 import CompanyProfile from "@/features/companies/pages/profile/CompanyProfile";
-import UserProfile from "@/features/users/user/pages/profile/UserProfile";
+import UserProfile from "@/features/users/pages/profile/UserProfile";
 import ProfessionalProfile from "@/features/professionals/pages/profile/ProfessionalProfile";
-import Chat from "@/features/messages/pages/chat/Chat";
-import ChatbotPage from "@/features/messages/pages/chatbot/ChatbotPage";
+import SolarPanelModelCrud from "@/features/solar-panel/pages/crud/SolarPanelModelCrud";
+import Chat from "@/features/messages/pages/Chat";
+import Inbox from "@/features/messages/pages/Inbox";
+import ContactCompany from "@/features/messages/pages/ContactCompany";
+import ChatbotPage from "@/features/messages/pages/ChatbotPage";
 import LoginPage from "@/features/access/pages/login/LoginPage";
 import RegisterPage from "@/features/access/pages/register/RegisterPage";
 import ForgotPasswordPage from "@/features/access/pages/forgot-password/ForgotPasswordPage";
-import DemandantDashboardPage from "@/features/demandant/pages/dashboard/DemandantDashboardPage";
-import SupplierDashboardPage from "@/features/supplier/pages/dashboard/SupplierDashboardPage";
-import SaaSLayout from "@/components/layout/saas/SaaSLayout";
+import VerifyEmailPage from "@/features/access/pages/verify-email/VerifyEmailPage";
+import SettingsPage from "@/features/settings/pages/SettingsPage";
+import SettingsSecurityPage from "@/features/settings/pages/security/SettingsSecurityPage";
+import DashboardPage from "@/features/dashboard/pages/DashboardPage";
+import EmployeesPage from "@/features/companies/pages/employees/EmployeesPage";
+import OffersPage from "@/features/offers/pages/OffersPage";
+import UnitsPage from "@/features/units/pages/UnitsPage";
+import RequireAuth from "@/features/access/RequireAuth";
+import RequireCompany from "@/features/access/RequireCompany";
+import RequirePlatformAdmin from "@/features/access/RequirePlatformAdmin";
+import RegistrationsPage from "@/features/platform-admin/pages/registrations/RegistrationsPage";
 
 interface RouteDefinition {
   key: string;
@@ -55,16 +71,33 @@ const APP: RouteDefinition[] = [
 
   { key: "productDetail", path: (lang) => `${joinSegments(lang, "solarPanel")}/:companySlug/:productSlug`, element: <SolarPanelAnnouncement /> },
 
-  { key: "ownCompanyProfile", path: (lang) => joinSegments(lang, "company"), element: <EnterpriseProfile /> },
   { key: "companyProfile", path: (lang) => `${joinSegments(lang, "company")}/:companySlug`, element: <CompanyProfile /> },
-  { key: "ownUserProfile", path: (lang) => joinSegments(lang, "user"), element: <UserProfile /> },
   { key: "professionalProfile", path: (lang) => `${joinSegments(lang, "professional")}/:professionalSlug`, element: <ProfessionalProfile /> },
 
   { key: "profileOnboardingUser", path: (lang) => joinSegments(lang, "profileSetup", "user"), element: <ProfileOnboarding kind="user" /> },
-  { key: "profileOnboardingCompany", path: (lang) => joinSegments(lang, "profileSetup", "company"), element: <ProfileOnboarding kind="company" /> },
 
-  { key: "chat", path: (lang) => `${joinSegments(lang, "messages")}/:contactId`, element: <Chat /> },
   { key: "chatbot", path: (lang) => joinSegments(lang, "chatbot"), element: <ChatbotPage /> },
+];
+
+const SAAS: RouteDefinition[] = [
+  { key: "dashboard", path: (lang) => joinSegments(lang, "dashboard"), element: <DashboardPage /> },
+  { key: "verifyEmail", path: (lang) => joinSegments(lang, "verifyEmail"), element: <VerifyEmailPage /> },
+  { key: "settings", path: (lang) => joinSegments(lang, "settings"), element: <SettingsPage /> },
+  { key: "settingsSecurity", path: (lang) => joinSegments(lang, "settings", "security"), element: <SettingsSecurityPage /> },
+  { key: "accountSetup", path: (lang) => joinSegments(lang, "profileSetup"), element: <AccountSetupPage /> },
+  { key: "profileOnboardingCompany", path: (lang) => joinSegments(lang, "profileSetup", "company"), element: <CompanyOnboarding /> },
+  { key: "profileOnboardingProfessional", path: (lang) => joinSegments(lang, "profileSetup", "professional"), element: <ProfessionalOnboarding /> },
+  { key: "profileOnboardingAccess", path: (lang) => joinSegments(lang, "profileSetup", "access"), element: <AccessInfoPage /> },
+  { key: "contactCompany", path: (lang) => `${joinSegments(lang, "messages", "company")}/:companyId`, element: <ContactCompany /> },
+  { key: "inbox", path: (lang) => joinSegments(lang, "messages"), element: <RequireCompany><Inbox /></RequireCompany> },
+  { key: "chat", path: (lang) => `${joinSegments(lang, "messages")}/:conversationId`, element: <RequireCompany><Chat /></RequireCompany> },
+  { key: "ownCompanyProfile", path: (lang) => joinSegments(lang, "company"), element: <EnterpriseProfile /> },
+  { key: "ownUserProfile", path: (lang) => joinSegments(lang, "user"), element: <UserProfile /> },
+  { key: "solarPanelModelsCrud", path: (lang) => joinSegments(lang, "admin", "solarPanelModels"), element: <RequireCompany type="SUPPLIER"><SolarPanelModelCrud /></RequireCompany> },
+  { key: "employeesManagement", path: (lang) => joinSegments(lang, "admin", "employees"), element: <RequireCompany><EmployeesPage /></RequireCompany> },
+  { key: "offersManagement", path: (lang) => joinSegments(lang, "admin", "offers"), element: <RequireCompany type="SUPPLIER"><OffersPage /></RequireCompany> },
+  { key: "unitsManagement", path: (lang) => joinSegments(lang, "admin", "units"), element: <RequireCompany type="DEMANDANT"><UnitsPage /></RequireCompany> },
+  { key: "registrationsManagement", path: (lang) => joinSegments(lang, "admin", "registrations"), element: <RequirePlatformAdmin><RegistrationsPage /></RequirePlatformAdmin> },
 ];
 
 export function AppRoutes() {
@@ -77,22 +110,16 @@ export function AppRoutes() {
 
         {SUPPORTED.flatMap((lang) => ACCESS.map(({ key, path, element }) => <Route key={`${lang}-${key}`} path={path(lang)} element={element} />))}
 
-        {SUPPORTED.map((lang) => (
-          <Route key={`demandant-${lang}`} path={joinSegments(lang, "demandant")} element={<SaaSLayout role="demandant" />}>
-            <Route index element={<DemandantDashboardPage />} />
-          </Route>
-        ))}
-
-        {SUPPORTED.map((lang) => (
-          <Route key={`supplier-${lang}`} path={joinSegments(lang, "supplier")} element={<SaaSLayout role="supplier" />}>
-            <Route index element={<SupplierDashboardPage />} />
-          </Route>
-        ))}
-
         <Route element={<AppLayout />}>
           <Route index element={<SolarPanelFeed />} />
 
           {SUPPORTED.flatMap((lang) => APP.map(({ key, path, element }) => <Route key={`${lang}-${key}`} path={path(lang)} element={element} />))}
+
+          <Route element={<RequireAuth />}>
+            <Route element={<SaaSLayout />}>
+              {SUPPORTED.flatMap((lang) => SAAS.map(({ key, path, element }) => <Route key={`${lang}-${key}`} path={path(lang)} element={element} />))}
+            </Route>
+          </Route>
 
           <Route path="*" element={<NotFoundPage />} />
         </Route>

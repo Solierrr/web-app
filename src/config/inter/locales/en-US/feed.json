@@ -1,25 +1,10 @@
 {
   "professional": {
-    "description": "Accredited professionals available for your projects."
+    "description": "Accredited professionals available for your projects.",
+    "loadError": "Could not load professionals."
   },
   "company": {
-    "eyebrow": "Find your next partner",
-    "title": "Companies making solar energy happen",
-    "description": "Meet suppliers of equipment and solutions to take your projects further.",
-    "collectionLabel": "Company collection",
-    "featuredLabel": "Featured",
-    "empty": "There are no companies to show yet.",
-    "tabs": {
-      "featured": "Featured",
-      "recent": "Recent"
-    },
-    "highlights": {
-      "solarProjects": "Solar projects",
-      "residential": "Residential",
-      "installation": "Installation",
-      "commercial": "Commercial",
-      "equipment": "Equipment",
-      "solarPanels": "Solar panels"
-    }
+    "loadError": "Could not load companies.",
+    "description": "Accredited companies available on the platform."
   }
 }

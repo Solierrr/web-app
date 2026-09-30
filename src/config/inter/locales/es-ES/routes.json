@@ -11,12 +11,21 @@
   "login": "iniciar-sesion",
   "register": "registro",
   "forgotPassword": "olvide-mi-contrasena",
+  "verifyEmail": "verificar-correo",
   "profileSetup": "personalizar-perfil",
   "user": "usuario",
   "admin": "admin",
-  "demandant": "solicitante",
   "supplier": "proveedor",
+  "demandant": "demandante",
   "solarPanelModels": "modelos-de-panel-solar",
   "messages": "mensajes",
-  "chatbot": "chatbot"
+  "chatbot": "chatbot",
+  "settings": "configuracion",
+  "security": "seguridad",
+  "access": "acceso",
+  "dashboard": "panel",
+  "employees": "empleados",
+  "offers": "ofertas",
+  "units": "unidades",
+  "registrations": "registros"
 }

@@ -4,8 +4,8 @@ import type { BusinessContact } from "@/shared/types/business-contact/businessCo
 
 export interface Company {
   id: string;
-  status: CompanyStatus;
   type?: "SUPPLIER" | "DEMANDANT";
+  status: CompanyStatus;
   cnpj: string;
   tradeName: string;
   corporateName: string;

@@ -5,15 +5,12 @@ import Select from "@@/ui/select/Select";
 import EntityCard from "@/components/layout/announcement/entity-card/EntityCard";
 import Skeleton from "@@/feedback/skeleton/Skeleton";
 import { ImageSkeleton } from "@@/feedback/skeleton/Skeleton.presets";
-import { getProfessionals } from "@/features/professionals/professional.service";
-import type { Professional } from "@/features/professionals/professional";
+import { getCatalogTechnicians, type CatalogTechnician } from "@/features/professionals/professional.service";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { toCardItem } from "./ProfessionalSearch.utils";
 import WrapperLayout from "@/config/WrapperLayout";
 
-const MOCK_IDS = ["professional-1", "professional-2", "professional-3"];
-
-function ProfessionalSearchContent({ items }: { items: Professional[] }) {
+function ProfessionalSearchContent({ items }: { items: CatalogTechnician[] }) {
   const { t } = useTranslation("search");
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
@@ -72,13 +69,17 @@ function ProfessionalSearchSkeleton() {
 }
 
 export default function ProfessionalSearch() {
-  const [items, setItems] = useState<Professional[] | null>(null);
+  const [items, setItems] = useState<CatalogTechnician[] | null>(null);
+  const [error, setError] = useState(false);
+  const { t } = useTranslation("search");
 
   useEffect(() => {
     let active = true;
 
-    getProfessionals(MOCK_IDS).then((result) => {
+    getCatalogTechnicians().then((result) => {
       if (active) setItems(result);
+    }).catch(() => {
+      if (active) setError(true);
     });
 
     return () => {
@@ -86,5 +87,8 @@ export default function ProfessionalSearch() {
     };
   }, []);
 
+  if (error) {
+    return <WrapperLayout ptop><p role="alert">{t("professional.loadError")}</p></WrapperLayout>;
+  }
   return <WrapperLayout ptop>{items ? <ProfessionalSearchContent items={items} /> : <ProfessionalSearchSkeleton />}</WrapperLayout>;
 }

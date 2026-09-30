@@ -1,25 +1,10 @@
 {
   "professional": {
-    "description": "Profesionales acreditados disponibles para tus proyectos."
+    "description": "Profesionales acreditados disponibles para tus proyectos.",
+    "loadError": "No se pudieron cargar los profesionales."
   },
   "company": {
-    "eyebrow": "Encuentra tu próximo socio",
-    "title": "Empresas que hacen posible la energía solar",
-    "description": "Conoce proveedores de equipos y soluciones para llevar tus proyectos más lejos.",
-    "collectionLabel": "Colección de empresas",
-    "featuredLabel": "Destacado",
-    "empty": "Todavía no hay empresas para mostrar.",
-    "tabs": {
-      "featured": "Destacados",
-      "recent": "Recientes"
-    },
-    "highlights": {
-      "solarProjects": "Proyectos solares",
-      "residential": "Residencial",
-      "installation": "Instalación",
-      "commercial": "Comercial",
-      "equipment": "Equipos",
-      "solarPanels": "Paneles solares"
-    }
+    "loadError": "No se pudieron cargar las empresas.",
+    "description": "Empresas acreditadas disponibles en la plataforma."
   }
 }

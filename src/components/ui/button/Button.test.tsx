@@ -171,8 +171,9 @@ describe("Button", () => {
       expect(button).toHaveTextContent("Salvar");
     });
 
-    it("does not add its own delay when VITE_MOCKS is ALWAYS", async () => {
+    it("forces at least a 2s wait when VITE_MOCKS is ALWAYS, even if the action resolves sooner", async () => {
       vi.stubEnv("VITE_MOCKS", MocksMode.ALWAYS);
+      vi.useFakeTimers();
       const action = vi.fn(() => Promise.resolve());
 
       render(<Button content="Salvar" description="desc" action={action} />);
@@ -182,6 +183,16 @@ describe("Button", () => {
         fireEvent.click(button);
       });
 
+      expect(button).toBeDisabled();
+
+      await act(async () => {
+        vi.advanceTimersByTime(1999);
+      });
+      expect(button).toBeDisabled();
+
+      await act(async () => {
+        vi.advanceTimersByTime(1);
+      });
       expect(button).not.toBeDisabled();
     });
 

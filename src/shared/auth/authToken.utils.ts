@@ -1,5 +1,4 @@
 import type { AuthSession } from "@/features/access/access";
-import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
 
 const STORAGE_KEY = "solaria.authSession";
 
@@ -8,10 +7,7 @@ export function getAuthSession(): AuthSession | null {
   if (!raw) return null;
 
   try {
-    const session = JSON.parse(raw) as AuthSession;
-    if (session.isMock && !isAlwaysMockMode()) return null;
-
-    return session;
+    return JSON.parse(raw) as AuthSession;
   } catch {
     return null;
   }

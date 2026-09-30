@@ -76,7 +76,7 @@ describe("SolarPanelAnnouncement", () => {
 
     renderAt("/placa-solar/solaria-energia/coletor-solar-termico-vertical-de-cobre");
 
-    expect(mockedGetSolarPanelBySlug).toHaveBeenCalledWith("solaria-energia", "coletor-solar-termico-vertical-de-cobre");
+    expect(mockedGetSolarPanelBySlug).toHaveBeenCalledWith("solaria-energia", "coletor-solar-termico-vertical-de-cobre", "pt-BR");
     expect(await screen.findByText(product.title)).toBeInTheDocument();
     expect(screen.getByText("Marca X")).toBeInTheDocument();
     expect(screen.getByText("Anunciado por Solaria Energia")).toBeInTheDocument();

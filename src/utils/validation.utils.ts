@@ -36,3 +36,40 @@ export function validateRequired(input: string, field: string): ResultValidation
   if (!input || input.trim() === "") return { isValid: false, message: `${field} é obrigatório` };
   return { isValid: true };
 }
+
+function checkDigit(digits: number[], weightsStart: number): number {
+  let sum = 0;
+  let weight = weightsStart;
+  for (const digit of digits) {
+    sum += digit * weight;
+    weight = weight === 2 ? 9 : weight - 1;
+  }
+  const remainder = sum % 11;
+  return remainder < 2 ? 0 : 11 - remainder;
+}
+
+export function validateCpf(input: string): ResultValidation {
+  const digits = input.replace(/\D/g, "");
+  if (!digits) return { isValid: false, message: "CPF é obrigatório" };
+  if (digits.length !== 11 || /^(\d)\1{10}$/.test(digits)) return { isValid: false, message: "CPF inválido" };
+
+  const numbers = digits.split("").map(Number);
+  const firstCheck = checkDigit(numbers.slice(0, 9), 10);
+  const secondCheck = checkDigit(numbers.slice(0, 10), 11);
+  if (firstCheck !== numbers[9] || secondCheck !== numbers[10]) return { isValid: false, message: "CPF inválido" };
+
+  return { isValid: true };
+}
+
+export function validateCnpj(input: string): ResultValidation {
+  const digits = input.replace(/\D/g, "");
+  if (!digits) return { isValid: false, message: "CNPJ é obrigatório" };
+  if (digits.length !== 14 || /^(\d)\1{13}$/.test(digits)) return { isValid: false, message: "CNPJ inválido" };
+
+  const numbers = digits.split("").map(Number);
+  const firstCheck = checkDigit(numbers.slice(0, 12), 5);
+  const secondCheck = checkDigit(numbers.slice(0, 13), 6);
+  if (firstCheck !== numbers[12] || secondCheck !== numbers[13]) return { isValid: false, message: "CNPJ inválido" };
+
+  return { isValid: true };
+}

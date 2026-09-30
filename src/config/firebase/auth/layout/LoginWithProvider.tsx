@@ -1,41 +1,23 @@
-import { FaMicrosoft } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
-import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
 import { loginWithGoogle } from "../auth.service";
+import { FcGoogle } from 'react-icons/fc';
+import { FaMicrosoft } from 'react-icons/fa';
 
-export type LoginProvider = "google" | "microsoft";
+const classes = "flex w-fit h-fit aspect-square cursor-pointer"
 
-interface LoginWithProviderProps {
-  onMockLogin?: () => Promise<void>;
-}
-
-const classes = "flex w-fit h-fit aspect-square cursor-pointer";
-
-async function handleLogin(onMockLogin: LoginWithProviderProps["onMockLogin"]) {
-  try {
-    if (isAlwaysMockMode()) {
-      await onMockLogin?.();
-      return;
+export function LoginWithGoogle() {
+    async function handleLogin() {
+        try { await loginWithGoogle(); }
+        catch (error) { console.error(error); }
     }
 
-    await loginWithGoogle();
-  } catch (error) {
-    console.error(error);
-  }
+    return (<button className={classes} onClick={handleLogin}><FcGoogle size="40" /></button>);
 }
 
-export function LoginWithGoogle({ onMockLogin }: LoginWithProviderProps) {
-  return (
-    <button type="button" className={classes} aria-label="Continue with Google" onClick={() => handleLogin(onMockLogin)}>
-      <FcGoogle size="40" />
-    </button>
-  );
-}
+export function LoginWithMicrosoft() {
+    async function handleLogin() {
+        try { await loginWithGoogle(); }
+        catch (error) { console.error(error); }
+    }
 
-export function LoginWithMicrosoft({ onMockLogin }: LoginWithProviderProps) {
-  return (
-    <button type="button" className={classes} aria-label="Continue with Microsoft" onClick={() => handleLogin(onMockLogin)}>
-      <FaMicrosoft size="40" />
-    </button>
-  );
+    return (<button className={classes} onClick={handleLogin}><FaMicrosoft size="40" /></button>);
 }

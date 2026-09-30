@@ -1,101 +1,96 @@
 import type { AuthSession, LoginCredentials, RegisterCredentials, RegisterResult } from "./access";
 
-import { resolveWithMocks } from "@/config/mocks/fallback.service";
-import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
 import { httpJson } from "@/shared/http/http.service";
 import { clearAuthSession, getAuthSession, setAuthSession } from "@/shared/auth/authToken.utils";
 
 const API = `${import.meta.env.VITE_API_AUTH}/auth`;
 const SERVICE_NAME = "access";
 
-function createMockSession(email: string): AuthSession {
-  return {
-    accessToken: `mock-access-${crypto.randomUUID()}`,
-    refreshToken: `mock-refresh-${crypto.randomUUID()}`,
-    accessTokenExpiresAt: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
-    userId: `mock-user-${crypto.randomUUID()}`,
-    email,
-    isMock: true,
-  };
-}
-
 export async function login(credentials: LoginCredentials): Promise<AuthSession> {
-  const session = await resolveWithMocks(
-    () =>
-      httpJson<AuthSession>(`${API}/login`, {
-        service: SERVICE_NAME,
-        operation: "login",
-        method: "POST",
-        body: credentials,
-        errorMessage: "Não foi possível fazer login",
-      }),
-    () => createMockSession(credentials.email),
-  );
-  setAuthSession(session);
-  return session;
-}
-
-export async function loginWithMockProvider(provider: "google" | "microsoft"): Promise<AuthSession> {
-  if (!isAlwaysMockMode()) throw new Error("Mock provider login is only available in mock mode");
-
-  await waitForMockService();
-  const session = createMockSession(`mock.${provider}@solaria.local`);
+  const session = await httpJson<AuthSession>(`${API}/login`, {
+    service: SERVICE_NAME,
+    operation: "login",
+    method: "POST",
+    body: credentials,
+    authenticated: false,
+    errorMessage: "Não foi possível fazer login",
+  });
   setAuthSession(session);
   return session;
 }
 
 export function register(credentials: RegisterCredentials): Promise<RegisterResult> {
-  return resolveWithMocks(
-    () =>
-      httpJson<RegisterResult>(`${API}/register`, {
-        service: SERVICE_NAME,
-        operation: "register",
-        method: "POST",
-        body: credentials,
-        errorMessage: "Não foi possível concluir o cadastro",
-      }),
-    () => ({ id: `mock-user-${crypto.randomUUID()}`, email: credentials.email, message: "Account created" }),
-  );
+  return httpJson<RegisterResult>(`${API}/register`, {
+    service: SERVICE_NAME,
+    operation: "register",
+    method: "POST",
+    body: credentials,
+    authenticated: false,
+    errorMessage: "Não foi possível concluir o cadastro",
+  });
 }
 
-export async function refresh(): Promise<AuthSession | null> {
-  const currentSession = getAuthSession();
-  if (!currentSession) return null;
-
-  const session = await resolveWithMocks(
-    () =>
-      httpJson<AuthSession>(`${API}/refresh`, {
-        service: SERVICE_NAME,
-        operation: "refresh",
-        method: "POST",
-        body: { refreshToken: currentSession.refreshToken },
-        errorMessage: "Não foi possível renovar a sessão",
-      }),
-    () => ({ ...currentSession, accessTokenExpiresAt: new Date(Date.now() + 60 * 60 * 1000).toISOString() }),
-  );
+export async function loginWithFirebase(idToken: string): Promise<AuthSession> {
+  const session = await httpJson<AuthSession>(`${API}/firebase`, {
+    service: SERVICE_NAME,
+    operation: "loginWithFirebase",
+    method: "POST",
+    body: { idToken },
+    authenticated: false,
+    errorMessage: "Não foi possível fazer login",
+  });
   setAuthSession(session);
   return session;
 }
 
-export async function logout(): Promise<void> {
-  try {
-    await resolveWithMocks(
-      () =>
-        httpJson<void>(`${API}/logout`, {
-          service: SERVICE_NAME,
-          operation: "logout",
-          method: "POST",
-          errorMessage: "Não foi possível encerrar a sessão",
-        }),
-      () => undefined,
-    );
-  } finally {
-    clearAuthSession();
-  }
+export async function linkFirebase(email: string, password: string, idToken: string): Promise<AuthSession> {
+  const session = await httpJson<AuthSession>(`${API}/firebase/link`, {
+    service: SERVICE_NAME,
+    operation: "linkFirebase",
+    method: "POST",
+    body: { email, password, idToken },
+    authenticated: false,
+    errorMessage: "Não foi possível vincular sua conta ao Firebase",
+  });
+  setAuthSession(session);
+  return session;
 }
 
-export async function requestPasswordReset(): Promise<void> {
-  if (!isAlwaysMockMode()) throw new Error("Password recovery is only available in mock mode");
+let pendingRefresh: Promise<AuthSession | null> | null = null;
 
-  await waitForMockService();
+export function refresh(): Promise<AuthSession | null> {
+  if (pendingRefresh) return pendingRefresh;
+  const currentSession = getAuthSession();
+  if (!currentSession) return Promise.resolve(null);
+
+  const renew = async () => {
+    const latest = getAuthSession();
+    if (!latest || latest.refreshToken !== currentSession.refreshToken) return latest;
+    const session = await httpJson<AuthSession>(`${API}/refresh`, {
+      service: SERVICE_NAME,
+      operation: "refresh",
+      method: "POST",
+      body: { refreshToken: latest.refreshToken },
+      authenticated: false,
+      errorMessage: "Não foi possível renovar a sessão",
+    });
+    // A resposta de uma renovação anterior não deve desfazer logout ou outro login.
+    if (getAuthSession()?.refreshToken !== latest.refreshToken) return getAuthSession();
+    setAuthSession(session);
+    return session;
+  };
+  // O token é rotativo; serializar também entre abas evita revogar a sessão por reuso.
+  pendingRefresh = (navigator.locks ? navigator.locks.request("solaria.auth.refresh", renew) : renew())
+    .finally(() => { pendingRefresh = null; });
+  return pendingRefresh;
+}
+
+export async function logout(): Promise<void> {
+  await httpJson<void>(`${API}/logout`, {
+    service: SERVICE_NAME,
+    operation: "logout",
+    method: "POST",
+    errorMessage: "Não foi possível encerrar a sessão",
+  });
+  clearAuthSession();
 }

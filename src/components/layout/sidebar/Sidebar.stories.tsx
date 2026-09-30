@@ -12,9 +12,6 @@ const meta = {
   parameters: {
     layout: "fullscreen",
   },
-  args: {
-    children: null,
-  },
 } satisfies Meta<typeof Sidebar>;
 
 export default meta;
@@ -32,6 +29,7 @@ function Options() {
 }
 
 export const Default: Story = {
+  args: { children: <Options /> },
   render: () => (
     <div className="flex h-screen">
       <Sidebar>
@@ -42,6 +40,7 @@ export const Default: Story = {
 };
 
 export const Collapsed: Story = {
+  args: { children: <Options /> },
   render: () => (
     <div className="flex h-screen">
       <Sidebar defaultCollapsed>
