@@ -4,6 +4,7 @@ import type { BusinessContact } from "@/shared/types/business-contact/businessCo
 
 export interface Company {
   id: string;
+  type?: "SUPPLIER" | "DEMANDANT";
   status: CompanyStatus;
   cnpj: string;
   tradeName: string;

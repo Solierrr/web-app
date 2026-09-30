@@ -10,7 +10,6 @@ import { getSolarPanelBySlug } from "@/features/solar-panel/solarPanel.service";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
 import { SoftIconButton } from "@@/ui/button/Button.presets";
-import Button from "@@/ui/button/Button";
 
 import { useTranslation } from "react-i18next";
 import WrapperLayout from "@/config/WrapperLayout";
@@ -77,7 +76,9 @@ function SolarPanelAnnouncementPacked({ product }: SolarPanelAnnouncementProps) 
                       </h3>
                     </div>
                     <div className="flex flex-row gap-2">
-                      <Button content={t("actions.contactSupplier")} description={t("actions.contactSupplierDescription")} className="px-8" rounded />
+                      <Link to={routePaths.contactCompany(lang, product.company.id, product.title)} className="rounded-full bg-orange px-8 py-2 text-white">
+                        {t("actions.contactSupplier")}
+                      </Link>
                       <SoftIconButton description={t("actions.addToCart")} icon="shoppingCart" />
                       <SoftIconButton description={t("actions.addToCart")} icon="heart" />
                     </div>
@@ -166,7 +167,8 @@ function SolarPanelAnnouncementSkeleton() {
 }
 
 export default function SolarPanelAnnouncement() {
-  const { companySlug, productSlug } = useParams<{ companySlug: string; productSlug: string }>();
+  const { companySlug, productSlug, lang: langParam } = useParams<{ companySlug: string; productSlug: string; lang: string }>();
+  const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
   const { t } = useTranslation("announcements", {
     keyPrefix: "solarPanel.errors",
   });
@@ -178,7 +180,7 @@ export default function SolarPanelAnnouncement() {
   useEffect(() => {
     if (!companySlug || !productSlug) return;
 
-    getSolarPanelBySlug(companySlug, productSlug)
+    getSolarPanelBySlug(companySlug, productSlug, lang)
       .then((product) => {
         setProduct(product);
       })
@@ -188,7 +190,7 @@ export default function SolarPanelAnnouncement() {
       .finally(() => {
         setLoading(false);
       });
-  }, [companySlug, productSlug]);
+  }, [companySlug, productSlug, lang]);
 
   if (!companySlug || !productSlug || error) {
     return <p>{t("load")}</p>;

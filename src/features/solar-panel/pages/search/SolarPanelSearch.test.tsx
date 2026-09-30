@@ -4,14 +4,14 @@ import { describe, expect, it, vi, beforeEach } from "vitest";
 import SolarPanelSearch from "./SolarPanelSearch";
 
 vi.mock("@/features/solar-panel/solarPanel.service", () => ({
-  getSolarPanels: vi.fn(),
+  getCatalogSolarPanels: vi.fn(),
 }));
 
-import { getSolarPanels } from "@/features/solar-panel/solarPanel.service";
+import { getCatalogSolarPanels } from "@/features/solar-panel/solarPanel.service";
 import type { SolarPanelAnnouncement } from "@/features/solar-panel/solarPanelAnnouncement";
 import { SolarPanelModelStatus as ModelStatus } from "@/features/solar-panel/solarPanel.enum";
 
-const mockedGetSolarPanels = vi.mocked(getSolarPanels);
+const mockedGetSolarPanels = vi.mocked(getCatalogSolarPanels);
 
 const items: SolarPanelAnnouncement[] = [
   {
@@ -41,7 +41,7 @@ describe("SolarPanelSearch", () => {
     mockedGetSolarPanels.mockReset();
   });
 
-  it("renders the page heading, tabs and filter controls", () => {
+  it("renders the page heading and search field", async () => {
     mockedGetSolarPanels.mockResolvedValue([]);
 
     render(
@@ -50,9 +50,8 @@ describe("SolarPanelSearch", () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByRole("heading", { name: "Placas Solares" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "filtrar-busca" })).toBeInTheDocument();
-    expect(screen.getByText("Vertical")).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Placas Solares" })).toBeInTheDocument();
+    expect(screen.getByRole("searchbox", { name: "Buscar placa solar" })).toBeInTheDocument();
   });
 
   it("renders the mocked solar panels in the results grid", async () => {

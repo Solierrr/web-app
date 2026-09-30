@@ -71,12 +71,237 @@
     "companies": "Empresas"
   },
   "saasSidebar": {
+    "logout": "Sair",
+    "messages": "Mensagens",
     "userProfile": "Meu perfil",
     "companyProfile": "Minha empresa",
-    "solarPanelModels": "Modelos de placas solares"
+    "solarPanelModels": "Modelos de placas solares",
+    "settings": "Configurações",
+    "dashboard": "Painel",
+    "employees": "Funcionários",
+    "offers": "Ofertas",
+    "units": "Unidades",
+    "registrations": "Cadastros"
+  },
+  "saasContext": {
+    "personal": "Pessoal",
+    "admin": "Admin",
+    "member": "Funcionário",
+    "company": "Empresa"
+  },
+  "dashboard": {
+    "loading": "Carregando...",
+    "greetingCompany": "Olá, {{name}}",
+    "greetingPersonal": "Olá!",
+    "greetingPlatformAdmin": "Painel do Admin Solaria",
+    "offers": "Ofertas ativas",
+    "moreMetricsSoon": "Mais métricas chegam nas próximas fases.",
+    "personalHint": "Use o menu para acessar seu perfil, mensagens ou cadastrar uma empresa.",
+    "approvedCompanies": "Empresas aprovadas",
+    "pendingCompanies": "Empresas pendentes",
+    "approvedModels": "Modelos aprovados",
+    "pendingModels": "Modelos pendentes"
+  },
+  "registrations": {
+    "title": "Gerência de cadastros",
+    "loading": "Carregando...",
+    "loadError": "Não foi possível carregar os cadastros pendentes.",
+    "companiesTitle": "Empresas pendentes",
+    "modelsTitle": "Modelos pendentes",
+    "approve": "Aprovar",
+    "reject": "Rejeitar",
+    "noCompanies": "Nenhuma empresa pendente.",
+    "noModels": "Nenhum modelo pendente."
+  },
+  "settings": {
+    "title": "Configurações",
+    "profile": "Perfil",
+    "security": "Segurança"
+  },
+  "settingsSecurity": {
+    "title": "Segurança",
+    "currentPassword": "Senha atual",
+    "newPassword": "Nova senha",
+    "submit": "Salvar",
+    "unlinkedError": "Você precisa verificar seu e-mail antes de poder trocar a senha.",
+    "changeError": "Não foi possível trocar a senha. Verifique a senha atual e tente novamente.",
+    "changeSuccess": "Senha alterada com sucesso."
+  },
+  "professionalProfile": {
+    "crea": "CREA",
+    "loadError": "Não foi possível carregar o profissional."
+  },
+  "myProfile": {
+    "username": "Nome de usuário",
+    "loadError": "Não foi possível carregar seu perfil.",
+    "saveError": "Não foi possível salvar o nome de usuário. Verifique se ele está disponível."
+  },
+  "employees": {
+    "title": "Funcionários",
+    "loading": "Carregando...",
+    "loadError": "Não foi possível carregar os funcionários.",
+    "listTitle": "Equipe",
+    "empty": "Nenhum funcionário ainda.",
+    "remove": "Desligar",
+    "inviteTitle": "Convidar funcionário",
+    "existingPosition": "Cargo existente",
+    "selectPosition": "Selecione um cargo",
+    "or": "ou",
+    "newPosition": "Novo cargo",
+    "newPositionPlaceholder": "Nome do cargo",
+    "generate": "Gerar código",
+    "generatedCode": "Código gerado: {{code}} — compartilhe com o novo funcionário.",
+    "activeCodesTitle": "Códigos ativos",
+    "noActiveCodes": "Nenhum código ativo.",
+    "revoke": "Revogar"
+  },
+  "companyOffers": {
+    "title": "Ofertas"
+  },
+  "unitsManagement": {
+    "title": "Unidades",
+    "loading": "Carregando...",
+    "error": "Não foi possível concluir a operação.",
+    "createHeading": "Nova unidade",
+    "editHeading": "Editar unidade",
+    "zipCode": "CEP",
+    "state": "UF",
+    "city": "Cidade",
+    "neighborhood": "Bairro",
+    "street": "Rua",
+    "number": "Número",
+    "complement": "Complemento",
+    "locationType": "Tipo de local",
+    "locationTypes": {
+      "house": "Casa",
+      "building": "Prédio",
+      "complex": "Condomínio"
+    },
+    "mapUnavailable": "Mapa interativo indisponível (nenhuma chave do Google Maps configurada) — informe a latitude/longitude manualmente, se souber.",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "add": "Cadastrar unidade",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "listTitle": "Suas unidades",
+    "noAddress": "Endereço não informado",
+    "edit": "Editar",
+    "remove": "Remover",
+    "empty": "Nenhuma unidade cadastrada ainda."
+  },
+  "offers": {
+    "title": "Ofertas",
+    "loading": "Carregando...",
+    "error": "Não foi possível concluir a operação.",
+    "createHeading": "Nova oferta",
+    "editHeading": "Editar oferta",
+    "noApprovedModels": "Nenhum modelo de placa solar aprovado ainda — cadastre um em Produtos e aguarde a análise.",
+    "model": "Modelo de placa",
+    "selectModel": "Selecione um modelo",
+    "offerTitle": "Título",
+    "offerDescription": "Descrição",
+    "unitPrice": "Preço unitário (R$)",
+    "availability": "Disponibilidade",
+    "discount": "Desconto (%)",
+    "serviceRegions": "Regiões atendidas",
+    "add": "Cadastrar oferta",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "listTitle": "Suas ofertas",
+    "units": "unidades",
+    "edit": "Editar",
+    "remove": "Remover",
+    "empty": "Nenhuma oferta cadastrada ainda."
+  },
+  "myCompany": {
+    "loadError": "Não foi possível carregar sua empresa.",
+    "empty": "Você ainda não tem uma empresa vinculada à sua conta.",
+    "register": "Cadastrar empresa"
+  },
+  "companyOnboarding": {
+    "title": "Cadastrar empresa",
+    "description": "Escolha a atuação da empresa. O cadastro será analisado antes de aparecer no marketplace.",
+    "type": "Tipo de empresa",
+    "supplier": "Fornecedor",
+    "demandant": "Demandante",
+    "cnpj": "CNPJ",
+    "tradeName": "Nome fantasia",
+    "corporateName": "Razão social",
+    "addressSection": "Endereço",
+    "zipCode": "CEP",
+    "state": "UF",
+    "city": "Cidade",
+    "neighborhood": "Bairro",
+    "street": "Rua",
+    "number": "Número",
+    "contactSection": "Contato comercial",
+    "companyEmail": "E-mail corporativo",
+    "phone": "Telefone",
+    "website": "Site",
+    "submit": "Cadastrar empresa",
+    "error": "Não foi possível cadastrar a empresa. Revise os dados e tente novamente.",
+    "resultTitle": "Cadastro enviado",
+    "categoryValid": "CNPJ compatível com o setor solar/elétrico.",
+    "categoryInvalid": "CNPJ com ramo de atividade não relacionado ao setor solar/elétrico — seu cadastro será revisado manualmente.",
+    "continue": "Continuar"
   },
   "corridor": {
     "viewAll": "acessar todas as peças"
+  },
+  "registrationStatus": {
+    "pending": "Em análise",
+    "approved": "Aprovado",
+    "rejected": "Reprovado"
+  },
+  "accountSetup": {
+    "title": "Como você quer usar a Solaria?",
+    "description": "Escolha o tipo de conta que melhor descreve você.",
+    "company": {
+      "title": "Empresa",
+      "description": "Cadastre sua empresa como fornecedora de placas solares ou como demandante de serviços."
+    },
+    "professional": {
+      "title": "Profissional autônomo",
+      "description": "Cadastre-se como técnico/profissional independente, com validação de CPF e certificados."
+    },
+    "access": {
+      "title": "Acesso vinculado a uma empresa",
+      "description": "Entre com um código de acesso fornecido por uma empresa já cadastrada."
+    }
+  },
+  "accessInfo": {
+    "title": "Entrar com código de acesso",
+    "description": "Peça o código de acesso a um administrador da empresa e cole aqui.",
+    "code": "Código de acesso",
+    "submit": "Entrar",
+    "error": "Código inválido, expirado ou já usado."
+  },
+  "professionalOnboarding": {
+    "title": "Cadastrar perfil profissional",
+    "description": "Cadastre seus dados como profissional autônomo. Seu cadastro passará por análise antes de aparecer no marketplace.",
+    "personalSection": "Dados pessoais",
+    "name": "Nome completo",
+    "cpf": "CPF",
+    "birthDate": "Data de nascimento",
+    "email": "E-mail",
+    "phone": "Telefone",
+    "registrationSection": "Registro profissional",
+    "crea": "CREA/registro profissional",
+    "profession": "Profissão",
+    "professionPlaceholder": "Selecione uma profissão",
+    "council": "Conselho",
+    "number": "Número do registro",
+    "expirationDate": "Validade do registro",
+    "certificatesSection": "Certificados",
+    "certificatesDescription": "Envie os links dos seus certificados NR-10 e NR-35 para validação automática.",
+    "certNr10": "Certificado NR-10 (URL)",
+    "certNr35": "Certificado NR-35 (URL)",
+    "submit": "Concluir cadastro",
+    "error": "Não foi possível concluir o cadastro. Revise os dados e tente novamente.",
+    "resultTitle": "Cadastro enviado",
+    "certificatesValid": "Certificados válidos.",
+    "certificatesInvalid": "Certificados reprovados na validação automática — seu cadastro será revisado manualmente.",
+    "continue": "Continuar"
   },
   "time": {
     "today": "hoje",

@@ -1,47 +1,52 @@
-import type { Professional } from "./professional";
-
-import { professionalMocks } from "@/config/mocks/registry";
 import { resolveWithMocks } from "@/config/mocks/fallback.service";
 import { httpJson } from "@/shared/http/http.service";
+import { API_CORE_URL } from "@/shared/http/apiCore.utils";
+import { professionalMocks } from "@/config/mocks/registry";
 
-const API = import.meta.env.VITE_API_PERSISTENCE;
 const SERVICE_NAME = "professional";
 
-export function getProfessional(id: string): Promise<Professional> {
+export interface CatalogTechnician {
+  id: string;
+  slug: string;
+  name: string;
+  crea: string;
+  professions: string[];
+}
+
+function mockCatalogTechnician(professional: { id: string; name: string; slug: string; registrations?: { profession: string }[] }): CatalogTechnician {
+  return {
+    id: professional.id,
+    slug: professional.slug,
+    name: professional.name,
+    crea: "",
+    professions: professional.registrations?.map((registration) => registration.profession) ?? [],
+  };
+}
+
+export function getCatalogTechnicians(): Promise<CatalogTechnician[]> {
   return resolveWithMocks(
-    () =>
-      httpJson<Professional>(`${API}/professionals/${id}`, {
-        service: SERVICE_NAME,
-        operation: "getProfessional",
-        errorMessage: `Não foi possível obter o profissional ${id}`,
-      }),
-    () => professionalMocks.find((professional) => professional.id === id) ?? professionalMocks[0],
+    () => httpJson<CatalogTechnician[]>(`${API_CORE_URL}/catalog/technicians`, {
+      service: SERVICE_NAME,
+      operation: "getCatalogTechnicians",
+      authenticated: false,
+      errorMessage: "Não foi possível carregar os profissionais",
+    }),
+    () => professionalMocks.map(mockCatalogTechnician),
   );
 }
 
-// `slug` ainda não existe em `technician`/`person` no schema-api-core.sql
-// (ver NOTE em `professional.d.ts`) — usado pela rota amigável de perfil
-// (/profissional/{slug}).
-export function getProfessionalBySlug(slug: string): Promise<Professional> {
+export function getCatalogTechnicianBySlug(slug: string): Promise<CatalogTechnician> {
   return resolveWithMocks(
-    () =>
-      httpJson<Professional>(`${API}/professionals/slug/${slug}`, {
-        service: SERVICE_NAME,
-        operation: "getProfessionalBySlug",
-        errorMessage: `Não foi possível obter o profissional ${slug}`,
-      }),
-    () => professionalMocks.find((professional) => professional.slug === slug) ?? professionalMocks[0],
-  );
-}
-
-export function getProfessionals(ids: string[]): Promise<Professional[]> {
-  return resolveWithMocks(
-    () =>
-      httpJson<Professional[]>(`${API}/professionals?ids=${ids.join(",")}`, {
-        service: SERVICE_NAME,
-        operation: "getProfessionals",
-        errorMessage: "Não foi possível obter os profissionais",
-      }),
-    () => professionalMocks,
+    () => httpJson<CatalogTechnician>(`${API_CORE_URL}/catalog/technicians/${encodeURIComponent(slug)}`, {
+      service: SERVICE_NAME,
+      operation: "getCatalogTechnicianBySlug",
+      authenticated: false,
+      errorMessage: "Não foi possível carregar o profissional",
+    }),
+    () => {
+      const professional = professionalMocks.find((item) => item.slug === slug);
+      if (!professional) throw new Error(`Profissional não encontrado: ${slug}`);
+      return mockCatalogTechnician(professional);
+    },
   );
 }

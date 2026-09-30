@@ -71,12 +71,237 @@
     "companies": "Empresas"
   },
   "saasSidebar": {
+    "logout": "Cerrar sesión",
+    "messages": "Mensajes",
     "userProfile": "Mi perfil",
     "companyProfile": "Mi empresa",
-    "solarPanelModels": "Modelos de paneles solares"
+    "solarPanelModels": "Modelos de paneles solares",
+    "settings": "Configuración",
+    "dashboard": "Panel",
+    "employees": "Empleados",
+    "offers": "Ofertas",
+    "units": "Unidades",
+    "registrations": "Registros"
+  },
+  "saasContext": {
+    "personal": "Personal",
+    "admin": "Admin",
+    "member": "Empleado",
+    "company": "Empresa"
+  },
+  "dashboard": {
+    "loading": "Cargando...",
+    "greetingCompany": "Hola, {{name}}",
+    "greetingPersonal": "¡Hola!",
+    "greetingPlatformAdmin": "Panel del Admin Solaria",
+    "offers": "Ofertas activas",
+    "moreMetricsSoon": "Más métricas llegarán en las próximas fases.",
+    "personalHint": "Usa el menú para acceder a tu perfil, mensajes o registrar una empresa.",
+    "approvedCompanies": "Empresas aprobadas",
+    "pendingCompanies": "Empresas pendientes",
+    "approvedModels": "Modelos aprobados",
+    "pendingModels": "Modelos pendientes"
+  },
+  "registrations": {
+    "title": "Gestión de registros",
+    "loading": "Cargando...",
+    "loadError": "No fue posible cargar los registros pendientes.",
+    "companiesTitle": "Empresas pendientes",
+    "modelsTitle": "Modelos pendientes",
+    "approve": "Aprobar",
+    "reject": "Rechazar",
+    "noCompanies": "No hay empresas pendientes.",
+    "noModels": "No hay modelos pendientes."
+  },
+  "settings": {
+    "title": "Configuración",
+    "profile": "Perfil",
+    "security": "Seguridad"
+  },
+  "settingsSecurity": {
+    "title": "Seguridad",
+    "currentPassword": "Contraseña actual",
+    "newPassword": "Nueva contraseña",
+    "submit": "Guardar",
+    "unlinkedError": "Necesitas verificar tu correo antes de poder cambiar la contraseña.",
+    "changeError": "No se pudo cambiar la contraseña. Verifica la contraseña actual e inténtalo de nuevo.",
+    "changeSuccess": "Contraseña cambiada correctamente."
+  },
+  "professionalProfile": {
+    "crea": "CREA",
+    "loadError": "No se pudo cargar el profesional."
+  },
+  "myProfile": {
+    "username": "Nombre de usuario",
+    "loadError": "No se pudo cargar tu perfil.",
+    "saveError": "No se pudo guardar el nombre de usuario. Comprueba si está disponible."
+  },
+  "employees": {
+    "title": "Empleados",
+    "loading": "Cargando...",
+    "loadError": "No se pudieron cargar los empleados.",
+    "listTitle": "Equipo",
+    "empty": "Todavía no hay empleados.",
+    "remove": "Desvincular",
+    "inviteTitle": "Invitar empleado",
+    "existingPosition": "Cargo existente",
+    "selectPosition": "Selecciona un cargo",
+    "or": "o",
+    "newPosition": "Nuevo cargo",
+    "newPositionPlaceholder": "Nombre del cargo",
+    "generate": "Generar código",
+    "generatedCode": "Código generado: {{code}} — compártelo con el nuevo empleado.",
+    "activeCodesTitle": "Códigos activos",
+    "noActiveCodes": "No hay códigos activos.",
+    "revoke": "Revocar"
+  },
+  "companyOffers": {
+    "title": "Ofertas"
+  },
+  "unitsManagement": {
+    "title": "Unidades",
+    "loading": "Cargando...",
+    "error": "No se pudo completar la operación.",
+    "createHeading": "Nueva unidad",
+    "editHeading": "Editar unidad",
+    "zipCode": "Código postal",
+    "state": "Estado",
+    "city": "Ciudad",
+    "neighborhood": "Barrio",
+    "street": "Calle",
+    "number": "Número",
+    "complement": "Complemento",
+    "locationType": "Tipo de lugar",
+    "locationTypes": {
+      "house": "Casa",
+      "building": "Edificio",
+      "complex": "Conjunto residencial"
+    },
+    "mapUnavailable": "Mapa interactivo no disponible (sin clave de Google Maps configurada) — indica la latitud/longitud manualmente si la conoces.",
+    "latitude": "Latitud",
+    "longitude": "Longitud",
+    "add": "Registrar unidad",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "listTitle": "Tus unidades",
+    "noAddress": "Dirección no informada",
+    "edit": "Editar",
+    "remove": "Eliminar",
+    "empty": "Todavía no hay unidades registradas."
+  },
+  "offers": {
+    "title": "Ofertas",
+    "loading": "Cargando...",
+    "error": "No se pudo completar la operación.",
+    "createHeading": "Nueva oferta",
+    "editHeading": "Editar oferta",
+    "noApprovedModels": "Todavía no hay modelos de panel aprobados — registra uno en Productos y espera la revisión.",
+    "model": "Modelo de panel",
+    "selectModel": "Selecciona un modelo",
+    "offerTitle": "Título",
+    "offerDescription": "Descripción",
+    "unitPrice": "Precio unitario (R$)",
+    "availability": "Disponibilidad",
+    "discount": "Descuento (%)",
+    "serviceRegions": "Regiones atendidas",
+    "add": "Crear oferta",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "listTitle": "Tus ofertas",
+    "units": "unidades",
+    "edit": "Editar",
+    "remove": "Eliminar",
+    "empty": "Todavía no hay ofertas registradas."
+  },
+  "myCompany": {
+    "loadError": "No se pudo cargar tu empresa.",
+    "empty": "Todavía no hay ninguna empresa vinculada a tu cuenta.",
+    "register": "Registrar empresa"
+  },
+  "companyOnboarding": {
+    "title": "Registrar empresa",
+    "description": "Elige la función de la empresa. Se revisará el registro antes de que aparezca en el mercado.",
+    "type": "Tipo de empresa",
+    "supplier": "Proveedor",
+    "demandant": "Demandante",
+    "cnpj": "CNPJ",
+    "tradeName": "Nombre comercial",
+    "corporateName": "Razón social",
+    "addressSection": "Dirección",
+    "zipCode": "Código postal",
+    "state": "Estado",
+    "city": "Ciudad",
+    "neighborhood": "Barrio",
+    "street": "Calle",
+    "number": "Número",
+    "contactSection": "Contacto comercial",
+    "companyEmail": "Correo corporativo",
+    "phone": "Teléfono",
+    "website": "Sitio web",
+    "submit": "Registrar empresa",
+    "error": "No se pudo registrar la empresa. Revisa los datos e inténtalo de nuevo.",
+    "resultTitle": "Registro enviado",
+    "categoryValid": "CNPJ compatible con el sector solar/eléctrico.",
+    "categoryInvalid": "CNPJ con un ramo de actividad no relacionado con el sector solar/eléctrico — tu registro será revisado manualmente.",
+    "continue": "Continuar"
   },
   "corridor": {
     "viewAll": "acceder a todas las piezas"
+  },
+  "registrationStatus": {
+    "pending": "En análisis",
+    "approved": "Aprobado",
+    "rejected": "Rechazado"
+  },
+  "accountSetup": {
+    "title": "¿Cómo quieres usar Solaria?",
+    "description": "Elige el tipo de cuenta que mejor te describe.",
+    "company": {
+      "title": "Empresa",
+      "description": "Registra tu empresa como proveedora de paneles solares o como demandante de servicios."
+    },
+    "professional": {
+      "title": "Profesional autónomo",
+      "description": "Regístrate como técnico/profesional independiente, con validación de CPF y certificados."
+    },
+    "access": {
+      "title": "Acceso vinculado a una empresa",
+      "description": "Ingresa con un código de acceso proporcionado por una empresa ya registrada."
+    }
+  },
+  "accessInfo": {
+    "title": "Entrar con código de acceso",
+    "description": "Pide el código de acceso a un administrador de la empresa y pégalo aquí.",
+    "code": "Código de acceso",
+    "submit": "Entrar",
+    "error": "Código inválido, vencido o ya utilizado."
+  },
+  "professionalOnboarding": {
+    "title": "Registra tu perfil profesional",
+    "description": "Registra tus datos como profesional autónomo. Tu registro será revisado antes de aparecer en el mercado.",
+    "personalSection": "Datos personales",
+    "name": "Nombre completo",
+    "cpf": "CPF",
+    "birthDate": "Fecha de nacimiento",
+    "email": "Correo electrónico",
+    "phone": "Teléfono",
+    "registrationSection": "Registro profesional",
+    "crea": "CREA/registro profesional",
+    "profession": "Profesión",
+    "professionPlaceholder": "Selecciona una profesión",
+    "council": "Consejo",
+    "number": "Número de registro",
+    "expirationDate": "Vigencia del registro",
+    "certificatesSection": "Certificados",
+    "certificatesDescription": "Envía los enlaces de tus certificados NR-10 y NR-35 para validación automática.",
+    "certNr10": "Certificado NR-10 (URL)",
+    "certNr35": "Certificado NR-35 (URL)",
+    "submit": "Completar registro",
+    "error": "No se pudo completar el registro. Revisa los datos e inténtalo de nuevo.",
+    "resultTitle": "Registro enviado",
+    "certificatesValid": "Certificados válidos.",
+    "certificatesInvalid": "Certificados rechazados en la validación automática — tu registro será revisado manualmente.",
+    "continue": "Continuar"
   },
   "time": {
     "today": "hoy",

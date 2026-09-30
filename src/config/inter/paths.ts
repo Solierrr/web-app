@@ -15,12 +15,21 @@ export const SEGMENT = [
   "login",
   "register",
   "forgotPassword",
+  "verifyEmail",
   "profileSetup",
   "user",
   "admin",
   "solarPanelModels",
   "messages",
   "chatbot",
+  "settings",
+  "security",
+  "access",
+  "dashboard",
+  "employees",
+  "offers",
+  "units",
+  "registrations",
 ] as const;
 
 
@@ -54,6 +63,7 @@ export const routePaths = {
   login: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "login")}`,
   register: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "register")}`,
   forgotPassword: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "forgotPassword")}`,
+  verifyEmail: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "verifyEmail")}`,
 
   ownCompanyProfile: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "company")}`,
   companyProfile: (lang: SupportedLanguage, companySlug: string) => `/${lang}/${joinSegments(lang, "company")}/${companySlug}`,
@@ -61,13 +71,27 @@ export const routePaths = {
   ownUserProfile: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "user")}`,
   professionalProfile: (lang: SupportedLanguage, professionalSlug: string) => `/${lang}/${joinSegments(lang, "professional")}/${professionalSlug}`,
 
+  accountSetup: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "profileSetup")}`,
   profileOnboardingUser: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "profileSetup", "user")}`,
   profileOnboardingCompany: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "profileSetup", "company")}`,
+  profileOnboardingProfessional: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "profileSetup", "professional")}`,
+  profileOnboardingAccess: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "profileSetup", "access")}`,
 
   solarPanelModelsCrud: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin", "solarPanelModels")}`,
+  employeesManagement: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin", "employees")}`,
+  offersManagement: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin", "offers")}`,
+  unitsManagement: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin", "units")}`,
+  registrationsManagement: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin", "registrations")}`,
 
-  chat: (lang: SupportedLanguage, contactId: string) => `/${lang}/${joinSegments(lang, "messages")}/${contactId}`,
+  inbox: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "messages")}`,
+  contactCompany: (lang: SupportedLanguage, companyId: string, productTitle?: string) =>
+    `/${lang}/${joinSegments(lang, "messages", "company")}/${companyId}${productTitle ? `?product=${encodeURIComponent(productTitle)}` : ""}`,
+  chat: (lang: SupportedLanguage, conversationId: string) => `/${lang}/${joinSegments(lang, "messages")}/${conversationId}`,
   chatbot: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "chatbot")}`,
+
+  settings: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "settings")}`,
+  settingsSecurity: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "settings", "security")}`,
+  dashboard: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "dashboard")}`,
 };
 
 

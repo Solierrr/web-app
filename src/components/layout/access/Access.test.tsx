@@ -43,6 +43,7 @@ describe("Access", () => {
       />,
     );
 
+    fireEvent.change(screen.getByRole("textbox", { name: "email" }), { target: { value: "user@example.com" } });
     fireEvent.click(screen.getByRole("button", { name: "Prosseguir" }));
 
     expect(handleSubmit).toHaveBeenCalledTimes(1);
@@ -52,5 +53,11 @@ describe("Access", () => {
     render(<Access heading="Solaria" fields={[]} submitLabel="Prosseguir" footer={<p>Não tem uma conta?</p>} />);
 
     expect(screen.getByText("Não tem uma conta?")).toBeInTheDocument();
+  });
+
+  it("renders the error message when provided", () => {
+    render(<Access heading="Solaria" fields={[]} submitLabel="Prosseguir" error="Credenciais inválidas" />);
+
+    expect(screen.getByText("Credenciais inválidas")).toBeInTheDocument();
   });
 });

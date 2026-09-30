@@ -1,8 +1,10 @@
 {
   "professional": {
-    "description": "Profesionales acreditados disponibles para tus proyectos."
+    "description": "Profesionales acreditados disponibles para tus proyectos.",
+    "loadError": "No se pudieron cargar los profesionales."
   },
   "company": {
+    "loadError": "No se pudieron cargar las empresas.",
     "description": "Empresas acreditadas disponibles en la plataforma."
   }
 }

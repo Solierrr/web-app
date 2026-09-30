@@ -11,10 +11,19 @@
   "login": "login",
   "register": "register",
   "forgotPassword": "forgot-password",
+  "verifyEmail": "verify-email",
   "profileSetup": "profile-setup",
   "user": "user",
   "admin": "admin",
   "solarPanelModels": "solar-panel-models",
   "messages": "messages",
-  "chatbot": "chatbot"
+  "chatbot": "chatbot",
+  "settings": "settings",
+  "security": "security",
+  "access": "access",
+  "dashboard": "dashboard",
+  "employees": "employees",
+  "offers": "offers",
+  "units": "units",
+  "registrations": "registrations"
 }

@@ -7,7 +7,7 @@ import { PrimaryButton, SecondaryButton, IconButton } from "@@/ui/button/Button.
 import Skeleton from "@@/feedback/skeleton/Skeleton";
 import { listSolarPanelModels, createSolarPanel, updateSolarPanel, deleteSolarPanel } from "@/features/solar-panel/solarPanel.service";
 import type { SolarPanel } from "@/features/solar-panel/solarPanel";
-import { SolarPanelType, SolarPanelModelStatus } from "@/features/solar-panel/solarPanel.enum";
+import { SolarPanelType } from "@/features/solar-panel/solarPanel.enum";
 import { EMPTY_DIMENSION, EMPTY_FORM } from "@/features/solar-panel/pages/crud/SolarPanelModelCrud.utils";
 import WrapperLayout from "@/config/WrapperLayout";
 
@@ -74,7 +74,7 @@ export default function SolarPanelModelCrud() {
   const { t } = useTranslation("crud", { keyPrefix: "solarPanelModel" });
   const [items, setItems] = useState<SolarPanel[] | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [form, setForm] = useState<Omit<SolarPanel, "id">>(EMPTY_FORM);
+  const [form, setForm] = useState<Omit<SolarPanel, "id" | "status">>(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -104,7 +104,6 @@ export default function SolarPanelModelCrud() {
       efficiency: item.efficiency ?? 0,
       dimension: item.dimension ?? EMPTY_DIMENSION,
       weight: item.weight ?? 0,
-      status: item.status,
     });
   }
 
@@ -160,13 +159,6 @@ export default function SolarPanelModelCrud() {
               value={form.type}
               options={Object.values(SolarPanelType)}
               onChange={(value) => setForm({ ...form, type: value as SolarPanelType })}
-            />
-            <Select
-              name="status"
-              placeholder={t("fields.status")}
-              value={form.status}
-              options={Object.values(SolarPanelModelStatus)}
-              onChange={(value) => setForm({ ...form, status: value as SolarPanelModelStatus })}
             />
             <Input
               name="powerOutput"

@@ -20,13 +20,26 @@ type Story = StoryObj<typeof meta>;
 export const Professionals: Story = {
   args: {
     title: "Profissionais credenciados",
-    items: professionalMock.map((professional) => toProfessionalCardItem(professional, DEFAULT_LANGUAGE)),
+    items: professionalMock.map((professional) => toProfessionalCardItem({
+      id: professional.id,
+      slug: professional.slug,
+      name: professional.name,
+      crea: professional.registrations?.[0]?.council ?? "",
+      professions: professional.registrations?.map((registration) => registration.profession) ?? [],
+    }, DEFAULT_LANGUAGE)),
   },
 };
 
 export const Companies: Story = {
   args: {
     title: "Empresas credenciadas",
-    items: companyMock.map((company) => toCompanyCardItem(company, DEFAULT_LANGUAGE)),
+    items: companyMock.map((company) => toCompanyCardItem({
+      id: company.id,
+      tradeName: company.tradeName,
+      slug: company.slug,
+      city: company.address?.city ?? null,
+      state: company.address?.state ?? null,
+      logoUrl: company.logoUrl,
+    }, DEFAULT_LANGUAGE)),
   },
 };

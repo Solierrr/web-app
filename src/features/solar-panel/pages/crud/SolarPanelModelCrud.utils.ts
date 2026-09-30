@@ -1,9 +1,9 @@
-import { SolarPanelType, SolarPanelModelStatus } from "@/features/solar-panel/solarPanel.enum";
+import { SolarPanelType } from "@/features/solar-panel/solarPanel.enum";
 import type { SolarPanel, SolarPanelDimension } from "@/features/solar-panel/solarPanel";
 
 export const EMPTY_DIMENSION: SolarPanelDimension = { width: 0, length: 0 };
 
-export const EMPTY_FORM: Omit<SolarPanel, "id"> = {
+export const EMPTY_FORM: Omit<SolarPanel, "id" | "status"> = {
   brand: "",
   model: "",
   type: SolarPanelType.MONOCRYSTALLINE,
@@ -11,5 +11,4 @@ export const EMPTY_FORM: Omit<SolarPanel, "id"> = {
   efficiency: 0,
   dimension: EMPTY_DIMENSION,
   weight: 0,
-  status: SolarPanelModelStatus.UNDERANALYSIS,
 };

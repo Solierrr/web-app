@@ -4,16 +4,13 @@ import { useTranslation } from "react-i18next";
 import EntityCorridor from "@/components/layout/announcement/corridor/EntityCorridor";
 import Skeleton from "@@/feedback/skeleton/Skeleton";
 import { ImageSkeleton } from "@@/feedback/skeleton/Skeleton.presets";
-import { getProfessionals } from "@/features/professionals/professional.service";
-import type { Professional } from "@/features/professionals/professional";
+import { getCatalogTechnicians, type CatalogTechnician } from "@/features/professionals/professional.service";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
 import { toCardItem } from "./ProfessionalFeed.utils";
 import WrapperLayout from "@/config/WrapperLayout";
 
-const MOCK_IDS = ["professional-1", "professional-2", "professional-3"];
-
-function ProfessionalFeedContent({ items }: { items: Professional[] }) {
+function ProfessionalFeedContent({ items }: { items: CatalogTechnician[] }) {
   const { t } = useTranslation("commons");
   const { t: tFeed } = useTranslation("feed");
   const { lang: langParam } = useParams<{ lang: string }>();
@@ -66,13 +63,17 @@ function ProfessionalFeedSkeleton() {
 }
 
 export default function ProfessionalFeed() {
-  const [items, setItems] = useState<Professional[] | null>(null);
+  const [items, setItems] = useState<CatalogTechnician[] | null>(null);
+  const [error, setError] = useState(false);
+  const { t } = useTranslation("feed");
 
   useEffect(() => {
     let active = true;
 
-    getProfessionals(MOCK_IDS).then((result) => {
+    getCatalogTechnicians().then((result) => {
       if (active) setItems(result);
+    }).catch(() => {
+      if (active) setError(true);
     });
 
     return () => {
@@ -80,6 +81,9 @@ export default function ProfessionalFeed() {
     };
   }, []);
 
+  if (error) {
+    return <WrapperLayout><p role="alert">{t("professional.loadError")}</p></WrapperLayout>;
+  }
   if (items) {
     return (
       <WrapperLayout>

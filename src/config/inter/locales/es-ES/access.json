@@ -12,20 +12,41 @@
     "submit": "Continuar",
     "forgotPassword": "Olvidé mi contraseña",
     "noAccountPrefix": "¿No tienes una cuenta?",
-    "register": "Regístrate"
+    "register": "Regístrate",
+    "error": "Correo electrónico o contraseña incorrectos"
   },
 
   "register": {
     "helperText": "Crea tu cuenta para acceder al marketplace",
     "submit": "Registrarse",
     "hasAccountPrefix": "¿Ya tienes una cuenta?",
-    "login": "Iniciar sesión"
+    "login": "Iniciar sesión",
+    "passwordMismatch": "Las contraseñas no coinciden",
+    "error": "No se pudo completar el registro"
   },
 
   "forgotPassword": {
     "helperText": "Indica tu correo electrónico para recibir las instrucciones de recuperación",
     "submit": "Enviar",
+    "sent": "Si ese correo está registrado, recibirás un enlace para restablecer tu contraseña.",
+    "error": "No se pudo enviar el correo de recuperación. Inténtalo de nuevo.",
     "rememberedPasswordPrefix": "¿Recordaste tu contraseña?",
     "backToLogin": "Volver al inicio de sesión"
+  },
+
+  "verifyEmail": {
+    "title": "Verifica tu correo",
+    "pending": "Enviamos un enlace de verificación a tu correo. Revisa tu bandeja de entrada.",
+    "verified": "Tu correo ya está verificado.",
+    "resend": "Reenviar correo",
+    "resendCooldown": "Espera {{seconds}}s para reenviar",
+    "resendError": "No se pudo reenviar el correo de verificación.",
+    "checking": "Verificando...",
+    "linkTitle": "Confirma tu contraseña para finalizar",
+    "linkDescription": "Ingresa tu contraseña actual para vincular la verificación a tu cuenta.",
+    "linkSubmit": "Confirmar",
+    "linkError": "No se pudo confirmar la verificación. Revisa tu contraseña e inténtalo de nuevo.",
+    "linkSuccess": "Correo verificado y vinculado correctamente.",
+    "noFirebaseAccount": "No encontramos una verificación en curso. Vuelve al registro o contacta con soporte."
   }
 }

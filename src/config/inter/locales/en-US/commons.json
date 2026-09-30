@@ -71,12 +71,237 @@
     "companies": "Companies"
   },
   "saasSidebar": {
+    "logout": "Sign out",
+    "messages": "Messages",
     "userProfile": "My profile",
     "companyProfile": "My company",
-    "solarPanelModels": "Solar panel models"
+    "solarPanelModels": "Solar panel models",
+    "settings": "Settings",
+    "dashboard": "Dashboard",
+    "employees": "Employees",
+    "offers": "Offers",
+    "units": "Units",
+    "registrations": "Registrations"
+  },
+  "saasContext": {
+    "personal": "Personal",
+    "admin": "Admin",
+    "member": "Employee",
+    "company": "Company"
+  },
+  "dashboard": {
+    "loading": "Loading...",
+    "greetingCompany": "Hi, {{name}}",
+    "greetingPersonal": "Hi!",
+    "greetingPlatformAdmin": "Platform Admin Dashboard",
+    "offers": "Active offers",
+    "moreMetricsSoon": "More metrics are coming in the next phases.",
+    "personalHint": "Use the menu to access your profile, messages, or register a company.",
+    "approvedCompanies": "Approved companies",
+    "pendingCompanies": "Pending companies",
+    "approvedModels": "Approved models",
+    "pendingModels": "Pending models"
+  },
+  "registrations": {
+    "title": "Registrations management",
+    "loading": "Loading...",
+    "loadError": "Could not load the pending registrations.",
+    "companiesTitle": "Pending companies",
+    "modelsTitle": "Pending models",
+    "approve": "Approve",
+    "reject": "Reject",
+    "noCompanies": "No pending companies.",
+    "noModels": "No pending models."
+  },
+  "settings": {
+    "title": "Settings",
+    "profile": "Profile",
+    "security": "Security"
+  },
+  "settingsSecurity": {
+    "title": "Security",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "submit": "Save",
+    "unlinkedError": "You need to verify your email before you can change your password.",
+    "changeError": "Could not change your password. Check the current password and try again.",
+    "changeSuccess": "Password changed successfully."
+  },
+  "professionalProfile": {
+    "crea": "CREA",
+    "loadError": "Could not load the professional."
+  },
+  "myProfile": {
+    "username": "Username",
+    "loadError": "Could not load your profile.",
+    "saveError": "Could not save your username. Check whether it is available."
+  },
+  "employees": {
+    "title": "Employees",
+    "loading": "Loading...",
+    "loadError": "Could not load employees.",
+    "listTitle": "Team",
+    "empty": "No employees yet.",
+    "remove": "Remove",
+    "inviteTitle": "Invite employee",
+    "existingPosition": "Existing position",
+    "selectPosition": "Select a position",
+    "or": "or",
+    "newPosition": "New position",
+    "newPositionPlaceholder": "Position name",
+    "generate": "Generate code",
+    "generatedCode": "Generated code: {{code}} — share it with the new employee.",
+    "activeCodesTitle": "Active codes",
+    "noActiveCodes": "No active codes.",
+    "revoke": "Revoke"
+  },
+  "companyOffers": {
+    "title": "Offers"
+  },
+  "unitsManagement": {
+    "title": "Units",
+    "loading": "Loading...",
+    "error": "Could not complete the operation.",
+    "createHeading": "New unit",
+    "editHeading": "Edit unit",
+    "zipCode": "ZIP code",
+    "state": "State",
+    "city": "City",
+    "neighborhood": "Neighborhood",
+    "street": "Street",
+    "number": "Number",
+    "complement": "Complement",
+    "locationType": "Location type",
+    "locationTypes": {
+      "house": "House",
+      "building": "Building",
+      "complex": "Complex"
+    },
+    "mapUnavailable": "Interactive map unavailable (no Google Maps key configured) — enter latitude/longitude manually if you know them.",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "add": "Register unit",
+    "save": "Save",
+    "cancel": "Cancel",
+    "listTitle": "Your units",
+    "noAddress": "No address provided",
+    "edit": "Edit",
+    "remove": "Remove",
+    "empty": "No units registered yet."
+  },
+  "offers": {
+    "title": "Offers",
+    "loading": "Loading...",
+    "error": "Could not complete the operation.",
+    "createHeading": "New offer",
+    "editHeading": "Edit offer",
+    "noApprovedModels": "No approved solar panel model yet — register one in Products and wait for the review.",
+    "model": "Panel model",
+    "selectModel": "Select a model",
+    "offerTitle": "Title",
+    "offerDescription": "Description",
+    "unitPrice": "Unit price ($)",
+    "availability": "Availability",
+    "discount": "Discount (%)",
+    "serviceRegions": "Service regions",
+    "add": "Create offer",
+    "save": "Save",
+    "cancel": "Cancel",
+    "listTitle": "Your offers",
+    "units": "units",
+    "edit": "Edit",
+    "remove": "Remove",
+    "empty": "No offers registered yet."
+  },
+  "myCompany": {
+    "loadError": "Could not load your company.",
+    "empty": "There is no company linked to your account yet.",
+    "register": "Register a company"
+  },
+  "companyOnboarding": {
+    "title": "Register a company",
+    "description": "Choose the company's role. The registration will be reviewed before it appears in the marketplace.",
+    "type": "Company type",
+    "supplier": "Supplier",
+    "demandant": "Buyer",
+    "cnpj": "CNPJ",
+    "tradeName": "Trade name",
+    "corporateName": "Legal name",
+    "addressSection": "Address",
+    "zipCode": "ZIP code",
+    "state": "State",
+    "city": "City",
+    "neighborhood": "Neighborhood",
+    "street": "Street",
+    "number": "Number",
+    "contactSection": "Business contact",
+    "companyEmail": "Corporate email",
+    "phone": "Phone",
+    "website": "Website",
+    "submit": "Register company",
+    "error": "Could not register the company. Review the details and try again.",
+    "resultTitle": "Registration submitted",
+    "categoryValid": "CNPJ compatible with the solar/electrical sector.",
+    "categoryInvalid": "CNPJ with a line of business unrelated to the solar/electrical sector — your registration will be reviewed manually.",
+    "continue": "Continue"
   },
   "corridor": {
     "viewAll": "view all items"
+  },
+  "registrationStatus": {
+    "pending": "Under review",
+    "approved": "Approved",
+    "rejected": "Rejected"
+  },
+  "accountSetup": {
+    "title": "How do you want to use Solaria?",
+    "description": "Choose the account type that best describes you.",
+    "company": {
+      "title": "Company",
+      "description": "Register your company as a solar panel supplier or as a buyer of services."
+    },
+    "professional": {
+      "title": "Independent professional",
+      "description": "Register as an independent technician/professional, with CPF and certificate validation."
+    },
+    "access": {
+      "title": "Access linked to a company",
+      "description": "Sign in with an access code provided by a company already registered."
+    }
+  },
+  "accessInfo": {
+    "title": "Sign in with an access code",
+    "description": "Ask a company admin for the access code and paste it here.",
+    "code": "Access code",
+    "submit": "Enter",
+    "error": "Invalid, expired or already used code."
+  },
+  "professionalOnboarding": {
+    "title": "Register your professional profile",
+    "description": "Register your details as an independent professional. Your registration will be reviewed before appearing in the marketplace.",
+    "personalSection": "Personal details",
+    "name": "Full name",
+    "cpf": "CPF",
+    "birthDate": "Date of birth",
+    "email": "Email",
+    "phone": "Phone",
+    "registrationSection": "Professional registration",
+    "crea": "CREA/professional registration",
+    "profession": "Profession",
+    "professionPlaceholder": "Select a profession",
+    "council": "Council",
+    "number": "Registration number",
+    "expirationDate": "Registration expiration",
+    "certificatesSection": "Certificates",
+    "certificatesDescription": "Send the links to your NR-10 and NR-35 certificates for automatic validation.",
+    "certNr10": "NR-10 certificate (URL)",
+    "certNr35": "NR-35 certificate (URL)",
+    "submit": "Complete registration",
+    "error": "Could not complete the registration. Review the details and try again.",
+    "resultTitle": "Registration submitted",
+    "certificatesValid": "Valid certificates.",
+    "certificatesInvalid": "Certificates rejected by automatic validation — your registration will be reviewed manually.",
+    "continue": "Continue"
   },
   "time": {
     "today": "today",

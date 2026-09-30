@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import Corridor from "@/components/layout/announcement/corridor/Corridor";
 import Skeleton from "@@/feedback/skeleton/Skeleton";
 import { ImageSkeleton } from "@@/feedback/skeleton/Skeleton.presets";
-import { getSolarPanels } from "@/features/solar-panel/solarPanel.service";
+import { getCatalogSolarPanels } from "@/features/solar-panel/solarPanel.service";
+import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
 import type { SolarPanelFeedSummary } from "@/features/solar-panel/solarPanelAnnouncement";
 import WrapperLayout from "@/config/WrapperLayout";
-
-const MOCK_IDS = ["1", "2", "3", "4", "5"];
 
 function SolarPanelFeedContent({ items }: { items: SolarPanelFeedSummary[] }) {
   return (
@@ -22,7 +22,6 @@ function SolarPanelFeedContent({ items }: { items: SolarPanelFeedSummary[] }) {
         <span className="px-4 py-2 font-medium text-input-text">fornecedores</span>
       </div>
 
-      <Corridor title="Principais placas solares presentes no mercado" items={items} />
       <Corridor title="Principais placas solares presentes no mercado" items={items} />
     </div>
   );
@@ -55,20 +54,26 @@ function SolarPanelFeedSkeleton() {
 }
 
 export default function SolarPanelFeed() {
+  const { lang: langParam } = useParams<{ lang: string }>();
+  const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
   const [items, setItems] = useState<SolarPanelFeedSummary[] | null>(null);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     let active = true;
 
-    getSolarPanels(MOCK_IDS).then((result) => {
+    getCatalogSolarPanels(lang).then((result) => {
       if (active) setItems(result);
+    }).catch(() => {
+      if (active) setError(true);
     });
 
     return () => {
       active = false;
     };
-  }, []);
+  }, [lang]);
 
+  if (error) return <WrapperLayout><p role="alert">Não foi possível carregar as placas solares.</p></WrapperLayout>;
   if (items) {
     return (
       <WrapperLayout>

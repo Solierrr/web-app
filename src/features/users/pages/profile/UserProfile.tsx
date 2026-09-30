@@ -1,56 +1,84 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+
 import ProfilePage from "@/components/layout/profile/ProfilePage";
 import ProfilePageSkeleton from "@/components/layout/profile/ProfilePageSkeleton";
-import { PrimaryButton } from "@@/ui/button/Button.presets";
-import { getUser } from "@/features/users/user/user.service";
-import type { User } from "@/features/users/user/user";
-
-// TODO: substituir pelo id do usuário autenticado quando o login estiver conectado à API real.
-const OWN_USER_ID = "user-1";
-
-interface UserProfilePackedProps {
-    user: User;
-}
-
-function UserProfilePacked({ user }: UserProfilePackedProps) {
-    const { t } = useTranslation("commons");
-
-    return (
-        <ProfilePage
-            bannerUrl={user.bannerUrl}
-            avatarUrl={user.avatar}
-            name={user.name}
-            subtitle={user.contact?.email}
-            actions={
-                <PrimaryButton
-                    content={t("actions.edit")}
-                    description={t("actions.edit")}
-                    rounded
-                />
-            }
-        >
-            <div className="flex flex-col gap-2">
-                {user.contact?.number && <p className="text-input-text">{user.contact.number}</p>}
-            </div>
-        </ProfilePage>
-    );
-}
+import { getMyUser, updateMyUser, type MyUser } from "@/features/users/user/user.service";
+import { getAuthSession } from "@/shared/auth/authToken.utils";
 
 export default function UserProfile() {
-    const [user, setUser] = useState<User | null>(null);
+  const { t } = useTranslation("commons");
+  const [user, setUser] = useState<MyUser | null>(null);
+  const [username, setUsername] = useState("");
+  const [editing, setEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(false);
 
-    useEffect(() => {
-        let active = true;
+  useEffect(() => {
+    let active = true;
+    getMyUser()
+      .then((result) => {
+        if (!active) return;
+        setUser(result);
+        setUsername(result.username);
+      })
+      .catch(() => {
+        if (active) setError(true);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
-        getUser(OWN_USER_ID).then((result) => {
-            if (active) setUser(result);
-        });
+  async function handleSave(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSaving(true);
+    setError(false);
+    try {
+      const updated = await updateMyUser(username.trim().toLowerCase());
+      setUser(updated);
+      setEditing(false);
+    } catch {
+      setError(true);
+    } finally {
+      setSaving(false);
+    }
+  }
 
-        return () => { active = false; };
-    }, []);
+  if (!user && !error) return <ProfilePageSkeleton />;
+  if (!user) return <p role="alert" className="p-6">{t("myProfile.loadError")}</p>;
 
-    if (!user) return <ProfilePageSkeleton />;
-
-    return <UserProfilePacked user={user} />;
+  return (
+    <ProfilePage
+      bannerUrl={user.banner ?? undefined}
+      avatarUrl={user.avatar ?? undefined}
+      name={user.username}
+      subtitle={getAuthSession()?.email}
+      actions={
+        <button type="button" onClick={() => setEditing((current) => !current)} className="rounded-full bg-orange px-4 py-2 text-white">
+          {editing ? t("actions.cancel") : t("actions.edit")}
+        </button>
+      }
+    >
+      {editing ? (
+        <form onSubmit={handleSave} className="flex max-w-sm flex-col gap-3">
+          <label htmlFor="username">{t("myProfile.username")}</label>
+          <input
+            id="username"
+            value={username}
+            onChange={(event) => setUsername(event.target.value)}
+            minLength={3}
+            maxLength={30}
+            pattern="[a-z0-9_]{3,30}"
+            required
+            className="rounded-lg border border-gray-300 p-2"
+          />
+          <button type="submit" disabled={saving} className="rounded-lg bg-orange px-4 py-2 text-white disabled:opacity-50">
+            {t("actions.save")}
+          </button>
+        </form>
+      ) : null}
+      {error ? <p role="alert" className="text-red-700">{t("myProfile.saveError")}</p> : null}
+    </ProfilePage>
+  );
 }

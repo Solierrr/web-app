@@ -1,25 +1,23 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import CompanySearch from "./CompanySearch";
 
 vi.mock("@/features/companies/company.service", () => ({
-  getCompanies: vi.fn(),
+  getCatalogCompanies: vi.fn(),
 }));
 
-import { getCompanies } from "@/features/companies/company.service";
-import { CompanyStatus } from "@/features/companies/company.enum";
-import type { Company } from "@/features/companies/company";
+import { getCatalogCompanies } from "@/features/companies/company.service";
+import type { CatalogCompany } from "@/features/companies/company.service";
 
-const mockedGetCompanies = vi.mocked(getCompanies);
+const mockedGetCompanies = vi.mocked(getCatalogCompanies);
 
-const items: Company[] = [
+const items: CatalogCompany[] = [
   {
     id: "company-1",
-    status: CompanyStatus.APPROVED,
-    cnpj: "12345678000190",
+    city: "São Paulo",
+    state: "SP",
     tradeName: "Solaria Energia",
-    corporateName: "Solaria Energia Solar Ltda",
     slug: "solaria-energia",
   },
 ];
@@ -29,8 +27,8 @@ describe("CompanySearch", () => {
     mockedGetCompanies.mockReset();
   });
 
-  it("renders the page heading and filter controls", () => {
-    mockedGetCompanies.mockReturnValue(new Promise(() => {}));
+  it("filters companies by name or locality", async () => {
+    mockedGetCompanies.mockResolvedValue(items);
 
     render(
       <MemoryRouter>
@@ -38,9 +36,12 @@ describe("CompanySearch", () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByRole("heading", { name: "Empresas" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "filtrar-busca" })).toBeInTheDocument();
-    expect(screen.getByText("Fornecedor")).toBeInTheDocument();
+    await screen.findByText("Solaria Energia");
+    const search = screen.getByRole("searchbox");
+    fireEvent.change(search, { target: { value: "sao paulo" } });
+    expect(screen.getByText("Solaria Energia")).toBeInTheDocument();
+    fireEvent.change(search, { target: { value: "inexistente" } });
+    expect(screen.queryByText("Solaria Energia")).not.toBeInTheDocument();
   });
 
   it("renders the mocked companies in the results grid", async () => {

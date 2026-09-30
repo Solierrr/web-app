@@ -4,14 +4,14 @@ import { describe, expect, it, vi, beforeEach } from "vitest";
 import SolarPanelFeed from "./SolarPanelFeed";
 
 vi.mock("@/features/solar-panel/solarPanel.service", () => ({
-  getSolarPanels: vi.fn(),
+  getCatalogSolarPanels: vi.fn(),
 }));
 
-import { getSolarPanels } from "@/features/solar-panel/solarPanel.service";
+import { getCatalogSolarPanels } from "@/features/solar-panel/solarPanel.service";
 import type { SolarPanelAnnouncement } from "@/features/solar-panel/solarPanelAnnouncement";
 import { SolarPanelModelStatus as ModelStatus } from "@/features/solar-panel/solarPanel.enum";
 
-const mockedGetSolarPanels = vi.mocked(getSolarPanels);
+const mockedGetSolarPanels = vi.mocked(getCatalogSolarPanels);
 
 const items: SolarPanelAnnouncement[] = [
   {
@@ -41,7 +41,7 @@ describe("SolarPanelFeed", () => {
     mockedGetSolarPanels.mockReset();
   });
 
-  it("renders the page heading and tabs", () => {
+  it("renders the page heading and tabs", async () => {
     mockedGetSolarPanels.mockResolvedValue([]);
 
     render(
@@ -50,7 +50,7 @@ describe("SolarPanelFeed", () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByRole("heading", { name: "Placas Solares" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Placas Solares" })).toBeInTheDocument();
     expect(screen.getByText("placas solares")).toBeInTheDocument();
     expect(screen.getByText("serviços")).toBeInTheDocument();
     expect(screen.getByText("fornecedores")).toBeInTheDocument();
@@ -65,6 +65,6 @@ describe("SolarPanelFeed", () => {
       </MemoryRouter>,
     );
 
-    expect(await screen.findAllByText("Coletor Solar Térmico Vertical De Cobre")).toHaveLength(2);
+    expect(await screen.findByText("Coletor Solar Térmico Vertical De Cobre")).toBeInTheDocument();
   });
 });

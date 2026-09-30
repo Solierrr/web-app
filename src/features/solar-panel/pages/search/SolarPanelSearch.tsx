@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import Select from "@@/ui/select/Select";
 import Skeleton from "@@/feedback/skeleton/Skeleton";
 import { ImageSkeleton } from "@@/feedback/skeleton/Skeleton.presets";
-import { getSolarPanels } from "@/features/solar-panel/solarPanel.service";
+import { getCatalogSolarPanels } from "@/features/solar-panel/solarPanel.service";
 import type { SolarPanelFeedSummary } from "@/features/solar-panel/solarPanelAnnouncement";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
 import WrapperLayout from "@/config/WrapperLayout";
 
-const MOCK_IDS = ["1", "2", "3", "4", "5", "6", "7", "8"];
-const FILTER_CHIPS = ["Foto Voltáica", "Vertical", "Produção Limpa", "Horizontal"];
-
 function SolarPanelSearchContent({ items }: { items: SolarPanelFeedSummary[] }) {
+  const [query, setQuery] = useState("");
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
+  const normalizedQuery = query.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const filtered = items.filter((item) => item.title.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().includes(normalizedQuery));
 
   return (
     <div className="flex flex-col gap-8">
@@ -29,17 +28,10 @@ function SolarPanelSearchContent({ items }: { items: SolarPanelFeedSummary[] }) 
         <span className="px-4 py-2 font-medium text-input-text">fornecedores</span>
       </div>
 
-      <div className="flex flex-row flex-wrap items-center gap-4">
-        <Select name="filtrar-busca" placeholder="Filtrar busca" options={FILTER_CHIPS} className="min-w-60" />
-        {FILTER_CHIPS.map((chip) => (
-          <span key={chip} className="rounded-full bg-input-bg px-4 py-2 font-medium text-black/70">
-            {chip}
-          </span>
-        ))}
-      </div>
+      <input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar placa solar" aria-label="Buscar placa solar" className="w-full max-w-md rounded-lg border border-gray-300 p-3" />
 
       <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
-        {items.map((item) => (
+        {filtered.map((item) => (
           <Link key={item.id} to={routePaths.productDetail(lang, item.companySlug, item.slug)} className="flex flex-col gap-2">
             <img
               src={item.photos.heroImage.url}
@@ -51,6 +43,7 @@ function SolarPanelSearchContent({ items }: { items: SolarPanelFeedSummary[] }) 
           </Link>
         ))}
       </div>
+      {filtered.length === 0 ? <p>Nenhuma placa encontrada.</p> : null}
     </div>
   );
 }
@@ -86,19 +79,24 @@ function SolarPanelSearchSkeleton() {
 }
 
 export default function SolarPanelSearch() {
+  const { lang: langParam } = useParams<{ lang: string }>();
+  const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
   const [items, setItems] = useState<SolarPanelFeedSummary[] | null>(null);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     let active = true;
 
-    getSolarPanels(MOCK_IDS).then((result) => {
+    getCatalogSolarPanels(lang).then((result) => {
       if (active) setItems(result);
+    }).catch(() => {
+      if (active) setError(true);
     });
 
     return () => {
       active = false;
     };
-  }, []);
+  }, [lang]);
 
-  return <WrapperLayout ptop>{items ? <SolarPanelSearchContent items={items} /> : <SolarPanelSearchSkeleton />}</WrapperLayout>;
+  return <WrapperLayout ptop>{error ? <p role="alert">Não foi possível carregar as placas solares.</p> : items ? <SolarPanelSearchContent items={items} /> : <SolarPanelSearchSkeleton />}</WrapperLayout>;
 }

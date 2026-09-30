@@ -1,23 +1,23 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import Select from "@@/ui/select/Select";
 import EntityCard from "@/components/layout/announcement/entity-card/EntityCard";
 import Skeleton from "@@/feedback/skeleton/Skeleton";
 import { ImageSkeleton } from "@@/feedback/skeleton/Skeleton.presets";
-import { getCompanies } from "@/features/companies/company.service";
-import type { Company } from "@/features/companies/company";
+import { getCatalogCompanies, type CatalogCompany } from "@/features/companies/company.service";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { toCardItem } from "./CompanySearch.utils";
 import WrapperLayout from "@/config/WrapperLayout";
 
-const MOCK_IDS = ["company-1", "company-2", "company-3"];
-
-function CompanySearchContent({ items }: { items: Company[] }) {
+function CompanySearchContent({ items }: { items: CatalogCompany[] }) {
   const { t } = useTranslation("search");
+  const [query, setQuery] = useState("");
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
-  const filterChips = Object.values(t("company.filters", { returnObjects: true }) as Record<string, string>);
+  const normalizedQuery = query.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const filtered = items.filter((company) =>
+    [company.tradeName, company.city, company.state].some((value) =>
+      value?.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().includes(normalizedQuery)));
 
   return (
     <div className="flex flex-col gap-8">
@@ -26,20 +26,21 @@ function CompanySearchContent({ items }: { items: Company[] }) {
         <p className="text-black/70">{t("company.description")}</p>
       </div>
 
-      <div className="flex flex-row flex-wrap items-center gap-4">
-        <Select name="filtrar-busca" placeholder={t("filterPlaceholder")} options={filterChips} className="min-w-60" />
-        {filterChips.map((chip) => (
-          <span key={chip} className="rounded-full bg-input-bg px-4 py-2 font-medium text-black/70">
-            {chip}
-          </span>
-        ))}
-      </div>
+      <input
+        type="search"
+        aria-label={t("company.queryPlaceholder")}
+        placeholder={t("company.queryPlaceholder")}
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
+        className="w-full max-w-md rounded-lg border border-gray-300 p-3"
+      />
 
       <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
-        {items.map((item) => (
+        {filtered.map((item) => (
           <EntityCard key={item.id} item={toCardItem(item, lang)} />
         ))}
       </div>
+      {filtered.length === 0 ? <p>{t("company.noResults")}</p> : null}
     </div>
   );
 }
@@ -72,13 +73,17 @@ function CompanySearchSkeleton() {
 }
 
 export default function CompanySearch() {
-  const [items, setItems] = useState<Company[] | null>(null);
+  const [items, setItems] = useState<CatalogCompany[] | null>(null);
+  const [error, setError] = useState(false);
+  const { t } = useTranslation("search");
 
   useEffect(() => {
     let active = true;
 
-    getCompanies(MOCK_IDS).then((result) => {
+    getCatalogCompanies().then((result) => {
       if (active) setItems(result);
+    }).catch(() => {
+      if (active) setError(true);
     });
 
     return () => {
@@ -86,5 +91,5 @@ export default function CompanySearch() {
     };
   }, []);
 
-  return <WrapperLayout ptop>{items ? <CompanySearchContent items={items} /> : <CompanySearchSkeleton />}</WrapperLayout>;
+  return <WrapperLayout ptop>{error ? <p role="alert">{t("company.loadError")}</p> : items ? <CompanySearchContent items={items} /> : <CompanySearchSkeleton />}</WrapperLayout>;
 }

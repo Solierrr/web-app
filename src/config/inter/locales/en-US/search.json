@@ -1,5 +1,6 @@
 {
   "professional": {
+    "loadError": "Could not load professionals.",
     "title": "Professionals",
     "description": "Find accredited professionals for your project.",
     "filters": {
@@ -10,6 +11,9 @@
     }
   },
   "company": {
+    "loadError": "Could not load companies.",
+    "queryPlaceholder": "Search companies or cities",
+    "noResults": "No companies found.",
     "title": "Companies",
     "description": "Find accredited companies on the platform.",
     "filters": {
