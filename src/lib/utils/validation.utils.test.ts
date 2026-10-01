@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { validateCnpj, validateCpf } from "./validation.utils";
+import { isSafeMailtoAddress, validateCnpj, validateCpf } from "./validation.utils";
 
 describe("validateCpf", () => {
   it("accepts a valid cpf, with or without formatting", () => {
@@ -36,5 +36,17 @@ describe("validateCnpj", () => {
 
   it("rejects an empty value", () => {
     expect(validateCnpj("").isValid).toBe(false);
+  });
+});
+
+describe("isSafeMailtoAddress", () => {
+  it("accepts a plain address", () => {
+    expect(isSafeMailtoAddress("novo@empresa.com")).toBe(true);
+  });
+
+  it("rejects characters that could add recipients, headers or break the link", () => {
+    for (const value of ["a@b.com?bcc=x@y.com", "a@b.com,c@d.com", "a@b.com;c@d.com", "a b@c.com", "a@b.com&cc=x", "a%40b.com", "a@b", "", "<a@b.com>"]) {
+      expect(isSafeMailtoAddress(value)).toBe(false);
+    }
   });
 });

@@ -24,9 +24,13 @@ describe("unit.service", () => {
   it("creates a geolocalization for an address", async () => {
     vi.mocked(httpJson).mockResolvedValue({ id: "geo-1" });
     await createGeolocalization("address-1", -23.5, -46.6);
-    expect(httpJson).toHaveBeenCalledWith(expect.stringContaining("/geolocalizations"), expect.objectContaining({
-      method: "POST", body: { addressId: "address-1", latitude: -23.5, longitude: -46.6 },
-    }));
+    expect(httpJson).toHaveBeenCalledWith(
+      expect.stringContaining("/geolocalizations"),
+      expect.objectContaining({
+        method: "POST",
+        body: { addressId: "address-1", latitude: -23.5, longitude: -46.6 },
+      }),
+    );
   });
 
   it("creates a unit", async () => {

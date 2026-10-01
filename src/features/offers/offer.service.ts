@@ -2,6 +2,7 @@ import { httpJson } from "@/lib/shared/http/http.service";
 import { API_CORE_URL } from "@/lib/shared/http/apiCore.utils";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
 import { getMockOffers, saveMockOffer, deleteMockOffer } from "./offer.d.mocks";
+import type { OfferStatus } from "./offer.utils";
 
 const SERVICE_NAME = "offer";
 
@@ -109,5 +110,54 @@ export async function deleteOffer(id: string): Promise<void> {
     operation: "deleteOffer",
     method: "DELETE",
     errorMessage: `Não foi possível remover a oferta ${id}`,
+  });
+}
+
+const REOPEN_DAYS = 30;
+
+function stockKey(id: string): string {
+  return `solaria.offerStock.${id}`;
+}
+
+function rememberStock(id: string, value: number): void {
+  try {
+    localStorage.setItem(stockKey(id), String(value));
+  } catch {
+    return;
+  }
+}
+
+function recallStock(id: string): number {
+  try {
+    return Number(localStorage.getItem(stockKey(id))) || 1;
+  } catch {
+    return 1;
+  }
+}
+
+export function changeOfferStatus(offer: Offer, status: OfferStatus): Promise<Offer> {
+  const translation = offer.translations[0];
+  let availability = offer.availability;
+  let expirationDate = offer.expirationDate ?? undefined;
+  if (status === "PAUSED") {
+    if (availability > 0) rememberStock(offer.id, availability);
+    availability = 0;
+  } else if (status === "ACTIVE") {
+    if (availability === 0) availability = recallStock(offer.id);
+    if (expirationDate && Date.parse(expirationDate) <= Date.now()) expirationDate = new Date(Date.now() + REOPEN_DAYS * 86_400_000).toISOString();
+  } else {
+    expirationDate = new Date().toISOString();
+  }
+  return updateOffer(offer.id, {
+    supplierId: offer.supplierId,
+    modelId: offer.model.id,
+    title: translation?.title ?? offer.slug,
+    description: translation?.description ?? offer.slug,
+    details: translation?.details ?? undefined,
+    unitPrice: offer.unitPrice,
+    availability,
+    expirationDate,
+    discountPercentage: offer.discountPercentage ?? undefined,
+    serviceRegions: offer.serviceRegions ?? undefined,
   });
 }

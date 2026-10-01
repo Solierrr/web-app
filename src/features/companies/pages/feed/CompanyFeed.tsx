@@ -73,11 +73,13 @@ export default function CompanyFeed() {
   useEffect(() => {
     let active = true;
 
-    getCatalogCompanies().then((result) => {
-      if (active) setItems(result);
-    }).catch(() => {
-      if (active) setError(true);
-    });
+    getCatalogCompanies()
+      .then((result) => {
+        if (active) setItems(result);
+      })
+      .catch(() => {
+        if (active) setError(true);
+      });
 
     return () => {
       active = false;
@@ -85,7 +87,11 @@ export default function CompanyFeed() {
   }, []);
 
   if (error) {
-    return <WrapperLayout><p role="alert">{t("company.loadError")}</p></WrapperLayout>;
+    return (
+      <WrapperLayout>
+        <p role="alert">{t("company.loadError")}</p>
+      </WrapperLayout>
+    );
   }
   if (items) {
     return (

@@ -8,6 +8,7 @@ import { getPermissionTemplate, isPermissionCompatible, permissionTemplates } fr
 
 import { useActiveContext } from "@/lib/shared/context/ActiveContext";
 import { getUser } from "@/features/users/user/user.service";
+import { isSafeMailtoAddress } from "@/lib/utils/validation.utils";
 import {
   createPosition,
   grantPermission,
@@ -33,7 +34,7 @@ interface EmployeeRow extends Employee {
 export default function EmployeesPage() {
   const { t } = useTranslation("commons", { keyPrefix: "employees" });
   const { t: tSaas } = useTranslation("saas");
-  const { company, can = () => false, loading: contextLoading } = useActiveContext();
+  const { company, can = () => false, loading: contextLoading, isAdmin } = useActiveContext();
   const { lang: parameter } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(parameter) ? parameter : DEFAULT;
   const canInvite = can("POST /api/access-codes");
@@ -50,6 +51,8 @@ export default function EmployeesPage() {
   const [newPositionName, setNewPositionName] = useState("");
   const [generating, setGenerating] = useState(false);
   const [generatedCode, setGeneratedCode] = useState<string | null>(null);
+  const [guestEmail, setGuestEmail] = useState("");
+  const [invitedEmail, setInvitedEmail] = useState("");
   const [availablePermissions, setAvailablePermissions] = useState<Permission[]>([]);
   const [newPermissions, setNewPermissions] = useState<string[]>([]);
   const [permissionsLoading, setPermissionsLoading] = useState(canCreatePosition && Boolean(company?.type));
@@ -141,6 +144,8 @@ export default function EmployeesPage() {
       if (!positionId) return;
       const code = await generateAccessCode(companyId, positionId);
       setGeneratedCode(code.code);
+      setInvitedEmail(isSafeMailtoAddress(guestEmail.trim()) ? guestEmail.trim() : "");
+      setGuestEmail("");
       setNewPositionName("");
       await reload(companyId);
     } catch {
@@ -187,13 +192,33 @@ export default function EmployeesPage() {
       </OperationalPage>
     );
   if (contextLoading || !employees) return <OperationalPage title={t("title")} loading />;
+  const admins = employees.filter((employee) => employee.position.name === "ADMIN");
+  const team = employees.filter((employee) => employee.position.name !== "ADMIN");
 
   return (
     <OperationalPage title={t("title")}>
+      {admins.length > 0 ? (
+        <section className="flex flex-col gap-3">
+          <h2 className="font-medium">{t("adminsTitle")}</h2>
+          <ul className="divide-y divide-operational-border rounded-small border border-operational-border">
+            {admins.map((employee) => (
+              <li key={employee.id} className="flex flex-wrap items-center justify-between gap-3 p-4">
+                <div>
+                  <Link className="font-medium hover:underline" to={`${routePaths.employeesManagement(lang)}/${encodeURIComponent(employee.id)}`}>
+                    {employee.username}
+                  </Link>
+                  <p className="text-sm text-gray-600">{employee.position.name}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
       <section className="flex flex-col gap-3">
         <h2 className="font-medium">{t("listTitle")}</h2>
         <ul className="divide-y divide-operational-border rounded-small border border-operational-border">
-          {employees.map((employee) => (
+          {team.map((employee) => (
             <li key={employee.id} className="flex flex-wrap items-center justify-between gap-3 p-4">
               <div>
                 <Link className="font-medium hover:underline" to={`${routePaths.employeesManagement(lang)}/${encodeURIComponent(employee.id)}`}>
@@ -224,7 +249,7 @@ export default function EmployeesPage() {
               ) : null}
             </li>
           ))}
-          {employees.length === 0 ? <li className="p-4 text-gray-600">{t("empty")}</li> : null}
+          {team.length === 0 && admins.length === 0 ? <li className="p-4 text-gray-600">{t("empty")}</li> : null}
         </ul>
       </section>
 
@@ -244,13 +269,22 @@ export default function EmployeesPage() {
                   className="rounded-small border border-operational-border p-2">
                   <option value="">{t("selectPosition")}</option>
                   {companyPositions
-                    .filter((position) => position.name !== "ADMIN")
+                    .filter((position) => position.name !== "ADMIN" || isAdmin)
                     .map((position) => (
                       <option key={position.id} value={position.id}>
                         {position.name}
                       </option>
                     ))}
                 </select>
+              </label>
+              <label className="flex flex-col gap-1 text-sm">
+                {t("guestEmail")}
+                <input
+                  type="email"
+                  value={guestEmail}
+                  onChange={(event) => setGuestEmail(event.target.value)}
+                  className="rounded-small border border-operational-border p-2"
+                />
               </label>
               <span className="text-sm text-gray-500">{t("or")}</span>
               {canCreatePosition && (
@@ -317,6 +351,22 @@ export default function EmployeesPage() {
           {generatedCode ? (
             <p role="status" className="rounded-small bg-green-50 p-3 text-sm">
               {t("generatedCode", { code: generatedCode })}
+              {invitedEmail ? (
+                <>
+                  {" "}
+                  <a
+                    className="text-orange underline"
+                    href={`mailto:${invitedEmail}?subject=${encodeURIComponent(t("emailSubject", { company: company?.tradeName ?? "" }))}&body=${encodeURIComponent(
+                      t("emailBody", {
+                        code: generatedCode,
+                        company: company?.tradeName ?? "",
+                        url: `${window.location.origin}${routePaths.activateAccess(lang)}`,
+                      }),
+                    )}`}>
+                    {t("sendByEmail")}
+                  </a>
+                </>
+              ) : null}
             </p>
           ) : null}
 

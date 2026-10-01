@@ -17,7 +17,10 @@ declare global {
   interface Window {
     google?: {
       maps: {
-        Map: new (element: HTMLElement, options: Record<string, unknown>) => {
+        Map: new (
+          element: HTMLElement,
+          options: Record<string, unknown>,
+        ) => {
           addListener: (event: string, handler: (event: { latLng: { lat: () => number; lng: () => number } }) => void) => void;
         };
         Marker: new (options: Record<string, unknown>) => { setPosition: (position: LatLng) => void };
@@ -53,17 +56,19 @@ export default function LocationPicker({ value, onChange }: LocationPickerProps)
   useEffect(() => {
     if (!apiKey || !mapRef.current) return;
     let cancelled = false;
-    loadGoogleMaps(apiKey).then(() => {
-      if (cancelled || !mapRef.current || !window.google) return;
-      const center = value ?? DEFAULT_CENTER;
-      const map = new window.google.maps.Map(mapRef.current, { center, zoom: 14 });
-      const marker = new window.google.maps.Marker({ position: center, map });
-      map.addListener("click", (event) => {
-        const position = { lat: event.latLng.lat(), lng: event.latLng.lng() };
-        marker.setPosition(position);
-        onChange(position);
-      });
-    }).catch(() => setMapError(true));
+    loadGoogleMaps(apiKey)
+      .then(() => {
+        if (cancelled || !mapRef.current || !window.google) return;
+        const center = value ?? DEFAULT_CENTER;
+        const map = new window.google.maps.Map(mapRef.current, { center, zoom: 14 });
+        const marker = new window.google.maps.Marker({ position: center, map });
+        map.addListener("click", (event) => {
+          const position = { lat: event.latLng.lat(), lng: event.latLng.lng() };
+          marker.setPosition(position);
+          onChange(position);
+        });
+      })
+      .catch(() => setMapError(true));
     return () => {
       cancelled = true;
     };

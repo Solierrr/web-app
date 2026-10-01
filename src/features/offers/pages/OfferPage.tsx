@@ -1,3 +1,4 @@
+import { getOfferStatus } from "@/features/offers/offer.utils";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -60,9 +61,25 @@ export default function OfferPage() {
                 <dd>{new Intl.NumberFormat(lang, { style: "currency", currency: "BRL" }).format(offer.unitPrice)}</dd>
               </div>
               <div>
+                <dt className="text-sm text-operational-muted">{t("statusLabel")}</dt>
+                <dd>{t(`status.${getOfferStatus(offer)}`)}</dd>
+              </div>
+              <div>
                 <dt className="text-sm text-operational-muted">{t("availability")}</dt>
                 <dd>{offer.availability}</dd>
               </div>
+              {offer.discountPercentage != null && (
+                <div>
+                  <dt className="text-sm text-operational-muted">{t("discountLabel")}</dt>
+                  <dd>{offer.discountPercentage}%</dd>
+                </div>
+              )}
+              {offer.expirationDate && (
+                <div>
+                  <dt className="text-sm text-operational-muted">{t("expiration")}</dt>
+                  <dd>{new Date(offer.expirationDate).toLocaleDateString(lang)}</dd>
+                </div>
+              )}
               <div>
                 <dt className="text-sm text-operational-muted">{t("serviceRegions")}</dt>
                 <dd>{offer.serviceRegions?.join(", ") || "—"}</dd>

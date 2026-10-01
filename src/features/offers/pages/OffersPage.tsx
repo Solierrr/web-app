@@ -8,7 +8,16 @@ import { routePaths } from "@/config/inter/paths";
 import { useActiveContext } from "@/lib/shared/context/ActiveContext";
 import { listApprovedSolarPanelModels } from "@/features/solar-panel/solarPanel.service";
 import type { SolarPanel } from "@/features/solar-panel/solarPanel";
-import { createOffer, deleteOffer, getMySupplier, listCompanyOffers, updateOffer, type Offer } from "@/features/offers/offer.service";
+import {
+  changeOfferStatus,
+  createOffer,
+  deleteOffer,
+  getMySupplier,
+  listCompanyOffers,
+  updateOffer,
+  type Offer,
+} from "@/features/offers/offer.service";
+import { getOfferStatus, type OfferStatus } from "@/features/offers/offer.utils";
 
 function offerTitle(offer: Offer): string {
   return (
@@ -52,6 +61,7 @@ export default function OffersPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
+  const [busyId, setBusyId] = useState<string | null>(null);
 
   async function load(id: string) {
     const editing = can("POST /api/offers") || can("PUT /api/offers/{id}");
@@ -151,6 +161,19 @@ export default function OffersPage() {
       await reload(companyId);
     } catch {
       setError(true);
+    }
+  }
+
+  async function handleStatus(offer: Offer, status: OfferStatus) {
+    if (!companyId || busyId) return;
+    setBusyId(offer.id);
+    try {
+      await changeOfferStatus(offer, status);
+      await reload(companyId);
+    } catch {
+      setError(true);
+    } finally {
+      setBusyId(null);
     }
   }
 
@@ -273,30 +296,51 @@ export default function OffersPage() {
       <section className="flex flex-col gap-3">
         <h2 className="font-medium">{t("listTitle")}</h2>
         <ul className="divide-y divide-operational-border rounded-small border border-operational-border">
-          {offers.map((offer) => (
-            <li key={offer.id} className="flex flex-wrap items-center justify-between gap-3 p-4">
-              <div>
-                <Link className="font-medium hover:underline" to={`${routePaths.offersManagement(lang)}/${encodeURIComponent(offer.id)}`}>
-                  {offerTitle(offer)}
-                </Link>
-                <p className="text-sm text-gray-600">
-                  {offer.model.brand} {offer.model.model} · R$ {offer.unitPrice} · {offer.availability} {t("units")}
-                </p>
-              </div>
-              <div className="flex gap-2">
-                {can("PUT /api/offers/{id}") && (
-                  <button type="button" onClick={() => startEdit(offer)} className="text-sm text-orange">
-                    {t("edit")}
-                  </button>
-                )}
-                {can("DELETE /api/offers/{id}") && (
-                  <button type="button" onClick={() => void handleDelete(offer.id)} className="text-sm text-red-700">
-                    {t("remove")}
-                  </button>
-                )}
-              </div>
-            </li>
-          ))}
+          {offers.map((offer) => {
+            const status = getOfferStatus(offer);
+            return (
+              <li key={offer.id} className="flex flex-wrap items-center justify-between gap-3 p-4">
+                <div>
+                  <Link className="font-medium hover:underline" to={`${routePaths.offersManagement(lang)}/${encodeURIComponent(offer.id)}`}>
+                    {offerTitle(offer)}
+                  </Link>
+                  <p className="text-sm text-gray-600">
+                    {offer.model.brand} {offer.model.model} · R$ {offer.unitPrice} · {offer.availability} {t("units")} · {t(`status.${status}`)}
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  {can("PUT /api/offers/{id}") && status !== "CLOSED" && (
+                    <button
+                      type="button"
+                      disabled={busyId !== null}
+                      onClick={() => void handleStatus(offer, status === "PAUSED" ? "ACTIVE" : "PAUSED")}
+                      className="text-sm text-orange">
+                      {status === "PAUSED" ? t("resume") : t("pause")}
+                    </button>
+                  )}
+                  {can("PUT /api/offers/{id}") && (
+                    <button
+                      type="button"
+                      disabled={busyId !== null}
+                      onClick={() => void handleStatus(offer, status === "CLOSED" ? "ACTIVE" : "CLOSED")}
+                      className="text-sm text-orange">
+                      {status === "CLOSED" ? t("reopen") : t("close")}
+                    </button>
+                  )}
+                  {can("PUT /api/offers/{id}") && (
+                    <button type="button" onClick={() => startEdit(offer)} className="text-sm text-orange">
+                      {t("edit")}
+                    </button>
+                  )}
+                  {can("DELETE /api/offers/{id}") && (
+                    <button type="button" onClick={() => void handleDelete(offer.id)} className="text-sm text-red-700">
+                      {t("remove")}
+                    </button>
+                  )}
+                </div>
+              </li>
+            );
+          })}
           {offers.length === 0 ? <li className="p-4 text-gray-600">{t("empty")}</li> : null}
         </ul>
       </section>
