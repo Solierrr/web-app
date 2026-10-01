@@ -8,9 +8,9 @@ import {
   updateSolarPanel,
 } from "./solarPanel.service";
 import { SolarPanelType } from "./solarPanel.enum";
-import { httpJson } from "@/shared/http/http.service";
+import { httpJson } from "@/lib/shared/http/http.service";
 
-vi.mock("@/shared/http/http.service", () => ({ httpJson: vi.fn() }));
+vi.mock("@/lib/shared/http/http.service", () => ({ httpJson: vi.fn() }));
 
 const modelDto = {
   id: "model-1", brand: "SolarTech", model: "ST-450W", type: "MONOCRYSTALLINE" as const,

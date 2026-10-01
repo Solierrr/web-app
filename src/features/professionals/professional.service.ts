@@ -1,6 +1,6 @@
 import { resolveWithMocks } from "@/config/mocks/fallback.service";
-import { httpJson } from "@/shared/http/http.service";
-import { API_CORE_URL } from "@/shared/http/apiCore.utils";
+import { httpJson } from "@/lib/shared/http/http.service";
+import { API_CORE_URL } from "@/lib/shared/http/apiCore.utils";
 import { professionalMocks } from "@/config/mocks/registry";
 
 const SERVICE_NAME = "professional";

@@ -1,6 +1,6 @@
 import type { Message } from "@/features/messages/messages";
 import type { SolarPanel } from "@/features/solar-panel/solarPanel";
-import type { SolarPanelAnnouncement } from "@/features/solar-panel/solarPanelAnnouncement";
+import type { SolarPanelAnnouncement } from "@/features/solar-panel/solarPanel.announcement";
 
 import { messagesMocks, solarPanelAnnouncementMocks } from "./registry";
 

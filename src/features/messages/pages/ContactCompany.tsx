@@ -5,9 +5,9 @@ import { useTranslation } from "react-i18next";
 
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
-import { createDirectConversation } from "@/features/messages/messenger.api";
+import { createDirectConversation } from "@/features/messages/messages.messenger.api";
 import { getMyCompany } from "@/features/companies/company.service";
-import { httpJson } from "@/shared/http/http.service";
+import { httpJson } from "@/lib/shared/http/http.service";
 
 export default function ContactCompany() {
   const { companyId = "", lang: langParam } = useParams<{ companyId: string; lang: string }>();

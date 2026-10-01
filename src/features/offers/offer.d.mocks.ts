@@ -1,5 +1,5 @@
 import { solarPanelAnnouncementMocks } from "@/config/mocks/registry";
-import { getSelectedContext } from "@/features/access/onboarding.service";
+import { getSelectedContext } from "@/features/access/access.onboarding.service";
 import type { Offer, OfferPayload } from "./offer.service";
 
 function key(companyId: string): string {

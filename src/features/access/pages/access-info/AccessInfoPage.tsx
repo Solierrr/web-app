@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
-import { redeemAccessCode } from "@/features/companies/companyManagement.service";
+import { redeemAccessCode } from "@/features/companies/company.management.service";
 
 export default function AccessInfoPage() {
   const { t } = useTranslation("commons", { keyPrefix: "accessInfo" });

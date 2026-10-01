@@ -12,9 +12,9 @@ import {
   createBusinessContact,
   createCompany,
 } from "@/features/companies/company.service";
-import { validateCnpj } from "@/utils/validation.utils";
-import { validateCnpjCategory, type CnpjValidationResult } from "@/shared/validation/aiValidation.service";
-import RegistrationStatus, { type RegistrationStatusKind } from "@/components/feedback/registration-status/RegistrationStatus";
+import { validateCnpj } from "@/lib/utils/validation.utils";
+import { validateCnpjCategory, type CnpjValidationResult } from "@/lib/shared/validation/aiValidation.service";
+import RegistrationStatus, { type RegistrationStatusKind } from "@/lib/components/feedback/registration-status/RegistrationStatus";
 import logger from "@/config/logging/logger";
 
 type CompanyType = "SUPPLIER" | "DEMANDANT";

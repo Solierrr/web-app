@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 
 import type { SolarPanel } from "@/features/solar-panel/solarPanel";
-import type { Image } from "@/shared/types/image/image";
+import type { Image } from "@/lib/shared/types/image/image";
 
 import { useContextMenu } from "@@/overlay/contextMenu/useContextMenu";
 import { panelCharacteristics } from "./SolarPanelAnnouncement.utils";

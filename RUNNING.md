@@ -64,5 +64,5 @@ npm run dev
 - `npm run lint`, roda o ESLint sobre o projeto.
 - `npm run format` / `npm run format:check`, aplica ou apenas verifica a formatação com Prettier.
 - `npm run test`, roda a suíte de testes com Vitest.
-- `npm run storybook`, sobe o Storybook em modo desenvolvimento na porta `6006` para visualizar os componentes de `src/components/`.
+- `npm run storybook`, sobe o Storybook em modo desenvolvimento na porta `6006` para visualizar os componentes de `src/lib/components/`.
 - `npm run build-storybook`, gera o build estático do Storybook.

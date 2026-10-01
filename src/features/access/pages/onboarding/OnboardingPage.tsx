@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { DEFAULT, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
-import { getAuthSession } from "@/shared/auth/authToken.utils";
+import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import { login, register } from "../../access.service";
 import {
   register as registerFirebase,
@@ -19,8 +19,8 @@ import {
   attachCompanyAddress,
   attachCompanyBusinessContact,
 } from "@/features/companies/company.service";
-import { redeemAccessCode } from "@/features/companies/companyManagement.service";
-import { validateCnpj, validateCpf } from "@/utils/validation.utils";
+import { redeemAccessCode } from "@/features/companies/company.management.service";
+import { validateCnpj, validateCpf } from "@/lib/utils/validation.utils";
 import {
   addOperationalMembership,
   claimRegistrationDraft,
@@ -29,8 +29,8 @@ import {
   getRegistrationDraft,
   saveOperationalAccount,
   saveRegistrationDraft,
-} from "../../onboarding.service";
-import type { RegistrationKind } from "../../onboarding";
+} from "../../access.onboarding.service";
+import type { RegistrationKind } from "../../access.onboarding";
 import { registrationFields } from "./Onboarding.presets";
 import {
   createContact,
@@ -39,10 +39,10 @@ import {
   createTechnician,
   getProfessions,
   type Profession,
-} from "@/features/professionals/professionalOnboarding.service";
+} from "@/features/professionals/professional.onboarding.service";
 import { getMyUser } from "@/features/users/user/user.service";
-import { validateCertificates, validateCnpjCategory } from "@/shared/validation/aiValidation.service";
-import Access from "@/components/layout/access/Access";
+import { validateCertificates, validateCnpjCategory } from "@/lib/shared/validation/aiValidation.service";
+import Access from "@/lib/components/layout/access/Access";
 import { useTranslation } from "react-i18next";
 
 export default function OnboardingPage({ kind }: { kind: RegistrationKind }) {

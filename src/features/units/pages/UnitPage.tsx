@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { DEFAULT, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
-import { useActiveContext } from "@/shared/context/ActiveContext";
+import { useActiveContext } from "@/lib/shared/context/ActiveContext";
 import { listCompanyUnits, type LocalUnit } from "../unit.service";
 
 export default function UnitPage() {

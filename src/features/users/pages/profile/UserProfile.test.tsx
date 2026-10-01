@@ -6,7 +6,7 @@ vi.mock("@/features/users/user/user.service", () => ({
   getMyUser: vi.fn(),
   updateMyUser: vi.fn(),
 }));
-vi.mock("@/shared/auth/authToken.utils", () => ({ getAuthSession: () => ({ email: "marina@example.test" }) }));
+vi.mock("@/lib/shared/auth/authToken.utils", () => ({ getAuthSession: () => ({ email: "marina@example.test" }) }));
 
 import { getMyUser, type MyUser } from "@/features/users/user/user.service";
 

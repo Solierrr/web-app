@@ -1,14 +1,14 @@
 import type { SolarPanel } from "./solarPanel";
-import type { SolarPanelAnnouncement } from "./solarPanelAnnouncement";
+import type { SolarPanelAnnouncement } from "./solarPanel.announcement";
 
 import { solarPanelAnnouncementMocks } from "@/config/mocks/registry";
 import { resolveWithMocks } from "@/config/mocks/fallback.service";
-import { httpJson } from "@/shared/http/http.service";
+import { httpJson } from "@/lib/shared/http/http.service";
 import { SolarPanelModelStatus, SolarPanelType } from "./solarPanel.enum";
 import { DEFAULT as DEFAULT_LANGUAGE, type SupportedLanguage } from "@/config/inter/browser/languages";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
 import { getMockModels, saveMockModel, deleteMockModel } from "./solarPanel.d.mocks";
-import { getSelectedContext } from "@/features/access/onboarding.service";
+import { getSelectedContext } from "@/features/access/access.onboarding.service";
 
 const API = import.meta.env.VITE_API_CORE;
 const SERVICE_NAME = "solarPanel";

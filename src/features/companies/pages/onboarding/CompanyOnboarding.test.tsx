@@ -3,7 +3,7 @@ import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import CompanyOnboarding from "./CompanyOnboarding";
 import * as companyService from "@/features/companies/company.service";
-import { validateCnpjCategory } from "@/shared/validation/aiValidation.service";
+import { validateCnpjCategory } from "@/lib/shared/validation/aiValidation.service";
 
 vi.mock("@/features/companies/company.service", () => ({
   createCompany: vi.fn(),
@@ -12,7 +12,7 @@ vi.mock("@/features/companies/company.service", () => ({
   attachCompanyAddress: vi.fn(),
   attachCompanyBusinessContact: vi.fn(),
 }));
-vi.mock("@/shared/validation/aiValidation.service", () => ({ validateCnpjCategory: vi.fn() }));
+vi.mock("@/lib/shared/validation/aiValidation.service", () => ({ validateCnpjCategory: vi.fn() }));
 
 const VALID_CNPJ = "11.444.777/0001-61";
 

@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import Icon from "@@/ui/icon/Icon";
-import { useActiveContext } from "@/shared/context/ActiveContext";
+import { useActiveContext } from "@/lib/shared/context/ActiveContext";
 import { DEFAULT, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { CompanyStatus } from "@/features/companies/company.enum";
 import { getOperationalNavigation } from "@@/layout/saas/SaaSLayout.presets";

@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 import { createOffer, deleteOffer, getMySupplier, listCompanyOffers, updateOffer } from "./offer.service";
-import { httpJson } from "@/shared/http/http.service";
+import { httpJson } from "@/lib/shared/http/http.service";
 
-vi.mock("@/shared/http/http.service", () => ({ httpJson: vi.fn() }));
+vi.mock("@/lib/shared/http/http.service", () => ({ httpJson: vi.fn() }));
 
 describe("offer.service", () => {
   it("returns the first supplier for a company", async () => {

@@ -4,9 +4,9 @@ import { useTranslation } from "react-i18next";
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { DEFAULT, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
-import { useActiveContext } from "@/shared/context/ActiveContext";
+import { useActiveContext } from "@/lib/shared/context/ActiveContext";
 import { getUser } from "@/features/users/user/user.service";
-import { listEmployees, type Employee } from "@/features/companies/companyManagement.service";
+import { listEmployees, type Employee } from "@/features/companies/company.management.service";
 import Permissions from "@/features/permissions/Permissions";
 
 export default function EmployeePage() {

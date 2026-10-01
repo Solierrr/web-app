@@ -1,4 +1,4 @@
-import type { RegistrationKind } from "../../onboarding";
+import type { RegistrationKind } from "../../access.onboarding";
 
 export interface RegistrationField {
   name: string;
