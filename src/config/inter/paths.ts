@@ -1,7 +1,6 @@
 import i18n from "@/config/inter/internationalization";
 import { isSupportedLanguage, type SupportedLanguage } from "@/config/inter/browser/languages";
 
-
 export const SEGMENT = [
   "solarPanels",
   "professionals",
@@ -34,7 +33,6 @@ export const SEGMENT = [
   "registrations",
 ] as const;
 
-
 export type RouteSegmentKey = (typeof SEGMENT)[number];
 
 export function routeSegment(lang: SupportedLanguage, key: RouteSegmentKey): string {
@@ -64,6 +62,9 @@ export const routePaths = {
 
   login: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "login")}`,
   register: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "register")}`,
+  registerCompany: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "register", "company")}`,
+  registerProfessional: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "register", "professional")}`,
+  activateAccess: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "register", "access")}`,
   forgotPassword: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "forgotPassword")}`,
   verifyEmail: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "verifyEmail")}`,
 
@@ -93,12 +94,12 @@ export const routePaths = {
     `/${lang}/${joinSegments(lang, "messages", "company")}/${companyId}${productTitle ? `?product=${encodeURIComponent(productTitle)}` : ""}`,
   chat: (lang: SupportedLanguage, conversationId: string) => `/${lang}/${joinSegments(lang, "messages")}/${conversationId}`,
   chatbot: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "chatbot")}`,
+  operationalChatbot: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "dashboard", "chatbot")}`,
 
   settings: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "settings")}`,
   settingsSecurity: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "settings", "security")}`,
   dashboard: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "dashboard")}`,
 };
-
 
 export function translatePathToLanguage(pathname: string, targetLang: SupportedLanguage): string {
   const [, currentLang, ...rest] = pathname.split("/");

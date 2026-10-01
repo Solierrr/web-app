@@ -1,5 +1,6 @@
 import { httpJson } from "@/shared/http/http.service";
 import { API_CORE_URL } from "@/shared/http/apiCore.utils";
+import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
 
 const SERVICE_NAME = "professionalOnboarding";
 
@@ -9,7 +10,11 @@ export interface Profession {
   requiresRegistration?: boolean;
 }
 
-export function getProfessions(): Promise<Profession[]> {
+export async function getProfessions(): Promise<Profession[]> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    return [{ id: "mock-installer", name: "Instalador de sistemas solares" }, { id: "mock-engineer", name: "Engenheiro eletricista" }];
+  }
   return httpJson<Profession[]>(`${API_CORE_URL}/professions`, {
     service: SERVICE_NAME,
     operation: "getProfessions",

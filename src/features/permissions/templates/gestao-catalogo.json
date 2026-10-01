@@ -1,0 +1,12 @@
+{
+  "title": "Gestão catálogo",
+  "companyTypes": ["SUPPLIER"],
+  "permissions": [
+    "GET /api/models",
+    "POST /api/models",
+    "PUT /api/models/{id}",
+    "DELETE /api/models/{id}",
+    "POST /auth/password/change",
+    "POST /auth/password/recovery"
+  ]
+}

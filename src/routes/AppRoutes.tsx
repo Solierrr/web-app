@@ -29,21 +29,26 @@ import CompanyProfile from "@/features/companies/pages/profile/CompanyProfile";
 import UserProfile from "@/features/users/pages/profile/UserProfile";
 import ProfessionalProfile from "@/features/professionals/pages/profile/ProfessionalProfile";
 import SolarPanelModelCrud from "@/features/solar-panel/pages/crud/SolarPanelModelCrud";
+import SolarPanelModelPage from "@/features/solar-panel/pages/crud/SolarPanelModelPage";
 import Chat from "@/features/messages/pages/Chat";
 import Inbox from "@/features/messages/pages/Inbox";
 import ContactCompany from "@/features/messages/pages/ContactCompany";
 import ChatbotPage from "@/features/messages/pages/ChatbotPage";
 import LoginPage from "@/features/access/pages/login/LoginPage";
-import RegisterPage from "@/features/access/pages/register/RegisterPage";
+import OnboardingPage from "@/features/access/pages/onboarding/OnboardingPage";
 import ForgotPasswordPage from "@/features/access/pages/forgot-password/ForgotPasswordPage";
 import VerifyEmailPage from "@/features/access/pages/verify-email/VerifyEmailPage";
 import SettingsPage from "@/features/settings/pages/SettingsPage";
 import SettingsSecurityPage from "@/features/settings/pages/security/SettingsSecurityPage";
 import DashboardPage from "@/features/dashboard/pages/DashboardPage";
 import EmployeesPage from "@/features/companies/pages/employees/EmployeesPage";
+import EmployeePage from "@/features/companies/pages/employees/EmployeePage";
 import OffersPage from "@/features/offers/pages/OffersPage";
+import OfferPage from "@/features/offers/pages/OfferPage";
 import UnitsPage from "@/features/units/pages/UnitsPage";
+import UnitPage from "@/features/units/pages/UnitPage";
 import RequireAuth from "@/features/access/RequireAuth";
+import RequireVerifiedEmail from "@/features/access/RequireVerifiedEmail";
 import RequireCompany from "@/features/access/RequireCompany";
 import RequirePlatformAdmin from "@/features/access/RequirePlatformAdmin";
 import RegistrationsPage from "@/features/platform-admin/pages/registrations/RegistrationsPage";
@@ -56,7 +61,14 @@ interface RouteDefinition {
 
 const ACCESS: RouteDefinition[] = [
   { key: "login", path: (lang) => joinSegments(lang, "login"), element: <LoginPage /> },
-  { key: "register", path: (lang) => joinSegments(lang, "register"), element: <RegisterPage /> },
+  { key: "register", path: (lang) => joinSegments(lang, "register"), element: <OnboardingPage key="professional" kind="professional" /> },
+  { key: "registerCompany", path: (lang) => joinSegments(lang, "register", "company"), element: <OnboardingPage key="company" kind="company" /> },
+  {
+    key: "registerProfessional",
+    path: (lang) => joinSegments(lang, "register", "professional"),
+    element: <OnboardingPage key="professional" kind="professional" />,
+  },
+  { key: "activateAccess", path: (lang) => joinSegments(lang, "register", "access"), element: <OnboardingPage key="invitation" kind="invitation" /> },
   { key: "forgotPassword", path: (lang) => joinSegments(lang, "forgotPassword"), element: <ForgotPasswordPage /> },
 ];
 
@@ -80,6 +92,43 @@ const APP: RouteDefinition[] = [
 ];
 
 const SAAS: RouteDefinition[] = [
+  {
+    key: "modelDetail",
+    path: (lang) => `${joinSegments(lang, "admin", "solarPanelModels")}/:modelId`,
+    element: (
+      <RequireCompany type="SUPPLIER" permission="GET /api/models">
+        <SolarPanelModelPage />
+      </RequireCompany>
+    ),
+  },
+  { key: "operationalChatbot", path: (lang) => joinSegments(lang, "dashboard", "chatbot"), element: <ChatbotPage operational /> },
+  {
+    key: "offerDetail",
+    path: (lang) => `${joinSegments(lang, "admin", "offers")}/:offerId`,
+    element: (
+      <RequireCompany type="SUPPLIER" permission="GET /api/offers/company/{companyId}">
+        <OfferPage />
+      </RequireCompany>
+    ),
+  },
+  {
+    key: "unitDetail",
+    path: (lang) => `${joinSegments(lang, "admin", "units")}/:unitId`,
+    element: (
+      <RequireCompany type="DEMANDANT" permission="GET /api/local-units/company/{companyId}">
+        <UnitPage />
+      </RequireCompany>
+    ),
+  },
+  {
+    key: "employeeDetail",
+    path: (lang) => `${joinSegments(lang, "admin", "employees")}/:employeeId`,
+    element: (
+      <RequireCompany permission="GET /api/user-companies/company/{companyId}">
+        <EmployeePage />
+      </RequireCompany>
+    ),
+  },
   { key: "dashboard", path: (lang) => joinSegments(lang, "dashboard"), element: <DashboardPage /> },
   { key: "verifyEmail", path: (lang) => joinSegments(lang, "verifyEmail"), element: <VerifyEmailPage /> },
   { key: "settings", path: (lang) => joinSegments(lang, "settings"), element: <SettingsPage /> },
@@ -89,15 +138,71 @@ const SAAS: RouteDefinition[] = [
   { key: "profileOnboardingProfessional", path: (lang) => joinSegments(lang, "profileSetup", "professional"), element: <ProfessionalOnboarding /> },
   { key: "profileOnboardingAccess", path: (lang) => joinSegments(lang, "profileSetup", "access"), element: <AccessInfoPage /> },
   { key: "contactCompany", path: (lang) => `${joinSegments(lang, "messages", "company")}/:companyId`, element: <ContactCompany /> },
-  { key: "inbox", path: (lang) => joinSegments(lang, "messages"), element: <RequireCompany><Inbox /></RequireCompany> },
-  { key: "chat", path: (lang) => `${joinSegments(lang, "messages")}/:conversationId`, element: <RequireCompany><Chat /></RequireCompany> },
+  {
+    key: "inbox",
+    path: (lang) => joinSegments(lang, "messages"),
+    element: (
+      <RequireVerifiedEmail>
+        <Inbox />
+      </RequireVerifiedEmail>
+    ),
+  },
+  {
+    key: "chat",
+    path: (lang) => `${joinSegments(lang, "messages")}/:conversationId`,
+    element: (
+      <RequireVerifiedEmail>
+        <Chat />
+      </RequireVerifiedEmail>
+    ),
+  },
   { key: "ownCompanyProfile", path: (lang) => joinSegments(lang, "company"), element: <EnterpriseProfile /> },
   { key: "ownUserProfile", path: (lang) => joinSegments(lang, "user"), element: <UserProfile /> },
-  { key: "solarPanelModelsCrud", path: (lang) => joinSegments(lang, "admin", "solarPanelModels"), element: <RequireCompany type="SUPPLIER"><SolarPanelModelCrud /></RequireCompany> },
-  { key: "employeesManagement", path: (lang) => joinSegments(lang, "admin", "employees"), element: <RequireCompany><EmployeesPage /></RequireCompany> },
-  { key: "offersManagement", path: (lang) => joinSegments(lang, "admin", "offers"), element: <RequireCompany type="SUPPLIER"><OffersPage /></RequireCompany> },
-  { key: "unitsManagement", path: (lang) => joinSegments(lang, "admin", "units"), element: <RequireCompany type="DEMANDANT"><UnitsPage /></RequireCompany> },
-  { key: "registrationsManagement", path: (lang) => joinSegments(lang, "admin", "registrations"), element: <RequirePlatformAdmin><RegistrationsPage /></RequirePlatformAdmin> },
+  {
+    key: "solarPanelModelsCrud",
+    path: (lang) => joinSegments(lang, "admin", "solarPanelModels"),
+    element: (
+      <RequireCompany type="SUPPLIER" permission="GET /api/models">
+        <SolarPanelModelCrud />
+      </RequireCompany>
+    ),
+  },
+  {
+    key: "employeesManagement",
+    path: (lang) => joinSegments(lang, "admin", "employees"),
+    element: (
+      <RequireCompany permission="GET /api/user-companies/company/{companyId}">
+        <EmployeesPage />
+      </RequireCompany>
+    ),
+  },
+  {
+    key: "offersManagement",
+    path: (lang) => joinSegments(lang, "admin", "offers"),
+    element: (
+      <RequireCompany type="SUPPLIER" permission="GET /api/offers/company/{companyId}">
+        <OffersPage />
+      </RequireCompany>
+    ),
+  },
+  {
+    key: "unitsManagement",
+    path: (lang) => joinSegments(lang, "admin", "units"),
+    element: (
+      <RequireCompany type="DEMANDANT" permission="GET /api/local-units/company/{companyId}">
+        <UnitsPage />
+      </RequireCompany>
+    ),
+  },
+  {
+    key: "registrationsManagement",
+    path: (lang) => joinSegments(lang, "admin", "registrations"),
+    element: (
+      <RequirePlatformAdmin>
+        <RegistrationsPage />
+      </RequirePlatformAdmin>
+    ),
+  },
 ];
 
 export function AppRoutes() {
@@ -115,13 +220,12 @@ export function AppRoutes() {
 
           {SUPPORTED.flatMap((lang) => APP.map(({ key, path, element }) => <Route key={`${lang}-${key}`} path={path(lang)} element={element} />))}
 
-          <Route element={<RequireAuth />}>
-            <Route element={<SaaSLayout />}>
-              {SUPPORTED.flatMap((lang) => SAAS.map(({ key, path, element }) => <Route key={`${lang}-${key}`} path={path(lang)} element={element} />))}
-            </Route>
-          </Route>
-
           <Route path="*" element={<NotFoundPage />} />
+        </Route>
+        <Route element={<RequireAuth />}>
+          <Route element={<SaaSLayout />}>
+            {SUPPORTED.flatMap((lang) => SAAS.map(({ key, path, element }) => <Route key={`${lang}-${key}`} path={path(lang)} element={element} />))}
+          </Route>
         </Route>
       </Route>
     </Routes>

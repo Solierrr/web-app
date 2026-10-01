@@ -1,7 +1,12 @@
 export function cleanString(input: string): string {
   let cleaned = input.trim();
   cleaned = cleaned.replace(/\s+/g, " ");
-  cleaned = cleaned.replace(/[\x00-\x1F\x7F]/g, "");
+  cleaned = Array.from(cleaned)
+    .filter((char) => {
+      const code = char.charCodeAt(0);
+      return code > 0x1f && code !== 0x7f;
+    })
+    .join("");
 
   return cleaned;
 }

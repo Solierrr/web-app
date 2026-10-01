@@ -5,6 +5,8 @@ import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter
 import { routePaths } from "@/config/inter/paths";
 import { refresh } from "@/features/access/access.service";
 import { clearAuthSession, getAuthSession } from "@/shared/auth/authToken.utils";
+import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
+import OperationalLoading from "@@/feedback/operational-loading/OperationalLoading";
 
 export default function RequireAuth() {
   const { lang: langParam } = useParams<{ lang: string }>();
@@ -18,7 +20,7 @@ export default function RequireAuth() {
 
     async function ensureSession() {
       const stored = getAuthSession();
-      if (!stored) {
+      if (!stored || (stored.isMock && !isAlwaysMockMode())) {
         if (active) setAuthenticated(false);
         return;
       }
@@ -44,7 +46,7 @@ export default function RequireAuth() {
     };
   }, []);
 
-  if (authenticated === null) return <p className="p-6">Carregando sessão…</p>;
+  if (authenticated === null) return <OperationalLoading />;
   if (!authenticated) {
     return <Navigate to={routePaths.login(lang)} replace state={{ returnTo: `${location.pathname}${location.search}${location.hash}` }} />;
   }

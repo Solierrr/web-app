@@ -1,4 +1,4 @@
-import type { RedirectOption } from "@/shared/types/navigation/navigation" 
+import type { RedirectOption } from "@/shared/types/navigation/navigation"; 
 import { Link } from "react-router-dom";
 
 interface SwitcherProps {

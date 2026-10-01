@@ -1,3 +1,4 @@
+import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { useEffect, useState, type FormEvent } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -30,9 +31,11 @@ export default function ProfessionalOnboarding() {
 
   useEffect(() => {
     let active = true;
-    getProfessions().then((result) => {
-      if (active) setProfessions(result);
-    }).catch(() => undefined);
+    getProfessions()
+      .then((result) => {
+        if (active) setProfessions(result);
+      })
+      .catch(() => undefined);
     return () => {
       active = false;
     };
@@ -101,84 +104,97 @@ export default function ProfessionalOnboarding() {
 
   if (done) {
     return (
-      <main className="mx-auto flex max-w-xl flex-col gap-4 p-6">
-        <h1 className="text-2xl font-semibold">{t("resultTitle")}</h1>
+      <OperationalPage title={t("resultTitle")} compact>
         <RegistrationStatus status="PENDING" />
         {certificateResult ? (
-          <div className="rounded-lg border border-gray-200 p-4">
-            <p className="font-medium">
-              {certificateResult.status === "ACCEPT" ? t("certificatesValid") : t("certificatesInvalid")}
-            </p>
+          <div className="rounded-small border border-operational-border p-4">
+            <p className="font-medium">{certificateResult.status === "ACCEPT" ? t("certificatesValid") : t("certificatesInvalid")}</p>
             <p className="text-sm text-gray-600">{certificateResult.reason}</p>
           </div>
         ) : null}
-        <Link to={routePaths.ownUserProfile(lang)} className="w-fit rounded-lg bg-orange px-5 py-2 text-white">
+        <Link to={routePaths.ownUserProfile(lang)} className="w-fit rounded-small bg-orange px-5 py-2 text-white">
           {t("continue")}
         </Link>
-      </main>
+      </OperationalPage>
     );
   }
 
   return (
-    <main className="mx-auto max-w-xl p-6">
-      <h1 className="mb-2 text-2xl font-semibold">{t("title")}</h1>
-      <p className="mb-6 text-gray-600">{t("description")}</p>
+    <OperationalPage title={t("title")} description={t("description")} compact>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <h2 className="font-medium">{t("personalSection")}</h2>
-        <label className="flex flex-col gap-1">{t("name")}
-          <input name="name" maxLength={60} required className="rounded-lg border border-gray-300 p-2" />
+        <label className="flex flex-col gap-1">
+          {t("name")}
+          <input name="name" maxLength={60} required className="rounded-small border border-operational-border p-2" />
         </label>
-        <label className="flex flex-col gap-1">{t("cpf")}
-          <input name="cpf" inputMode="numeric" pattern="[0-9.\-]{11,14}" required className="rounded-lg border border-gray-300 p-2" />
+        <label className="flex flex-col gap-1">
+          {t("cpf")}
+          <input name="cpf" inputMode="numeric" pattern="[0-9.\-]{11,14}" required className="rounded-small border border-operational-border p-2" />
         </label>
-        <label className="flex flex-col gap-1">{t("birthDate")}
-          <input name="birthDate" type="date" required className="rounded-lg border border-gray-300 p-2" />
+        <label className="flex flex-col gap-1">
+          {t("birthDate")}
+          <input name="birthDate" type="date" required className="rounded-small border border-operational-border p-2" />
         </label>
-        <label className="flex flex-col gap-1">{t("email")}
-          <input name="email" type="email" className="rounded-lg border border-gray-300 p-2" />
+        <label className="flex flex-col gap-1">
+          {t("email")}
+          <input name="email" type="email" className="rounded-small border border-operational-border p-2" />
         </label>
-        <label className="flex flex-col gap-1">{t("phone")}
-          <input name="phone" inputMode="numeric" placeholder="9XXXXXXXX" className="rounded-lg border border-gray-300 p-2" />
+        <label className="flex flex-col gap-1">
+          {t("phone")}
+          <input name="phone" inputMode="numeric" placeholder="9XXXXXXXX" className="rounded-small border border-operational-border p-2" />
         </label>
 
         <h2 className="mt-2 font-medium">{t("registrationSection")}</h2>
-        <label className="flex flex-col gap-1">{t("crea")}
-          <input name="crea" required className="rounded-lg border border-gray-300 p-2" />
+        <label className="flex flex-col gap-1">
+          {t("crea")}
+          <input name="crea" required className="rounded-small border border-operational-border p-2" />
         </label>
-        <label className="flex flex-col gap-1">{t("profession")}
-          <select name="professionId" required className="rounded-lg border border-gray-300 p-2">
+        <label className="flex flex-col gap-1">
+          {t("profession")}
+          <select name="professionId" required className="rounded-small border border-operational-border p-2">
             <option value="" disabled>
               {t("professionPlaceholder")}
             </option>
             {professions.map((profession) => (
-              <option key={profession.id} value={profession.id}>{profession.name}</option>
+              <option key={profession.id} value={profession.id}>
+                {profession.name}
+              </option>
             ))}
           </select>
         </label>
-        <label className="flex flex-col gap-1">{t("council")}
-          <input name="council" maxLength={60} className="rounded-lg border border-gray-300 p-2" />
+        <label className="flex flex-col gap-1">
+          {t("council")}
+          <input name="council" maxLength={60} className="rounded-small border border-operational-border p-2" />
         </label>
-        <label className="flex flex-col gap-1">{t("number")}
-          <input name="number" maxLength={30} className="rounded-lg border border-gray-300 p-2" />
+        <label className="flex flex-col gap-1">
+          {t("number")}
+          <input name="number" maxLength={30} className="rounded-small border border-operational-border p-2" />
         </label>
-        <label className="flex flex-col gap-1">{t("expirationDate")}
-          <input name="expirationDate" type="date" className="rounded-lg border border-gray-300 p-2" />
+        <label className="flex flex-col gap-1">
+          {t("expirationDate")}
+          <input name="expirationDate" type="date" className="rounded-small border border-operational-border p-2" />
         </label>
 
         <h2 className="mt-2 font-medium">{t("certificatesSection")}</h2>
         <p className="text-sm text-gray-600">{t("certificatesDescription")}</p>
-        <label className="flex flex-col gap-1">{t("certNr10")}
-          <input name="certNr10Url" type="url" placeholder="https://" className="rounded-lg border border-gray-300 p-2" />
+        <label className="flex flex-col gap-1">
+          {t("certNr10")}
+          <input name="certNr10Url" type="url" placeholder="https://" className="rounded-small border border-operational-border p-2" />
         </label>
-        <label className="flex flex-col gap-1">{t("certNr35")}
-          <input name="certNr35Url" type="url" placeholder="https://" className="rounded-lg border border-gray-300 p-2" />
+        <label className="flex flex-col gap-1">
+          {t("certNr35")}
+          <input name="certNr35Url" type="url" placeholder="https://" className="rounded-small border border-operational-border p-2" />
         </label>
 
-        {error ? <p role="alert" className="text-red-700">{error}</p> : null}
-        <button type="submit" disabled={saving} className="rounded-lg bg-orange px-5 py-2 text-white disabled:opacity-50">
+        {error ? (
+          <p role="alert" className="text-red-700">
+            {error}
+          </p>
+        ) : null}
+        <button type="submit" disabled={saving} className="rounded-small bg-orange px-5 py-2 text-white disabled:opacity-50">
           {t("submit")}
         </button>
       </form>
-    </main>
+    </OperationalPage>
   );
 }

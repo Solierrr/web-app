@@ -1,5 +1,7 @@
 import { httpJson } from "@/shared/http/http.service";
 import { API_CORE_URL } from "@/shared/http/apiCore.utils";
+import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
+import { createMockUser } from "./user.d.mocks";
 
 const SERVICE_NAME = "user";
 
@@ -12,7 +14,11 @@ export interface MyUser {
   active: boolean;
 }
 
-export function getMyUser(): Promise<MyUser> {
+export async function getMyUser(): Promise<MyUser> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    return createMockUser();
+  }
   return httpJson<MyUser>(`${API_CORE_URL}/users/me`, {
     service: SERVICE_NAME,
     operation: "getMyUser",
@@ -20,7 +26,13 @@ export function getMyUser(): Promise<MyUser> {
   });
 }
 
-export function updateMyUser(username: string): Promise<MyUser> {
+export async function updateMyUser(username: string): Promise<MyUser> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    const user = createMockUser();
+    localStorage.setItem(`solaria.mock.username.${user.id}`, username);
+    return { ...user, username };
+  }
   return httpJson<MyUser>(`${API_CORE_URL}/users/me`, {
     service: SERVICE_NAME,
     operation: "updateMyUser",
@@ -30,7 +42,11 @@ export function updateMyUser(username: string): Promise<MyUser> {
   });
 }
 
-export function getUser(id: string): Promise<MyUser> {
+export async function getUser(id: string): Promise<MyUser> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    return createMockUser(id);
+  }
   return httpJson<MyUser>(`${API_CORE_URL}/users/${encodeURIComponent(id)}`, {
     service: SERVICE_NAME,
     operation: "getUser",

@@ -6,6 +6,9 @@ import { resolveWithMocks } from "@/config/mocks/fallback.service";
 import { httpJson } from "@/shared/http/http.service";
 import { SolarPanelModelStatus, SolarPanelType } from "./solarPanel.enum";
 import { DEFAULT as DEFAULT_LANGUAGE, type SupportedLanguage } from "@/config/inter/browser/languages";
+import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
+import { getMockModels, saveMockModel, deleteMockModel } from "./solarPanel.d.mocks";
+import { getSelectedContext } from "@/features/access/onboarding.service";
 
 const API = import.meta.env.VITE_API_CORE;
 const SERVICE_NAME = "solarPanel";
@@ -37,9 +40,12 @@ interface CatalogOffer {
 
 function toAnnouncement(offer: CatalogOffer): SolarPanelAnnouncement {
   const image = offer.photoUrls[0] ?? "/images/solar-panel-placeholder.svg";
-  const type = offer.type === "THIN_FILM" ? SolarPanelType.THINFILM
-    : offer.type === "POLYCRYSTALLINE" ? SolarPanelType.POLYCRYSTALLINE
-    : SolarPanelType.MONOCRYSTALLINE;
+  const type =
+    offer.type === "THIN_FILM"
+      ? SolarPanelType.THINFILM
+      : offer.type === "POLYCRYSTALLINE"
+        ? SolarPanelType.POLYCRYSTALLINE
+        : SolarPanelType.MONOCRYSTALLINE;
   return {
     id: offer.id,
     supplierId: offer.companyId,
@@ -73,12 +79,13 @@ function toAnnouncement(offer: CatalogOffer): SolarPanelAnnouncement {
 
 export function getCatalogSolarPanels(lang: SupportedLanguage): Promise<SolarPanelAnnouncement[]> {
   return resolveWithMocks(
-    () => httpJson<CatalogOffer[]>(`${API}/api/catalog/offers?locale=${encodeURIComponent(lang)}`, {
-      service: SERVICE_NAME,
-      operation: "getCatalogSolarPanels",
-      authenticated: false,
-      errorMessage: "Não foi possível carregar as placas solares",
-    }).then((offers) => offers.map(toAnnouncement)),
+    () =>
+      httpJson<CatalogOffer[]>(`${API}/api/catalog/offers?locale=${encodeURIComponent(lang)}`, {
+        service: SERVICE_NAME,
+        operation: "getCatalogSolarPanels",
+        authenticated: false,
+        errorMessage: "Não foi possível carregar as placas solares",
+      }).then((offers) => offers.map(toAnnouncement)),
     () => solarPanelAnnouncementMocks,
   );
 }
@@ -86,12 +93,15 @@ export function getCatalogSolarPanels(lang: SupportedLanguage): Promise<SolarPan
 export function getSolarPanelBySlug(companySlug: string, slug: string, lang: SupportedLanguage = DEFAULT_LANGUAGE): Promise<SolarPanelAnnouncement> {
   return resolveWithMocks(
     () =>
-      httpJson<CatalogOffer>(`${API}/api/catalog/offers/${encodeURIComponent(companySlug)}/${encodeURIComponent(slug)}?locale=${encodeURIComponent(lang)}`, {
-        service: SERVICE_NAME,
-        operation: "getSolarPanelBySlug",
-        authenticated: false,
-        errorMessage: `Não foi possível obter o painel solar ${companySlug}/${slug}`,
-      }).then(toAnnouncement),
+      httpJson<CatalogOffer>(
+        `${API}/api/catalog/offers/${encodeURIComponent(companySlug)}/${encodeURIComponent(slug)}?locale=${encodeURIComponent(lang)}`,
+        {
+          service: SERVICE_NAME,
+          operation: "getSolarPanelBySlug",
+          authenticated: false,
+          errorMessage: `Não foi possível obter o painel solar ${companySlug}/${slug}`,
+        },
+      ).then(toAnnouncement),
     () => {
       const mock = solarPanelAnnouncementMocks.find((announcement) => announcement.companySlug === companySlug && announcement.slug === slug);
       if (!mock) throw new Error(`Painel solar não encontrado: ${companySlug}/${slug}`);
@@ -102,6 +112,7 @@ export function getSolarPanelBySlug(companySlug: string, slug: string, lang: Sup
 
 interface ModelDTO {
   id: string;
+  creatorCompanyId?: string | null;
   brand: string;
   model: string;
   type: "MONOCRYSTALLINE" | "POLYCRYSTALLINE" | "THIN_FILM";
@@ -128,6 +139,7 @@ function fromBackendType(type: ModelDTO["type"]): SolarPanelType {
 function toSolarPanel(dto: ModelDTO): SolarPanel {
   return {
     id: dto.id,
+    creatorCompanyId: dto.creatorCompanyId,
     brand: dto.brand,
     model: dto.model,
     type: fromBackendType(dto.type),
@@ -152,9 +164,11 @@ function toModelPayload(payload: Omit<SolarPanel, "id" | "status">) {
   };
 }
 
-// `Model` é um catálogo compartilhado (sem dono/empresa) — qualquer fornecedor
-// pode cadastrar ou editar. A vinculação com uma empresa acontece via `Offer`.
-export function listSolarPanelModels(): Promise<SolarPanel[]> {
+export async function listSolarPanelModels(): Promise<SolarPanel[]> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    return getMockModels();
+  }
   return httpJson<ModelDTO[]>(`${API}/api/models`, {
     service: SERVICE_NAME,
     operation: "listSolarPanelModels",
@@ -162,7 +176,11 @@ export function listSolarPanelModels(): Promise<SolarPanel[]> {
   }).then((models) => models.map(toSolarPanel));
 }
 
-export function listApprovedSolarPanelModels(): Promise<SolarPanel[]> {
+export async function listApprovedSolarPanelModels(): Promise<SolarPanel[]> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    return getMockModels().filter((item) => item.status === SolarPanelModelStatus.APPROVED);
+  }
   return httpJson<ModelDTO[]>(`${API}/api/models/status/APPROVED`, {
     service: SERVICE_NAME,
     operation: "listApprovedSolarPanelModels",
@@ -170,7 +188,11 @@ export function listApprovedSolarPanelModels(): Promise<SolarPanel[]> {
   }).then((models) => models.map(toSolarPanel));
 }
 
-export function listSolarPanelModelsByStatus(status: SolarPanelModelStatus): Promise<SolarPanel[]> {
+export async function listSolarPanelModelsByStatus(status: SolarPanelModelStatus): Promise<SolarPanel[]> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    return getMockModels().filter((item) => item.status === status);
+  }
   return httpJson<ModelDTO[]>(`${API}/api/models/status/${encodeURIComponent(status)}`, {
     service: SERVICE_NAME,
     operation: "listSolarPanelModelsByStatus",
@@ -178,10 +200,11 @@ export function listSolarPanelModelsByStatus(status: SolarPanelModelStatus): Pro
   }).then((models) => models.map(toSolarPanel));
 }
 
-// Admin Solaria: aprovação/rejeição de modelos fica restrita ao platform admin
-// no backend (ver RbacAuthorizationService.PLATFORM_ADMIN_ONLY_ENDPOINTS) — Model
-// é um catálogo compartilhado, não pertence a nenhum fornecedor específico.
-export function approveSolarPanel(id: string): Promise<SolarPanel> {
+export async function approveSolarPanel(id: string): Promise<SolarPanel> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    return saveMockModel({ ...(getMockModels().find((item) => item.id === id) ?? { id }), status: SolarPanelModelStatus.APPROVED });
+  }
   return httpJson<ModelDTO>(`${API}/api/models/${encodeURIComponent(id)}/approval`, {
     service: SERVICE_NAME,
     operation: "approveSolarPanel",
@@ -190,7 +213,11 @@ export function approveSolarPanel(id: string): Promise<SolarPanel> {
   }).then(toSolarPanel);
 }
 
-export function rejectSolarPanel(id: string): Promise<SolarPanel> {
+export async function rejectSolarPanel(id: string): Promise<SolarPanel> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    return saveMockModel({ ...(getMockModels().find((item) => item.id === id) ?? { id }), status: SolarPanelModelStatus.REJECTED });
+  }
   return httpJson<ModelDTO>(`${API}/api/models/${encodeURIComponent(id)}/rejection`, {
     service: SERVICE_NAME,
     operation: "rejectSolarPanel",
@@ -199,7 +226,16 @@ export function rejectSolarPanel(id: string): Promise<SolarPanel> {
   }).then(toSolarPanel);
 }
 
-export function createSolarPanel(payload: Omit<SolarPanel, "id" | "status">): Promise<SolarPanel> {
+export async function createSolarPanel(payload: Omit<SolarPanel, "id" | "status">): Promise<SolarPanel> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    return saveMockModel({
+      ...payload,
+      id: crypto.randomUUID(),
+      creatorCompanyId: getSelectedContext(),
+      status: SolarPanelModelStatus.UNDERANALYSIS,
+    });
+  }
   return httpJson<ModelDTO>(`${API}/api/models`, {
     service: SERVICE_NAME,
     operation: "createSolarPanel",
@@ -209,7 +245,11 @@ export function createSolarPanel(payload: Omit<SolarPanel, "id" | "status">): Pr
   }).then(toSolarPanel);
 }
 
-export function updateSolarPanel(id: string, payload: Omit<SolarPanel, "id" | "status">): Promise<SolarPanel> {
+export async function updateSolarPanel(id: string, payload: Omit<SolarPanel, "id" | "status">): Promise<SolarPanel> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    return saveMockModel({ ...getMockModels().find((item) => item.id === id), ...payload, id, status: SolarPanelModelStatus.UNDERANALYSIS });
+  }
   return httpJson<ModelDTO>(`${API}/api/models/${encodeURIComponent(id)}`, {
     service: SERVICE_NAME,
     operation: "updateSolarPanel",
@@ -219,7 +259,12 @@ export function updateSolarPanel(id: string, payload: Omit<SolarPanel, "id" | "s
   }).then(toSolarPanel);
 }
 
-export function deleteSolarPanel(id: string): Promise<void> {
+export async function deleteSolarPanel(id: string): Promise<void> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    deleteMockModel(id);
+    return;
+  }
   return httpJson<void>(`${API}/api/models/${encodeURIComponent(id)}`, {
     service: SERVICE_NAME,
     operation: "deleteSolarPanel",

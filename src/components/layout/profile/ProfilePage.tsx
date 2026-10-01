@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 import WrapperLayout from "@/config/WrapperLayout";
+import OperationalPage from "@@/layout/operational-page/OperationalPage";
 
-const DEFAULT_BANNER =
-  "https://fastly.picsum.photos/id/918/1600/400.jpg?hmac=1gEvFp6O-XDh4848VnlwyOIrVy8s_aJNhYyTzxN9_JA";
+const DEFAULT_BANNER = "https://fastly.picsum.photos/id/918/1600/400.jpg?hmac=1gEvFp6O-XDh4848VnlwyOIrVy8s_aJNhYyTzxN9_JA";
 const DEFAULT_AVATAR = "https://i.pravatar.cc/300";
 
 interface ProfilePageProps {
@@ -12,6 +12,8 @@ interface ProfilePageProps {
   subtitle?: string;
   actions?: ReactNode;
   children?: ReactNode;
+  operational?: boolean;
+  operationalTitle?: string;
 }
 
 /**
@@ -29,35 +31,39 @@ export default function ProfilePage({
   subtitle,
   actions,
   children,
+  operational = false,
+  operationalTitle,
 }: ProfilePageProps) {
-  return (
+  const ContentWrapper = operational ? "div" : WrapperLayout;
+  const NameHeading = operational ? "h2" : "h1";
+  const content = (
     <div>
-      <section
-        className="h-60 w-full bg-input-bg bg-cover bg-center sm:h-80"
-        style={{ backgroundImage: `url(${bannerUrl})` }}
-      />
+      <section className="h-60 w-full bg-input-bg bg-cover bg-center sm:h-80" style={{ backgroundImage: `url(${bannerUrl})` }} />
 
-      <WrapperLayout>
+      <ContentWrapper className={operational ? "px-4 pb-8 sm:px-8 lg:px-10" : undefined}>
         <section className="flex flex-col gap-6">
           <div className="-mt-16 flex flex-col items-start gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-end">
-              <img
-                src={avatarUrl}
-                alt={name}
-                className="h-32 w-32 rounded-full border-4 border-white bg-input-bg object-cover"
-              />
+              <img src={avatarUrl} alt={name} className="h-32 w-32 rounded-full border-4 border-white bg-input-bg object-cover" />
               <div className="flex flex-col gap-1 pb-2">
-                <h1>{name}</h1>
+                <NameHeading>{name}</NameHeading>
                 {subtitle && <p className="text-input-text">{subtitle}</p>}
               </div>
             </div>
 
-            {actions && <div className="flex flex-row gap-2">{actions}</div>}
+            {actions && !operational && <div className="flex flex-row gap-2">{actions}</div>}
           </div>
 
           {children}
         </section>
-      </WrapperLayout>
+      </ContentWrapper>
     </div>
+  );
+  return operational ? (
+    <OperationalPage title={operationalTitle ?? name} actions={actions} profile>
+      {content}
+    </OperationalPage>
+  ) : (
+    content
   );
 }

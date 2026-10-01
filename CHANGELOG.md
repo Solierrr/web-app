@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.1.0](https://github.com/Solierrr/web-app/compare/v3.0.1...v3.1.0) (2026-09-30)
+
+
+### Features
+
+* saas contact journey ([#51](https://github.com/Solierrr/web-app/issues/51)) ([617bae6](https://github.com/Solierrr/web-app/commit/617bae6f38fcc7281baf88568566c5146ff11a88))
+
+
+### Bug Fixes
+
+* pass vault arguments correctly in PowerShell ([e633eb7](https://github.com/Solierrr/web-app/commit/e633eb7489b5b1dd7bdf7fef54e5646610488952))
+* support powershell secret extraction ([3374261](https://github.com/Solierrr/web-app/commit/337426138432fc342968fe1d378d301f7eceaf94))
+
 ## [3.0.1](https://github.com/Solierrr/web-app/compare/v3.0.0...v3.0.1) (2026-09-27)
 
 

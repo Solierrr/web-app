@@ -1,4 +1,4 @@
-import Hyperlink from "@/components/ui/link/Hyperlink"
+import Hyperlink from "@/components/ui/link/Hyperlink";
 // import Logo from "@/components/brand/logo/Logo"
 
 export default function footer() {
@@ -9,5 +9,5 @@ export default function footer() {
                 <Hyperlink content="Página" url="/" />
             </nav>
         </footer>
-    )
+    );
 }
