@@ -2,17 +2,20 @@ import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import type { Company } from "@/features/companies/company";
 import { useActiveContext } from "@/lib/shared/context/ActiveContext";
 import type { AnalyticsScope, KpiResult } from "../analytics";
 import { getCompanyKpis, getPlatformKpis } from "../analytics.service";
-import { kpisToCsv } from "../analytics.utils";
+import { ANALYTICS_PERMISSIONS, kpisToCsv } from "../analytics.utils";
+
+interface ContentProps {
+  scope: AnalyticsScope | null;
+  company: Company | null;
+  can: (permission: string) => boolean;
+}
 
 export default function AnalyticsPage() {
-  const { t } = useTranslation("commons", { keyPrefix: "analytics" });
   const { loading, kind, company, isPlatformAdmin, can = () => false } = useActiveContext();
-  const [result, setResult] = useState<KpiResult | null>(null);
-  const [error, setError] = useState(false);
-
   const scope: AnalyticsScope | null =
     kind === "company" && company
       ? company.type === "SUPPLIER"
@@ -23,10 +26,23 @@ export default function AnalyticsPage() {
       : isPlatformAdmin
         ? "platform"
         : null;
-  const companyId = company?.id;
+  const key = `${scope}:${company?.id}:${ANALYTICS_PERMISSIONS.filter(can).join("|")}`;
+
+  return loading ? <OperationalLoading /> : <AnalyticsContent key={key} scope={scope} company={company} can={can} />;
+}
+
+function OperationalLoading() {
+  const { t } = useTranslation("commons", { keyPrefix: "analytics" });
+  return <OperationalPage title={t("title")} loading />;
+}
+
+function AnalyticsContent({ scope, company, can }: ContentProps) {
+  const { t } = useTranslation("commons", { keyPrefix: "analytics" });
+  const [result, setResult] = useState<KpiResult | null>(null);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    if (loading || !scope) return;
+    if (!scope) return;
     let active = true;
     const request = scope === "platform" || !company ? getPlatformKpis() : getCompanyKpis(company, can);
     request
@@ -39,7 +55,7 @@ export default function AnalyticsPage() {
     return () => {
       active = false;
     };
-  }, [loading, scope, companyId]);
+  }, []);
 
   function exportCsv() {
     if (!result) return;
@@ -48,15 +64,19 @@ export default function AnalyticsPage() {
     const link = document.createElement("a");
     link.href = url;
     link.download = "solaria-indicators.csv";
+    document.body.append(link);
     link.click();
-    URL.revokeObjectURL(url);
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 0);
   }
+
+  const allFailed = Boolean(result?.failed) && !result?.kpis.length;
 
   return (
     <OperationalPage
       title={t("title")}
       description={scope ? t(`scope.${scope}`) : undefined}
-      loading={loading || (scope !== null && !result && !error)}
+      loading={scope !== null && !result && !error}
       actions={
         result?.kpis.length ? (
           <button type="button" onClick={exportCsv} className="rounded-small border border-operational-border px-3 py-2">
@@ -65,8 +85,8 @@ export default function AnalyticsPage() {
         ) : undefined
       }>
       {scope === null ? <p>{t("personal")}</p> : null}
-      {error ? <p role="alert">{t("loadError")}</p> : null}
-      {result ? (
+      {error || allFailed ? <p role="alert">{t("loadError")}</p> : null}
+      {result && !allFailed ? (
         <>
           {result.failed ? <p role="alert">{t("partial")}</p> : null}
           {result.kpis.length ? (

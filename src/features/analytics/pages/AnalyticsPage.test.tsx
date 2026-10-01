@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import AnalyticsPage from "./AnalyticsPage";
 import { useActiveContext } from "@/lib/shared/context/ActiveContext";
@@ -88,7 +88,51 @@ describe("AnalyticsPage", () => {
     expect(createObjectURL).toHaveBeenCalledTimes(1);
     expect(await readBlob((createObjectURL.mock.calls[0] as unknown as [Blob])[0])).toBe("indicador,valor\nEmpresas aprovadas,4");
     expect(click).toHaveBeenCalled();
-    expect(revokeObjectURL).toHaveBeenCalledWith("blob:csv");
+    await waitFor(() => expect(revokeObjectURL).toHaveBeenCalledWith("blob:csv"));
     click.mockRestore();
+  });
+
+  it("drops the previous company indicators when the active company changes", async () => {
+    const other = { id: "c2", type: "DEMANDANT", tradeName: "Outra" } as never;
+    vi.mocked(useActiveContext).mockReturnValue({ ...base, kind: "company", company: supplier, isPlatformAdmin: false, can: () => true });
+    vi.mocked(getCompanyKpis).mockResolvedValueOnce({ failed: false, kpis: [{ key: "activeOffers", value: 7 }] });
+    const { rerender } = render(<AnalyticsPage />);
+    expect(await screen.findByText("Ofertas ativas")).toBeInTheDocument();
+
+    let finish!: (value: { failed: boolean; kpis: { key: string; value: number }[] }) => void;
+    vi.mocked(getCompanyKpis).mockReturnValueOnce(
+      new Promise((resolve) => {
+        finish = resolve;
+      }),
+    );
+    vi.mocked(useActiveContext).mockReturnValue({ ...base, kind: "company", company: other, isPlatformAdmin: false, can: () => true });
+    rerender(<AnalyticsPage />);
+
+    expect(screen.queryByText("Ofertas ativas")).not.toBeInTheDocument();
+    finish({ failed: false, kpis: [{ key: "units", value: 2 }] });
+    expect(await screen.findByText("Unidades")).toBeInTheDocument();
+  });
+
+  it("reloads when the granted permissions change", async () => {
+    vi.mocked(useActiveContext).mockReturnValue({ ...base, kind: "company", company: supplier, isPlatformAdmin: false, can: () => false });
+    vi.mocked(getCompanyKpis).mockResolvedValue({ failed: false, kpis: [] });
+    const { rerender } = render(<AnalyticsPage />);
+    await screen.findByText("Sem dados para este escopo.");
+
+    vi.mocked(useActiveContext).mockReturnValue({ ...base, kind: "company", company: supplier, isPlatformAdmin: false, can: () => true });
+    rerender(<AnalyticsPage />);
+
+    await waitFor(() => expect(getCompanyKpis).toHaveBeenCalledTimes(2));
+  });
+
+  it("shows only the load error when every indicator failed", async () => {
+    vi.mocked(useActiveContext).mockReturnValue({ ...base, kind: "personal", company: null, isPlatformAdmin: true });
+    vi.mocked(getPlatformKpis).mockResolvedValue({ failed: true, kpis: [] });
+
+    render(<AnalyticsPage />);
+
+    expect(await screen.findByText("Não foi possível carregar os indicadores.")).toBeInTheDocument();
+    expect(screen.queryByText("Sem dados para este escopo.")).not.toBeInTheDocument();
+    expect(screen.queryByText("Alguns indicadores não puderam ser carregados.")).not.toBeInTheDocument();
   });
 });

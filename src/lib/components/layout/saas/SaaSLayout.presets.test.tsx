@@ -24,4 +24,11 @@ describe("getOperationalNavigation", () => {
   it("adds the administration group for a platform admin", () => {
     expect(keys({ company: false, companyType: null, platformAdmin: true })).toContain("registrations");
   });
+
+  it("offers the analytics page only to the platform admin or to members who can read something", () => {
+    expect(keys({ company: false, companyType: null, platformAdmin: true })).toContain("analytics");
+    expect(keys({ company: true, companyType: "SUPPLIER", platformAdmin: false })).toContain("analytics");
+    expect(keys({ company: true, companyType: "SUPPLIER", platformAdmin: false, can: () => false })).not.toContain("analytics");
+    expect(keys({ company: false, companyType: null, platformAdmin: false })).not.toContain("analytics");
+  });
 });

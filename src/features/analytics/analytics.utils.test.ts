@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { countBy, kpisToCsv, pickKpis } from "./analytics.utils";
+import { ANALYTICS_PERMISSIONS, countBy, kpisToCsv, pickKpis } from "./analytics.utils";
 
 describe("analytics.utils", () => {
   it("builds a csv with a header and one row per indicator", () => {
@@ -22,5 +22,21 @@ describe("analytics.utils", () => {
       { key: "a", value: 1 },
       { key: "c", value: 0 },
     ]);
+  });
+
+  it("neutralizes labels that a spreadsheet would read as a formula", () => {
+    expect(
+      kpisToCsv(
+        [
+          { label: "=SUM(A1)", value: 1 },
+          { label: "-cmd", value: 2 },
+        ],
+        ["indicador", "valor"],
+      ),
+    ).toBe("indicador,valor\n'=SUM(A1),1\n'-cmd,2");
+  });
+
+  it("lists the permissions that unlock any indicator", () => {
+    expect(ANALYTICS_PERMISSIONS).toContain("GET /api/offers/company/{companyId}");
   });
 });
