@@ -13,6 +13,7 @@ import { ActiveContextProvider, useActiveContext } from "@/lib/shared/context/Ac
 import { CompanyStatus } from "@/features/companies/company.enum";
 import { SaaSAccountNavigation, SaaSNavigation } from "./SaaSLayout.reusable";
 import { getOperationalNavigation } from "./SaaSLayout.presets";
+import SaaSContextIndicator from "@/lib/components/layout/saas-context/SaaSContextIndicator";
 import SaaSContext from "@@/layout/saas-context/SaaSContext";
 import { rememberPage } from "@/features/dashboard/dashboard.utils";
 
@@ -172,7 +173,7 @@ function SaaSLayoutContent() {
             <Icon name="menu" size={20} />
             <span className="text-lower">{t("shell.openMenu")}</span>
           </button>
-          <span className="text-lower text-operational-muted">{kind === "personal" ? t("shell.personal") : company?.tradeName}</span>
+          <SaaSContextIndicator />
           <Link
             to={routePaths.settings(lang)}
             aria-label={t("navigation.items.settings")}

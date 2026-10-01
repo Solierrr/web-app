@@ -16,7 +16,15 @@
     "account": "Your account",
     "skipContent": "Skip to content",
     "backToSite": "Back to site",
-    "logout": "Sign out"
+    "logout": "Sign out",
+    "scope": {
+      "platformAdmin": "Solaria Admin",
+      "personal": "Personal profile",
+      "SUPPLIER": "Supplier",
+      "DEMANDANT": "Demandant",
+      "admin": "Admin",
+      "member": "Access"
+    }
   },
   "navigation": {
     "label": "Main navigation",
