@@ -41,7 +41,7 @@ export default function OnboardingLayout({
         <ol aria-label={progressLabel} className="flex w-full gap-2">
           {steps.map((label, index) => (
             <li
-              key={label}
+              key={index}
               aria-current={index === step ? "step" : undefined}
               title={label}
               className={`h-1 flex-1 rounded-full ${index <= step ? "bg-orange" : "bg-black/10"}`}

@@ -7,17 +7,16 @@ import { getPrivacyPreferences, savePrivacyPreferences } from "../../settings.se
 export default function SettingsPrivacyPage() {
   const { t } = useTranslation("commons", { keyPrefix: "settingsPrivacy" });
   const [preferences, setPreferences] = useState(getPrivacyPreferences);
-  const [saved, setSaved] = useState(false);
+  const [saved, setSaved] = useState<boolean | null>(null);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    savePrivacyPreferences(preferences);
-    setSaved(true);
+    setSaved(savePrivacyPreferences(preferences));
   }
 
   function toggle(name: keyof typeof preferences) {
     setPreferences({ ...preferences, [name]: !preferences[name] });
-    setSaved(false);
+    setSaved(null);
   }
 
   return (
@@ -31,7 +30,8 @@ export default function SettingsPrivacyPage() {
           <input type="checkbox" checked={preferences.showInSearch} onChange={() => toggle("showInSearch")} />
           {t("showInSearch")}
         </label>
-        {saved ? <p role="status">{t("saved")}</p> : null}
+        {saved === true ? <p role="status">{t("saved")}</p> : null}
+        {saved === false ? <p role="alert">{t("saveError")}</p> : null}
         <button type="submit" className="self-start rounded-small bg-orange px-4 py-2 text-white">
           {t("save")}
         </button>

@@ -21,8 +21,13 @@ export function getPrivacyPreferences(): PrivacyPreferences {
   }
 }
 
-export function savePrivacyPreferences(preferences: PrivacyPreferences): void {
-  localStorage.setItem(privacyKey(), JSON.stringify(preferences));
+export function savePrivacyPreferences(preferences: PrivacyPreferences): boolean {
+  try {
+    localStorage.setItem(privacyKey(), JSON.stringify(preferences));
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 export async function listSessions(): Promise<DeviceSession[]> {

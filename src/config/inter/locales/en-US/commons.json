@@ -317,11 +317,12 @@
   },
   "settingsPrivacy": {
     "title": "Privacy",
-    "description": "Choose what other users can see.",
+    "description": "Choose what other users can see. Preferences are kept on this device and will apply to your public profile once the server supports it.",
     "showContact": "Show my contact details on my public profile",
     "showInSearch": "Appear in search results",
     "save": "Save",
-    "saved": "Preferences saved."
+    "saved": "Preferences saved on this device.",
+    "saveError": "We could not save the preferences on this device."
   },
   "settingsSessions": {
     "title": "Sessions and devices",
@@ -332,6 +333,7 @@
     "revoked": "Session ended.",
     "signOut": "Sign out of this device",
     "onlyCurrent": "For now you can only see and end the session on this device.",
-    "error": "We could not load the sessions."
+    "error": "We could not load the sessions.",
+    "revokeError": "We could not end the session."
   }
 }

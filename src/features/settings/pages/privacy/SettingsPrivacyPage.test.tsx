@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import SettingsPrivacyPage from "./SettingsPrivacyPage";
 import { getPrivacyPreferences } from "../../settings.service";
 
@@ -24,6 +24,18 @@ describe("SettingsPrivacyPage", () => {
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
     expect(getPrivacyPreferences()).toEqual({ showContact: true, showInSearch: false });
-    expect(screen.getByRole("status")).toHaveTextContent("Preferências salvas.");
+    expect(screen.getByRole("status")).toHaveTextContent("Preferências salvas neste dispositivo.");
+  });
+
+  it("warns when the device blocks saving", () => {
+    vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+      throw new Error("blocked");
+    });
+    render(<SettingsPrivacyPage />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
+
+    expect(screen.getByRole("alert")).toHaveTextContent("Não foi possível salvar as preferências");
+    vi.restoreAllMocks();
   });
 });

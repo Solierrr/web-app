@@ -63,6 +63,9 @@ export default function ResetPasswordPage() {
       busy={busy}
       error={error}
       onSubmit={handleSubmit}
+      footer={
+        error ? <Hyperlink content={t("resetPassword.requestNewLink")} url={routePaths.forgotPassword(lang)} className="text-hyperlink" /> : undefined
+      }
     />
   );
 }

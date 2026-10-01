@@ -14,6 +14,14 @@ describe("OnboardingLayout", () => {
     expect(screen.getByTitle("Validação")).toHaveAttribute("aria-current", "step");
   });
 
+  it("names the progress list, renders the footer and disables the button while busy", () => {
+    render(<OnboardingLayout title="Dados" steps={steps} step={0} submitLabel="Continuar" progressLabel="Etapa 1 de 3" footer={<a href="/login">Já tenho conta</a>} busy />);
+
+    expect(screen.getByRole("list", { name: "Etapa 1 de 3" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Já tenho conta" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Continuar" })).toBeDisabled();
+  });
+
   it("submits the form through the labelled button and shows the error", () => {
     const onSubmit = vi.fn();
     render(<OnboardingLayout title="Dados" steps={steps} step={0} submitLabel="Continuar" error="Algo falhou" onSubmit={onSubmit} />);

@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import SettingsSessionsPage from "./SettingsSessionsPage";
 import { logout } from "@/features/access/access.service";
@@ -8,8 +8,11 @@ vi.mock("@/features/access/access.service", () => ({ logout: vi.fn() }));
 
 function renderPage() {
   render(
-    <MemoryRouter>
-      <SettingsSessionsPage />
+    <MemoryRouter initialEntries={["/pt-BR/configuracoes/sessoes"]}>
+      <Routes>
+        <Route path="/pt-BR/configuracoes/sessoes" element={<SettingsSessionsPage />} />
+        <Route path="/pt-BR/login" element={<p>Tela de login</p>} />
+      </Routes>
     </MemoryRouter>,
   );
 }
@@ -37,6 +40,23 @@ describe("SettingsSessionsPage", () => {
     fireEvent.click(await screen.findByRole("button", { name: "Sair deste dispositivo" }));
 
     await waitFor(() => expect(logout).toHaveBeenCalled());
+    expect(await screen.findByText("Tela de login")).toBeInTheDocument();
+  });
+
+  it("still leaves for the login when the server logout fails", async () => {
+    vi.mocked(logout).mockRejectedValue(new Error("offline"));
+    renderPage();
+
+    fireEvent.click(await screen.findByRole("button", { name: "Sair deste dispositivo" }));
+
+    expect(await screen.findByText("Tela de login")).toBeInTheDocument();
+  });
+
+  it("reports when another session cannot be ended", async () => {
+    renderPage();
+    await screen.findByText("Este dispositivo");
+
+    expect(screen.queryByRole("button", { name: "Encerrar sessão" })).not.toBeInTheDocument();
   });
 
   it("ends another mocked session", async () => {

@@ -15,7 +15,7 @@ export default function SettingsSessionsPage() {
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
   const navigate = useNavigate();
   const [sessions, setSessions] = useState<DeviceSession[] | null>(null);
-  const [message, setMessage] = useState<"revoked" | "error" | null>(null);
+  const [message, setMessage] = useState<"revoked" | "error" | "revokeError" | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -37,12 +37,12 @@ export default function SettingsSessionsPage() {
       setSessions((items) => items?.filter((item) => item.id !== id) ?? null);
       setMessage("revoked");
     } catch {
-      setMessage("error");
+      setMessage("revokeError");
     }
   }
 
   async function handleSignOut() {
-    await logout();
+    await logout().catch(() => undefined);
     navigate(routePaths.login(lang), { replace: true });
   }
 
@@ -70,7 +70,7 @@ export default function SettingsSessionsPage() {
         ))}
       </ul>
       {sessions && sessions.length === 1 ? <p className="text-sm text-operational-muted">{t("onlyCurrent")}</p> : null}
-      {message ? <p role={message === "error" ? "alert" : "status"}>{t(message)}</p> : null}
+      {message ? <p role={message === "revoked" ? "status" : "alert"}>{t(message)}</p> : null}
     </OperationalPage>
   );
 }

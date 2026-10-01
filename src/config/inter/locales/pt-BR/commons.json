@@ -317,11 +317,12 @@
   },
   "settingsPrivacy": {
     "title": "Privacidade",
-    "description": "Escolha o que os outros usuários podem ver.",
+    "description": "Escolha o que os outros usuários podem ver. As preferências ficam guardadas neste dispositivo e serão aplicadas ao perfil público quando o servidor suportar.",
     "showContact": "Mostrar meus dados de contato no perfil público",
     "showInSearch": "Aparecer nos resultados de busca",
     "save": "Salvar",
-    "saved": "Preferências salvas."
+    "saved": "Preferências salvas neste dispositivo.",
+    "saveError": "Não foi possível salvar as preferências neste dispositivo."
   },
   "settingsSessions": {
     "title": "Sessões e dispositivos",
@@ -332,6 +333,7 @@
     "revoked": "Sessão encerrada.",
     "signOut": "Sair deste dispositivo",
     "onlyCurrent": "Por enquanto só é possível ver e encerrar a sessão deste dispositivo.",
-    "error": "Não foi possível carregar as sessões."
+    "error": "Não foi possível carregar as sessões.",
+    "revokeError": "Não foi possível encerrar a sessão."
   }
 }

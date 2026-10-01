@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import ResetPasswordPage from "./ResetPasswordPage";
 import { completePasswordReset } from "@/config/firebase/auth/auth.service";
@@ -64,5 +64,29 @@ describe("ResetPasswordPage", () => {
     fill("senha-muito-segura-1", "senha-muito-segura-1");
 
     expect(await screen.findByRole("alert")).toHaveTextContent("Não foi possível redefinir a senha");
+    expect(screen.getByRole("link", { name: "Solicitar novo link" })).toHaveAttribute("href", "/pt-BR/esqueci-senha");
+  });
+
+  it("builds the links for the language in the route", () => {
+    render(
+      <MemoryRouter initialEntries={["/en-US/reset-password"]}>
+        <Routes>
+          <Route path="/:lang/reset-password" element={<ResetPasswordPage />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByRole("link", { name: "Solicitar novo link" })).toHaveAttribute("href", "/en-US/forgot-password");
+  });
+
+  it("lets the mocked flow proceed without a code", async () => {
+    vi.stubEnv("VITE_MOCKS", "ALWAYS");
+    vi.stubEnv("VITE_MOCKS_DELAY_SECONDS", "0");
+    renderPage("");
+
+    fill("senha-muito-segura-1", "senha-muito-segura-1");
+
+    expect(await screen.findByRole("status")).toHaveTextContent("Senha redefinida");
+    expect(completePasswordReset).not.toHaveBeenCalled();
   });
 });

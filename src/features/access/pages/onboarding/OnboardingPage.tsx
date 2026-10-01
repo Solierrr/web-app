@@ -246,6 +246,7 @@ export default function OnboardingPage({ kind }: { kind: RegistrationKind }) {
       title={titles[draft.step]}
       steps={titles}
       step={draft.step}
+      progressLabel={t("progress", { step: draft.step + 1, total: titles.length })}
       eyebrow={`${kind === "company" ? t("company") : kind === "professional" ? t("professional") : t("invitation")} · ${t("progress", { step: draft.step + 1, total: titles.length })}`}
       busy={busy}
       error={error}
