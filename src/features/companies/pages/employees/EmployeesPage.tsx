@@ -8,6 +8,7 @@ import { getPermissionTemplate, isPermissionCompatible, permissionTemplates } fr
 
 import { useActiveContext } from "@/lib/shared/context/ActiveContext";
 import { getUser } from "@/features/users/user/user.service";
+import { isSafeMailtoAddress } from "@/lib/utils/validation.utils";
 import {
   createPosition,
   grantPermission,
@@ -143,7 +144,7 @@ export default function EmployeesPage() {
       if (!positionId) return;
       const code = await generateAccessCode(companyId, positionId);
       setGeneratedCode(code.code);
-      setInvitedEmail(guestEmail.trim());
+      setInvitedEmail(isSafeMailtoAddress(guestEmail.trim()) ? guestEmail.trim() : "");
       setGuestEmail("");
       setNewPositionName("");
       await reload(companyId);

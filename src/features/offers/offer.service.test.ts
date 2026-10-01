@@ -29,7 +29,14 @@ describe("offer.service", () => {
 
   it("updates an offer", async () => {
     vi.mocked(httpJson).mockResolvedValue({ id: "offer-1" });
-    await updateOffer("offer-1", { supplierId: "supplier-1", modelId: "model-1", title: "Placa X", description: "desc", unitPrice: 120, availability: 3 });
+    await updateOffer("offer-1", {
+      supplierId: "supplier-1",
+      modelId: "model-1",
+      title: "Placa X",
+      description: "desc",
+      unitPrice: 120,
+      availability: 3,
+    });
     expect(httpJson).toHaveBeenCalledWith(expect.stringContaining("/offers/offer-1"), expect.objectContaining({ method: "PUT" }));
   });
 
@@ -41,8 +48,16 @@ describe("offer.service", () => {
 
   describe("changeOfferStatus", () => {
     const offer: Offer = {
-      id: "offer-1", supplierId: "supplier-1", model: { id: "model-1", brand: "SolarTech", model: "ST-450W" }, slug: "placa",
-      unitPrice: 899.9, availability: 10, expirationDate: null, discountPercentage: 5, serviceRegions: ["SP"], translationStatus: "COMPLETED",
+      id: "offer-1",
+      supplierId: "supplier-1",
+      model: { id: "model-1", brand: "SolarTech", model: "ST-450W" },
+      slug: "placa",
+      unitPrice: 899.9,
+      availability: 10,
+      expirationDate: null,
+      discountPercentage: 5,
+      serviceRegions: ["SP"],
+      translationStatus: "COMPLETED",
       translations: [{ locale: "pt-BR", title: "Painel", description: "desc", details: null }],
     };
 
@@ -59,6 +74,33 @@ describe("offer.service", () => {
 
       await changeOfferStatus({ ...offer, availability: 0 }, "ACTIVE");
       expect(sentBody().availability).toBe(10);
+    });
+
+    it("reopens a paused offer without a remembered stock with a single unit", async () => {
+      localStorage.clear();
+      vi.mocked(httpJson).mockResolvedValue(offer);
+
+      await changeOfferStatus({ ...offer, availability: 0 }, "ACTIVE");
+
+      expect(sentBody().availability).toBe(1);
+    });
+
+    it("still sends the change when the browser storage is unavailable", async () => {
+      vi.mocked(httpJson).mockResolvedValue(offer);
+      const failing = vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+        throw new Error("blocked");
+      });
+      const reading = vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => {
+        throw new Error("blocked");
+      });
+
+      await changeOfferStatus(offer, "PAUSED");
+      expect(sentBody().availability).toBe(0);
+      await changeOfferStatus({ ...offer, availability: 0 }, "ACTIVE");
+      expect(sentBody().availability).toBe(1);
+
+      failing.mockRestore();
+      reading.mockRestore();
     });
 
     it("closes by expiring the offer now and reopens with a future date", async () => {

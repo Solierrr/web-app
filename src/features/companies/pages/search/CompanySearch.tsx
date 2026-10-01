@@ -14,10 +14,19 @@ function CompanySearchContent({ items }: { items: CatalogCompany[] }) {
   const [query, setQuery] = useState("");
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
-  const normalizedQuery = query.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const normalizedQuery = query
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
   const filtered = items.filter((company) =>
     [company.tradeName, company.city, company.state].some((value) =>
-      value?.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().includes(normalizedQuery)));
+      value
+        ?.normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .includes(normalizedQuery),
+    ),
+  );
 
   return (
     <div className="flex flex-col gap-8">
@@ -80,16 +89,22 @@ export default function CompanySearch() {
   useEffect(() => {
     let active = true;
 
-    getCatalogCompanies().then((result) => {
-      if (active) setItems(result);
-    }).catch(() => {
-      if (active) setError(true);
-    });
+    getCatalogCompanies()
+      .then((result) => {
+        if (active) setItems(result);
+      })
+      .catch(() => {
+        if (active) setError(true);
+      });
 
     return () => {
       active = false;
     };
   }, []);
 
-  return <WrapperLayout ptop>{error ? <p role="alert">{t("company.loadError")}</p> : items ? <CompanySearchContent items={items} /> : <CompanySearchSkeleton />}</WrapperLayout>;
+  return (
+    <WrapperLayout ptop>
+      {error ? <p role="alert">{t("company.loadError")}</p> : items ? <CompanySearchContent items={items} /> : <CompanySearchSkeleton />}
+    </WrapperLayout>
+  );
 }

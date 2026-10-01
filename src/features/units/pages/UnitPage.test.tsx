@@ -9,13 +9,24 @@ vi.mock("@/lib/shared/context/ActiveContext", () => ({ useActiveContext: vi.fn()
 vi.mock("../unit.service", () => ({ listCompanyUnits: vi.fn() }));
 
 const unit = {
-  id: "unit-1", requesterId: "r1", complement: "Bloco B", locationType: "HOUSE" as const,
+  id: "unit-1",
+  requesterId: "r1",
+  complement: "Bloco B",
+  locationType: "HOUSE" as const,
   address: { id: "a1", state: "SP", city: "Campinas", neighborhood: null, zipCode: "13010000", street: "Rua das Flores", number: "250" },
 };
 
 describe("UnitPage", () => {
   beforeEach(() => {
-    vi.mocked(useActiveContext).mockReturnValue({ loading: false, kind: "company", setKind: vi.fn(), company: { id: "c1" } as never, isAdmin: true, hasCompany: true, isPlatformAdmin: false });
+    vi.mocked(useActiveContext).mockReturnValue({
+      loading: false,
+      kind: "company",
+      setKind: vi.fn(),
+      company: { id: "c1" } as never,
+      isAdmin: true,
+      hasCompany: true,
+      isPlatformAdmin: false,
+    });
   });
 
   it("shows the unit address and links to it on Google Maps", async () => {
@@ -33,6 +44,21 @@ describe("UnitPage", () => {
     const link = screen.getByRole("link", { name: "Ver no Google Maps" });
     expect(link.getAttribute("href")).toContain("google.com/maps/search/?api=1&query=Rua%20das%20Flores%20250");
     expect(link).toHaveAttribute("target", "_blank");
+  });
+
+  it("builds the map query without a dangling comma when the unit has no number", async () => {
+    vi.mocked(listCompanyUnits).mockResolvedValue([{ ...unit, address: { ...unit.address, number: null } }]);
+
+    render(
+      <MemoryRouter initialEntries={["/pt-BR/admin/unidades/unit-1"]}>
+        <Routes>
+          <Route path="/pt-BR/admin/unidades/:unitId" element={<UnitPage />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    const link = await screen.findByRole("link", { name: "Ver no Google Maps" });
+    expect(decodeURIComponent(link.getAttribute("href") ?? "")).toContain("query=Rua das Flores, Campinas SP 13010000");
   });
 
   it("shows an error when the unit does not exist", async () => {

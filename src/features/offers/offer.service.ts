@@ -119,15 +119,31 @@ function stockKey(id: string): string {
   return `solaria.offerStock.${id}`;
 }
 
+function rememberStock(id: string, value: number): void {
+  try {
+    localStorage.setItem(stockKey(id), String(value));
+  } catch {
+    return;
+  }
+}
+
+function recallStock(id: string): number {
+  try {
+    return Number(localStorage.getItem(stockKey(id))) || 1;
+  } catch {
+    return 1;
+  }
+}
+
 export function changeOfferStatus(offer: Offer, status: OfferStatus): Promise<Offer> {
   const translation = offer.translations[0];
   let availability = offer.availability;
   let expirationDate = offer.expirationDate ?? undefined;
   if (status === "PAUSED") {
-    if (availability > 0) localStorage.setItem(stockKey(offer.id), String(availability));
+    if (availability > 0) rememberStock(offer.id, availability);
     availability = 0;
   } else if (status === "ACTIVE") {
-    if (availability === 0) availability = Number(localStorage.getItem(stockKey(offer.id))) || 1;
+    if (availability === 0) availability = recallStock(offer.id);
     if (expirationDate && Date.parse(expirationDate) <= Date.now()) expirationDate = new Date(Date.now() + REOPEN_DAYS * 86_400_000).toISOString();
   } else {
     expirationDate = new Date().toISOString();

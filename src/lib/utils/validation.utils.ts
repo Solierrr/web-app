@@ -73,3 +73,7 @@ export function validateCnpj(input: string): ResultValidation {
 
   return { isValid: true };
 }
+
+export function isSafeMailtoAddress(value: string): boolean {
+  return /^[^\s@,;?&%#<>"]+@[^\s@,;?&%#<>"]+\.[^\s@,;?&%#<>"]+$/.test(value);
+}

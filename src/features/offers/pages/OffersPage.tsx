@@ -61,6 +61,7 @@ export default function OffersPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
+  const [busyId, setBusyId] = useState<string | null>(null);
 
   async function load(id: string) {
     const editing = can("POST /api/offers") || can("PUT /api/offers/{id}");
@@ -164,12 +165,15 @@ export default function OffersPage() {
   }
 
   async function handleStatus(offer: Offer, status: OfferStatus) {
-    if (!companyId) return;
+    if (!companyId || busyId) return;
+    setBusyId(offer.id);
     try {
       await changeOfferStatus(offer, status);
       await reload(companyId);
     } catch {
       setError(true);
+    } finally {
+      setBusyId(null);
     }
   }
 
@@ -308,6 +312,7 @@ export default function OffersPage() {
                   {can("PUT /api/offers/{id}") && status !== "CLOSED" && (
                     <button
                       type="button"
+                      disabled={busyId !== null}
                       onClick={() => void handleStatus(offer, status === "PAUSED" ? "ACTIVE" : "PAUSED")}
                       className="text-sm text-orange">
                       {status === "PAUSED" ? t("resume") : t("pause")}
@@ -316,6 +321,7 @@ export default function OffersPage() {
                   {can("PUT /api/offers/{id}") && (
                     <button
                       type="button"
+                      disabled={busyId !== null}
                       onClick={() => void handleStatus(offer, status === "CLOSED" ? "ACTIVE" : "CLOSED")}
                       className="text-sm text-orange">
                       {status === "CLOSED" ? t("reopen") : t("close")}

@@ -52,8 +52,14 @@ describe("CompanyOnboarding", () => {
     vi.mocked(companyService.createAddress).mockResolvedValue({ id: "address-1" });
     vi.mocked(companyService.createBusinessContact).mockResolvedValue({ id: "contact-1" });
     vi.mocked(validateCnpjCategory).mockResolvedValue({
-      status: "VALID", cnpj: "11444777000161", company_name: "Solar XPTO", trade_name: "Solar XPTO",
-      is_active: true, matched_category: "ENGENHARIA", error_code: null, reason: "Compatível",
+      status: "VALID",
+      cnpj: "11444777000161",
+      company_name: "Solar XPTO",
+      trade_name: "Solar XPTO",
+      is_active: true,
+      matched_category: "ENGENHARIA",
+      error_code: null,
+      reason: "Compatível",
     });
 
     render(
@@ -65,9 +71,14 @@ describe("CompanyOnboarding", () => {
     fillBaseFields();
     fireEvent.click(screen.getByRole("button", { name: "Cadastrar empresa" }));
 
-    await waitFor(() => expect(companyService.createCompany).toHaveBeenCalledWith({
-      type: "SUPPLIER", cnpj: "11444777000161", tradeName: "Solar XPTO", corporateName: "Solar XPTO Ltda",
-    }));
+    await waitFor(() =>
+      expect(companyService.createCompany).toHaveBeenCalledWith({
+        type: "SUPPLIER",
+        cnpj: "11444777000161",
+        tradeName: "Solar XPTO",
+        corporateName: "Solar XPTO Ltda",
+      }),
+    );
     expect(companyService.attachCompanyAddress).toHaveBeenCalledWith("company-1", "address-1");
     expect(companyService.attachCompanyBusinessContact).toHaveBeenCalledWith("company-1", "contact-1");
 
