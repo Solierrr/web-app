@@ -75,7 +75,7 @@ export default function Button({
 
   return (
     <button
-      className={`relative flex items-center-safe justify-center font-medium cursor-pointer text-nowrap disabled:cursor-not-allowed select-none transition-all duration-350 ${rounded ? "rounded-full" : "rounded-medium"} ${iconOnly ? "aspect-square p-2" : `px-4 py-2`} ${ASPECT_BUTTON_CLASSES[bgColor] ?? ""} ${className ?? ""}`}
+      className={`relative flex items-center-safe justify-center font-medium cursor-pointer text-nowrap disabled:cursor-not-allowed select-none transition-all duration-350 ${rounded || iconOnly ? "rounded-full" : "rounded-medium"} ${iconOnly ? "aspect-square p-2" : `px-4 py-2`} ${ASPECT_BUTTON_CLASSES[bgColor] ?? ""} ${className ?? ""}`}
       {...props}
       onClick={handleClick}
       disabled={disabled || isLoading}
