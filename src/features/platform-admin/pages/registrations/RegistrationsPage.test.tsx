@@ -1,3 +1,4 @@
+import { MemoryRouter } from "react-router-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import RegistrationsPage from "./RegistrationsPage";
@@ -5,6 +6,7 @@ import type { Company } from "@/features/companies/company";
 import { approveCompany, listAllCompanies } from "@/features/companies/company.service";
 import type { SolarPanel } from "@/features/solar-panel/solarPanel";
 import { listSolarPanelModelsByStatus, rejectSolarPanel } from "@/features/solar-panel/solarPanel.service";
+import { listProfessionalReviews } from "@/features/professionals/review/review.service";
 
 vi.mock("@/features/companies/company.service", () => ({
   listAllCompanies: vi.fn(),
@@ -16,6 +18,11 @@ vi.mock("@/features/solar-panel/solarPanel.service", () => ({
   listSolarPanelModelsByStatus: vi.fn(),
   approveSolarPanel: vi.fn(),
   rejectSolarPanel: vi.fn(),
+}));
+
+vi.mock("@/features/professionals/review/review.service", () => ({
+  listProfessionalReviews: vi.fn(),
+  decideProfessional: vi.fn(),
 }));
 
 const pendingCompany = {
@@ -35,13 +42,14 @@ const pendingModel = {
 describe("RegistrationsPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.mocked(listProfessionalReviews).mockResolvedValue([]);
   });
 
   it("lists only companies under analysis, and pending models", async () => {
     vi.mocked(listAllCompanies).mockResolvedValue([pendingCompany, approvedCompany]);
     vi.mocked(listSolarPanelModelsByStatus).mockResolvedValue([pendingModel]);
 
-    render(<RegistrationsPage />);
+    render(<MemoryRouter><RegistrationsPage /></MemoryRouter>);
 
     expect(await screen.findByText("Fornecedora Solar")).toBeInTheDocument();
     expect(screen.queryByText("Já Aprovada")).not.toBeInTheDocument();
@@ -53,7 +61,7 @@ describe("RegistrationsPage", () => {
     vi.mocked(listSolarPanelModelsByStatus).mockResolvedValue([]);
     vi.mocked(approveCompany).mockResolvedValue({ ...pendingCompany, status: "APPROVED" } as never);
 
-    render(<RegistrationsPage />);
+    render(<MemoryRouter><RegistrationsPage /></MemoryRouter>);
     await screen.findByText("Fornecedora Solar");
 
     screen.getAllByRole("button", { name: "Aprovar" })[0].click();
@@ -67,7 +75,7 @@ describe("RegistrationsPage", () => {
     vi.mocked(listSolarPanelModelsByStatus).mockResolvedValue([pendingModel]);
     vi.mocked(rejectSolarPanel).mockResolvedValue({ ...pendingModel, status: "REJECTED" } as never);
 
-    render(<RegistrationsPage />);
+    render(<MemoryRouter><RegistrationsPage /></MemoryRouter>);
     await screen.findByText("Marca Modelo X");
 
     screen.getAllByRole("button", { name: "Rejeitar" })[0].click();
@@ -80,7 +88,7 @@ describe("RegistrationsPage", () => {
     vi.mocked(listAllCompanies).mockResolvedValue([]);
     vi.mocked(listSolarPanelModelsByStatus).mockResolvedValue([]);
 
-    render(<RegistrationsPage />);
+    render(<MemoryRouter><RegistrationsPage /></MemoryRouter>);
 
     expect(await screen.findByText("Nenhuma empresa pendente.")).toBeInTheDocument();
     expect(screen.getByText("Nenhum modelo pendente.")).toBeInTheDocument();
@@ -90,7 +98,7 @@ describe("RegistrationsPage", () => {
     vi.mocked(listAllCompanies).mockRejectedValue(new Error("network"));
     vi.mocked(listSolarPanelModelsByStatus).mockResolvedValue([]);
 
-    render(<RegistrationsPage />);
+    render(<MemoryRouter><RegistrationsPage /></MemoryRouter>);
 
     expect(await screen.findByRole("alert")).toHaveTextContent("Não foi possível carregar os cadastros pendentes.");
   });

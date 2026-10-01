@@ -32,14 +32,16 @@ describe("LoginPage", () => {
     expect(screen.getByRole("button", { name: "Prosseguir" })).toBeInTheDocument();
   });
 
-  it("links to the register and forgot-password routes", () => {
+  it("links to the registration journeys and forgot-password routes", () => {
     render(
       <MemoryRouter>
         <LoginPage />
       </MemoryRouter>,
     );
 
-    expect(screen.getByRole("link", { name: "Cadastre-se" })).toHaveAttribute("href", "/pt-BR/cadastro");
+    expect(screen.getByRole("link", { name: "Cadastrar empresa" })).toHaveAttribute("href", "/pt-BR/cadastro/empresa");
+    expect(screen.getByRole("link", { name: "Sou profissional autônomo" })).toHaveAttribute("href", "/pt-BR/cadastro/profissional");
+    expect(screen.getByRole("link", { name: "Tenho um código de acesso" })).toHaveAttribute("href", "/pt-BR/cadastro/acesso");
     expect(screen.getByRole("link", { name: "Esqueci minha senha" })).toHaveAttribute("href", "/pt-BR/esqueci-senha");
   });
 

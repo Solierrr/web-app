@@ -1,3 +1,4 @@
+import { MemoryRouter } from "react-router-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import OffersPage from "./OffersPage";
@@ -20,7 +21,7 @@ const company = { id: "company-1", status: "APPROVED", type: "SUPPLIER", cnpj: "
 describe("OffersPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(useActiveContext).mockReturnValue({ loading: false, kind: "company", setKind: vi.fn(), company, isAdmin: true, hasCompany: true, isPlatformAdmin: false });
+    vi.mocked(useActiveContext).mockReturnValue({ loading: false, kind: "company", setKind: vi.fn(), company, isAdmin: true, hasCompany: true, isPlatformAdmin: false, can: () => true });
     vi.mocked(offerService.getMySupplier).mockResolvedValue({ id: "supplier-1", companyId: "company-1" });
   });
 
@@ -28,7 +29,7 @@ describe("OffersPage", () => {
     vi.mocked(listApprovedSolarPanelModels).mockResolvedValue([]);
     vi.mocked(offerService.listCompanyOffers).mockResolvedValue([]);
 
-    render(<OffersPage />);
+    render(<MemoryRouter><OffersPage /></MemoryRouter>);
 
     expect(await screen.findByText(/Nenhum modelo de placa solar aprovado/)).toBeInTheDocument();
   });
@@ -42,7 +43,7 @@ describe("OffersPage", () => {
       translations: [{ locale: "pt-BR", title: "Painel SolarTech", description: "desc", details: null }],
     }]);
 
-    render(<OffersPage />);
+    render(<MemoryRouter><OffersPage /></MemoryRouter>);
 
     expect(await screen.findByText("Painel SolarTech")).toBeInTheDocument();
   });
@@ -52,7 +53,7 @@ describe("OffersPage", () => {
     vi.mocked(offerService.listCompanyOffers).mockResolvedValue([]);
     vi.mocked(offerService.createOffer).mockResolvedValue({} as never);
 
-    render(<OffersPage />);
+    render(<MemoryRouter><OffersPage /></MemoryRouter>);
     await screen.findByText("Nenhuma oferta cadastrada ainda.");
 
     fireEvent.change(screen.getByLabelText("Modelo de placa"), { target: { value: "model-1" } });

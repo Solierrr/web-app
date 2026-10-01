@@ -1,6 +1,10 @@
+import { MemoryRouter } from "react-router-dom";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import SolarPanelModelCrud from "./SolarPanelModelCrud";
+import { useActiveContext } from "@/shared/context/ActiveContext";
+
+vi.mock("@/shared/context/ActiveContext", () => ({ useActiveContext: vi.fn() }));
 
 vi.mock("@/features/solar-panel/solarPanel.service", () => ({
   listSolarPanelModels: vi.fn(),
@@ -29,12 +33,16 @@ const items: SolarPanel[] = [
 describe("SolarPanelModelCrud", () => {
   beforeEach(() => {
     mockedListSolarPanelModels.mockReset();
+    vi.mocked(useActiveContext).mockReturnValue({
+      loading: false, kind: "company", setKind: vi.fn(), isAdmin: true, hasCompany: true, isPlatformAdmin: false, can: () => true,
+      company: { id: "company-1", status: "APPROVED", type: "SUPPLIER", cnpj: "1", tradeName: "Solaria", corporateName: "Solaria Ltda", slug: "solaria" } as never,
+    });
   });
 
   it("renders the page heading and the create form", () => {
     mockedListSolarPanelModels.mockReturnValue(new Promise(() => {}));
 
-    render(<SolarPanelModelCrud />);
+    render(<MemoryRouter><SolarPanelModelCrud /></MemoryRouter>);
 
     expect(screen.getByRole("heading", { name: "Modelos de placa solar" })).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Marca")).toBeInTheDocument();
@@ -43,7 +51,7 @@ describe("SolarPanelModelCrud", () => {
   it("renders the mocked models in the table once loaded", async () => {
     mockedListSolarPanelModels.mockResolvedValue(items);
 
-    render(<SolarPanelModelCrud />);
+    render(<MemoryRouter><SolarPanelModelCrud /></MemoryRouter>);
 
     expect(await screen.findByText("SolTech ST-450")).toBeInTheDocument();
   });

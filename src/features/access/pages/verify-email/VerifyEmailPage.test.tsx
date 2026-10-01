@@ -1,3 +1,4 @@
+import { MemoryRouter } from "react-router-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import VerifyEmailPage from "./VerifyEmailPage";
@@ -14,28 +15,28 @@ vi.mock("@/shared/auth/authToken.utils", () => ({ getAuthSession: () => ({ email
 
 describe("VerifyEmailPage", () => {
   it("shows the pending state with a resend button when the email is not verified yet", async () => {
-    vi.mocked(authService.reloadCurrentFirebaseUser).mockResolvedValue({ emailVerified: false } as never);
+    vi.mocked(authService.reloadCurrentFirebaseUser).mockResolvedValue({ email: "user@example.com", emailVerified: false } as never);
 
-    render(<VerifyEmailPage />);
+    render(<MemoryRouter><VerifyEmailPage /></MemoryRouter>);
 
     expect(await screen.findByRole("button", { name: "Reenviar e-mail" })).toBeInTheDocument();
   });
 
   it("shows the password confirmation form once the email is verified", async () => {
-    vi.mocked(authService.reloadCurrentFirebaseUser).mockResolvedValue({ emailVerified: true } as never);
+    vi.mocked(authService.reloadCurrentFirebaseUser).mockResolvedValue({ email: "user@example.com", emailVerified: true } as never);
 
-    render(<VerifyEmailPage />);
+    render(<MemoryRouter><VerifyEmailPage /></MemoryRouter>);
 
     expect(await screen.findByRole("button", { name: "Confirmar" })).toBeInTheDocument();
   });
 
   it("links the account after submitting the password", async () => {
     const getIdToken = vi.fn().mockResolvedValue("id-token");
-    vi.mocked(authService.reloadCurrentFirebaseUser).mockResolvedValue({ emailVerified: true } as never);
-    vi.mocked(authService.getCurrentFirebaseUser).mockReturnValue({ getIdToken } as never);
+    vi.mocked(authService.reloadCurrentFirebaseUser).mockResolvedValue({ email: "user@example.com", emailVerified: true } as never);
+    vi.mocked(authService.getCurrentFirebaseUser).mockReturnValue({ email: "user@example.com", getIdToken } as never);
     vi.mocked(linkFirebase).mockResolvedValue({} as never);
 
-    render(<VerifyEmailPage />);
+    render(<MemoryRouter><VerifyEmailPage /></MemoryRouter>);
     await screen.findByRole("button", { name: "Confirmar" });
 
     const passwordInput = document.querySelector<HTMLInputElement>("input[type='password']");
@@ -49,7 +50,7 @@ describe("VerifyEmailPage", () => {
   it("shows a fallback message when there is no firebase account to verify", async () => {
     vi.mocked(authService.reloadCurrentFirebaseUser).mockResolvedValue(null);
 
-    render(<VerifyEmailPage />);
+    render(<MemoryRouter><VerifyEmailPage /></MemoryRouter>);
 
     expect(await screen.findByText(/Não encontramos uma verificação em andamento/)).toBeInTheDocument();
   });
