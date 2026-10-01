@@ -14,6 +14,7 @@ vi.mock("@/features/offers/offer.service", () => ({
   createOffer: vi.fn(),
   updateOffer: vi.fn(),
   deleteOffer: vi.fn(),
+  changeOfferStatus: vi.fn(),
 }));
 
 const company = { id: "company-1", status: "APPROVED", type: "SUPPLIER", cnpj: "1", tradeName: "Solaria", corporateName: "Solaria Ltda", slug: "solaria" } as never;
@@ -66,5 +67,24 @@ describe("OffersPage", () => {
     await waitFor(() => expect(offerService.createOffer).toHaveBeenCalledWith(expect.objectContaining({
       supplierId: "supplier-1", modelId: "model-1", title: "Painel X", description: "Descrição da oferta", unitPrice: 1000, availability: 5,
     })));
+  });
+
+  it("pauses an active offer by sending zero availability", async () => {
+    const offer = {
+      id: "offer-1", supplierId: "supplier-1", model: { id: "model-1", brand: "SolarTech", model: "ST-450W" },
+      slug: "placa", unitPrice: 899.9, availability: 10, expirationDate: null, discountPercentage: null,
+      serviceRegions: null, translationStatus: "COMPLETED",
+      translations: [{ locale: "pt-BR", title: "Painel SolarTech", description: "desc", details: null }],
+    };
+    vi.mocked(listApprovedSolarPanelModels).mockResolvedValue([]);
+    vi.mocked(offerService.listCompanyOffers).mockResolvedValue([offer]);
+    vi.mocked(offerService.changeOfferStatus).mockResolvedValue(offer);
+
+    render(<MemoryRouter><OffersPage /></MemoryRouter>);
+    await screen.findByText(/Ativa/);
+
+    fireEvent.click(screen.getByRole("button", { name: "Pausar" }));
+
+    await waitFor(() => expect(offerService.changeOfferStatus).toHaveBeenCalledWith(offer, "PAUSED"));
   });
 });
