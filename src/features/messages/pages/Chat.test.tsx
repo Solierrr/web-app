@@ -10,7 +10,7 @@ vi.mock("@/features/messages/messages.messenger.api", () => ({
   getUserSummary: vi.fn(), markConversationRead: vi.fn(), sendConversationMessage: vi.fn(),
 }));
 vi.mock("@/features/messages/messages.messenger.socket", () => ({ subscribeToConversation: vi.fn() }));
-vi.mock("@/shared/auth/authToken.utils", () => ({ getAuthSession: () => ({ userId: "me" }) }));
+vi.mock("@/lib/shared/auth/authToken.utils", () => ({ getAuthSession: () => ({ userId: "me" }) }));
 
 const conversation: api.ConversationDto = {
   id: "conv-1", conversationType: "DIRECT", participantIds: ["me", "supplier"],

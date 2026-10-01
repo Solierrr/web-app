@@ -1,4 +1,4 @@
-import { getAuthSession } from "@/shared/auth/authToken.utils";
+import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
 import type { OperationalAccount, OperationalMembership, RegistrationDraft, RegistrationKind } from "./access.onboarding";
 

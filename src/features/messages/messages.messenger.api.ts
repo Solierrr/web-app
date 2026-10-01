@@ -1,4 +1,4 @@
-import { httpJson } from "@/shared/http/http.service";
+import { httpJson } from "@/lib/shared/http/http.service";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
 import { getMockMessenger, getMockConversation, createMockConversation, sendMockMessage } from "./messages.messenger.d.mocks";
 import { userMocks } from "@/config/mocks/registry";

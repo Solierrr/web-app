@@ -3,9 +3,9 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import DashboardPage from "./DashboardPage";
 import { rememberPage } from "../dashboard.utils";
-import { useActiveContext } from "@/shared/context/ActiveContext";
+import { useActiveContext } from "@/lib/shared/context/ActiveContext";
 
-vi.mock("@/shared/context/ActiveContext", () => ({ useActiveContext: vi.fn() }));
+vi.mock("@/lib/shared/context/ActiveContext", () => ({ useActiveContext: vi.fn() }));
 
 const supplier = { id: "c1", status: "APPROVED", type: "SUPPLIER", cnpj: "1", tradeName: "Solaria", corporateName: "Solaria Ltda", slug: "solaria" } as never;
 

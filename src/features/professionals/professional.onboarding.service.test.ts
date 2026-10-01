@@ -6,9 +6,9 @@ import {
   createTechnician,
   getProfessions,
 } from "./professional.onboarding.service";
-import { httpJson } from "@/shared/http/http.service";
+import { httpJson } from "@/lib/shared/http/http.service";
 
-vi.mock("@/shared/http/http.service", () => ({ httpJson: vi.fn() }));
+vi.mock("@/lib/shared/http/http.service", () => ({ httpJson: vi.fn() }));
 
 describe("professional.onboarding.service", () => {
   it("lists professions", async () => {

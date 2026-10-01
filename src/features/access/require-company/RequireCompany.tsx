@@ -8,7 +8,7 @@ import { routePaths } from "@/config/inter/paths";
 import { getMyCompany } from "@/features/companies/company.service";
 import { getSelectedContext } from "../access.onboarding.service";
 import { CompanyStatus } from "@/features/companies/company.enum";
-import { useActiveContext } from "@/shared/context/ActiveContext";
+import { useActiveContext } from "@/lib/shared/context/ActiveContext";
 
 interface RequireCompanyProps {
   children: ReactNode;

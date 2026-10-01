@@ -11,8 +11,8 @@ import SolarPanelModelCrud from "@/features/solar-panel/pages/crud/SolarPanelMod
 import CompanyFeed from "@/features/companies/pages/feed/CompanyFeed";
 import ProfessionalFeed from "@/features/professionals/pages/feed/ProfessionalFeed";
 import SolarPanelFeed from "@/features/solar-panel/pages/feed/SolarPanelFeed";
-import ProfileOnboarding from "@/components/layout/profile/ProfileOnboarding";
-import ProfilePage from "@/components/layout/profile/ProfilePage";
+import ProfileOnboarding from "@/lib/components/layout/profile/ProfileOnboarding";
+import ProfilePage from "@/lib/components/layout/profile/ProfilePage";
 import ProfessionalSearch from "@/features/professionals/pages/search/ProfessionalSearch";
 import SolarPanelSearch from "@/features/solar-panel/pages/search/SolarPanelSearch";
 import CompanySearch from "@/features/companies/pages/search/CompanySearch";

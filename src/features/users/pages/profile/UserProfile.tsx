@@ -2,10 +2,10 @@ import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import ProfilePage from "@/components/layout/profile/ProfilePage";
-import ProfilePageSkeleton from "@/components/layout/profile/ProfilePageSkeleton";
+import ProfilePage from "@/lib/components/layout/profile/ProfilePage";
+import ProfilePageSkeleton from "@/lib/components/layout/profile/ProfilePageSkeleton";
 import { getMyUser, updateMyUser, type MyUser } from "@/features/users/user/user.service";
-import { getAuthSession } from "@/shared/auth/authToken.utils";
+import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 
 export default function UserProfile() {
   const { t } = useTranslation("commons");

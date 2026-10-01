@@ -14,9 +14,9 @@ import {
   getProfessions,
   type Profession,
 } from "@/features/professionals/professional.onboarding.service";
-import { validateCertificates, type CertificateValidationResult } from "@/shared/validation/aiValidation.service";
-import { validateCpf } from "@/utils/validation.utils";
-import RegistrationStatus from "@/components/feedback/registration-status/RegistrationStatus";
+import { validateCertificates, type CertificateValidationResult } from "@/lib/shared/validation/aiValidation.service";
+import { validateCpf } from "@/lib/utils/validation.utils";
+import RegistrationStatus from "@/lib/components/feedback/registration-status/RegistrationStatus";
 import logger from "@/config/logging/logger";
 
 export default function ProfessionalOnboarding() {

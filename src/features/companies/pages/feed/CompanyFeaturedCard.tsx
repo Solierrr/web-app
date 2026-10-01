@@ -5,7 +5,7 @@ import { Building2, MapPin } from "lucide-react";
 
 import { routePaths } from "@/config/inter/paths";
 import type { SupportedLanguage } from "@/config/inter/browser/languages";
-import { slugNormalization } from "@/utils/normalization.utils";
+import { slugNormalization } from "@/lib/utils/normalization.utils";
 import type { CompanyFeedItem } from "./CompanyFeed.utils";
 
 interface CompanyFeaturedCardProps {

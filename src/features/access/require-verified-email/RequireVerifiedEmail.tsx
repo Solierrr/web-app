@@ -5,7 +5,7 @@ import { DEFAULT, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
 import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
 import { reloadCurrentFirebaseUser } from "@/config/firebase/auth/auth.service";
-import { getAuthSession } from "@/shared/auth/authToken.utils";
+import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import { useTranslation } from "react-i18next";
 
 export default function RequireVerifiedEmail({ children }: { children: ReactNode }) {

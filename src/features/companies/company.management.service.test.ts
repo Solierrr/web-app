@@ -10,9 +10,9 @@ import {
   revokeAccessCode,
   updateEmployeePosition,
 } from "./company.management.service";
-import { httpJson } from "@/shared/http/http.service";
+import { httpJson } from "@/lib/shared/http/http.service";
 
-vi.mock("@/shared/http/http.service", () => ({ httpJson: vi.fn() }));
+vi.mock("@/lib/shared/http/http.service", () => ({ httpJson: vi.fn() }));
 
 describe("company.management.service", () => {
   it("creates a position with no default accesses", async () => {

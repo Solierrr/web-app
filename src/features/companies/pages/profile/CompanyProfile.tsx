@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import ProfilePage from "@/components/layout/profile/ProfilePage";
-import ProfilePageSkeleton from "@/components/layout/profile/ProfilePageSkeleton";
-import EntityCard from "@/components/layout/announcement/entity-card/EntityCard";
+import ProfilePage from "@/lib/components/layout/profile/ProfilePage";
+import ProfilePageSkeleton from "@/lib/components/layout/profile/ProfilePageSkeleton";
+import EntityCard from "@/lib/components/layout/announcement/entity-card/EntityCard";
 import { getCatalogCompanyBySlug, type CatalogCompany } from "@/features/companies/company.service";
 import { getCatalogSolarPanels } from "@/features/solar-panel/solarPanel.service";
 import type { SolarPanelAnnouncement } from "@/features/solar-panel/solarPanel.announcement";

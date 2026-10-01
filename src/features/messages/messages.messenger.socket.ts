@@ -2,7 +2,7 @@ import { Client } from "@stomp/stompjs";
 
 import type { MessageDto } from "./messages.messenger.api";
 import { refresh } from "@/features/access/access.service";
-import { getAuthSession } from "@/shared/auth/authToken.utils";
+import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
 
 interface MessageEvent {

@@ -5,9 +5,9 @@ import AppMode from "@/config/vite/mode.enum";
 
 import { TestRoutes } from "./TestRoutes";
 import { AppLayout } from "../config/AppLayout";
-import { SaaSLayout } from "@/components/layout/saas/SaaSLayout";
+import { SaaSLayout } from "@/lib/components/layout/saas/SaaSLayout";
 import LanguageLayout, { RootRedirect } from "../config/inter/browser/LanguageLayout";
-import { NotFoundPage } from "../pages/error/not-found/NotFound";
+import { NotFoundPage } from "../features/error/pages/not-found/NotFound";
 
 import { SUPPORTED, type SupportedLanguage } from "@/config/inter/browser/languages";
 import { joinSegments } from "@/config/inter/paths";
@@ -19,7 +19,7 @@ import CompanyFeed from "@/features/companies/pages/feed/CompanyFeed";
 import SolarPanelSearch from "@/features/solar-panel/pages/search/SolarPanelSearch";
 import ProfessionalSearch from "@/features/professionals/pages/search/ProfessionalSearch";
 import CompanySearch from "@/features/companies/pages/search/CompanySearch";
-import ProfileOnboarding from "@/components/layout/profile/ProfileOnboarding";
+import ProfileOnboarding from "@/lib/components/layout/profile/ProfileOnboarding";
 import CompanyOnboarding from "@/features/companies/pages/onboarding/CompanyOnboarding";
 import ProfessionalOnboarding from "@/features/professionals/pages/onboarding/ProfessionalOnboarding";
 import AccountSetupPage from "@/features/access/pages/account-setup/AccountSetupPage";

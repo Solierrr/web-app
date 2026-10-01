@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Corridor from "@/components/layout/announcement/corridor/Corridor";
+import Corridor from "@/lib/components/layout/announcement/corridor/Corridor";
 import Skeleton from "@@/feedback/skeleton/Skeleton";
 import { ImageSkeleton } from "@@/feedback/skeleton/Skeleton.presets";
 import { getCatalogSolarPanels } from "@/features/solar-panel/solarPanel.service";

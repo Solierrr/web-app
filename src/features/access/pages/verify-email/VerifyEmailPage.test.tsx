@@ -11,7 +11,7 @@ vi.mock("@/config/firebase/auth/auth.service", () => ({
   sendVerificationEmail: vi.fn(),
 }));
 vi.mock("@/features/access/access.service", () => ({ linkFirebase: vi.fn() }));
-vi.mock("@/shared/auth/authToken.utils", () => ({ getAuthSession: () => ({ email: "user@example.com" }) }));
+vi.mock("@/lib/shared/auth/authToken.utils", () => ({ getAuthSession: () => ({ email: "user@example.com" }) }));
 
 describe("VerifyEmailPage", () => {
   it("shows the pending state with a resend button when the email is not verified yet", async () => {

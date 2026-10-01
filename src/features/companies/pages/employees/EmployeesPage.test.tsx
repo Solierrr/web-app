@@ -2,11 +2,11 @@ import { MemoryRouter } from "react-router-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import EmployeesPage from "./EmployeesPage";
-import { useActiveContext } from "@/shared/context/ActiveContext";
+import { useActiveContext } from "@/lib/shared/context/ActiveContext";
 import { getUser } from "@/features/users/user/user.service";
 import * as managementService from "@/features/companies/company.management.service";
 
-vi.mock("@/shared/context/ActiveContext", () => ({ useActiveContext: vi.fn() }));
+vi.mock("@/lib/shared/context/ActiveContext", () => ({ useActiveContext: vi.fn() }));
 vi.mock("@/features/users/user/user.service", () => ({ getUser: vi.fn() }));
 vi.mock("@/features/companies/company.management.service", () => ({
   listEmployees: vi.fn(),

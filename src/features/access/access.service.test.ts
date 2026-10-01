@@ -1,10 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { refresh } from "./access.service";
 import type { AuthSession } from "./access";
-import { httpJson } from "@/shared/http/http.service";
-import { clearAuthSession, getAuthSession, setAuthSession } from "@/shared/auth/authToken.utils";
+import { httpJson } from "@/lib/shared/http/http.service";
+import { clearAuthSession, getAuthSession, setAuthSession } from "@/lib/shared/auth/authToken.utils";
 
-vi.mock("@/shared/http/http.service", () => ({ httpJson: vi.fn() }));
+vi.mock("@/lib/shared/http/http.service", () => ({ httpJson: vi.fn() }));
 
 const stored: AuthSession = {
   accessToken: "old-access", refreshToken: "old-refresh", userId: "user-1",
