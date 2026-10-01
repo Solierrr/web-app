@@ -146,7 +146,7 @@
     "loadError": "Could not load employees.",
     "listTitle": "Team",
     "empty": "No employees yet.",
-    "remove": "Remove",
+    "remove": "Deactivate access",
     "inviteTitle": "Invite employee",
     "existingPosition": "Existing position",
     "selectPosition": "Select a position",
@@ -157,7 +157,12 @@
     "generatedCode": "Generated code: {{code}} — share it with the new employee.",
     "activeCodesTitle": "Active codes",
     "noActiveCodes": "No active codes.",
-    "revoke": "Revoke"
+    "revoke": "Revoke",
+    "adminsTitle": "Administrators",
+    "guestEmail": "Guest e-mail (optional)",
+    "sendByEmail": "Send by e-mail",
+    "emailSubject": "Invitation to {{company}} on Solaria",
+    "emailBody": "Use the code {{code}} to join {{company}}: {{url}}"
   },
   "companyOffers": {
     "title": "Offers"
@@ -191,7 +196,8 @@
     "noAddress": "No address provided",
     "edit": "Edit",
     "remove": "Remove",
-    "empty": "No units registered yet."
+    "empty": "No units registered yet.",
+    "openMap": "View on Google Maps"
   },
   "offers": {
     "title": "Offers",
@@ -215,7 +221,19 @@
     "units": "units",
     "edit": "Edit",
     "remove": "Remove",
-    "empty": "No offers registered yet."
+    "empty": "No offers registered yet.",
+    "status": {
+      "ACTIVE": "Active",
+      "PAUSED": "Paused",
+      "CLOSED": "Closed"
+    },
+    "pause": "Pause",
+    "resume": "Resume",
+    "close": "Close",
+    "reopen": "Reopen",
+    "discountLabel": "Discount",
+    "statusLabel": "Status",
+    "expiration": "Valid until"
   },
   "myCompany": {
     "loadError": "Could not load your company.",

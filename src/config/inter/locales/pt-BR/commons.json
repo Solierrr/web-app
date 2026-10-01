@@ -146,7 +146,7 @@
     "loadError": "Não foi possível carregar os funcionários.",
     "listTitle": "Equipe",
     "empty": "Nenhum funcionário ainda.",
-    "remove": "Desligar",
+    "remove": "Desativar acesso",
     "inviteTitle": "Convidar funcionário",
     "existingPosition": "Cargo existente",
     "selectPosition": "Selecione um cargo",
@@ -157,7 +157,12 @@
     "generatedCode": "Código gerado: {{code}} — compartilhe com o novo funcionário.",
     "activeCodesTitle": "Códigos ativos",
     "noActiveCodes": "Nenhum código ativo.",
-    "revoke": "Revogar"
+    "revoke": "Revogar",
+    "adminsTitle": "Administradores",
+    "guestEmail": "E-mail do convidado (opcional)",
+    "sendByEmail": "Enviar por e-mail",
+    "emailSubject": "Convite para {{company}} na Solaria",
+    "emailBody": "Use o código {{code}} para entrar na {{company}}: {{url}}"
   },
   "companyOffers": {
     "title": "Ofertas"
@@ -191,7 +196,8 @@
     "noAddress": "Endereço não informado",
     "edit": "Editar",
     "remove": "Remover",
-    "empty": "Nenhuma unidade cadastrada ainda."
+    "empty": "Nenhuma unidade cadastrada ainda.",
+    "openMap": "Ver no Google Maps"
   },
   "offers": {
     "title": "Ofertas",
@@ -215,7 +221,19 @@
     "units": "unidades",
     "edit": "Editar",
     "remove": "Remover",
-    "empty": "Nenhuma oferta cadastrada ainda."
+    "empty": "Nenhuma oferta cadastrada ainda.",
+    "status": {
+      "ACTIVE": "Ativa",
+      "PAUSED": "Pausada",
+      "CLOSED": "Encerrada"
+    },
+    "pause": "Pausar",
+    "resume": "Reativar",
+    "close": "Encerrar",
+    "reopen": "Reabrir",
+    "discountLabel": "Desconto",
+    "statusLabel": "Status",
+    "expiration": "Validade"
   },
   "myCompany": {
     "loadError": "Não foi possível carregar sua empresa.",
