@@ -31,5 +31,6 @@
   "resetPassword": "redefinir-senha",
   "privacy": "privacidade",
   "sessions": "sessoes",
-  "registrationStatus": "status-cadastro"
+  "registrationStatus": "status-cadastro",
+  "analytics": "indicadores"
 }

@@ -54,6 +54,7 @@ import RequireAuth from "@/features/access/require-auth/RequireAuth";
 import RequireVerifiedEmail from "@/features/access/require-verified-email/RequireVerifiedEmail";
 import RequireCompany from "@/features/access/require-company/RequireCompany";
 import RequirePlatformAdmin from "@/features/access/require-platform-admin/RequirePlatformAdmin";
+import AnalyticsPage from "@/features/analytics/pages/AnalyticsPage";
 import RegistrationStatusPage from "@/features/access/pages/registration-status/RegistrationStatusPage";
 import RegistrationDetailPage from "@/features/platform-admin/pages/registration/RegistrationDetailPage";
 import RegistrationsPage from "@/features/platform-admin/pages/registrations/RegistrationsPage";
@@ -202,6 +203,7 @@ const SAAS: RouteDefinition[] = [
       </RequireCompany>
     ),
   },
+  { key: "analytics", path: (lang) => joinSegments(lang, "analytics"), element: <AnalyticsPage /> },
   { key: "registrationStatus", path: (lang) => joinSegments(lang, "registrationStatus"), element: <RegistrationStatusPage /> },
   {
     key: "registrationDetail",

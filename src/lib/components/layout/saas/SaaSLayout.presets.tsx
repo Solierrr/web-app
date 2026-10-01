@@ -17,6 +17,9 @@ export function getOperationalNavigation({ company, companyType, platformAdmin, 
       items: [
         { key: "dashboard", label: "navigation.items.dashboard", icon: "home", to: routePaths.dashboard },
         { key: "messages", label: "navigation.items.messages", icon: "messages", to: routePaths.inbox },
+        ...(companyType || platformAdmin
+          ? [{ key: "analytics", label: "navigation.items.analytics", icon: "chart" as const, to: routePaths.analytics }]
+          : []),
         ...(pendingRegistration
           ? [{ key: "registrationStatus", label: "navigation.items.registrationStatus", icon: "building" as const, to: routePaths.registrationStatus }]
           : []),

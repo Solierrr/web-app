@@ -31,5 +31,6 @@
   "resetPassword": "reset-password",
   "privacy": "privacy",
   "sessions": "sessions",
-  "registrationStatus": "registration-status"
+  "registrationStatus": "registration-status",
+  "analytics": "analytics"
 }

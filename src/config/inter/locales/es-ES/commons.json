@@ -390,5 +390,36 @@
       "APPROVED": "Registro aprobado. Las funciones de la empresa están habilitadas.",
       "REJECTED": "Registro rechazado. Habla con soporte para revisar los datos."
     }
+  },
+  "analytics": {
+    "title": "Indicadores",
+    "exportCsv": "Exportar CSV",
+    "report": "Informe",
+    "loadError": "No se pudieron cargar los indicadores.",
+    "personal": "Los indicadores aparecen cuando actúas en una empresa o como administrador de la plataforma.",
+    "partial": "Algunos indicadores no se pudieron cargar.",
+    "empty": "Sin datos para este alcance.",
+    "scope": {
+      "platform": "Vista de toda la plataforma",
+      "supplier": "Vista de la empresa proveedora",
+      "demandant": "Vista de la empresa demandante"
+    },
+    "kpi": {
+      "approvedCompanies": "Empresas aprobadas",
+      "pendingCompanies": "Empresas en análisis",
+      "approvedModels": "Modelos aprobados",
+      "pendingModels": "Modelos en análisis",
+      "pendingProfessionals": "Profesionales en análisis",
+      "activeOffers": "Ofertas activas",
+      "pausedOffers": "Ofertas pausadas",
+      "closedOffers": "Ofertas cerradas",
+      "models": "Modelos registrados",
+      "employees": "Empleados",
+      "units": "Unidades"
+    },
+    "csv": {
+      "indicator": "indicador",
+      "value": "valor"
+    }
   }
 }
