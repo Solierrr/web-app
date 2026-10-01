@@ -17,7 +17,7 @@ vi.mock("firebase/firestore", () => ({
   serverTimestamp: serverTimestampMock,
 }));
 
-vi.mock("./firebase", () => ({
+vi.mock("../firebase", () => ({
   db: dbMock,
 }));
 
