@@ -17,14 +17,13 @@ export default function ContactCompany() {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation("chat");
-  const [error, setError] = useState<"mock" | "api" | "role" | null>(null);
+  const [requestError, setError] = useState<"api" | "role" | null>(null);
+  const invalidCompany = !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(companyId);
+  const error = invalidCompany ? "mock" : requestError;
 
   useEffect(() => {
     let active = true;
-    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(companyId)) {
-      setError("mock");
-      return;
-    }
+    if (invalidCompany) return;
     getMyCompany()
       .then((myCompany) => {
         if (!active) return null;
@@ -55,7 +54,7 @@ export default function ContactCompany() {
     return () => {
       active = false;
     };
-  }, [companyId, lang, location.pathname, location.search, navigate, product]);
+  }, [companyId, invalidCompany, lang, location.pathname, location.search, navigate, product]);
 
   if (error) {
     return (

@@ -29,8 +29,6 @@ export default function Permissions({ positionId, companyType, disabled = false 
 
   useEffect(() => {
     let active = true;
-    setLoading(true);
-    setFeedback(null);
     Promise.all([listPermissions(), listPositionPermissions(positionId)])
       .then(([all, links]) => {
         if (!active) return;

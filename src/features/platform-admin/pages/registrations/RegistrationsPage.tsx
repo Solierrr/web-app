@@ -19,23 +19,45 @@ export default function RegistrationsPage() {
   const [professionals, setProfessionals] = useState<ProfessionalReview[] | null>(null);
   const [error, setError] = useState(false);
 
+  async function load() {
+    const [allCompanies, pendingModels, allProfessionals] = await Promise.all([
+      listAllCompanies(),
+      listSolarPanelModelsByStatus(SolarPanelModelStatus.UNDERANALYSIS),
+      listProfessionalReviews(),
+    ]);
+    return {
+      companies: allCompanies.filter((company) => company.status === CompanyStatus.UNDERANALYSIS),
+      models: pendingModels,
+      professionals: allProfessionals.filter((item) => item.status === "UNDER_ANALYSIS"),
+    };
+  }
+
+  function apply(data: Awaited<ReturnType<typeof load>>) {
+    setCompanies(data.companies);
+    setModels(data.models);
+    setProfessionals(data.professionals);
+  }
+
   async function reload() {
     try {
-      const [allCompanies, pendingModels, allProfessionals] = await Promise.all([
-        listAllCompanies(),
-        listSolarPanelModelsByStatus(SolarPanelModelStatus.UNDERANALYSIS),
-        listProfessionalReviews(),
-      ]);
-      setCompanies(allCompanies.filter((company) => company.status === CompanyStatus.UNDERANALYSIS));
-      setModels(pendingModels);
-      setProfessionals(allProfessionals.filter((item) => item.status === "UNDER_ANALYSIS"));
+      apply(await load());
     } catch {
       setError(true);
     }
   }
 
   useEffect(() => {
-    void reload();
+    let active = true;
+    load()
+      .then((data) => {
+        if (active) apply(data);
+      })
+      .catch(() => {
+        if (active) setError(true);
+      });
+    return () => {
+      active = false;
+    };
   }, []);
 
   async function handleCompanyDecision(id: string, approve: boolean) {

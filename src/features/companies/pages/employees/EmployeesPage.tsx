@@ -52,13 +52,12 @@ export default function EmployeesPage() {
   const [generatedCode, setGeneratedCode] = useState<string | null>(null);
   const [availablePermissions, setAvailablePermissions] = useState<Permission[]>([]);
   const [newPermissions, setNewPermissions] = useState<string[]>([]);
-  const [permissionsLoading, setPermissionsLoading] = useState(false);
+  const [permissionsLoading, setPermissionsLoading] = useState(canCreatePosition && Boolean(company?.type));
 
   useEffect(() => {
     let active = true;
     if (!canCreatePosition || !company?.type) return;
     const type = company.type;
-    setPermissionsLoading(true);
     listPermissions()
       .then((items) => {
         if (!active) return;
@@ -78,26 +77,34 @@ export default function EmployeesPage() {
     };
   }, [companyId, canCreatePosition]);
 
+  async function load(id: string) {
+    const [employeeLinks, positions, codes] = await Promise.all([
+      listEmployees(id),
+      can("GET /api/company-positions/company/{companyId}") ? listCompanyPositions(id) : Promise.resolve([]),
+      can("GET /api/access-codes/company/{companyId}") ? listAccessCodes(id) : Promise.resolve([]),
+    ]);
+    const withNames = await Promise.all(
+      employeeLinks.map(async (employee) => {
+        try {
+          const user = await getUser(employee.userId);
+          return { ...employee, username: user.username };
+        } catch {
+          return { ...employee, username: employee.userId };
+        }
+      }),
+    );
+    return { employees: withNames, positions: positions.map((link) => link.position), codes: codes.filter((code) => code.status === "ACTIVE") };
+  }
+
+  function apply(data: Awaited<ReturnType<typeof load>>) {
+    setEmployees(data.employees);
+    setCompanyPositions(data.positions);
+    setAccessCodes(data.codes);
+  }
+
   async function reload(id: string) {
     try {
-      const [employeeLinks, positions, codes] = await Promise.all([
-        listEmployees(id),
-        can("GET /api/company-positions/company/{companyId}") ? listCompanyPositions(id) : Promise.resolve([]),
-        can("GET /api/access-codes/company/{companyId}") ? listAccessCodes(id) : Promise.resolve([]),
-      ]);
-      const withNames = await Promise.all(
-        employeeLinks.map(async (employee) => {
-          try {
-            const user = await getUser(employee.userId);
-            return { ...employee, username: user.username };
-          } catch {
-            return { ...employee, username: employee.userId };
-          }
-        }),
-      );
-      setEmployees(withNames);
-      setCompanyPositions(positions.map((link) => link.position));
-      setAccessCodes(codes.filter((code) => code.status === "ACTIVE"));
+      apply(await load(id));
     } catch {
       setError(true);
     }
@@ -105,7 +112,17 @@ export default function EmployeesPage() {
 
   useEffect(() => {
     if (!companyId) return;
-    void reload(companyId);
+    let active = true;
+    load(companyId)
+      .then((data) => {
+        if (active) apply(data);
+      })
+      .catch(() => {
+        if (active) setError(true);
+      });
+    return () => {
+      active = false;
+    };
   }, [companyId, canInvite]);
 
   async function handleGenerateCode(event: FormEvent<HTMLFormElement>) {

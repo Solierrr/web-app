@@ -37,7 +37,10 @@ function SaaSLayoutContent() {
     () => true,
   );
   const [collapsed, setCollapsed] = useState(() => localStorage.getItem("solaria.sidebar.collapsed") === "true");
-  const [open, setOpen] = useState(false);
+  const viewKey = `${pathname}|${desktop}`;
+  const [openKey, setOpenKey] = useState<string | null>(null);
+  const open = openKey === viewKey;
+  const setOpen = (value: boolean) => setOpenKey(value ? viewKey : null);
   const [signingOut, setSigningOut] = useState(false);
   const menuButton = useRef<HTMLButtonElement>(null);
   const drawer = useRef<HTMLDivElement>(null);
@@ -49,10 +52,6 @@ function SaaSLayoutContent() {
     platformAdmin: isPlatformAdmin,
     can: context.can,
   });
-
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname, desktop]);
 
   useEffect(() => {
     if (loading || needsContextChoice) return;

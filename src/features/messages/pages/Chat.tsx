@@ -25,7 +25,12 @@ function mergeMessages(current: MessageDto[], incoming: MessageDto[]): MessageDt
 }
 
 export default function Chat() {
-  const { conversationId = "", lang: langParam } = useParams<{ conversationId: string; lang: string }>();
+  const { conversationId = "" } = useParams<{ conversationId: string }>();
+  return <Conversation key={conversationId} conversationId={conversationId} />;
+}
+
+function Conversation({ conversationId }: { conversationId: string }) {
+  const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
   const { t } = useTranslation("chat");
   const location = useLocation();
@@ -68,13 +73,6 @@ export default function Chat() {
     lastMarkedRead.current = 0;
     followLatest.current = true;
     olderScrollHeight.current = null;
-    setLoading(true);
-    setConversation(null);
-    setParticipantName(null);
-    setMessages([]);
-    setHasOlder(false);
-    setDraft(product ? t("contactAbout", { title: product }) : "");
-    setError(null);
 
     function receive(incoming: MessageDto[]) {
       if (!active) return;

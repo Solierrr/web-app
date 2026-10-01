@@ -17,8 +17,6 @@ export default function SolarPanelModelPage() {
   const [error, setError] = useState(false);
   useEffect(() => {
     let active = true;
-    setLoading(true);
-    setError(false);
     listSolarPanelModels()
       .then((items) => {
         const item = items.find((entry) => entry.id === modelId);

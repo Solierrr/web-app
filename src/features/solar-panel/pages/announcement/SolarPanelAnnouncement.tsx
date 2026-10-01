@@ -200,5 +200,5 @@ export default function SolarPanelAnnouncement() {
     return <SolarPanelAnnouncementSkeleton />;
   }
 
-  return <SolarPanelAnnouncementPacked product={product} />
+  return <SolarPanelAnnouncementPacked product={product} />;
 }

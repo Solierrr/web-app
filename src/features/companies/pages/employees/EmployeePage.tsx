@@ -21,8 +21,6 @@ export default function EmployeePage() {
 
   useEffect(() => {
     let active = true;
-    setLoading(true);
-    setError(false);
     if (!company) return;
     listEmployees(company.id)
       .then(async (items) => {

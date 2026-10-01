@@ -53,17 +53,25 @@ export default function OffersPage() {
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
 
+  async function load(id: string) {
+    const editing = can("POST /api/offers") || can("PUT /api/offers/{id}");
+    const [supplier, approvedModels, companyOffers] = await Promise.all([
+      editing ? getMySupplier(id) : Promise.resolve(null),
+      editing ? listApprovedSolarPanelModels() : Promise.resolve([]),
+      listCompanyOffers(id),
+    ]);
+    return { supplierId: supplier?.id ?? null, models: approvedModels, offers: companyOffers };
+  }
+
+  function apply(data: Awaited<ReturnType<typeof load>>) {
+    setSupplierId(data.supplierId);
+    setModels(data.models);
+    setOffers(data.offers);
+  }
+
   async function reload(id: string) {
     try {
-      const editing = can("POST /api/offers") || can("PUT /api/offers/{id}");
-      const [supplier, approvedModels, companyOffers] = await Promise.all([
-        editing ? getMySupplier(id) : Promise.resolve(null),
-        editing ? listApprovedSolarPanelModels() : Promise.resolve([]),
-        listCompanyOffers(id),
-      ]);
-      setSupplierId(supplier?.id ?? null);
-      setModels(approvedModels);
-      setOffers(companyOffers);
+      apply(await load(id));
     } catch {
       setError(true);
     }
@@ -71,7 +79,17 @@ export default function OffersPage() {
 
   useEffect(() => {
     if (!companyId) return;
-    void reload(companyId);
+    let active = true;
+    load(companyId)
+      .then((data) => {
+        if (active) apply(data);
+      })
+      .catch(() => {
+        if (active) setError(true);
+      });
+    return () => {
+      active = false;
+    };
   }, [companyId]);
 
   function startCreate() {

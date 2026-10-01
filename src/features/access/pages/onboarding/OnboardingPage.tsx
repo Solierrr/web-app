@@ -172,7 +172,7 @@ export default function OnboardingPage({ kind }: { kind: RegistrationKind }) {
       }
       if (kind === "professional" && draft.step === 1) {
         if (!isMock) {
-          let savedFields = { ...draft.fields };
+          const savedFields = { ...draft.fields };
           const myUser = await getMyUser();
           const contact = savedFields.contactId
             ? { id: savedFields.contactId }

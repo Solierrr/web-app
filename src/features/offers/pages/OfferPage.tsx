@@ -18,8 +18,6 @@ export default function OfferPage() {
   const [error, setError] = useState(false);
   useEffect(() => {
     let active = true;
-    setLoading(true);
-    setError(false);
     if (!company) return;
     listCompanyOffers(company.id)
       .then((items) => {

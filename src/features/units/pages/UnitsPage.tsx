@@ -46,12 +46,20 @@ export default function UnitsPage() {
   const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
   const [saving, setSaving] = useState(false);
 
+  async function load(id: string) {
+    const editing = can("POST /api/local-units") || can("PUT /api/local-units/{id}");
+    const [requester, companyUnits] = await Promise.all([editing ? getMyRequester(id) : Promise.resolve(null), listCompanyUnits(id)]);
+    return { requesterId: requester?.id ?? null, units: companyUnits };
+  }
+
+  function apply(data: Awaited<ReturnType<typeof load>>) {
+    setRequesterId(data.requesterId);
+    setUnits(data.units);
+  }
+
   async function reload(id: string) {
     try {
-      const editing = can("POST /api/local-units") || can("PUT /api/local-units/{id}");
-      const [requester, companyUnits] = await Promise.all([editing ? getMyRequester(id) : Promise.resolve(null), listCompanyUnits(id)]);
-      setRequesterId(requester?.id ?? null);
-      setUnits(companyUnits);
+      apply(await load(id));
     } catch {
       setError(true);
     }
@@ -59,7 +67,17 @@ export default function UnitsPage() {
 
   useEffect(() => {
     if (!companyId) return;
-    void reload(companyId);
+    let active = true;
+    load(companyId)
+      .then((data) => {
+        if (active) apply(data);
+      })
+      .catch(() => {
+        if (active) setError(true);
+      });
+    return () => {
+      active = false;
+    };
   }, [companyId]);
 
   function startCreate() {
