@@ -22,12 +22,14 @@ describe("RegistrationStatusPage", () => {
 
     expect(await screen.findByText(/Cadastro aprovado/)).toBeInTheDocument();
     expect(screen.getByText("Resultado")).toHaveAttribute("aria-current", "step");
+    expect(screen.getByText("Análise manual")).not.toHaveAttribute("aria-current");
   });
 
   it("explains rejection and tells when there is no registration", async () => {
     vi.mocked(getMyCompany).mockResolvedValueOnce({ id: "c1", status: "REJECTED" } as never);
     const { unmount } = render(<RegistrationStatusPage />);
     expect(await screen.findByText(/Cadastro reprovado/)).toBeInTheDocument();
+    expect(screen.getByText("Resultado")).toHaveAttribute("aria-current", "step");
     unmount();
 
     vi.mocked(getMyCompany).mockResolvedValueOnce(null);

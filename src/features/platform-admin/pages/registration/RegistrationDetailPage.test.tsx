@@ -2,13 +2,20 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import RegistrationDetailPage from "./RegistrationDetailPage";
-import { approveCompany, getCompany, rejectCompany } from "@/features/companies/company.service";
+import { approveCompany, getCompany } from "@/features/companies/company.service";
 import { decideProfessional, listProfessionalReviews } from "@/features/professionals/review/review.service";
 
 vi.mock("@/features/companies/company.service", () => ({ getCompany: vi.fn(), approveCompany: vi.fn(), rejectCompany: vi.fn() }));
 vi.mock("@/features/professionals/review/review.service", () => ({ listProfessionalReviews: vi.fn(), decideProfessional: vi.fn() }));
 
-const company = { id: "c1", status: "UNDER_ANALYSIS", type: "SUPPLIER", cnpj: "12345678000199", tradeName: "Fornecedora Solar", corporateName: "Fornecedora Solar Ltda" };
+const company = {
+  id: "c1",
+  status: "UNDER_ANALYSIS",
+  type: "SUPPLIER",
+  cnpj: "12345678000199",
+  tradeName: "Fornecedora Solar",
+  corporateName: "Fornecedora Solar Ltda",
+};
 
 function renderAt(path: string) {
   render(
@@ -58,12 +65,22 @@ describe("RegistrationDetailPage", () => {
 
     expect(await screen.findByText("Aprovado")).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Aprovar" })).not.toBeInTheDocument();
-    expect(rejectCompany).not.toHaveBeenCalled();
+    expect(screen.queryByRole("button", { name: "Rejeitar" })).not.toBeInTheDocument();
   });
 
-  it("reports an unknown request and a failed decision", async () => {
+  it("reports an unknown kind without calling the services", async () => {
     renderAt("/pt-BR/admin/cadastros/other/x");
+
     expect(await screen.findByRole("alert")).toHaveTextContent("Solicitação não encontrada.");
+    expect(getCompany).not.toHaveBeenCalled();
+    expect(listProfessionalReviews).not.toHaveBeenCalled();
+  });
+
+  it("tells a load failure apart from a missing request", async () => {
+    vi.mocked(getCompany).mockRejectedValue(new Error("500"));
+    renderAt("/pt-BR/admin/cadastros/company/c1");
+
+    expect(await screen.findByRole("alert")).toHaveTextContent("Não foi possível carregar a solicitação.");
   });
 
   it("shows an error when the decision fails", async () => {

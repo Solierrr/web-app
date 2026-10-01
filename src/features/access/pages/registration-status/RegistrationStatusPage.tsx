@@ -31,6 +31,9 @@ export default function RegistrationStatusPage() {
 
   return (
     <OperationalPage title={t("title")} loading={company === undefined && !error} compact>
+      <p role="status" className={stage ? "" : "sr-only"}>
+        {stage ? t(`stage.${stage}`) : ""}
+      </p>
       {error ? <p role="alert">{t("loadError")}</p> : null}
       {company === null ? <p>{t("none")}</p> : null}
       {company && stage ? (
@@ -45,7 +48,6 @@ export default function RegistrationStatusPage() {
               </li>
             ))}
           </ol>
-          <p role="status">{t(`stage.${stage}`)}</p>
         </>
       ) : null}
     </OperationalPage>

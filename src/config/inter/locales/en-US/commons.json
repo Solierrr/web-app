@@ -136,7 +136,8 @@
     "name": "Name",
     "notFound": "Request not found.",
     "decisionError": "We could not record the decision.",
-    "statusLabel": "Status"
+    "statusLabel": "Status",
+    "detailError": "We could not load the request."
   },
   "settings": {
     "title": "Settings",

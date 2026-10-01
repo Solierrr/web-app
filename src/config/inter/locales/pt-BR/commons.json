@@ -136,7 +136,8 @@
     "name": "Nome",
     "notFound": "Solicitação não encontrada.",
     "decisionError": "Não foi possível registrar a decisão.",
-    "statusLabel": "Situação"
+    "statusLabel": "Situação",
+    "detailError": "Não foi possível carregar a solicitação."
   },
   "settings": {
     "title": "Configurações",

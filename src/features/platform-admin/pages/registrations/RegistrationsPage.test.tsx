@@ -26,17 +26,31 @@ vi.mock("@/features/professionals/review/review.service", () => ({
 }));
 
 const pendingCompany = {
-  id: "company-1", status: "UNDER_ANALYSIS", type: "SUPPLIER",
-  cnpj: "12345678000199", tradeName: "Fornecedora Solar", corporateName: "Fornecedora Solar Ltda", slug: "fornecedora-solar",
+  id: "company-1",
+  status: "UNDER_ANALYSIS",
+  type: "SUPPLIER",
+  cnpj: "12345678000199",
+  tradeName: "Fornecedora Solar",
+  corporateName: "Fornecedora Solar Ltda",
+  slug: "fornecedora-solar",
 } as unknown as Company;
 
 const approvedCompany = {
-  id: "company-2", status: "APPROVED", type: "SUPPLIER",
-  cnpj: "98765432000188", tradeName: "Já Aprovada", corporateName: "Já Aprovada Ltda", slug: "ja-aprovada",
+  id: "company-2",
+  status: "APPROVED",
+  type: "SUPPLIER",
+  cnpj: "98765432000188",
+  tradeName: "Já Aprovada",
+  corporateName: "Já Aprovada Ltda",
+  slug: "ja-aprovada",
 } as unknown as Company;
 
 const pendingModel = {
-  id: "model-1", brand: "Marca", model: "Modelo X", status: "UNDER_ANALYSIS", powerOutput: 550,
+  id: "model-1",
+  brand: "Marca",
+  model: "Modelo X",
+  status: "UNDER_ANALYSIS",
+  powerOutput: 550,
 } as unknown as SolarPanel;
 
 describe("RegistrationsPage", () => {
@@ -49,7 +63,11 @@ describe("RegistrationsPage", () => {
     vi.mocked(listAllCompanies).mockResolvedValue([pendingCompany, approvedCompany]);
     vi.mocked(listSolarPanelModelsByStatus).mockResolvedValue([pendingModel]);
 
-    render(<MemoryRouter><RegistrationsPage /></MemoryRouter>);
+    render(
+      <MemoryRouter>
+        <RegistrationsPage />
+      </MemoryRouter>,
+    );
 
     expect(await screen.findByText("Fornecedora Solar")).toBeInTheDocument();
     expect(screen.queryByText("Já Aprovada")).not.toBeInTheDocument();
@@ -61,7 +79,11 @@ describe("RegistrationsPage", () => {
     vi.mocked(listSolarPanelModelsByStatus).mockResolvedValue([]);
     vi.mocked(approveCompany).mockResolvedValue({ ...pendingCompany, status: "APPROVED" } as never);
 
-    render(<MemoryRouter><RegistrationsPage /></MemoryRouter>);
+    render(
+      <MemoryRouter>
+        <RegistrationsPage />
+      </MemoryRouter>,
+    );
     await screen.findByText("Fornecedora Solar");
 
     screen.getAllByRole("button", { name: "Aprovar" })[0].click();
@@ -75,7 +97,11 @@ describe("RegistrationsPage", () => {
     vi.mocked(listSolarPanelModelsByStatus).mockResolvedValue([pendingModel]);
     vi.mocked(rejectSolarPanel).mockResolvedValue({ ...pendingModel, status: "REJECTED" } as never);
 
-    render(<MemoryRouter><RegistrationsPage /></MemoryRouter>);
+    render(
+      <MemoryRouter>
+        <RegistrationsPage />
+      </MemoryRouter>,
+    );
     await screen.findByText("Marca Modelo X");
 
     screen.getAllByRole("button", { name: "Rejeitar" })[0].click();
@@ -88,7 +114,11 @@ describe("RegistrationsPage", () => {
     vi.mocked(listAllCompanies).mockResolvedValue([]);
     vi.mocked(listSolarPanelModelsByStatus).mockResolvedValue([]);
 
-    render(<MemoryRouter><RegistrationsPage /></MemoryRouter>);
+    render(
+      <MemoryRouter>
+        <RegistrationsPage />
+      </MemoryRouter>,
+    );
 
     expect(await screen.findByText("Nenhuma empresa pendente.")).toBeInTheDocument();
     expect(screen.getByText("Nenhum modelo pendente.")).toBeInTheDocument();
@@ -98,7 +128,11 @@ describe("RegistrationsPage", () => {
     vi.mocked(listAllCompanies).mockRejectedValue(new Error("network"));
     vi.mocked(listSolarPanelModelsByStatus).mockResolvedValue([]);
 
-    render(<MemoryRouter><RegistrationsPage /></MemoryRouter>);
+    render(
+      <MemoryRouter>
+        <RegistrationsPage />
+      </MemoryRouter>,
+    );
 
     expect(await screen.findByRole("alert")).toHaveTextContent("Não foi possível carregar os cadastros pendentes.");
   });
@@ -107,7 +141,11 @@ describe("RegistrationsPage", () => {
     vi.mocked(listAllCompanies).mockResolvedValue([pendingCompany, approvedCompany]);
     vi.mocked(listSolarPanelModelsByStatus).mockResolvedValue([]);
 
-    render(<MemoryRouter><RegistrationsPage /></MemoryRouter>);
+    render(
+      <MemoryRouter>
+        <RegistrationsPage />
+      </MemoryRouter>,
+    );
     await screen.findByText("Fornecedora Solar");
 
     fireEvent.change(screen.getByLabelText("Situação"), { target: { value: "ALL" } });
@@ -118,10 +156,17 @@ describe("RegistrationsPage", () => {
   });
 
   it("filters by registration type", async () => {
-    vi.mocked(listAllCompanies).mockResolvedValue([pendingCompany, { ...pendingCompany, id: "company-3", type: "DEMANDANT", tradeName: "Demandante Sul" } as unknown as Company]);
+    vi.mocked(listAllCompanies).mockResolvedValue([
+      pendingCompany,
+      { ...pendingCompany, id: "company-3", type: "DEMANDANT", tradeName: "Demandante Sul" } as unknown as Company,
+    ]);
     vi.mocked(listSolarPanelModelsByStatus).mockResolvedValue([]);
 
-    render(<MemoryRouter><RegistrationsPage /></MemoryRouter>);
+    render(
+      <MemoryRouter>
+        <RegistrationsPage />
+      </MemoryRouter>,
+    );
     await screen.findByText("Fornecedora Solar");
 
     fireEvent.change(screen.getByLabelText("Tipo"), { target: { value: "DEMANDANT" } });

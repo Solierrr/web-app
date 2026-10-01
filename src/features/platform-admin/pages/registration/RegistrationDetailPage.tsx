@@ -11,13 +11,18 @@ import { decideProfessional, listProfessionalReviews } from "@/features/professi
 import type { ProfessionalReview } from "@/features/professionals/review/review.d";
 
 export default function RegistrationDetailPage() {
+  const { kind = "", id = "" } = useParams<{ kind: string; id: string }>();
+  return <RegistrationDetail key={`${kind}:${id}`} kind={kind} id={id} />;
+}
+
+function RegistrationDetail({ kind, id }: { kind: string; id: string }) {
   const { t } = useTranslation("commons", { keyPrefix: "registrations" });
-  const { lang: langParam, kind, id = "" } = useParams<{ lang: string; kind: string; id: string }>();
+  const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT;
   const navigate = useNavigate();
   const [company, setCompany] = useState<Company | null>(null);
   const [professional, setProfessional] = useState<ProfessionalReview | null>(null);
-  const [state, setState] = useState<"loading" | "ready" | "notFound">("loading");
+  const [state, setState] = useState<"loading" | "ready" | "notFound" | "error">("loading");
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
@@ -36,7 +41,7 @@ export default function RegistrationDetailPage() {
         setState(item ? "ready" : "notFound");
       })
       .catch(() => {
-        if (active) setState("notFound");
+        if (active) setState("error");
       });
     return () => {
       active = false;
@@ -74,10 +79,11 @@ export default function RegistrationDetailPage() {
       compact
       actions={<Link to={routePaths.registrationsManagement(lang)}>{t("back")}</Link>}>
       {state === "notFound" ? <p role="alert">{t("notFound")}</p> : null}
+      {state === "error" ? <p role="alert">{t("detailError")}</p> : null}
       {state === "ready" && status ? (
         <>
           <dl className="grid gap-4 rounded-small border border-operational-border p-4">
-            {[...rows, [t("statusLabel"), t(`status.${status}`)] as [string, string]].map(([label, value]) => (
+            {[...rows, [t("statusLabel"), t(`status.${status}`, { defaultValue: status })] as [string, string]].map(([label, value]) => (
               <div key={label}>
                 <dt className="text-sm text-operational-muted">{label}</dt>
                 <dd>{value ?? "—"}</dd>
@@ -89,7 +95,10 @@ export default function RegistrationDetailPage() {
               <button type="button" onClick={() => void decide(true)} className="rounded-small bg-orange px-4 py-2 text-white">
                 {t("approve")}
               </button>
-              <button type="button" onClick={() => void decide(false)} className="rounded-small border border-operational-border px-4 py-2 text-red-700">
+              <button
+                type="button"
+                onClick={() => void decide(false)}
+                className="rounded-small border border-operational-border px-4 py-2 text-red-700">
                 {t("reject")}
               </button>
             </div>
