@@ -30,5 +30,6 @@
   "registrations": "registrations",
   "resetPassword": "reset-password",
   "privacy": "privacy",
-  "sessions": "sessions"
+  "sessions": "sessions",
+  "registrationStatus": "registration-status"
 }

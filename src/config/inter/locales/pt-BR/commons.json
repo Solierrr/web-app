@@ -113,7 +113,30 @@
     "noCompanies": "Nenhuma empresa pendente.",
     "noModels": "Nenhum modelo pendente.",
     "noProfessionals": "Nenhum profissional aguardando análise.",
-    "professionalsTitle": "Profissionais autônomos"
+    "professionalsTitle": "Profissionais autônomos",
+    "status": {
+      "UNDER_ANALYSIS": "Em análise manual",
+      "APPROVED": "Aprovado",
+      "REJECTED": "Reprovado"
+    },
+    "statusFilter": "Situação",
+    "typeFilter": "Tipo",
+    "all": "Todos",
+    "SUPPLIER": "Fornecedoras",
+    "DEMANDANT": "Demandantes",
+    "PROFESSIONAL": "Profissionais",
+    "details": "Detalhes",
+    "detailTitle": "Detalhes da solicitação",
+    "back": "Voltar para os cadastros",
+    "cnpj": "CNPJ",
+    "corporateName": "Razão social",
+    "tradeName": "Nome fantasia",
+    "type": "Tipo",
+    "crea": "CREA",
+    "name": "Nome",
+    "notFound": "Solicitação não encontrada.",
+    "decisionError": "Não foi possível registrar a decisão.",
+    "statusLabel": "Situação"
   },
   "settings": {
     "title": "Configurações",
@@ -353,5 +376,18 @@
     "onlyCurrent": "Por enquanto só é possível ver e encerrar a sessão deste dispositivo.",
     "error": "Não foi possível carregar as sessões.",
     "revokeError": "Não foi possível encerrar a sessão."
+  },
+  "registrationStatusPage": {
+    "title": "Status do cadastro",
+    "submitted": "Cadastro enviado",
+    "manualReview": "Análise manual",
+    "result": "Resultado",
+    "none": "Você ainda não tem um cadastro de empresa.",
+    "loadError": "Não foi possível carregar o status do cadastro.",
+    "stage": {
+      "MANUAL_REVIEW": "Seu cadastro está em análise manual. Avisaremos quando houver resultado.",
+      "APPROVED": "Cadastro aprovado. As funcionalidades da empresa estão liberadas.",
+      "REJECTED": "Cadastro reprovado. Fale com o suporte para revisar os dados."
+    }
   }
 }

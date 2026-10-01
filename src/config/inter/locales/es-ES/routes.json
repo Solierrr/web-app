@@ -30,5 +30,6 @@
   "registrations": "registros",
   "resetPassword": "restablecer-contrasena",
   "privacy": "privacidad",
-  "sessions": "sesiones"
+  "sessions": "sesiones",
+  "registrationStatus": "estado-registro"
 }
