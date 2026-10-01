@@ -46,7 +46,8 @@
       "profile": "Meu perfil",
       "settings": "Configurações",
       "chatbot": "Assistente",
-      "registrationStatus": "Status do cadastro"
+      "registrationStatus": "Status do cadastro",
+      "analytics": "Indicadores"
     }
   },
   "dashboard": {

@@ -1,5 +1,6 @@
 import { routePaths } from "@/config/inter/paths";
 import type { SaaSNavigationGroup } from "@/features/saas/saas";
+import { ANALYTICS_PERMISSIONS } from "@/features/analytics/analytics.utils";
 
 interface NavigationContext {
   company: boolean;
@@ -9,7 +10,13 @@ interface NavigationContext {
   can?: (permission: string) => boolean;
 }
 
-export function getOperationalNavigation({ company, companyType, platformAdmin, pendingRegistration = false, can = () => true }: NavigationContext): SaaSNavigationGroup[] {
+export function getOperationalNavigation({
+  company,
+  companyType,
+  platformAdmin,
+  pendingRegistration = false,
+  can = () => true,
+}: NavigationContext): SaaSNavigationGroup[] {
   return [
     {
       key: "overview",
@@ -17,8 +24,18 @@ export function getOperationalNavigation({ company, companyType, platformAdmin, 
       items: [
         { key: "dashboard", label: "navigation.items.dashboard", icon: "home", to: routePaths.dashboard },
         { key: "messages", label: "navigation.items.messages", icon: "messages", to: routePaths.inbox },
+        ...((companyType && ANALYTICS_PERMISSIONS.some((permission) => can(permission))) || platformAdmin
+          ? [{ key: "analytics", label: "navigation.items.analytics", icon: "chart" as const, to: routePaths.analytics }]
+          : []),
         ...(pendingRegistration
-          ? [{ key: "registrationStatus", label: "navigation.items.registrationStatus", icon: "building" as const, to: routePaths.registrationStatus }]
+          ? [
+              {
+                key: "registrationStatus",
+                label: "navigation.items.registrationStatus",
+                icon: "building" as const,
+                to: routePaths.registrationStatus,
+              },
+            ]
           : []),
         ...(company || platformAdmin
           ? [{ key: "chatbot", label: "navigation.items.chatbot", icon: "messages" as const, to: routePaths.operationalChatbot }]

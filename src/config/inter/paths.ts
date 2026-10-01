@@ -35,6 +35,7 @@ export const SEGMENT = [
   "privacy",
   "sessions",
   "registrationStatus",
+  "analytics",
 ] as const;
 
 export type RouteSegmentKey = (typeof SEGMENT)[number];
@@ -91,6 +92,7 @@ export const routePaths = {
   employeesManagement: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin", "employees")}`,
   offersManagement: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin", "offers")}`,
   unitsManagement: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin", "units")}`,
+  analytics: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "analytics")}`,
   registrationStatus: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "registrationStatus")}`,
   registrationDetail: (lang: SupportedLanguage, kind: "company" | "professional", id: string) =>
     `/${lang}/${joinSegments(lang, "admin", "registrations")}/${kind}/${encodeURIComponent(id)}`,

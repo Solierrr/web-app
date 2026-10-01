@@ -1,4 +1,4 @@
-import { Menu, LogOut, MessageSquare, Users, PanelsTopLeft, Home, User, Settings, Search, ChevronDown, ChevronLeft, X, Eye, EyeOff, ShoppingCart, Globe, type LucideIcon, Heart, LoaderCircle, Building2 } from "lucide-react";
+import { Menu, LogOut, MessageSquare, Users, PanelsTopLeft, Home, User, Settings, Search, ChevronDown, ChevronLeft, X, Eye, EyeOff, ShoppingCart, Globe, type LucideIcon, Heart, LoaderCircle, Building2, ChartColumn } from "lucide-react";
 import Colors from "@/lib/shared/styles/colors/colors.enum";
 import { InvalidIconError } from "@/features/error/invalid-icon/InvalidIcon.error";
 
@@ -22,6 +22,7 @@ const icons = {
   heart: Heart,
   loader: LoaderCircle,
   building: Building2,
+  chart: ChartColumn,
 } satisfies Record<string, LucideIcon>;
 
 export type IconName = keyof typeof icons;
