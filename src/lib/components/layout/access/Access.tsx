@@ -48,7 +48,7 @@ export default function Access({ helperText, fields, submitLabel, error, footer,
                 ),
               )}
               <PrimaryButton type="submit" disabled={busy} content={submitLabel} description={submitLabel} rounded className="w-full" />
-              {error && <div className="text-orange">{error}</div>}
+              {error && <div role="alert" className="text-orange">{error}</div>}
             </form>
           </div>
           {helperText && <div className="text-black/70">{helperText}</div>}
