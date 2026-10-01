@@ -76,5 +76,8 @@
     "email": "Your sign-in email",
     "password": "Password (at least 12 characters)",
     "confirmPassword": "Confirm password"
-  }
+  },
+  "corporateEmailRequired": "Use the company's corporate e-mail, not a personal one.",
+  "inviteAdmins": "Invite other administrators",
+  "grantedPermissions": "Permissions granted to you"
 }
