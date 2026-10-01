@@ -6,7 +6,7 @@ import ProfilePageSkeleton from "@/components/layout/profile/ProfilePageSkeleton
 import EntityCard from "@/components/layout/announcement/entity-card/EntityCard";
 import { getCatalogCompanyBySlug, type CatalogCompany } from "@/features/companies/company.service";
 import { getCatalogSolarPanels } from "@/features/solar-panel/solarPanel.service";
-import type { SolarPanelAnnouncement } from "@/features/solar-panel/solarPanelAnnouncement";
+import type { SolarPanelAnnouncement } from "@/features/solar-panel/solarPanel.announcement";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
 

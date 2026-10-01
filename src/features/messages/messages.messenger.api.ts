@@ -1,6 +1,6 @@
 import { httpJson } from "@/shared/http/http.service";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
-import { getMockMessenger, getMockConversation, createMockConversation, sendMockMessage } from "./messenger.d.mocks";
+import { getMockMessenger, getMockConversation, createMockConversation, sendMockMessage } from "./messages.messenger.d.mocks";
 import { userMocks } from "@/config/mocks/registry";
 
 const API = `${import.meta.env.VITE_API_MESSENGER}/messaging`;

@@ -5,12 +5,12 @@ import {
   createProfessionalRegistration,
   createTechnician,
   getProfessions,
-} from "./professionalOnboarding.service";
+} from "./professional.onboarding.service";
 import { httpJson } from "@/shared/http/http.service";
 
 vi.mock("@/shared/http/http.service", () => ({ httpJson: vi.fn() }));
 
-describe("professionalOnboarding.service", () => {
+describe("professional.onboarding.service", () => {
   it("lists professions", async () => {
     vi.mocked(httpJson).mockResolvedValue([{ id: "profession-1", name: "Eletricista" }]);
     await expect(getProfessions()).resolves.toEqual([{ id: "profession-1", name: "Eletricista" }]);

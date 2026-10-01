@@ -47,10 +47,10 @@ import OffersPage from "@/features/offers/pages/OffersPage";
 import OfferPage from "@/features/offers/pages/OfferPage";
 import UnitsPage from "@/features/units/pages/UnitsPage";
 import UnitPage from "@/features/units/pages/UnitPage";
-import RequireAuth from "@/features/access/RequireAuth";
-import RequireVerifiedEmail from "@/features/access/RequireVerifiedEmail";
-import RequireCompany from "@/features/access/RequireCompany";
-import RequirePlatformAdmin from "@/features/access/RequirePlatformAdmin";
+import RequireAuth from "@/features/access/require-auth/RequireAuth";
+import RequireVerifiedEmail from "@/features/access/require-verified-email/RequireVerifiedEmail";
+import RequireCompany from "@/features/access/require-company/RequireCompany";
+import RequirePlatformAdmin from "@/features/access/require-platform-admin/RequirePlatformAdmin";
 import RegistrationsPage from "@/features/platform-admin/pages/registrations/RegistrationsPage";
 
 interface RouteDefinition {

@@ -1,4 +1,4 @@
-import { getSelectedContext } from "@/features/access/onboarding.service";
+import { getSelectedContext } from "@/features/access/access.onboarding.service";
 import type { Address, AddressPayload, LocalUnit, UnitPayload } from "./unit.service";
 
 export function getMockUnits(companyId: string): LocalUnit[] {

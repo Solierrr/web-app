@@ -1,5 +1,5 @@
 import { getAuthSession } from "@/shared/auth/authToken.utils";
-import type { ConversationDto, MessageDto } from "./messenger.api";
+import type { ConversationDto, MessageDto } from "./messages.messenger.api";
 
 interface MockMessenger {
   conversations: ConversationDto[];

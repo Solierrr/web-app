@@ -2,11 +2,11 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import ProfessionalOnboarding from "./ProfessionalOnboarding";
-import * as onboardingService from "@/features/professionals/professionalOnboarding.service";
+import * as onboardingService from "@/features/professionals/professional.onboarding.service";
 import { getMyUser } from "@/features/users/user/user.service";
 import { validateCertificates } from "@/shared/validation/aiValidation.service";
 
-vi.mock("@/features/professionals/professionalOnboarding.service", () => ({
+vi.mock("@/features/professionals/professional.onboarding.service", () => ({
   getProfessions: vi.fn(),
   createContact: vi.fn(),
   createPerson: vi.fn(),

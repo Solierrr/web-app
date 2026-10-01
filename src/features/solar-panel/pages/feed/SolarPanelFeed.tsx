@@ -5,7 +5,7 @@ import Skeleton from "@@/feedback/skeleton/Skeleton";
 import { ImageSkeleton } from "@@/feedback/skeleton/Skeleton.presets";
 import { getCatalogSolarPanels } from "@/features/solar-panel/solarPanel.service";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
-import type { SolarPanelFeedSummary } from "@/features/solar-panel/solarPanelAnnouncement";
+import type { SolarPanelFeedSummary } from "@/features/solar-panel/solarPanel.announcement";
 import WrapperLayout from "@/config/WrapperLayout";
 
 function SolarPanelFeedContent({ items }: { items: SolarPanelFeedSummary[] }) {

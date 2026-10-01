@@ -1,6 +1,6 @@
 import { getAuthSession } from "@/shared/auth/authToken.utils";
 import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
-import type { OperationalAccount, OperationalMembership, RegistrationDraft, RegistrationKind } from "./onboarding";
+import type { OperationalAccount, OperationalMembership, RegistrationDraft, RegistrationKind } from "./access.onboarding";
 
 function readStored<T>(key: string, fallback: T): T {
   try {

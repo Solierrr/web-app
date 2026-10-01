@@ -13,7 +13,7 @@ vi.mock("@/features/solar-panel/solarPanel.service", () => ({
 import { getCatalogCompanyBySlug } from "@/features/companies/company.service";
 import type { CatalogCompany } from "@/features/companies/company.service";
 import { getCatalogSolarPanels } from "@/features/solar-panel/solarPanel.service";
-import type { SolarPanelAnnouncement } from "@/features/solar-panel/solarPanelAnnouncement";
+import type { SolarPanelAnnouncement } from "@/features/solar-panel/solarPanel.announcement";
 
 const mockedGetCompanyBySlug = vi.mocked(getCatalogCompanyBySlug);
 const mockedGetCatalogSolarPanels = vi.mocked(getCatalogSolarPanels);

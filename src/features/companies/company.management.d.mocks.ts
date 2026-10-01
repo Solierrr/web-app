@@ -1,5 +1,5 @@
-import { getOperationalAccount, addOperationalMembership } from "@/features/access/onboarding.service";
-import type { AccessCode, Employee, Position, RedeemedMembership } from "./companyManagement.service";
+import { getOperationalAccount, addOperationalMembership } from "@/features/access/access.onboarding.service";
+import type { AccessCode, Employee, Position, RedeemedMembership } from "./company.management.service";
 
 interface MockAccessCode extends AccessCode {
   companyName: string;

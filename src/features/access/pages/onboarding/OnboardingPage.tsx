@@ -19,7 +19,7 @@ import {
   attachCompanyAddress,
   attachCompanyBusinessContact,
 } from "@/features/companies/company.service";
-import { redeemAccessCode } from "@/features/companies/companyManagement.service";
+import { redeemAccessCode } from "@/features/companies/company.management.service";
 import { validateCnpj, validateCpf } from "@/utils/validation.utils";
 import {
   addOperationalMembership,
@@ -29,8 +29,8 @@ import {
   getRegistrationDraft,
   saveOperationalAccount,
   saveRegistrationDraft,
-} from "../../onboarding.service";
-import type { RegistrationKind } from "../../onboarding";
+} from "../../access.onboarding.service";
+import type { RegistrationKind } from "../../access.onboarding";
 import { registrationFields } from "./Onboarding.presets";
 import {
   createContact,
@@ -39,7 +39,7 @@ import {
   createTechnician,
   getProfessions,
   type Profession,
-} from "@/features/professionals/professionalOnboarding.service";
+} from "@/features/professionals/professional.onboarding.service";
 import { getMyUser } from "@/features/users/user/user.service";
 import { validateCertificates, validateCnpjCategory } from "@/shared/validation/aiValidation.service";
 import Access from "@/components/layout/access/Access";

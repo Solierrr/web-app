@@ -4,8 +4,8 @@ import type { Company } from "@/features/companies/company";
 import { getMyCompany, getMyMembership } from "@/features/companies/company.service";
 import { getMyPlatformAdmin } from "@/features/platform-admin/platformAdmin.service";
 import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
-import { getOperationalAccount, getSelectedContext, selectContext } from "@/features/access/onboarding.service";
-import type { OperationalMembership } from "@/features/access/onboarding";
+import { getOperationalAccount, getSelectedContext, selectContext } from "@/features/access/access.onboarding.service";
+import type { OperationalMembership } from "@/features/access/access.onboarding";
 
 type ContextKind = "personal" | "company";
 

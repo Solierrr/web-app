@@ -24,7 +24,7 @@ import {
   type Employee,
   type Position,
   type Permission,
-} from "@/features/companies/companyManagement.service";
+} from "@/features/companies/company.management.service";
 
 interface EmployeeRow extends Employee {
   username: string;

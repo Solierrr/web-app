@@ -15,8 +15,8 @@ import {
   sendConversationMessage,
   type ConversationDto,
   type MessageDto,
-} from "@/features/messages/messenger.api";
-import { subscribeToConversation } from "@/features/messages/messenger.socket";
+} from "@/features/messages/messages.messenger.api";
+import { subscribeToConversation } from "@/features/messages/messages.messenger.socket";
 
 function mergeMessages(current: MessageDto[], incoming: MessageDto[]): MessageDto[] {
   return [...new Map([...current, ...incoming].map((message) => [message.id, message])).values()].sort(

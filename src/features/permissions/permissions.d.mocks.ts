@@ -1,5 +1,5 @@
 import { permissionTemplates } from "./permissions.utils";
-import type { Permission, PositionPermission } from "@/features/companies/companyManagement.service";
+import type { Permission, PositionPermission } from "@/features/companies/company.management.service";
 
 function permissionLabel(permissionName: string): string {
   if (permissionName === "POST /auth/password/change") return "Alterar própria senha";

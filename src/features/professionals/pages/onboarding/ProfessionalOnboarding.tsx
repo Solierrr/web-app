@@ -13,7 +13,7 @@ import {
   createTechnician,
   getProfessions,
   type Profession,
-} from "@/features/professionals/professionalOnboarding.service";
+} from "@/features/professionals/professional.onboarding.service";
 import { validateCertificates, type CertificateValidationResult } from "@/shared/validation/aiValidation.service";
 import { validateCpf } from "@/utils/validation.utils";
 import RegistrationStatus from "@/components/feedback/registration-status/RegistrationStatus";

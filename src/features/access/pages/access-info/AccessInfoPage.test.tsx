@@ -2,9 +2,9 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 import AccessInfoPage from "./AccessInfoPage";
-import { redeemAccessCode } from "@/features/companies/companyManagement.service";
+import { redeemAccessCode } from "@/features/companies/company.management.service";
 
-vi.mock("@/features/companies/companyManagement.service", () => ({ redeemAccessCode: vi.fn() }));
+vi.mock("@/features/companies/company.management.service", () => ({ redeemAccessCode: vi.fn() }));
 
 describe("AccessInfoPage", () => {
   it("redeems the access code and shows an error on failure", async () => {

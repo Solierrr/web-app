@@ -8,8 +8,8 @@ import {
   getMockInvitations,
   redeemMockAccessCode,
   saveMockInvitations,
-} from "./companyManagement.d.mocks";
-import { getSelectedContext } from "@/features/access/onboarding.service";
+} from "./company.management.d.mocks";
+import { getSelectedContext } from "@/features/access/access.onboarding.service";
 import { permissionMocks, getMockPositionPermissions, saveMockPositionPermissions } from "@/features/permissions/permissions.d.mocks";
 
 const SERVICE_NAME = "companyManagement";

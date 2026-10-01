@@ -9,12 +9,12 @@ import {
   removeEmployee,
   revokeAccessCode,
   updateEmployeePosition,
-} from "./companyManagement.service";
+} from "./company.management.service";
 import { httpJson } from "@/shared/http/http.service";
 
 vi.mock("@/shared/http/http.service", () => ({ httpJson: vi.fn() }));
 
-describe("companyManagement.service", () => {
+describe("company.management.service", () => {
   it("creates a position with no default accesses", async () => {
     vi.mocked(httpJson).mockResolvedValue({ id: "position-1" });
     await createPosition("Instalador");

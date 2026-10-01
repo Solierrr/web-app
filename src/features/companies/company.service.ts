@@ -7,7 +7,7 @@ import { API_CORE_URL } from "@/shared/http/apiCore.utils";
 import { getMyUser } from "@/features/users/user/user.service";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
 import { getMockCompanyReviews, decideMockCompany } from "./company.d.mocks";
-import { getOperationalAccount } from "@/features/access/onboarding.service";
+import { getOperationalAccount } from "@/features/access/access.onboarding.service";
 import { CompanyStatus } from "./company.enum";
 
 const SERVICE_NAME = "company";
