@@ -1,0 +1,79 @@
+{
+  "roles": {
+    "admin": "Administração",
+    "demandant": "Demandante",
+    "supplier": "Fornecedor"
+  },
+  "shell": {
+    "openMenu": "Abrir menu",
+    "closeMenu": "Fechar menu",
+    "collapseSidebar": "Recolher menu lateral",
+    "expandSidebar": "Expandir menu lateral",
+    "loading": "Carregando área operacional...",
+    "brandPlaceholder": "Placeholder",
+    "context": "Contexto ativo",
+    "personal": "Pessoal",
+    "account": "Sua conta",
+    "skipContent": "Ir para o conteúdo",
+    "backToSite": "Voltar ao site",
+    "logout": "Sair"
+  },
+  "navigation": {
+    "label": "Navegação principal",
+    "groups": {
+      "overview": "Visão geral",
+      "catalog": "Catálogo",
+      "company": "Empresa",
+      "administration": "Administração"
+    },
+    "items": {
+      "dashboard": "Início",
+      "solarPanelModels": "Modelos de placas solares",
+      "messages": "Mensagens",
+      "companyProfile": "Perfil da empresa",
+      "offers": "Ofertas",
+      "units": "Unidades",
+      "employees": "Acessos e funcionários",
+      "registrations": "Cadastros",
+      "profile": "Meu perfil",
+      "settings": "Configurações",
+      "chatbot": "Assistente"
+    }
+  },
+  "dashboard": {
+    "title": "Visão geral",
+    "placeholder": "O painel global de administração será definido em uma próxima etapa.",
+    "demandant": {
+      "title": "Visão geral",
+      "placeholder": "O painel do Demandante será definido em uma próxima etapa."
+    },
+    "supplier": {
+      "title": "Visão geral",
+      "placeholder": "O painel do Fornecedor será definido em uma próxima etapa."
+    }
+  },
+  "page": {
+    "tabs": "Seções da página"
+  },
+  "home": {
+    "recent": "Recentes",
+    "shortcuts": "Atalhos",
+    "title": "O que você deseja fazer?",
+    "noRecent": "As telas visitadas aparecerão aqui.",
+    "noResults": "Nenhuma tela encontrada.",
+    "search": "Buscar uma tela"
+  },
+  "permissions": {
+    "title": "Permissões do cargo",
+    "saved": "Permissões salvas.",
+    "error": "Não foi possível salvar ou carregar as permissões.",
+    "choose": "Selecionar template",
+    "save": "Salvar permissões",
+    "template": "Template de permissões"
+  },
+  "details": {
+    "error": "Não foi possível carregar os detalhes.",
+    "position": "Cargo",
+    "back": "Voltar à lista"
+  }
+}

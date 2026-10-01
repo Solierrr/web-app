@@ -1,5 +1,7 @@
 import { httpJson } from "@/shared/http/http.service";
 import { API_CORE_URL } from "@/shared/http/apiCore.utils";
+import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
+import { getMockUnits, saveMockAddress, saveMockUnit, deleteMockUnit } from "./unit.d.mocks";
 
 const SERVICE_NAME = "unit";
 
@@ -26,7 +28,11 @@ export interface LocalUnit {
   locationType: "BUILDING" | "HOUSE" | "COMPLEX";
 }
 
-export function getMyRequester(companyId: string): Promise<Requester | null> {
+export async function getMyRequester(companyId: string): Promise<Requester | null> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    return { id: companyId, companyId };
+  }
   return httpJson<{ id: string; company: { id: string } }[]>(`${API_CORE_URL}/requesters/company/${encodeURIComponent(companyId)}`, {
     service: SERVICE_NAME,
     operation: "getMyRequester",
@@ -37,7 +43,11 @@ export function getMyRequester(companyId: string): Promise<Requester | null> {
   });
 }
 
-export function listCompanyUnits(companyId: string): Promise<LocalUnit[]> {
+export async function listCompanyUnits(companyId: string): Promise<LocalUnit[]> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    return getMockUnits(companyId);
+  }
   return httpJson<LocalUnit[]>(`${API_CORE_URL}/local-units/company/${encodeURIComponent(companyId)}`, {
     service: SERVICE_NAME,
     operation: "listCompanyUnits",
@@ -54,7 +64,11 @@ export interface AddressPayload {
   number?: string;
 }
 
-export function createAddress(payload: AddressPayload): Promise<{ id: string }> {
+export async function createAddress(payload: AddressPayload): Promise<{ id: string }> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    return saveMockAddress(payload);
+  }
   return httpJson<{ id: string }>(`${API_CORE_URL}/addresses`, {
     service: SERVICE_NAME,
     operation: "createAddress",
@@ -64,7 +78,11 @@ export function createAddress(payload: AddressPayload): Promise<{ id: string }> 
   });
 }
 
-export function createGeolocalization(addressId: string, latitude: number, longitude: number): Promise<{ id: string }> {
+export async function createGeolocalization(addressId: string, latitude: number, longitude: number): Promise<{ id: string }> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    return { id: crypto.randomUUID() };
+  }
   return httpJson<{ id: string }>(`${API_CORE_URL}/geolocalizations`, {
     service: SERVICE_NAME,
     operation: "createGeolocalization",
@@ -81,7 +99,11 @@ export interface UnitPayload {
   locationType: LocalUnit["locationType"];
 }
 
-export function createUnit(payload: UnitPayload): Promise<LocalUnit> {
+export async function createUnit(payload: UnitPayload): Promise<LocalUnit> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    return saveMockUnit(payload);
+  }
   return httpJson<LocalUnit>(`${API_CORE_URL}/local-units`, {
     service: SERVICE_NAME,
     operation: "createUnit",
@@ -91,7 +113,11 @@ export function createUnit(payload: UnitPayload): Promise<LocalUnit> {
   });
 }
 
-export function updateUnit(id: string, payload: UnitPayload): Promise<LocalUnit> {
+export async function updateUnit(id: string, payload: UnitPayload): Promise<LocalUnit> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    return saveMockUnit(payload, id);
+  }
   return httpJson<LocalUnit>(`${API_CORE_URL}/local-units/${encodeURIComponent(id)}`, {
     service: SERVICE_NAME,
     operation: "updateUnit",
@@ -101,7 +127,12 @@ export function updateUnit(id: string, payload: UnitPayload): Promise<LocalUnit>
   });
 }
 
-export function deleteUnit(id: string): Promise<void> {
+export async function deleteUnit(id: string): Promise<void> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    deleteMockUnit(id);
+    return;
+  }
   return httpJson<void>(`${API_CORE_URL}/local-units/${encodeURIComponent(id)}`, {
     service: SERVICE_NAME,
     operation: "deleteUnit",

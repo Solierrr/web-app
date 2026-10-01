@@ -9,17 +9,18 @@ interface ErrorBoundaryState {
   error: Error | null;
 }
 
-function ErrorFallback() {
+function ErrorFallback({ error }: { error: Error }) {
   const { t } = useTranslation("commons", { keyPrefix: "errorBoundary" });
 
   return (
-    <div>
-      <button
-        type="button"
-        onClick={() => window.location.reload()} >
+    <section className="flex flex-col gap-4 p-8">
+      <p>{t("label")}</p>
+      <h1>{t("title")}</h1>
+      <p>{error.message}</p>
+      <button type="button" onClick={() => window.location.reload()}>
         {t("reload")}
       </button>
-    </div>
+    </section>
   );
 }
 
@@ -38,7 +39,7 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
     const { error } = this.state;
 
     if (error) {
-      return <ErrorFallback />;
+      return <ErrorFallback error={error} />;
     }
 
     return this.props.children;

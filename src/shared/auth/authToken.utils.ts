@@ -15,8 +15,10 @@ export function getAuthSession(): AuthSession | null {
 
 export function setAuthSession(session: AuthSession): void {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
+  window.dispatchEvent(new Event("solaria:session"));
 }
 
 export function clearAuthSession(): void {
   localStorage.removeItem(STORAGE_KEY);
+  window.dispatchEvent(new Event("solaria:session"));
 }

@@ -20,8 +20,8 @@ describe("ProfessionalSearch", () => {
     mockedGetCatalogTechnicians.mockReset();
   });
 
-  it("renders the page heading and filter controls", () => {
-    mockedGetCatalogTechnicians.mockReturnValue(new Promise(() => {}));
+  it("renders the page heading and filter controls once the catalog loads", async () => {
+    mockedGetCatalogTechnicians.mockResolvedValue(items);
 
     render(
       <MemoryRouter>
@@ -29,7 +29,7 @@ describe("ProfessionalSearch", () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByRole("heading", { name: "Profissionais" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Profissionais" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "filtrar-busca" })).toBeInTheDocument();
     expect(screen.getByText("Instalação")).toBeInTheDocument();
   });

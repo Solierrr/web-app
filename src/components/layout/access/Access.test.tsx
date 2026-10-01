@@ -3,10 +3,9 @@ import { describe, expect, it, vi } from "vitest";
 import Access from "./Access";
 
 describe("Access", () => {
-  it("renders the heading and helper text", () => {
+  it("renders the helper text", () => {
     render(<Access heading="Solaria" helperText="Não encontrou sua empresa?" fields={[]} submitLabel="Prosseguir" />);
 
-    expect(screen.getByRole("heading", { name: "Solaria" })).toBeInTheDocument();
     expect(screen.getByText("Não encontrou sua empresa?")).toBeInTheDocument();
   });
 

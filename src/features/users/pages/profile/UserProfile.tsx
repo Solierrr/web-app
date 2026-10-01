@@ -1,3 +1,4 @@
+import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -45,11 +46,18 @@ export default function UserProfile() {
     }
   }
 
-  if (!user && !error) return <ProfilePageSkeleton />;
-  if (!user) return <p role="alert" className="p-6">{t("myProfile.loadError")}</p>;
+  if (!user && !error) return <ProfilePageSkeleton operational />;
+  if (!user)
+    return (
+      <OperationalPage title={t("settings.profile")}>
+        <p role="alert">{t("myProfile.loadError")}</p>
+      </OperationalPage>
+    );
 
   return (
     <ProfilePage
+      operational
+      operationalTitle={t("settings.profile")}
       bannerUrl={user.banner ?? undefined}
       avatarUrl={user.avatar ?? undefined}
       name={user.username}
@@ -58,8 +66,7 @@ export default function UserProfile() {
         <button type="button" onClick={() => setEditing((current) => !current)} className="rounded-full bg-orange px-4 py-2 text-white">
           {editing ? t("actions.cancel") : t("actions.edit")}
         </button>
-      }
-    >
+      }>
       {editing ? (
         <form onSubmit={handleSave} className="flex max-w-sm flex-col gap-3">
           <label htmlFor="username">{t("myProfile.username")}</label>
@@ -71,14 +78,18 @@ export default function UserProfile() {
             maxLength={30}
             pattern="[a-z0-9_]{3,30}"
             required
-            className="rounded-lg border border-gray-300 p-2"
+            className="rounded-small border border-operational-border p-2"
           />
-          <button type="submit" disabled={saving} className="rounded-lg bg-orange px-4 py-2 text-white disabled:opacity-50">
+          <button type="submit" disabled={saving} className="rounded-small bg-orange px-4 py-2 text-white disabled:opacity-50">
             {t("actions.save")}
           </button>
         </form>
       ) : null}
-      {error ? <p role="alert" className="text-red-700">{t("myProfile.saveError")}</p> : null}
+      {error ? (
+        <p role="alert" className="text-red-700">
+          {t("myProfile.saveError")}
+        </p>
+      ) : null}
     </ProfilePage>
   );
 }

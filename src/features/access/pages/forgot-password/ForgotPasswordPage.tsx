@@ -6,6 +6,7 @@ import Hyperlink from "@/components/ui/link/Hyperlink";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
 import { requestPasswordReset } from "@/config/firebase/auth/auth.service";
+import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
 
 export default function ForgotPasswordPage() {
   const { t } = useTranslation("access");
@@ -18,7 +19,8 @@ export default function ForgotPasswordPage() {
     const data = new FormData(event.currentTarget);
     setError(null);
     try {
-      await requestPasswordReset(String(data.get("email") ?? ""));
+      if (isAlwaysMockMode()) await waitForMockService();
+      else await requestPasswordReset(String(data.get("email") ?? ""));
       setSent(true);
     } catch {
       setError(t("forgotPassword.error"));

@@ -1,7 +1,6 @@
 import i18n from "@/config/inter/internationalization";
 import { isSupportedLanguage, type SupportedLanguage } from "@/config/inter/browser/languages";
 
-
 export const SEGMENT = [
   "solarPanels",
   "professionals",
@@ -19,6 +18,8 @@ export const SEGMENT = [
   "profileSetup",
   "user",
   "admin",
+  "supplier",
+  "demandant",
   "solarPanelModels",
   "messages",
   "chatbot",
@@ -31,7 +32,6 @@ export const SEGMENT = [
   "units",
   "registrations",
 ] as const;
-
 
 export type RouteSegmentKey = (typeof SEGMENT)[number];
 
@@ -62,6 +62,9 @@ export const routePaths = {
 
   login: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "login")}`,
   register: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "register")}`,
+  registerCompany: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "register", "company")}`,
+  registerProfessional: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "register", "professional")}`,
+  activateAccess: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "register", "access")}`,
   forgotPassword: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "forgotPassword")}`,
   verifyEmail: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "verifyEmail")}`,
 
@@ -78,6 +81,9 @@ export const routePaths = {
   profileOnboardingAccess: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "profileSetup", "access")}`,
 
   solarPanelModelsCrud: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin", "solarPanelModels")}`,
+  adminDashboard: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin")}`,
+  supplierDashboard: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "supplier")}`,
+  demandantDashboard: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "demandant")}`,
   employeesManagement: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin", "employees")}`,
   offersManagement: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin", "offers")}`,
   unitsManagement: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin", "units")}`,
@@ -88,12 +94,12 @@ export const routePaths = {
     `/${lang}/${joinSegments(lang, "messages", "company")}/${companyId}${productTitle ? `?product=${encodeURIComponent(productTitle)}` : ""}`,
   chat: (lang: SupportedLanguage, conversationId: string) => `/${lang}/${joinSegments(lang, "messages")}/${conversationId}`,
   chatbot: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "chatbot")}`,
+  operationalChatbot: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "dashboard", "chatbot")}`,
 
   settings: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "settings")}`,
   settingsSecurity: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "settings", "security")}`,
   dashboard: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "dashboard")}`,
 };
-
 
 export function translatePathToLanguage(pathname: string, targetLang: SupportedLanguage): string {
   const [, currentLang, ...rest] = pathname.split("/");

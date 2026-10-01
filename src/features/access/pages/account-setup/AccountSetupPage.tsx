@@ -1,3 +1,4 @@
+import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -16,23 +17,15 @@ export default function AccountSetupPage() {
   ];
 
   return (
-    <main className="mx-auto flex max-w-2xl flex-col gap-6 p-6">
-      <div>
-        <h1 className="text-2xl font-semibold">{t("title")}</h1>
-        <p className="text-gray-600">{t("description")}</p>
-      </div>
+    <OperationalPage title={t("title")} description={t("description")} compact>
       <div className="flex flex-col gap-3">
         {options.map((option) => (
-          <Link
-            key={option.to}
-            to={option.to}
-            className="rounded-xl border border-gray-200 p-4 hover:border-orange hover:bg-orange/5"
-          >
+          <Link key={option.to} to={option.to} className="rounded-small border border-operational-border p-4 hover:border-orange hover:bg-orange/5">
             <h2 className="font-medium">{option.title}</h2>
             <p className="text-sm text-gray-600">{option.description}</p>
           </Link>
         ))}
       </div>
-    </main>
+    </OperationalPage>
   );
 }

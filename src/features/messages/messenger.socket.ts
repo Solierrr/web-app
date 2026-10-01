@@ -3,6 +3,7 @@ import { Client } from "@stomp/stompjs";
 import type { MessageDto } from "./messenger.api";
 import { refresh } from "@/features/access/access.service";
 import { getAuthSession } from "@/shared/auth/authToken.utils";
+import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
 
 interface MessageEvent {
   type: string;
@@ -15,6 +16,10 @@ export function subscribeToConversations(
   onMessage: (message: MessageDto) => void,
   onConnectionChange?: (connected: boolean) => void,
 ): () => void {
+  if (isAlwaysMockMode()) {
+    onConnectionChange?.(true);
+    return () => undefined;
+  }
   const brokerURL = import.meta.env.VITE_WS_MESSENGER;
   if (!getAuthSession() || !brokerURL) {
     onConnectionChange?.(false);

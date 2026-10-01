@@ -1,54 +1,84 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { MemoryRouter } from "react-router-dom";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import DashboardPage from "./DashboardPage";
+import { rememberPage } from "../dashboard.utils";
 import { useActiveContext } from "@/shared/context/ActiveContext";
-import { getCatalogSolarPanels } from "@/features/solar-panel/solarPanel.service";
 
 vi.mock("@/shared/context/ActiveContext", () => ({ useActiveContext: vi.fn() }));
-vi.mock("@/features/solar-panel/solarPanel.service", () => ({ getCatalogSolarPanels: vi.fn() }));
+
+const supplier = { id: "c1", status: "APPROVED", type: "SUPPLIER", cnpj: "1", tradeName: "Solaria", corporateName: "Solaria Ltda", slug: "solaria" } as never;
+
+function renderPage() {
+  render(
+    <MemoryRouter>
+      <DashboardPage />
+    </MemoryRouter>,
+  );
+}
 
 describe("DashboardPage", () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
   it("shows a loading state", () => {
     vi.mocked(useActiveContext).mockReturnValue({ loading: true, kind: "personal", setKind: vi.fn(), company: null, isAdmin: false, hasCompany: false, isPlatformAdmin: false });
 
-    render(<DashboardPage />);
+    renderPage();
 
-    expect(screen.getByText("Carregando...")).toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent("Carregando área operacional...");
   });
 
-  it("shows the personal hint when there is no company", () => {
+  it("shows only the personal shortcuts when there is no company", () => {
     vi.mocked(useActiveContext).mockReturnValue({ loading: false, kind: "personal", setKind: vi.fn(), company: null, isAdmin: false, hasCompany: false, isPlatformAdmin: false });
 
-    render(<DashboardPage />);
+    renderPage();
 
-    expect(screen.getByText("Olá!")).toBeInTheDocument();
-    expect(screen.getByText(/Use o menu/)).toBeInTheDocument();
+    expect(screen.getByText("O que você deseja fazer?")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Mensagens" })).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Ofertas" })).not.toBeInTheDocument();
+    expect(screen.getByText("As telas visitadas aparecerão aqui.")).toBeInTheDocument();
   });
 
-  it("shows the offer count for a supplier company", async () => {
+  it("shows the company shortcuts for a supplier company", () => {
     vi.mocked(useActiveContext).mockReturnValue({
-      loading: false, kind: "company", setKind: vi.fn(), isAdmin: true, hasCompany: true, isPlatformAdmin: false,
-      company: { id: "c1", status: "APPROVED", type: "SUPPLIER", cnpj: "1", tradeName: "Solaria", corporateName: "Solaria Ltda", slug: "solaria" } as never,
+      loading: false, kind: "company", setKind: vi.fn(), company: supplier, isAdmin: true, hasCompany: true, isPlatformAdmin: false, can: () => true,
     });
-    vi.mocked(getCatalogSolarPanels).mockResolvedValue([
-      { companySlug: "solaria" } as never,
-      { companySlug: "other" } as never,
-    ]);
 
-    render(<DashboardPage />);
+    renderPage();
 
-    expect(screen.getByText("Olá, Solaria")).toBeInTheDocument();
-    expect(await screen.findByText("1")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Perfil da empresa" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Ofertas" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Modelos de placas solares" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Assistente" })).toBeInTheDocument();
   });
 
-  it("shows the more-metrics-soon note for a demandant company", () => {
+  it("filters the shortcuts by the search query and reports when nothing matches", () => {
     vi.mocked(useActiveContext).mockReturnValue({
-      loading: false, kind: "company", setKind: vi.fn(), isAdmin: true, hasCompany: true, isPlatformAdmin: false,
-      company: { id: "c1", status: "APPROVED", type: "DEMANDANT", cnpj: "1", tradeName: "Solaria", corporateName: "Solaria Ltda", slug: "solaria" } as never,
+      loading: false, kind: "company", setKind: vi.fn(), company: supplier, isAdmin: true, hasCompany: true, isPlatformAdmin: false, can: () => true,
     });
 
-    render(<DashboardPage />);
+    renderPage();
+    const search = screen.getByPlaceholderText("Buscar uma tela");
 
-    expect(screen.getByText(/Mais métricas/)).toBeInTheDocument();
+    fireEvent.change(search, { target: { value: "ofertas" } });
+    expect(screen.getByRole("link", { name: "Ofertas" })).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Mensagens" })).not.toBeInTheDocument();
+
+    fireEvent.change(search, { target: { value: "inexistente" } });
+    expect(screen.getByText("Nenhuma tela encontrada.")).toBeInTheDocument();
+  });
+
+  it("lists the recently visited screens", () => {
+    rememberPage("c1", "offers");
+    vi.mocked(useActiveContext).mockReturnValue({
+      loading: false, kind: "company", setKind: vi.fn(), company: supplier, isAdmin: true, hasCompany: true, isPlatformAdmin: false, can: () => true,
+    });
+
+    renderPage();
+
+    expect(screen.getAllByRole("link", { name: "Ofertas" })).toHaveLength(2);
+    expect(screen.queryByText("As telas visitadas aparecerão aqui.")).not.toBeInTheDocument();
   });
 });

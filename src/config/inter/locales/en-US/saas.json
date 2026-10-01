@@ -1,0 +1,79 @@
+{
+  "roles": {
+    "admin": "Administration",
+    "demandant": "Requester",
+    "supplier": "Supplier"
+  },
+  "shell": {
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "collapseSidebar": "Collapse sidebar",
+    "expandSidebar": "Expand sidebar",
+    "loading": "Loading workspace...",
+    "brandPlaceholder": "Placeholder",
+    "context": "Active context",
+    "personal": "Personal",
+    "account": "Your account",
+    "skipContent": "Skip to content",
+    "backToSite": "Back to site",
+    "logout": "Sign out"
+  },
+  "navigation": {
+    "label": "Main navigation",
+    "groups": {
+      "overview": "Overview",
+      "catalog": "Catalog",
+      "company": "Company",
+      "administration": "Administration"
+    },
+    "items": {
+      "dashboard": "Home",
+      "solarPanelModels": "Solar panel models",
+      "messages": "Messages",
+      "companyProfile": "Company profile",
+      "offers": "Offers",
+      "units": "Units",
+      "employees": "Access and employees",
+      "registrations": "Registrations",
+      "profile": "My profile",
+      "settings": "Settings",
+      "chatbot": "Assistant"
+    }
+  },
+  "dashboard": {
+    "title": "Overview",
+    "placeholder": "The global administration dashboard will be defined in a later stage.",
+    "demandant": {
+      "title": "Overview",
+      "placeholder": "The requester dashboard will be defined in a later stage."
+    },
+    "supplier": {
+      "title": "Overview",
+      "placeholder": "The supplier dashboard will be defined in a later stage."
+    }
+  },
+  "page": {
+    "tabs": "Page sections"
+  },
+  "home": {
+    "recent": "Recent",
+    "shortcuts": "Shortcuts",
+    "title": "What would you like to do?",
+    "noRecent": "Pages you visit will appear here.",
+    "noResults": "No pages found.",
+    "search": "Search for a page"
+  },
+  "permissions": {
+    "title": "Position permissions",
+    "saved": "Permissions saved.",
+    "error": "Unable to save or load permissions.",
+    "choose": "Select a template",
+    "save": "Save permissions",
+    "template": "Permission template"
+  },
+  "details": {
+    "error": "Unable to load details.",
+    "position": "Position",
+    "back": "Back to list"
+  }
+}

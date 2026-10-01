@@ -1,5 +1,7 @@
 import Skeleton from "@@/feedback/skeleton/Skeleton";
 import WrapperLayout from "@/config/WrapperLayout";
+import OperationalPage from "@@/layout/operational-page/OperationalPage";
+import { useTranslation } from "react-i18next";
 
 /**
  * ProfilePageSkeleton
@@ -8,7 +10,9 @@ import WrapperLayout from "@/config/WrapperLayout";
  * as páginas de perfil (usuário, empresa, profissional) enquanto o service
  * ainda não resolveu os dados.
  */
-export default function ProfilePageSkeleton() {
+export default function ProfilePageSkeleton({ operational = false }: { operational?: boolean }) {
+  const { t } = useTranslation("saas");
+  if (operational) return <OperationalPage title={t("navigation.items.profile")} profile loading />;
   return (
     <div aria-busy="true">
       <Skeleton height="15rem" className="rounded-none sm:h-80" />

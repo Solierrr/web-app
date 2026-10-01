@@ -15,6 +15,8 @@
   "profileSetup": "profile-setup",
   "user": "user",
   "admin": "admin",
+  "supplier": "supplier",
+  "demandant": "demandant",
   "solarPanelModels": "solar-panel-models",
   "messages": "messages",
   "chatbot": "chatbot",

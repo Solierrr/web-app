@@ -1,3 +1,4 @@
+import { MemoryRouter } from "react-router-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import UnitsPage from "./UnitsPage";
@@ -20,14 +21,14 @@ const company = { id: "company-1", status: "APPROVED", type: "DEMANDANT", cnpj: 
 describe("UnitsPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(useActiveContext).mockReturnValue({ loading: false, kind: "company", setKind: vi.fn(), company, isAdmin: true, hasCompany: true, isPlatformAdmin: false });
+    vi.mocked(useActiveContext).mockReturnValue({ loading: false, kind: "company", setKind: vi.fn(), company, isAdmin: true, hasCompany: true, isPlatformAdmin: false, can: () => true });
     vi.mocked(unitService.getMyRequester).mockResolvedValue({ id: "requester-1", companyId: "company-1" });
   });
 
   it("shows a fallback lat/lng input when no maps key is configured", async () => {
     vi.mocked(unitService.listCompanyUnits).mockResolvedValue([]);
 
-    render(<UnitsPage />);
+    render(<MemoryRouter><UnitsPage /></MemoryRouter>);
 
     expect(await screen.findByText(/Mapa interativo indisponível/)).toBeInTheDocument();
   });
@@ -39,7 +40,7 @@ describe("UnitsPage", () => {
       complement: null, locationType: "HOUSE",
     }]);
 
-    render(<UnitsPage />);
+    render(<MemoryRouter><UnitsPage /></MemoryRouter>);
 
     expect(await screen.findByText("Rua das Flores, 250")).toBeInTheDocument();
   });
@@ -49,7 +50,7 @@ describe("UnitsPage", () => {
     vi.mocked(unitService.createAddress).mockResolvedValue({ id: "address-1" });
     vi.mocked(unitService.createUnit).mockResolvedValue({} as never);
 
-    render(<UnitsPage />);
+    render(<MemoryRouter><UnitsPage /></MemoryRouter>);
     await screen.findByText("Nenhuma unidade cadastrada ainda.");
 
     fireEvent.change(screen.getByLabelText("CEP"), { target: { value: "13010000" } });
