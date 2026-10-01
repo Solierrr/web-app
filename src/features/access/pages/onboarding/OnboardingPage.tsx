@@ -42,7 +42,7 @@ import {
 } from "@/features/professionals/professional.onboarding.service";
 import { getMyUser } from "@/features/users/user/user.service";
 import { validateCertificates, validateCnpjCategory } from "@/lib/shared/validation/aiValidation.service";
-import Access from "@/lib/components/layout/access/Access";
+import OnboardingLayout from "@/lib/components/layout/onboarding/OnboardingLayout";
 import { useTranslation } from "react-i18next";
 
 export default function OnboardingPage({ kind }: { kind: RegistrationKind }) {
@@ -242,9 +242,12 @@ export default function OnboardingPage({ kind }: { kind: RegistrationKind }) {
   const accountFields =
     draft.step === accountStep && signedIn && (isMock || getCurrentFirebaseUser()?.email?.toLowerCase() === signedIn.email.toLowerCase());
   return (
-    <Access
-      heading={titles[draft.step]}
-      fields={[]}
+    <OnboardingLayout
+      title={titles[draft.step]}
+      steps={titles}
+      step={draft.step}
+      progressLabel={t("progress", { step: draft.step + 1, total: titles.length })}
+      eyebrow={`${kind === "company" ? t("company") : kind === "professional" ? t("professional") : t("invitation")} · ${t("progress", { step: draft.step + 1, total: titles.length })}`}
       busy={busy}
       error={error}
       onSubmit={(event) => void submit(event)}
@@ -272,13 +275,6 @@ export default function OnboardingPage({ kind }: { kind: RegistrationKind }) {
           </div>
         )
       }>
-      <div>
-        <p className="text-sm text-gray-500">
-          {kind === "company" ? t("company") : kind === "professional" ? t("professional") : t("invitation")} ·{" "}
-          {t("progress", { step: draft.step + 1, total: titles.length })}
-        </p>
-        <h1 className="mt-2 text-3xl font-semibold">{titles[draft.step]}</h1>
-      </div>
       {draft.step === finalStep ? (
         <div className="flex flex-col gap-5 rounded-xl border border-gray-200 p-6">
           <p>{kind === "invitation" ? t("invitationReady") : isMock ? t("mockReady") : t("pending")}</p>
@@ -367,6 +363,6 @@ export default function OnboardingPage({ kind }: { kind: RegistrationKind }) {
           )}
         </>
       )}
-    </Access>
+    </OnboardingLayout>
   );
 }

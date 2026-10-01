@@ -1,11 +1,18 @@
 {
   "fields": {
-    "email": { "placeholder": "seuemailaqui@email.com" },
-    "password": { "placeholder": "suasenhaaqui" },
-    "name": { "placeholder": "seunomeaqui" },
-    "confirmPassword": { "placeholder": "confirmesuasenha" }
+    "email": {
+      "placeholder": "seuemailaqui@email.com"
+    },
+    "password": {
+      "placeholder": "suasenhaaqui"
+    },
+    "name": {
+      "placeholder": "seunomeaqui"
+    },
+    "confirmPassword": {
+      "placeholder": "confirmesuasenha"
+    }
   },
-
   "login": {
     "helperTextPrefix": "Não encontrou sua empresa?",
     "contactSupport": "Contatar o suporte",
@@ -15,7 +22,6 @@
     "register": "Cadastre-se",
     "error": "E-mail ou senha inválidos"
   },
-
   "register": {
     "helperText": "Crie sua conta para acessar o marketplace",
     "submit": "Cadastrar",
@@ -24,7 +30,6 @@
     "passwordMismatch": "As senhas não coincidem",
     "error": "Não foi possível concluir o cadastro"
   },
-
   "forgotPassword": {
     "helperText": "Informe seu e-mail para receber as instruções de recuperação",
     "submit": "Enviar",
@@ -33,7 +38,6 @@
     "rememberedPasswordPrefix": "Lembrou a senha?",
     "backToLogin": "Voltar para o login"
   },
-
   "verifyEmail": {
     "title": "Verifique seu e-mail",
     "pending": "Enviamos um link de verificação para o seu e-mail. Verifique sua caixa de entrada.",
@@ -48,5 +52,14 @@
     "linkError": "Não foi possível confirmar a verificação. Verifique sua senha e tente novamente.",
     "linkSuccess": "E-mail verificado e vinculado com sucesso.",
     "noFirebaseAccount": "Não encontramos uma verificação em andamento. Volte para o cadastro ou fale com o suporte."
+  },
+  "resetPassword": {
+    "helperText": "Escolha uma nova senha com pelo menos 12 caracteres",
+    "submit": "Redefinir senha",
+    "success": "Senha redefinida. Entre com a nova senha.",
+    "error": "Não foi possível redefinir a senha. Peça um novo link e tente novamente.",
+    "invalidLink": "Este link de redefinição é inválido ou expirou.",
+    "mismatch": "As senhas não conferem.",
+    "requestNewLink": "Solicitar novo link"
   }
 }

@@ -1,12 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { authMock, createUserMock, signInMock, reloadMock, updatePasswordMock, signOutMock } = vi.hoisted(() => ({
+const { authMock, createUserMock, signInMock, reloadMock, updatePasswordMock, signOutMock, confirmResetMock } = vi.hoisted(() => ({
   authMock: { currentUser: null as unknown },
   createUserMock: vi.fn(),
   signInMock: vi.fn(),
   reloadMock: vi.fn(),
   updatePasswordMock: vi.fn(),
   signOutMock: vi.fn(),
+  confirmResetMock: vi.fn(),
 }));
 
 vi.mock("firebase/auth", () => ({
@@ -19,11 +20,12 @@ vi.mock("firebase/auth", () => ({
   reload: reloadMock,
   updatePassword: updatePasswordMock,
   signOut: signOutMock,
+  confirmPasswordReset: confirmResetMock,
 }));
 
 vi.mock("../firebase", () => ({ auth: authMock }));
 
-import { changePassword, getCurrentFirebaseUser, login, logout, register, reloadCurrentFirebaseUser } from "./auth.service";
+import { changePassword, completePasswordReset, getCurrentFirebaseUser, login, logout, register, reloadCurrentFirebaseUser } from "./auth.service";
 
 describe("auth.service", () => {
   beforeEach(() => {
@@ -72,5 +74,11 @@ describe("auth.service", () => {
 
     expect(signInMock).toHaveBeenCalledWith(authMock, "user@example.com", "old");
     expect(updatePasswordMock).toHaveBeenCalledWith(user, "new");
+  });
+
+  it("confirms the password reset with the emailed code", async () => {
+    await completePasswordReset("code-1", "new-password");
+
+    expect(confirmResetMock).toHaveBeenCalledWith(authMock, "code-1", "new-password");
   });
 });
