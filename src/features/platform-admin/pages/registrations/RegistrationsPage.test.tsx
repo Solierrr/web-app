@@ -1,5 +1,5 @@
 import { MemoryRouter } from "react-router-dom";
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import RegistrationsPage from "./RegistrationsPage";
 import type { Company } from "@/features/companies/company";
@@ -101,5 +101,32 @@ describe("RegistrationsPage", () => {
     render(<MemoryRouter><RegistrationsPage /></MemoryRouter>);
 
     expect(await screen.findByRole("alert")).toHaveTextContent("Não foi possível carregar os cadastros pendentes.");
+  });
+
+  it("shows every situation when the status filter is cleared and links to the detail", async () => {
+    vi.mocked(listAllCompanies).mockResolvedValue([pendingCompany, approvedCompany]);
+    vi.mocked(listSolarPanelModelsByStatus).mockResolvedValue([]);
+
+    render(<MemoryRouter><RegistrationsPage /></MemoryRouter>);
+    await screen.findByText("Fornecedora Solar");
+
+    fireEvent.change(screen.getByLabelText("Situação"), { target: { value: "ALL" } });
+
+    expect(screen.getByText("Já Aprovada")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Já Aprovada" })).toHaveAttribute("href", "/pt-BR/admin/cadastros/company/company-2");
+    expect(screen.getAllByRole("button", { name: "Aprovar" })).toHaveLength(1);
+  });
+
+  it("filters by registration type", async () => {
+    vi.mocked(listAllCompanies).mockResolvedValue([pendingCompany, { ...pendingCompany, id: "company-3", type: "DEMANDANT", tradeName: "Demandante Sul" } as unknown as Company]);
+    vi.mocked(listSolarPanelModelsByStatus).mockResolvedValue([]);
+
+    render(<MemoryRouter><RegistrationsPage /></MemoryRouter>);
+    await screen.findByText("Fornecedora Solar");
+
+    fireEvent.change(screen.getByLabelText("Tipo"), { target: { value: "DEMANDANT" } });
+
+    expect(screen.getByText("Demandante Sul")).toBeInTheDocument();
+    expect(screen.queryByText("Fornecedora Solar")).not.toBeInTheDocument();
   });
 });
