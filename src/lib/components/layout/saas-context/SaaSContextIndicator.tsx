@@ -6,10 +6,12 @@ export default function SaaSContextIndicator() {
   const { kind, company, isAdmin, isPlatformAdmin } = useActiveContext();
 
   if (kind === "company" && company) {
-    const type = company.type ? t(company.type) : null;
+    const type = company.type ? t(company.type, { defaultValue: "" }) : "";
     return (
-      <span className="min-w-0 truncate text-lower text-operational-muted">
-        {[type, company.tradeName, isAdmin ? t("admin") : t("member")].filter(Boolean).join(" · ")}
+      <span className="flex min-w-0 items-center text-lower text-operational-muted">
+        {type ? <span className="shrink-0">{type} ·&nbsp;</span> : null}
+        <span className="truncate">{company.tradeName}</span>
+        <span className="shrink-0">&nbsp;· {isAdmin ? t("admin") : t("member")}</span>
       </span>
     );
   }

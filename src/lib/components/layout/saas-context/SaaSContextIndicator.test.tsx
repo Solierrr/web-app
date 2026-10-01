@@ -30,7 +30,7 @@ describe("SaaSContextIndicator", () => {
 
     render(<SaaSContextIndicator />);
 
-    expect(screen.getByText("Fornecedora · Solar XPTO · Admin")).toBeInTheDocument();
+    expect(screen.getByText("Fornecedora ·").parentElement).toHaveTextContent("Fornecedora · Solar XPTO · Admin");
   });
 
   it("marks an employee access as access", () => {
@@ -38,6 +38,23 @@ describe("SaaSContextIndicator", () => {
 
     render(<SaaSContextIndicator />);
 
-    expect(screen.getByText("Demandante · Solar XPTO · Acesso")).toBeInTheDocument();
+    expect(screen.getByText("Demandante ·").parentElement).toHaveTextContent("Demandante · Solar XPTO · Acesso");
+  });
+
+  it("omits the type when the company has none", () => {
+    vi.mocked(useActiveContext).mockReturnValue({ ...base, kind: "company", company: { id: "c1", tradeName: "Solar XPTO" } as never, isAdmin: true, isPlatformAdmin: false });
+
+    render(<SaaSContextIndicator />);
+
+    expect(screen.getByText("Solar XPTO").parentElement).toHaveTextContent("Solar XPTO · Admin");
+  });
+
+  it("shows the personal profile when the company is selected away", () => {
+    vi.mocked(useActiveContext).mockReturnValue({ ...base, kind: "personal", company: company as never, isAdmin: true, isPlatformAdmin: true });
+
+    render(<SaaSContextIndicator />);
+
+    expect(screen.getByText("Admin Solaria")).toBeInTheDocument();
+    expect(screen.queryByText("Solar XPTO")).not.toBeInTheDocument();
   });
 });
