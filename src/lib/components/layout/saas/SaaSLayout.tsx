@@ -51,6 +51,7 @@ function SaaSLayoutContent() {
     company: companyContext,
     companyType: companyContext && company.status === CompanyStatus.APPROVED ? (company.type ?? null) : null,
     platformAdmin: isPlatformAdmin,
+    pendingRegistration: companyContext && company.status !== CompanyStatus.APPROVED,
     can: context.can,
   });
 

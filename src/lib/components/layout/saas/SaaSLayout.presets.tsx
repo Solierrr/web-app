@@ -5,10 +5,11 @@ interface NavigationContext {
   company: boolean;
   companyType: "SUPPLIER" | "DEMANDANT" | null;
   platformAdmin: boolean;
+  pendingRegistration?: boolean;
   can?: (permission: string) => boolean;
 }
 
-export function getOperationalNavigation({ company, companyType, platformAdmin, can = () => true }: NavigationContext): SaaSNavigationGroup[] {
+export function getOperationalNavigation({ company, companyType, platformAdmin, pendingRegistration = false, can = () => true }: NavigationContext): SaaSNavigationGroup[] {
   return [
     {
       key: "overview",
@@ -16,6 +17,9 @@ export function getOperationalNavigation({ company, companyType, platformAdmin, 
       items: [
         { key: "dashboard", label: "navigation.items.dashboard", icon: "home", to: routePaths.dashboard },
         { key: "messages", label: "navigation.items.messages", icon: "messages", to: routePaths.inbox },
+        ...(pendingRegistration
+          ? [{ key: "registrationStatus", label: "navigation.items.registrationStatus", icon: "building" as const, to: routePaths.registrationStatus }]
+          : []),
         ...(company || platformAdmin
           ? [{ key: "chatbot", label: "navigation.items.chatbot", icon: "messages" as const, to: routePaths.operationalChatbot }]
           : []),

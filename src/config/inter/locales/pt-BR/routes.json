@@ -30,5 +30,6 @@
   "registrations": "cadastros",
   "resetPassword": "redefinir-senha",
   "privacy": "privacidade",
-  "sessions": "sessoes"
+  "sessions": "sessoes",
+  "registrationStatus": "status-cadastro"
 }

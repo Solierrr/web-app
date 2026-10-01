@@ -113,7 +113,31 @@
     "noCompanies": "No pending companies.",
     "noModels": "No pending models.",
     "noProfessionals": "No professionals awaiting review.",
-    "professionalsTitle": "Independent professionals"
+    "professionalsTitle": "Independent professionals",
+    "status": {
+      "UNDER_ANALYSIS": "Under manual review",
+      "APPROVED": "Approved",
+      "REJECTED": "Rejected"
+    },
+    "statusFilter": "Status",
+    "typeFilter": "Type",
+    "all": "All",
+    "SUPPLIER": "Suppliers",
+    "DEMANDANT": "Demandants",
+    "PROFESSIONAL": "Professionals",
+    "details": "Details",
+    "detailTitle": "Request details",
+    "back": "Back to registrations",
+    "cnpj": "CNPJ",
+    "corporateName": "Corporate name",
+    "tradeName": "Trade name",
+    "type": "Type",
+    "crea": "CREA",
+    "name": "Name",
+    "notFound": "Request not found.",
+    "decisionError": "We could not record the decision.",
+    "statusLabel": "Status",
+    "detailError": "We could not load the request."
   },
   "settings": {
     "title": "Settings",
@@ -353,5 +377,18 @@
     "onlyCurrent": "For now you can only see and end the session on this device.",
     "error": "We could not load the sessions.",
     "revokeError": "We could not end the session."
+  },
+  "registrationStatusPage": {
+    "title": "Registration status",
+    "submitted": "Registration sent",
+    "manualReview": "Manual review",
+    "result": "Result",
+    "none": "You do not have a company registration yet.",
+    "loadError": "We could not load the registration status.",
+    "stage": {
+      "MANUAL_REVIEW": "Your registration is under manual review. We will let you know when there is a result.",
+      "APPROVED": "Registration approved. Company features are unlocked.",
+      "REJECTED": "Registration rejected. Contact support to review the data."
+    }
   }
 }

@@ -113,7 +113,31 @@
     "noCompanies": "No hay empresas pendientes.",
     "noModels": "No hay modelos pendientes.",
     "noProfessionals": "Ningún profesional pendiente de revisión.",
-    "professionalsTitle": "Profesionales independientes"
+    "professionalsTitle": "Profesionales independientes",
+    "status": {
+      "UNDER_ANALYSIS": "En análisis manual",
+      "APPROVED": "Aprobado",
+      "REJECTED": "Rechazado"
+    },
+    "statusFilter": "Situación",
+    "typeFilter": "Tipo",
+    "all": "Todos",
+    "SUPPLIER": "Proveedoras",
+    "DEMANDANT": "Demandantes",
+    "PROFESSIONAL": "Profesionales",
+    "details": "Detalles",
+    "detailTitle": "Detalles de la solicitud",
+    "back": "Volver a los registros",
+    "cnpj": "CNPJ",
+    "corporateName": "Razón social",
+    "tradeName": "Nombre comercial",
+    "type": "Tipo",
+    "crea": "CREA",
+    "name": "Nombre",
+    "notFound": "Solicitud no encontrada.",
+    "decisionError": "No se pudo registrar la decisión.",
+    "statusLabel": "Situación",
+    "detailError": "No se pudo cargar la solicitud."
   },
   "settings": {
     "title": "Configuración",
@@ -353,5 +377,18 @@
     "onlyCurrent": "Por ahora solo puedes ver y cerrar la sesión de este dispositivo.",
     "error": "No se pudieron cargar las sesiones.",
     "revokeError": "No se pudo cerrar la sesión."
+  },
+  "registrationStatusPage": {
+    "title": "Estado del registro",
+    "submitted": "Registro enviado",
+    "manualReview": "Análisis manual",
+    "result": "Resultado",
+    "none": "Todavía no tienes un registro de empresa.",
+    "loadError": "No se pudo cargar el estado del registro.",
+    "stage": {
+      "MANUAL_REVIEW": "Tu registro está en análisis manual. Te avisaremos cuando haya un resultado.",
+      "APPROVED": "Registro aprobado. Las funciones de la empresa están habilitadas.",
+      "REJECTED": "Registro rechazado. Habla con soporte para revisar los datos."
+    }
   }
 }

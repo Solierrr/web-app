@@ -20,6 +20,7 @@ export default function DashboardPage() {
     company: companyContext,
     companyType: companyContext && company.status === CompanyStatus.APPROVED ? (company.type ?? null) : null,
     platformAdmin: isPlatformAdmin,
+    pendingRegistration: companyContext && company.status !== CompanyStatus.APPROVED,
     can,
   }).map((group) => ({ ...group, items: group.items.filter((item) => item.key !== "dashboard") }));
   const items = groups.flatMap((group) => group.items);
