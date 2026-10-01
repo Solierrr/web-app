@@ -100,13 +100,13 @@ describe("Button", () => {
   it("defaults to icon after content (flex-row-reverse) when inverse is not set", () => {
     render(<Button content="Buscar" description="desc" icon={{ name: "search" }} />);
 
-    expect(screen.getByRole("button")).toHaveClass("flex-row-reverse");
+    expect(screen.getByRole("button").firstElementChild).toHaveClass("flex-row-reverse");
   });
 
   it("places the icon before content (flex-row) when icon.inverse is true", () => {
     render(<Button content="Buscar" description="desc" icon={{ name: "search", inverse: true }} />);
 
-    expect(screen.getByRole("button")).toHaveClass("flex-row");
+    expect(screen.getByRole("button").firstElementChild).toHaveClass("flex-row");
   });
 
   it("forces a 1:1 rounded shape when there is no content, ignoring the rounded prop", () => {
@@ -131,8 +131,7 @@ describe("Button", () => {
       vi.useRealTimers();
     });
 
-    it("calls action and shows the animated loading label while it resolves", async () => {
-      vi.useFakeTimers();
+    it("calls action and shows a spinner in place of the label while it resolves", async () => {
       let resolveAction!: () => void;
       const action = vi.fn(
         () =>
@@ -141,7 +140,7 @@ describe("Button", () => {
           }),
       );
 
-      render(<Button content="Salvar" description="desc" action={action} />);
+      const { container } = render(<Button content="Salvar" description="desc" action={action} />);
       const button = screen.getByRole("button");
 
       await act(async () => {
@@ -150,17 +149,9 @@ describe("Button", () => {
 
       expect(action).toHaveBeenCalledTimes(1);
       expect(button).toBeDisabled();
-      expect(button).toHaveTextContent("carregando.");
-
-      await act(async () => {
-        vi.advanceTimersByTime(400);
-      });
-      expect(button).toHaveTextContent("carregando..");
-
-      await act(async () => {
-        vi.advanceTimersByTime(400);
-      });
-      expect(button).toHaveTextContent("carregando...");
+      expect(button).toHaveAttribute("aria-busy", "true");
+      expect(container.querySelector(".animate-spin")).toBeInTheDocument();
+      expect(button.firstElementChild).toHaveClass("invisible");
 
       await act(async () => {
         resolveAction();
@@ -168,6 +159,8 @@ describe("Button", () => {
       });
 
       expect(button).not.toBeDisabled();
+      expect(button).toHaveAttribute("aria-busy", "false");
+      expect(container.querySelector(".animate-spin")).not.toBeInTheDocument();
       expect(button).toHaveTextContent("Salvar");
     });
 
