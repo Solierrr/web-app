@@ -27,5 +27,8 @@
   "employees": "funcionarios",
   "offers": "ofertas",
   "units": "unidades",
-  "registrations": "cadastros"
+  "registrations": "cadastros",
+  "resetPassword": "redefinir-senha",
+  "privacy": "privacidade",
+  "sessions": "sessoes"
 }

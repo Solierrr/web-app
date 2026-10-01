@@ -1,11 +1,18 @@
 {
   "fields": {
-    "email": { "placeholder": "youremailhere@email.com" },
-    "password": { "placeholder": "yourpasswordhere" },
-    "name": { "placeholder": "yournamehere" },
-    "confirmPassword": { "placeholder": "confirmyourpassword" }
+    "email": {
+      "placeholder": "youremailhere@email.com"
+    },
+    "password": {
+      "placeholder": "yourpasswordhere"
+    },
+    "name": {
+      "placeholder": "yournamehere"
+    },
+    "confirmPassword": {
+      "placeholder": "confirmyourpassword"
+    }
   },
-
   "login": {
     "helperTextPrefix": "Can't find your company?",
     "contactSupport": "Contact support",
@@ -15,7 +22,6 @@
     "register": "Sign up",
     "error": "Invalid email or password"
   },
-
   "register": {
     "helperText": "Create your account to access the marketplace",
     "submit": "Register",
@@ -24,7 +30,6 @@
     "passwordMismatch": "Passwords do not match",
     "error": "Could not complete the registration"
   },
-
   "forgotPassword": {
     "helperText": "Enter your email to receive recovery instructions",
     "submit": "Send",
@@ -33,7 +38,6 @@
     "rememberedPasswordPrefix": "Remembered your password?",
     "backToLogin": "Back to login"
   },
-
   "verifyEmail": {
     "title": "Verify your email",
     "pending": "We sent a verification link to your email. Check your inbox.",
@@ -48,5 +52,14 @@
     "linkError": "Could not confirm the verification. Check your password and try again.",
     "linkSuccess": "Email verified and linked successfully.",
     "noFirebaseAccount": "We couldn't find a verification in progress. Go back to registration or contact support."
+  },
+  "resetPassword": {
+    "helperText": "Choose a new password with at least 12 characters",
+    "submit": "Reset password",
+    "success": "Password reset. Sign in with your new password.",
+    "error": "We could not reset the password. Request a new link and try again.",
+    "invalidLink": "This reset link is invalid or has expired.",
+    "mismatch": "The passwords do not match.",
+    "requestNewLink": "Request a new link"
   }
 }

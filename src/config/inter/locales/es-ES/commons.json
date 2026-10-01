@@ -118,7 +118,9 @@
   "settings": {
     "title": "Configuración",
     "profile": "Perfil",
-    "security": "Seguridad"
+    "security": "Seguridad",
+    "privacy": "Privacidad",
+    "sessions": "Sesiones y dispositivos"
   },
   "settingsSecurity": {
     "title": "Seguridad",
@@ -312,5 +314,24 @@
   },
   "empty": {
     "default": "no se encontraron resultados."
+  },
+  "settingsPrivacy": {
+    "title": "Privacidad",
+    "description": "Elige qué pueden ver los demás usuarios.",
+    "showContact": "Mostrar mis datos de contacto en el perfil público",
+    "showInSearch": "Aparecer en los resultados de búsqueda",
+    "save": "Guardar",
+    "saved": "Preferencias guardadas."
+  },
+  "settingsSessions": {
+    "title": "Sesiones y dispositivos",
+    "description": "Dispositivos con acceso a tu cuenta.",
+    "current": "Este dispositivo",
+    "lastActive": "Último acceso: {{date}}",
+    "revoke": "Cerrar sesión",
+    "revoked": "Sesión cerrada.",
+    "signOut": "Salir de este dispositivo",
+    "onlyCurrent": "Por ahora solo puedes ver y cerrar la sesión de este dispositivo.",
+    "error": "No se pudieron cargar las sesiones."
   }
 }

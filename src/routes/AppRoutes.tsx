@@ -40,6 +40,9 @@ import ForgotPasswordPage from "@/features/access/pages/forgot-password/ForgotPa
 import VerifyEmailPage from "@/features/access/pages/verify-email/VerifyEmailPage";
 import SettingsPage from "@/features/settings/pages/SettingsPage";
 import SettingsSecurityPage from "@/features/settings/pages/security/SettingsSecurityPage";
+import SettingsPrivacyPage from "@/features/settings/pages/privacy/SettingsPrivacyPage";
+import SettingsSessionsPage from "@/features/settings/pages/sessions/SettingsSessionsPage";
+import ResetPasswordPage from "@/features/access/pages/reset-password/ResetPasswordPage";
 import DashboardPage from "@/features/dashboard/pages/DashboardPage";
 import EmployeesPage from "@/features/companies/pages/employees/EmployeesPage";
 import EmployeePage from "@/features/companies/pages/employees/EmployeePage";
@@ -70,6 +73,7 @@ const ACCESS: RouteDefinition[] = [
   },
   { key: "activateAccess", path: (lang) => joinSegments(lang, "register", "access"), element: <OnboardingPage key="invitation" kind="invitation" /> },
   { key: "forgotPassword", path: (lang) => joinSegments(lang, "forgotPassword"), element: <ForgotPasswordPage /> },
+  { key: "resetPassword", path: (lang) => joinSegments(lang, "resetPassword"), element: <ResetPasswordPage /> },
 ];
 
 const APP: RouteDefinition[] = [
@@ -133,6 +137,8 @@ const SAAS: RouteDefinition[] = [
   { key: "verifyEmail", path: (lang) => joinSegments(lang, "verifyEmail"), element: <VerifyEmailPage /> },
   { key: "settings", path: (lang) => joinSegments(lang, "settings"), element: <SettingsPage /> },
   { key: "settingsSecurity", path: (lang) => joinSegments(lang, "settings", "security"), element: <SettingsSecurityPage /> },
+  { key: "settingsPrivacy", path: (lang) => joinSegments(lang, "settings", "privacy"), element: <SettingsPrivacyPage /> },
+  { key: "settingsSessions", path: (lang) => joinSegments(lang, "settings", "sessions"), element: <SettingsSessionsPage /> },
   { key: "accountSetup", path: (lang) => joinSegments(lang, "profileSetup"), element: <AccountSetupPage /> },
   { key: "profileOnboardingCompany", path: (lang) => joinSegments(lang, "profileSetup", "company"), element: <CompanyOnboarding /> },
   { key: "profileOnboardingProfessional", path: (lang) => joinSegments(lang, "profileSetup", "professional"), element: <ProfessionalOnboarding /> },

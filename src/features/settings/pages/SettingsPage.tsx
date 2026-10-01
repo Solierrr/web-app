@@ -19,6 +19,12 @@ export default function SettingsPage() {
         <Link to={routePaths.settingsSecurity(lang)} className="block p-4 hover:bg-operational-hover">
           {t("security")}
         </Link>
+        <Link to={routePaths.settingsPrivacy(lang)} className="block p-4 hover:bg-operational-hover">
+          {t("privacy")}
+        </Link>
+        <Link to={routePaths.settingsSessions(lang)} className="block p-4 hover:bg-operational-hover">
+          {t("sessions")}
+        </Link>
       </nav>
     </OperationalPage>
   );
