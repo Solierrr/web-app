@@ -1,3 +1,4 @@
+import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { useState, type FormEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -30,24 +31,27 @@ export default function AccessInfoPage() {
   }
 
   return (
-    <main className="mx-auto flex max-w-md flex-col gap-4 p-6">
-      <h1 className="text-2xl font-semibold">{t("title")}</h1>
-      <p className="text-gray-600">{t("description")}</p>
+    <OperationalPage title={t("title")} description={t("description")} compact>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-        <label className="flex flex-col gap-1">{t("code")}
+        <label className="flex flex-col gap-1">
+          {t("code")}
           <input
             value={code}
             onChange={(event) => setCode(event.target.value)}
             maxLength={8}
             required
-            className="rounded-lg border border-gray-300 p-2 font-mono uppercase"
+            className="rounded-small border border-operational-border p-2 font-mono uppercase"
           />
         </label>
-        {error ? <p role="alert" className="text-red-700">{t("error")}</p> : null}
-        <button type="submit" disabled={saving || !code.trim()} className="rounded-lg bg-orange px-5 py-2 text-white disabled:opacity-50">
+        {error ? (
+          <p role="alert" className="text-red-700">
+            {t("error")}
+          </p>
+        ) : null}
+        <button type="submit" disabled={saving || !code.trim()} className="rounded-small bg-orange px-5 py-2 text-white disabled:opacity-50">
           {t("submit")}
         </button>
       </form>
-    </main>
+    </OperationalPage>
   );
 }

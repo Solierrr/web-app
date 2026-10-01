@@ -1,8 +1,13 @@
-import { Home, User, Settings, Search, ChevronDown, ChevronLeft, X, Eye, EyeOff, ShoppingCart, Globe, type LucideIcon, Heart, LoaderCircle, Building2 } from "lucide-react";
+import { Menu, LogOut, MessageSquare, Users, PanelsTopLeft, Home, User, Settings, Search, ChevronDown, ChevronLeft, X, Eye, EyeOff, ShoppingCart, Globe, type LucideIcon, Heart, LoaderCircle, Building2 } from "lucide-react";
 import Colors from "@/shared/styles/colors/colors.enum";
 import { InvalidIconError } from "@/config/error/InvalidIcon.error";
 
 const icons = {
+  menu: Menu,
+  logout: LogOut,
+  messages: MessageSquare,
+  users: Users,
+  panels: PanelsTopLeft,
   home: Home,
   user: User,
   settings: Settings,

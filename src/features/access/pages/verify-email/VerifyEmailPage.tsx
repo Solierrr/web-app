@@ -1,19 +1,21 @@
+import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import { Link, useParams } from "react-router-dom";
+import { routePaths } from "@/config/inter/paths";
+import { DEFAULT, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { useTranslation } from "react-i18next";
 
 import { getAuthSession } from "@/shared/auth/authToken.utils";
 import { linkFirebase } from "@/features/access/access.service";
-import {
-  getCurrentFirebaseUser,
-  reloadCurrentFirebaseUser,
-  sendVerificationEmail,
-} from "@/config/firebase/auth/auth.service";
+import { getCurrentFirebaseUser, reloadCurrentFirebaseUser, sendVerificationEmail } from "@/config/firebase/auth/auth.service";
 
 const RESEND_COOLDOWN_SECONDS = 60;
 
 type Status = "checking" | "no-account" | "pending" | "verified";
 
 export default function VerifyEmailPage() {
+  const { lang: langParam } = useParams<{ lang: string }>();
+  const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT;
   const { t } = useTranslation("access", { keyPrefix: "verifyEmail" });
   const [status, setStatus] = useState<Status>("checking");
   const [cooldown, setCooldown] = useState(0);
@@ -26,16 +28,18 @@ export default function VerifyEmailPage() {
 
   useEffect(() => {
     let active = true;
-    reloadCurrentFirebaseUser().then((user) => {
-      if (!active) return;
-      if (!user) {
-        setStatus("no-account");
-      } else {
-        setStatus(user.emailVerified ? "verified" : "pending");
-      }
-    }).catch(() => {
-      if (active) setStatus("no-account");
-    });
+    reloadCurrentFirebaseUser()
+      .then((user) => {
+        if (!active) return;
+        if (!user || user.email?.toLowerCase() !== getAuthSession()?.email?.toLowerCase()) {
+          setStatus("no-account");
+        } else {
+          setStatus(user.emailVerified ? "verified" : "pending");
+        }
+      })
+      .catch(() => {
+        if (active) setStatus("no-account");
+      });
     return () => {
       active = false;
     };
@@ -68,7 +72,7 @@ export default function VerifyEmailPage() {
     event.preventDefault();
     const user = getCurrentFirebaseUser();
     const email = getAuthSession()?.email;
-    if (!user || !email) return;
+    if (!user || !email || user.email?.toLowerCase() !== email.toLowerCase()) return;
     setLinking(true);
     setLinkError(false);
     try {
@@ -83,27 +87,33 @@ export default function VerifyEmailPage() {
   }
 
   if (status === "checking") {
-    return <p className="p-6">{t("checking")}</p>;
+    return <OperationalPage title={t("title")} compact loading />;
   }
 
   if (status === "no-account") {
-    return <p className="p-6">{t("noFirebaseAccount")}</p>;
+    return (
+      <OperationalPage title={t("title")} compact>
+        <p>{t("noFirebaseAccount")}</p>
+        <Link to={routePaths.login(lang)}>{t("linkTitle")}</Link>
+      </OperationalPage>
+    );
   }
 
   return (
-    <main className="mx-auto flex max-w-md flex-col gap-4 p-6">
-      <h1 className="text-2xl font-semibold">{t("title")}</h1>
-
+    <OperationalPage title={t("title")} compact>
       {status === "pending" ? (
         <>
           <p>{t("pending")}</p>
-          {resendError ? <p role="alert" className="text-red-700">{t("resendError")}</p> : null}
+          {resendError ? (
+            <p role="alert" className="text-red-700">
+              {t("resendError")}
+            </p>
+          ) : null}
           <button
             type="button"
             disabled={cooldown > 0}
             onClick={() => void handleResend()}
-            className="self-start rounded-lg bg-orange px-4 py-2 text-white disabled:opacity-50"
-          >
+            className="self-start rounded-small bg-orange px-4 py-2 text-white disabled:opacity-50">
             {cooldown > 0 ? t("resendCooldown", { seconds: cooldown }) : t("resend")}
           </button>
         </>
@@ -121,16 +131,20 @@ export default function VerifyEmailPage() {
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
                 required
-                className="rounded-lg border border-gray-300 p-2"
+                className="rounded-small border border-operational-border p-2"
               />
             </label>
-            {linkError ? <p role="alert" className="text-red-700">{t("linkError")}</p> : null}
-            <button type="submit" disabled={linking} className="rounded-lg bg-orange px-4 py-2 text-white disabled:opacity-50">
+            {linkError ? (
+              <p role="alert" className="text-red-700">
+                {t("linkError")}
+              </p>
+            ) : null}
+            <button type="submit" disabled={linking} className="rounded-small bg-orange px-4 py-2 text-white disabled:opacity-50">
               {t("linkSubmit")}
             </button>
           </form>
         </>
       )}
-    </main>
+    </OperationalPage>
   );
 }

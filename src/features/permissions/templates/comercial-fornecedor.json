@@ -1,0 +1,17 @@
+{
+  "title": "Comercial fornecedor",
+  "companyTypes": [
+    "SUPPLIER"
+  ],
+  "permissions": [
+    "GET /api/offers/company/{companyId}",
+    "POST /api/offers",
+    "PUT /api/offers/{id}",
+    "DELETE /api/offers/{id}",
+    "GET /api/models",
+    "POST /auth/password/change",
+    "POST /auth/password/recovery",
+    "GET /api/suppliers/company/{companyId}",
+    "GET /api/models/status/{status}"
+  ]
+}

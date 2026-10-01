@@ -7,6 +7,7 @@ export interface SolarPanelDimension {
 
 export interface SolarPanel {
   id: string;
+  creatorCompanyId?: string | null;
   brand?: string;
   model?: string;
   type?: SolarPanelType;

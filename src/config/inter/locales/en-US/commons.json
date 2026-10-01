@@ -111,7 +111,9 @@
     "approve": "Approve",
     "reject": "Reject",
     "noCompanies": "No pending companies.",
-    "noModels": "No pending models."
+    "noModels": "No pending models.",
+    "noProfessionals": "No professionals awaiting review.",
+    "professionalsTitle": "Independent professionals"
   },
   "settings": {
     "title": "Settings",

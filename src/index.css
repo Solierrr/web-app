@@ -3,6 +3,16 @@
 @import "tw-shimmer";
 
 @theme {
+  --color-operational-border: #e5e7eb;
+  --color-operational-hover: #f3f4f6;
+  --color-operational-muted: #62676f;
+  --color-operational-ink: #242628;
+  --color-operational-surface: #fafafa;
+  --text-operational-title: 1.5rem;
+  --spacing-operational-form: 48rem;
+  --spacing-operational-page: 88rem;
+  --spacing-operational-copy: 44rem;
+  --animate-operational-progress: operational-progress 1.4s ease-in-out infinite;
   --color-white: #FFFFFF;
   --color-gray:  #797979;
   --color-black: #444444;
@@ -155,4 +165,25 @@
     opacity: 1;
     transform: scale(1);
   }
+}
+
+@keyframes operational-progress {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(300%); }
+}
+
+@layer components {
+  .operational-shell {
+    @apply text-operational-ink;
+  }
+  .operational-page :is(input, select, textarea) {
+    @apply min-w-0 max-w-full rounded-small border-operational-border;
+  }
+  .operational-page :is(h2, h3) {
+    @apply text-label font-semi-bold;
+  }
+}
+
+.operational-shell * {
+  font-family: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
 }

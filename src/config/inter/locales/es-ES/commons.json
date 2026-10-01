@@ -111,7 +111,9 @@
     "approve": "Aprobar",
     "reject": "Rechazar",
     "noCompanies": "No hay empresas pendientes.",
-    "noModels": "No hay modelos pendientes."
+    "noModels": "No hay modelos pendientes.",
+    "noProfessionals": "Ningún profesional pendiente de revisión.",
+    "professionalsTitle": "Profesionales independientes"
   },
   "settings": {
     "title": "Configuración",

@@ -1,16 +1,13 @@
 import logger from "@/config/logging/logger";
-import sleep from "@/utils/sleep.utils";
+import { getMocksMode, waitForMockService } from "./mockMode.utils";
 
 import MocksMode from "./mocksMode.enum";
 
-const NAP_TIME_MS = 2000;
-
 export async function resolveWithMocks<T>(apiCall: () => Promise<T>, mockCall: () => T | Promise<T>): Promise<T> {
-  const mode = import.meta.env.VITE_MOCKS as MocksMode;
+  const mode = getMocksMode();
 
   async function takeNap() {
-    await sleep(NAP_TIME_MS);
-    logger.info(`Mocks called before ${NAP_TIME_MS} ms`);
+    await waitForMockService();
   }
 
   if (mode === MocksMode.ALWAYS) {

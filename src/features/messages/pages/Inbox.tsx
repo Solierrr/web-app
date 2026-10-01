@@ -1,3 +1,4 @@
+import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -38,12 +39,20 @@ export default function Inbox() {
           if (nextKey !== subscriptionKey) {
             subscriptionKey = nextKey;
             unsubscribe();
-            unsubscribe = ids.length ? subscribeToConversations(ids, () => { void reload(); }) : () => undefined;
+            unsubscribe = ids.length
+              ? subscribeToConversations(ids, () => {
+                  void reload();
+                })
+              : () => undefined;
           }
         }
-        const otherIds = [...new Set(direct.flatMap((conversation) => conversation.participantIds.filter((id) => id !== currentUserId && !knownNames[id])))];
+        const otherIds = [
+          ...new Set(direct.flatMap((conversation) => conversation.participantIds.filter((id) => id !== currentUserId && !knownNames[id]))),
+        ];
         const names = await Promise.allSettled(otherIds.map((id) => getUserSummary(id)));
-        names.forEach((result, index) => { if (result.status === "fulfilled") knownNames[otherIds[index]] = result.value.username; });
+        names.forEach((result, index) => {
+          if (result.status === "fulfilled") knownNames[otherIds[index]] = result.value.username;
+        });
         if (active) setParticipantNames({ ...knownNames });
       } catch {
         if (active) setError(true);
@@ -53,7 +62,9 @@ export default function Inbox() {
       }
     }
     void reload();
-    const onVisible = () => { if (!document.hidden) void reload(); };
+    const onVisible = () => {
+      if (!document.hidden) void reload();
+    };
     const interval = setInterval(onVisible, 20_000);
     document.addEventListener("visibilitychange", onVisible);
     return () => {
@@ -65,30 +76,34 @@ export default function Inbox() {
   }, []);
 
   return (
-    <main className="mx-auto max-w-4xl p-6">
-      <h1 className="mb-6 text-2xl font-semibold">{t("inbox")}</h1>
-      {loading ? <p>{t("loading")}</p> : null}
+    <OperationalPage title={t("inbox")} loading={loading}>
       {error ? <p role="alert">{t("loadError")}</p> : null}
       {!loading && !error && conversations.length === 0 ? <p>{t("emptyInbox")}</p> : null}
-      <ul className="divide-y divide-gray-200 rounded-xl border border-gray-200">
-        {conversations.map((conversation) => (
-          <li key={conversation.id}>
-            <Link to={routePaths.chat(lang, conversation.id)} className="block p-4 hover:bg-gray-50">
-              <span className="font-medium">{conversation.title || conversation.participantIds.map((id) => participantNames[id]).find(Boolean) || t("conversation")}</span>
-              {conversation.unreadCount > 0 ? (
-                <span className="ml-2 rounded-full bg-orange px-2 py-1 text-xs text-white" aria-label={t("unreadCount", { count: conversation.unreadCount })}>
-                  {conversation.unreadCount}
+      {conversations.length > 0 && (
+        <ul className="divide-y divide-operational-border rounded-small border border-operational-border">
+          {conversations.map((conversation) => (
+            <li key={conversation.id}>
+              <Link to={routePaths.chat(lang, conversation.id)} className="block p-4 hover:bg-operational-hover">
+                <span className="font-medium">
+                  {conversation.title || conversation.participantIds.map((id) => participantNames[id]).find(Boolean) || t("conversation")}
                 </span>
-              ) : null}
-              {conversation.lastInteractionAt ? (
-                <time className="ml-3 text-sm text-gray-500" dateTime={conversation.lastInteractionAt}>
-                  {new Date(conversation.lastInteractionAt).toLocaleString(lang)}
-                </time>
-              ) : null}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </main>
+                {conversation.unreadCount > 0 ? (
+                  <span
+                    className="ml-2 rounded-full bg-orange px-2 py-1 text-xs text-white"
+                    aria-label={t("unreadCount", { count: conversation.unreadCount })}>
+                    {conversation.unreadCount}
+                  </span>
+                ) : null}
+                {conversation.lastInteractionAt ? (
+                  <time className="ml-3 text-sm text-gray-500" dateTime={conversation.lastInteractionAt}>
+                    {new Date(conversation.lastInteractionAt).toLocaleString(lang)}
+                  </time>
+                ) : null}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+    </OperationalPage>
   );
 }

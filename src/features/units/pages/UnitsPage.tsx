@@ -1,5 +1,9 @@
+import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { useEffect, useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
+import { Link, useParams } from "react-router-dom";
+import { DEFAULT, isSupportedLanguage } from "@/config/inter/browser/languages";
+import { routePaths } from "@/config/inter/paths";
 
 import { useActiveContext } from "@/shared/context/ActiveContext";
 import {
@@ -29,7 +33,9 @@ const EMPTY_FORM: FormState = { state: "", city: "", neighborhood: "", zipCode: 
 
 export default function UnitsPage() {
   const { t } = useTranslation("commons", { keyPrefix: "unitsManagement" });
-  const { company, loading: contextLoading } = useActiveContext();
+  const { company, can = () => false, loading: contextLoading } = useActiveContext();
+  const { lang: parameter } = useParams<{ lang: string }>();
+  const lang = isSupportedLanguage(parameter) ? parameter : DEFAULT;
   const companyId = company?.id;
 
   const [requesterId, setRequesterId] = useState<string | null>(null);
@@ -42,7 +48,8 @@ export default function UnitsPage() {
 
   async function reload(id: string) {
     try {
-      const [requester, companyUnits] = await Promise.all([getMyRequester(id), listCompanyUnits(id)]);
+      const editing = can("POST /api/local-units") || can("PUT /api/local-units/{id}");
+      const [requester, companyUnits] = await Promise.all([editing ? getMyRequester(id) : Promise.resolve(null), listCompanyUnits(id)]);
       setRequesterId(requester?.id ?? null);
       setUnits(companyUnits);
     } catch {
@@ -123,84 +130,146 @@ export default function UnitsPage() {
     }
   }
 
-  if (contextLoading || !units) return <main className="p-6">{t("loading")}</main>;
+  if (error && !units)
+    return (
+      <OperationalPage title={t("title")}>
+        <p role="alert">{t("error")}</p>
+      </OperationalPage>
+    );
+  if (contextLoading || !units) return <OperationalPage title={t("title")} loading />;
 
   return (
-    <main className="mx-auto flex max-w-4xl flex-col gap-8 p-6">
-      <h1 className="text-2xl font-semibold">{t("title")}</h1>
-      {error ? <p role="alert" className="text-red-700">{t("error")}</p> : null}
+    <OperationalPage title={t("title")}>
+      {error ? (
+        <p role="alert" className="text-red-700">
+          {t("error")}
+        </p>
+      ) : null}
 
-      <section className="flex flex-col gap-3 rounded-xl border border-gray-200 p-4">
-        <h2 className="font-medium">{editingId ? t("editHeading") : t("createHeading")}</h2>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          <div className="grid grid-cols-2 gap-3">
-            <label className="flex flex-col gap-1 text-sm">
-              {t("zipCode")}
-              <input value={form.zipCode} onChange={(event) => setForm({ ...form, zipCode: event.target.value })} required inputMode="numeric" className="rounded-lg border border-gray-300 p-2" />
-            </label>
-            <label className="flex flex-col gap-1 text-sm">
-              {t("state")}
-              <input value={form.state} onChange={(event) => setForm({ ...form, state: event.target.value })} required maxLength={2} className="rounded-lg border border-gray-300 p-2 uppercase" />
-            </label>
-            <label className="flex flex-col gap-1 text-sm">
-              {t("city")}
-              <input value={form.city} onChange={(event) => setForm({ ...form, city: event.target.value })} required className="rounded-lg border border-gray-300 p-2" />
-            </label>
-            <label className="flex flex-col gap-1 text-sm">
-              {t("neighborhood")}
-              <input value={form.neighborhood} onChange={(event) => setForm({ ...form, neighborhood: event.target.value })} className="rounded-lg border border-gray-300 p-2" />
-            </label>
-            <label className="col-span-2 flex flex-col gap-1 text-sm">
-              {t("street")}
-              <input value={form.street} onChange={(event) => setForm({ ...form, street: event.target.value })} required className="rounded-lg border border-gray-300 p-2" />
-            </label>
-            <label className="flex flex-col gap-1 text-sm">
-              {t("number")}
-              <input value={form.number} onChange={(event) => setForm({ ...form, number: event.target.value })} className="rounded-lg border border-gray-300 p-2" />
-            </label>
-            <label className="flex flex-col gap-1 text-sm">
-              {t("complement")}
-              <input value={form.complement} onChange={(event) => setForm({ ...form, complement: event.target.value })} className="rounded-lg border border-gray-300 p-2" />
-            </label>
-            <label className="flex flex-col gap-1 text-sm">
-              {t("locationType")}
-              <select value={form.locationType} onChange={(event) => setForm({ ...form, locationType: event.target.value as LocalUnit["locationType"] })} className="rounded-lg border border-gray-300 p-2">
-                <option value="HOUSE">{t("locationTypes.house")}</option>
-                <option value="BUILDING">{t("locationTypes.building")}</option>
-                <option value="COMPLEX">{t("locationTypes.complex")}</option>
-              </select>
-            </label>
-          </div>
+      {(editingId ? can("PUT /api/local-units/{id}") : can("POST /api/local-units")) && (
+        <section className="flex flex-col gap-3 rounded-small border border-operational-border p-4">
+          <h2 className="font-medium">{editingId ? t("editHeading") : t("createHeading")}</h2>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+            <div className="grid grid-cols-2 gap-3">
+              <label className="flex flex-col gap-1 text-sm">
+                {t("zipCode")}
+                <input
+                  value={form.zipCode}
+                  onChange={(event) => setForm({ ...form, zipCode: event.target.value })}
+                  required
+                  inputMode="numeric"
+                  className="rounded-small border border-operational-border p-2"
+                />
+              </label>
+              <label className="flex flex-col gap-1 text-sm">
+                {t("state")}
+                <input
+                  value={form.state}
+                  onChange={(event) => setForm({ ...form, state: event.target.value })}
+                  required
+                  maxLength={2}
+                  className="rounded-small border border-operational-border p-2 uppercase"
+                />
+              </label>
+              <label className="flex flex-col gap-1 text-sm">
+                {t("city")}
+                <input
+                  value={form.city}
+                  onChange={(event) => setForm({ ...form, city: event.target.value })}
+                  required
+                  className="rounded-small border border-operational-border p-2"
+                />
+              </label>
+              <label className="flex flex-col gap-1 text-sm">
+                {t("neighborhood")}
+                <input
+                  value={form.neighborhood}
+                  onChange={(event) => setForm({ ...form, neighborhood: event.target.value })}
+                  className="rounded-small border border-operational-border p-2"
+                />
+              </label>
+              <label className="col-span-2 flex flex-col gap-1 text-sm">
+                {t("street")}
+                <input
+                  value={form.street}
+                  onChange={(event) => setForm({ ...form, street: event.target.value })}
+                  required
+                  className="rounded-small border border-operational-border p-2"
+                />
+              </label>
+              <label className="flex flex-col gap-1 text-sm">
+                {t("number")}
+                <input
+                  value={form.number}
+                  onChange={(event) => setForm({ ...form, number: event.target.value })}
+                  className="rounded-small border border-operational-border p-2"
+                />
+              </label>
+              <label className="flex flex-col gap-1 text-sm">
+                {t("complement")}
+                <input
+                  value={form.complement}
+                  onChange={(event) => setForm({ ...form, complement: event.target.value })}
+                  className="rounded-small border border-operational-border p-2"
+                />
+              </label>
+              <label className="flex flex-col gap-1 text-sm">
+                {t("locationType")}
+                <select
+                  value={form.locationType}
+                  onChange={(event) => setForm({ ...form, locationType: event.target.value as LocalUnit["locationType"] })}
+                  className="rounded-small border border-operational-border p-2">
+                  <option value="HOUSE">{t("locationTypes.house")}</option>
+                  <option value="BUILDING">{t("locationTypes.building")}</option>
+                  <option value="COMPLEX">{t("locationTypes.complex")}</option>
+                </select>
+              </label>
+            </div>
 
-          <LocationPicker value={coordinates} onChange={setCoordinates} />
+            <LocationPicker value={coordinates} onChange={setCoordinates} />
 
-          <div className="flex gap-2">
-            <button type="submit" disabled={saving || !requesterId} className="rounded-lg bg-orange px-4 py-2 text-white disabled:opacity-50">
-              {editingId ? t("save") : t("add")}
-            </button>
-            {editingId ? <button type="button" onClick={startCreate} className="rounded-lg border border-gray-300 px-4 py-2">{t("cancel")}</button> : null}
-          </div>
-        </form>
-      </section>
+            <div className="flex gap-2">
+              <button type="submit" disabled={saving || !requesterId} className="rounded-small bg-orange px-4 py-2 text-white disabled:opacity-50">
+                {editingId ? t("save") : t("add")}
+              </button>
+              {editingId ? (
+                <button type="button" onClick={startCreate} className="rounded-small border border-operational-border px-4 py-2">
+                  {t("cancel")}
+                </button>
+              ) : null}
+            </div>
+          </form>
+        </section>
+      )}
 
       <section className="flex flex-col gap-3">
         <h2 className="font-medium">{t("listTitle")}</h2>
-        <ul className="divide-y divide-gray-200 rounded-xl border border-gray-200">
+        <ul className="divide-y divide-operational-border rounded-small border border-operational-border">
           {units.map((unit) => (
             <li key={unit.id} className="flex flex-wrap items-center justify-between gap-3 p-4">
               <div>
-                <p className="font-medium">{unit.address ? `${unit.address.street}, ${unit.address.number ?? "-"}` : t("noAddress")}</p>
+                <Link className="font-medium hover:underline" to={`${routePaths.unitsManagement(lang)}/${encodeURIComponent(unit.id)}`}>
+                  {unit.address ? `${unit.address.street}, ${unit.address.number ?? "-"}` : t("noAddress")}
+                </Link>
                 <p className="text-sm text-gray-600">{unit.address ? `${unit.address.city}/${unit.address.state}` : ""}</p>
               </div>
               <div className="flex gap-2">
-                <button type="button" onClick={() => startEdit(unit)} className="text-sm text-orange">{t("edit")}</button>
-                <button type="button" onClick={() => void handleDelete(unit.id)} className="text-sm text-red-700">{t("remove")}</button>
+                {can("PUT /api/local-units/{id}") && (
+                  <button type="button" onClick={() => startEdit(unit)} className="text-sm text-orange">
+                    {t("edit")}
+                  </button>
+                )}
+                {can("DELETE /api/local-units/{id}") && (
+                  <button type="button" onClick={() => void handleDelete(unit.id)} className="text-sm text-red-700">
+                    {t("remove")}
+                  </button>
+                )}
               </div>
             </li>
           ))}
           {units.length === 0 ? <li className="p-4 text-gray-600">{t("empty")}</li> : null}
         </ul>
       </section>
-    </main>
+    </OperationalPage>
   );
 }
