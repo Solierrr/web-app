@@ -111,7 +111,9 @@
     "approve": "Aprovar",
     "reject": "Rejeitar",
     "noCompanies": "Nenhuma empresa pendente.",
-    "noModels": "Nenhum modelo pendente."
+    "noModels": "Nenhum modelo pendente.",
+    "noProfessionals": "Nenhum profissional aguardando análise.",
+    "professionalsTitle": "Profissionais autônomos"
   },
   "settings": {
     "title": "Configurações",

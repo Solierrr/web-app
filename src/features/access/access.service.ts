@@ -2,11 +2,19 @@ import type { AuthSession, LoginCredentials, RegisterCredentials, RegisterResult
 
 import { httpJson } from "@/shared/http/http.service";
 import { clearAuthSession, getAuthSession, setAuthSession } from "@/shared/auth/authToken.utils";
+import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
+import { createMockSession } from "./access.d.mocks";
 
 const API = `${import.meta.env.VITE_API_AUTH}/auth`;
 const SERVICE_NAME = "access";
 
 export async function login(credentials: LoginCredentials): Promise<AuthSession> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    const session = createMockSession(credentials.email);
+    setAuthSession(session);
+    return session;
+  }
   const session = await httpJson<AuthSession>(`${API}/login`, {
     service: SERVICE_NAME,
     operation: "login",
@@ -19,7 +27,12 @@ export async function login(credentials: LoginCredentials): Promise<AuthSession>
   return session;
 }
 
-export function register(credentials: RegisterCredentials): Promise<RegisterResult> {
+export async function register(credentials: RegisterCredentials): Promise<RegisterResult> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    const session = createMockSession(credentials.email);
+    return { id: session.userId, email: session.email, message: "Cadastro realizado" };
+  }
   return httpJson<RegisterResult>(`${API}/register`, {
     service: SERVICE_NAME,
     operation: "register",
@@ -66,6 +79,11 @@ export function refresh(): Promise<AuthSession | null> {
   const renew = async () => {
     const latest = getAuthSession();
     if (!latest || latest.refreshToken !== currentSession.refreshToken) return latest;
+    if (isAlwaysMockMode() && latest.isMock) {
+      const renewed = createMockSession(latest.email, latest.userId);
+      setAuthSession(renewed);
+      return renewed;
+    }
     const session = await httpJson<AuthSession>(`${API}/refresh`, {
       service: SERVICE_NAME,
       operation: "refresh",
@@ -86,6 +104,10 @@ export function refresh(): Promise<AuthSession | null> {
 }
 
 export async function logout(): Promise<void> {
+  if (isAlwaysMockMode() && getAuthSession()?.isMock) {
+    clearAuthSession();
+    return;
+  }
   await httpJson<void>(`${API}/logout`, {
     service: SERVICE_NAME,
     operation: "logout",

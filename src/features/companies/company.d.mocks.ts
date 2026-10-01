@@ -81,3 +81,17 @@ const companyMock = companyMockData.map((company) => ({
 })) as Company[];
 
 export default companyMock;
+
+export function getMockCompanyReviews(): Company[] {
+  try {
+    const raw = localStorage.getItem("solaria.mock.companyReviews");
+    return raw ? JSON.parse(raw) : companyMock;
+  } catch { return companyMock; }
+}
+
+export function decideMockCompany(id: string, status: Company["status"]): Company {
+  const items = getMockCompanyReviews();
+  const company = { ...(items.find((item) => item.id === id) ?? items[0]), status };
+  localStorage.setItem("solaria.mock.companyReviews", JSON.stringify(items.map((item) => item.id === company.id ? company : item)));
+  return company;
+}

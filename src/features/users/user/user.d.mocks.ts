@@ -1,4 +1,6 @@
 import type { User } from "./user";
+import { getAuthSession } from "@/shared/auth/authToken.utils";
+import type { MyUser } from "./user.service";
 
 const userMock = [
   {
@@ -52,3 +54,12 @@ const userMock = [
 ] as User[];
 
 export default userMock;
+
+export function createMockUser(id = getAuthSession()?.userId ?? "mock-user"): MyUser {
+  const session = getAuthSession();
+  return {
+    id, authId: id,
+    username: localStorage.getItem(`solaria.mock.username.${id}`) ?? (id === session?.userId ? session.email.split("@")[0] : id),
+    avatar: null, banner: null, active: true,
+  };
+}

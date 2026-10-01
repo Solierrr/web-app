@@ -1,3 +1,4 @@
+import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -16,34 +17,34 @@ export default function ContactCompany() {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation("chat");
-  const [error, setError] = useState<"mock" | "api" | "role" | null>(null);
+  const [requestError, setError] = useState<"api" | "role" | null>(null);
+  const invalidCompany = !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(companyId);
+  const error = invalidCompany ? "mock" : requestError;
 
   useEffect(() => {
     let active = true;
-    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(companyId)) {
-      setError("mock");
-      return;
-    }
-    getMyCompany().then((myCompany) => {
-      if (!active) return null;
-      if (!myCompany) {
-        navigate(routePaths.profileOnboardingCompany(lang), {
-          replace: true,
-          state: { returnTo: `${location.pathname}${location.search}`, suggestedType: "DEMANDANT" },
+    if (invalidCompany) return;
+    getMyCompany()
+      .then((myCompany) => {
+        if (!active) return null;
+        if (!myCompany) {
+          navigate(routePaths.profileOnboardingCompany(lang), {
+            replace: true,
+            state: { returnTo: `${location.pathname}${location.search}`, suggestedType: "DEMANDANT" },
+          });
+          return null;
+        }
+        if (myCompany.type !== "DEMANDANT") {
+          setError("role");
+          return null;
+        }
+        return httpJson<{ recipientAuthId: string }>(`${import.meta.env.VITE_API_CORE}/api/companies/${encodeURIComponent(companyId)}/contact-user`, {
+          service: "company",
+          operation: "findContactUser",
+          errorMessage: "Não foi possível encontrar um responsável pela empresa",
         });
-        return null;
-      }
-      if (myCompany.type !== "DEMANDANT") {
-        setError("role");
-        return null;
-      }
-      return httpJson<{ recipientAuthId: string }>(`${import.meta.env.VITE_API_CORE}/api/companies/${encodeURIComponent(companyId)}/contact-user`, {
-      service: "company",
-      operation: "findContactUser",
-      errorMessage: "Não foi possível encontrar um responsável pela empresa",
-      });
-    })
-      .then((contact) => contact ? createDirectConversation(contact.recipientAuthId) : null)
+      })
+      .then((contact) => (contact ? createDirectConversation(contact.recipientAuthId) : null))
       .then((conversation) => {
         if (active && conversation) navigate(routePaths.chat(lang, conversation.id), { replace: true, state: { product } });
       })
@@ -53,15 +54,17 @@ export default function ContactCompany() {
     return () => {
       active = false;
     };
-  }, [companyId, lang, location.pathname, location.search, navigate, product]);
+  }, [companyId, invalidCompany, lang, location.pathname, location.search, navigate, product]);
 
   if (error) {
     return (
-      <main className="p-6">
+      <OperationalPage title={t("conversation")}>
         <p role="alert">{t(error === "mock" ? "mockContactUnavailable" : error === "role" ? "demandantOnly" : "contactError")}</p>
-        <Link to={routePaths.companiesFeed(lang)} className="text-orange">{t("backToCompanies")}</Link>
-      </main>
+        <Link to={routePaths.companiesFeed(lang)} className="text-orange">
+          {t("backToCompanies")}
+        </Link>
+      </OperationalPage>
     );
   }
-  return <p className="p-6">{t("openingConversation")}</p>;
+  return <OperationalPage title={t("openingConversation")} loading />;
 }

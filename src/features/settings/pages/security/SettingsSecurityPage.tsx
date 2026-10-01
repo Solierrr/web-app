@@ -1,7 +1,9 @@
+import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 
 import { changePassword, getCurrentFirebaseUser } from "@/config/firebase/auth/auth.service";
+import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
 
 export default function SettingsSecurityPage() {
   const { t } = useTranslation("commons", { keyPrefix: "settingsSecurity" });
@@ -13,7 +15,7 @@ export default function SettingsSecurityPage() {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!getCurrentFirebaseUser()) {
+    if (!isAlwaysMockMode() && !getCurrentFirebaseUser()) {
       setError("unlinked");
       return;
     }
@@ -21,7 +23,8 @@ export default function SettingsSecurityPage() {
     setError(null);
     setSuccess(false);
     try {
-      await changePassword(currentPassword, newPassword);
+      if (isAlwaysMockMode()) await waitForMockService();
+      else await changePassword(currentPassword, newPassword);
       setSuccess(true);
       setCurrentPassword("");
       setNewPassword("");
@@ -33,8 +36,7 @@ export default function SettingsSecurityPage() {
   }
 
   return (
-    <main className="mx-auto flex max-w-md flex-col gap-4 p-6">
-      <h1 className="text-2xl font-semibold">{t("title")}</h1>
+    <OperationalPage title={t("title")} compact>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <label className="flex flex-col gap-1">
           {t("currentPassword")}
@@ -43,7 +45,7 @@ export default function SettingsSecurityPage() {
             value={currentPassword}
             onChange={(event) => setCurrentPassword(event.target.value)}
             required
-            className="rounded-lg border border-gray-300 p-2"
+            className="rounded-small border border-operational-border p-2"
           />
         </label>
         <label className="flex flex-col gap-1">
@@ -54,16 +56,24 @@ export default function SettingsSecurityPage() {
             onChange={(event) => setNewPassword(event.target.value)}
             required
             minLength={12}
-            className="rounded-lg border border-gray-300 p-2"
+            className="rounded-small border border-operational-border p-2"
           />
         </label>
-        {error === "unlinked" ? <p role="alert" className="text-red-700">{t("unlinkedError")}</p> : null}
-        {error === "failed" ? <p role="alert" className="text-red-700">{t("changeError")}</p> : null}
+        {error === "unlinked" ? (
+          <p role="alert" className="text-red-700">
+            {t("unlinkedError")}
+          </p>
+        ) : null}
+        {error === "failed" ? (
+          <p role="alert" className="text-red-700">
+            {t("changeError")}
+          </p>
+        ) : null}
         {success ? <p role="status">{t("changeSuccess")}</p> : null}
-        <button type="submit" disabled={saving} className="rounded-lg bg-orange px-4 py-2 text-white disabled:opacity-50">
+        <button type="submit" disabled={saving} className="rounded-small bg-orange px-4 py-2 text-white disabled:opacity-50">
           {t("submit")}
         </button>
       </form>
-    </main>
+    </OperationalPage>
   );
 }

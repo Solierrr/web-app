@@ -6,7 +6,7 @@ interface ProfileHeadProps {
 }
 
 export function ProfileHead({ background = "/pattern/orange.jpg", profileImage = "reusable" }: ProfileHeadProps) {
-    const { t } = useTranslation("profile")
+    const { t } = useTranslation("profile");
 
     return (
         <section className="relative h-[40vh] w-full" style={{ backgroundImage: `url(${background})` }}>

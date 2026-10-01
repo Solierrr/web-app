@@ -1,3 +1,4 @@
+import { MemoryRouter } from "react-router-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import EmployeesPage from "./EmployeesPage";
@@ -17,6 +18,8 @@ vi.mock("@/features/companies/companyManagement.service", () => ({
   updateEmployeePosition: vi.fn(),
   removeEmployee: vi.fn(),
   revokeAccessCode: vi.fn(),
+  grantPermission: vi.fn(),
+  listPermissions: vi.fn(),
 }));
 
 const company = { id: "company-1", status: "APPROVED", type: "SUPPLIER", cnpj: "1", tradeName: "Solaria", corporateName: "Solaria Ltda", slug: "solaria" } as never;
@@ -31,28 +34,29 @@ describe("EmployeesPage", () => {
       { id: "link-2", companyId: "company-1", position: memberPosition },
     ]);
     vi.mocked(managementService.listAccessCodes).mockResolvedValue([]);
+    vi.mocked(managementService.listPermissions).mockResolvedValue([]);
     vi.mocked(getUser).mockResolvedValue({ id: "user-1", authId: "auth-1", username: "fulano", avatar: null, banner: null, active: true });
   });
 
   it("lists employees with their names and positions", async () => {
-    vi.mocked(useActiveContext).mockReturnValue({ loading: false, kind: "company", setKind: vi.fn(), company, isAdmin: true, hasCompany: true, isPlatformAdmin: false });
+    vi.mocked(useActiveContext).mockReturnValue({ loading: false, kind: "company", setKind: vi.fn(), company, isAdmin: true, hasCompany: true, isPlatformAdmin: false, can: () => true });
     vi.mocked(managementService.listEmployees).mockResolvedValue([
       { id: "uc-1", companyId: "company-1", userId: "user-1", position: memberPosition },
     ]);
 
-    render(<EmployeesPage />);
+    render(<MemoryRouter><EmployeesPage /></MemoryRouter>);
 
     expect(await screen.findByText("fulano")).toBeInTheDocument();
     expect(screen.getAllByText("MEMBER").length).toBeGreaterThan(0);
   });
 
   it("hides management controls for non-admins", async () => {
-    vi.mocked(useActiveContext).mockReturnValue({ loading: false, kind: "company", setKind: vi.fn(), company, isAdmin: false, hasCompany: true, isPlatformAdmin: false });
+    vi.mocked(useActiveContext).mockReturnValue({ loading: false, kind: "company", setKind: vi.fn(), company, isAdmin: false, hasCompany: true, isPlatformAdmin: false, can: () => false });
     vi.mocked(managementService.listEmployees).mockResolvedValue([
       { id: "uc-1", companyId: "company-1", userId: "user-1", position: memberPosition },
     ]);
 
-    render(<EmployeesPage />);
+    render(<MemoryRouter><EmployeesPage /></MemoryRouter>);
 
     await screen.findByText("fulano");
     expect(screen.queryByRole("button", { name: "Gerar código" })).not.toBeInTheDocument();
@@ -60,11 +64,11 @@ describe("EmployeesPage", () => {
   });
 
   it("generates an access code for a selected existing position", async () => {
-    vi.mocked(useActiveContext).mockReturnValue({ loading: false, kind: "company", setKind: vi.fn(), company, isAdmin: true, hasCompany: true, isPlatformAdmin: false });
+    vi.mocked(useActiveContext).mockReturnValue({ loading: false, kind: "company", setKind: vi.fn(), company, isAdmin: true, hasCompany: true, isPlatformAdmin: false, can: () => true });
     vi.mocked(managementService.listEmployees).mockResolvedValue([]);
     vi.mocked(managementService.generateAccessCode).mockResolvedValue({ id: "code-1", companyId: "company-1", code: "ABC12345", status: "ACTIVE", expiresAt: "2027-01-01", position: memberPosition });
 
-    render(<EmployeesPage />);
+    render(<MemoryRouter><EmployeesPage /></MemoryRouter>);
     await screen.findByText("Nenhum funcionário ainda.");
 
     fireEvent.change(screen.getByLabelText("Cargo existente"), { target: { value: "member-position" } });
@@ -75,13 +79,13 @@ describe("EmployeesPage", () => {
   });
 
   it("creates a new position before generating a code when none is selected", async () => {
-    vi.mocked(useActiveContext).mockReturnValue({ loading: false, kind: "company", setKind: vi.fn(), company, isAdmin: true, hasCompany: true, isPlatformAdmin: false });
+    vi.mocked(useActiveContext).mockReturnValue({ loading: false, kind: "company", setKind: vi.fn(), company, isAdmin: true, hasCompany: true, isPlatformAdmin: false, can: () => true });
     vi.mocked(managementService.listEmployees).mockResolvedValue([]);
     vi.mocked(managementService.createPosition).mockResolvedValue({ id: "new-position", name: "Instalador", accesses: "" });
     vi.mocked(managementService.linkPositionToCompany).mockResolvedValue({ id: "link-3" });
     vi.mocked(managementService.generateAccessCode).mockResolvedValue({ id: "code-1", companyId: "company-1", code: "XYZ98765", status: "ACTIVE", expiresAt: "2027-01-01", position: { id: "new-position", name: "Instalador", accesses: "" } });
 
-    render(<EmployeesPage />);
+    render(<MemoryRouter><EmployeesPage /></MemoryRouter>);
     await screen.findByText("Nenhum funcionário ainda.");
 
     fireEvent.change(screen.getByLabelText("Novo cargo"), { target: { value: "Instalador" } });

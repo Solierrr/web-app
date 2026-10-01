@@ -1,0 +1,11 @@
+{
+  "title": "Consulta",
+  "companyTypes": ["SUPPLIER", "DEMANDANT"],
+  "permissions": [
+    "GET /api/offers/company/{companyId}",
+    "GET /api/models",
+    "GET /api/local-units/company/{companyId}",
+    "POST /auth/password/change",
+    "POST /auth/password/recovery"
+  ]
+}

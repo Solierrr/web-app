@@ -1,5 +1,7 @@
 import { httpJson } from "@/shared/http/http.service";
 import { API_CORE_URL } from "@/shared/http/apiCore.utils";
+import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
+import { getMockOffers, saveMockOffer, deleteMockOffer } from "./offer.d.mocks";
 
 const SERVICE_NAME = "offer";
 
@@ -28,7 +30,11 @@ export interface Supplier {
   companyId: string;
 }
 
-export function getMySupplier(companyId: string): Promise<Supplier | null> {
+export async function getMySupplier(companyId: string): Promise<Supplier | null> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    return { id: companyId, companyId };
+  }
   return httpJson<Supplier[]>(`${API_CORE_URL}/suppliers/company/${encodeURIComponent(companyId)}`, {
     service: SERVICE_NAME,
     operation: "getMySupplier",
@@ -36,7 +42,11 @@ export function getMySupplier(companyId: string): Promise<Supplier | null> {
   }).then((suppliers) => suppliers[0] ?? null);
 }
 
-export function listCompanyOffers(companyId: string): Promise<Offer[]> {
+export async function listCompanyOffers(companyId: string): Promise<Offer[]> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    return getMockOffers(companyId);
+  }
   return httpJson<Offer[]>(`${API_CORE_URL}/offers/company/${encodeURIComponent(companyId)}`, {
     service: SERVICE_NAME,
     operation: "listCompanyOffers",
@@ -57,7 +67,11 @@ export interface OfferPayload {
   serviceRegions?: string[];
 }
 
-export function createOffer(payload: OfferPayload): Promise<Offer> {
+export async function createOffer(payload: OfferPayload): Promise<Offer> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    return saveMockOffer(payload);
+  }
   return httpJson<Offer>(`${API_CORE_URL}/offers`, {
     service: SERVICE_NAME,
     operation: "createOffer",
@@ -70,7 +84,11 @@ export function createOffer(payload: OfferPayload): Promise<Offer> {
 // OfferRequestDTO exige title/description não-vazios mesmo na atualização
 // (a API ignora esses dois campos no update — só a tradução "PENDING" do
 // cadastro é usada — mas a validação do DTO ainda os exige no corpo).
-export function updateOffer(id: string, payload: OfferPayload): Promise<Offer> {
+export async function updateOffer(id: string, payload: OfferPayload): Promise<Offer> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    return saveMockOffer(payload, id);
+  }
   return httpJson<Offer>(`${API_CORE_URL}/offers/${encodeURIComponent(id)}`, {
     service: SERVICE_NAME,
     operation: "updateOffer",
@@ -80,7 +98,12 @@ export function updateOffer(id: string, payload: OfferPayload): Promise<Offer> {
   });
 }
 
-export function deleteOffer(id: string): Promise<void> {
+export async function deleteOffer(id: string): Promise<void> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    deleteMockOffer(id);
+    return;
+  }
   return httpJson<void>(`${API_CORE_URL}/offers/${encodeURIComponent(id)}`, {
     service: SERVICE_NAME,
     operation: "deleteOffer",

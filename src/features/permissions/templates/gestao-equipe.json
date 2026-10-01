@@ -1,0 +1,21 @@
+{
+  "title": "Gestão equipe",
+  "companyTypes": ["SUPPLIER", "DEMANDANT"],
+  "permissions": [
+    "GET /api/user-companies/company/{companyId}",
+    "GET /api/access-codes/company/{companyId}",
+    "POST /api/access-codes",
+    "DELETE /api/access-codes/{id}/company/{companyId}",
+    "PATCH /api/user-companies/{id}/position",
+    "DELETE /api/user-companies/{id}",
+    "POST /api/positions",
+    "POST /api/company-positions",
+    "GET /api/company-positions/company/{companyId}",
+    "GET /api/permissions",
+    "GET /api/position-permissions/position/{positionId}",
+    "POST /api/position-permissions",
+    "DELETE /api/position-permissions/{id}",
+    "POST /auth/password/change",
+    "POST /auth/password/recovery"
+  ]
+}

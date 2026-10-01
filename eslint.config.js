@@ -21,5 +21,6 @@ export default defineConfig([globalIgnores(['dist', 'coverage']), {
   },
   rules: {
     semi: ["error", "always"],
+    "react-refresh/only-export-components": ["error", { allowExportNames: ["useActiveContext", "useAuth", "useSidebarCollapsed"] }],
   },
 }, ...storybook.configs["flat/recommended"]])

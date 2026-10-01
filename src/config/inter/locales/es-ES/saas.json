@@ -8,17 +8,36 @@
     "openMenu": "Abrir menú",
     "closeMenu": "Cerrar menú",
     "collapseSidebar": "Contraer menú lateral",
-    "expandSidebar": "Expandir menú lateral"
+    "expandSidebar": "Expandir menú lateral",
+    "loading": "Cargando área operativa...",
+    "brandPlaceholder": "Placeholder",
+    "context": "Contexto activo",
+    "personal": "Personal",
+    "account": "Tu cuenta",
+    "skipContent": "Ir al contenido",
+    "backToSite": "Volver al sitio",
+    "logout": "Cerrar sesión"
   },
   "navigation": {
     "label": "Navegación principal",
     "groups": {
       "overview": "Vista general",
-      "catalog": "Catálogo"
+      "catalog": "Catálogo",
+      "company": "Empresa",
+      "administration": "Administración"
     },
     "items": {
       "dashboard": "Inicio",
-      "solarPanelModels": "Modelos de panel solar"
+      "solarPanelModels": "Modelos de panel solar",
+      "messages": "Mensajes",
+      "companyProfile": "Perfil de empresa",
+      "offers": "Ofertas",
+      "units": "Unidades",
+      "employees": "Accesos y empleados",
+      "registrations": "Registros",
+      "profile": "Mi perfil",
+      "settings": "Configuración",
+      "chatbot": "Asistente"
     }
   },
   "dashboard": {
@@ -32,5 +51,29 @@
       "title": "Vista general",
       "placeholder": "El panel del proveedor se definirá en una próxima etapa."
     }
+  },
+  "page": {
+    "tabs": "Secciones de página"
+  },
+  "home": {
+    "recent": "Recientes",
+    "shortcuts": "Accesos rápidos",
+    "title": "¿Qué quieres hacer?",
+    "noRecent": "Las páginas visitadas aparecerán aquí.",
+    "noResults": "No se encontraron páginas.",
+    "search": "Buscar una página"
+  },
+  "permissions": {
+    "title": "Permisos del cargo",
+    "saved": "Permisos guardados.",
+    "error": "No se pudieron guardar o cargar los permisos.",
+    "choose": "Seleccionar plantilla",
+    "save": "Guardar permisos",
+    "template": "Plantilla de permisos"
+  },
+  "details": {
+    "error": "No se pudieron cargar los detalles.",
+    "position": "Cargo",
+    "back": "Volver a la lista"
   }
 }

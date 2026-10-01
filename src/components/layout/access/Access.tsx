@@ -21,9 +21,11 @@ interface AccessProps {
   error?: ReactNode;
   footer?: ReactNode;
   onSubmit?: (event: FormEvent<HTMLFormElement>) => void;
+  children?: ReactNode;
+  busy?: boolean;
 }
 
-export default function Access({ helperText, fields, submitLabel, error, footer, onSubmit }: AccessProps) {
+export default function Access({ helperText, fields, submitLabel, error, footer, onSubmit, children, busy = false }: AccessProps) {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     onSubmit?.(event);
@@ -37,6 +39,7 @@ export default function Access({ helperText, fields, submitLabel, error, footer,
             <Logo className="self-baseline"/>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
+              {children}
               {fields.map((field) =>
                 field.password ? (
                   <PasswordInput key={field.name} name={field.name} placeholder={field.placeholder} minLength={field.minLength} required className="w-full" />
@@ -44,7 +47,7 @@ export default function Access({ helperText, fields, submitLabel, error, footer,
                   <Input key={field.name} name={field.name} type={field.type ?? "text"} placeholder={field.placeholder} required className="w-full" />
                 ),
               )}
-              <PrimaryButton type="submit" content={submitLabel} description={submitLabel} rounded className="w-full" />
+              <PrimaryButton type="submit" disabled={busy} content={submitLabel} description={submitLabel} rounded className="w-full" />
               {error && <div className="text-orange">{error}</div>}
             </form>
           </div>

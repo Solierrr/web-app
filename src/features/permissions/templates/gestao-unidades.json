@@ -1,0 +1,17 @@
+{
+  "title": "Gestão unidades",
+  "companyTypes": [
+    "DEMANDANT"
+  ],
+  "permissions": [
+    "GET /api/local-units/company/{companyId}",
+    "POST /api/local-units",
+    "PUT /api/local-units/{id}",
+    "DELETE /api/local-units/{id}",
+    "POST /auth/password/change",
+    "POST /auth/password/recovery",
+    "GET /api/requesters/company/{companyId}",
+    "POST /api/addresses",
+    "POST /api/geolocalizations"
+  ]
+}
