@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import ProfilePage from "@/components/layout/profile/ProfilePage";
-import ProfilePageSkeleton from "@/components/layout/profile/ProfilePageSkeleton";
+import ProfilePage from "@/lib/components/layout/profile/ProfilePage";
+import ProfilePageSkeleton from "@/lib/components/layout/profile/ProfilePageSkeleton";
 import { getCatalogTechnicianBySlug, type CatalogTechnician } from "@/features/professionals/professional.service";
 
 interface ProfessionalProfilePackedProps {

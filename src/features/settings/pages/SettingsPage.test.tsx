@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import SettingsPage from "./SettingsPage";
 
 describe("SettingsPage", () => {
-  it("links to the profile and security pages", () => {
+  it("links to the profile, security, privacy and sessions pages", () => {
     render(
       <MemoryRouter>
         <SettingsPage />
@@ -13,5 +13,7 @@ describe("SettingsPage", () => {
 
     expect(screen.getByRole("link", { name: "Perfil" })).toHaveAttribute("href", "/pt-BR/usuario");
     expect(screen.getByRole("link", { name: "Segurança" })).toHaveAttribute("href", "/pt-BR/configuracoes/seguranca");
+    expect(screen.getByRole("link", { name: "Privacidade" })).toHaveAttribute("href", "/pt-BR/configuracoes/privacidade");
+    expect(screen.getByRole("link", { name: "Sessões e dispositivos" })).toHaveAttribute("href", "/pt-BR/configuracoes/sessoes");
   });
 });

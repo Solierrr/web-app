@@ -1,7 +1,7 @@
 import type { AuthSession, LoginCredentials, RegisterCredentials, RegisterResult } from "./access";
 
-import { httpJson } from "@/shared/http/http.service";
-import { clearAuthSession, getAuthSession, setAuthSession } from "@/shared/auth/authToken.utils";
+import { httpJson } from "@/lib/shared/http/http.service";
+import { clearAuthSession, getAuthSession, setAuthSession } from "@/lib/shared/auth/authToken.utils";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
 import { createMockSession } from "./access.d.mocks";
 

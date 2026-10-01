@@ -13,7 +13,7 @@ import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { Link, useParams } from "react-router-dom";
 import { DEFAULT, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
-import { useActiveContext } from "@/shared/context/ActiveContext";
+import { useActiveContext } from "@/lib/shared/context/ActiveContext";
 import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
 import { SolarPanelModelStatus } from "@/features/solar-panel/solarPanel.enum";
 

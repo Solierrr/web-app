@@ -113,12 +113,38 @@
     "noCompanies": "No pending companies.",
     "noModels": "No pending models.",
     "noProfessionals": "No professionals awaiting review.",
-    "professionalsTitle": "Independent professionals"
+    "professionalsTitle": "Independent professionals",
+    "status": {
+      "UNDER_ANALYSIS": "Under manual review",
+      "APPROVED": "Approved",
+      "REJECTED": "Rejected"
+    },
+    "statusFilter": "Status",
+    "typeFilter": "Type",
+    "all": "All",
+    "SUPPLIER": "Suppliers",
+    "DEMANDANT": "Demandants",
+    "PROFESSIONAL": "Professionals",
+    "details": "Details",
+    "detailTitle": "Request details",
+    "back": "Back to registrations",
+    "cnpj": "CNPJ",
+    "corporateName": "Corporate name",
+    "tradeName": "Trade name",
+    "type": "Type",
+    "crea": "CREA",
+    "name": "Name",
+    "notFound": "Request not found.",
+    "decisionError": "We could not record the decision.",
+    "statusLabel": "Status",
+    "detailError": "We could not load the request."
   },
   "settings": {
     "title": "Settings",
     "profile": "Profile",
-    "security": "Security"
+    "security": "Security",
+    "privacy": "Privacy",
+    "sessions": "Sessions and devices"
   },
   "settingsSecurity": {
     "title": "Security",
@@ -144,7 +170,7 @@
     "loadError": "Could not load employees.",
     "listTitle": "Team",
     "empty": "No employees yet.",
-    "remove": "Remove",
+    "remove": "Deactivate access",
     "inviteTitle": "Invite employee",
     "existingPosition": "Existing position",
     "selectPosition": "Select a position",
@@ -155,7 +181,12 @@
     "generatedCode": "Generated code: {{code}} — share it with the new employee.",
     "activeCodesTitle": "Active codes",
     "noActiveCodes": "No active codes.",
-    "revoke": "Revoke"
+    "revoke": "Revoke",
+    "adminsTitle": "Administrators",
+    "guestEmail": "Guest e-mail (optional)",
+    "sendByEmail": "Send by e-mail",
+    "emailSubject": "Invitation to {{company}} on Solaria",
+    "emailBody": "Use the code {{code}} to join {{company}}: {{url}}"
   },
   "companyOffers": {
     "title": "Offers"
@@ -189,7 +220,8 @@
     "noAddress": "No address provided",
     "edit": "Edit",
     "remove": "Remove",
-    "empty": "No units registered yet."
+    "empty": "No units registered yet.",
+    "openMap": "View on Google Maps"
   },
   "offers": {
     "title": "Offers",
@@ -213,7 +245,19 @@
     "units": "units",
     "edit": "Edit",
     "remove": "Remove",
-    "empty": "No offers registered yet."
+    "empty": "No offers registered yet.",
+    "status": {
+      "ACTIVE": "Active",
+      "PAUSED": "Paused",
+      "CLOSED": "Closed"
+    },
+    "pause": "Pause",
+    "resume": "Resume",
+    "close": "Close",
+    "reopen": "Reopen",
+    "discountLabel": "Discount",
+    "statusLabel": "Status",
+    "expiration": "Valid until"
   },
   "myCompany": {
     "loadError": "Could not load your company.",
@@ -312,5 +356,70 @@
   },
   "empty": {
     "default": "no results found."
+  },
+  "settingsPrivacy": {
+    "title": "Privacy",
+    "description": "Choose what other users can see. Preferences are kept on this device and will apply to your public profile once the server supports it.",
+    "showContact": "Show my contact details on my public profile",
+    "showInSearch": "Appear in search results",
+    "save": "Save",
+    "saved": "Preferences saved on this device.",
+    "saveError": "We could not save the preferences on this device."
+  },
+  "settingsSessions": {
+    "title": "Sessions and devices",
+    "description": "Devices with access to your account.",
+    "current": "This device",
+    "lastActive": "Last active: {{date}}",
+    "revoke": "End session",
+    "revoked": "Session ended.",
+    "signOut": "Sign out of this device",
+    "onlyCurrent": "For now you can only see and end the session on this device.",
+    "error": "We could not load the sessions.",
+    "revokeError": "We could not end the session."
+  },
+  "registrationStatusPage": {
+    "title": "Registration status",
+    "submitted": "Registration sent",
+    "manualReview": "Manual review",
+    "result": "Result",
+    "none": "You do not have a company registration yet.",
+    "loadError": "We could not load the registration status.",
+    "stage": {
+      "MANUAL_REVIEW": "Your registration is under manual review. We will let you know when there is a result.",
+      "APPROVED": "Registration approved. Company features are unlocked.",
+      "REJECTED": "Registration rejected. Contact support to review the data."
+    }
+  },
+  "analytics": {
+    "title": "Analytics",
+    "exportCsv": "Export CSV",
+    "report": "Report",
+    "loadError": "We could not load the indicators.",
+    "personal": "Indicators appear when you act for a company or as a platform admin.",
+    "partial": "Some indicators could not be loaded.",
+    "empty": "No data for this scope.",
+    "scope": {
+      "platform": "Whole platform view",
+      "supplier": "Supplier company view",
+      "demandant": "Demandant company view"
+    },
+    "kpi": {
+      "approvedCompanies": "Approved companies",
+      "pendingCompanies": "Companies under review",
+      "approvedModels": "Approved models",
+      "pendingModels": "Models under review",
+      "pendingProfessionals": "Professionals under review",
+      "activeOffers": "Active offers",
+      "pausedOffers": "Paused offers",
+      "closedOffers": "Closed offers",
+      "models": "Registered models",
+      "employees": "Employees",
+      "units": "Units"
+    },
+    "csv": {
+      "indicator": "indicator",
+      "value": "value"
+    }
   }
 }

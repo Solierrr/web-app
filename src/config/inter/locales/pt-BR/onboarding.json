@@ -76,5 +76,8 @@
     "email": "Seu email de login",
     "password": "Senha (mínimo 12 caracteres)",
     "confirmPassword": "Confirmar senha"
-  }
+  },
+  "corporateEmailRequired": "Use o e-mail corporativo da empresa, não um e-mail pessoal.",
+  "inviteAdmins": "Convidar outros administradores",
+  "grantedPermissions": "Permissões concedidas a você"
 }

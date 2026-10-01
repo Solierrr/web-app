@@ -27,5 +27,10 @@
   "employees": "employees",
   "offers": "offers",
   "units": "units",
-  "registrations": "registrations"
+  "registrations": "registrations",
+  "resetPassword": "reset-password",
+  "privacy": "privacy",
+  "sessions": "sessions",
+  "registrationStatus": "registration-status",
+  "analytics": "analytics"
 }

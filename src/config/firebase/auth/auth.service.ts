@@ -1,5 +1,6 @@
 import {
     GoogleAuthProvider,
+    confirmPasswordReset,
     createUserWithEmailAndPassword,
     reload,
     sendEmailVerification,
@@ -63,4 +64,8 @@ export async function changePassword(currentPassword: string, newPassword: strin
     if (!user?.email) throw new Error("Nenhuma sessão do Firebase disponível");
     await signInWithEmailAndPassword(auth, user.email, currentPassword);
     await updatePassword(user, newPassword);
+}
+
+export function completePasswordReset(code: string, newPassword: string) {
+    return confirmPasswordReset(auth, code, newPassword);
 }

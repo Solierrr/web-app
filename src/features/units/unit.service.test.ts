@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 import { createGeolocalization, createUnit, deleteUnit, getMyRequester, listCompanyUnits, updateUnit } from "./unit.service";
-import { httpJson } from "@/shared/http/http.service";
+import { httpJson } from "@/lib/shared/http/http.service";
 
-vi.mock("@/shared/http/http.service", () => ({ httpJson: vi.fn() }));
+vi.mock("@/lib/shared/http/http.service", () => ({ httpJson: vi.fn() }));
 
 describe("unit.service", () => {
   it("returns the first requester for a company", async () => {
@@ -24,9 +24,13 @@ describe("unit.service", () => {
   it("creates a geolocalization for an address", async () => {
     vi.mocked(httpJson).mockResolvedValue({ id: "geo-1" });
     await createGeolocalization("address-1", -23.5, -46.6);
-    expect(httpJson).toHaveBeenCalledWith(expect.stringContaining("/geolocalizations"), expect.objectContaining({
-      method: "POST", body: { addressId: "address-1", latitude: -23.5, longitude: -46.6 },
-    }));
+    expect(httpJson).toHaveBeenCalledWith(
+      expect.stringContaining("/geolocalizations"),
+      expect.objectContaining({
+        method: "POST",
+        body: { addressId: "address-1", latitude: -23.5, longitude: -46.6 },
+      }),
+    );
   });
 
   it("creates a unit", async () => {

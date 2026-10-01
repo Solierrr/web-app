@@ -5,7 +5,7 @@ import { routePaths } from "@/config/inter/paths";
 import { DEFAULT, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { useTranslation } from "react-i18next";
 
-import { getAuthSession } from "@/shared/auth/authToken.utils";
+import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import { linkFirebase } from "@/features/access/access.service";
 import { getCurrentFirebaseUser, reloadCurrentFirebaseUser, sendVerificationEmail } from "@/config/firebase/auth/auth.service";
 

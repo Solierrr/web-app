@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { DEFAULT, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
-import { getAuthSession } from "@/shared/auth/authToken.utils";
+import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import { login, register } from "../../access.service";
 import {
   register as registerFirebase,
@@ -18,9 +18,10 @@ import {
   createBusinessContact,
   attachCompanyAddress,
   attachCompanyBusinessContact,
+  getMyMembership,
 } from "@/features/companies/company.service";
-import { redeemAccessCode } from "@/features/companies/companyManagement.service";
-import { validateCnpj, validateCpf } from "@/utils/validation.utils";
+import { redeemAccessCode } from "@/features/companies/company.management.service";
+import { isCorporateEmail, validateCnpj, validateCpf } from "@/lib/utils/validation.utils";
 import {
   addOperationalMembership,
   claimRegistrationDraft,
@@ -29,8 +30,8 @@ import {
   getRegistrationDraft,
   saveOperationalAccount,
   saveRegistrationDraft,
-} from "../../onboarding.service";
-import type { RegistrationKind } from "../../onboarding";
+} from "../../access.onboarding.service";
+import type { RegistrationKind } from "../../access.onboarding";
 import { registrationFields } from "./Onboarding.presets";
 import {
   createContact,
@@ -39,10 +40,10 @@ import {
   createTechnician,
   getProfessions,
   type Profession,
-} from "@/features/professionals/professionalOnboarding.service";
+} from "@/features/professionals/professional.onboarding.service";
 import { getMyUser } from "@/features/users/user/user.service";
-import { validateCertificates, validateCnpjCategory } from "@/shared/validation/aiValidation.service";
-import Access from "@/components/layout/access/Access";
+import { validateCertificates, validateCnpjCategory } from "@/lib/shared/validation/aiValidation.service";
+import OnboardingLayout from "@/lib/components/layout/onboarding/OnboardingLayout";
 import { useTranslation } from "react-i18next";
 
 export default function OnboardingPage({ kind }: { kind: RegistrationKind }) {
@@ -60,12 +61,26 @@ export default function OnboardingPage({ kind }: { kind: RegistrationKind }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [professions, setProfessions] = useState<Profession[]>([]);
+  const [granted, setGranted] = useState<string[]>([]);
   const isMock = isAlwaysMockMode();
   const titles = Array.from({ length: kind === "company" ? 5 : kind === "professional" ? 4 : 3 }, (_, index) => t(`${kind}Steps.${index}`));
   const finalStep = titles.length - 1;
   const verificationStep = kind === "company" ? 3 : 2;
   const accountStep = kind === "company" ? 2 : kind === "professional" ? 0 : 1;
   const fields = registrationFields(kind, draft.step);
+
+  useEffect(() => {
+    if (kind !== "invitation" || draft.step !== finalStep) return;
+    let active = true;
+    getMyMembership()
+      .then((membership) => {
+        if (active) setGranted(membership?.permissions ?? []);
+      })
+      .catch(() => undefined);
+    return () => {
+      active = false;
+    };
+  }, [kind, draft.step, finalStep]);
 
   useEffect(() => {
     if (kind !== "professional") return;
@@ -119,6 +134,7 @@ export default function OnboardingPage({ kind }: { kind: RegistrationKind }) {
       if (kind === "company" && draft.step === 1 && !isMock) {
         const result = validateCnpj(draft.fields.cnpj.replace(/\D/g, ""));
         if (!result.isValid) throw new Error(result.message ?? t("invalidCnpj"));
+        if (!isCorporateEmail(draft.fields.companyEmail)) throw new Error(t("corporateEmailRequired"));
       }
       if (kind === "professional" && draft.step === 1 && !isMock) {
         const result = validateCpf(draft.fields.cpf.replace(/\D/g, ""));
@@ -242,9 +258,12 @@ export default function OnboardingPage({ kind }: { kind: RegistrationKind }) {
   const accountFields =
     draft.step === accountStep && signedIn && (isMock || getCurrentFirebaseUser()?.email?.toLowerCase() === signedIn.email.toLowerCase());
   return (
-    <Access
-      heading={titles[draft.step]}
-      fields={[]}
+    <OnboardingLayout
+      title={titles[draft.step]}
+      steps={titles}
+      step={draft.step}
+      progressLabel={t("progress", { step: draft.step + 1, total: titles.length })}
+      eyebrow={`${kind === "company" ? t("company") : kind === "professional" ? t("professional") : t("invitation")} · ${t("progress", { step: draft.step + 1, total: titles.length })}`}
       busy={busy}
       error={error}
       onSubmit={(event) => void submit(event)}
@@ -272,16 +291,24 @@ export default function OnboardingPage({ kind }: { kind: RegistrationKind }) {
           </div>
         )
       }>
-      <div>
-        <p className="text-sm text-gray-500">
-          {kind === "company" ? t("company") : kind === "professional" ? t("professional") : t("invitation")} ·{" "}
-          {t("progress", { step: draft.step + 1, total: titles.length })}
-        </p>
-        <h1 className="mt-2 text-3xl font-semibold">{titles[draft.step]}</h1>
-      </div>
       {draft.step === finalStep ? (
         <div className="flex flex-col gap-5 rounded-xl border border-gray-200 p-6">
           <p>{kind === "invitation" ? t("invitationReady") : isMock ? t("mockReady") : t("pending")}</p>
+          {kind === "invitation" && granted.length > 0 ? (
+            <section aria-label={t("grantedPermissions")}>
+              <h2 className="font-medium">{t("grantedPermissions")}</h2>
+              <ul className="mt-2 list-disc pl-5 text-sm">
+                {granted.map((permission) => (
+                  <li key={permission}>{permission}</li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
+          {kind === "company" ? (
+            <Link to={routePaths.employeesManagement(lang)} className="text-orange">
+              {t("inviteAdmins")}
+            </Link>
+          ) : null}
         </div>
       ) : (
         <>
@@ -367,6 +394,6 @@ export default function OnboardingPage({ kind }: { kind: RegistrationKind }) {
           )}
         </>
       )}
-    </Access>
+    </OnboardingLayout>
   );
 }

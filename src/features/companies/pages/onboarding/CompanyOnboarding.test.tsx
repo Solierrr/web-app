@@ -3,7 +3,7 @@ import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import CompanyOnboarding from "./CompanyOnboarding";
 import * as companyService from "@/features/companies/company.service";
-import { validateCnpjCategory } from "@/shared/validation/aiValidation.service";
+import { validateCnpjCategory } from "@/lib/shared/validation/aiValidation.service";
 
 vi.mock("@/features/companies/company.service", () => ({
   createCompany: vi.fn(),
@@ -12,7 +12,7 @@ vi.mock("@/features/companies/company.service", () => ({
   attachCompanyAddress: vi.fn(),
   attachCompanyBusinessContact: vi.fn(),
 }));
-vi.mock("@/shared/validation/aiValidation.service", () => ({ validateCnpjCategory: vi.fn() }));
+vi.mock("@/lib/shared/validation/aiValidation.service", () => ({ validateCnpjCategory: vi.fn() }));
 
 const VALID_CNPJ = "11.444.777/0001-61";
 
@@ -52,8 +52,14 @@ describe("CompanyOnboarding", () => {
     vi.mocked(companyService.createAddress).mockResolvedValue({ id: "address-1" });
     vi.mocked(companyService.createBusinessContact).mockResolvedValue({ id: "contact-1" });
     vi.mocked(validateCnpjCategory).mockResolvedValue({
-      status: "VALID", cnpj: "11444777000161", company_name: "Solar XPTO", trade_name: "Solar XPTO",
-      is_active: true, matched_category: "ENGENHARIA", error_code: null, reason: "Compatível",
+      status: "VALID",
+      cnpj: "11444777000161",
+      company_name: "Solar XPTO",
+      trade_name: "Solar XPTO",
+      is_active: true,
+      matched_category: "ENGENHARIA",
+      error_code: null,
+      reason: "Compatível",
     });
 
     render(
@@ -65,9 +71,14 @@ describe("CompanyOnboarding", () => {
     fillBaseFields();
     fireEvent.click(screen.getByRole("button", { name: "Cadastrar empresa" }));
 
-    await waitFor(() => expect(companyService.createCompany).toHaveBeenCalledWith({
-      type: "SUPPLIER", cnpj: "11444777000161", tradeName: "Solar XPTO", corporateName: "Solar XPTO Ltda",
-    }));
+    await waitFor(() =>
+      expect(companyService.createCompany).toHaveBeenCalledWith({
+        type: "SUPPLIER",
+        cnpj: "11444777000161",
+        tradeName: "Solar XPTO",
+        corporateName: "Solar XPTO Ltda",
+      }),
+    );
     expect(companyService.attachCompanyAddress).toHaveBeenCalledWith("company-1", "address-1");
     expect(companyService.attachCompanyBusinessContact).toHaveBeenCalledWith("company-1", "contact-1");
 

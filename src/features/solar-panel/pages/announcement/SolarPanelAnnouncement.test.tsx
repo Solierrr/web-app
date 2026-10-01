@@ -10,7 +10,7 @@ vi.mock("@/features/solar-panel/solarPanel.service", () => ({
 }));
 
 import { getSolarPanelBySlug } from "@/features/solar-panel/solarPanel.service";
-import type { SolarPanelAnnouncement as SolarPanelAnnouncementModel } from "@/features/solar-panel/solarPanelAnnouncement";
+import type { SolarPanelAnnouncement as SolarPanelAnnouncementModel } from "@/features/solar-panel/solarPanel.announcement";
 import { SolarPanelModelStatus as ModelStatus } from "@/features/solar-panel/solarPanel.enum";
 import SolarPanelAnnouncement from "./SolarPanelAnnouncement";
 

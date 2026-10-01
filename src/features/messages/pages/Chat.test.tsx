@@ -2,15 +2,15 @@ import { act, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import Chat from "./Chat";
-import * as api from "@/features/messages/messenger.api";
-import { subscribeToConversation } from "@/features/messages/messenger.socket";
+import * as api from "@/features/messages/messages.messenger.api";
+import { subscribeToConversation } from "@/features/messages/messages.messenger.socket";
 
-vi.mock("@/features/messages/messenger.api", () => ({
+vi.mock("@/features/messages/messages.messenger.api", () => ({
   getConversation: vi.fn(), getConversationMessages: vi.fn(), getConversationMessagesSince: vi.fn(),
   getUserSummary: vi.fn(), markConversationRead: vi.fn(), sendConversationMessage: vi.fn(),
 }));
-vi.mock("@/features/messages/messenger.socket", () => ({ subscribeToConversation: vi.fn() }));
-vi.mock("@/shared/auth/authToken.utils", () => ({ getAuthSession: () => ({ userId: "me" }) }));
+vi.mock("@/features/messages/messages.messenger.socket", () => ({ subscribeToConversation: vi.fn() }));
+vi.mock("@/lib/shared/auth/authToken.utils", () => ({ getAuthSession: () => ({ userId: "me" }) }));
 
 const conversation: api.ConversationDto = {
   id: "conv-1", conversationType: "DIRECT", participantIds: ["me", "supplier"],

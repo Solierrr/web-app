@@ -1,4 +1,4 @@
-import { getAuthSession } from "@/shared/auth/authToken.utils";
+import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 
 function storageKey(context: string): string {
   return `solaria.recentPages.${getAuthSession()?.userId ?? "anonymous"}.${context}`;

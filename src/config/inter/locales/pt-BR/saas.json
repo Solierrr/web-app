@@ -16,7 +16,15 @@
     "account": "Sua conta",
     "skipContent": "Ir para o conteúdo",
     "backToSite": "Voltar ao site",
-    "logout": "Sair"
+    "logout": "Sair",
+    "scope": {
+      "platformAdmin": "Admin Solaria",
+      "personal": "Perfil pessoal",
+      "SUPPLIER": "Fornecedora",
+      "DEMANDANT": "Demandante",
+      "admin": "Admin",
+      "member": "Acesso"
+    }
   },
   "navigation": {
     "label": "Navegação principal",
@@ -37,7 +45,9 @@
       "registrations": "Cadastros",
       "profile": "Meu perfil",
       "settings": "Configurações",
-      "chatbot": "Assistente"
+      "chatbot": "Assistente",
+      "registrationStatus": "Status do cadastro",
+      "analytics": "Indicadores"
     }
   },
   "dashboard": {

@@ -2,12 +2,12 @@ import type { Company } from "./company";
 
 import { companyMocks } from "@/config/mocks/registry";
 import { resolveWithMocks } from "@/config/mocks/fallback.service";
-import { httpJson } from "@/shared/http/http.service";
-import { API_CORE_URL } from "@/shared/http/apiCore.utils";
+import { httpJson } from "@/lib/shared/http/http.service";
+import { API_CORE_URL } from "@/lib/shared/http/apiCore.utils";
 import { getMyUser } from "@/features/users/user/user.service";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
 import { getMockCompanyReviews, decideMockCompany } from "./company.d.mocks";
-import { getOperationalAccount } from "@/features/access/onboarding.service";
+import { getOperationalAccount } from "@/features/access/access.onboarding.service";
 import { CompanyStatus } from "./company.enum";
 
 const SERVICE_NAME = "company";
