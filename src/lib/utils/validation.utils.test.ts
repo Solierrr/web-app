@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isSafeMailtoAddress, validateCnpj, validateCpf } from "./validation.utils";
+import { isCorporateEmail, isSafeMailtoAddress, validateCnpj, validateCpf } from "./validation.utils";
 
 describe("validateCpf", () => {
   it("accepts a valid cpf, with or without formatting", () => {
@@ -48,5 +48,19 @@ describe("isSafeMailtoAddress", () => {
     for (const value of ["a@b.com?bcc=x@y.com", "a@b.com,c@d.com", "a@b.com;c@d.com", "a b@c.com", "a@b.com&cc=x", "a%40b.com", "a@b", "", "<a@b.com>"]) {
       expect(isSafeMailtoAddress(value)).toBe(false);
     }
+  });
+});
+
+describe("isCorporateEmail", () => {
+  it("accepts an address on the company domain", () => {
+    expect(isCorporateEmail("contato@solarxpto.com.br")).toBe(true);
+  });
+
+  it("rejects free mail providers regardless of case", () => {
+    for (const value of ["a@gmail.com", "a@Hotmail.com", "a@yahoo.com.br", " a@outlook.com "]) expect(isCorporateEmail(value)).toBe(false);
+  });
+
+  it("rejects a value without a domain", () => {
+    expect(isCorporateEmail("sem-arroba")).toBe(false);
   });
 });

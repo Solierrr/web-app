@@ -18,9 +18,10 @@ import {
   createBusinessContact,
   attachCompanyAddress,
   attachCompanyBusinessContact,
+  getMyMembership,
 } from "@/features/companies/company.service";
 import { redeemAccessCode } from "@/features/companies/company.management.service";
-import { validateCnpj, validateCpf } from "@/lib/utils/validation.utils";
+import { isCorporateEmail, validateCnpj, validateCpf } from "@/lib/utils/validation.utils";
 import {
   addOperationalMembership,
   claimRegistrationDraft,
@@ -60,12 +61,26 @@ export default function OnboardingPage({ kind }: { kind: RegistrationKind }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [professions, setProfessions] = useState<Profession[]>([]);
+  const [granted, setGranted] = useState<string[]>([]);
   const isMock = isAlwaysMockMode();
   const titles = Array.from({ length: kind === "company" ? 5 : kind === "professional" ? 4 : 3 }, (_, index) => t(`${kind}Steps.${index}`));
   const finalStep = titles.length - 1;
   const verificationStep = kind === "company" ? 3 : 2;
   const accountStep = kind === "company" ? 2 : kind === "professional" ? 0 : 1;
   const fields = registrationFields(kind, draft.step);
+
+  useEffect(() => {
+    if (kind !== "invitation" || draft.step !== finalStep) return;
+    let active = true;
+    getMyMembership()
+      .then((membership) => {
+        if (active) setGranted(membership?.permissions ?? []);
+      })
+      .catch(() => undefined);
+    return () => {
+      active = false;
+    };
+  }, [kind, draft.step, finalStep]);
 
   useEffect(() => {
     if (kind !== "professional") return;
@@ -119,6 +134,7 @@ export default function OnboardingPage({ kind }: { kind: RegistrationKind }) {
       if (kind === "company" && draft.step === 1 && !isMock) {
         const result = validateCnpj(draft.fields.cnpj.replace(/\D/g, ""));
         if (!result.isValid) throw new Error(result.message ?? t("invalidCnpj"));
+        if (!isCorporateEmail(draft.fields.companyEmail)) throw new Error(t("corporateEmailRequired"));
       }
       if (kind === "professional" && draft.step === 1 && !isMock) {
         const result = validateCpf(draft.fields.cpf.replace(/\D/g, ""));
@@ -278,6 +294,21 @@ export default function OnboardingPage({ kind }: { kind: RegistrationKind }) {
       {draft.step === finalStep ? (
         <div className="flex flex-col gap-5 rounded-xl border border-gray-200 p-6">
           <p>{kind === "invitation" ? t("invitationReady") : isMock ? t("mockReady") : t("pending")}</p>
+          {kind === "invitation" && granted.length > 0 ? (
+            <section aria-label={t("grantedPermissions")}>
+              <h2 className="font-medium">{t("grantedPermissions")}</h2>
+              <ul className="mt-2 list-disc pl-5 text-sm">
+                {granted.map((permission) => (
+                  <li key={permission}>{permission}</li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
+          {kind === "company" ? (
+            <Link to={routePaths.employeesManagement(lang)} className="text-orange">
+              {t("inviteAdmins")}
+            </Link>
+          ) : null}
         </div>
       ) : (
         <>
