@@ -77,3 +77,13 @@ export function validateCnpj(input: string): ResultValidation {
 export function isSafeMailtoAddress(value: string): boolean {
   return /^[^\s@,;?&%#<>"]+@[^\s@,;?&%#<>"]+\.[^\s@,;?&%#<>"]+$/.test(value);
 }
+
+const FREE_MAIL_DOMAINS = new Set([
+  "gmail.com", "googlemail.com", "hotmail.com", "outlook.com", "live.com", "msn.com", "yahoo.com", "yahoo.com.br",
+  "icloud.com", "me.com", "uol.com.br", "bol.com.br", "terra.com.br", "ig.com.br", "proton.me", "protonmail.com",
+]);
+
+export function isCorporateEmail(value: string): boolean {
+  const domain = value.trim().toLowerCase().split("@")[1];
+  return Boolean(domain) && !FREE_MAIL_DOMAINS.has(domain);
+}
