@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
-import { getAuthSession } from "@/shared/auth/authToken.utils";
+import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import {
   getConversation,
   getConversationMessages,
@@ -15,8 +15,8 @@ import {
   sendConversationMessage,
   type ConversationDto,
   type MessageDto,
-} from "@/features/messages/messenger.api";
-import { subscribeToConversation } from "@/features/messages/messenger.socket";
+} from "@/features/messages/messages.messenger.api";
+import { subscribeToConversation } from "@/features/messages/messages.messenger.socket";
 
 function mergeMessages(current: MessageDto[], incoming: MessageDto[]): MessageDto[] {
   return [...new Map([...current, ...incoming].map((message) => [message.id, message])).values()].sort(

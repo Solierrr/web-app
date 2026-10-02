@@ -8,7 +8,7 @@ vi.mock("@/features/solar-panel/solarPanel.service", () => ({
 }));
 
 import { getCatalogSolarPanels } from "@/features/solar-panel/solarPanel.service";
-import type { SolarPanelAnnouncement } from "@/features/solar-panel/solarPanelAnnouncement";
+import type { SolarPanelAnnouncement } from "@/features/solar-panel/solarPanel.announcement";
 import { SolarPanelModelStatus as ModelStatus } from "@/features/solar-panel/solarPanel.enum";
 
 const mockedGetSolarPanels = vi.mocked(getCatalogSolarPanels);

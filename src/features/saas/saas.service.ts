@@ -4,9 +4,9 @@ import { resolveWithMocks } from "@/config/mocks/fallback.service";
 import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
 import { getMocksMode } from "@/config/mocks/mockMode.utils";
 import MocksMode from "@/config/mocks/mocksMode.enum";
-import { API_CORE_URL } from "@/shared/http/apiCore.utils";
-import { httpJson } from "@/shared/http/http.service";
-import { getAuthSession } from "@/shared/auth/authToken.utils";
+import { API_CORE_URL } from "@/lib/shared/http/apiCore.utils";
+import { httpJson } from "@/lib/shared/http/http.service";
+import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 
 const SERVICE_NAME = "saas";
 const MOCK_CONTEXT_KEY_PREFIX = "solaria.mockOperationalContext.";

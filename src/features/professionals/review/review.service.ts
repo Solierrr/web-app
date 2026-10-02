@@ -1,5 +1,5 @@
-import { httpJson } from "@/shared/http/http.service";
-import { API_CORE_URL } from "@/shared/http/apiCore.utils";
+import { httpJson } from "@/lib/shared/http/http.service";
+import { API_CORE_URL } from "@/lib/shared/http/apiCore.utils";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
 import type { ProfessionalReview } from "./review.d";
 import { getMockProfessionalReviews, decideMockProfessional } from "./review.d.mocks";

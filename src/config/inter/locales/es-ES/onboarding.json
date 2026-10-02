@@ -76,5 +76,8 @@
     "email": "Tu correo de acceso",
     "password": "Contraseña (mínimo 12 caracteres)",
     "confirmPassword": "Confirmar contraseña"
-  }
+  },
+  "corporateEmailRequired": "Usa el correo corporativo de la empresa, no uno personal.",
+  "inviteAdmins": "Invitar a otros administradores",
+  "grantedPermissions": "Permisos concedidos a ti"
 }

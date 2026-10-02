@@ -31,6 +31,11 @@ export const SEGMENT = [
   "offers",
   "units",
   "registrations",
+  "resetPassword",
+  "privacy",
+  "sessions",
+  "registrationStatus",
+  "analytics",
 ] as const;
 
 export type RouteSegmentKey = (typeof SEGMENT)[number];
@@ -87,6 +92,10 @@ export const routePaths = {
   employeesManagement: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin", "employees")}`,
   offersManagement: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin", "offers")}`,
   unitsManagement: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin", "units")}`,
+  analytics: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "analytics")}`,
+  registrationStatus: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "registrationStatus")}`,
+  registrationDetail: (lang: SupportedLanguage, kind: "company" | "professional", id: string) =>
+    `/${lang}/${joinSegments(lang, "admin", "registrations")}/${kind}/${encodeURIComponent(id)}`,
   registrationsManagement: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin", "registrations")}`,
 
   inbox: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "messages")}`,
@@ -98,6 +107,9 @@ export const routePaths = {
 
   settings: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "settings")}`,
   settingsSecurity: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "settings", "security")}`,
+  settingsPrivacy: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "settings", "privacy")}`,
+  settingsSessions: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "settings", "sessions")}`,
+  resetPassword: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "resetPassword")}`,
   dashboard: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "dashboard")}`,
 };
 

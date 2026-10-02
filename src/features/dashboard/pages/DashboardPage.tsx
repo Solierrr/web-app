@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import Icon from "@@/ui/icon/Icon";
-import { useActiveContext } from "@/shared/context/ActiveContext";
+import { useActiveContext } from "@/lib/shared/context/ActiveContext";
 import { DEFAULT, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { CompanyStatus } from "@/features/companies/company.enum";
 import { getOperationalNavigation } from "@@/layout/saas/SaaSLayout.presets";
@@ -20,6 +20,7 @@ export default function DashboardPage() {
     company: companyContext,
     companyType: companyContext && company.status === CompanyStatus.APPROVED ? (company.type ?? null) : null,
     platformAdmin: isPlatformAdmin,
+    pendingRegistration: companyContext && company.status !== CompanyStatus.APPROVED,
     can,
   }).map((group) => ({ ...group, items: group.items.filter((item) => item.key !== "dashboard") }));
   const items = groups.flatMap((group) => group.items);

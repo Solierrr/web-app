@@ -1,6 +1,10 @@
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+
+import { DEFAULT, isSupportedLanguage } from "@/config/inter/browser/languages";
+import { routePaths } from "@/config/inter/paths";
 
 import { CompanyStatus } from "@/features/companies/company.enum";
 import type { Company } from "@/features/companies/company";
@@ -13,6 +17,10 @@ import type { ProfessionalReview } from "@/features/professionals/review/review.
 
 export default function RegistrationsPage() {
   const { t } = useTranslation("commons", { keyPrefix: "registrations" });
+  const { lang: langParam } = useParams<{ lang: string }>();
+  const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT;
+  const [statusFilter, setStatusFilter] = useState<"ALL" | `${CompanyStatus}`>(CompanyStatus.UNDERANALYSIS);
+  const [typeFilter, setTypeFilter] = useState<"ALL" | "SUPPLIER" | "DEMANDANT" | "PROFESSIONAL">("ALL");
 
   const [companies, setCompanies] = useState<Company[] | null>(null);
   const [models, setModels] = useState<SolarPanel[] | null>(null);
@@ -26,9 +34,9 @@ export default function RegistrationsPage() {
       listProfessionalReviews(),
     ]);
     return {
-      companies: allCompanies.filter((company) => company.status === CompanyStatus.UNDERANALYSIS),
+      companies: allCompanies,
       models: pendingModels,
-      professionals: allProfessionals.filter((item) => item.status === "UNDER_ANALYSIS"),
+      professionals: allProfessionals,
     };
   }
 
@@ -95,56 +103,105 @@ export default function RegistrationsPage() {
     );
   if (!companies || !models || !professionals) return <OperationalPage title={t("title")} loading />;
 
+  const matchesStatus = (status: string) => statusFilter === "ALL" || status === statusFilter;
+  const visibleProfessionals =
+    typeFilter === "ALL" || typeFilter === "PROFESSIONAL" ? professionals.filter((item) => matchesStatus(item.status)) : [];
+  const visibleCompanies = companies.filter(
+    (company) => matchesStatus(company.status) && (typeFilter === "ALL" || (typeFilter !== "PROFESSIONAL" && company.type === typeFilter)),
+  );
+
   return (
     <OperationalPage title={t("title")}>
+      <div className="flex flex-wrap gap-4">
+        <label className="flex flex-col gap-1 text-sm">
+          {t("statusFilter")}
+          <select
+            value={statusFilter}
+            onChange={(event) => setStatusFilter(event.target.value as typeof statusFilter)}
+            className="rounded-small border border-operational-border p-2">
+            <option value="ALL">{t("all")}</option>
+            {Object.values(CompanyStatus).map((status) => (
+              <option key={status} value={status}>
+                {t(`status.${status}`)}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="flex flex-col gap-1 text-sm">
+          {t("typeFilter")}
+          <select
+            value={typeFilter}
+            onChange={(event) => setTypeFilter(event.target.value as typeof typeFilter)}
+            className="rounded-small border border-operational-border p-2">
+            <option value="ALL">{t("all")}</option>
+            {(["SUPPLIER", "DEMANDANT", "PROFESSIONAL"] as const).map((type) => (
+              <option key={type} value={type}>
+                {t(type)}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
       <section className="flex flex-col gap-3">
         <h2 className="font-medium">{t("professionalsTitle")}</h2>
         <ul className="divide-y divide-operational-border rounded-small border border-operational-border">
-          {professionals.map((item) => (
+          {visibleProfessionals.map((item) => (
             <li key={item.id} className="flex flex-wrap items-center justify-between gap-3 p-4">
               <div>
-                <p className="font-medium">{item.person.name}</p>
-                <p className="text-sm text-operational-muted">{item.crea}</p>
+                <Link to={routePaths.registrationDetail(lang, "professional", item.id)} className="font-medium hover:underline">
+                  {item.person.name}
+                </Link>
+                <p className="text-sm text-operational-muted">
+                  {item.crea} · {t(`status.${item.status}`)}
+                </p>
               </div>
-              <div className="flex gap-3">
-                <button
-                  type="button"
-                  onClick={() => void handleProfessionalDecision(item.id, true)}
-                  className="rounded-small border border-operational-border px-3 py-1 text-sm">
-                  {t("approve")}
-                </button>
-                <button type="button" onClick={() => void handleProfessionalDecision(item.id, false)} className="text-sm text-red-700">
-                  {t("reject")}
-                </button>
-              </div>
+              {item.status === "UNDER_ANALYSIS" ? (
+                <div className="flex gap-3">
+                  <button
+                    type="button"
+                    onClick={() => void handleProfessionalDecision(item.id, true)}
+                    className="rounded-small border border-operational-border px-3 py-1 text-sm">
+                    {t("approve")}
+                  </button>
+                  <button type="button" onClick={() => void handleProfessionalDecision(item.id, false)} className="text-sm text-red-700">
+                    {t("reject")}
+                  </button>
+                </div>
+              ) : null}
             </li>
           ))}
-          {!professionals.length && <li className="p-4 text-operational-muted">{t("noProfessionals")}</li>}
+          {!visibleProfessionals.length && <li className="p-4 text-operational-muted">{t("noProfessionals")}</li>}
         </ul>
       </section>
       <section className="flex flex-col gap-3">
         <h2 className="font-medium">{t("companiesTitle")}</h2>
         <ul className="divide-y divide-operational-border rounded-small border border-operational-border">
-          {companies.map((company) => (
+          {visibleCompanies.map((company) => (
             <li key={company.id} className="flex flex-wrap items-center justify-between gap-3 p-4">
               <div>
-                <p className="font-medium">{company.tradeName}</p>
-                <p className="text-sm text-gray-600">{company.cnpj}</p>
+                <Link to={routePaths.registrationDetail(lang, "company", company.id)} className="font-medium hover:underline">
+                  {company.tradeName}
+                </Link>
+                <p className="text-sm text-gray-600">
+                  {company.cnpj} · {t(`status.${company.status}`)}
+                </p>
               </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => void handleCompanyDecision(company.id, true)}
-                  className="rounded-small bg-orange px-3 py-1 text-sm text-white">
-                  {t("approve")}
-                </button>
-                <button type="button" onClick={() => void handleCompanyDecision(company.id, false)} className="text-sm text-red-700">
-                  {t("reject")}
-                </button>
-              </div>
+              {company.status === CompanyStatus.UNDERANALYSIS ? (
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => void handleCompanyDecision(company.id, true)}
+                    className="rounded-small bg-orange px-3 py-1 text-sm text-white">
+                    {t("approve")}
+                  </button>
+                  <button type="button" onClick={() => void handleCompanyDecision(company.id, false)} className="text-sm text-red-700">
+                    {t("reject")}
+                  </button>
+                </div>
+              ) : null}
             </li>
           ))}
-          {companies.length === 0 ? <li className="p-4 text-gray-600">{t("noCompanies")}</li> : null}
+          {visibleCompanies.length === 0 ? <li className="p-4 text-gray-600">{t("noCompanies")}</li> : null}
         </ul>
       </section>
 

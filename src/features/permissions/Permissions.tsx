@@ -7,7 +7,7 @@ import {
   revokePermission,
   type Permission,
   type PositionPermission,
-} from "@/features/companies/companyManagement.service";
+} from "@/features/companies/company.management.service";
 import { getPermissionTemplate, isPermissionCompatible, permissionTemplates } from "./permissions.utils";
 
 interface PermissionsProps {

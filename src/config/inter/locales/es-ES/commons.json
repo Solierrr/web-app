@@ -113,12 +113,38 @@
     "noCompanies": "No hay empresas pendientes.",
     "noModels": "No hay modelos pendientes.",
     "noProfessionals": "Ningún profesional pendiente de revisión.",
-    "professionalsTitle": "Profesionales independientes"
+    "professionalsTitle": "Profesionales independientes",
+    "status": {
+      "UNDER_ANALYSIS": "En análisis manual",
+      "APPROVED": "Aprobado",
+      "REJECTED": "Rechazado"
+    },
+    "statusFilter": "Situación",
+    "typeFilter": "Tipo",
+    "all": "Todos",
+    "SUPPLIER": "Proveedoras",
+    "DEMANDANT": "Demandantes",
+    "PROFESSIONAL": "Profesionales",
+    "details": "Detalles",
+    "detailTitle": "Detalles de la solicitud",
+    "back": "Volver a los registros",
+    "cnpj": "CNPJ",
+    "corporateName": "Razón social",
+    "tradeName": "Nombre comercial",
+    "type": "Tipo",
+    "crea": "CREA",
+    "name": "Nombre",
+    "notFound": "Solicitud no encontrada.",
+    "decisionError": "No se pudo registrar la decisión.",
+    "statusLabel": "Situación",
+    "detailError": "No se pudo cargar la solicitud."
   },
   "settings": {
     "title": "Configuración",
     "profile": "Perfil",
-    "security": "Seguridad"
+    "security": "Seguridad",
+    "privacy": "Privacidad",
+    "sessions": "Sesiones y dispositivos"
   },
   "settingsSecurity": {
     "title": "Seguridad",
@@ -144,7 +170,7 @@
     "loadError": "No se pudieron cargar los empleados.",
     "listTitle": "Equipo",
     "empty": "Todavía no hay empleados.",
-    "remove": "Desvincular",
+    "remove": "Desactivar acceso",
     "inviteTitle": "Invitar empleado",
     "existingPosition": "Cargo existente",
     "selectPosition": "Selecciona un cargo",
@@ -155,7 +181,12 @@
     "generatedCode": "Código generado: {{code}} — compártelo con el nuevo empleado.",
     "activeCodesTitle": "Códigos activos",
     "noActiveCodes": "No hay códigos activos.",
-    "revoke": "Revocar"
+    "revoke": "Revocar",
+    "adminsTitle": "Administradores",
+    "guestEmail": "Correo del invitado (opcional)",
+    "sendByEmail": "Enviar por correo",
+    "emailSubject": "Invitación a {{company}} en Solaria",
+    "emailBody": "Usa el código {{code}} para unirte a {{company}}: {{url}}"
   },
   "companyOffers": {
     "title": "Ofertas"
@@ -189,7 +220,8 @@
     "noAddress": "Dirección no informada",
     "edit": "Editar",
     "remove": "Eliminar",
-    "empty": "Todavía no hay unidades registradas."
+    "empty": "Todavía no hay unidades registradas.",
+    "openMap": "Ver en Google Maps"
   },
   "offers": {
     "title": "Ofertas",
@@ -213,7 +245,19 @@
     "units": "unidades",
     "edit": "Editar",
     "remove": "Eliminar",
-    "empty": "Todavía no hay ofertas registradas."
+    "empty": "Todavía no hay ofertas registradas.",
+    "status": {
+      "ACTIVE": "Activa",
+      "PAUSED": "Pausada",
+      "CLOSED": "Cerrada"
+    },
+    "pause": "Pausar",
+    "resume": "Reactivar",
+    "close": "Cerrar",
+    "reopen": "Reabrir",
+    "discountLabel": "Descuento",
+    "statusLabel": "Estado",
+    "expiration": "Validez"
   },
   "myCompany": {
     "loadError": "No se pudo cargar tu empresa.",
@@ -312,5 +356,70 @@
   },
   "empty": {
     "default": "no se encontraron resultados."
+  },
+  "settingsPrivacy": {
+    "title": "Privacidad",
+    "description": "Elige qué pueden ver los demás usuarios. Las preferencias se guardan en este dispositivo y se aplicarán al perfil público cuando el servidor lo admita.",
+    "showContact": "Mostrar mis datos de contacto en el perfil público",
+    "showInSearch": "Aparecer en los resultados de búsqueda",
+    "save": "Guardar",
+    "saved": "Preferencias guardadas en este dispositivo.",
+    "saveError": "No se pudieron guardar las preferencias en este dispositivo."
+  },
+  "settingsSessions": {
+    "title": "Sesiones y dispositivos",
+    "description": "Dispositivos con acceso a tu cuenta.",
+    "current": "Este dispositivo",
+    "lastActive": "Último acceso: {{date}}",
+    "revoke": "Cerrar sesión",
+    "revoked": "Sesión cerrada.",
+    "signOut": "Salir de este dispositivo",
+    "onlyCurrent": "Por ahora solo puedes ver y cerrar la sesión de este dispositivo.",
+    "error": "No se pudieron cargar las sesiones.",
+    "revokeError": "No se pudo cerrar la sesión."
+  },
+  "registrationStatusPage": {
+    "title": "Estado del registro",
+    "submitted": "Registro enviado",
+    "manualReview": "Análisis manual",
+    "result": "Resultado",
+    "none": "Todavía no tienes un registro de empresa.",
+    "loadError": "No se pudo cargar el estado del registro.",
+    "stage": {
+      "MANUAL_REVIEW": "Tu registro está en análisis manual. Te avisaremos cuando haya un resultado.",
+      "APPROVED": "Registro aprobado. Las funciones de la empresa están habilitadas.",
+      "REJECTED": "Registro rechazado. Habla con soporte para revisar los datos."
+    }
+  },
+  "analytics": {
+    "title": "Indicadores",
+    "exportCsv": "Exportar CSV",
+    "report": "Informe",
+    "loadError": "No se pudieron cargar los indicadores.",
+    "personal": "Los indicadores aparecen cuando actúas en una empresa o como administrador de la plataforma.",
+    "partial": "Algunos indicadores no se pudieron cargar.",
+    "empty": "Sin datos para este alcance.",
+    "scope": {
+      "platform": "Vista de toda la plataforma",
+      "supplier": "Vista de la empresa proveedora",
+      "demandant": "Vista de la empresa demandante"
+    },
+    "kpi": {
+      "approvedCompanies": "Empresas aprobadas",
+      "pendingCompanies": "Empresas en análisis",
+      "approvedModels": "Modelos aprobados",
+      "pendingModels": "Modelos en análisis",
+      "pendingProfessionals": "Profesionales en análisis",
+      "activeOffers": "Ofertas activas",
+      "pausedOffers": "Ofertas pausadas",
+      "closedOffers": "Ofertas cerradas",
+      "models": "Modelos registrados",
+      "employees": "Empleados",
+      "units": "Unidades"
+    },
+    "csv": {
+      "indicator": "indicador",
+      "value": "valor"
+    }
   }
 }

@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { DEFAULT, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
-import { useActiveContext } from "@/shared/context/ActiveContext";
+import { useActiveContext } from "@/lib/shared/context/ActiveContext";
 import { listCompanyUnits, type LocalUnit } from "../unit.service";
 
 export default function UnitPage() {
@@ -60,6 +60,19 @@ export default function UnitPage() {
               <dt className="text-sm text-operational-muted">{t("zipCode")}</dt>
               <dd>{unit.address?.zipCode ?? "—"}</dd>
             </div>
+            {unit.address && (
+              <div>
+                <a
+                  className="text-orange underline"
+                  target="_blank"
+                  rel="noreferrer"
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                    `${[unit.address.street, unit.address.number].filter(Boolean).join(" ")}, ${unit.address.city} ${unit.address.state} ${unit.address.zipCode}`,
+                  )}`}>
+                  {t("openMap")}
+                </a>
+              </div>
+            )}
             <div>
               <dt className="text-sm text-operational-muted">{t("complement")}</dt>
               <dd>{unit.complement ?? "—"}</dd>

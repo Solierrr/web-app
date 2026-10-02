@@ -1,5 +1,5 @@
 import type { User } from "./user";
-import { getAuthSession } from "@/shared/auth/authToken.utils";
+import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import type { MyUser } from "./user.service";
 
 const userMock = [

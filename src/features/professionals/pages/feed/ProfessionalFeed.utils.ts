@@ -1,5 +1,5 @@
 import type { CatalogTechnician } from "@/features/professionals/professional.service";
-import type { EntityCardItem } from "@/components/layout/announcement/entity-card/EntityCard";
+import type { EntityCardItem } from "@/lib/components/layout/announcement/entity-card/EntityCard";
 import type { SupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
 

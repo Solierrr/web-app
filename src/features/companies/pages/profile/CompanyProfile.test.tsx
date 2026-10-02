@@ -13,7 +13,7 @@ vi.mock("@/features/solar-panel/solarPanel.service", () => ({
 import { getCatalogCompanyBySlug } from "@/features/companies/company.service";
 import type { CatalogCompany } from "@/features/companies/company.service";
 import { getCatalogSolarPanels } from "@/features/solar-panel/solarPanel.service";
-import type { SolarPanelAnnouncement } from "@/features/solar-panel/solarPanelAnnouncement";
+import type { SolarPanelAnnouncement } from "@/features/solar-panel/solarPanel.announcement";
 
 const mockedGetCompanyBySlug = vi.mocked(getCatalogCompanyBySlug);
 const mockedGetCatalogSolarPanels = vi.mocked(getCatalogSolarPanels);
@@ -31,7 +31,17 @@ function makeOffer(companySlug: string): SolarPanelAnnouncement {
     id: "offer-1",
     supplierId: "company-1",
     company: { id: "company-1", tradeName: "Solaria Energia", slug: companySlug },
-    panel: { id: "model-1", brand: "SolarBrand", model: "X100", type: "MONOCRYSTALLINE" as never, powerOutput: 400, efficiency: 20, dimension: { width: 1, length: 2 }, weight: 20, status: "APPROVED" as never },
+    panel: {
+      id: "model-1",
+      brand: "SolarBrand",
+      model: "X100",
+      type: "MONOCRYSTALLINE" as never,
+      powerOutput: 400,
+      efficiency: 20,
+      dimension: { width: 1, length: 2 },
+      weight: 20,
+      status: "APPROVED" as never,
+    },
     title: "Placa X100",
     description: "",
     photos: { heroImage: { url: "/panel.jpg", description: "" }, otherImages: [] },
