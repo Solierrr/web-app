@@ -4,7 +4,7 @@ import professionalMock from "@/features/professionals/professional.d.mock";
 import companyMock from "@/features/companies/company.d.mock";
 import { toCardItem as toProfessionalCardItem } from "@/features/professionals/pages/feed/ProfessionalFeed.utils";
 import { toCardItem as toCompanyCardItem } from "@/features/companies/pages/feed/CompanyFeed.utils";
-import { DEFAULT as DEFAULT_LANGUAGE } from "@/config/inter/browser/languages";
+import { DEFAULT as DEFAULT_LANGUAGE } from "@/config/i18n/browser/languages";
 
 const meta = {
   title: "Layout/Announcement/EntityCorridor",

@@ -2,8 +2,8 @@ import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { useEffect, useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
-import { DEFAULT, isSupportedLanguage } from "@/config/inter/browser/languages";
-import { routePaths } from "@/config/inter/paths";
+import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
+import { routePaths } from "@/config/i18n/paths";
 import { getPermissionTemplate, isPermissionCompatible, permissionTemplates } from "@/features/permissions/permissions.utils";
 
 import { useActiveContext } from "@/lib/shared/context/ActiveContext";

@@ -1,3 +1,5 @@
+import i18n from "@/config/i18n/internationalization";
+import { createServiceError } from "@/config/logging/serviceError.utils";
 import { resolveWithMocks } from "@/config/mocks/fallback.service";
 import { httpJson } from "@/lib/shared/http/http.service";
 import { API_CORE_URL } from "@/lib/shared/http/apiCore.utils";
@@ -13,7 +15,12 @@ export interface CatalogTechnician {
   professions: string[];
 }
 
-function mockCatalogTechnician(professional: { id: string; name: string; slug: string; registrations?: { profession: string }[] }): CatalogTechnician {
+function mockCatalogTechnician(professional: {
+  id: string;
+  name: string;
+  slug: string;
+  registrations?: { profession: string }[];
+}): CatalogTechnician {
   return {
     id: professional.id,
     slug: professional.slug,
@@ -25,27 +32,29 @@ function mockCatalogTechnician(professional: { id: string; name: string; slug: s
 
 export function getCatalogTechnicians(): Promise<CatalogTechnician[]> {
   return resolveWithMocks(
-    () => httpJson<CatalogTechnician[]>(`${API_CORE_URL}/catalog/technicians`, {
-      service: SERVICE_NAME,
-      operation: "getCatalogTechnicians",
-      authenticated: false,
-      errorMessage: "Não foi possível carregar os profissionais",
-    }),
+    () =>
+      httpJson<CatalogTechnician[]>(`${API_CORE_URL}/catalog/technicians`, {
+        service: SERVICE_NAME,
+        operation: "getCatalogTechnicians",
+        authenticated: false,
+        errorMessage: i18n.t("services:professional.getCatalogTechnicians"),
+      }),
     () => professionalMocks.map(mockCatalogTechnician),
   );
 }
 
 export function getCatalogTechnicianBySlug(slug: string): Promise<CatalogTechnician> {
   return resolveWithMocks(
-    () => httpJson<CatalogTechnician>(`${API_CORE_URL}/catalog/technicians/${encodeURIComponent(slug)}`, {
-      service: SERVICE_NAME,
-      operation: "getCatalogTechnicianBySlug",
-      authenticated: false,
-      errorMessage: "Não foi possível carregar o profissional",
-    }),
+    () =>
+      httpJson<CatalogTechnician>(`${API_CORE_URL}/catalog/technicians/${encodeURIComponent(slug)}`, {
+        service: SERVICE_NAME,
+        operation: "getCatalogTechnicianBySlug",
+        authenticated: false,
+        errorMessage: i18n.t("services:professional.getCatalogTechnicianBySlug"),
+      }),
     () => {
       const professional = professionalMocks.find((item) => item.slug === slug);
-      if (!professional) throw new Error(`Profissional não encontrado: ${slug}`);
+      if (!professional) throw createServiceError(SERVICE_NAME, "getCatalogTechnicianBySlug", i18n.t("services:professional.notFound", { slug }));
       return mockCatalogTechnician(professional);
     },
   );

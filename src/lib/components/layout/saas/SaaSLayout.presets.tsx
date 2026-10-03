@@ -1,4 +1,4 @@
-import { routePaths } from "@/config/inter/paths";
+import { routePaths } from "@/config/i18n/paths";
 import type { SaaSNavigationGroup } from "@/features/saas/saas";
 import { ANALYTICS_PERMISSIONS } from "@/features/analytics/analytics.utils";
 

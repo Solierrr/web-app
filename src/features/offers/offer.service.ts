@@ -1,3 +1,4 @@
+import i18n from "@/config/i18n/internationalization";
 import { httpJson } from "@/lib/shared/http/http.service";
 import { API_CORE_URL } from "@/lib/shared/http/apiCore.utils";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
@@ -39,7 +40,7 @@ export async function getMySupplier(companyId: string): Promise<Supplier | null>
   return httpJson<Supplier[]>(`${API_CORE_URL}/suppliers/company/${encodeURIComponent(companyId)}`, {
     service: SERVICE_NAME,
     operation: "getMySupplier",
-    errorMessage: "Não foi possível carregar os dados de fornecedor",
+    errorMessage: i18n.t("services:offer.getMySupplier"),
   }).then((suppliers) => suppliers[0] ?? null);
 }
 
@@ -51,7 +52,7 @@ export async function listCompanyOffers(companyId: string): Promise<Offer[]> {
   return httpJson<Offer[]>(`${API_CORE_URL}/offers/company/${encodeURIComponent(companyId)}`, {
     service: SERVICE_NAME,
     operation: "listCompanyOffers",
-    errorMessage: "Não foi possível carregar as ofertas",
+    errorMessage: i18n.t("services:offer.listCompanyOffers"),
   });
 }
 
@@ -78,7 +79,7 @@ export async function createOffer(payload: OfferPayload): Promise<Offer> {
     operation: "createOffer",
     method: "POST",
     body: payload,
-    errorMessage: "Não foi possível criar a oferta",
+    errorMessage: i18n.t("services:offer.createOffer"),
   });
 }
 
@@ -95,7 +96,7 @@ export async function updateOffer(id: string, payload: OfferPayload): Promise<Of
     operation: "updateOffer",
     method: "PUT",
     body: payload,
-    errorMessage: `Não foi possível atualizar a oferta ${id}`,
+    errorMessage: i18n.t("services:offer.updateOffer", { id }),
   });
 }
 
@@ -109,7 +110,7 @@ export async function deleteOffer(id: string): Promise<void> {
     service: SERVICE_NAME,
     operation: "deleteOffer",
     method: "DELETE",
-    errorMessage: `Não foi possível remover a oferta ${id}`,
+    errorMessage: i18n.t("services:offer.deleteOffer", { id }),
   });
 }
 

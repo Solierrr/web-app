@@ -3,8 +3,8 @@ import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { useEffect, useState, type ReactNode } from "react";
 import { Navigate, useParams } from "react-router-dom";
 
-import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
-import { routePaths } from "@/config/inter/paths";
+import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
+import { routePaths } from "@/config/i18n/paths";
 import { getMyPlatformAdmin } from "@/features/platform-admin/platformAdmin.service";
 import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
 

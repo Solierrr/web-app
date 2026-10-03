@@ -6,11 +6,11 @@ import AppMode from "@/config/vite/mode.enum";
 import { TestRoutes } from "./TestRoutes";
 import { AppLayout } from "../config/AppLayout";
 import { SaaSLayout } from "@/lib/components/layout/saas/SaaSLayout";
-import LanguageLayout, { RootRedirect } from "../config/inter/browser/LanguageLayout";
+import LanguageLayout, { RootRedirect } from "../config/i18n/browser/LanguageLayout";
 import { NotFoundPage } from "../features/error/pages/not-found/NotFound";
 
-import { SUPPORTED, type SupportedLanguage } from "@/config/inter/browser/languages";
-import { joinSegments } from "@/config/inter/paths";
+import { SUPPORTED, type SupportedLanguage } from "@/config/i18n/browser/languages";
+import { joinSegments } from "@/config/i18n/paths";
 
 import SolarPanelAnnouncement from "@/features/solar-panel/pages/announcement/SolarPanelAnnouncement";
 import SolarPanelFeed from "@/features/solar-panel/pages/feed/SolarPanelFeed";

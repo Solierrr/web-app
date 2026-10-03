@@ -4,8 +4,8 @@ import { useTranslation } from "react-i18next";
 import ProfilePage from "@/lib/components/layout/profile/ProfilePage";
 import Input from "@@/ui/input/Input";
 import { PrimaryButton, SecondaryButton } from "@@/ui/button/Button.presets";
-import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
-import { routePaths } from "@/config/inter/paths";
+import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
+import { routePaths } from "@/config/i18n/paths";
 
 interface ProfileOnboardingProps {
   kind?: "user" | "company";

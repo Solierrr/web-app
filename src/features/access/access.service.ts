@@ -1,3 +1,4 @@
+import i18n from "@/config/i18n/internationalization";
 import type { AuthSession, LoginCredentials, RegisterCredentials, RegisterResult } from "./access";
 
 import { httpJson } from "@/lib/shared/http/http.service";
@@ -21,7 +22,7 @@ export async function login(credentials: LoginCredentials): Promise<AuthSession>
     method: "POST",
     body: credentials,
     authenticated: false,
-    errorMessage: "Não foi possível fazer login",
+    errorMessage: i18n.t("services:access.login"),
   });
   setAuthSession(session);
   return session;
@@ -31,7 +32,7 @@ export async function register(credentials: RegisterCredentials): Promise<Regist
   if (isAlwaysMockMode()) {
     await waitForMockService();
     const session = createMockSession(credentials.email);
-    return { id: session.userId, email: session.email, message: "Cadastro realizado" };
+    return { id: session.userId, email: session.email, message: i18n.t("services:access.registrationSuccess") };
   }
   return httpJson<RegisterResult>(`${API}/register`, {
     service: SERVICE_NAME,
@@ -39,7 +40,7 @@ export async function register(credentials: RegisterCredentials): Promise<Regist
     method: "POST",
     body: credentials,
     authenticated: false,
-    errorMessage: "Não foi possível concluir o cadastro",
+    errorMessage: i18n.t("services:access.register"),
   });
 }
 
@@ -50,7 +51,7 @@ export async function loginWithFirebase(idToken: string): Promise<AuthSession> {
     method: "POST",
     body: { idToken },
     authenticated: false,
-    errorMessage: "Não foi possível fazer login",
+    errorMessage: i18n.t("services:access.loginWithFirebase"),
   });
   setAuthSession(session);
   return session;
@@ -63,7 +64,7 @@ export async function linkFirebase(email: string, password: string, idToken: str
     method: "POST",
     body: { email, password, idToken },
     authenticated: false,
-    errorMessage: "Não foi possível vincular sua conta ao Firebase",
+    errorMessage: i18n.t("services:access.linkFirebase"),
   });
   setAuthSession(session);
   return session;
@@ -90,7 +91,7 @@ export function refresh(): Promise<AuthSession | null> {
       method: "POST",
       body: { refreshToken: latest.refreshToken },
       authenticated: false,
-      errorMessage: "Não foi possível renovar a sessão",
+      errorMessage: i18n.t("services:access.refresh"),
     });
     // A resposta de uma renovação anterior não deve desfazer logout ou outro login.
     if (getAuthSession()?.refreshToken !== latest.refreshToken) return getAuthSession();
@@ -98,8 +99,9 @@ export function refresh(): Promise<AuthSession | null> {
     return session;
   };
   // O token é rotativo; serializar também entre abas evita revogar a sessão por reuso.
-  pendingRefresh = (navigator.locks ? navigator.locks.request("solaria.auth.refresh", renew) : renew())
-    .finally(() => { pendingRefresh = null; });
+  pendingRefresh = (navigator.locks ? navigator.locks.request("solaria.auth.refresh", renew) : renew()).finally(() => {
+    pendingRefresh = null;
+  });
   return pendingRefresh;
 }
 
@@ -112,7 +114,7 @@ export async function logout(): Promise<void> {
     service: SERVICE_NAME,
     operation: "logout",
     method: "POST",
-    errorMessage: "Não foi possível encerrar a sessão",
+    errorMessage: i18n.t("services:access.logout"),
   });
   clearAuthSession();
 }

@@ -1,3 +1,5 @@
+import i18n from "@/config/i18n/internationalization";
+import { createServiceError } from "@/config/logging/serviceError.utils";
 import type { Company } from "./company";
 
 import { companyMocks } from "@/config/mocks/registry";
@@ -27,7 +29,7 @@ export function createCompany(payload: { type: "SUPPLIER" | "DEMANDANT"; cnpj: s
     operation: "createCompany",
     method: "POST",
     body: payload,
-    errorMessage: "Não foi possível cadastrar a empresa",
+    errorMessage: i18n.t("services:company.createCompany"),
   });
 }
 
@@ -52,7 +54,7 @@ export function createAddress(payload: AddressPayload): Promise<{ id: string }> 
     operation: "createAddress",
     method: "POST",
     body: payload,
-    errorMessage: "Não foi possível cadastrar o endereço",
+    errorMessage: i18n.t("services:company.createAddress"),
   });
 }
 
@@ -62,7 +64,7 @@ export function createBusinessContact(payload: BusinessContactPayload): Promise<
     operation: "createBusinessContact",
     method: "POST",
     body: payload,
-    errorMessage: "Não foi possível cadastrar o contato comercial",
+    errorMessage: i18n.t("services:company.createBusinessContact"),
   });
 }
 
@@ -72,7 +74,7 @@ export function attachCompanyAddress(companyId: string, addressId: string): Prom
     operation: "attachCompanyAddress",
     method: "PATCH",
     body: { addressId },
-    errorMessage: "Não foi possível vincular o endereço à empresa",
+    errorMessage: i18n.t("services:company.attachCompanyAddress"),
   });
 }
 
@@ -82,7 +84,7 @@ export function attachCompanyBusinessContact(companyId: string, businessContactI
     operation: "attachCompanyBusinessContact",
     method: "PATCH",
     body: { businessContactId },
-    errorMessage: "Não foi possível vincular o contato comercial à empresa",
+    errorMessage: i18n.t("services:company.attachCompanyBusinessContact"),
   });
 }
 
@@ -104,7 +106,7 @@ export function getCatalogCompanies(): Promise<CatalogCompany[]> {
         service: SERVICE_NAME,
         operation: "getCatalogCompanies",
         authenticated: false,
-        errorMessage: "Não foi possível carregar os fornecedores",
+        errorMessage: i18n.t("services:company.getCatalogCompanies"),
       }),
     () => companyMocks.filter((company) => company.status === "APPROVED").map(mockCatalogCompany),
   );
@@ -117,11 +119,11 @@ export function getCatalogCompanyBySlug(slug: string): Promise<CatalogCompany> {
         service: SERVICE_NAME,
         operation: "getCatalogCompanyBySlug",
         authenticated: false,
-        errorMessage: "Não foi possível carregar o fornecedor",
+        errorMessage: i18n.t("services:company.getCatalogCompanyBySlug"),
       }),
     () => {
       const company = companyMocks.find((item) => item.slug === slug && item.status === "APPROVED");
-      if (!company) throw new Error(`Fornecedor não encontrado: ${slug}`);
+      if (!company) throw createServiceError(SERVICE_NAME, "getCatalogCompanyBySlug", i18n.t("services:company.supplierNotFound", { slug }));
       return mockCatalogCompany(company);
     },
   );
@@ -143,7 +145,7 @@ export async function getMyMembership(): Promise<MyMembership | null> {
   const membership = await httpJson<MyMembership | undefined>(`${API_CORE_URL}/user-companies/me`, {
     service: SERVICE_NAME,
     operation: "getMyCompanyMembership",
-    errorMessage: "Não foi possível carregar o vínculo com a empresa",
+    errorMessage: i18n.t("services:company.getMyCompanyMembership"),
   });
   return membership ?? null;
 }
@@ -183,7 +185,7 @@ export async function getMyCompany(): Promise<Company | null> {
   return httpJson<Company>(`${API_CORE_URL}/companies/${encodeURIComponent(membership.companyId)}`, {
     service: SERVICE_NAME,
     operation: "getMyCompany",
-    errorMessage: "Não foi possível carregar sua empresa",
+    errorMessage: i18n.t("services:company.getMyCompany"),
   });
 }
 
@@ -191,10 +193,11 @@ export async function updateMyCompanyProfile(
   companyId: string,
   profile: Pick<Company, "tradeName" | "corporateName" | "businessContact" | "address">,
 ): Promise<Company> {
-  if (!isAlwaysMockMode()) throw new Error("A edição do perfil empresarial ainda não está disponível na API.");
+  if (!isAlwaysMockMode()) throw createServiceError(SERVICE_NAME, "updateMyCompanyProfile", i18n.t("services:company.profileEditingUnavailable"));
   await waitForMockService();
   const company = await getMyCompany();
-  if (!company || company.id !== companyId) throw new Error("Não foi possível encontrar a empresa ativa.");
+  if (!company || company.id !== companyId)
+    throw createServiceError(SERVICE_NAME, "updateMyCompanyProfile", i18n.t("services:company.activeCompanyNotFound"));
   const updated = { ...company, ...profile };
   const account = getOperationalAccount();
   saveOperationalAccount({
@@ -231,7 +234,7 @@ export function getCompany(id: string): Promise<Company> {
       httpJson<Company>(`${API_CORE_URL}/companies/${id}`, {
         service: SERVICE_NAME,
         operation: "getCompany",
-        errorMessage: `Não foi possível obter a empresa ${id}`,
+        errorMessage: i18n.t("services:company.getCompany", { id }),
       }),
     () => companyMocks.find((company) => company.id === id) ?? companyMocks[0],
   );
@@ -243,7 +246,7 @@ export function getCompanyBySlug(slug: string): Promise<Company> {
       httpJson<Company>(`${API_CORE_URL}/companies/slug/${slug}`, {
         service: SERVICE_NAME,
         operation: "getCompanyBySlug",
-        errorMessage: `Não foi possível obter a empresa ${slug}`,
+        errorMessage: i18n.t("services:company.getCompanyBySlug", { slug }),
       }),
     () => companyMocks.find((company) => company.slug === slug) ?? companyMocks[0],
   );
@@ -260,7 +263,7 @@ export async function approveCompany(id: string): Promise<Company> {
     service: SERVICE_NAME,
     operation: "approveCompany",
     method: "PATCH",
-    errorMessage: `Não foi possível aprovar a empresa ${id}`,
+    errorMessage: i18n.t("services:company.approveCompany", { id }),
   });
 }
 
@@ -273,7 +276,7 @@ export async function rejectCompany(id: string): Promise<Company> {
     service: SERVICE_NAME,
     operation: "rejectCompany",
     method: "PATCH",
-    errorMessage: `Não foi possível rejeitar a empresa ${id}`,
+    errorMessage: i18n.t("services:company.rejectCompany", { id }),
   });
 }
 
@@ -285,7 +288,7 @@ export async function listAllCompanies(): Promise<Company[]> {
   return httpJson<Company[]>(`${API_CORE_URL}/companies`, {
     service: SERVICE_NAME,
     operation: "listAllCompanies",
-    errorMessage: "Não foi possível obter as empresas",
+    errorMessage: i18n.t("services:company.listAllCompanies"),
   });
 }
 
@@ -295,7 +298,7 @@ export function getCompanies(ids: string[]): Promise<Company[]> {
       httpJson<Company[]>(`${API_CORE_URL}/companies`, {
         service: SERVICE_NAME,
         operation: "getCompanies",
-        errorMessage: "Não foi possível obter as empresas",
+        errorMessage: i18n.t("services:company.getCompanies"),
       }).then((companies) => companies.filter((company) => ids.includes(company.id))),
     () => companyMocks,
   );

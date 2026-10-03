@@ -1,8 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Icon from "@@/ui/icon/Icon";
-import { routePaths } from "@/config/inter/paths";
-import type { SupportedLanguage } from "@/config/inter/browser/languages";
+import { routePaths } from "@/config/i18n/paths";
+import type { SupportedLanguage } from "@/config/i18n/browser/languages";
 import type { SaaSNavigationGroup } from "@/features/saas/saas";
 
 interface SaaSNavigationProps {

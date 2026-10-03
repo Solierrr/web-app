@@ -1,7 +1,7 @@
 import type { Preview } from "@storybook/react-vite";
 import { MemoryRouter } from "react-router-dom";
 import "../src/index.css";
-import "../src/config/inter/internationalization";
+import "../src/config/i18n/internationalization";
 
 const preview: Preview = {
   parameters: {

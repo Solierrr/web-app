@@ -1,3 +1,4 @@
+import i18n from "@/config/i18n/internationalization";
 import { httpJson } from "@/lib/shared/http/http.service";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
 import { getMockMessenger, getMockConversation, createMockConversation, sendMockMessage } from "./messages.messenger.d.mocks";
@@ -31,7 +32,7 @@ export async function getConversations(): Promise<ConversationDto[]> {
   return httpJson<ConversationDto[]>(`${API}/conversations/me`, {
     service: "messenger",
     operation: "getConversations",
-    errorMessage: "Não foi possível carregar as conversas",
+    errorMessage: i18n.t("services:messenger.getConversations"),
   });
 }
 
@@ -43,7 +44,7 @@ export async function getConversation(id: string): Promise<ConversationDto> {
   return httpJson<ConversationDto>(`${API}/conversations/${encodeURIComponent(id)}`, {
     service: "messenger",
     operation: "getConversation",
-    errorMessage: "Não foi possível carregar a conversa",
+    errorMessage: i18n.t("services:messenger.getConversation"),
   });
 }
 
@@ -57,7 +58,7 @@ export async function createDirectConversation(recipientId: string): Promise<Con
     operation: "createDirectConversation",
     method: "POST",
     body: { recipientId },
-    errorMessage: "Não foi possível iniciar a conversa",
+    errorMessage: i18n.t("services:messenger.createDirectConversation"),
   });
 }
 
@@ -73,7 +74,7 @@ export async function getConversationMessages(id: string, beforeSequence?: numbe
   return httpJson<MessageDto[]>(`${API}/messages/conversation/${encodeURIComponent(id)}/history?${params}`, {
     service: "messenger",
     operation: "getConversationMessages",
-    errorMessage: "Não foi possível carregar as mensagens",
+    errorMessage: i18n.t("services:messenger.getConversationMessages"),
   });
 }
 
@@ -85,7 +86,7 @@ export async function getConversationMessagesSince(id: string, sequence: number)
   return httpJson<MessageDto[]>(`${API}/messages/conversation/${encodeURIComponent(id)}?sinceSequence=${sequence}&limit=100`, {
     service: "messenger",
     operation: "syncConversationMessages",
-    errorMessage: "Não foi possível sincronizar as mensagens",
+    errorMessage: i18n.t("services:messenger.syncConversationMessages"),
   });
 }
 
@@ -99,7 +100,7 @@ export async function markConversationRead(id: string, sequence: number): Promis
     operation: "markConversationRead",
     method: "POST",
     body: { sequence },
-    errorMessage: "Não foi possível atualizar a leitura da conversa",
+    errorMessage: i18n.t("services:messenger.markConversationRead"),
   });
 }
 
@@ -113,7 +114,7 @@ export async function sendConversationMessage(conversationId: string, content: s
     operation: "sendConversationMessage",
     method: "POST",
     body: { conversationId, messageType: "USER_TO_USER", content },
-    errorMessage: "Não foi possível enviar a mensagem",
+    errorMessage: i18n.t("services:messenger.sendConversationMessage"),
   });
 }
 
@@ -128,7 +129,7 @@ export async function getUserSummary(authId: string): Promise<{ username: string
     {
       service: "user",
       operation: "getUserSummary",
-      errorMessage: "Não foi possível carregar o participante",
+      errorMessage: i18n.t("services:user.getUserSummary"),
     },
   );
 }

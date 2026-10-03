@@ -1,3 +1,4 @@
+import logger from "@/config/logging/logger";
 import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
 import type { MockProfessionalProfile, OperationalAccount, OperationalMembership, RegistrationDraft, RegistrationKind } from "./access.onboarding";
@@ -6,7 +7,8 @@ function readStored<T>(key: string, fallback: T): T {
   try {
     const raw = localStorage.getItem(key);
     return raw ? (JSON.parse(raw) as T) : fallback;
-  } catch {
+  } catch (error) {
+    logger.serviceError({ service: "accessOnboarding", operation: "readStored", error });
     return fallback;
   }
 }

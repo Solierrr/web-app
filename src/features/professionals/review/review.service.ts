@@ -1,3 +1,4 @@
+import i18n from "@/config/i18n/internationalization";
 import { httpJson } from "@/lib/shared/http/http.service";
 import { API_CORE_URL } from "@/lib/shared/http/apiCore.utils";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
@@ -12,7 +13,7 @@ export async function listProfessionalReviews(): Promise<ProfessionalReview[]> {
   return httpJson<ProfessionalReview[]>(`${API_CORE_URL}/technicians`, {
     service: "professionalReview",
     operation: "listProfessionalReviews",
-    errorMessage: "Não foi possível carregar os profissionais em análise",
+    errorMessage: i18n.t("services:professionalReview.listProfessionalReviews"),
   });
 }
 
@@ -26,6 +27,6 @@ export async function decideProfessional(id: string, approved: boolean): Promise
     service: "professionalReview",
     operation: "decideProfessional",
     method: "POST",
-    errorMessage: "Não foi possível analisar o profissional",
+    errorMessage: i18n.t("services:professionalReview.decideProfessional"),
   });
 }

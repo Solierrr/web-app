@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Building2, MapPin } from "lucide-react";
 
-import { routePaths } from "@/config/inter/paths";
-import type { SupportedLanguage } from "@/config/inter/browser/languages";
+import { routePaths } from "@/config/i18n/paths";
+import type { SupportedLanguage } from "@/config/i18n/browser/languages";
 import { slugNormalization } from "@/lib/utils/normalization.utils";
 import type { CompanyFeedItem } from "./CompanyFeed.utils";
 

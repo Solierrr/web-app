@@ -3,8 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Icon from "@@/ui/icon/Icon";
 import { MenuList, MenuItem } from "@@/overlay/Menu";
-import { SUPPORTED as SUPPORTED_LANGUAGES, type SupportedLanguage } from "@/config/inter/browser/languages";
-import { translatePathToLanguage } from "@/config/inter/paths";
+import { SUPPORTED as SUPPORTED_LANGUAGES, type SupportedLanguage } from "@/config/i18n/browser/languages";
+import { translatePathToLanguage } from "@/config/i18n/paths";
 
 const LANGUAGE_LABELS: Record<SupportedLanguage, string> = {
   "pt-BR": "Português",

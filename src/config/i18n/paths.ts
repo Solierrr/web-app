@@ -1,5 +1,5 @@
-import i18n from "@/config/inter/internationalization";
-import { isSupportedLanguage, type SupportedLanguage } from "@/config/inter/browser/languages";
+import i18n from "@/config/i18n/internationalization";
+import { isSupportedLanguage, type SupportedLanguage } from "@/config/i18n/browser/languages";
 
 export const SEGMENT = [
   "solarPanels",

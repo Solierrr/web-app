@@ -1,8 +1,8 @@
 import type { CatalogCompany } from "@/features/companies/company.service";
 import type { Company } from "@/features/companies/company";
 import type { EntityCardItem } from "@/lib/components/layout/announcement/entity-card/EntityCard";
-import type { SupportedLanguage } from "@/config/inter/browser/languages";
-import { routePaths } from "@/config/inter/paths";
+import type { SupportedLanguage } from "@/config/i18n/browser/languages";
+import { routePaths } from "@/config/i18n/paths";
 
 export interface CompanyFeedItem {
   company: Company;

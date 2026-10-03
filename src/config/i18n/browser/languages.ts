@@ -1,4 +1,4 @@
-import SupportedLanguages from "@/config/inter/supported.enum";
+import SupportedLanguages from "@/config/i18n/supported.enum";
 
 export const SUPPORTED = Object.values(SupportedLanguages);
 export type SupportedLanguage = SupportedLanguages;

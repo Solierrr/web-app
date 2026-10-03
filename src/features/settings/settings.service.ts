@@ -1,3 +1,6 @@
+import i18n from "@/config/i18n/internationalization";
+import logger from "@/config/logging/logger";
+import { createServiceError } from "@/config/logging/serviceError.utils";
 import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
 import type { DeviceSession, PrivacyPreferences } from "./settings";
@@ -16,7 +19,8 @@ export function getPrivacyPreferences(): PrivacyPreferences {
   try {
     const stored = JSON.parse(localStorage.getItem(privacyKey()) ?? "null") as Partial<PrivacyPreferences> | null;
     return { ...DEFAULT_PRIVACY, ...stored };
-  } catch {
+  } catch (error) {
+    logger.serviceError({ service: "settings", operation: "getPrivacyPreferences", error });
     return DEFAULT_PRIVACY;
   }
 }
@@ -25,7 +29,8 @@ export function savePrivacyPreferences(preferences: PrivacyPreferences): boolean
   try {
     localStorage.setItem(privacyKey(), JSON.stringify(preferences));
     return true;
-  } catch {
+  } catch (error) {
+    logger.serviceError({ service: "settings", operation: "savePrivacyPreferences", error });
     return false;
   }
 }
@@ -39,5 +44,5 @@ export async function listSessions(): Promise<DeviceSession[]> {
 
 export async function revokeSession(id: string): Promise<void> {
   if (isAlwaysMockMode()) await waitForMockService();
-  else throw new Error(`Encerrar a sessão ${id} ainda não é suportado pelo servidor`);
+  else throw createServiceError("settings", "revokeSession", i18n.t("services:settings.revokeSessionUnavailable", { id }));
 }

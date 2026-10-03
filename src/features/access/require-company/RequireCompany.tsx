@@ -3,8 +3,8 @@ import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { useEffect, useState, useSyncExternalStore, type ReactNode } from "react";
 import { Navigate, useParams } from "react-router-dom";
 
-import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
-import { routePaths } from "@/config/inter/paths";
+import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
+import { routePaths } from "@/config/i18n/paths";
 import { getMyCompany } from "@/features/companies/company.service";
 import { getSelectedContext } from "../access.onboarding.service";
 import { CompanyStatus } from "@/features/companies/company.enum";

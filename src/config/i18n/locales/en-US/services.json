@@ -1,0 +1,147 @@
+{
+  "access": {
+    "login": "Unable to sign in",
+    "register": "Unable to complete registration",
+    "loginWithFirebase": "Unable to sign in",
+    "linkFirebase": "Unable to link your account to Firebase",
+    "refresh": "Unable to refresh the session",
+    "logout": "Unable to end the session",
+    "registrationSuccess": "Registration completed"
+  },
+  "companyManagement": {
+    "listPositions": "Unable to load the roles",
+    "createPosition": "Unable to create the role",
+    "listCompanyPositions": "Unable to load the company roles",
+    "linkPositionToCompany": "Unable to make the role available to the company",
+    "listPermissions": "Unable to load the permissions",
+    "listPositionPermissions": "Unable to load the role permissions",
+    "grantPermission": "Unable to grant the permission",
+    "revokePermission": "Unable to revoke the permission",
+    "listEmployees": "Unable to load the employees",
+    "updateEmployeePosition": "Unable to update the employee's role",
+    "removeEmployee": "Unable to remove the employee",
+    "generateAccessCode": "Unable to generate the access code",
+    "listAccessCodes": "Unable to load the access codes",
+    "revokeAccessCode": "Unable to revoke the access code",
+    "redeemAccessCode": "Unable to redeem the access code"
+  },
+  "company": {
+    "createCompany": "Unable to register the company",
+    "createAddress": "Unable to register the address",
+    "createBusinessContact": "Unable to register the business contact",
+    "attachCompanyAddress": "Unable to link the address to the company",
+    "attachCompanyBusinessContact": "Unable to link the business contact to the company",
+    "getCatalogCompanies": "Unable to load the suppliers",
+    "getCatalogCompanyBySlug": "Unable to load the supplier",
+    "getMyCompanyMembership": "Unable to load the company membership",
+    "getMyCompany": "Unable to load your company",
+    "getCompany": "Unable to get company {{id}}",
+    "getCompanyBySlug": "Unable to get company {{slug}}",
+    "approveCompany": "Unable to approve company {{id}}",
+    "rejectCompany": "Unable to reject company {{id}}",
+    "listAllCompanies": "Unable to get the companies",
+    "getCompanies": "Unable to get the companies",
+    "supplierNotFound": "Supplier not found: {{slug}}",
+    "profileEditingUnavailable": "Company profile editing is not available in the API yet.",
+    "activeCompanyNotFound": "The active company could not be found."
+  },
+  "messenger": {
+    "getConversations": "Unable to load the conversations",
+    "getConversation": "Unable to load the conversation",
+    "createDirectConversation": "Unable to start the conversation",
+    "getConversationMessages": "Unable to load the messages",
+    "syncConversationMessages": "Unable to sync the messages",
+    "markConversationRead": "Unable to update the conversation read status",
+    "sendConversationMessage": "Unable to send the message",
+    "sessionUnavailable": "Session unavailable"
+  },
+  "user": {
+    "getUserSummary": "Unable to load the participant",
+    "getMyUser": "Unable to load your profile",
+    "updateMyUser": "Unable to save your profile",
+    "getUser": "Unable to get user {{id}}"
+  },
+  "messages": {
+    "getMessages": "Unable to get the messages for chat {{chatId}}",
+    "sendMessage": "Unable to send the message in chat {{chatId}}"
+  },
+  "offer": {
+    "getMySupplier": "Unable to load the supplier details",
+    "listCompanyOffers": "Unable to load the offers",
+    "createOffer": "Unable to create the offer",
+    "updateOffer": "Unable to update offer {{id}}",
+    "deleteOffer": "Unable to remove offer {{id}}"
+  },
+  "platformAdmin": {
+    "getMyPlatformAdmin": "Unable to check the Solaria administrator status"
+  },
+  "professionalOnboarding": {
+    "getProfessions": "Unable to load the professions",
+    "createContact": "Unable to register the contact",
+    "createPerson": "Unable to register your personal details",
+    "createTechnician": "Unable to register your professional details",
+    "createProfessionalRegistration": "Unable to complete professional registration",
+    "installer": "Solar system installer",
+    "engineer": "Electrical engineer"
+  },
+  "professional": {
+    "getCatalogTechnicians": "Unable to load the professionals",
+    "getCatalogTechnicianBySlug": "Unable to load the professional",
+    "notFound": "Professional not found: {{slug}}"
+  },
+  "professionalReview": {
+    "listProfessionalReviews": "Unable to load the professionals awaiting review",
+    "decideProfessional": "Unable to review the professional"
+  },
+  "saas": {
+    "getOperationalContext": "Unable to get the operational profile"
+  },
+  "solarPanel": {
+    "getCatalogSolarPanels": "Unable to load the solar panels",
+    "getSolarPanelBySlug": "Unable to get solar panel {{companySlug}}/{{slug}}",
+    "listSolarPanelModels": "Unable to get the solar panel models",
+    "listApprovedSolarPanelModels": "Unable to get the approved models",
+    "listSolarPanelModelsByStatus": "Unable to get the solar panel models",
+    "approveSolarPanel": "Unable to approve model {{id}}",
+    "rejectSolarPanel": "Unable to reject model {{id}}",
+    "createSolarPanel": "Unable to create the solar panel model",
+    "updateSolarPanel": "Unable to update model {{id}}",
+    "deleteSolarPanel": "Unable to remove model {{id}}",
+    "notFound": "Solar panel not found: {{companySlug}}/{{slug}}"
+  },
+  "unit": {
+    "getMyRequester": "Unable to load the requester details",
+    "listCompanyUnits": "Unable to load the units",
+    "createAddress": "Unable to register the address",
+    "createGeolocalization": "Unable to save the map location",
+    "createUnit": "Unable to register the unit",
+    "updateUnit": "Unable to update unit {{id}}",
+    "deleteUnit": "Unable to remove unit {{id}}"
+  },
+  "aiValidation": {
+    "validateCnpjCategory": "Unable to validate the CNPJ",
+    "validateCertificates": "Unable to validate the certificates"
+  },
+  "settings": {
+    "revokeSessionUnavailable": "Ending session {{id}} is not supported by the server yet"
+  },
+  "exchange": {
+    "notConfigured": "Exchange API is not configured",
+    "getExchangeRate": "Unable to get exchange rate for {{from}}/{{to}}"
+  },
+  "firebaseAuth": {
+    "sessionUnavailable": "No Firebase session available",
+    "register": "Unable to complete registration",
+    "login": "Unable to sign in",
+    "logout": "Unable to end the session",
+    "loginWithGoogle": "Unable to sign in with Google",
+    "reloadCurrentFirebaseUser": "Unable to reload the session",
+    "sendVerificationEmail": "Unable to send the verification email",
+    "requestPasswordReset": "Unable to request a password reset",
+    "changePassword": "Unable to change the password",
+    "completePasswordReset": "Unable to reset the password"
+  },
+  "typingStatus": {
+    "setTypingStatus": "Unable to update the typing indicator"
+  }
+}

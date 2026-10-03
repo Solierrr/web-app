@@ -7,8 +7,8 @@ import ProfilePageSkeleton from "@/lib/components/layout/profile/ProfilePageSkel
 import { ProfileEditForm } from "@/lib/components/layout/profile/ProfilePage.reusable";
 import { getMyCompany, updateMyCompanyProfile } from "@/features/companies/company.service";
 import type { Company } from "@/features/companies/company";
-import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
-import { routePaths } from "@/config/inter/paths";
+import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
+import { routePaths } from "@/config/i18n/paths";
 import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
 import { EnterpriseProfileInformation } from "./EnterpriseProfile.reusable";
 import { getEnterpriseProfileFields, toEnterpriseProfileUpdate } from "./EnterpriseProfile.utils";

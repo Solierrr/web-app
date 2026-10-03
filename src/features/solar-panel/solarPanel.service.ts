@@ -1,3 +1,5 @@
+import i18n from "@/config/i18n/internationalization";
+import { createServiceError } from "@/config/logging/serviceError.utils";
 import type { SolarPanel } from "./solarPanel";
 import type { SolarPanelAnnouncement } from "./solarPanel.announcement";
 
@@ -5,7 +7,7 @@ import { solarPanelAnnouncementMocks } from "@/config/mocks/registry";
 import { resolveWithMocks } from "@/config/mocks/fallback.service";
 import { httpJson } from "@/lib/shared/http/http.service";
 import { SolarPanelModelStatus, SolarPanelType } from "./solarPanel.enum";
-import { DEFAULT as DEFAULT_LANGUAGE, type SupportedLanguage } from "@/config/inter/browser/languages";
+import { DEFAULT as DEFAULT_LANGUAGE, type SupportedLanguage } from "@/config/i18n/browser/languages";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
 import { getMockModels, saveMockModel, deleteMockModel } from "./solarPanel.d.mocks";
 import { getSelectedContext } from "@/features/access/access.onboarding.service";
@@ -84,7 +86,7 @@ export function getCatalogSolarPanels(lang: SupportedLanguage): Promise<SolarPan
         service: SERVICE_NAME,
         operation: "getCatalogSolarPanels",
         authenticated: false,
-        errorMessage: "Não foi possível carregar as placas solares",
+        errorMessage: i18n.t("services:solarPanel.getCatalogSolarPanels"),
       }).then((offers) => offers.map(toAnnouncement)),
     () => solarPanelAnnouncementMocks,
   );
@@ -99,12 +101,12 @@ export function getSolarPanelBySlug(companySlug: string, slug: string, lang: Sup
           service: SERVICE_NAME,
           operation: "getSolarPanelBySlug",
           authenticated: false,
-          errorMessage: `Não foi possível obter o painel solar ${companySlug}/${slug}`,
+          errorMessage: i18n.t("services:solarPanel.getSolarPanelBySlug", { companySlug, slug }),
         },
       ).then(toAnnouncement),
     () => {
       const mock = solarPanelAnnouncementMocks.find((announcement) => announcement.companySlug === companySlug && announcement.slug === slug);
-      if (!mock) throw new Error(`Painel solar não encontrado: ${companySlug}/${slug}`);
+      if (!mock) throw createServiceError(SERVICE_NAME, "getSolarPanelBySlug", i18n.t("services:solarPanel.notFound", { companySlug, slug }));
       return mock;
     },
   );
@@ -172,7 +174,7 @@ export async function listSolarPanelModels(): Promise<SolarPanel[]> {
   return httpJson<ModelDTO[]>(`${API}/api/models`, {
     service: SERVICE_NAME,
     operation: "listSolarPanelModels",
-    errorMessage: "Não foi possível obter os modelos de placa solar",
+    errorMessage: i18n.t("services:solarPanel.listSolarPanelModels"),
   }).then((models) => models.map(toSolarPanel));
 }
 
@@ -184,7 +186,7 @@ export async function listApprovedSolarPanelModels(): Promise<SolarPanel[]> {
   return httpJson<ModelDTO[]>(`${API}/api/models/status/APPROVED`, {
     service: SERVICE_NAME,
     operation: "listApprovedSolarPanelModels",
-    errorMessage: "Não foi possível obter os modelos aprovados",
+    errorMessage: i18n.t("services:solarPanel.listApprovedSolarPanelModels"),
   }).then((models) => models.map(toSolarPanel));
 }
 
@@ -196,7 +198,7 @@ export async function listSolarPanelModelsByStatus(status: SolarPanelModelStatus
   return httpJson<ModelDTO[]>(`${API}/api/models/status/${encodeURIComponent(status)}`, {
     service: SERVICE_NAME,
     operation: "listSolarPanelModelsByStatus",
-    errorMessage: "Não foi possível obter os modelos de placa solar",
+    errorMessage: i18n.t("services:solarPanel.listSolarPanelModelsByStatus"),
   }).then((models) => models.map(toSolarPanel));
 }
 
@@ -209,7 +211,7 @@ export async function approveSolarPanel(id: string): Promise<SolarPanel> {
     service: SERVICE_NAME,
     operation: "approveSolarPanel",
     method: "POST",
-    errorMessage: `Não foi possível aprovar o modelo ${id}`,
+    errorMessage: i18n.t("services:solarPanel.approveSolarPanel", { id }),
   }).then(toSolarPanel);
 }
 
@@ -222,7 +224,7 @@ export async function rejectSolarPanel(id: string): Promise<SolarPanel> {
     service: SERVICE_NAME,
     operation: "rejectSolarPanel",
     method: "POST",
-    errorMessage: `Não foi possível rejeitar o modelo ${id}`,
+    errorMessage: i18n.t("services:solarPanel.rejectSolarPanel", { id }),
   }).then(toSolarPanel);
 }
 
@@ -241,7 +243,7 @@ export async function createSolarPanel(payload: Omit<SolarPanel, "id" | "status"
     operation: "createSolarPanel",
     method: "POST",
     body: toModelPayload(payload),
-    errorMessage: "Não foi possível criar o modelo de placa solar",
+    errorMessage: i18n.t("services:solarPanel.createSolarPanel"),
   }).then(toSolarPanel);
 }
 
@@ -255,7 +257,7 @@ export async function updateSolarPanel(id: string, payload: Omit<SolarPanel, "id
     operation: "updateSolarPanel",
     method: "PUT",
     body: toModelPayload(payload),
-    errorMessage: `Não foi possível atualizar o modelo ${id}`,
+    errorMessage: i18n.t("services:solarPanel.updateSolarPanel", { id }),
   }).then(toSolarPanel);
 }
 
@@ -269,6 +271,6 @@ export async function deleteSolarPanel(id: string): Promise<void> {
     service: SERVICE_NAME,
     operation: "deleteSolarPanel",
     method: "DELETE",
-    errorMessage: `Não foi possível remover o modelo ${id}`,
+    errorMessage: i18n.t("services:solarPanel.deleteSolarPanel", { id }),
   });
 }

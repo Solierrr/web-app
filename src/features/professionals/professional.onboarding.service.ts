@@ -1,3 +1,4 @@
+import i18n from "@/config/i18n/internationalization";
 import { httpJson } from "@/lib/shared/http/http.service";
 import { API_CORE_URL } from "@/lib/shared/http/apiCore.utils";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
@@ -13,12 +14,15 @@ export interface Profession {
 export async function getProfessions(): Promise<Profession[]> {
   if (isAlwaysMockMode()) {
     await waitForMockService();
-    return [{ id: "mock-installer", name: "Instalador de sistemas solares" }, { id: "mock-engineer", name: "Engenheiro eletricista" }];
+    return [
+      { id: "mock-installer", name: i18n.t("services:professionalOnboarding.installer") },
+      { id: "mock-engineer", name: i18n.t("services:professionalOnboarding.engineer") },
+    ];
   }
   return httpJson<Profession[]>(`${API_CORE_URL}/professions`, {
     service: SERVICE_NAME,
     operation: "getProfessions",
-    errorMessage: "Não foi possível carregar as profissões",
+    errorMessage: i18n.t("services:professionalOnboarding.getProfessions"),
   });
 }
 
@@ -28,23 +32,17 @@ export function createContact(payload: { email?: string; phone?: string }): Prom
     operation: "createContact",
     method: "POST",
     body: payload,
-    errorMessage: "Não foi possível cadastrar o contato",
+    errorMessage: i18n.t("services:professionalOnboarding.createContact"),
   });
 }
 
-export function createPerson(payload: {
-  userId: string;
-  contactId: string;
-  name: string;
-  cpf: string;
-  birthDate: string;
-}): Promise<{ id: string }> {
+export function createPerson(payload: { userId: string; contactId: string; name: string; cpf: string; birthDate: string }): Promise<{ id: string }> {
   return httpJson<{ id: string }>(`${API_CORE_URL}/persons`, {
     service: SERVICE_NAME,
     operation: "createPerson",
     method: "POST",
     body: payload,
-    errorMessage: "Não foi possível cadastrar seus dados pessoais",
+    errorMessage: i18n.t("services:professionalOnboarding.createPerson"),
   });
 }
 
@@ -54,7 +52,7 @@ export function createTechnician(payload: { personId: string; crea: string }): P
     operation: "createTechnician",
     method: "POST",
     body: payload,
-    errorMessage: "Não foi possível cadastrar seu registro profissional",
+    errorMessage: i18n.t("services:professionalOnboarding.createTechnician"),
   });
 }
 
@@ -70,6 +68,6 @@ export function createProfessionalRegistration(payload: {
     operation: "createProfessionalRegistration",
     method: "POST",
     body: payload,
-    errorMessage: "Não foi possível concluir o registro profissional",
+    errorMessage: i18n.t("services:professionalOnboarding.createProfessionalRegistration"),
   });
 }

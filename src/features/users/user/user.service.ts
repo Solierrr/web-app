@@ -1,3 +1,4 @@
+import i18n from "@/config/i18n/internationalization";
 import { httpJson } from "@/lib/shared/http/http.service";
 import { API_CORE_URL } from "@/lib/shared/http/apiCore.utils";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
@@ -22,7 +23,7 @@ export async function getMyUser(): Promise<MyUser> {
   return httpJson<MyUser>(`${API_CORE_URL}/users/me`, {
     service: SERVICE_NAME,
     operation: "getMyUser",
-    errorMessage: "Não foi possível carregar seu perfil",
+    errorMessage: i18n.t("services:user.getMyUser"),
   });
 }
 
@@ -38,7 +39,7 @@ export async function updateMyUser(username: string): Promise<MyUser> {
     operation: "updateMyUser",
     method: "PATCH",
     body: { username },
-    errorMessage: "Não foi possível salvar seu perfil",
+    errorMessage: i18n.t("services:user.updateMyUser"),
   });
 }
 
@@ -50,6 +51,6 @@ export async function getUser(id: string): Promise<MyUser> {
   return httpJson<MyUser>(`${API_CORE_URL}/users/${encodeURIComponent(id)}`, {
     service: SERVICE_NAME,
     operation: "getUser",
-    errorMessage: `Não foi possível obter o usuário ${id}`,
+    errorMessage: i18n.t("services:user.getUser", { id }),
   });
 }

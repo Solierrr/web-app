@@ -1,3 +1,4 @@
+import i18n from "@/config/i18n/internationalization";
 import { httpJson } from "@/lib/shared/http/http.service";
 import { API_CORE_URL } from "@/lib/shared/http/apiCore.utils";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
@@ -55,7 +56,7 @@ export function listPositions(): Promise<Position[]> {
   return httpJson<Position[]>(`${API_CORE_URL}/positions`, {
     service: SERVICE_NAME,
     operation: "listPositions",
-    errorMessage: "Não foi possível carregar os cargos",
+    errorMessage: i18n.t("services:companyManagement.listPositions"),
   });
 }
 
@@ -72,7 +73,7 @@ export async function createPosition(name: string): Promise<Position> {
     operation: "createPosition",
     method: "POST",
     body: { name, accesses: "" },
-    errorMessage: "Não foi possível criar o cargo",
+    errorMessage: i18n.t("services:companyManagement.createPosition"),
   });
 }
 
@@ -84,7 +85,7 @@ export async function listCompanyPositions(companyId: string): Promise<{ id: str
   return httpJson(`${API_CORE_URL}/company-positions/company/${encodeURIComponent(companyId)}`, {
     service: SERVICE_NAME,
     operation: "listCompanyPositions",
-    errorMessage: "Não foi possível carregar os cargos da empresa",
+    errorMessage: i18n.t("services:companyManagement.listCompanyPositions"),
   });
 }
 
@@ -95,7 +96,7 @@ export async function linkPositionToCompany(companyId: string, positionId: strin
     operation: "linkPositionToCompany",
     method: "POST",
     body: { companyId, positionId },
-    errorMessage: "Não foi possível disponibilizar o cargo para a empresa",
+    errorMessage: i18n.t("services:companyManagement.linkPositionToCompany"),
   });
 }
 
@@ -109,7 +110,7 @@ export async function listPermissions(): Promise<Permission[]> {
   return httpJson<Permission[]>(`${API_CORE_URL}/permissions`, {
     service: SERVICE_NAME,
     operation: "listPermissions",
-    errorMessage: "Não foi possível carregar as permissões",
+    errorMessage: i18n.t("services:companyManagement.listPermissions"),
   });
 }
 
@@ -121,7 +122,7 @@ export async function listPositionPermissions(positionId: string): Promise<Posit
   return httpJson<PositionPermission[]>(`${API_CORE_URL}/position-permissions/position/${encodeURIComponent(positionId)}`, {
     service: SERVICE_NAME,
     operation: "listPositionPermissions",
-    errorMessage: "Não foi possível carregar as permissões do cargo",
+    errorMessage: i18n.t("services:companyManagement.listPositionPermissions"),
   });
 }
 
@@ -146,7 +147,7 @@ export async function grantPermission(positionId: string, permissionId: string):
     operation: "grantPermission",
     method: "POST",
     body: { positionId, permissionId },
-    errorMessage: "Não foi possível conceder a permissão",
+    errorMessage: i18n.t("services:companyManagement.grantPermission"),
   });
 }
 
@@ -160,7 +161,7 @@ export async function revokePermission(id: string): Promise<void> {
     service: SERVICE_NAME,
     operation: "revokePermission",
     method: "DELETE",
-    errorMessage: "Não foi possível revogar a permissão",
+    errorMessage: i18n.t("services:companyManagement.revokePermission"),
   });
 }
 
@@ -174,7 +175,7 @@ export async function listEmployees(companyId: string): Promise<Employee[]> {
   return httpJson<Employee[]>(`${API_CORE_URL}/user-companies/company/${encodeURIComponent(companyId)}`, {
     service: SERVICE_NAME,
     operation: "listEmployees",
-    errorMessage: "Não foi possível carregar os funcionários",
+    errorMessage: i18n.t("services:companyManagement.listEmployees"),
   });
 }
 
@@ -193,7 +194,7 @@ export async function updateEmployeePosition(userCompanyId: string, positionId: 
     operation: "updateEmployeePosition",
     method: "PATCH",
     body: { positionId },
-    errorMessage: "Não foi possível atualizar o cargo do funcionário",
+    errorMessage: i18n.t("services:companyManagement.updateEmployeePosition"),
   });
 }
 
@@ -211,7 +212,7 @@ export async function removeEmployee(userCompanyId: string): Promise<void> {
     service: SERVICE_NAME,
     operation: "removeEmployee",
     method: "DELETE",
-    errorMessage: "Não foi possível desligar o funcionário",
+    errorMessage: i18n.t("services:companyManagement.removeEmployee"),
   });
 }
 
@@ -227,7 +228,7 @@ export async function generateAccessCode(companyId: string, positionId: string):
     operation: "generateAccessCode",
     method: "POST",
     body: { companyId, positionId },
-    errorMessage: "Não foi possível gerar o código de acesso",
+    errorMessage: i18n.t("services:companyManagement.generateAccessCode"),
   });
 }
 
@@ -239,7 +240,7 @@ export async function listAccessCodes(companyId: string): Promise<AccessCode[]> 
   return httpJson<AccessCode[]>(`${API_CORE_URL}/access-codes/company/${encodeURIComponent(companyId)}`, {
     service: SERVICE_NAME,
     operation: "listAccessCodes",
-    errorMessage: "Não foi possível carregar os códigos de acesso",
+    errorMessage: i18n.t("services:companyManagement.listAccessCodes"),
   });
 }
 
@@ -256,7 +257,7 @@ export async function revokeAccessCode(id: string, companyId: string): Promise<v
     service: SERVICE_NAME,
     operation: "revokeAccessCode",
     method: "DELETE",
-    errorMessage: "Não foi possível revogar o código de acesso",
+    errorMessage: i18n.t("services:companyManagement.revokeAccessCode"),
   });
 }
 
@@ -275,6 +276,6 @@ export async function redeemAccessCode(code: string): Promise<RedeemedMembership
     operation: "redeemAccessCode",
     method: "POST",
     body: { code },
-    errorMessage: "Não foi possível usar o código de acesso",
+    errorMessage: i18n.t("services:companyManagement.redeemAccessCode"),
   });
 }

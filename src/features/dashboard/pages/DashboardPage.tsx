@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import Icon from "@@/ui/icon/Icon";
 import { useActiveContext } from "@/lib/shared/context/ActiveContext";
-import { DEFAULT, isSupportedLanguage } from "@/config/inter/browser/languages";
+import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { CompanyStatus } from "@/features/companies/company.enum";
 import { getOperationalNavigation } from "@@/layout/saas/SaaSLayout.presets";
 import { getRecentPages } from "../dashboard.utils";

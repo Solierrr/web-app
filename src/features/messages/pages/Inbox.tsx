@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
-import { routePaths } from "@/config/inter/paths";
+import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
+import { routePaths } from "@/config/i18n/paths";
 import { getConversations, getUserSummary, type ConversationDto } from "@/features/messages/messages.messenger.api";
 import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import { subscribeToConversations } from "@/features/messages/messages.messenger.socket";
