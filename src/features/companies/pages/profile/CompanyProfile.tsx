@@ -9,6 +9,7 @@ import { getCatalogSolarPanels } from "@/features/solar-panel/solarPanel.service
 import type { SolarPanelAnnouncement } from "@/features/solar-panel/solarPanel.announcement";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
 import { routePaths } from "@/config/inter/paths";
+import { ProfileInfoRow, ProfileInfoSection } from "@/lib/components/layout/profile/ProfilePage.reusable";
 
 interface CompanyProfilePackedProps {
   company: CatalogCompany;
@@ -18,6 +19,7 @@ function CompanyProfilePacked({ company }: CompanyProfilePackedProps) {
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
   const { t } = useTranslation("commons");
+  const { t: tProfile } = useTranslation("profile", { keyPrefix: "edit" });
   const [offers, setOffers] = useState<SolarPanelAnnouncement[] | null>(null);
 
   useEffect(() => {
@@ -44,6 +46,13 @@ function CompanyProfilePacked({ company }: CompanyProfilePackedProps) {
           {t("actions.contact")}
         </Link>
       }>
+      <ProfileInfoSection title={tProfile("companyDetails")}>
+        <dl className="divide-y divide-black/5">
+          <ProfileInfoRow label={tProfile("tradeName")} value={company.tradeName} />
+          <ProfileInfoRow label={tProfile("city")} value={company.city} />
+          <ProfileInfoRow label={tProfile("state")} value={company.state} />
+        </dl>
+      </ProfileInfoSection>
       {offers && offers.length > 0 ? (
         <div className="flex flex-col gap-3">
           <h2>{t("companyOffers.title")}</h2>

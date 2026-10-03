@@ -7,7 +7,7 @@ import { API_CORE_URL } from "@/lib/shared/http/apiCore.utils";
 import { getMyUser } from "@/features/users/user/user.service";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
 import { getMockCompanyReviews, decideMockCompany } from "./company.d.mocks";
-import { getOperationalAccount } from "@/features/access/access.onboarding.service";
+import { getOperationalAccount, saveOperationalAccount } from "@/features/access/access.onboarding.service";
 import { CompanyStatus } from "./company.enum";
 
 const SERVICE_NAME = "company";
@@ -152,17 +152,31 @@ export async function getMyCompany(): Promise<Company | null> {
   if (isAlwaysMockMode()) {
     const account = getOperationalAccount();
     const membership = account.memberships.find((item) => item.id === account.selectedContext) ?? account.memberships[0];
-    return membership
-      ? {
-          id: membership.id,
-          type: membership.type,
-          status: CompanyStatus.APPROVED,
-          cnpj: "",
-          tradeName: membership.name,
-          corporateName: membership.name,
-          slug: membership.id,
-        }
-      : null;
+    if (!membership) return null;
+    const profile = membership.companyProfile;
+    return {
+      id: membership.id,
+      type: membership.type,
+      status: CompanyStatus.APPROVED,
+      cnpj: profile?.cnpj ?? "",
+      tradeName: membership.name,
+      corporateName: profile?.corporateName ?? membership.name,
+      slug: membership.id,
+      businessContact: profile
+        ? { companyEmail: profile.companyEmail, phone: profile.phone || undefined, website: profile.website || undefined }
+        : undefined,
+      address: profile
+        ? {
+            street: profile.street,
+            number: profile.number,
+            neighborhood: profile.neighborhood,
+            city: profile.city,
+            state: profile.state,
+            zipCode: profile.zipCode,
+            country: profile.country ?? "Brasil",
+          }
+        : undefined,
+    };
   }
   const membership = await getMyMembership();
   if (!membership) return null;
@@ -171,6 +185,44 @@ export async function getMyCompany(): Promise<Company | null> {
     operation: "getMyCompany",
     errorMessage: "Não foi possível carregar sua empresa",
   });
+}
+
+export async function updateMyCompanyProfile(
+  companyId: string,
+  profile: Pick<Company, "tradeName" | "corporateName" | "businessContact" | "address">,
+): Promise<Company> {
+  if (!isAlwaysMockMode()) throw new Error("A edição do perfil empresarial ainda não está disponível na API.");
+  await waitForMockService();
+  const company = await getMyCompany();
+  if (!company || company.id !== companyId) throw new Error("Não foi possível encontrar a empresa ativa.");
+  const updated = { ...company, ...profile };
+  const account = getOperationalAccount();
+  saveOperationalAccount({
+    ...account,
+    memberships: account.memberships.map((membership) =>
+      membership.id === companyId
+        ? {
+            ...membership,
+            name: updated.tradeName,
+            companyProfile: {
+              cnpj: updated.cnpj,
+              corporateName: updated.corporateName,
+              companyEmail: updated.businessContact?.companyEmail ?? "",
+              phone: updated.businessContact?.phone ?? "",
+              website: updated.businessContact?.website ?? "",
+              street: updated.address?.street ?? "",
+              number: updated.address?.number ?? "",
+              neighborhood: updated.address?.neighborhood ?? "",
+              city: updated.address?.city ?? "",
+              state: updated.address?.state ?? "",
+              zipCode: updated.address?.zipCode ?? "",
+              country: updated.address?.country ?? "",
+            },
+          }
+        : membership,
+    ),
+  });
+  return updated;
 }
 
 export function getCompany(id: string): Promise<Company> {
@@ -200,7 +252,10 @@ export function getCompanyBySlug(slug: string): Promise<Company> {
 // Admin Solaria: aprovação/rejeição de empresas fica restrita ao platform admin
 // no backend (ver RbacAuthorizationService.PLATFORM_ADMIN_ONLY_ENDPOINTS).
 export async function approveCompany(id: string): Promise<Company> {
-  if (isAlwaysMockMode()) { await waitForMockService(); return decideMockCompany(id, CompanyStatus.APPROVED); }
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    return decideMockCompany(id, CompanyStatus.APPROVED);
+  }
   return httpJson<Company>(`${API_CORE_URL}/companies/${encodeURIComponent(id)}/approval`, {
     service: SERVICE_NAME,
     operation: "approveCompany",
@@ -210,7 +265,10 @@ export async function approveCompany(id: string): Promise<Company> {
 }
 
 export async function rejectCompany(id: string): Promise<Company> {
-  if (isAlwaysMockMode()) { await waitForMockService(); return decideMockCompany(id, CompanyStatus.REJECTED); }
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    return decideMockCompany(id, CompanyStatus.REJECTED);
+  }
   return httpJson<Company>(`${API_CORE_URL}/companies/${encodeURIComponent(id)}/rejection`, {
     service: SERVICE_NAME,
     operation: "rejectCompany",
@@ -220,7 +278,10 @@ export async function rejectCompany(id: string): Promise<Company> {
 }
 
 export async function listAllCompanies(): Promise<Company[]> {
-  if (isAlwaysMockMode()) { await waitForMockService(); return getMockCompanyReviews(); }
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    return getMockCompanyReviews();
+  }
   return httpJson<Company[]>(`${API_CORE_URL}/companies`, {
     service: SERVICE_NAME,
     operation: "listAllCompanies",

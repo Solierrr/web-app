@@ -242,8 +242,35 @@ export default function OnboardingPage({ kind }: { kind: RegistrationKind }) {
               name: draft.fields.tradeName,
               type: draft.fields.type === "DEMANDANT" ? "DEMANDANT" : "SUPPLIER",
               admin: true,
+              companyProfile: {
+                cnpj: draft.fields.cnpj,
+                corporateName: draft.fields.corporateName,
+                companyEmail: draft.fields.companyEmail,
+                phone: draft.fields.phone,
+                website: draft.fields.website,
+                street: draft.fields.street,
+                number: draft.fields.number,
+                neighborhood: draft.fields.neighborhood,
+                city: draft.fields.city,
+                state: draft.fields.state,
+                zipCode: draft.fields.zipCode,
+              },
             });
-          else saveOperationalAccount({ ...getOperationalAccount(), professional: true });
+          else
+            saveOperationalAccount({
+              ...getOperationalAccount(),
+              professional: true,
+              professionalProfile: {
+                name: draft.fields.name ?? "",
+                email: getAuthSession()?.email ?? draft.fields.email ?? "",
+                phone: draft.fields.phone ?? "",
+                crea: draft.fields.crea ?? "",
+                profession: professions.find((profession) => profession.id === draft.fields.professionId)?.name ?? "",
+                council: draft.fields.council ?? "",
+                registrationNumber: draft.fields.number ?? "",
+                expirationDate: draft.fields.expirationDate ?? "",
+              },
+            });
         }
       }
       update(draft.fields, draft.step + 1);

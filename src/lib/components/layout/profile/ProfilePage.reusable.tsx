@@ -41,23 +41,30 @@ export interface ProfileEditField {
   name: string;
   label: string;
   value: string;
-  type?: "text" | "email" | "tel" | "url";
+  type?: "text" | "email" | "tel" | "url" | "date";
+  required?: boolean;
+  minLength?: number;
+  maxLength?: number;
+  pattern?: string;
 }
 
 interface ProfileEditFormProps {
   title: string;
   fields: ProfileEditField[];
   onCancel: () => void;
-  onSave: (values: Record<string, string>) => void;
+  onSave: (values: Record<string, string>) => void | Promise<void>;
+  saving?: boolean;
+  error?: string;
+  notice?: string;
 }
 
-export function ProfileEditForm({ title, fields, onCancel, onSave }: ProfileEditFormProps) {
+export function ProfileEditForm({ title, fields, onCancel, onSave, saving = false, error, notice }: ProfileEditFormProps) {
   const { t } = useTranslation("profile", { keyPrefix: "edit" });
   const [values, setValues] = useState(() => Object.fromEntries(fields.map((field) => [field.name, field.value])));
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    onSave(values);
+    void onSave(values);
   }
 
   return (
@@ -71,20 +78,38 @@ export function ProfileEditForm({ title, fields, onCancel, onSave }: ProfileEdit
                 name={field.name}
                 type={field.type ?? "text"}
                 value={values[field.name] ?? ""}
+                required={field.required}
+                minLength={field.minLength}
+                maxLength={field.maxLength}
+                pattern={field.pattern}
                 onChange={(event) => setValues((current) => ({ ...current, [field.name]: event.target.value }))}
+                disabled={saving}
                 className="w-full border border-input-outline bg-white focus-within:border-orange"
               />
             </label>
           ))}
         </div>
 
-        <p role="note" className="rounded-medium bg-orange/8 px-4 py-3 text-sm leading-6 text-black/65">
-          {t("mockNotice")}
-        </p>
+        {notice && (
+          <p role="note" className="rounded-medium bg-orange/8 px-4 py-3 text-sm leading-6 text-black/65">
+            {notice}
+          </p>
+        )}
+        {error && (
+          <p role="alert" className="text-sm text-red-700">
+            {error}
+          </p>
+        )}
 
         <div className="flex flex-wrap gap-3">
-          <PrimaryButton content={t("save")} description={t("save")} rounded type="submit" />
-          <SecondaryButton content={t("cancel")} description={t("cancel")} rounded type="button" onClick={onCancel} />
+          <PrimaryButton
+            content={saving ? t("saving") : t("save")}
+            description={saving ? t("saving") : t("save")}
+            rounded
+            type="submit"
+            disabled={saving}
+          />
+          <SecondaryButton content={t("cancel")} description={t("cancel")} rounded type="button" onClick={onCancel} disabled={saving} />
         </div>
       </form>
     </ProfileInfoSection>

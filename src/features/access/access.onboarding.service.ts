@@ -1,11 +1,11 @@
 import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
-import type { OperationalAccount, OperationalMembership, RegistrationDraft, RegistrationKind } from "./access.onboarding";
+import type { MockProfessionalProfile, OperationalAccount, OperationalMembership, RegistrationDraft, RegistrationKind } from "./access.onboarding";
 
 function readStored<T>(key: string, fallback: T): T {
   try {
     const raw = localStorage.getItem(key);
-    return raw ? JSON.parse(raw) as T : fallback;
+    return raw ? (JSON.parse(raw) as T) : fallback;
   } catch {
     return fallback;
   }
@@ -64,4 +64,9 @@ export function saveOperationalAccount(account: OperationalAccount): void {
 export function addOperationalMembership(membership: OperationalMembership): void {
   const account = getOperationalAccount();
   saveOperationalAccount({ ...account, memberships: [...account.memberships.filter((item) => item.id !== membership.id), membership] });
+}
+
+export function updateMockProfessionalProfile(profile: MockProfessionalProfile): void {
+  const account = getOperationalAccount();
+  saveOperationalAccount({ ...account, professional: true, professionalProfile: profile });
 }

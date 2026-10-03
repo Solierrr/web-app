@@ -18,6 +18,8 @@ import { validateCertificates, type CertificateValidationResult } from "@/lib/sh
 import { validateCpf } from "@/lib/utils/validation.utils";
 import RegistrationStatus from "@/lib/components/feedback/registration-status/RegistrationStatus";
 import logger from "@/config/logging/logger";
+import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
+import { updateMockProfessionalProfile } from "@/features/access/access.onboarding.service";
 
 export default function ProfessionalOnboarding() {
   const { lang: langParam } = useParams<{ lang: string }>();
@@ -93,6 +95,19 @@ export default function ProfessionalOnboarding() {
         number: String(data.get("number") ?? "").trim() || undefined,
         expirationDate: expirationDate ? `${expirationDate}T00:00:00` : undefined,
       });
+
+      if (isAlwaysMockMode()) {
+        updateMockProfessionalProfile({
+          name: String(data.get("name") ?? "").trim(),
+          email: String(data.get("email") ?? "").trim(),
+          phone: String(data.get("phone") ?? "").replace(/\D/g, ""),
+          crea: String(data.get("crea") ?? "").trim(),
+          profession: professions.find((profession) => profession.id === String(data.get("professionId")))?.name ?? "",
+          council: String(data.get("council") ?? "").trim(),
+          registrationNumber: String(data.get("number") ?? "").trim(),
+          expirationDate,
+        });
+      }
 
       setDone(true);
     } catch {

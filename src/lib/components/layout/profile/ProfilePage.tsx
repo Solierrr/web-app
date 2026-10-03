@@ -35,27 +35,34 @@ export default function ProfilePage({
   operationalTitle,
 }: ProfilePageProps) {
   const ContentWrapper = operational ? "div" : WrapperLayout;
+  const ContentMain = operational ? "div" : "main";
   const NameHeading = operational ? "h2" : "h1";
   const content = (
-    <div>
-      <section className="h-60 w-full bg-input-bg bg-cover bg-center sm:h-80" style={{ backgroundImage: `url(${bannerUrl})` }} />
+    <div className="pb-8">
+      <section className="relative h-56 w-full bg-input-bg bg-cover bg-center sm:h-72" style={{ backgroundImage: `url(${bannerUrl})` }}>
+        <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+      </section>
 
       <ContentWrapper className={operational ? "px-4 pb-8 sm:px-8 lg:px-10" : undefined}>
-        <section className="flex flex-col gap-6">
-          <div className="-mt-16 flex flex-col items-start gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <ContentMain className="flex flex-col gap-8">
+          <header className="-mt-14 flex flex-col items-start justify-between gap-5 rounded-hard border border-black/5 bg-white p-5 shadow-soft sm:-mt-16 sm:flex-row sm:items-end sm:p-7">
             <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-end">
-              <img src={avatarUrl} alt={name} className="h-32 w-32 rounded-full border-4 border-white bg-input-bg object-cover" />
+              <img
+                src={avatarUrl}
+                alt={name}
+                className="h-28 w-28 rounded-full border-4 border-white bg-input-bg object-cover shadow-hard sm:h-32 sm:w-32"
+              />
               <div className="flex flex-col gap-1 pb-2">
-                <NameHeading>{name}</NameHeading>
-                {subtitle && <p className="text-input-text">{subtitle}</p>}
+                <NameHeading className="text-xl font-semibold sm:text-2xl">{name}</NameHeading>
+                {subtitle && <p className="text-sm text-input-text sm:text-base">{subtitle}</p>}
               </div>
             </div>
 
             {actions && !operational && <div className="flex flex-row gap-2">{actions}</div>}
-          </div>
+          </header>
 
-          {children}
-        </section>
+          <section className="flex flex-col gap-6">{children}</section>
+        </ContentMain>
       </ContentWrapper>
     </div>
   );
