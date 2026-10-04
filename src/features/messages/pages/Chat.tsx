@@ -1,4 +1,6 @@
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
+import MessageComposer from "@@/ui/message-composer/MessageComposer";
+import ToolbarAction from "@@/ui/button/ToolbarAction";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -29,20 +31,22 @@ export default function Chat() {
   return <Conversation key={conversationId} conversationId={conversationId} />;
 }
 
-function Conversation({ conversationId }: { conversationId: string }) {
+export function Conversation({ conversationId, embedded = false }: { conversationId: string; embedded?: boolean }) {
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
   const { t } = useTranslation("chat");
   const location = useLocation();
-  const product = (location.state as { product?: string | null } | null)?.product;
+  const navigationState = location.state as { product?: string | null; initialDraft?: string; initialSendError?: boolean } | null;
+  const product = navigationState?.product;
   const userId = getAuthSession()?.userId;
   const [conversation, setConversation] = useState<ConversationDto | null>(null);
   const [participantName, setParticipantName] = useState<string | null>(null);
+  const [participantNames, setParticipantNames] = useState<Record<string, string>>({});
   const [messages, setMessages] = useState<MessageDto[]>([]);
-  const [draft, setDraft] = useState(product ? t("contactAbout", { title: product }) : "");
+  const [draft, setDraft] = useState(navigationState?.initialDraft ?? (product ? t("contactAbout", { title: product }) : ""));
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(navigationState?.initialSendError ? t("sendError") : null);
   const [realtimeConnected, setRealtimeConnected] = useState<boolean | null>(null);
   const [hasOlder, setHasOlder] = useState(false);
   const [loadingOlder, setLoadingOlder] = useState(false);
@@ -109,6 +113,17 @@ function Conversation({ conversationId }: { conversationId: string }) {
         initialized = true;
         void synchronize();
         const otherId = loadedConversation.participantIds.find((id) => id !== userId);
+        if (loadedConversation.conversationType === "GROUP") {
+          const ids = loadedConversation.participantIds.filter((id) => id !== userId);
+          void Promise.allSettled(ids.map(getUserSummary)).then((results) => {
+            if (!active) return;
+            const names: Record<string, string> = {};
+            results.forEach((result, index) => {
+              if (result.status === "fulfilled") names[ids[index]] = result.value.username;
+            });
+            setParticipantNames(names);
+          });
+        }
         if (otherId)
           void getUserSummary(otherId)
             .then((user) => {
@@ -155,7 +170,10 @@ function Conversation({ conversationId }: { conversationId: string }) {
       if (sequence <= lastMarkedRead.current) return;
       void markConversationRead(conversationId, sequence)
         .then(() => {
-          if (activeConversationId.current === conversationId) lastMarkedRead.current = Math.max(lastMarkedRead.current, sequence);
+          if (activeConversationId.current === conversationId) {
+            lastMarkedRead.current = Math.max(lastMarkedRead.current, sequence);
+            window.dispatchEvent(new Event("solaria:messenger"));
+          }
         })
         .catch(() => undefined);
     };
@@ -180,19 +198,19 @@ function Conversation({ conversationId }: { conversationId: string }) {
     }
   }
 
-  async function handleSend(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async function handleSend() {
     const content = draft.trim();
     if (!content || sending) return;
     setSending(true);
     setError(null);
     try {
-      const sent = await sendConversationMessage(conversationId, content);
+      const sent = await sendConversationMessage(conversationId, content, conversation?.conversationType);
       if (activeConversationId.current !== conversationId) return;
       lastSequence.current = Math.max(lastSequence.current, sent.sequence);
       followLatest.current = true;
       setMessages((current) => mergeMessages(current, [sent]));
       setDraft("");
+      window.dispatchEvent(new Event("solaria:messenger"));
     } catch {
       setError(t("sendError"));
     } finally {
@@ -200,71 +218,102 @@ function Conversation({ conversationId }: { conversationId: string }) {
     }
   }
 
-  return (
-    <OperationalPage
-      chat
-      title={conversation?.title || participantName || t("conversation")}
-      actions={
-        <Link to={routePaths.inbox(lang)} className="text-orange">
-          {t("inbox")}
-        </Link>
-      }>
-      {product ? <p className="rounded-small bg-orange/10 p-3 text-sm">{t("productContext", { title: product })}</p> : null}
-      {loading ? <p>{t("loading")}</p> : null}
-      {error ? (
-        <p role="alert" className="text-red-700">
+  const title =
+    conversation?.title || (conversation?.conversationType === "CHAT_BOT" ? t("chatbot.assistantName") : participantName) || t("conversation");
+  const content = (
+    <section className="flex h-full min-h-0 min-w-0 flex-col gap-4">
+      {embedded && (
+        <header className="flex shrink-0 items-center justify-between gap-3">
+          <div className="flex min-w-0 items-center gap-3">
+            <div aria-hidden="true" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-hard bg-input-bg">
+              <span className="text-label">{title.slice(0, 1)}</span>
+            </div>
+            <h2 className="truncate text-label font-medium">{title}</h2>
+          </div>
+          <ToolbarAction to={routePaths.inbox(lang)} icon="panelLeftOpen" label={t("inbox")} className="@xl/messages:hidden" />
+        </header>
+      )}
+      {product && <p className="rounded-medium bg-orange/10 p-3 text-lower">{t("productContext", { title: product })}</p>}
+      {loading && (
+        <p role="status" className="text-lower text-operational-muted">
+          {t("loading")}
+        </p>
+      )}
+      {error && (
+        <p role="alert" className="text-lower text-operational-ink">
           {error}
         </p>
-      ) : null}
-      {realtimeConnected === false ? (
-        <p role="status" className="text-sm text-amber-700">
+      )}
+      {realtimeConnected === false && (
+        <p role="status" className="text-lower text-operational-muted">
           {t("realtimeUnavailable")}
         </p>
-      ) : null}
+      )}
       <div
         ref={viewport}
         onScroll={(event) => {
           const node = event.currentTarget;
           followLatest.current = node.scrollHeight - node.scrollTop - node.clientHeight < 80;
         }}
-        className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto"
+        className="scrollbar-none flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto py-2"
         aria-live="polite">
-        {hasOlder ? (
-          <button type="button" disabled={loadingOlder} onClick={() => void loadOlder()} className="self-center text-orange disabled:opacity-50">
-            {t("loadOlder")}
-          </button>
-        ) : null}
-        {!loading && messages.length === 0 ? <p className="text-gray-600">{t("emptyConversation")}</p> : null}
+        {hasOlder && (
+          <ToolbarAction
+            label={t("loadOlder")}
+            content={t("loadOlder")}
+            disabled={loadingOlder}
+            onClick={() => void loadOlder()}
+            className="self-center"
+          />
+        )}
+        {!loading && messages.length === 0 && <p className="m-auto text-center text-lower text-operational-muted">{t("emptyConversation")}</p>}
         {messages.map((message) => {
           const own = message.senderId === userId;
+          const assistant = message.role === "assistant" || message.messageType === "CHATBOT_TO_USER";
           return (
-            <article
-              key={message.id}
-              className={`max-w-[80%] rounded-small px-4 py-3 ${own ? "self-end bg-orange text-white" : "self-start bg-gray-100"}`}>
-              <p className="whitespace-pre-wrap break-words">{message.content}</p>
-              <time className="mt-1 block text-xs opacity-70" dateTime={message.timestamp}>
-                {new Date(message.timestamp).toLocaleString(lang)}
+            <article key={message.id} className={`flex max-w-full flex-col gap-1 ${own ? "self-end items-end" : "self-start items-start"}`}>
+              <span className="text-lower text-operational-muted">
+                {own
+                  ? t("you")
+                  : assistant
+                    ? t("chatbot.assistantName")
+                    : (conversation?.conversationType === "GROUP" ? participantNames[message.senderId] : participantName) || t("participant")}
+              </span>
+              <div className={`max-w-full rounded-hard px-4 py-3 ${own ? "bg-input-bg" : "bg-white"}`}>
+                <p className="whitespace-pre-wrap break-words [overflow-wrap:anywhere] text-body leading-relaxed">{message.content}</p>
+              </div>
+              <time className="px-1 text-lower text-operational-muted" dateTime={message.timestamp}>
+                {new Date(message.timestamp).toLocaleTimeString(lang, { hour: "2-digit", minute: "2-digit" })}
               </time>
             </article>
           );
         })}
       </div>
-      <form onSubmit={handleSend} className="flex gap-2 border-t pt-4">
-        <textarea
-          aria-label={t("draftPlaceholder")}
-          placeholder={t("draftPlaceholder")}
-          value={draft}
-          onChange={(event) => setDraft(event.target.value)}
-          maxLength={8000}
-          className="min-h-12 flex-1 rounded-small border border-operational-border p-3"
-        />
-        <button
-          type="submit"
-          disabled={!draft.trim() || sending || loading || !conversation}
-          className="rounded-small bg-orange px-5 text-white disabled:opacity-50">
-          {t("send")}
-        </button>
-      </form>
+      <MessageComposer
+        value={draft}
+        onChange={setDraft}
+        onSend={() => void handleSend()}
+        placeholder={t("draftPlaceholder")}
+        label={t("draftPlaceholder")}
+        sendLabel={t("sendDescription")}
+        hint={t("chatbot.composerHint")}
+        maxLength={8000}
+        disabled={sending || loading || !conversation}
+      />
+    </section>
+  );
+  return embedded ? (
+    content
+  ) : (
+    <OperationalPage
+      chat
+      title={title}
+      actions={
+        <Link to={routePaths.inbox(lang)} className="text-orange">
+          {t("inbox")}
+        </Link>
+      }>
+      {content}
     </OperationalPage>
   );
 }
