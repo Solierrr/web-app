@@ -32,5 +32,8 @@
   "privacy": "privacidade",
   "sessions": "sessoes",
   "registrationStatus": "status-cadastro",
-  "analytics": "indicadores"
+  "analytics": "indicadores",
+  "policy": "politicas",
+  "terms": "termos",
+  "cookies": "cookies"
 }
