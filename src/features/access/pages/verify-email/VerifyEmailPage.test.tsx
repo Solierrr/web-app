@@ -17,7 +17,11 @@ describe("VerifyEmailPage", () => {
   it("shows the pending state with a resend button when the email is not verified yet", async () => {
     vi.mocked(authService.reloadCurrentFirebaseUser).mockResolvedValue({ email: "user@example.com", emailVerified: false } as never);
 
-    render(<MemoryRouter><VerifyEmailPage /></MemoryRouter>);
+    render(
+      <MemoryRouter>
+        <VerifyEmailPage />
+      </MemoryRouter>,
+    );
 
     expect(await screen.findByRole("button", { name: "Reenviar e-mail" })).toBeInTheDocument();
   });
@@ -25,7 +29,11 @@ describe("VerifyEmailPage", () => {
   it("shows the password confirmation form once the email is verified", async () => {
     vi.mocked(authService.reloadCurrentFirebaseUser).mockResolvedValue({ email: "user@example.com", emailVerified: true } as never);
 
-    render(<MemoryRouter><VerifyEmailPage /></MemoryRouter>);
+    render(
+      <MemoryRouter>
+        <VerifyEmailPage />
+      </MemoryRouter>,
+    );
 
     expect(await screen.findByRole("button", { name: "Confirmar" })).toBeInTheDocument();
   });
@@ -36,7 +44,11 @@ describe("VerifyEmailPage", () => {
     vi.mocked(authService.getCurrentFirebaseUser).mockReturnValue({ email: "user@example.com", getIdToken } as never);
     vi.mocked(linkFirebase).mockResolvedValue({} as never);
 
-    render(<MemoryRouter><VerifyEmailPage /></MemoryRouter>);
+    render(
+      <MemoryRouter>
+        <VerifyEmailPage />
+      </MemoryRouter>,
+    );
     await screen.findByRole("button", { name: "Confirmar" });
 
     const passwordInput = document.querySelector<HTMLInputElement>("input[type='password']");
@@ -50,8 +62,12 @@ describe("VerifyEmailPage", () => {
   it("shows a fallback message when there is no firebase account to verify", async () => {
     vi.mocked(authService.reloadCurrentFirebaseUser).mockResolvedValue(null);
 
-    render(<MemoryRouter><VerifyEmailPage /></MemoryRouter>);
+    render(
+      <MemoryRouter>
+        <VerifyEmailPage />
+      </MemoryRouter>,
+    );
 
-    expect(await screen.findByText(/Não encontramos uma verificação em andamento/)).toBeInTheDocument();
+    expect(await screen.findByText(/A verificação do seu email ainda não foi iniciada/)).toBeInTheDocument();
   });
 });

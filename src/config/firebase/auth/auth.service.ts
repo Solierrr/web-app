@@ -1,5 +1,6 @@
 import {
   GoogleAuthProvider,
+  OAuthProvider,
   confirmPasswordReset,
   createUserWithEmailAndPassword,
   reload,
@@ -15,8 +16,6 @@ import {
 import { auth } from "../firebase";
 import i18n from "@/config/i18n/internationalization";
 import { createServiceError } from "@/config/logging/serviceError.utils";
-
-const googleProvider = new GoogleAuthProvider();
 
 async function runAuthOperation<T>(operation: string, request: () => Promise<T>): Promise<T> {
   try {
@@ -38,8 +37,17 @@ export function logout() {
   return runAuthOperation("logout", () => signOut(auth));
 }
 
-export async function loginWithGoogle() {
+export async function loginWithGoogle(email?: string) {
+  const googleProvider = new GoogleAuthProvider();
+  googleProvider.setCustomParameters(email ? { login_hint: email } : { prompt: "select_account" });
   const result = await runAuthOperation("loginWithGoogle", () => signInWithPopup(auth, googleProvider));
+  return result.user;
+}
+
+export async function loginWithMicrosoft(email?: string) {
+  const provider = new OAuthProvider("microsoft.com");
+  provider.setCustomParameters(email ? { login_hint: email } : { prompt: "select_account" });
+  const result = await runAuthOperation("loginWithMicrosoft", () => signInWithPopup(auth, provider));
   return result.user;
 }
 

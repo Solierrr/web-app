@@ -27,21 +27,19 @@ describe("LoginPage", () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByPlaceholderText("seuemailaqui@email.com")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("suasenhaaqui")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Prosseguir" })).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("Insira seu e-mail aqui")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("Insira sua senha")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Entrar" })).toBeInTheDocument();
   });
 
-  it("links to the registration journeys and forgot-password routes", () => {
+  it("links to basic registration and forgot-password routes", () => {
     render(
       <MemoryRouter>
         <LoginPage />
       </MemoryRouter>,
     );
 
-    expect(screen.getByRole("link", { name: "Cadastrar empresa" })).toHaveAttribute("href", "/pt-BR/cadastro/empresa");
-    expect(screen.getByRole("link", { name: "Sou profissional autônomo" })).toHaveAttribute("href", "/pt-BR/cadastro/profissional");
-    expect(screen.getByRole("link", { name: "Tenho um código de acesso" })).toHaveAttribute("href", "/pt-BR/cadastro/acesso");
+    expect(screen.getByRole("link", { name: "Cadastre-se" })).toHaveAttribute("href", "/pt-BR/cadastro");
     expect(screen.getByRole("link", { name: "Esqueci minha senha" })).toHaveAttribute("href", "/pt-BR/esqueci-senha");
   });
 
@@ -60,9 +58,9 @@ describe("LoginPage", () => {
       </MemoryRouter>,
     );
 
-    fireEvent.change(screen.getByPlaceholderText("seuemailaqui@email.com"), { target: { value: "user@solaria.com" } });
-    fireEvent.change(screen.getByPlaceholderText("suasenhaaqui"), { target: { value: "supersecret123" } });
-    fireEvent.click(screen.getByRole("button", { name: "Prosseguir" }));
+    fireEvent.change(screen.getByPlaceholderText("Insira seu e-mail aqui"), { target: { value: "user@solaria.com" } });
+    fireEvent.change(screen.getByPlaceholderText("Insira sua senha"), { target: { value: "supersecret123" } });
+    fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
 
     await waitFor(() => {
       expect(mockedLogin).toHaveBeenCalledWith({ email: "user@solaria.com", password: "supersecret123" });
@@ -78,9 +76,9 @@ describe("LoginPage", () => {
       </MemoryRouter>,
     );
 
-    fireEvent.change(screen.getByPlaceholderText("seuemailaqui@email.com"), { target: { value: "user@solaria.com" } });
-    fireEvent.change(screen.getByPlaceholderText("suasenhaaqui"), { target: { value: "wrong" } });
-    fireEvent.click(screen.getByRole("button", { name: "Prosseguir" }));
+    fireEvent.change(screen.getByPlaceholderText("Insira seu e-mail aqui"), { target: { value: "user@solaria.com" } });
+    fireEvent.change(screen.getByPlaceholderText("Insira sua senha"), { target: { value: "wrong" } });
+    fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
 
     expect(await screen.findByText("E-mail ou senha inválidos")).toBeInTheDocument();
   });

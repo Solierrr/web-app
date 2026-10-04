@@ -1,41 +1,46 @@
-import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import Access from "@/lib/components/layout/access/Access";
 import { routePaths } from "@/config/i18n/paths";
 import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
-import { useTranslation } from "react-i18next";
-
 import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
-import { linkFirebase } from "@/features/access/access.service";
-import { getCurrentFirebaseUser, reloadCurrentFirebaseUser, sendVerificationEmail } from "@/config/firebase/auth/auth.service";
+import { linkFirebase, login } from "@/features/access/access.service";
+import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
+import {
+  getCurrentFirebaseUser,
+  login as loginFirebase,
+  register as registerFirebase,
+  reloadCurrentFirebaseUser,
+  sendVerificationEmail,
+} from "@/config/firebase/auth/auth.service";
 
 const RESEND_COOLDOWN_SECONDS = 60;
-
-type Status = "checking" | "no-account" | "pending" | "verified";
+type Status = "checking" | "no-account" | "pending" | "verified" | "linked";
 
 export default function VerifyEmailPage() {
-  const { lang: langParam } = useParams<{ lang: string }>();
-  const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT;
+  const { lang: parameter } = useParams<{ lang: string }>();
+  const lang = isSupportedLanguage(parameter) ? parameter : DEFAULT;
   const { t } = useTranslation("access", { keyPrefix: "verifyEmail" });
-  const [status, setStatus] = useState<Status>("checking");
+  const { t: tAccess } = useTranslation("access");
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [status, setStatus] = useState<Status>(isAlwaysMockMode() ? "linked" : "checking");
   const [cooldown, setCooldown] = useState(0);
-  const [resendError, setResendError] = useState(false);
-  const [password, setPassword] = useState("");
-  const [linking, setLinking] = useState(false);
-  const [linkError, setLinkError] = useState(false);
-  const [linked, setLinked] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const cooldownTimer = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
+  const returnTo = (location.state as { returnTo?: string } | null)?.returnTo;
+  const destination = returnTo?.startsWith(`/${lang}/`) ? returnTo : routePaths.dashboard(lang);
 
   useEffect(() => {
+    if (isAlwaysMockMode()) return;
     let active = true;
     reloadCurrentFirebaseUser()
       .then((user) => {
         if (!active) return;
-        if (!user || user.email?.toLowerCase() !== getAuthSession()?.email?.toLowerCase()) {
-          setStatus("no-account");
-        } else {
-          setStatus(user.emailVerified ? "verified" : "pending");
-        }
+        const matching = user?.email?.toLowerCase() === getAuthSession()?.email.toLowerCase();
+        setStatus(user && matching ? (user.emailVerified ? "verified" : "pending") : "no-account");
       })
       .catch(() => {
         if (active) setStatus("no-account");
@@ -49,11 +54,13 @@ export default function VerifyEmailPage() {
 
   async function handleResend() {
     const user = getCurrentFirebaseUser();
-    if (!user || cooldown > 0) return;
-    setResendError(false);
+    if (busy || cooldown > 0 || !user || user.email?.toLowerCase() !== getAuthSession()?.email.toLowerCase()) return;
+    setBusy(true);
+    setError(null);
     try {
       await sendVerificationEmail(user);
       setCooldown(RESEND_COOLDOWN_SECONDS);
+      clearInterval(cooldownTimer.current);
       cooldownTimer.current = setInterval(() => {
         setCooldown((current) => {
           if (current <= 1) {
@@ -64,87 +71,90 @@ export default function VerifyEmailPage() {
         });
       }, 1000);
     } catch {
-      setResendError(true);
-    }
-  }
-
-  async function handleLinkSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const user = getCurrentFirebaseUser();
-    const email = getAuthSession()?.email;
-    if (!user || !email || user.email?.toLowerCase() !== email.toLowerCase()) return;
-    setLinking(true);
-    setLinkError(false);
-    try {
-      const idToken = await user.getIdToken();
-      await linkFirebase(email, password, idToken);
-      setLinked(true);
-    } catch {
-      setLinkError(true);
+      setError(t("resendError"));
     } finally {
-      setLinking(false);
+      setBusy(false);
     }
   }
 
-  if (status === "checking") {
-    return <OperationalPage title={t("title")} compact loading />;
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    if (busy) return;
+    if (status === "linked") {
+      navigate(destination, { replace: true });
+      return;
+    }
+    const password = String(new FormData(event.currentTarget).get("password") ?? "");
+    const email = getAuthSession()?.email;
+    setBusy(true);
+    setError(null);
+    try {
+      if (status === "no-account" && email) {
+        await login({ email, password });
+        const { user } = await loginFirebase(email, password).catch(async (failure) => {
+          if (failure?.code !== "auth/user-not-found" && failure?.code !== "auth/invalid-credential") throw failure;
+          return registerFirebase(email, password);
+        });
+        if (!user.emailVerified) await sendVerificationEmail(user);
+        setStatus(user.emailVerified ? "verified" : "pending");
+      } else {
+        const user = await reloadCurrentFirebaseUser();
+        if (!user || !email || user.email?.toLowerCase() !== email.toLowerCase()) {
+          setStatus("no-account");
+          return;
+        }
+        if (!user.emailVerified) {
+          setStatus("pending");
+          setError(t("notConfirmed"));
+          return;
+        }
+        if (status === "pending") {
+          setStatus("verified");
+          return;
+        }
+        await linkFirebase(email, password, await user.getIdToken(true));
+        setStatus("linked");
+      }
+    } catch {
+      setError(t("linkError"));
+    } finally {
+      setBusy(false);
+    }
   }
 
-  if (status === "no-account") {
-    return (
-      <OperationalPage title={t("title")} compact>
-        <p>{t("noFirebaseAccount")}</p>
-        <Link to={routePaths.login(lang)}>{t("linkTitle")}</Link>
-      </OperationalPage>
-    );
-  }
-
+  const passwordRequired = status === "verified" || status === "no-account";
   return (
-    <OperationalPage title={t("title")} compact>
-      {status === "pending" ? (
-        <>
-          <p>{t("pending")}</p>
-          {resendError ? (
-            <p role="alert" className="text-red-700">
-              {t("resendError")}
-            </p>
-          ) : null}
-          <button
-            type="button"
-            disabled={cooldown > 0}
-            onClick={() => void handleResend()}
-            className="self-start rounded-small bg-orange px-4 py-2 text-white disabled:opacity-50">
-            {cooldown > 0 ? t("resendCooldown", { seconds: cooldown }) : t("resend")}
-          </button>
-        </>
-      ) : linked ? (
-        <p role="status">{t("linkSuccess")}</p>
-      ) : (
-        <>
-          <p>{t("verified")}</p>
-          <p className="text-gray-600">{t("linkDescription")}</p>
-          <form onSubmit={handleLinkSubmit} className="flex flex-col gap-3">
-            <label className="flex flex-col gap-1">
-              {t("linkTitle")}
-              <input
-                type="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                required
-                className="rounded-small border border-operational-border p-2"
-              />
-            </label>
-            {linkError ? (
-              <p role="alert" className="text-red-700">
-                {t("linkError")}
-              </p>
-            ) : null}
-            <button type="submit" disabled={linking} className="rounded-small bg-orange px-4 py-2 text-white disabled:opacity-50">
-              {t("linkSubmit")}
+    <Access
+      heading={t("title")}
+      animatedBackground={false}
+      busy={busy || status === "checking"}
+      error={error}
+      fields={passwordRequired ? [{ name: "password", password: true, placeholder: tAccess("fields.password.placeholder") }] : []}
+      submitLabel={status === "checking" ? undefined : status === "pending" ? t("check") : status === "linked" ? t("continue") : t("linkSubmit")}
+      onSubmit={handleSubmit}
+      footer={
+        status === "pending" ? (
+          <div className="flex flex-col gap-3">
+            <button type="button" disabled={busy || cooldown > 0} onClick={() => void handleResend()}>
+              {cooldown > 0 ? t("resendCooldown", { seconds: cooldown }) : t("resend")}
             </button>
-          </form>
-        </>
-      )}
-    </OperationalPage>
+            <Link to={destination}>{t("continueLater")}</Link>
+          </div>
+        ) : undefined
+      }>
+      <p role="status">
+        {t(
+          status === "checking"
+            ? "checking"
+            : status === "no-account"
+              ? "noFirebaseAccount"
+              : status === "pending"
+                ? "pending"
+                : status === "linked"
+                  ? "linkSuccess"
+                  : "verified",
+        )}
+      </p>
+      {passwordRequired && <p>{t(status === "no-account" ? "resume" : "linkDescription")}</p>}
+    </Access>
   );
 }

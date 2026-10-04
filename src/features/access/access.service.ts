@@ -4,10 +4,34 @@ import type { AuthSession, LoginCredentials, RegisterCredentials, RegisterResult
 import { httpJson } from "@/lib/shared/http/http.service";
 import { clearAuthSession, getAuthSession, setAuthSession } from "@/lib/shared/auth/authToken.utils";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
-import { createMockSession } from "./access.d.mocks";
+import { createMockSession, createMockTestAccount, MOCK_TEST_EMAIL, MOCK_TEST_USER_ID } from "./access.d.mocks";
+import { getOperationalAccount, saveOperationalAccount, selectContext } from "./access.onboarding.service";
 
 const API = `${import.meta.env.VITE_API_AUTH}/auth`;
 const SERVICE_NAME = "access";
+
+export async function loginWithMockMicrosoft(): Promise<AuthSession> {
+  if (!isAlwaysMockMode()) throw new Error("Mock login is unavailable");
+  await waitForMockService();
+  const session = createMockSession(MOCK_TEST_EMAIL, MOCK_TEST_USER_ID);
+  setAuthSession(session);
+  const defaults = createMockTestAccount();
+  const account = getOperationalAccount();
+  saveOperationalAccount({
+    ...defaults,
+    ...account,
+    professional: true,
+    professionalProfile: account.professionalProfile ?? defaults.professionalProfile,
+    memberships: [
+      ...defaults.memberships.map((membership) => ({ ...membership, ...account.memberships.find((item) => item.id === membership.id), admin: true })),
+      ...account.memberships.filter((membership) => !defaults.memberships.some((item) => item.id === membership.id)),
+    ],
+  });
+  if (!account.selectedContext) selectContext(defaults.selectedContext!);
+  const usernameKey = `solaria.mock.username.${session.userId}`;
+  if (!localStorage.getItem(usernameKey)) localStorage.setItem(usernameKey, "Teste Solaria");
+  return session;
+}
 
 export async function login(credentials: LoginCredentials): Promise<AuthSession> {
   if (isAlwaysMockMode()) {

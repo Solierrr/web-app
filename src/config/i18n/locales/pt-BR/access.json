@@ -20,7 +20,27 @@
     "forgotPassword": "Esqueci minha senha",
     "noAccountPrefix": "Não tem uma conta?",
     "register": "Cadastre-se",
-    "error": "E-mail ou senha inválidos"
+    "error": "E-mail ou senha inválidos",
+    "helperText": "Entre na sua conta para continuar",
+    "title": "Entrar",
+    "google": "Continuar com Google",
+    "or": "ou",
+    "emailLabel": "E-mail",
+    "passwordLabel": "Senha",
+    "emailPlaceholder": "Insira seu e-mail aqui",
+    "passwordPlaceholder": "Insira sua senha",
+    "signIn": "Entrar",
+    "remember": "Lembrar meu e-mail e método de acesso neste dispositivo",
+    "continueAs": "Continuar como {{email}}",
+    "forgetAccount": "Esquecer esta conta neste dispositivo",
+    "anotherAccount": "Entrar com outra conta",
+    "lastUsed": "Último acesso",
+    "emailMethod": "E-mail e senha",
+    "policiesIntro": "Consulte as políticas do Solaria:",
+    "terms": "Termos de uso",
+    "privacy": "Política de privacidade",
+    "cookies": "Política de cookies",
+    "microsoft": "Continuar com Microsoft"
   },
   "register": {
     "helperText": "Crie sua conta para acessar o marketplace",
@@ -28,7 +48,12 @@
     "hasAccountPrefix": "Já tem uma conta?",
     "login": "Entrar",
     "passwordMismatch": "As senhas não coincidem",
-    "error": "Não foi possível concluir o cadastro"
+    "error": "Não foi possível concluir o cadastro",
+    "title": "Criar conta",
+    "confirmPasswordPlaceholder": "Repita sua senha novamente",
+    "emailPlaceholder": "Insira seu e-mail aqui",
+    "confirmPasswordLabel": "Confirmar senha",
+    "passwordPlaceholder": "Crie uma senha"
   },
   "forgotPassword": {
     "helperText": "Informe seu e-mail para receber as instruções de recuperação",
@@ -51,7 +76,12 @@
     "linkSubmit": "Confirmar",
     "linkError": "Não foi possível confirmar a verificação. Verifique sua senha e tente novamente.",
     "linkSuccess": "E-mail verificado e vinculado com sucesso.",
-    "noFirebaseAccount": "Não encontramos uma verificação em andamento. Volte para o cadastro ou fale com o suporte."
+    "noFirebaseAccount": "A verificação do seu email ainda não foi iniciada.",
+    "check": "Já confirmei meu email",
+    "continue": "Ir para o painel",
+    "continueLater": "Continuar e verificar depois",
+    "notConfirmed": "Seu email ainda não foi confirmado. Abra o link recebido e tente novamente.",
+    "resume": "Confirme sua senha para retomar a verificação do email."
   },
   "resetPassword": {
     "helperText": "Escolha uma nova senha com pelo menos 12 caracteres",
@@ -61,5 +91,22 @@
     "invalidLink": "Este link de redefinição é inválido ou expirou.",
     "mismatch": "As senhas não conferem.",
     "requestNewLink": "Solicitar novo link"
+  },
+  "canvas": {
+    "waves": {
+      "title": "Ondas finas",
+      "description": "Linhas de energia em movimento lento que se deformam com o cursor. Clique para criar um pulso."
+    },
+    "dots": {
+      "title": "Pontos reativos",
+      "description": "Mova o cursor para iluminar os pontos. Clique para criar um pulso. Uma textura solar discreta, sem tirar o foco do formulário."
+    },
+    "reference": "Ver referência original",
+    "preview": "Prévia do fundo de login",
+    "navigation": "Comparar fundos do login",
+    "grid": {
+      "title": "Grade interativa",
+      "description": "Passe o cursor para iluminar apenas o quadrado sob ele. Clique para espalhar uma onda de cor pelos quadrados próximos."
+    }
   }
 }
