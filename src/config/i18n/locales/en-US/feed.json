@@ -1,10 +1,79 @@
 {
   "professional": {
-    "description": "Accredited professionals available for your projects.",
+    "description": "Find professionals, independent technicians and teams for your projects.",
     "loadError": "Could not load professionals."
   },
   "company": {
     "loadError": "Could not load companies.",
-    "description": "Accredited companies available on the platform."
+    "description": "Find solar panel suppliers, technical teams, maintenance and inspection companies for your project.",
+    "activities": {
+      "SOLAR_PANELS": "Solar panels",
+      "INSPECTION": "Review and inspection",
+      "MAINTENANCE": "Maintenance",
+      "TECHNICIANS": "Technical team"
+    },
+    "empty": "No companies available in this category."
+  },
+  "marketplace": {
+    "label": "Marketplace categories",
+    "solarPanels": "solar panels",
+    "services": "services",
+    "suppliers": "suppliers"
+  },
+  "offers": {
+    "description": "Explore solar panel offers from suppliers.",
+    "trending": "Trending offers",
+    "recent": "Latest offers"
+  },
+  "views": {
+    "trending": "Trending",
+    "teams": "Teams",
+    "professionals": "Professionals",
+    "other": "Other",
+    "providers": "Service providers",
+    "independent": "Independent",
+    "suppliers": "Suppliers",
+    "labels": {
+      "solarPanels": "Sort offers",
+      "companies": "Company types",
+      "professionals": "Service types",
+      "infrastructure": "Infrastructure"
+    },
+    "recent": "Recent"
+  },
+  "services": {
+    "title": "Services",
+    "empty": "No results available in this category."
+  },
+  "catalog": {
+    "panelsTitle": "Solar Panels",
+    "infrastructureTitle": "Infrastructure",
+    "panelsDescription": "Compare solar panel offers and find the right model for your project.",
+    "infrastructureDescription": "Find rails, clamps, brackets and kits for your solar installation.",
+    "search": "Search offer, brand or supplier",
+    "filters": "Filters",
+    "clearFilters": "Clear filters",
+    "refresh": "Refresh offers",
+    "supplier": "Supplier",
+    "allSuppliers": "All suppliers",
+    "type": "Infrastructure type",
+    "allTypes": "All types",
+    "recent": "Available offers",
+    "trending": "Trending offers",
+    "failed": "Unable to load offers.",
+    "retry": "Try again",
+    "noResults": "No offers match your search.",
+    "empty": "There are no available offers in this category yet.",
+    "perUnit": "per unit",
+    "discount": "{{value}}% off",
+    "types": {
+      "RAIL": "Rails",
+      "CLAMP": "Clamps",
+      "BRACKET": "Brackets",
+      "HOOK": "Hooks",
+      "KIT": "Kits",
+      "OTHER": "Other"
+    },
+    "material": "Material"
   }
 }
