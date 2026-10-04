@@ -36,6 +36,9 @@ export const SEGMENT = [
   "sessions",
   "registrationStatus",
   "analytics",
+  "policy",
+  "terms",
+  "cookies",
 ] as const;
 
 export type RouteSegmentKey = (typeof SEGMENT)[number];
@@ -49,6 +52,9 @@ export function joinSegments(lang: SupportedLanguage, ...keys: RouteSegmentKey[]
 }
 
 export const routePaths = {
+  termsPolicy: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "policy", "terms")}`,
+  privacyPolicy: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "policy", "privacy")}`,
+  cookiePolicy: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "policy", "cookies")}`,
   home: (lang: SupportedLanguage) => `/${lang}`,
 
   solarPanelsFeed: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "solarPanels")}`,
