@@ -5,13 +5,16 @@ import { toCardItem } from "@/features/professionals/pages/feed/ProfessionalFeed
 import { DEFAULT as DEFAULT_LANGUAGE } from "@/config/i18n/browser/languages";
 
 const professional = professionalMock[0];
-const item = toCardItem({
-  id: professional.id,
-  slug: professional.slug,
-  name: professional.name,
-  crea: professional.registrations?.[0]?.council ?? "",
-  professions: professional.registrations?.map((registration) => registration.profession) ?? [],
-}, DEFAULT_LANGUAGE);
+const item = toCardItem(
+  {
+    id: professional.id,
+    slug: professional.slug,
+    name: professional.name,
+    crea: professional.registrations?.[0]?.council ?? "",
+    professions: professional.registrations?.map((registration) => registration.profession) ?? [],
+  },
+  DEFAULT_LANGUAGE,
+);
 
 const meta = {
   title: "Layout/Announcement/EntityCard",
@@ -37,3 +40,5 @@ export const WithoutSubtitle: Story = {
 export const WithoutAvatar: Story = {
   args: { item: { ...item, avatarUrl: undefined } },
 };
+
+export const Product: Story = { args: { variant: "product" } };
