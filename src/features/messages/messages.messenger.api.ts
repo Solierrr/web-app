@@ -1,7 +1,14 @@
 import i18n from "@/config/i18n/internationalization";
 import { httpJson } from "@/lib/shared/http/http.service";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
-import { getMockMessenger, getMockConversation, createMockConversation, sendMockMessage } from "./messages.messenger.d.mocks";
+import {
+  getMockMessenger,
+  getMockConversation,
+  createMockConversation,
+  createMockChatbotConversation,
+  sendMockMessage,
+  markMockConversationRead,
+} from "./messages.messenger.d.mocks";
 import { userMocks } from "@/config/mocks/registry";
 
 const API = `${import.meta.env.VITE_API_MESSENGER}/messaging`;
@@ -22,6 +29,8 @@ export interface MessageDto {
   content: string;
   timestamp: string;
   sequence: number;
+  role?: string;
+  messageType?: "USER_TO_USER" | "USER_TO_GROUP" | "USER_TO_CHATBOT" | "CHATBOT_TO_USER";
 }
 
 export async function getConversations(): Promise<ConversationDto[]> {
@@ -93,7 +102,7 @@ export async function getConversationMessagesSince(id: string, sequence: number)
 export async function markConversationRead(id: string, sequence: number): Promise<ConversationDto> {
   if (isAlwaysMockMode()) {
     await waitForMockService();
-    return { ...getMockConversation(id), unreadCount: 0 };
+    return markMockConversationRead(id);
   }
   return httpJson<ConversationDto>(`${API}/conversations/${encodeURIComponent(id)}/read`, {
     service: "messenger",
@@ -104,7 +113,11 @@ export async function markConversationRead(id: string, sequence: number): Promis
   });
 }
 
-export async function sendConversationMessage(conversationId: string, content: string): Promise<MessageDto> {
+export async function sendConversationMessage(
+  conversationId: string,
+  content: string,
+  conversationType: ConversationDto["conversationType"] = "DIRECT",
+): Promise<MessageDto> {
   if (isAlwaysMockMode()) {
     await waitForMockService();
     return sendMockMessage(conversationId, content);
@@ -113,15 +126,51 @@ export async function sendConversationMessage(conversationId: string, content: s
     service: "messenger",
     operation: "sendConversationMessage",
     method: "POST",
-    body: { conversationId, messageType: "USER_TO_USER", content },
+    body: {
+      conversationId,
+      messageType: conversationType === "GROUP" ? "USER_TO_GROUP" : conversationType === "CHAT_BOT" ? "USER_TO_CHATBOT" : "USER_TO_USER",
+      content,
+    },
     errorMessage: i18n.t("services:messenger.sendConversationMessage"),
+  });
+}
+
+export async function createChatbotConversation(userType: string): Promise<ConversationDto> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    return createMockChatbotConversation();
+  }
+  return httpJson<ConversationDto>(`${API}/conversations/chatbot-conversations`, {
+    service: "messenger",
+    operation: "createChatbotConversation",
+    method: "POST",
+    body: { userType },
+    errorMessage: i18n.t("chat:createError"),
+  });
+}
+
+export interface MessengerContact {
+  authId: string;
+  username: string;
+  avatar: string | null;
+}
+
+export async function getMessengerContacts(): Promise<MessengerContact[]> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    return userMocks.map((user) => ({ authId: user.authId || user.id, username: user.name, avatar: user.avatar ?? null }));
+  }
+  return httpJson<MessengerContact[]>(`${import.meta.env.VITE_API_CORE}/api/connections`, {
+    service: "user",
+    operation: "getMessengerContacts",
+    errorMessage: i18n.t("chat:contactsError"),
   });
 }
 
 export async function getUserSummary(authId: string): Promise<{ username: string; avatar: string | null }> {
   if (isAlwaysMockMode()) {
     await waitForMockService();
-    const user = userMocks.find((item) => item.id === authId) ?? userMocks[0];
+    const user = userMocks.find((item) => item.id === authId || item.authId === authId) ?? userMocks[0];
     return { username: user.name, avatar: user.avatar ?? null };
   }
   return httpJson<{ username: string; avatar: string | null }>(
