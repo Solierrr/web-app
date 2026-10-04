@@ -37,10 +37,11 @@ export default function Sidebar({
 
   return (
     <SidebarContext.Provider value={collapsed}>
-      <aside className={`flex shrink-0 flex-col h-full bg-white ${collapsed ? "w-16" : "w-64"} ${className ?? ""}`}>
+      <aside
+        className={`flex shrink-0 flex-col h-full overflow-hidden bg-white transition-[width] duration-250 ease-in-out motion-reduce:transition-none ${collapsed ? "w-16" : "w-64"} ${className ?? ""}`}>
         {header}
         {navigation ?? (
-          <nav className="flex-1 overflow-y-auto">
+          <nav className="scrollbar-none min-h-0 flex-1 overflow-y-auto">
             <ul className="flex flex-col gap-1 p-2">{children}</ul>
           </nav>
         )}
@@ -54,8 +55,8 @@ export default function Sidebar({
           }}
           aria-label={collapsed ? expandLabel : collapseLabel}
           aria-expanded={!collapsed}
-          className={`${controlledCollapsed === undefined ? "flex" : "hidden lg:flex"} min-h-12 items-center justify-center border-t border-operational-border p-2 cursor-pointer hover:bg-operational-hover`}>
-          <Icon name="chevronLeft" className={`transition-transform duration-350 ${collapsed ? "rotate-180" : ""}`} />
+          className={`${controlledCollapsed === undefined ? "flex" : "hidden lg:flex"} min-h-12 items-center justify-center p-2 cursor-pointer hover:bg-operational-hover`}>
+          <Icon name={collapsed ? "panelLeftOpen" : "panelLeftClose"} size={20} className="shrink-0" />
         </button>
       </aside>
     </SidebarContext.Provider>

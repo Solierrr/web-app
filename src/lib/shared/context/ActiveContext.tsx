@@ -40,8 +40,7 @@ export function ActiveContextProvider({ children }: { children: ReactNode }) {
     let generation = 0;
     function load() {
       const current = ++generation;
-      setLoading(true);
-      Promise.all([getMyMembership(), getMyCompany(), isAlwaysMockMode() ? Promise.resolve(null) : getMyPlatformAdmin().catch(() => null)])
+      Promise.all([getMyMembership(), getMyCompany(), getMyPlatformAdmin().catch(() => null)])
         .then(([membership, loadedCompany, platformAdmin]) => {
           if (!active || current !== generation) return;
           setCompany(loadedCompany);

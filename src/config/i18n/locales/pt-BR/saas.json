@@ -5,6 +5,8 @@
     "supplier": "Fornecedor"
   },
   "shell": {
+    "exploreCatalog": "Retornar ao catálogo",
+    "closeAssistant": "Fechar assistente",
     "openMenu": "Abrir menu",
     "closeMenu": "Fechar menu",
     "collapseSidebar": "Recolher menu lateral",
@@ -32,7 +34,8 @@
       "overview": "Visão geral",
       "catalog": "Catálogo",
       "company": "Empresa",
-      "administration": "Administração"
+      "administration": "Administração",
+      "workspace": "Área de trabalho"
     },
     "items": {
       "dashboard": "Início",
@@ -71,7 +74,9 @@
     "title": "O que você deseja fazer?",
     "noRecent": "As telas visitadas aparecerão aqui.",
     "noResults": "Nenhuma tela encontrada.",
-    "search": "Buscar uma tela"
+    "search": "Buscar uma tela",
+    "navigate": "para navegar",
+    "select": "para selecionar"
   },
   "permissions": {
     "title": "Permissões do cargo",

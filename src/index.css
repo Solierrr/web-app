@@ -3,6 +3,9 @@
 @import "tw-shimmer";
 
 @theme {
+  --font-ui: "Plus Jakarta Sans", sans-serif;
+  --leading-toolbar: 1.25rem;
+  --tracking-toolbar: 0em;
   --color-operational-border: #e5e7eb;
   --color-operational-hover: #f3f4f6;
   --color-operational-muted: #62676f;
@@ -18,6 +21,10 @@
   --color-black: #444444;
 
   --color-orange: #FF6500;
+  --color-orange-gold: #FFB347;
+  --color-orange-apricot: #FF914D;
+  --color-orange-coral: #F05A3C;
+  --color-orange-copper: #C84B18;
   --color-green:  #00AA57;
   --color-purple: #8D1BFF;
   
@@ -68,10 +75,10 @@
     font-optical-sizing: auto;
     font-synthesis: none;
     font-style: normal;
-    font-weight: 300;
+    font-weight: 500;
     @apply text-body text-black;
   }
-  
+
   body { @apply overflow-x-hidden }
 
   h1     { @apply text-title    font-bold       leading-9; }
@@ -110,6 +117,24 @@
   line-height: 1;
   padding-bottom: 1px;
 }
+
+@utility navbar-frame {
+  @apply flex h-16 shrink-0 items-center bg-white px-4 py-3.5 sm:px-8;
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.ai-orange-gradient stop:nth-child(1) { stop-color: var(--color-orange-gold); }
+.ai-orange-gradient stop:nth-child(2) { stop-color: var(--color-orange-apricot); }
+.ai-orange-gradient stop:nth-child(3) { stop-color: var(--color-orange); }
+.ai-orange-gradient stop:nth-child(4) { stop-color: var(--color-orange-coral); }
+.ai-orange-gradient stop:nth-child(5) { stop-color: var(--color-orange-copper); }
 
 @utility bg-interactive {
   @apply bg-black/8;
@@ -150,7 +175,7 @@
 }
 
 * {
-  font-family: "Plus Jakarta Sans", sans-serif;
+  font-family: var(--font-ui);
 }
 
 .input-scrollbar::-webkit-scrollbar-thumb       { @apply bg-input-outline rounded-full; }
@@ -184,6 +209,11 @@
   }
 }
 
-.operational-shell * {
-  font-family: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+.toolbar-action,
+.toolbar-action * {
+  font-family: var(--font-ui);
+  font-size: var(--text-lower);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--leading-toolbar);
+  letter-spacing: var(--tracking-toolbar);
 }

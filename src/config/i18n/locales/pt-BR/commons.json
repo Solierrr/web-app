@@ -64,6 +64,7 @@
   },
   "navbar": {
     "app": "Aplicativo",
+    "login": "Entrar",
     "solarPanels": "Placas Solares",
     "professionals": "Profissionais",
     "accredit": "Credenciar-se",

@@ -139,7 +139,8 @@
     "sendVerificationEmail": "Não foi possível enviar o e-mail de confirmação",
     "requestPasswordReset": "Não foi possível solicitar a redefinição de senha",
     "changePassword": "Não foi possível alterar a senha",
-    "completePasswordReset": "Não foi possível redefinir a senha"
+    "completePasswordReset": "Não foi possível redefinir a senha",
+    "loginWithMicrosoft": "Não foi possível entrar com a Microsoft. Tente novamente."
   },
   "typingStatus": {
     "setTypingStatus": "Não foi possível atualizar o indicador de digitação"

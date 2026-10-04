@@ -23,7 +23,14 @@ export function getOperationalNavigation({
       label: "navigation.groups.overview",
       items: [
         { key: "dashboard", label: "navigation.items.dashboard", icon: "home", to: routePaths.dashboard },
-        { key: "messages", label: "navigation.items.messages", icon: "messages", to: routePaths.inbox },
+        { key: "chatbot", label: "navigation.items.chatbot", icon: "sparkles", to: routePaths.operationalChatbot },
+      ],
+    },
+    {
+      key: "workspace",
+      label: "navigation.groups.workspace",
+      items: [
+        { key: "messages", label: "navigation.items.messages", icon: "messagesSquare", to: routePaths.inbox },
         ...((companyType && ANALYTICS_PERMISSIONS.some((permission) => can(permission))) || platformAdmin
           ? [{ key: "analytics", label: "navigation.items.analytics", icon: "chart" as const, to: routePaths.analytics }]
           : []),
@@ -36,9 +43,6 @@ export function getOperationalNavigation({
                 to: routePaths.registrationStatus,
               },
             ]
-          : []),
-        ...(company || platformAdmin
-          ? [{ key: "chatbot", label: "navigation.items.chatbot", icon: "messages" as const, to: routePaths.operationalChatbot }]
           : []),
       ],
     },
@@ -82,7 +86,12 @@ export function getOperationalNavigation({
             key: "administration",
             label: "navigation.groups.administration",
             items: [
-              { key: "registrations", label: "navigation.items.registrations", icon: "settings" as const, to: routePaths.registrationsManagement },
+              {
+                key: "registrations",
+                label: "navigation.items.registrations",
+                icon: "userRoundCheck" as const,
+                to: routePaths.registrationsManagement,
+              },
             ],
           },
         ]

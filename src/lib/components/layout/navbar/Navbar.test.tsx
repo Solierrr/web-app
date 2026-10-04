@@ -13,10 +13,11 @@ describe("Navbar", () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByRole("link", { name: "Aplicativo" })).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Aplicativo" })).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Placas Solares" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Profissionais" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Credenciar-se" })).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Credenciar-se" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Entrar" })).toHaveAttribute("href", "/pt-BR/login");
     expect(screen.getByRole("link", { name: "Suporte" })).toBeInTheDocument();
   });
 

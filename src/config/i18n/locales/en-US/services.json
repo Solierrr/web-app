@@ -139,7 +139,8 @@
     "sendVerificationEmail": "Unable to send the verification email",
     "requestPasswordReset": "Unable to request a password reset",
     "changePassword": "Unable to change the password",
-    "completePasswordReset": "Unable to reset the password"
+    "completePasswordReset": "Unable to reset the password",
+    "loginWithMicrosoft": "Could not sign in with Microsoft. Please try again."
   },
   "typingStatus": {
     "setTypingStatus": "Unable to update the typing indicator"

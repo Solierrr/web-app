@@ -4,13 +4,16 @@ import { useTranslation } from "react-i18next";
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import Icon from "@@/ui/icon/Icon";
 import { useActiveContext } from "@/lib/shared/context/ActiveContext";
+import { routePaths } from "@/config/i18n/paths";
 import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { CompanyStatus } from "@/features/companies/company.enum";
 import { getOperationalNavigation } from "@@/layout/saas/SaaSLayout.presets";
-import { getRecentPages } from "../dashboard.utils";
+import { filterPages } from "../dashboard.utils";
+import { useRecentPages } from "../dashboard.hooks";
 
 export default function DashboardPage() {
   const { t } = useTranslation("saas");
+  const { t: tSetup } = useTranslation("commons", { keyPrefix: "accountSetup" });
   const { lang: parameter } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(parameter) ? parameter : DEFAULT;
   const { kind, company, loading, isPlatformAdmin, can } = useActiveContext();
@@ -24,13 +27,31 @@ export default function DashboardPage() {
     can,
   }).map((group) => ({ ...group, items: group.items.filter((item) => item.key !== "dashboard") }));
   const items = groups.flatMap((group) => group.items);
-  const recentKeys = getRecentPages(companyContext ? company.id : "personal");
+  const recentKeys = useRecentPages(companyContext ? company.id : "personal");
   const recent = recentKeys.flatMap((key) => items.filter((item) => item.key === key));
   const query = search.trim().toLocaleLowerCase(lang);
-  const filtered = groups.map((group) => ({ ...group, items: group.items.filter((item) => t(item.label).toLocaleLowerCase(lang).includes(query)) }));
+  const filtered = filterPages(groups, query, lang, t);
 
   return (
     <OperationalPage title={t("navigation.items.dashboard")} loading={loading}>
+      <section aria-label={tSetup("title")} className="mb-8">
+        <h2 className="mb-3 font-medium">{tSetup("title")}</h2>
+        <div className="grid gap-3 sm:grid-cols-3">
+          {[
+            { to: routePaths.profileOnboardingCompany(lang), key: "company" },
+            { to: routePaths.profileOnboardingProfessional(lang), key: "professional" },
+            { to: routePaths.profileOnboardingAccess(lang), key: "access" },
+          ].map((option) => (
+            <Link
+              key={option.key}
+              to={option.to}
+              className="rounded-small border border-operational-border p-4 hover:border-orange hover:bg-orange/5">
+              <h3 className="font-medium">{tSetup(option.key + ".title")}</h3>
+              <p className="text-sm text-operational-muted">{tSetup(option.key + ".description")}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
       <section className="mx-auto flex w-full max-w-3xl flex-col items-center gap-5 pb-8 pt-8">
         <h2 className="text-center text-2xl font-semi-bold">{t("home.title")}</h2>
         <label className="flex w-full items-center gap-3 rounded-small border border-operational-border bg-white px-4 py-3 focus-within:ring-2 focus-within:ring-operational-border">

@@ -10,7 +10,7 @@ interface HyperlinkProps {
   state?: unknown;
 }
 
-export default function Hyperlink({ content, url, type = HyperlinkUrlType.COMPLETE, className, state }: HyperlinkProps) {
+export default function Hyperlink({ content, url, type = HyperlinkUrlType.COMPLETE, className = "", state }: HyperlinkProps) {
   const { pathname } = useLocation();
 
   let redirect: string;
@@ -23,8 +23,8 @@ export default function Hyperlink({ content, url, type = HyperlinkUrlType.COMPLE
   }
 
   return (
-    <div className="flex w-fit px-2 rounded-small bg-interactive">
-      <Link className={`font-medium ${className} hover:text-orange transition-colors duration-400`} to={redirect} state={state}>
+    <div className="flex w-fit px-1 rounded-small bg-black/0 hover:bg-black/2 transition-colors duration-800">
+      <Link className={`font-medium hover:text-orange transition-colors duration-200 ${className}`} to={redirect} state={state}>
         {content}
       </Link>
     </div>

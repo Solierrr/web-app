@@ -64,6 +64,7 @@
   },
   "navbar": {
     "app": "App",
+    "login": "Sign in",
     "solarPanels": "Solar Panels",
     "professionals": "Professionals",
     "accredit": "Become a partner",

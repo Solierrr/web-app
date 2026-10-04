@@ -139,7 +139,8 @@
     "sendVerificationEmail": "No se pudo enviar el correo de verificación",
     "requestPasswordReset": "No se pudo solicitar el restablecimiento de contraseña",
     "changePassword": "No se pudo cambiar la contraseña",
-    "completePasswordReset": "No se pudo restablecer la contraseña"
+    "completePasswordReset": "No se pudo restablecer la contraseña",
+    "loginWithMicrosoft": "No se pudo iniciar sesión con Microsoft. Inténtalo de nuevo."
   },
   "typingStatus": {
     "setTypingStatus": "No se pudo actualizar el indicador de escritura"

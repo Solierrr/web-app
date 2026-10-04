@@ -19,9 +19,14 @@ export function SidebarOption({ to, content, icon }: SidebarOptionProps) {
       <Link
         to={to}
         title={content}
-        className={`flex items-center-safe gap-3 px-3 py-2 rounded-medium *:font-semibold! ${active ? "bg-input-bg" : "hover:bg-input-bg"}`}>
-        <Icon name={icon} color={active ? Colors.ORANGE : Colors.BLACK} />
-        {!collapsed && <span className={active ? "text-orange" : ""}>{content}</span>}
+        aria-label={content}
+        className={`flex items-center-safe overflow-hidden px-3 py-2 rounded-medium *:font-semibold! transition-[gap,background-color] duration-250 ease-in-out motion-reduce:transition-none ${collapsed ? "justify-center gap-0" : "gap-3"} ${active ? "bg-input-bg" : "hover:bg-input-bg"}`}>
+        <Icon name={icon} size={20} color={active ? Colors.ORANGE : Colors.BLACK} className="shrink-0" />
+        <span
+          aria-hidden={collapsed}
+          className={`overflow-hidden whitespace-nowrap transition-[max-width,opacity] duration-250 ease-in-out motion-reduce:transition-none ${collapsed ? "max-w-0 opacity-0" : "max-w-48 opacity-100"} ${active ? "text-orange" : ""}`}>
+          {content}
+        </span>
       </Link>
     </li>
   );
