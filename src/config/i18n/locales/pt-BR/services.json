@@ -11,8 +11,6 @@
   "companyManagement": {
     "listPositions": "Não foi possível carregar os cargos",
     "createPosition": "Não foi possível criar o cargo",
-    "listCompanyPositions": "Não foi possível carregar os cargos da empresa",
-    "linkPositionToCompany": "Não foi possível disponibilizar o cargo para a empresa",
     "listPermissions": "Não foi possível carregar as permissões",
     "listPositionPermissions": "Não foi possível carregar as permissões do cargo",
     "grantPermission": "Não foi possível conceder a permissão",
@@ -144,5 +142,17 @@
   },
   "typingStatus": {
     "setTypingStatus": "Não foi possível atualizar o indicador de digitação"
+  },
+  "purchases": {
+    "getCart": "Não foi possível carregar o carrinho.",
+    "putCartItem": "Não foi possível atualizar o carrinho.",
+    "removeCartItem": "Não foi possível remover o item.",
+    "checkout": "Não foi possível concluir a compra.",
+    "listOrders": "Não foi possível carregar os pedidos.",
+    "getOrder": "Não foi possível carregar o pedido.",
+    "cancelOrder": "Não foi possível cancelar o pedido.",
+    "listSales": "Não foi possível carregar as vendas.",
+    "getSubscription": "Não foi possível carregar o plano.",
+    "payCharge": "Não foi possível pagar a cobrança."
   }
 }

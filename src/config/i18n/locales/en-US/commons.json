@@ -1,4 +1,19 @@
 {
+  "tableUi": {
+    "search": "Search table",
+    "filters": "Filters",
+    "clearFilters": "Clear filters",
+    "settings": "Table settings",
+    "rowOptions": "Record options",
+    "noResults": "No results found.",
+    "close": "Close",
+    "all": "All",
+    "hideSearch": "Hide search",
+    "showSearch": "Show search",
+    "refresh": "Refresh data",
+    "refreshed": "Data refreshed.",
+    "refreshError": "Unable to refresh data."
+  },
   "and": "and",
   "or": "or",
   "not": "not",
@@ -20,7 +35,7 @@
     "save": "save",
     "search": "search",
     "send": "send",
-    "view": "view",
+    "view": "View details",
     "contact": "contact"
   },
   "status": {
@@ -56,11 +71,14 @@
   "errorBoundary": {
     "label": "Error",
     "title": "Something went wrong",
-    "reload": "Reload page"
+    "reload": "Reload page",
+    "message": "We could not display this page. Return home and try again.",
+    "back": "Back to home"
   },
   "notFound": {
-    "title": "Oops...",
-    "subtitle": "Something's not right..."
+    "title": "Oops... It looks like this page doesn't exist...",
+    "subtitle": "We could not find this page. It may have moved, or the address may be incorrect.",
+    "back": "Back to home"
   },
   "navbar": {
     "app": "App",
@@ -76,7 +94,7 @@
     "messages": "Messages",
     "userProfile": "My profile",
     "companyProfile": "My company",
-    "solarPanelModels": "Solar panel models",
+    "solarPanelModels": "Solar Panels",
     "settings": "Settings",
     "dashboard": "Dashboard",
     "employees": "Employees",
@@ -138,7 +156,33 @@
     "notFound": "Request not found.",
     "decisionError": "We could not record the decision.",
     "statusLabel": "Status",
-    "detailError": "We could not load the request."
+    "detailError": "We could not load the request.",
+    "description": "Review and manage registrations of professionals, companies, brands and solar panel models.",
+    "table": {
+      "name": "Name",
+      "actions": "Actions",
+      "view": "View details",
+      "power": "Power"
+    },
+    "tabs": {
+      "label": "Registrations",
+      "companies": "Companies",
+      "professionals": "Professionals",
+      "models": "Solar panels",
+      "brands": "Brands"
+    },
+    "filters": "Filters",
+    "confirmApprove": "Confirm approval",
+    "confirmReject": "Confirm rejection",
+    "approveMessage": "Approve the registration for {{name}}?",
+    "rejectMessage": "Reject the registration for {{name}}?",
+    "approvedSuccess": "Registration approved successfully.",
+    "rejectedSuccess": "Registration rejected successfully.",
+    "information": "Registration information",
+    "certificates": "Certificates",
+    "noCertificates": "No certificates provided for this registration.",
+    "openCertificate": "Open certificate",
+    "certificateError": "The certificate image could not be loaded."
   },
   "settings": {
     "title": "Settings",
@@ -187,12 +231,14 @@
     "guestEmail": "Guest e-mail (optional)",
     "sendByEmail": "Send by e-mail",
     "emailSubject": "Invitation to {{company}} on Solaria",
-    "emailBody": "Use the code {{code}} to join {{company}}: {{url}}"
+    "emailBody": "Use the code {{code}} to join {{company}}: {{url}}",
+    "description": "Manage your team, positions and invitations."
   },
   "companyOffers": {
     "title": "Offers"
   },
   "unitsManagement": {
+    "mapSection": "Map location",
     "title": "Units",
     "loading": "Loading...",
     "error": "Could not complete the operation.",
@@ -222,9 +268,11 @@
     "edit": "Edit",
     "remove": "Remove",
     "empty": "No units registered yet.",
-    "openMap": "View on Google Maps"
+    "openMap": "View on Google Maps",
+    "description": "Manage company installation locations."
   },
   "offers": {
+    "commercialSection": "Commercial terms",
     "title": "Offers",
     "loading": "Loading...",
     "error": "Could not complete the operation.",
@@ -258,7 +306,8 @@
     "reopen": "Reopen",
     "discountLabel": "Discount",
     "statusLabel": "Status",
-    "expiration": "Valid until"
+    "expiration": "Valid until",
+    "description": "Manage offers and availability."
   },
   "myCompany": {
     "loadError": "Could not load your company.",
@@ -266,6 +315,26 @@
     "register": "Register a company"
   },
   "companyOnboarding": {
+    "placeholders": {
+      "cnpj": "12.ABC.345/01DE-35",
+      "tradeName": "Name your company is known by",
+      "corporateName": "Full registered company name",
+      "zipCode": "01001-000",
+      "state": "Type or select a state",
+      "city": "City name",
+      "neighborhood": "Neighborhood name",
+      "street": "Street or avenue name",
+      "number": "Number or no number",
+      "companyEmail": "contact@company.com",
+      "phone": "11999999999",
+      "website": "https://yourcompany.com"
+    },
+    "stateNotFound": "Select a valid state.",
+    "postal": {
+      "loading": "Looking up address…",
+      "notFound": "Postal code not found. Enter the address manually.",
+      "failed": "Unable to look up the postal code. Enter the address manually."
+    },
     "title": "Register a company",
     "description": "Choose the company's role. The registration will be reviewed before it appears in the marketplace.",
     "type": "Company type",
@@ -377,7 +446,9 @@
     "signOut": "Sign out of this device",
     "onlyCurrent": "For now you can only see and end the session on this device.",
     "error": "We could not load the sessions.",
-    "revokeError": "We could not end the session."
+    "revokeError": "We could not end the session.",
+    "device": "Device",
+    "lastActiveLabel": "Last active"
   },
   "registrationStatusPage": {
     "title": "Registration status",
@@ -422,5 +493,22 @@
       "indicator": "indicator",
       "value": "value"
     }
+  },
+  "pagination": {
+    "label": "Pagination",
+    "summary": "Showing {{start}}–{{end}} of {{total}}",
+    "first": "First page",
+    "previous": "Previous page",
+    "next": "Next page",
+    "last": "Last page",
+    "page": "Page {{page}}",
+    "pageSummary": "Page {{current}} of {{pages}}"
+  },
+  "operational": {
+    "actions": "Actions",
+    "confirmAction": "Confirm \"{{action}}\" for {{name}}?",
+    "actionSuccess": "Action completed.",
+    "actionError": "Unable to complete the action.",
+    "empty": "No items to display."
   }
 }

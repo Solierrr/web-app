@@ -11,8 +11,6 @@
   "companyManagement": {
     "listPositions": "No se pudo cargar los cargos",
     "createPosition": "No se pudo crear el cargo",
-    "listCompanyPositions": "No se pudo cargar los cargos de la empresa",
-    "linkPositionToCompany": "No se pudo habilitar el cargo para la empresa",
     "listPermissions": "No se pudo cargar los permisos",
     "listPositionPermissions": "No se pudo cargar los permisos del cargo",
     "grantPermission": "No se pudo conceder el permiso",
@@ -144,5 +142,17 @@
   },
   "typingStatus": {
     "setTypingStatus": "No se pudo actualizar el indicador de escritura"
+  },
+  "purchases": {
+    "getCart": "No se pudo cargar el carrito.",
+    "putCartItem": "No se pudo actualizar el carrito.",
+    "removeCartItem": "No se pudo quitar el artículo.",
+    "checkout": "No se pudo completar la compra.",
+    "listOrders": "No se pudieron cargar los pedidos.",
+    "getOrder": "No se pudo cargar el pedido.",
+    "cancelOrder": "No se pudo cancelar el pedido.",
+    "listSales": "No se pudieron cargar las ventas.",
+    "getSubscription": "No se pudo cargar el plan.",
+    "payCharge": "No se pudo pagar el cobro."
   }
 }

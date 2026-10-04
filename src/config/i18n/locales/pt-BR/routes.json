@@ -1,4 +1,5 @@
 {
+  "brands": "marcas",
   "solarPanels": "placas-solares",
   "professionals": "profissionais",
   "companies": "empresas",
@@ -35,5 +36,14 @@
   "analytics": "indicadores",
   "policy": "politicas",
   "terms": "termos",
-  "cookies": "cookies"
+  "cookies": "cookies",
+  "brandRequests": "solicitacoes",
+  "projects": "projetos",
+  "newProject": "novo",
+  "editProject": "editar",
+  "infrastructure": "infraestrutura",
+  "cart": "carrinho",
+  "orders": "pedidos",
+  "sales": "vendas",
+  "plan": "plano"
 }

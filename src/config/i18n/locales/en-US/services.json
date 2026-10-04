@@ -11,8 +11,6 @@
   "companyManagement": {
     "listPositions": "Unable to load the roles",
     "createPosition": "Unable to create the role",
-    "listCompanyPositions": "Unable to load the company roles",
-    "linkPositionToCompany": "Unable to make the role available to the company",
     "listPermissions": "Unable to load the permissions",
     "listPositionPermissions": "Unable to load the role permissions",
     "grantPermission": "Unable to grant the permission",
@@ -144,5 +142,17 @@
   },
   "typingStatus": {
     "setTypingStatus": "Unable to update the typing indicator"
+  },
+  "purchases": {
+    "getCart": "Could not load the cart.",
+    "putCartItem": "Could not update the cart.",
+    "removeCartItem": "Could not remove the item.",
+    "checkout": "Could not complete the purchase.",
+    "listOrders": "Could not load the orders.",
+    "getOrder": "Could not load the order.",
+    "cancelOrder": "Could not cancel the order.",
+    "listSales": "Could not load the sales.",
+    "getSubscription": "Could not load the plan.",
+    "payCharge": "Could not pay the charge."
   }
 }

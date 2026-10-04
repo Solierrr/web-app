@@ -1,4 +1,19 @@
 {
+  "tableUi": {
+    "search": "Buscar na tabela",
+    "filters": "Filtros",
+    "clearFilters": "Limpar filtros",
+    "settings": "Configurações da tabela",
+    "rowOptions": "Opções do registro",
+    "noResults": "Nenhum resultado encontrado.",
+    "close": "Fechar",
+    "all": "Todos",
+    "hideSearch": "Ocultar busca",
+    "showSearch": "Mostrar busca",
+    "refresh": "Atualizar dados",
+    "refreshed": "Dados atualizados.",
+    "refreshError": "Não foi possível atualizar os dados."
+  },
   "and": "e",
   "or": "ou",
   "not": "não",
@@ -20,7 +35,7 @@
     "save": "salvar",
     "search": "pesquisar",
     "send": "enviar",
-    "view": "visualizar",
+    "view": "Ver detalhes",
     "contact": "entrar em contato"
   },
   "status": {
@@ -56,11 +71,14 @@
   "errorBoundary": {
     "label": "Erro",
     "title": "Algo deu errado",
-    "reload": "Recarregar página"
+    "reload": "Recarregar página",
+    "message": "Não foi possível exibir esta página. Volte ao início e tente novamente.",
+    "back": "Voltar ao início"
   },
   "notFound": {
-    "title": "Opssss...",
-    "subtitle": "Algo de errado não está certo..."
+    "title": "Oops... Parece que essa página não existe...",
+    "subtitle": "Não encontramos esta página. Ela pode ter sido movida ou o endereço pode estar incorreto.",
+    "back": "Voltar ao início"
   },
   "navbar": {
     "app": "Aplicativo",
@@ -76,7 +94,7 @@
     "messages": "Mensagens",
     "userProfile": "Meu perfil",
     "companyProfile": "Minha empresa",
-    "solarPanelModels": "Modelos de placas solares",
+    "solarPanelModels": "Placas Solares",
     "settings": "Configurações",
     "dashboard": "Painel",
     "employees": "Funcionários",
@@ -138,7 +156,33 @@
     "notFound": "Solicitação não encontrada.",
     "decisionError": "Não foi possível registrar a decisão.",
     "statusLabel": "Situação",
-    "detailError": "Não foi possível carregar a solicitação."
+    "detailError": "Não foi possível carregar a solicitação.",
+    "description": "Revise e gerencie os cadastros de profissionais, empresas, marcas e modelos de placas solares.",
+    "table": {
+      "name": "Nome",
+      "actions": "Ações",
+      "view": "Ver detalhes",
+      "power": "Potência"
+    },
+    "tabs": {
+      "label": "Cadastros",
+      "companies": "Empresas",
+      "professionals": "Profissionais",
+      "models": "Placas solares",
+      "brands": "Marcas"
+    },
+    "filters": "Filtros",
+    "confirmApprove": "Confirmar aprovação",
+    "confirmReject": "Confirmar reprovação",
+    "approveMessage": "Deseja aprovar o cadastro de {{name}}?",
+    "rejectMessage": "Deseja reprovar o cadastro de {{name}}?",
+    "approvedSuccess": "Cadastro aprovado com sucesso.",
+    "rejectedSuccess": "Cadastro reprovado com sucesso.",
+    "information": "Informações do cadastro",
+    "certificates": "Certificados",
+    "noCertificates": "Nenhum certificado disponibilizado neste cadastro.",
+    "openCertificate": "Abrir certificado",
+    "certificateError": "Não foi possível carregar a imagem do certificado."
   },
   "settings": {
     "title": "Configurações",
@@ -187,12 +231,14 @@
     "guestEmail": "E-mail do convidado (opcional)",
     "sendByEmail": "Enviar por e-mail",
     "emailSubject": "Convite para {{company}} na Solaria",
-    "emailBody": "Use o código {{code}} para entrar na {{company}}: {{url}}"
+    "emailBody": "Use o código {{code}} para entrar na {{company}}: {{url}}",
+    "description": "Gerencie sua equipe, cargos e convites."
   },
   "companyOffers": {
     "title": "Ofertas"
   },
   "unitsManagement": {
+    "mapSection": "Localização no mapa",
     "title": "Unidades",
     "loading": "Carregando...",
     "error": "Não foi possível concluir a operação.",
@@ -222,9 +268,11 @@
     "edit": "Editar",
     "remove": "Remover",
     "empty": "Nenhuma unidade cadastrada ainda.",
-    "openMap": "Ver no Google Maps"
+    "openMap": "Ver no Google Maps",
+    "description": "Gerencie os locais de instalação da empresa."
   },
   "offers": {
+    "commercialSection": "Condições comerciais",
     "title": "Ofertas",
     "loading": "Carregando...",
     "error": "Não foi possível concluir a operação.",
@@ -258,7 +306,8 @@
     "reopen": "Reabrir",
     "discountLabel": "Desconto",
     "statusLabel": "Status",
-    "expiration": "Validade"
+    "expiration": "Validade",
+    "description": "Gerencie as ofertas e sua disponibilidade."
   },
   "myCompany": {
     "loadError": "Não foi possível carregar sua empresa.",
@@ -266,6 +315,26 @@
     "register": "Cadastrar empresa"
   },
   "companyOnboarding": {
+    "placeholders": {
+      "cnpj": "12.ABC.345/01DE-35",
+      "tradeName": "Nome pelo qual sua empresa é conhecida",
+      "corporateName": "Nome completo da empresa registrado no CNPJ",
+      "zipCode": "01001-000",
+      "state": "Digite ou selecione a UF",
+      "city": "Nome da cidade",
+      "neighborhood": "Nome do bairro",
+      "street": "Nome da rua ou avenida",
+      "number": "Número ou S/N",
+      "companyEmail": "contato@empresa.com.br",
+      "phone": "11999999999",
+      "website": "https://suaempresa.com.br"
+    },
+    "stateNotFound": "Selecione uma UF válida.",
+    "postal": {
+      "loading": "Buscando endereço…",
+      "notFound": "CEP não encontrado. Preencha o endereço manualmente.",
+      "failed": "Não foi possível consultar o CEP. Preencha o endereço manualmente."
+    },
     "title": "Cadastrar empresa",
     "description": "Escolha a atuação da empresa. O cadastro será analisado antes de aparecer no marketplace.",
     "type": "Tipo de empresa",
@@ -377,7 +446,9 @@
     "signOut": "Sair deste dispositivo",
     "onlyCurrent": "Por enquanto só é possível ver e encerrar a sessão deste dispositivo.",
     "error": "Não foi possível carregar as sessões.",
-    "revokeError": "Não foi possível encerrar a sessão."
+    "revokeError": "Não foi possível encerrar a sessão.",
+    "device": "Dispositivo",
+    "lastActiveLabel": "Última atividade"
   },
   "registrationStatusPage": {
     "title": "Status do cadastro",
@@ -422,5 +493,22 @@
       "indicator": "indicador",
       "value": "valor"
     }
+  },
+  "pagination": {
+    "label": "Paginação",
+    "summary": "Exibindo {{start}}–{{end}} de {{total}}",
+    "first": "Primeira página",
+    "previous": "Página anterior",
+    "next": "Próxima página",
+    "last": "Última página",
+    "page": "Página {{page}}",
+    "pageSummary": "Página {{current}} de {{pages}}"
+  },
+  "operational": {
+    "actions": "Ações",
+    "confirmAction": "Confirmar \"{{action}}\" para {{name}}?",
+    "actionSuccess": "Ação concluída.",
+    "actionError": "Não foi possível concluir a ação.",
+    "empty": "Nenhum item para exibir."
   }
 }

@@ -1,4 +1,5 @@
 {
+  "brands": "brands",
   "solarPanels": "solar-panels",
   "professionals": "professionals",
   "companies": "companies",
@@ -35,5 +36,14 @@
   "analytics": "analytics",
   "policy": "policies",
   "terms": "terms",
-  "cookies": "cookies"
+  "cookies": "cookies",
+  "brandRequests": "requests",
+  "projects": "projects",
+  "newProject": "new",
+  "editProject": "edit",
+  "infrastructure": "infrastructure",
+  "cart": "cart",
+  "orders": "orders",
+  "sales": "sales",
+  "plan": "plan"
 }
