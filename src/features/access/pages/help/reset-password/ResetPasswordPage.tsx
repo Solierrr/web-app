@@ -19,6 +19,7 @@ export default function ResetPasswordPage() {
   const mock = isAlwaysMockMode();
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    if (busy) return;
     const data = new FormData(event.currentTarget);
     const password = String(data.get("password") ?? "");
     if (password !== String(data.get("confirmPassword") ?? "")) {
@@ -40,20 +41,20 @@ export default function ResetPasswordPage() {
 
   if (done || (!code && !mock)) {
     return (
-      <main className="flex min-h-screen w-full flex-col items-center justify-center gap-4 p-6 text-center">
+      <Access heading="Solaria" animatedBackground={false}>
         <p role={done ? "status" : "alert"}>{done ? t("resetPassword.success") : t("resetPassword.invalidLink")}</p>
         <Hyperlink
           content={done ? t("forgotPassword.backToLogin") : t("resetPassword.requestNewLink")}
           url={done ? routePaths.login(lang) : routePaths.forgotPassword(lang)}
-          className="text-hyperlink"
         />
-      </main>
+      </Access>
     );
   }
 
   return (
     <Access
       heading="Solaria"
+      animatedBackground={false}
       helperText={t("resetPassword.helperText")}
       fields={[
         { name: "password", placeholder: t("fields.password.placeholder"), password: true, minLength: 12 },
@@ -63,9 +64,7 @@ export default function ResetPasswordPage() {
       busy={busy}
       error={error}
       onSubmit={handleSubmit}
-      footer={
-        error ? <Hyperlink content={t("resetPassword.requestNewLink")} url={routePaths.forgotPassword(lang)} className="text-hyperlink" /> : undefined
-      }
+      footer={error ? <Hyperlink content={t("resetPassword.requestNewLink")} url={routePaths.forgotPassword(lang)} /> : undefined}
     />
   );
 }

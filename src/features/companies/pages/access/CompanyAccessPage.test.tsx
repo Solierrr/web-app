@@ -1,18 +1,18 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
-import AccessInfoPage from "./AccessInfoPage";
+import CompanyAccessPage from "./CompanyAccessPage";
 import { redeemAccessCode } from "@/features/companies/company.management.service";
 
 vi.mock("@/features/companies/company.management.service", () => ({ redeemAccessCode: vi.fn() }));
 
-describe("AccessInfoPage", () => {
+describe("CompanyAccessPage", () => {
   it("redeems the access code and shows an error on failure", async () => {
     vi.mocked(redeemAccessCode).mockRejectedValue(new Error("invalid"));
 
     render(
       <MemoryRouter>
-        <AccessInfoPage />
+        <CompanyAccessPage />
       </MemoryRouter>,
     );
 

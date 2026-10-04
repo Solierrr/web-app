@@ -6,7 +6,8 @@ import { routePaths } from "@/config/i18n/paths";
 import { refresh } from "@/features/access/access.service";
 import { clearAuthSession, getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
-import OperationalLoading from "@@/feedback/operational-loading/OperationalLoading";
+import Loading from "@@/helpers/accessibility/loading/Loading";
+import Logo from "@@/brand/logo/Logo";
 
 export default function RequireAuth() {
   const { lang: langParam } = useParams<{ lang: string }>();
@@ -46,7 +47,12 @@ export default function RequireAuth() {
     };
   }, []);
 
-  if (authenticated === null) return <OperationalLoading />;
+  if (authenticated === null)
+    return (
+      <Loading>
+        <Logo width={4} />
+      </Loading>
+    );
   if (!authenticated) {
     return <Navigate to={routePaths.login(lang)} replace state={{ returnTo: `${location.pathname}${location.search}${location.hash}` }} />;
   }

@@ -18,13 +18,20 @@ import { validateCertificates, type CertificateValidationResult } from "@/lib/sh
 import { validateCpf } from "@/lib/utils/validation.utils";
 import RegistrationStatus from "@/lib/components/feedback/registration-status/RegistrationStatus";
 import logger from "@/config/logging/logger";
-import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
-import { updateMockProfessionalProfile } from "@/features/access/access.onboarding.service";
+import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
+import {
+  clearRegistrationDraft,
+  getRegistrationDraft,
+  saveRegistrationDraft,
+  updateMockProfessionalProfile,
+} from "@/features/access/access.onboarding.service";
 
 export default function ProfessionalOnboarding() {
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
   const { t } = useTranslation("commons", { keyPrefix: "professionalOnboarding" });
+  const [draft] = useState(() => getRegistrationDraft("professional"));
+  const [professionId, setProfessionId] = useState(draft.fields.professionId ?? "");
   const [professions, setProfessions] = useState<Profession[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -45,11 +52,12 @@ export default function ProfessionalOnboarding() {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (saving) return;
     const data = new FormData(event.currentTarget);
     const cpf = String(data.get("cpf") ?? "").replace(/\D/g, "");
 
     const cpfCheck = validateCpf(cpf);
-    if (!cpfCheck.isValid) {
+    if (!isAlwaysMockMode() && !cpfCheck.isValid) {
       setError(cpfCheck.message ?? t("error"));
       return;
     }
@@ -57,26 +65,61 @@ export default function ProfessionalOnboarding() {
     setSaving(true);
     setError(null);
     try {
+      if (isAlwaysMockMode()) {
+        await waitForMockService();
+        const expirationDate = String(data.get("expirationDate") ?? "");
+        updateMockProfessionalProfile({
+          name: String(data.get("name") ?? "").trim(),
+          email: String(data.get("email") ?? "").trim(),
+          phone: String(data.get("phone") ?? "").replace(/\D/g, ""),
+          crea: String(data.get("crea") ?? "").trim(),
+          profession: professions.find((profession) => profession.id === String(data.get("professionId")))?.name ?? "",
+          council: String(data.get("council") ?? "").trim(),
+          registrationNumber: String(data.get("number") ?? "").trim(),
+          expirationDate,
+        });
+        clearRegistrationDraft("professional");
+        setDone(true);
+        return;
+      }
+
+      const fields = {
+        ...getRegistrationDraft("professional").fields,
+        ...Object.fromEntries(Array.from(data.entries()).map(([key, value]) => [key, String(value)])),
+      };
+      const save = () => saveRegistrationDraft({ ...draft, fields });
       const myUser = await getMyUser();
 
-      const contact = await createContact({
-        email: String(data.get("email") ?? "").trim() || undefined,
-        phone: String(data.get("phone") ?? "").replace(/\D/g, "") || undefined,
-      });
+      const contact = fields.contactId
+        ? { id: fields.contactId }
+        : await createContact({
+            email: String(data.get("email") ?? "").trim() || undefined,
+            phone: String(data.get("phone") ?? "").replace(/\D/g, "") || undefined,
+          });
 
-      const person = await createPerson({
-        userId: myUser.id,
-        contactId: contact.id,
-        name: String(data.get("name")).trim(),
-        cpf,
-        birthDate: String(data.get("birthDate")),
-      });
+      fields.contactId = contact.id;
+      save();
+      const person = fields.personId
+        ? { id: fields.personId }
+        : await createPerson({
+            userId: myUser.id,
+            contactId: contact.id,
+            name: String(data.get("name")).trim(),
+            cpf,
+            birthDate: String(data.get("birthDate")),
+          });
 
-      const technician = await createTechnician({
-        personId: person.id,
-        crea: String(data.get("crea")).trim(),
-      });
+      fields.personId = person.id;
+      save();
+      const technician = fields.technicianId
+        ? { id: fields.technicianId }
+        : await createTechnician({
+            personId: person.id,
+            crea: String(data.get("crea")).trim(),
+          });
 
+      fields.technicianId = technician.id;
+      save();
       const certNr10Url = String(data.get("certNr10Url") ?? "").trim();
       const certNr35Url = String(data.get("certNr35Url") ?? "").trim();
       if (certNr10Url && certNr35Url) {
@@ -88,27 +131,18 @@ export default function ProfessionalOnboarding() {
       }
 
       const expirationDate = String(data.get("expirationDate") ?? "");
-      await createProfessionalRegistration({
-        technicianId: technician.id,
-        professionId: String(data.get("professionId")),
-        council: String(data.get("council") ?? "").trim() || undefined,
-        number: String(data.get("number") ?? "").trim() || undefined,
-        expirationDate: expirationDate ? `${expirationDate}T00:00:00` : undefined,
-      });
-
-      if (isAlwaysMockMode()) {
-        updateMockProfessionalProfile({
-          name: String(data.get("name") ?? "").trim(),
-          email: String(data.get("email") ?? "").trim(),
-          phone: String(data.get("phone") ?? "").replace(/\D/g, ""),
-          crea: String(data.get("crea") ?? "").trim(),
-          profession: professions.find((profession) => profession.id === String(data.get("professionId")))?.name ?? "",
-          council: String(data.get("council") ?? "").trim(),
-          registrationNumber: String(data.get("number") ?? "").trim(),
-          expirationDate,
+      if (!fields.registrationId) {
+        const registration = await createProfessionalRegistration({
+          technicianId: technician.id,
+          professionId: String(data.get("professionId")),
+          council: String(data.get("council") ?? "").trim() || undefined,
+          number: String(data.get("number") ?? "").trim() || undefined,
+          expirationDate: expirationDate ? `${expirationDate}T00:00:00` : undefined,
         });
+        fields.registrationId = registration.id;
+        save();
       }
-
+      clearRegistrationDraft("professional");
       setDone(true);
     } catch {
       setError(t("error"));
@@ -136,37 +170,73 @@ export default function ProfessionalOnboarding() {
 
   return (
     <OperationalPage title={t("title")} description={t("description")} compact>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form
+        onSubmit={handleSubmit}
+        onChange={(event) => {
+          const fields = Object.fromEntries(Array.from(new FormData(event.currentTarget).entries()).map(([key, value]) => [key, String(value)]));
+          saveRegistrationDraft({ ...draft, fields: { ...getRegistrationDraft("professional").fields, ...fields } });
+        }}
+        className="flex flex-col gap-4">
         <h2 className="font-medium">{t("personalSection")}</h2>
         <label className="flex flex-col gap-1">
           {t("name")}
-          <input name="name" maxLength={60} required className="rounded-small border border-operational-border p-2" />
+          <input
+            defaultValue={draft.fields.name ?? ""}
+            name="name"
+            maxLength={60}
+            required
+            className="rounded-small border border-operational-border p-2"
+          />
         </label>
         <label className="flex flex-col gap-1">
           {t("cpf")}
-          <input name="cpf" inputMode="numeric" pattern="[0-9.\-]{11,14}" required className="rounded-small border border-operational-border p-2" />
+          <input
+            defaultValue={draft.fields.cpf ?? ""}
+            name="cpf"
+            inputMode="numeric"
+            pattern="[0-9.\-]{11,14}"
+            required
+            className="rounded-small border border-operational-border p-2"
+          />
         </label>
         <label className="flex flex-col gap-1">
           {t("birthDate")}
-          <input name="birthDate" type="date" required className="rounded-small border border-operational-border p-2" />
+          <input
+            defaultValue={draft.fields.birthDate ?? ""}
+            name="birthDate"
+            type="date"
+            required
+            className="rounded-small border border-operational-border p-2"
+          />
         </label>
         <label className="flex flex-col gap-1">
           {t("email")}
-          <input name="email" type="email" className="rounded-small border border-operational-border p-2" />
+          <input defaultValue={draft.fields.email ?? ""} name="email" type="email" className="rounded-small border border-operational-border p-2" />
         </label>
         <label className="flex flex-col gap-1">
           {t("phone")}
-          <input name="phone" inputMode="numeric" placeholder="9XXXXXXXX" className="rounded-small border border-operational-border p-2" />
+          <input
+            defaultValue={draft.fields.phone ?? ""}
+            name="phone"
+            inputMode="numeric"
+            placeholder="9XXXXXXXX"
+            className="rounded-small border border-operational-border p-2"
+          />
         </label>
 
         <h2 className="mt-2 font-medium">{t("registrationSection")}</h2>
         <label className="flex flex-col gap-1">
           {t("crea")}
-          <input name="crea" required className="rounded-small border border-operational-border p-2" />
+          <input defaultValue={draft.fields.crea ?? ""} name="crea" required className="rounded-small border border-operational-border p-2" />
         </label>
         <label className="flex flex-col gap-1">
           {t("profession")}
-          <select name="professionId" required className="rounded-small border border-operational-border p-2">
+          <select
+            value={professionId}
+            onChange={(event) => setProfessionId(event.target.value)}
+            name="professionId"
+            required
+            className="rounded-small border border-operational-border p-2">
             <option value="" disabled>
               {t("professionPlaceholder")}
             </option>
@@ -179,26 +249,53 @@ export default function ProfessionalOnboarding() {
         </label>
         <label className="flex flex-col gap-1">
           {t("council")}
-          <input name="council" maxLength={60} className="rounded-small border border-operational-border p-2" />
+          <input
+            defaultValue={draft.fields.council ?? ""}
+            name="council"
+            maxLength={60}
+            className="rounded-small border border-operational-border p-2"
+          />
         </label>
         <label className="flex flex-col gap-1">
           {t("number")}
-          <input name="number" maxLength={30} className="rounded-small border border-operational-border p-2" />
+          <input
+            defaultValue={draft.fields.number ?? ""}
+            name="number"
+            maxLength={30}
+            className="rounded-small border border-operational-border p-2"
+          />
         </label>
         <label className="flex flex-col gap-1">
           {t("expirationDate")}
-          <input name="expirationDate" type="date" className="rounded-small border border-operational-border p-2" />
+          <input
+            defaultValue={draft.fields.expirationDate ?? ""}
+            name="expirationDate"
+            type="date"
+            className="rounded-small border border-operational-border p-2"
+          />
         </label>
 
         <h2 className="mt-2 font-medium">{t("certificatesSection")}</h2>
         <p className="text-sm text-gray-600">{t("certificatesDescription")}</p>
         <label className="flex flex-col gap-1">
           {t("certNr10")}
-          <input name="certNr10Url" type="url" placeholder="https://" className="rounded-small border border-operational-border p-2" />
+          <input
+            defaultValue={draft.fields.certNr10Url ?? ""}
+            name="certNr10Url"
+            type="url"
+            placeholder="https://"
+            className="rounded-small border border-operational-border p-2"
+          />
         </label>
         <label className="flex flex-col gap-1">
           {t("certNr35")}
-          <input name="certNr35Url" type="url" placeholder="https://" className="rounded-small border border-operational-border p-2" />
+          <input
+            defaultValue={draft.fields.certNr35Url ?? ""}
+            name="certNr35Url"
+            type="url"
+            placeholder="https://"
+            className="rounded-small border border-operational-border p-2"
+          />
         </label>
 
         {error ? (

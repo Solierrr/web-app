@@ -6,8 +6,9 @@ import { useTranslation } from "react-i18next";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
 import { redeemAccessCode } from "@/features/companies/company.management.service";
+import { selectContext } from "@/features/access/access.onboarding.service";
 
-export default function AccessInfoPage() {
+export default function CompanyAccessPage() {
   const { t } = useTranslation("commons", { keyPrefix: "accessInfo" });
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
@@ -18,10 +19,12 @@ export default function AccessInfoPage() {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (saving) return;
     setSaving(true);
     setError(false);
     try {
-      await redeemAccessCode(code.trim().toUpperCase());
+      const membership = await redeemAccessCode(code.trim().toUpperCase());
+      selectContext(membership.companyId);
       navigate(routePaths.ownCompanyProfile(lang), { replace: true });
     } catch {
       setError(true);

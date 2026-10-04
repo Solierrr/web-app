@@ -12,40 +12,46 @@ export default function ForgotPasswordPage() {
   const { t } = useTranslation("access");
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
+  const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    if (busy) return;
     const data = new FormData(event.currentTarget);
     setError(null);
+    setBusy(true);
     try {
       if (isAlwaysMockMode()) await waitForMockService();
       else await requestPasswordReset(String(data.get("email") ?? ""));
       setSent(true);
     } catch {
       setError(t("forgotPassword.error"));
+    } finally {
+      setBusy(false);
     }
   }
 
   const backToLogin = (
     <div className="flex flex-wrap items-center gap-1">
       <span>{t("forgotPassword.rememberedPasswordPrefix")}</span>
-      <Hyperlink content={t("forgotPassword.backToLogin")} url={routePaths.login(lang)} className="text-hyperlink" />
+      <Hyperlink content={t("forgotPassword.backToLogin")} url={routePaths.login(lang)} />
     </div>
   );
 
   if (sent) {
     return (
-      <main className="flex min-h-screen w-full flex-col items-center justify-center gap-4 p-6 text-center">
+      <Access heading="Solaria" animatedBackground={false} footer={backToLogin}>
         <p role="status">{t("forgotPassword.sent")}</p>
-        {backToLogin}
-      </main>
+      </Access>
     );
   }
 
   return (
     <Access
       heading="Solaria"
+      animatedBackground={false}
+      busy={busy}
       helperText={t("forgotPassword.helperText")}
       fields={[
         {
