@@ -1,16 +1,46 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,500..800;1,500..800&display=swap');
 @import "tailwindcss";
 @import "tw-shimmer";
+
+::view-transition-group(switcher-selection) {
+  animation-duration: 250ms;
+  animation-timing-function: ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(switcher-selection) {
+    animation-duration: 0s;
+  }
+}
+
+@theme inline {
+  --shadow-button-soft: inset 0 -0.025rem 0.02rem -0.09rem color-mix(in srgb, var(--button-accent, var(--color-orange)) calc(65% * var(--button-depth, 1)), transparent), inset 0 -0.1rem 0.08rem -0.18rem color-mix(in srgb, var(--button-accent, var(--color-orange)) calc(55% * var(--button-depth, 1)), transparent), inset 0 -0.3125rem 0.25rem -0.22rem color-mix(in srgb, var(--button-accent, var(--color-orange)) calc(30% * var(--button-depth, 1)), transparent), 0 0.04rem 0.04rem -0.08rem color-mix(in srgb, var(--color-black) calc(18% * var(--button-depth, 1)), transparent), 0 0.14rem 0.14rem -0.16rem color-mix(in srgb, var(--color-black) calc(16% * var(--button-depth, 1)), transparent), 0 0.625rem 0.625rem -0.23rem color-mix(in srgb, var(--color-black) calc(6% * var(--button-depth, 1)), transparent);
+}
 
 @theme {
   --font-ui: "Plus Jakarta Sans", sans-serif;
   --leading-toolbar: 1.25rem;
   --tracking-toolbar: 0em;
-  --color-operational-border: #e5e7eb;
+  --color-border: #e5e7eb;
+  --color-operational-border: var(--color-border);
+  --border-width-ui: 0.0625rem;
+  --shadow-surface: 0 0.125rem 0.5rem color-mix(in srgb, var(--color-black) 8%, transparent);
+  --shadow-overlay: 0 0.25rem 1rem color-mix(in srgb, var(--color-black) 12%, transparent);
+  --color-dialog-backdrop: color-mix(in srgb, var(--color-operational-ink) 22%, transparent);
+  --duration-dialog: 180;
+  --animate-dialog-in: dialog-in calc(var(--duration-dialog) * 1ms) ease-out both;
+  --animate-dialog-out: dialog-out calc(var(--duration-dialog) * 1ms) ease-in both;
+  --radius-surface: 1.5rem;
+  --motion-icon-duration: 280ms;
+  --motion-icon-sequence: 1400ms;
   --color-operational-hover: #f3f4f6;
   --color-operational-muted: #62676f;
   --color-operational-ink: #242628;
   --color-operational-surface: #fafafa;
+  --color-feedback-error: #b42318;
+  --color-feedback-success: #18794e;
+  --color-feedback-warning: #925c12;
+  --color-feedback-info: #306eee;
   --text-operational-title: 1.5rem;
   --spacing-operational-form: 48rem;
   --spacing-operational-page: 88rem;
@@ -21,6 +51,8 @@
   --color-black: #444444;
 
   --color-orange: #FF6500;
+  --color-action-highlight: #FF9B52;
+  --color-action-base: #FF650A;
   --color-orange-gold: #FFB347;
   --color-orange-apricot: #FF914D;
   --color-orange-coral: #F05A3C;
@@ -45,15 +77,12 @@
   --text-subtitle: 1.65rem;
   --text-label:    1.20rem;
   --text-body:     1.00rem;
-  --text-lower:    0.85rem;
 
+  --font-weight-*: initial;
   --font-weight-extra-bold: 800;
   --font-weight-bold:       700;
   --font-weight-semi-bold:  600;
   --font-weight-medium:     500;
-  --font-weight-regular:    400;
-  --font-weight-light:      300;
-  --font-weight-thin:       200;
 
   --spacing-announcement: 3rem;
 
@@ -66,6 +95,51 @@
   --animate-fade-in: fade-in 150ms ease-out;
 }
 
+@utility icon-motion {
+  & .icon-contour { transition: d var(--motion-icon-duration) ease-in-out; }
+  @media (prefers-reduced-motion: reduce) {
+    & .icon-contour { transition: none; animation: none !important; }
+  }
+}
+
+@utility icon-motion-folder {
+  & .icon-contour { d: var(--icon-folder-closed); }
+  :is(a, button):is(:hover, :focus-visible) & .icon-contour { d: var(--icon-folder-open); }
+  @media (prefers-reduced-motion: reduce) {
+    :is(a, button):is(:hover, :focus-visible) & .icon-contour { d: var(--icon-folder-closed); }
+  }
+}
+
+@utility icon-motion-account {
+  & .icon-contour { d: var(--icon-account-square); }
+  :is(a, button):is(:hover, :focus-visible) & .icon-contour {
+    animation: icon-account-contour var(--motion-icon-sequence) ease-in-out both;
+  }
+}
+
+@keyframes icon-account-contour {
+  0%, 10% { d: var(--icon-account-square); }
+  45%, 55% { d: var(--icon-account-hexagon); }
+  90%, 100% { d: var(--icon-account-pentagon); }
+}
+
+@utility dialog-surface {
+  @apply animate-dialog-in motion-reduce:animate-none;
+  &[data-closing] { @apply animate-dialog-out motion-reduce:animate-none; }
+  &::backdrop { transition: opacity calc(var(--duration-dialog) * 1ms) ease-out; }
+  &[data-closing]::backdrop { opacity: 0; }
+}
+
+@keyframes dialog-in {
+  from { opacity: 0; transform: translateY(0.5rem); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes dialog-out {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(0.5rem); }
+}
+
 @layer base {
   * {
     margin: 0;
@@ -75,7 +149,7 @@
     font-optical-sizing: auto;
     font-synthesis: none;
     font-style: normal;
-    font-weight: 500;
+    font-weight: var(--font-weight-medium);
     @apply text-body text-black;
   }
 
@@ -85,7 +159,7 @@
   h2     { @apply text-subtitle font-semi-bold  leading-7; }
   h3, h4 { @apply text-label    font-medium     leading-6; }
   h6, h5 { @apply text-body     font-medium     leading-6; }
-  p      { @apply font-regular  leading-6; }
+  p      { @apply font-medium  leading-6; }
 
   ::-webkit-scrollbar             { @apply w-2 cursor-default!;      }
   ::-webkit-scrollbar-track       { @apply bg-transparent;           }
@@ -144,6 +218,10 @@
   @apply bg-interactive hover:bg-black/14 active:bg-black/20 transition duration-350
 }
 
+@utility border-ui {
+  border: var(--border-width-ui) solid var(--color-border);
+}
+
 @utility shadow-soft-* {
   box-shadow: 0 0.125rem 0.5rem 0 color-mix(in srgb, --value(--color-*) 12%, transparent);
 }
@@ -172,6 +250,31 @@
   &:hover::after {
     @apply opacity-20;
   };
+}
+
+@utility aspect-button-neutral {
+  background-image: linear-gradient(to top, color-mix(in srgb, var(--color-white) 94%, var(--color-gray)), var(--color-white)) !important;
+}
+
+@utility button-flat-orange {
+  background-image: linear-gradient(135deg, color-mix(in srgb, var(--color-orange) 94%, var(--color-white)), var(--color-orange), color-mix(in srgb, var(--color-orange) 92%, var(--color-black)));
+}
+
+@utility button-soft {
+  background-image: linear-gradient(177deg, var(--button-highlight, var(--color-action-highlight)) 0%, var(--button-base, var(--color-action-base)) 100%);
+  @apply shadow-button-soft;
+}
+
+@utility button-soft-neutral {
+  --button-highlight: var(--color-white);
+  --button-base: var(--color-operational-surface);
+  --button-depth: 0.5;
+}
+
+@utility button-soft-surface {
+  --button-highlight: var(--color-operational-surface);
+  --button-base: var(--color-operational-surface);
+  @apply shadow-none;
 }
 
 * {
@@ -212,8 +315,90 @@
 .toolbar-action,
 .toolbar-action * {
   font-family: var(--font-ui);
-  font-size: var(--text-lower);
+  font-size: var(--text-body);
   font-weight: var(--font-weight-semi-bold);
   line-height: var(--leading-toolbar);
   letter-spacing: var(--tracking-toolbar);
 }
+
+@keyframes toast-enter {
+  from { opacity: 0; transform: translateY(1rem); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.toast-enter {
+  animation: toast-enter 250ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast-enter { animation: none; }
+}
+
+.form-corners {
+  mask-image: radial-gradient(ellipse 20rem 16rem at top left, black, transparent), radial-gradient(ellipse 20rem 16rem at bottom right, black, transparent);
+  opacity: 0.85;
+}
+
+.operational-form {
+  gap: 1.5rem;
+}
+
+.operational-form label:not(:has(input[type="checkbox"])) {
+  min-width: 0;
+  gap: 0.5rem;
+  font-size: var(--text-body);
+  font-weight: var(--font-weight-medium);
+}
+
+.operational-form label > div:has(input),
+.operational-form label > div:has(textarea) {
+  width: 100%;
+  border: 1px solid var(--color-operational-border);
+}
+
+.operational-form label > div:focus-within {
+  outline: 2px solid var(--color-operational-ink);
+  outline-offset: 2px;
+}
+
+.operational-form > h2 {
+  border-bottom: 1px solid var(--color-operational-border);
+  padding-bottom: 0.75rem;
+  font-size: 1rem;
+}
+
+@media (max-width: 639px) {
+  .operational-form .grid-cols-2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .operational-form .col-span-2 {
+    grid-column: auto;
+  }
+  .form-corners {
+    opacity: 0.2;
+  }
+}
+
+.operational-form-login {
+  gap: 1rem;
+}
+
+.operational-form-login label > div:has(input),
+.operational-form-login label > div:has(textarea) {
+  min-height: 3rem;
+  border: 0;
+}
+
+.operational-form-login label > div > [role="button"] {
+  min-height: 3rem;
+}
+
+input:not([type="checkbox"]):not([type="radio"]) {
+  appearance: none;
+  outline: none;
+  box-shadow: none;
+}
+.operational-form-login label > div:focus-within { outline: none; }
+.form-section-body { display: grid; grid-template-rows: 0fr; opacity: 0; visibility: hidden; transition: grid-template-rows 300ms ease, opacity 200ms ease, visibility 300ms; }
+.form-section-body.is-expanded { grid-template-rows: 1fr; opacity: 1; visibility: visible; }
+@media (prefers-reduced-motion: reduce) { .form-section-body { transition: none; } }
