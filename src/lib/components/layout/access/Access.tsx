@@ -13,9 +13,11 @@ export interface AccessField {
   minLength?: number;
   label?: string;
   value?: string;
+  defaultValue?: string;
   onChange?: ChangeEventHandler<HTMLInputElement>;
   autoComplete?: string;
   autoFocus?: boolean;
+  readOnly?: boolean;
 }
 
 interface AccessProps {
@@ -23,6 +25,7 @@ interface AccessProps {
   helperText?: ReactNode;
   fields?: AccessField[];
   submitLabel?: string;
+  submitVariant?: "advanced" | "flat" | "soft";
   error?: ReactNode;
   footer?: ReactNode;
   onSubmit?: (event: FormEvent<HTMLFormElement>) => void;
@@ -40,6 +43,7 @@ export default function Access({
   helperText,
   fields = [],
   submitLabel,
+  submitVariant = "flat",
   error,
   footer,
   onSubmit,
@@ -63,7 +67,7 @@ export default function Access({
         <div className={`flex flex-col w-full ${compact ? "max-w-96" : "max-w-120 max-md:px-8 max-sm:px-4"} gap-6 items-center-safe h-min`}>
           <div className={`flex flex-col w-full ${compact ? "gap-7" : "gap-12"}`}>
             <Logo className={compact ? "self-center" : "self-baseline"} />
-            {heading !== "Solaria" && <h1 className={`text-2xl font-semibold ${compact ? "text-center" : ""}`}>{heading}</h1>}
+            {heading !== "Solaria" && <h1 className={`text-2xl font-semi-bold ${compact ? "text-center" : ""}`}>{heading}</h1>}
             {formHeader}
 
             {submitLabel ? (
@@ -72,7 +76,7 @@ export default function Access({
                 {fields.map((field) => (
                   <div key={field.name} className="flex flex-col gap-2">
                     {field.label && (
-                      <label htmlFor={`access-${field.name}`} className="text-sm font-medium">
+                      <label htmlFor={`access-${field.name}`} className="text-body font-medium">
                         {field.label}
                       </label>
                     )}
@@ -83,10 +87,12 @@ export default function Access({
                         placeholder={field.placeholder}
                         minLength={field.minLength}
                         required
+                        defaultValue={field.defaultValue}
                         value={field.value}
                         onChange={field.onChange}
                         autoComplete={field.autoComplete}
                         autoFocus={field.autoFocus}
+                        readOnly={field.readOnly}
                         disabled={busy}
                         aria-label={field.label ?? field.name}
                         className={`w-full ${compact ? "min-h-12" : ""}`}
@@ -98,10 +104,12 @@ export default function Access({
                         type={field.type ?? "text"}
                         placeholder={field.placeholder}
                         required
+                        defaultValue={field.defaultValue}
                         value={field.value}
                         onChange={field.onChange}
                         autoComplete={field.autoComplete}
                         autoFocus={field.autoFocus}
+                        readOnly={field.readOnly}
                         disabled={busy}
                         aria-label={field.label ?? field.name}
                         className={`w-full ${compact ? "min-h-12" : ""}`}
@@ -111,6 +119,7 @@ export default function Access({
                 ))}
                 {beforeSubmit}
                 <PrimaryButton
+                  variant={submitVariant}
                   type="submit"
                   disabled={busy}
                   content={submitLabel}

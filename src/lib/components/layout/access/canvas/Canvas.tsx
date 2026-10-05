@@ -1,13 +1,24 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type CSSProperties } from "react";
 import { drawCanvas, type CanvasScene, type CanvasVariant } from "./Canvas.utils";
 import { createGridRenderer, GRID_CELL_SIZE } from "./Grid.utils";
 
-export default function Canvas({ variant }: { variant: CanvasVariant }) {
+export default function Canvas({
+  variant,
+  style,
+  backgroundColor = "var(--color-white)",
+  interactionScope = "canvas",
+}: {
+  variant: CanvasVariant;
+  style?: CSSProperties;
+  backgroundColor?: CSSProperties["backgroundColor"];
+  interactionScope?: "canvas" | "page";
+}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+    const interactionTarget = interactionScope === "page" ? (canvas.closest("main") ?? canvas) : canvas;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     const draw =
@@ -28,7 +39,7 @@ export default function Canvas({ variant }: { variant: CanvasVariant }) {
       ripples: [],
       orange: colors.getPropertyValue("--color-orange").trim() || "#FF6500",
       neutral: colors.getPropertyValue("--color-gray").trim() || "#797979",
-      surface: colors.getPropertyValue("--color-white").trim() || "#FFFFFF",
+      surface: getComputedStyle(canvas).backgroundColor,
     };
     let frame = 0;
     let previous = 0;
@@ -62,6 +73,7 @@ export default function Canvas({ variant }: { variant: CanvasVariant }) {
 
     function resize() {
       if (!canvas) return;
+      scene.pointer.active = false;
       const rect = canvas.getBoundingClientRect();
       scene.width = rect.width;
       scene.height = rect.height;
@@ -74,20 +86,40 @@ export default function Canvas({ variant }: { variant: CanvasVariant }) {
 
     function move(event: PointerEvent) {
       if (!canvas || motion.matches) return;
+      let x = event.offsetX;
+      let y = event.offsetY;
+      if (interactionScope === "page") {
+        const blocked =
+          event.target instanceof Element &&
+          event.target.closest("table, form, button, a, input, textarea, select, [role='button'], [role='combobox']");
+        if (blocked) {
+          leave();
+          return;
+        }
+        const bounds = canvas.getBoundingClientRect();
+        x = event.clientX - bounds.left;
+        y = event.clientY - bounds.top;
+        if (x < 0 || y < 0 || x >= bounds.width || y >= bounds.height) {
+          leave();
+          return;
+        }
+      }
       const changedCell =
         !scene.pointer.active ||
-        Math.floor(event.offsetX / GRID_CELL_SIZE) !== Math.floor(scene.pointer.x / GRID_CELL_SIZE) ||
-        Math.floor(event.offsetY / GRID_CELL_SIZE) !== Math.floor(scene.pointer.y / GRID_CELL_SIZE);
-      scene.pointer = { x: event.offsetX, y: event.offsetY, active: true };
+        Math.floor(x / GRID_CELL_SIZE) !== Math.floor(scene.pointer.x / GRID_CELL_SIZE) ||
+        Math.floor(y / GRID_CELL_SIZE) !== Math.floor(scene.pointer.y / GRID_CELL_SIZE);
+      scene.pointer = { x, y, active: true };
       if (variant !== "grid" || changedCell) wake();
     }
     function leave() {
+      if (!scene.pointer.active) return;
       scene.pointer.active = false;
       wake();
     }
     function pulse(event: PointerEvent) {
       if (motion.matches) return;
       move(event);
+      if (!scene.pointer.active) return;
       scene.ripple = { x: scene.pointer.x, y: scene.pointer.y, time: scene.time };
       if (variant === "grid") scene.ripples.push(scene.ripple);
       wake();
@@ -101,34 +133,45 @@ export default function Canvas({ variant }: { variant: CanvasVariant }) {
     const resizeObserver = new ResizeObserver(resize);
     const intersectionObserver = new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting;
+      if (!visible) scene.pointer.active = false;
       update();
     });
+    function visibilityChanged() {
+      if (document.hidden) scene.pointer.active = false;
+      update();
+    }
     resizeObserver.observe(canvas);
     intersectionObserver.observe(canvas);
-    canvas.addEventListener("pointermove", move);
-    canvas.addEventListener("pointerleave", leave);
-    canvas.addEventListener("pointerdown", pulse);
-    document.addEventListener("visibilitychange", update);
+    interactionTarget.addEventListener("pointermove", move as EventListener);
+    interactionTarget.addEventListener("pointerleave", leave as EventListener);
+    interactionTarget.addEventListener("pointercancel", leave as EventListener);
+    interactionTarget.addEventListener("pointerdown", pulse as EventListener);
+    window.addEventListener("blur", leave);
+    window.addEventListener("scroll", leave, true);
+    document.addEventListener("visibilitychange", visibilityChanged);
     motion.addEventListener("change", preferenceChanged);
     resize();
     return () => {
       cancelAnimationFrame(frame);
       resizeObserver.disconnect();
       intersectionObserver.disconnect();
-      canvas.removeEventListener("pointermove", move);
-      canvas.removeEventListener("pointerleave", leave);
-      canvas.removeEventListener("pointerdown", pulse);
-      document.removeEventListener("visibilitychange", update);
+      interactionTarget.removeEventListener("pointermove", move as EventListener);
+      interactionTarget.removeEventListener("pointerleave", leave as EventListener);
+      interactionTarget.removeEventListener("pointercancel", leave as EventListener);
+      interactionTarget.removeEventListener("pointerdown", pulse as EventListener);
+      window.removeEventListener("blur", leave);
+      window.removeEventListener("scroll", leave, true);
+      document.removeEventListener("visibilitychange", visibilityChanged);
       motion.removeEventListener("change", preferenceChanged);
     };
-  }, [variant]);
+  }, [variant, backgroundColor, interactionScope]);
 
   return (
     <canvas
       ref={canvasRef}
       aria-hidden="true"
       className="absolute inset-0 size-full"
-      style={{ maskImage: "linear-gradient(to right, transparent, black 20%)" }}
+      style={{ maskImage: "linear-gradient(to right, transparent, black 20%)", ...style, backgroundColor }}
     />
   );
 }

@@ -50,16 +50,11 @@ export function createGridRenderer(ctx: CanvasRenderingContext2D) {
     fading.clear();
     waves = [];
     dirty.clear();
-    const radius = Math.min(width, height) * 0.28;
     for (let y = 0; y < height; y += GAP) {
       for (let x = 0; x < width; x += GAP) {
         const path = new Path2D();
         path.roundRect(x + 4, y + 4, GAP - 8, GAP - 8, 5);
         cells.push({ path, x: x + GAP / 2, y: y + GAP / 2 });
-        const distance = Math.hypot(x + GAP / 2 - width * 0.52, y + GAP / 2 - height * 0.48);
-        backdrop.fillStyle = scene.orange;
-        backdrop.globalAlpha = Math.max(0, 1 - Math.abs(distance - radius) / 65) * 0.065;
-        backdrop.fill(path);
         backdrop.fillStyle = scene.neutral;
         backdrop.globalAlpha = 0.2;
         backdrop.fillRect(x - 1, y - 1, 2, 2);
