@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type SelectHTMLAttributes } from "react";
 import { useTranslation } from "react-i18next";
 import Colors from "@/lib/shared/styles/colors/colors.enum";
 import Icon from "@@/ui/icon/Icon";
@@ -23,8 +23,18 @@ interface SelectProps<T> {
   placeholder?: string;
   rounded?: boolean;
   disabled?: boolean;
+  clearable?: boolean;
 
   className?: string;
+}
+
+export function NativeSelect({ className = "", ...props }: SelectHTMLAttributes<HTMLSelectElement> & { name: string }) {
+  return (
+    <select
+      {...props}
+      className={`min-h-10 rounded-medium border border-operational-border bg-input-bg px-4 py-2 font-medium text-black cursor-pointer disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-operational-ink disabled:opacity-50 ${className}`}
+    />
+  );
 }
 
 /**
@@ -54,6 +64,7 @@ export default function Select<T = string>({
   placeholder,
   rounded = false,
   disabled = false,
+  clearable = true,
   className,
 }: SelectProps<T>) {
   const { t } = useTranslation("commons", { keyPrefix: "select" });
@@ -119,7 +130,7 @@ export default function Select<T = string>({
           }
         }}>
         <span className="flex items-center-safe gap-2">
-          {selectedOption && (
+          {selectedOption && clearable && (
             <button
               type="button"
               aria-label={t("clearSelection")}

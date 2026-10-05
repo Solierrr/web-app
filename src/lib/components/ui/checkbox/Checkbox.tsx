@@ -23,7 +23,7 @@ export default function Checkbox({ label, className = "", disabled, ...props }: 
           className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-200 peer-checked:opacity-100"
         />
       </span>
-      <span className="text-xs leading-5">{label}</span>
+      <span className="text-body leading-5">{label}</span>
     </label>
   );
 }
