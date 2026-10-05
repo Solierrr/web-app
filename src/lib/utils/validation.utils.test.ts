@@ -21,6 +21,14 @@ describe("validateCpf", () => {
 });
 
 describe("validateCnpj", () => {
+  it("accepts official alphanumeric examples and rejects invalid check digits", () => {
+    expect(validateCnpj("12.ABC.345/01DE-35").isValid).toBe(true);
+    expect(validateCnpj("00.000.000/E08G-12").isValid).toBe(true);
+    expect(validateCnpj("12.abc.345/01de-35").isValid).toBe(true);
+    expect(validateCnpj("12ABC34501DE00").isValid).toBe(false);
+    expect(validateCnpj("12ABC34501DEAA").isValid).toBe(false);
+    expect(validateCnpj("11444777000161!").isValid).toBe(false);
+  });
   it("accepts a valid cnpj, with or without formatting", () => {
     expect(validateCnpj("11444777000161").isValid).toBe(true);
     expect(validateCnpj("11.444.777/0001-61").isValid).toBe(true);
@@ -45,7 +53,17 @@ describe("isSafeMailtoAddress", () => {
   });
 
   it("rejects characters that could add recipients, headers or break the link", () => {
-    for (const value of ["a@b.com?bcc=x@y.com", "a@b.com,c@d.com", "a@b.com;c@d.com", "a b@c.com", "a@b.com&cc=x", "a%40b.com", "a@b", "", "<a@b.com>"]) {
+    for (const value of [
+      "a@b.com?bcc=x@y.com",
+      "a@b.com,c@d.com",
+      "a@b.com;c@d.com",
+      "a b@c.com",
+      "a@b.com&cc=x",
+      "a%40b.com",
+      "a@b",
+      "",
+      "<a@b.com>",
+    ]) {
       expect(isSafeMailtoAddress(value)).toBe(false);
     }
   });
