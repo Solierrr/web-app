@@ -1,4 +1,7 @@
-import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
+import MessageFormatting from "./MessageFormatting";
+import { formatMessageSelection, type MessageFormat } from "./MessageComposer.formatting";
+import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from "react";
+import { notify } from "@@/feedback/toast/Toast.utils";
 import Textarea from "@@/ui/textarea/Textarea";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
 import Instructions from "@@/ui/instructions/Instructions";
@@ -48,6 +51,26 @@ export default function MessageComposer({
   const documentInput = useRef<HTMLInputElement>(null);
   const attachmentMenu = useRef<HTMLDivElement>(null);
   const attachmentTrigger = useRef<HTMLButtonElement>(null);
+  const [selection, setSelection] = useState<{ start: number; end: number } | null>(null);
+  const closeFormatting = useCallback(() => setSelection(null), []);
+  function captureSelection(input: HTMLTextAreaElement) {
+    setSelection(!disabled && input.selectionEnd > input.selectionStart ? { start: input.selectionStart, end: input.selectionEnd } : null);
+  }
+  function applyFormat(format: MessageFormat) {
+    const input = form.current?.querySelector("textarea");
+    if (!input || !selection || disabled) return;
+    const result = formatMessageSelection(value, selection.start, selection.end, format);
+    if (maxLength && result.value.length > maxLength) {
+      notify(t("formatting.tooLong"));
+      return;
+    }
+    onChange(result.value);
+    closeFormatting();
+    requestAnimationFrame(() => {
+      input.focus();
+      input.setSelectionRange(result.caret, result.caret);
+    });
+  }
   const [attachmentsOpen, setAttachmentsOpen] = useState(false);
   const speech = useComposerSpeech(compact && active && !disabled, value, onChange, i18n.resolvedLanguage ?? i18n.language, maxLength);
   useEffect(() => {
@@ -75,11 +98,19 @@ export default function MessageComposer({
     input.style.height = "auto";
     input.style.height = `${Math.min(input.scrollHeight, 160)}px`;
   }, [value]);
+  useEffect(() => {
+    if (!compact || !active) return;
+    if (!speech.available || speech.failed || speech.listening) {
+      notify(t(!speech.available ? "speech.denied" : speech.failed ? "speech.error" : "speech.listening"));
+    }
+  }, [compact, active, speech.available, speech.failed, speech.listening, t]);
+  const headingLevel = selection ? /^#{1,3}\s/.exec(value.slice(value.lastIndexOf("\n", selection.start - 1) + 1))?.[0].trim().length : 0;
+  const selectedTextType = headingLevel ? (`h${headingLevel}` as "h1" | "h2" | "h3") : "paragraph";
   const canSend = !disabled && !speech.listening && !speech.starting && (Boolean(value.trim()) || attachments.length > 0);
   return (
     <form
       ref={form}
-      className={`flex shrink-0 flex-col gap-3 rounded-hard bg-input-bg ${compact ? "p-3" : "p-4"} transition-shadow duration-250 focus-within:shadow-soft-orange motion-reduce:transition-none`}
+      className={`relative shrink-0 gap-2 rounded-medium bg-input-bg p-3 ${compact ? "flex flex-col" : "grid grid-cols-[minmax(0,1fr)_auto] items-end"}`}
       onSubmit={(event) => {
         event.preventDefault();
         if (canSend) {
@@ -93,12 +124,26 @@ export default function MessageComposer({
         value={value}
         placeholder={placeholder}
         disabled={disabled || speech.listening || speech.starting}
-        rows={compact ? 3 : 2}
+        rows={1}
         maxLength={maxLength}
         aria-describedby={hint ? `${id}-hint` : undefined}
-        className={`w-full! bg-transparent! [&_textarea]:w-full [&_textarea]:min-w-0 [&_textarea]:px-0 [&_textarea]:py-0 [&_textarea]:leading-relaxed [&_textarea]:placeholder:text-operational-muted ${compact ? "[&_textarea]:text-lower" : ""}`}
-        onChange={(event) => onChange(event.target.value)}
+        className={`w-full! bg-transparent! [&_textarea]:w-full [&_textarea]:min-w-0 [&_textarea]:px-0 [&_textarea]:py-0 [&_textarea]:leading-relaxed [&_textarea]:placeholder:text-operational-muted`}
+        onSelect={(event) => captureSelection(event.currentTarget)}
+        onMouseUp={(event) => captureSelection(event.currentTarget)}
+        onTouchEnd={(event) => captureSelection(event.currentTarget)}
+        onKeyUp={(event) => {
+          if (event.key !== "Escape") captureSelection(event.currentTarget);
+        }}
+        onChange={(event) => {
+          closeFormatting();
+          onChange(event.target.value);
+        }}
         onKeyDown={(event) => {
+          if ((event.ctrlKey || event.metaKey) && ["b", "i"].includes(event.key.toLowerCase()) && selection) {
+            event.preventDefault();
+            applyFormat(event.key.toLowerCase() === "b" ? "bold" : "italic");
+            return;
+          }
           if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) {
             event.preventDefault();
             if (canSend) {
@@ -108,12 +153,15 @@ export default function MessageComposer({
           }
         }}
       />
+      {selection && active && !disabled && (
+        <MessageFormatting anchorRef={form} onClose={closeFormatting} onFormat={applyFormat} textType={selectedTextType} />
+      )}
       {attachments.length > 0 && (
-        <ul className="flex max-h-24 flex-wrap gap-2 overflow-y-auto scrollbar-none">
+        <ul className="col-span-2 flex max-h-24 flex-wrap gap-2 overflow-y-auto scrollbar-none">
           {attachments.map((attachment) => (
             <li key={attachment.id} className="flex min-w-0 max-w-full items-center gap-1 rounded-medium bg-white px-2 py-1">
               <Icon name={attachment.type.startsWith("image/") ? "image" : "document"} size={16} />
-              <span className="truncate text-lower">{attachment.name}</span>
+              <span className="truncate text-body">{attachment.name}</span>
               <ToolbarAction
                 icon="x"
                 label={t("attachments.remove", { name: attachment.name })}
@@ -125,14 +173,9 @@ export default function MessageComposer({
           ))}
         </ul>
       )}
-      {compact && (!speech.supported || !speech.available || speech.failed || speech.listening) && (
-        <p role="status" className="text-lower text-operational-muted">
-          {t(!speech.supported ? "speech.unsupported" : !speech.available ? "speech.denied" : speech.failed ? "speech.error" : "speech.listening")}
-        </p>
-      )}
-      <div className="flex items-end justify-between gap-3">
+      <div className={`flex items-end justify-between gap-3 ${compact ? "" : "col-start-2 row-start-1"}`}>
         {hint && (
-          <div id={`${id}-hint`} className={compact ? "sr-only" : "flex flex-wrap items-center gap-x-4 gap-y-2 text-lower text-operational-muted"}>
+          <div id={`${id}-hint`} className="sr-only">
             <span className="inline-flex items-center gap-2">
               <Instructions items={["Enter"]} />
               {t("composerInstructions.send")}
@@ -176,7 +219,7 @@ export default function MessageComposer({
                     setAttachmentsOpen(false);
                   }}>
                   <Icon name="image" size={18} />
-                  <span className="text-lower">{t("attachments.image")}</span>
+                  <span className="text-body">{t("attachments.image")}</span>
                 </MenuItem>
                 <MenuItem
                   role="menuitem"
@@ -185,7 +228,7 @@ export default function MessageComposer({
                     setAttachmentsOpen(false);
                   }}>
                   <Icon name="document" size={18} />
-                  <span className="text-lower">{t("attachments.document")}</span>
+                  <span className="text-body">{t("attachments.document")}</span>
                 </MenuItem>
               </MenuList>
             )}
@@ -220,15 +263,22 @@ export default function MessageComposer({
             aria-pressed={speech.listening}
             className="ml-auto size-8! rounded-full!"
             color={speech.listening ? "var(--color-orange)" : "var(--color-operational-muted)"}
-            disabled={disabled || speech.starting || !speech.supported || !speech.available}
-            onClick={() => void speech.toggle()}
+            disabled={disabled || speech.starting}
+            onClick={() => {
+              if (!speech.supported) notify(t("speech.unsupported"));
+              else if (!speech.available) notify(t("speech.denied"));
+              else {
+                if (!speech.listening) notify(t("speech.denied"));
+                void speech.toggle();
+              }
+            }}
           />
         )}
         <ToolbarAction
           type="submit"
-          icon={compact ? "arrowUp" : "send"}
+          icon="arrowUp"
           label={sendLabel}
-          className={compact ? "size-8! rounded-full!" : "ml-auto"}
+          className={`size-8! rounded-full! ${compact ? "" : "ml-auto"}`}
           disabled={!canSend}
           color="var(--color-white)"
           backgroundColor="var(--color-orange)"
