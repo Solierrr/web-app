@@ -4,6 +4,8 @@ import Icon, { type IconName } from "@@/ui/icon/Icon";
 
 type ToolbarActionProps = {
   icon?: IconName;
+  iconSize?: number;
+  iconMotion?: "folder" | "account";
   label: string;
   content?: string;
   iconGradient?: "orange";
@@ -16,6 +18,8 @@ type ToolbarActionProps = {
 
 export default function ToolbarAction({
   icon,
+  iconSize = 20,
+  iconMotion,
   label,
   content,
   iconGradient,
@@ -28,7 +32,7 @@ export default function ToolbarAction({
   style,
   ...props
 }: ToolbarActionProps) {
-  const classes = `toolbar-action flex h-9 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-small text-lower transition-colors duration-250 bg-[var(--action-bg)] text-[color:var(--action-color)] hover:bg-[var(--action-hover-bg)] hover:text-[color:var(--action-hover-color)] focus-visible:outline-2 focus-visible:outline-orange disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:transition-none ${content ? "min-w-[42px] px-3" : "w-[42px]"} ${className ?? ""}`;
+  const classes = `toolbar-action flex h-9 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-small text-body transition-colors duration-250 bg-[var(--action-bg)] text-[color:var(--action-color)] hover:bg-[var(--action-hover-bg)] hover:text-[color:var(--action-hover-color)] focus-visible:outline-2 focus-visible:outline-orange disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:transition-none ${content ? "min-w-[42px] px-3" : "w-[42px]"} ${className ?? ""}`;
   const actionStyle = {
     "--action-bg": backgroundColor,
     "--action-color": color,
@@ -38,8 +42,17 @@ export default function ToolbarAction({
   } as CSSProperties;
   const children = (
     <>
-      {icon && <Icon name={icon} size={20} color="currentColor" gradient={iconGradient} className="shrink-0 text-inherit [&_*]:text-inherit" />}
-      {content && <span className={`text-lower text-inherit ${hideContentOnMobile ? "hidden sm:inline" : ""}`}>{content}</span>}
+      {icon && (
+        <Icon
+          name={icon}
+          motion={iconMotion}
+          size={iconSize}
+          color="currentColor"
+          gradient={iconGradient}
+          className="shrink-0 text-inherit [&_*]:text-inherit"
+        />
+      )}
+      {content && <span className={`text-body text-inherit ${hideContentOnMobile ? "hidden sm:inline" : ""}`}>{content}</span>}
     </>
   );
 
