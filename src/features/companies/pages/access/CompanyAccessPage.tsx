@@ -1,3 +1,6 @@
+import { PrimaryButton } from "@@/ui/button/Button.presets";
+import Input from "@@/ui/input/Input";
+import OperationalForm from "@@/layout/operational-page/OperationalForm";
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { useState, type FormEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -34,27 +37,28 @@ export default function CompanyAccessPage() {
   }
 
   return (
-    <OperationalPage title={t("title")} description={t("description")} compact>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+    <OperationalPage title={t("title")} description={t("description")} compact form centered formBackground>
+      <OperationalForm plain onSubmit={handleSubmit}>
         <label className="flex flex-col gap-1">
           {t("code")}
-          <input
+          <Input
+            name="code"
+            aria-label={t("code")}
+            placeholder={t("code")}
             value={code}
             onChange={(event) => setCode(event.target.value)}
             maxLength={8}
             required
-            className="rounded-small border border-operational-border p-2 font-mono uppercase"
+            className="w-full"
           />
         </label>
         {error ? (
-          <p role="alert" className="text-red-700">
+          <p role="alert" className="text-feedback-error">
             {t("error")}
           </p>
         ) : null}
-        <button type="submit" disabled={saving || !code.trim()} className="rounded-small bg-orange px-5 py-2 text-white disabled:opacity-50">
-          {t("submit")}
-        </button>
-      </form>
+        <PrimaryButton type="submit" disabled={saving || !code.trim()} className="min-h-12 w-full" content={t("submit")} description={t("submit")} />
+      </OperationalForm>
     </OperationalPage>
   );
 }

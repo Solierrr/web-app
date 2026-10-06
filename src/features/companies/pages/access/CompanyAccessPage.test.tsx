@@ -1,3 +1,4 @@
+vi.mock("@@/layout/access/canvas/SideCanvas", () => ({ default: () => null }));
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
