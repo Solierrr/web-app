@@ -98,3 +98,13 @@ export function markMockConversationRead(id: string): ConversationDto {
   }
   return conversation;
 }
+
+/** Registers a project group in the same local messenger store used by Conversation. */
+export function saveMockProjectConversation(conversation: ConversationDto): ConversationDto {
+  const s = getMockMessenger();
+  const existing = s.conversations.find((c) => c.id === conversation.id);
+  if (existing) return existing;
+  localStorage.setItem(key(), JSON.stringify({ ...s, conversations: [...s.conversations, conversation] }));
+  window.dispatchEvent(new Event("solaria:messenger"));
+  return conversation;
+}

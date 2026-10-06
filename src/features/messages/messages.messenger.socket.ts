@@ -19,7 +19,7 @@ export function subscribeToConversations(
   onMessage: (message: MessageDto) => void,
   onConnectionChange?: (connected: boolean) => void,
 ): () => void {
-  if (isAlwaysMockMode()) {
+  if (isAlwaysMockMode("MESSENGER")) {
     onConnectionChange?.(true);
     return () => undefined;
   }

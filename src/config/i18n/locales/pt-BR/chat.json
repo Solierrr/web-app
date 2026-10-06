@@ -21,6 +21,7 @@
   "participant": "Participante",
   "group": "Grupo",
   "actionsClose": "Fechar",
+  "filterConversations": "Filtrar conversas",
   "filters": {
     "ALL": "Todas",
     "DIRECT": "Pessoas",
@@ -96,5 +97,17 @@
     "start": "Ditar mensagem",
     "stop": "Parar ditado",
     "error": "Não foi possível iniciar o ditado. Tente novamente."
+  },
+  "participantCount": "{{count}} participantes",
+  "formatting": {
+    "label": "Formatar texto",
+    "textType": "Tipo de texto",
+    "bold": "Negrito",
+    "italic": "Itálico",
+    "paragraph": "Texto",
+    "h1": "Título 1",
+    "h2": "Título 2",
+    "h3": "Título 3",
+    "tooLong": "A formatação ultrapassa o limite da mensagem."
   }
 }

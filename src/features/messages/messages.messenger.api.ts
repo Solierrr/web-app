@@ -11,7 +11,7 @@ import {
 } from "./messages.messenger.d.mocks";
 import { userMocks } from "@/config/mocks/registry";
 
-const API = `${import.meta.env.VITE_API_MESSENGER}/messaging`;
+const API = `${import.meta.env.VITE_API_MESSENGER?.replace(/\/$/, "")}/messaging`;
 
 export interface ConversationDto {
   id: string;
@@ -19,7 +19,9 @@ export interface ConversationDto {
   participantIds: string[];
   title: string | null;
   lastInteractionAt: string | null;
-  unreadCount: number;
+  unreadCount?: number;
+  communityId?: string | null;
+  projectGeneral?: boolean;
 }
 
 export interface MessageDto {
@@ -34,7 +36,7 @@ export interface MessageDto {
 }
 
 export async function getConversations(): Promise<ConversationDto[]> {
-  if (isAlwaysMockMode()) {
+  if (isAlwaysMockMode("MESSENGER")) {
     await waitForMockService();
     return getMockMessenger().conversations;
   }
@@ -46,7 +48,7 @@ export async function getConversations(): Promise<ConversationDto[]> {
 }
 
 export async function getConversation(id: string): Promise<ConversationDto> {
-  if (isAlwaysMockMode()) {
+  if (isAlwaysMockMode("MESSENGER")) {
     await waitForMockService();
     return getMockConversation(id);
   }
@@ -58,7 +60,7 @@ export async function getConversation(id: string): Promise<ConversationDto> {
 }
 
 export async function createDirectConversation(recipientId: string): Promise<ConversationDto> {
-  if (isAlwaysMockMode()) {
+  if (isAlwaysMockMode("MESSENGER")) {
     await waitForMockService();
     return createMockConversation(recipientId);
   }
@@ -72,23 +74,26 @@ export async function createDirectConversation(recipientId: string): Promise<Con
 }
 
 export async function getConversationMessages(id: string, beforeSequence?: number): Promise<MessageDto[]> {
-  if (isAlwaysMockMode()) {
+  if (isAlwaysMockMode("MESSENGER")) {
     await waitForMockService();
     return getMockMessenger()
       .messages.filter((item) => item.conversationId === id && (beforeSequence === undefined || item.sequence < beforeSequence))
       .slice(-100);
   }
-  const params = new URLSearchParams({ limit: "100" });
-  if (beforeSequence !== undefined) params.set("beforeSequence", String(beforeSequence));
-  return httpJson<MessageDto[]>(`${API}/messages/conversation/${encodeURIComponent(id)}/history?${params}`, {
-    service: "messenger",
-    operation: "getConversationMessages",
-    errorMessage: i18n.t("services:messenger.getConversationMessages"),
-  });
+  const messages: MessageDto[] = [];
+  let cursor = 0;
+  while (true) {
+    const page = await getConversationMessagesSince(id, cursor);
+    messages.push(...page);
+    const next = page.reduce((highest, message) => Math.max(highest, message.sequence), cursor);
+    if (page.length < 100 || next <= cursor || (beforeSequence !== undefined && next >= beforeSequence)) break;
+    cursor = next;
+  }
+  return messages.filter((message) => beforeSequence === undefined || message.sequence < beforeSequence).slice(-100);
 }
 
 export async function getConversationMessagesSince(id: string, sequence: number): Promise<MessageDto[]> {
-  if (isAlwaysMockMode()) {
+  if (isAlwaysMockMode("MESSENGER")) {
     await waitForMockService();
     return getMockMessenger().messages.filter((item) => item.conversationId === id && item.sequence > sequence);
   }
@@ -99,18 +104,10 @@ export async function getConversationMessagesSince(id: string, sequence: number)
   });
 }
 
-export async function markConversationRead(id: string, sequence: number): Promise<ConversationDto> {
-  if (isAlwaysMockMode()) {
-    await waitForMockService();
-    return markMockConversationRead(id);
-  }
-  return httpJson<ConversationDto>(`${API}/conversations/${encodeURIComponent(id)}/read`, {
-    service: "messenger",
-    operation: "markConversationRead",
-    method: "POST",
-    body: { sequence },
-    errorMessage: i18n.t("services:messenger.markConversationRead"),
-  });
+export async function markConversationRead(id: string, sequence: number): Promise<ConversationDto | undefined> {
+  if (!isAlwaysMockMode("MESSENGER")) return;
+  await waitForMockService();
+  if (sequence > 0) return markMockConversationRead(id);
 }
 
 export async function sendConversationMessage(
@@ -118,7 +115,7 @@ export async function sendConversationMessage(
   content: string,
   conversationType: ConversationDto["conversationType"] = "DIRECT",
 ): Promise<MessageDto> {
-  if (isAlwaysMockMode()) {
+  if (isAlwaysMockMode("MESSENGER")) {
     await waitForMockService();
     return sendMockMessage(conversationId, content);
   }
@@ -136,7 +133,7 @@ export async function sendConversationMessage(
 }
 
 export async function createChatbotConversation(userType: string): Promise<ConversationDto> {
-  if (isAlwaysMockMode()) {
+  if (isAlwaysMockMode("MESSENGER")) {
     await waitForMockService();
     return createMockChatbotConversation();
   }
@@ -156,7 +153,7 @@ export interface MessengerContact {
 }
 
 export async function getMessengerContacts(): Promise<MessengerContact[]> {
-  if (isAlwaysMockMode()) {
+  if (isAlwaysMockMode("MESSENGER")) {
     await waitForMockService();
     return userMocks.map((user) => ({ authId: user.authId || user.id, username: user.name, avatar: user.avatar ?? null }));
   }
@@ -168,7 +165,7 @@ export async function getMessengerContacts(): Promise<MessengerContact[]> {
 }
 
 export async function getUserSummary(authId: string): Promise<{ username: string; avatar: string | null }> {
-  if (isAlwaysMockMode()) {
+  if (isAlwaysMockMode("MESSENGER")) {
     await waitForMockService();
     const user = userMocks.find((item) => item.id === authId || item.authId === authId) ?? userMocks[0];
     return { username: user.name, avatar: user.avatar ?? null };
