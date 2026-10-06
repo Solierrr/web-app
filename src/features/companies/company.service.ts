@@ -9,8 +9,8 @@ import { API_CORE_URL } from "@/lib/shared/http/apiCore.utils";
 import { getMyUser } from "@/features/users/user/user.service";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
 import { getMockCompanyReviews, decideMockCompany } from "./company.d.mocks";
-import { getOperationalAccount, saveOperationalAccount } from "@/features/access/access.onboarding.service";
-import { CompanyStatus } from "./company.enum";
+import { getOperationalAccount, getSelectedContext, saveOperationalAccount } from "@/features/access/access.onboarding.service";
+import { CompanyStatus, type CompanyActivity } from "./company.enum";
 
 const SERVICE_NAME = "company";
 
@@ -21,16 +21,9 @@ export interface CatalogCompany {
   city: string | null;
   state: string | null;
   logoUrl?: string;
-}
-
-export function createCompany(payload: { type: "SUPPLIER" | "DEMANDANT"; cnpj: string; tradeName: string; corporateName: string }): Promise<Company> {
-  return httpJson<Company>(`${API_CORE_URL}/companies`, {
-    service: SERVICE_NAME,
-    operation: "createCompany",
-    method: "POST",
-    body: payload,
-    errorMessage: i18n.t("services:company.createCompany"),
-  });
+  bannerUrl?: string;
+  activities?: CompanyActivity[];
+  hasTechnicalTeam?: boolean;
 }
 
 interface AddressPayload {
@@ -48,43 +41,20 @@ interface BusinessContactPayload {
   website?: string;
 }
 
-export function createAddress(payload: AddressPayload): Promise<{ id: string }> {
-  return httpJson<{ id: string }>(`${API_CORE_URL}/addresses`, {
+export function createCompany(payload: {
+  type: "SUPPLIER" | "DEMANDANT";
+  cnpj: string;
+  tradeName: string;
+  corporateName: string;
+  address?: AddressPayload;
+  businessContact?: BusinessContactPayload;
+}): Promise<Company> {
+  return httpJson<Company>(`${API_CORE_URL}/companies`, {
     service: SERVICE_NAME,
-    operation: "createAddress",
+    operation: "createCompany",
     method: "POST",
     body: payload,
-    errorMessage: i18n.t("services:company.createAddress"),
-  });
-}
-
-export function createBusinessContact(payload: BusinessContactPayload): Promise<{ id: string }> {
-  return httpJson<{ id: string }>(`${API_CORE_URL}/business-contacts`, {
-    service: SERVICE_NAME,
-    operation: "createBusinessContact",
-    method: "POST",
-    body: payload,
-    errorMessage: i18n.t("services:company.createBusinessContact"),
-  });
-}
-
-export function attachCompanyAddress(companyId: string, addressId: string): Promise<Company> {
-  return httpJson<Company>(`${API_CORE_URL}/companies/${encodeURIComponent(companyId)}/address`, {
-    service: SERVICE_NAME,
-    operation: "attachCompanyAddress",
-    method: "PATCH",
-    body: { addressId },
-    errorMessage: i18n.t("services:company.attachCompanyAddress"),
-  });
-}
-
-export function attachCompanyBusinessContact(companyId: string, businessContactId: string): Promise<Company> {
-  return httpJson<Company>(`${API_CORE_URL}/companies/${encodeURIComponent(companyId)}/business-contact`, {
-    service: SERVICE_NAME,
-    operation: "attachCompanyBusinessContact",
-    method: "PATCH",
-    body: { businessContactId },
-    errorMessage: i18n.t("services:company.attachCompanyBusinessContact"),
+    errorMessage: i18n.t("services:company.createCompany"),
   });
 }
 
@@ -96,6 +66,9 @@ function mockCatalogCompany(company: Company): CatalogCompany {
     city: company.address?.city ?? null,
     state: company.address?.state ?? null,
     logoUrl: company.logoUrl,
+    bannerUrl: company.bannerUrl,
+    activities: company.activities,
+    hasTechnicalTeam: company.hasTechnicalTeam,
   };
 }
 
@@ -135,19 +108,44 @@ export interface MyMembership {
   permissions?: string[];
 }
 
+export async function getMyMemberships(): Promise<MyMembership[]> {
+  if (isAlwaysMockMode())
+    return getOperationalAccount().memberships.map((item) => ({
+      companyId: item.id,
+      position: { id: "mock-position", name: item.admin ? "ADMIN" : "MEMBER" },
+    }));
+  await getMyUser();
+  return httpJson<MyMembership[]>(`${API_CORE_URL}/user-companies/me/all`, {
+    service: SERVICE_NAME,
+    operation: "getMyCompanyMembership",
+    errorMessage: i18n.t("services:company.getMyCompanyMembership"),
+  });
+}
+
+export async function getMyContexts() {
+  const user = await getMyUser();
+  const memberships = await getMyMemberships();
+  const companies = await Promise.all(
+    memberships.map((membership) =>
+      httpJson<Company>(`${API_CORE_URL}/companies/${encodeURIComponent(membership.companyId)}`, {
+        service: SERVICE_NAME,
+        operation: "getMyCompany",
+        errorMessage: i18n.t("services:company.getMyCompanyMembership"),
+      }),
+    ),
+  );
+  return { memberships, companies, managedByCompanyId: user.managedByCompanyId ?? null };
+}
+
 export async function getMyMembership(): Promise<MyMembership | null> {
   if (isAlwaysMockMode()) {
     const account = getOperationalAccount();
     const membership = account.memberships.find((item) => item.id === account.selectedContext) ?? account.memberships[0];
     return membership ? { companyId: membership.id, position: { id: "mock-position", name: membership.admin ? "ADMIN" : "MEMBER" } } : null;
   }
-  await getMyUser();
-  const membership = await httpJson<MyMembership | undefined>(`${API_CORE_URL}/user-companies/me`, {
-    service: SERVICE_NAME,
-    operation: "getMyCompanyMembership",
-    errorMessage: i18n.t("services:company.getMyCompanyMembership"),
-  });
-  return membership ?? null;
+  const memberships = await getMyMemberships();
+  const selected = getSelectedContext();
+  return memberships.find((item) => item.companyId === selected) ?? memberships[0] ?? null;
 }
 
 export async function getMyCompany(): Promise<Company | null> {

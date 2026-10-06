@@ -52,7 +52,11 @@ export interface AccessCode {
 
 // Cargos (positions)
 
-export function listPositions(): Promise<Position[]> {
+export async function listPositions(): Promise<Position[]> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    return getMockInvitations().positions;
+  }
   return httpJson<Position[]>(`${API_CORE_URL}/positions`, {
     service: SERVICE_NAME,
     operation: "listPositions",
@@ -74,29 +78,6 @@ export async function createPosition(name: string): Promise<Position> {
     method: "POST",
     body: { name, accesses: "" },
     errorMessage: i18n.t("services:companyManagement.createPosition"),
-  });
-}
-
-export async function listCompanyPositions(companyId: string): Promise<{ id: string; companyId: string; position: Position }[]> {
-  if (isAlwaysMockMode()) {
-    await waitForMockService();
-    return getMockInvitations().positions.map((position) => ({ id: position.id, companyId, position }));
-  }
-  return httpJson(`${API_CORE_URL}/company-positions/company/${encodeURIComponent(companyId)}`, {
-    service: SERVICE_NAME,
-    operation: "listCompanyPositions",
-    errorMessage: i18n.t("services:companyManagement.listCompanyPositions"),
-  });
-}
-
-export async function linkPositionToCompany(companyId: string, positionId: string): Promise<{ id: string }> {
-  if (isAlwaysMockMode()) return { id: `${companyId}:${positionId}` };
-  return httpJson<{ id: string }>(`${API_CORE_URL}/company-positions`, {
-    service: SERVICE_NAME,
-    operation: "linkPositionToCompany",
-    method: "POST",
-    body: { companyId, positionId },
-    errorMessage: i18n.t("services:companyManagement.linkPositionToCompany"),
   });
 }
 
