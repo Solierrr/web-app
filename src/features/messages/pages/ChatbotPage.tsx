@@ -7,6 +7,8 @@ import WrapperLayout from "@/config/WrapperLayout";
 import MessageComposer from "@@/ui/message-composer/MessageComposer";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
 import Icon from "@@/ui/icon/Icon";
+import MorphingHexagon from "@@/ui/morphing-hexagon/MorphingHexagon";
+import SideCanvas from "@@/layout/access/canvas/SideCanvas";
 import { useParams } from "react-router-dom";
 import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
@@ -102,9 +104,9 @@ export default function ChatbotPage({
           />
         </div>
       )}
-      {panelStyle && (
+      {embedded && (
         <div className="flex shrink-0 items-center justify-between gap-2 rounded-hard bg-operational-surface px-3 py-2">
-          <span className="text-lower">{t("needHelp")}</span>
+          <span className="text-body">{t("needHelp")}</span>
           <ToolbarAction
             to={routePaths.solarPanelsFeed(lang)}
             content={t("explore")}
@@ -122,9 +124,9 @@ export default function ChatbotPage({
         {messages.length === 1 ? (
           <div className={`flex min-h-full flex-col justify-center px-1 ${panelStyle ? "mx-auto max-w-72 gap-3 py-2" : "gap-6 py-4"}`}>
             <div className={`flex flex-col ${panelStyle ? "items-center gap-2 text-center" : "items-start gap-3"}`}>
-              <div aria-hidden="true" className={`${panelStyle ? "mb-2 size-20" : "mb-1 size-12"} rounded-hard bg-input-bg`} />
+              <MorphingHexagon paused={!active} className={`${panelStyle ? "mb-2 size-20" : "mb-1 size-12"} shrink-0`} />
               <h2 className={`${panelStyle ? "text-body font-medium" : "text-label font-semi-bold"} leading-relaxed`}>{t("welcomeTitle")}</h2>
-              <p className="text-lower leading-relaxed text-operational-muted">{t(panelStyle ? "panelDescription" : "welcomeDescription")}</p>
+              <p className="text-body leading-relaxed text-operational-muted">{t(panelStyle ? "panelDescription" : "welcomeDescription")}</p>
             </div>
             <div className="flex w-full flex-col gap-2">
               {(["catalog", "compare", "help"] as const).map((key) =>
@@ -143,9 +145,9 @@ export default function ChatbotPage({
                       className="shrink-0"
                       color="var(--color-input-icon)"
                     />
-                    <span className="flex min-w-0 flex-col text-lower">
-                      <span className="text-lower font-medium leading-5">{t(`suggestionTitles.${key}`)}</span>
-                      <span className="text-lower leading-5 text-operational-muted">{t(`suggestionDescriptions.${key}`)}</span>
+                    <span className="flex min-w-0 flex-col text-body">
+                      <span className="text-body font-medium leading-5">{t(`suggestionTitles.${key}`)}</span>
+                      <span className="text-body leading-5 text-operational-muted">{t(`suggestionDescriptions.${key}`)}</span>
                     </span>
                   </button>
                 ) : (
@@ -171,7 +173,7 @@ export default function ChatbotPage({
       </div>
       <div ref={composer} className="shrink-0">
         {attachmentError && (
-          <p role="alert" className="mb-2 text-lower text-operational-muted">
+          <p role="alert" className="mb-2 text-body text-operational-muted">
             {tChat("attachments.rejected")}
           </p>
         )}
@@ -194,8 +196,9 @@ export default function ChatbotPage({
   );
   if (embedded) return content;
   return operational ? (
-    <main aria-label={t("assistantName")} className="mx-auto flex h-full min-h-0 w-full max-w-operational-copy flex-col p-4 sm:p-6">
-      {content}
+    <main aria-label={t("assistantName")} className="relative isolate flex h-full min-h-0 w-full flex-col">
+      {messages.length === 1 && <SideCanvas centerWidth="var(--spacing-operational-copy)" />}
+      <div className="mx-auto flex h-full min-h-0 w-full max-w-operational-copy flex-col p-4 sm:p-6">{content}</div>
     </main>
   ) : (
     <WrapperLayout ptop>{content}</WrapperLayout>
