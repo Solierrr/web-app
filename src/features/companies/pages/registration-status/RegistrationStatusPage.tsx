@@ -30,7 +30,7 @@ export default function RegistrationStatusPage() {
   const current = stage === "MANUAL_REVIEW" ? 1 : 2;
 
   return (
-    <OperationalPage title={t("title")} loading={company === undefined && !error} compact>
+    <OperationalPage title={t("title")} loading={company === undefined && !error} compact centered sideBackground>
       <p role="status" className={stage ? "" : "sr-only"}>
         {stage ? t(`stage.${stage}`) : ""}
       </p>
@@ -43,7 +43,7 @@ export default function RegistrationStatusPage() {
               <li
                 key={label}
                 aria-current={index === current ? "step" : undefined}
-                className={`rounded-small border p-3 ${index === current ? "border-orange font-medium" : "border-operational-border text-operational-muted"}`}>
+                className={`rounded-hard border bg-white p-5 ${index === current ? "border-orange font-medium" : "border-operational-border text-operational-muted"}`}>
                 {label}
               </li>
             ))}

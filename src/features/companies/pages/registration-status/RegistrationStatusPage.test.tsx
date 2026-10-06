@@ -1,3 +1,4 @@
+vi.mock("@@/layout/access/canvas/SideCanvas", () => ({ default: () => null }));
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import RegistrationStatusPage from "./RegistrationStatusPage";
