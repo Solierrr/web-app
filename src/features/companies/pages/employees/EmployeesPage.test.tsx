@@ -1,3 +1,4 @@
+vi.mock("@@/layout/access/canvas/SideCanvas", () => ({ default: () => null }));
 import { MemoryRouter } from "react-router-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
@@ -10,10 +11,9 @@ vi.mock("@/lib/shared/context/ActiveContext", () => ({ useActiveContext: vi.fn()
 vi.mock("@/features/users/user/user.service", () => ({ getUser: vi.fn() }));
 vi.mock("@/features/companies/company.management.service", () => ({
   listEmployees: vi.fn(),
-  listCompanyPositions: vi.fn(),
+  listPositions: vi.fn(),
   listAccessCodes: vi.fn(),
   createPosition: vi.fn(),
-  linkPositionToCompany: vi.fn(),
   generateAccessCode: vi.fn(),
   updateEmployeePosition: vi.fn(),
   removeEmployee: vi.fn(),
@@ -37,10 +37,7 @@ const memberPosition = { id: "member-position", name: "MEMBER", accesses: "" };
 describe("EmployeesPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(managementService.listCompanyPositions).mockResolvedValue([
-      { id: "link-1", companyId: "company-1", position: adminPosition },
-      { id: "link-2", companyId: "company-1", position: memberPosition },
-    ]);
+    vi.mocked(managementService.listPositions).mockResolvedValue([adminPosition, memberPosition]);
     vi.mocked(managementService.listAccessCodes).mockResolvedValue([]);
     vi.mocked(managementService.listPermissions).mockResolvedValue([]);
     vi.mocked(getUser).mockResolvedValue({ id: "user-1", authId: "auth-1", username: "fulano", avatar: null, banner: null, active: true });
@@ -124,6 +121,7 @@ describe("EmployeesPage", () => {
       </MemoryRouter>,
     );
     await screen.findByText("Nenhum funcionário ainda.");
+    fireEvent.click(screen.getByRole("button", { name: "Convidar funcionário" }));
 
     fireEvent.change(screen.getByLabelText("Cargo existente"), { target: { value: "member-position" } });
     fireEvent.click(screen.getByRole("button", { name: "Gerar código" }));
@@ -145,7 +143,6 @@ describe("EmployeesPage", () => {
     });
     vi.mocked(managementService.listEmployees).mockResolvedValue([]);
     vi.mocked(managementService.createPosition).mockResolvedValue({ id: "new-position", name: "Instalador", accesses: "" });
-    vi.mocked(managementService.linkPositionToCompany).mockResolvedValue({ id: "link-3" });
     vi.mocked(managementService.generateAccessCode).mockResolvedValue({
       id: "code-1",
       companyId: "company-1",
@@ -161,16 +158,16 @@ describe("EmployeesPage", () => {
       </MemoryRouter>,
     );
     await screen.findByText("Nenhum funcionário ainda.");
+    fireEvent.click(screen.getByRole("button", { name: "Convidar funcionário" }));
 
     fireEvent.change(screen.getByLabelText("Novo cargo"), { target: { value: "Instalador" } });
     fireEvent.click(screen.getByRole("button", { name: "Gerar código" }));
 
     await waitFor(() => expect(managementService.createPosition).toHaveBeenCalledWith("Instalador"));
-    expect(managementService.linkPositionToCompany).toHaveBeenCalledWith("company-1", "new-position");
     expect(managementService.generateAccessCode).toHaveBeenCalledWith("company-1", "new-position");
   });
 
-  it("lists administrators apart from the team", async () => {
+  it("lists administrators and team members while protecting administrator access", async () => {
     vi.mocked(useActiveContext).mockReturnValue({
       loading: false,
       kind: "company",
@@ -192,11 +189,11 @@ describe("EmployeesPage", () => {
       </MemoryRouter>,
     );
 
-    const admins = (await screen.findByRole("heading", { name: "Administradores" })).closest("section") as HTMLElement;
-    const team = screen.getByRole("heading", { name: "Equipe" }).closest("section") as HTMLElement;
-    expect(admins).toHaveTextContent("ADMIN");
-    expect(admins).not.toHaveTextContent("MEMBER");
-    expect(team).toHaveTextContent("MEMBER");
+    const table = await screen.findByRole("table", { name: "Equipe" });
+    expect(table).toHaveTextContent("ADMIN");
+    expect(table).toHaveTextContent("MEMBER");
+    fireEvent.click(screen.getAllByRole("button", { name: /Opções do registro/ })[1]);
+    expect(screen.getAllByRole("button", { name: "Desativar acesso" })).toHaveLength(1);
   });
 
   it("offers to send the generated code to the guest by e-mail", async () => {
@@ -226,6 +223,7 @@ describe("EmployeesPage", () => {
       </MemoryRouter>,
     );
     await screen.findByText("Nenhum funcionário ainda.");
+    fireEvent.click(screen.getByRole("button", { name: "Convidar funcionário" }));
 
     fireEvent.change(screen.getByLabelText("Cargo existente"), { target: { value: "member-position" } });
     fireEvent.change(screen.getByLabelText("E-mail do convidado (opcional)"), { target: { value: "novo@empresa.com" } });
@@ -265,6 +263,7 @@ describe("EmployeesPage", () => {
       </MemoryRouter>,
     );
     await screen.findByText("Nenhum funcionário ainda.");
+    fireEvent.click(screen.getByRole("button", { name: "Convidar funcionário" }));
 
     fireEvent.change(screen.getByLabelText("Cargo existente"), { target: { value: "member-position" } });
     fireEvent.change(screen.getByLabelText("E-mail do convidado (opcional)"), { target: { value: "a&cc=x@b.com" } });
@@ -293,6 +292,7 @@ describe("EmployeesPage", () => {
       </MemoryRouter>,
     );
     await screen.findByText("Nenhum funcionário ainda.");
+    fireEvent.click(screen.getByRole("button", { name: "Convidar funcionário" }));
 
     expect(screen.getByRole("option", { name: "ADMIN" })).toBeInTheDocument();
   });
@@ -316,7 +316,32 @@ describe("EmployeesPage", () => {
       </MemoryRouter>,
     );
     await screen.findByText("Nenhum funcionário ainda.");
+    fireEvent.click(screen.getByRole("button", { name: "Convidar funcionário" }));
 
     expect(screen.queryByRole("option", { name: "ADMIN" })).not.toBeInTheDocument();
+  });
+  it("cancels a filled invitation without generating a code", async () => {
+    vi.mocked(useActiveContext).mockReturnValue({
+      loading: false,
+      kind: "company",
+      setKind: vi.fn(),
+      company,
+      isAdmin: true,
+      hasCompany: true,
+      isPlatformAdmin: false,
+      can: () => true,
+    });
+    vi.mocked(managementService.listEmployees).mockResolvedValue([]);
+    render(
+      <MemoryRouter>
+        <EmployeesPage />
+      </MemoryRouter>,
+    );
+    fireEvent.click(await screen.findByRole("button", { name: "Convidar funcion\u00e1rio" }));
+    fireEvent.change(screen.getByLabelText("Cargo existente"), { target: { value: "member-position" } });
+    fireEvent.click(screen.getByRole("button", { name: "cancelar" }));
+    expect(managementService.generateAccessCode).not.toHaveBeenCalled();
+    expect(screen.getByRole("table", { name: "Equipe" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Gerar c\u00f3digo" })).not.toBeInTheDocument();
   });
 });
