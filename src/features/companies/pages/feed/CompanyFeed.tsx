@@ -1,16 +1,16 @@
+import Marketplace from "@/features/marketplace/Marketplace";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
+import { filterCompanies, getFeedView } from "@/features/marketplace/marketplace.utils";
 import { useTranslation } from "react-i18next";
 
-import EntityCorridor from "@/lib/components/layout/announcement/corridor/EntityCorridor";
+import CompanyFeaturedCard from "./CompanyFeaturedCard";
 import Skeleton from "@@/feedback/skeleton/Skeleton";
 
 import { ImageSkeleton } from "@@/feedback/skeleton/Skeleton.presets";
 import { getCatalogCompanies, type CatalogCompany } from "@/features/companies/company.service";
 
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
-import { routePaths } from "@/config/i18n/paths";
-import { toCardItem } from "./CompanyFeed.utils";
 import WrapperLayout from "@/config/WrapperLayout";
 
 function CompanyFeedContent({ items }: { items: CatalogCompany[] }) {
@@ -18,24 +18,26 @@ function CompanyFeedContent({ items }: { items: CatalogCompany[] }) {
   const { t: tFeed } = useTranslation("feed");
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
+  const [params] = useSearchParams();
+  const filtered = filterCompanies(items, getFeedView("companies", params.get("view")));
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col items-center gap-2 text-center">
         <h1>{t("navbar.companies")}</h1>
         <p className="text-black/70">{tFeed("company.description")}</p>
       </div>
 
-      <div className="flex w-fit flex-row gap-2 rounded-full bg-input-bg p-1">
-        <Link to={routePaths.professionalsFeed(lang)} className="px-4 py-2 font-medium text-input-text">
-          {t("navbar.professionals")}
-        </Link>
-        <Link to={routePaths.companiesFeed(lang)} className="rounded-full bg-white px-4 py-2 font-medium text-orange">
-          {t("navbar.companies")}
-        </Link>
+      <div className="flex justify-center">
+        <Marketplace category="companies" />
       </div>
 
-      <EntityCorridor title={t("navbar.companies")} items={items.map((company) => toCardItem(company, lang))} />
+      <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 xl:grid-cols-3">
+        {filtered.map((company) => (
+          <CompanyFeaturedCard key={company.id} company={company} lang={lang} />
+        ))}
+      </div>
+      {filtered.length === 0 && <p>{tFeed("company.empty")}</p>}
     </div>
   );
 }
@@ -43,23 +45,28 @@ function CompanyFeedContent({ items }: { items: CatalogCompany[] }) {
 function CompanyFeedSkeleton() {
   return (
     <div className="flex flex-col gap-8" aria-busy="true">
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col items-center gap-2 text-center">
         <Skeleton height="2.25rem" width="12rem" />
         <Skeleton height="1.5rem" width="60%" />
       </div>
 
-      <Skeleton height="2.5rem" width="16rem" className="rounded-full" />
+      <div className="flex justify-center">
+        <Marketplace category="companies" />
+      </div>
 
-      <div className="flex flex-col gap-4">
-        <Skeleton height="1.65rem" width="10rem" />
-        <div className="flex flex-row gap-6 overflow-hidden">
-          {Array.from({ length: 4 }, (_, index) => (
-            <div key={index} className="flex w-40 shrink-0 flex-col items-center gap-2">
-              <ImageSkeleton className="rounded-full" />
-              <Skeleton height="1.25rem" width="80%" />
+      <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 xl:grid-cols-3">
+        {Array.from({ length: 6 }, (_, index) => (
+          <div key={index} className="flex flex-col gap-4">
+            <ImageSkeleton className="aspect-[4/3] rounded-hard" />
+            <div className="flex items-start gap-3">
+              <Skeleton height="2.5rem" width="2.5rem" className="shrink-0 rounded-full" />
+              <div className="flex flex-1 flex-col gap-2">
+                <Skeleton height="1.25rem" width="70%" />
+                <Skeleton height="1rem" width="90%" />
+              </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </div>
   );
