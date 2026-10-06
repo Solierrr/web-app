@@ -1,3 +1,4 @@
+import SideCanvas from "@@/layout/access/canvas/SideCanvas";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -20,7 +21,9 @@ import { Conversation } from "./Chat";
 import Input from "@@/ui/input/Input";
 import Icon from "@@/ui/icon/Icon";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
+import InboxFilters from "./InboxFilters";
 import MessageComposer from "@@/ui/message-composer/MessageComposer";
+import LogoLoader from "@@/feedback/logo-loader/LogoLoader";
 
 export default function Inbox() {
   const { lang: langParam, conversationId } = useParams<{ lang: string; conversationId: string }>();
@@ -208,48 +211,26 @@ export default function Inbox() {
   const hasList = conversations.length > 0;
 
   return (
-    <section className="@container/messages flex h-full min-h-0 min-w-0 flex-col p-4 sm:p-6" aria-label={t("inbox")}>
+    <main className="relative isolate @container/messages flex h-full min-h-0 min-w-0 flex-col p-4 sm:p-6" aria-label={t("inbox")}>
+      {!loading && !conversationId && !contactsOpen && <SideCanvas centerWidth="var(--spacing-operational-copy)" />}
       {error && (
-        <p role="alert" className="mb-3 text-lower">
+        <p role="alert" className="mb-3 text-body">
           {t("loadError")}
         </p>
       )}
       {createError && (
-        <p role="alert" className="mb-3 text-lower">
+        <p role="alert" className="mb-3 text-body">
           {t("createError")}
         </p>
       )}
-      {loading && !hasList && !conversationId && (
-        <p role="status" className="m-auto text-lower text-operational-muted">
-          {t("loading")}
-        </p>
-      )}
+      {loading && !hasList && !conversationId && <LogoLoader label={t("loading")} />}
       {(!loading || hasList || conversationId) && (
         <div className="flex min-h-0 min-w-0 flex-1 gap-4">
           {hasList && (
             <aside
               className={`min-h-0 w-full shrink-0 flex-col gap-3 rounded-hard bg-white p-3 @xl/messages:flex @xl/messages:w-72 ${conversationId || contactsOpen ? "hidden" : "flex"}`}
               aria-label={t("conversations")}>
-              <Input
-                name={t("searchConversations")}
-                placeholder={t("searchConversations")}
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                className="w-full!"
-              />
-              <div className="flex flex-wrap gap-1">
-                {(["ALL", "DIRECT", "GROUP", "CHAT_BOT"] as const).map((type) => (
-                  <ToolbarAction
-                    key={type}
-                    label={t(`filters.${type}`)}
-                    content={t(`filters.${type}`)}
-                    aria-pressed={filter === type}
-                    backgroundColor={filter === type ? "var(--color-input-bg)" : "transparent"}
-                    onClick={() => setFilter(type)}
-                    className="px-2!"
-                  />
-                ))}
-              </div>
+              <InboxFilters query={query} onQueryChange={setQuery} filter={filter} onFilterChange={setFilter} />
               <ul className="scrollbar-none min-h-0 flex-1 overflow-y-auto">
                 {visible.map((item) => (
                   <li key={item.id}>
@@ -266,12 +247,12 @@ export default function Inbox() {
                         />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="truncate text-lower font-medium">{title(item)}</p>
-                        <span className="text-lower text-operational-muted">{t(`filters.${item.conversationType}`)}</span>
+                        <p className="truncate text-body font-medium">{title(item)}</p>
+                        <span className="text-body text-operational-muted">{t(`filters.${item.conversationType}`)}</span>
                       </div>
-                      {item.unreadCount > 0 && (
+                      {(item.unreadCount ?? 0) > 0 && (
                         <span
-                          className="rounded-full bg-orange px-2 text-lower text-white"
+                          className="rounded-full bg-orange px-2 text-body text-white"
                           aria-label={t("unreadCount", { count: item.unreadCount })}>
                           {item.unreadCount}
                         </span>
@@ -279,11 +260,12 @@ export default function Inbox() {
                     </Link>
                   </li>
                 ))}
-                {visible.length === 0 && <p className="p-4 text-center text-lower text-operational-muted">{t("noMatches")}</p>}
+                {visible.length === 0 && <p className="p-4 text-center text-body text-operational-muted">{t("noMatches")}</p>}
               </ul>
             </aside>
           )}
-          <div className={`min-h-0 min-w-0 flex-1 ${hasList && !conversationId && !contactsOpen ? "hidden @xl/messages:flex @xl/messages:flex-col" : "flex flex-col"}`}>
+          <div
+            className={`min-h-0 min-w-0 flex-1 ${hasList && !conversationId && !contactsOpen ? "hidden @xl/messages:flex @xl/messages:flex-col" : "flex flex-col"}`}>
             {contactsOpen ? (
               <section className="scrollbar-none flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto rounded-hard bg-white p-4">
                 <header className="flex items-center justify-between">
@@ -298,12 +280,12 @@ export default function Inbox() {
                   className="w-full!"
                 />
                 {contactsLoading && (
-                  <p role="status" className="text-lower">
+                  <p role="status" className="text-body">
                     {t("loading")}
                   </p>
                 )}
                 {contactsError && (
-                  <p role="alert" className="text-lower">
+                  <p role="alert" className="text-body">
                     {t("contactsError")}
                   </p>
                 )}
@@ -326,9 +308,9 @@ export default function Inbox() {
                   </ul>
                 )}
                 {!contactsLoading && !contactsError && contacts.length === 0 && (
-                  <p className="text-lower text-operational-muted">{t("noContacts")}</p>
+                  <p className="text-body text-operational-muted">{t("noContacts")}</p>
                 )}
-                <Link to={routePaths.professionalsFeed(lang)} className="text-lower text-orange">
+                <Link to={routePaths.professionalsFeed(lang)} className="text-body text-orange">
                   {t("findPeople")}
                 </Link>
               </section>
@@ -340,7 +322,7 @@ export default function Inbox() {
                   <Icon name="messagesSquare" size={24} />
                 </div>
                 <h2 className="text-label font-medium">{t(hasList ? "selectConversation" : "startConversation")}</h2>
-                <p className="max-w-operational-copy text-lower text-operational-muted">
+                <p className="max-w-operational-copy text-body text-operational-muted">
                   {t(hasList ? "selectConversationDescription" : "startConversationDescription")}
                 </p>
                 {!hasList && (
@@ -376,6 +358,6 @@ export default function Inbox() {
           </div>
         </div>
       )}
-    </section>
+    </main>
   );
 }
