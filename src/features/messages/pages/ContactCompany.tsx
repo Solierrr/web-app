@@ -58,7 +58,7 @@ export default function ContactCompany() {
 
   if (error) {
     return (
-      <OperationalPage title={t("conversation")}>
+      <OperationalPage title={t("conversation")} centered sideBackground compact>
         <p role="alert">{t(error === "mock" ? "mockContactUnavailable" : error === "role" ? "demandantOnly" : "contactError")}</p>
         <Link to={routePaths.companiesFeed(lang)} className="text-orange">
           {t("backToCompanies")}

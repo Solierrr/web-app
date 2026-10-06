@@ -1,4 +1,8 @@
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
+import MessageBubble from "@@/layout/chat/message/MessageBubble";
+import Skeleton from "@@/feedback/skeleton/Skeleton";
+import ValueField from "@@/ui/value-field/ValueField";
+import Icon from "@@/ui/icon/Icon";
 import MessageComposer from "@@/ui/message-composer/MessageComposer";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -31,7 +35,17 @@ export default function Chat() {
   return <Conversation key={conversationId} conversationId={conversationId} />;
 }
 
-export function Conversation({ conversationId, embedded = false }: { conversationId: string; embedded?: boolean }) {
+export function Conversation({
+  conversationId,
+  embedded = false,
+  readOnly = false,
+  displayTitle,
+}: {
+  conversationId: string;
+  embedded?: boolean;
+  readOnly?: boolean;
+  displayTitle?: string;
+}) {
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
   const { t } = useTranslation("chat");
@@ -200,7 +214,7 @@ export function Conversation({ conversationId, embedded = false }: { conversatio
 
   async function handleSend() {
     const content = draft.trim();
-    if (!content || sending) return;
+    if (!content || sending || readOnly) return;
     setSending(true);
     setError(null);
     try {
@@ -219,33 +233,45 @@ export function Conversation({ conversationId, embedded = false }: { conversatio
   }
 
   const title =
-    conversation?.title || (conversation?.conversationType === "CHAT_BOT" ? t("chatbot.assistantName") : participantName) || t("conversation");
+    displayTitle ||
+    conversation?.title ||
+    (conversation?.conversationType === "CHAT_BOT" ? t("chatbot.assistantName") : participantName) ||
+    t("conversation");
   const content = (
     <section className="flex h-full min-h-0 min-w-0 flex-col gap-4">
       {embedded && (
         <header className="flex shrink-0 items-center justify-between gap-3">
           <div className="flex min-w-0 items-center gap-3">
-            <div aria-hidden="true" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-hard bg-input-bg">
-              <span className="text-label">{title.slice(0, 1)}</span>
+            <div aria-hidden="true" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-medium bg-white">
+              <Icon
+                name={conversation?.conversationType === "GROUP" ? "users" : conversation?.conversationType === "CHAT_BOT" ? "sparkles" : "user"}
+                size={20}
+              />
             </div>
-            <h2 className="truncate text-label font-medium">{title}</h2>
+            <div className="min-w-0">
+              <h2 className="truncate text-body! font-semi-bold">{title}</h2>
+              {conversation && (
+                <p className="mt-1 text-body text-operational-muted">{t("participantCount", { count: conversation.participantIds.length })}</p>
+              )}
+            </div>
           </div>
           <ToolbarAction to={routePaths.inbox(lang)} icon="panelLeftOpen" label={t("inbox")} className="@xl/messages:hidden" />
         </header>
       )}
-      {product && <p className="rounded-medium bg-orange/10 p-3 text-lower">{t("productContext", { title: product })}</p>}
+      {product && <p className="rounded-medium bg-orange/10 p-3 text-body">{t("productContext", { title: product })}</p>}
       {loading && (
-        <p role="status" className="text-lower text-operational-muted">
-          {t("loading")}
-        </p>
+        <div role="status" aria-label={t("loading")} className="flex flex-col gap-3">
+          <Skeleton height={56} width="65%" className="rounded-medium" />
+          <Skeleton height={56} width="45%" className="self-end rounded-medium" />
+        </div>
       )}
       {error && (
-        <p role="alert" className="text-lower text-operational-ink">
+        <p role="alert" className="text-body text-operational-ink">
           {error}
         </p>
       )}
       {realtimeConnected === false && (
-        <p role="status" className="text-lower text-operational-muted">
+        <p role="status" className="text-body text-operational-muted">
           {t("realtimeUnavailable")}
         </p>
       )}
@@ -255,7 +281,7 @@ export function Conversation({ conversationId, embedded = false }: { conversatio
           const node = event.currentTarget;
           followLatest.current = node.scrollHeight - node.scrollTop - node.clientHeight < 80;
         }}
-        className="scrollbar-none flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto py-2"
+        className="scrollbar-none flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto px-1 py-4"
         aria-live="polite">
         {hasOlder && (
           <ToolbarAction
@@ -266,26 +292,52 @@ export function Conversation({ conversationId, embedded = false }: { conversatio
             className="self-center"
           />
         )}
-        {!loading && messages.length === 0 && <p className="m-auto text-center text-lower text-operational-muted">{t("emptyConversation")}</p>}
-        {messages.map((message) => {
+        {!loading && !error && messages.length === 0 && (
+          <div className="m-auto flex max-w-operational-copy flex-col items-center gap-3 px-5 text-center text-body text-operational-muted">
+            <span aria-hidden="true" className="flex size-12 items-center justify-center rounded-medium bg-white">
+              <Icon name="messages" />
+            </span>
+            <p>{t("emptyConversation")}</p>
+          </div>
+        )}
+        {messages.map((message, index) => {
           const own = message.senderId === userId;
           const assistant = message.role === "assistant" || message.messageType === "CHATBOT_TO_USER";
+          const previous = messages[index - 1];
+          const day = new Date(message.timestamp).toDateString();
+          const newDay = !previous || day !== new Date(previous.timestamp).toDateString();
+          const grouped =
+            previous &&
+            !newDay &&
+            previous.senderId === message.senderId &&
+            previous.role === message.role &&
+            Date.parse(message.timestamp) - Date.parse(previous.timestamp) < 5 * 60 * 1000;
+          const author = own
+            ? t("you")
+            : assistant
+              ? t("chatbot.assistantName")
+              : (conversation?.conversationType === "GROUP" ? participantNames[message.senderId] : participantName) || t("participant");
           return (
-            <article key={message.id} className={`flex max-w-full flex-col gap-1 ${own ? "self-end items-end" : "self-start items-start"}`}>
-              <span className="text-lower text-operational-muted">
-                {own
-                  ? t("you")
-                  : assistant
-                    ? t("chatbot.assistantName")
-                    : (conversation?.conversationType === "GROUP" ? participantNames[message.senderId] : participantName) || t("participant")}
-              </span>
-              <div className={`max-w-full rounded-hard px-4 py-3 ${own ? "bg-input-bg" : "bg-white"}`}>
-                <p className="whitespace-pre-wrap break-words [overflow-wrap:anywhere] text-body leading-relaxed">{message.content}</p>
-              </div>
-              <time className="px-1 text-lower text-operational-muted" dateTime={message.timestamp}>
-                {new Date(message.timestamp).toLocaleTimeString(lang, { hour: "2-digit", minute: "2-digit" })}
-              </time>
-            </article>
+            <div key={message.id} className={`flex flex-col gap-3 ${!grouped && !newDay ? "mt-3" : ""}`}>
+              {newDay && (
+                <div className="my-3 flex justify-center">
+                  <ValueField>
+                    <time dateTime={message.timestamp}>
+                      {new Intl.DateTimeFormat(lang, { day: "numeric", month: "long", year: "numeric" }).format(new Date(message.timestamp))}
+                    </time>
+                  </ValueField>
+                </div>
+              )}
+              <MessageBubble
+                content={message.content}
+                timestamp={message.timestamp}
+                locale={lang}
+                author={author}
+                own={own}
+                assistant={assistant}
+                showAuthor={!grouped}
+              />
+            </div>
           );
         })}
       </div>
@@ -298,7 +350,7 @@ export function Conversation({ conversationId, embedded = false }: { conversatio
         sendLabel={t("sendDescription")}
         hint={t("chatbot.composerHint")}
         maxLength={8000}
-        disabled={sending || loading || !conversation}
+        disabled={readOnly || sending || loading || !conversation}
       />
     </section>
   );

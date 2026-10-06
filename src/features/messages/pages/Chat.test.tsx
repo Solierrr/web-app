@@ -6,25 +6,41 @@ import * as api from "@/features/messages/messages.messenger.api";
 import { subscribeToConversation } from "@/features/messages/messages.messenger.socket";
 
 vi.mock("@/features/messages/messages.messenger.api", () => ({
-  getConversation: vi.fn(), getConversationMessages: vi.fn(), getConversationMessagesSince: vi.fn(),
-  getUserSummary: vi.fn(), markConversationRead: vi.fn(), sendConversationMessage: vi.fn(),
+  getConversation: vi.fn(),
+  getConversationMessages: vi.fn(),
+  getConversationMessagesSince: vi.fn(),
+  getUserSummary: vi.fn(),
+  markConversationRead: vi.fn(),
+  sendConversationMessage: vi.fn(),
 }));
 vi.mock("@/features/messages/messages.messenger.socket", () => ({ subscribeToConversation: vi.fn() }));
 vi.mock("@/lib/shared/auth/authToken.utils", () => ({ getAuthSession: () => ({ userId: "me" }) }));
 
 const conversation: api.ConversationDto = {
-  id: "conv-1", conversationType: "DIRECT", participantIds: ["me", "supplier"],
-  title: null, lastInteractionAt: null, unreadCount: 0,
+  id: "conv-1",
+  conversationType: "DIRECT",
+  participantIds: ["me", "supplier"],
+  title: null,
+  lastInteractionAt: null,
+  unreadCount: 0,
 };
 const message = (sequence: number, content: string): api.MessageDto => ({
-  id: `msg-${sequence}`, conversationId: "conv-1", senderId: "supplier", sequence,
-  content, timestamp: "2026-09-28T12:00:00Z",
+  id: `msg-${sequence}`,
+  conversationId: "conv-1",
+  senderId: "supplier",
+  sequence,
+  content,
+  timestamp: "2026-09-28T12:00:00Z",
 });
 
 function renderChat() {
-  return render(<MemoryRouter initialEntries={["/pt-BR/mensagens/conv-1"]}>
-    <Routes><Route path="/:lang/mensagens/:conversationId" element={<Chat />} /></Routes>
-  </MemoryRouter>);
+  return render(
+    <MemoryRouter initialEntries={["/pt-BR/mensagens/conv-1"]}>
+      <Routes>
+        <Route path="/:lang/mensagens/:conversationId" element={<Chat />} />
+      </Routes>
+    </MemoryRouter>,
+  );
 }
 
 describe("Chat", () => {
@@ -40,10 +56,18 @@ describe("Chat", () => {
 
   it("preserves live messages that arrive while history is still loading", async () => {
     let finishHistory!: (messages: api.MessageDto[]) => void;
-    vi.mocked(api.getConversationMessages).mockReturnValue(new Promise((resolve) => { finishHistory = resolve; }));
+    vi.mocked(api.getConversationMessages).mockReturnValue(
+      new Promise((resolve) => {
+        finishHistory = resolve;
+      }),
+    );
     renderChat();
-    act(() => { vi.mocked(subscribeToConversation).mock.calls[0][1](message(2, "Mensagem ao vivo")); });
-    await act(async () => { finishHistory([message(1, "Mensagem anterior")]); });
+    act(() => {
+      vi.mocked(subscribeToConversation).mock.calls[0][1](message(2, "Mensagem ao vivo"));
+    });
+    await act(async () => {
+      finishHistory([message(1, "Mensagem anterior")]);
+    });
     expect(await screen.findByText("Mensagem anterior")).toBeInTheDocument();
     expect(screen.getByText("Mensagem ao vivo")).toBeInTheDocument();
     await waitFor(() => expect(api.markConversationRead).toHaveBeenCalledWith("conv-1", 2));
@@ -58,9 +82,9 @@ describe("Chat", () => {
     renderChat();
     await screen.findByRole("heading", { name: "Fornecedor" });
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "Tenho interesse" } });
-    fireEvent.click(screen.getByRole("button", { name: "Enviar" }));
+    fireEvent.click(screen.getByRole("button", { name: "Enviar mensagem" }));
     await waitFor(() => expect(screen.getAllByText("Tenho interesse")).toHaveLength(1));
-    expect(api.sendConversationMessage).toHaveBeenCalledWith("conv-1", "Tenho interesse");
+    expect(api.sendConversationMessage).toHaveBeenCalledWith("conv-1", "Tenho interesse", "DIRECT");
   });
 
   it("does not enable sending when the conversation cannot be loaded", async () => {
@@ -68,6 +92,6 @@ describe("Chat", () => {
     renderChat();
     await screen.findByRole("alert");
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "Mensagem" } });
-    expect(screen.getByRole("button", { name: "Enviar" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Enviar mensagem" })).toBeDisabled();
   });
 });
