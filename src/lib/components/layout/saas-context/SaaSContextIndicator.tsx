@@ -8,7 +8,7 @@ export default function SaaSContextIndicator() {
   if (kind === "company" && company) {
     const type = company.type ? t(company.type, { defaultValue: "" }) : "";
     return (
-      <span className="flex min-w-0 items-center text-lower text-operational-muted">
+      <span className="flex min-w-0 items-center text-body text-operational-muted">
         {type ? <span className="shrink-0">{type} ·&nbsp;</span> : null}
         <span className="truncate">{company.tradeName}</span>
         <span className="shrink-0">&nbsp;· {isAdmin ? t("admin") : t("member")}</span>
@@ -16,5 +16,5 @@ export default function SaaSContextIndicator() {
     );
   }
 
-  return <span className="text-lower text-operational-muted">{isPlatformAdmin ? t("platformAdmin") : t("personal")}</span>;
+  return <span className="text-body text-operational-muted">{isPlatformAdmin ? t("platformAdmin") : t("personal")}</span>;
 }
