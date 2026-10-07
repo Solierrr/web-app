@@ -10,8 +10,17 @@ describe("getOperationalNavigation", () => {
     expect(keys({ company: true, companyType: "SUPPLIER", platformAdmin: false })).not.toContain("registrationStatus");
   });
 
-  it("limits a personal profile to the overview items", () => {
-    expect(keys({ company: false, companyType: null, platformAdmin: false })).toEqual(["dashboard", "messages"]);
+  it("limits a personal profile to the overview items and the purchase pages", () => {
+    expect(keys({ company: false, companyType: null, platformAdmin: false })).toEqual(["dashboard", "chatbot", "projects", "messages", "cart", "orders"]);
+  });
+
+  it("keeps the cart away from suppliers and shows sales and plan when allowed", () => {
+    const result = keys({ company: true, companyType: "SUPPLIER", platformAdmin: false });
+
+    expect(result).not.toContain("cart");
+    expect(result).toContain("sales");
+    expect(result).toContain("plan");
+    expect(keys({ company: true, companyType: "DEMANDANT", platformAdmin: false })).toContain("cart");
   });
 
   it("hides supplier management items the user cannot read", () => {
