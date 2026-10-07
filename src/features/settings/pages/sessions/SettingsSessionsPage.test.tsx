@@ -1,3 +1,4 @@
+vi.mock("@@/layout/access/canvas/SideCanvas", () => ({ default: () => null }));
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -37,7 +38,8 @@ describe("SettingsSessionsPage", () => {
     vi.mocked(logout).mockResolvedValue(undefined);
     renderPage();
 
-    fireEvent.click(await screen.findByRole("button", { name: "Sair deste dispositivo" }));
+    fireEvent.click((await screen.findAllByRole("button", { name: /Opções do registro/ }))[0]);
+    fireEvent.click(screen.getByRole("button", { name: "Sair deste dispositivo" }));
 
     await waitFor(() => expect(logout).toHaveBeenCalled());
     expect(await screen.findByText("Tela de login")).toBeInTheDocument();
@@ -47,7 +49,8 @@ describe("SettingsSessionsPage", () => {
     vi.mocked(logout).mockRejectedValue(new Error("offline"));
     renderPage();
 
-    fireEvent.click(await screen.findByRole("button", { name: "Sair deste dispositivo" }));
+    fireEvent.click((await screen.findAllByRole("button", { name: /Opções do registro/ }))[0]);
+    fireEvent.click(screen.getByRole("button", { name: "Sair deste dispositivo" }));
 
     expect(await screen.findByText("Tela de login")).toBeInTheDocument();
   });
@@ -64,9 +67,11 @@ describe("SettingsSessionsPage", () => {
     vi.stubEnv("VITE_MOCKS_DELAY_SECONDS", "0");
     renderPage();
 
-    fireEvent.click((await screen.findAllByRole("button", { name: "Encerrar sessão" }))[0]);
+    fireEvent.click((await screen.findAllByRole("button", { name: /Opções do registro/ }))[1]);
+    fireEvent.click(screen.getByRole("button", { name: "Encerrar sessão" }));
 
-    expect(await screen.findByRole("status")).toHaveTextContent("Sessão encerrada.");
-    expect(screen.getAllByRole("button", { name: "Encerrar sessão" })).toHaveLength(1);
+    fireEvent.click(await screen.findByRole("button", { name: "confirmar" }));
+    await waitFor(() => expect(screen.queryByText("Notebook")).not.toBeInTheDocument());
+    expect(screen.getAllByRole("button", { name: /Opções do registro/ })).toHaveLength(2);
   });
 });

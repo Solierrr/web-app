@@ -11,8 +11,8 @@ export default function SettingsPage() {
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
 
   return (
-    <OperationalPage title={t("title")} compact>
-      <nav className="flex flex-col divide-y divide-operational-border rounded-small border border-operational-border">
+    <OperationalPage title={t("title")} compact centered sideBackground>
+      <nav className="flex flex-col divide-y divide-operational-border overflow-hidden rounded-surface border-ui bg-white shadow-surface">
         <Link to={routePaths.ownUserProfile(lang)} className="block p-4 hover:bg-operational-hover">
           {t("profile")}
         </Link>
