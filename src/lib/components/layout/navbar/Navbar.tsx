@@ -20,6 +20,7 @@ export default function Navbar() {
   const { t } = useTranslation("commons", { keyPrefix: "navbar" });
   const { t: tAccess } = useTranslation("onboarding");
   const { t: tCommons } = useTranslation("commons");
+  const { t: tFeed } = useTranslation("feed");
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
   const authenticated = useSyncExternalStore(
@@ -32,7 +33,13 @@ export default function Navbar() {
     <header className="w-full">
       <div className="navbar-frame gap-2 w-full justify-center">
         <ToolbarAction to={routePaths.solarPanelsFeed(lang)} content={t("solarPanels")} label={t("solarPanels")} />
-        <ToolbarAction to={routePaths.professionalsFeed(lang)} content={t("professionals")} label={t("professionals")} />
+        <ToolbarAction
+          to={routePaths.infrastructureFeed(lang)}
+          content={tFeed("catalog.infrastructureTitle")}
+          label={tFeed("catalog.infrastructureTitle")}
+        />
+        <ToolbarAction to={routePaths.professionalsFeed(lang)} content={tFeed("services.title")} label={tFeed("services.title")} />
+        <ToolbarAction to={routePaths.companiesFeed(lang)} content={t("companies")} label={t("companies")} />
         <ToolbarAction to={routePaths.registerCompany(lang)} content={tAccess("company")} label={tAccess("company")} />
         {authenticated && <ToolbarAction to={routePaths.dashboard(lang)} content={tAccess("operational")} label={tAccess("operational")} />}
         <ToolbarAction to={routePaths.chatbot(lang)} content={t("support")} label={t("support")} />
