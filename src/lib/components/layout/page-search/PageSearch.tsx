@@ -16,9 +16,10 @@ interface PageSearchProps {
   context: string;
   collapsed: boolean;
   onNavigate: () => void;
+  showTrigger?: boolean;
 }
 
-export default function PageSearch({ groups, lang, context, collapsed, onNavigate }: PageSearchProps) {
+export default function PageSearch({ groups, lang, context, collapsed, onNavigate, showTrigger = true }: PageSearchProps) {
   const { t } = useTranslation("saas");
   const navigate = useNavigate();
   const id = useId();
@@ -122,24 +123,26 @@ export default function PageSearch({ groups, lang, context, collapsed, onNavigat
 
   return (
     <>
-      <button
-        ref={trigger}
-        type="button"
-        aria-label={t("home.search")}
-        title={t("home.search")}
-        aria-expanded={open}
-        aria-haspopup="listbox"
-        aria-controls={open ? `${id}-results` : undefined}
-        onClick={() => (open ? close(true) : show())}
-        className={`flex min-h-10 w-full cursor-pointer items-center rounded-small px-3 py-2 hover:bg-operational-hover ${collapsed ? "justify-center" : "gap-3"}`}>
-        <Icon name="search" size={20} className="shrink-0" />
-        {!collapsed && (
-          <>
-            <span className="flex-1 text-left text-lower font-medium">{t("home.search")}</span>
-            <Instructions items={["Ctrl", "K"]} />
-          </>
-        )}
-      </button>
+      {showTrigger && (
+        <button
+          ref={trigger}
+          type="button"
+          aria-label={t("home.search")}
+          title={t("home.search")}
+          aria-expanded={open}
+          aria-haspopup="listbox"
+          aria-controls={open ? `${id}-results` : undefined}
+          onClick={() => (open ? close(true) : show())}
+          className={`flex min-h-10 w-full cursor-pointer items-center rounded-medium bg-input-bg px-3 py-2 hover:bg-operational-hover ${collapsed ? "justify-center" : "gap-3"}`}>
+          <Icon name="search" size={20} className="shrink-0" />
+          {!collapsed && (
+            <>
+              <span className="flex-1 text-left text-body font-medium">{t("home.search")}</span>
+              <Instructions items={["Ctrl", "K"]} />
+            </>
+          )}
+        </button>
+      )}
       {open &&
         createPortal(
           <div
@@ -161,7 +164,7 @@ export default function PageSearch({ groups, lang, context, collapsed, onNavigat
                 aria-controls={`${id}-results`}
                 aria-autocomplete="list"
                 aria-activedescendant={results.length ? `${id}-result-${active}` : undefined}
-                className="w-full! bg-transparent! [&_input]:px-0 [&_input]:text-lower"
+                className="w-full! bg-transparent! [&_input]:px-0 [&_input]:text-body"
                 onKeyDown={(event) => {
                   if (event.key === "ArrowDown" || event.key === "ArrowUp") {
                     event.preventDefault();
@@ -178,7 +181,7 @@ export default function PageSearch({ groups, lang, context, collapsed, onNavigat
               {results.map((item, index) => (
                 <Fragment key={item.key}>
                   {!query.trim() && (index === 0 || index === recent.length) && (
-                    <li role="presentation" className="px-3 pb-1 pt-2 text-lower text-operational-muted">
+                    <li role="presentation" className="px-3 pb-1 pt-2 text-body text-operational-muted">
                       {t(index === 0 && recent.length ? "home.recent" : "home.shortcuts")}
                     </li>
                   )}
@@ -190,23 +193,23 @@ export default function PageSearch({ groups, lang, context, collapsed, onNavigat
                     onClick={() => select(index)}
                     className={`flex cursor-pointer items-center gap-3 rounded-medium px-3 py-3 ${active === index ? "bg-operational-hover" : ""}`}>
                     <Icon name={!query.trim() && recentKeys.includes(item.key) ? "history" : item.icon} size={18} className="shrink-0" />
-                    <span className="min-w-0 flex-1 truncate text-lower">
-                      {t(item.label)} <span className="text-lower text-operational-muted">— {t(item.group)}</span>
+                    <span className="min-w-0 flex-1 truncate text-body">
+                      {t(item.label)} <span className="text-body text-operational-muted">— {t(item.group)}</span>
                     </span>
                   </li>
                 </Fragment>
               ))}
             </ul>
             {results.length === 0 && (
-              <p role="status" className="p-3 text-lower text-operational-muted">
+              <p role="status" className="p-3 text-body text-operational-muted">
                 {t("home.noResults")}
               </p>
             )}
             <div className="flex shrink-0 flex-wrap items-center gap-2 rounded-medium bg-operational-surface p-2">
               <Instructions items={["↑", "↓"]} />
-              <span className="text-lower text-operational-muted">{t("home.navigate")}</span>
+              <span className="text-body text-operational-muted">{t("home.navigate")}</span>
               <Instructions items={["Enter"]} />
-              <span className="text-lower text-operational-muted">{t("home.select")}</span>
+              <span className="text-body text-operational-muted">{t("home.select")}</span>
             </div>
           </div>,
           document.body,

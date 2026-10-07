@@ -39,7 +39,7 @@ describe("Sidebar", () => {
   it("starts collapsed when defaultCollapsed is true, hiding labels", () => {
     renderSidebar("/inicio", true);
 
-    expect(screen.queryByText("Início")).not.toBeInTheDocument();
+    expect(screen.getByText("Início")).toHaveAttribute("aria-hidden", "true");
   });
 
   it("hides option labels after clicking the collapse toggle", () => {
@@ -47,7 +47,7 @@ describe("Sidebar", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /recolher menu/i }));
 
-    expect(screen.queryByText("Início")).not.toBeInTheDocument();
+    expect(screen.getByText("Início")).toHaveAttribute("aria-hidden", "true");
   });
 
   it("shows option labels again after toggling twice", () => {

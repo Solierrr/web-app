@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react";
+import { SIDEBAR_ICON_SIZE } from "./Sidebar.styles";
 import Icon from "@@/ui/icon/Icon";
 
 const SidebarContext = createContext(false);
@@ -56,7 +57,7 @@ export default function Sidebar({
           aria-label={collapsed ? expandLabel : collapseLabel}
           aria-expanded={!collapsed}
           className={`${controlledCollapsed === undefined ? "flex" : "hidden lg:flex"} min-h-12 items-center justify-center p-2 cursor-pointer hover:bg-operational-hover`}>
-          <Icon name={collapsed ? "panelLeftOpen" : "panelLeftClose"} size={20} className="shrink-0" />
+          <Icon name={collapsed ? "panelLeftOpen" : "panelLeftClose"} size={SIDEBAR_ICON_SIZE} className="shrink-0" />
         </button>
       </aside>
     </SidebarContext.Provider>

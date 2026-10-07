@@ -9,6 +9,7 @@ const LANG = SupportedLanguages.PTBR;
 const meta = {
   title: "Layout/Sidebar",
   component: Sidebar,
+  subcomponents: { SidebarOption },
   parameters: {
     layout: "fullscreen",
   },
