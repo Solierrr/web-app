@@ -1,9 +1,9 @@
+import ToolbarAction from "@@/ui/button/ToolbarAction";
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import ProfilePage from "@/lib/components/layout/profile/ProfilePage";
-import ProfilePageSkeleton from "@/lib/components/layout/profile/ProfilePageSkeleton";
 import { getMyUser, updateMyUser, type MyUser } from "@/features/users/user/user.service";
 import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
@@ -93,11 +93,27 @@ export default function UserProfile() {
       ]
     : [];
 
-  if (!user && !error) return <ProfilePageSkeleton operational />;
+  if (!user && !error) return <OperationalPage title="" loading />;
   if (!user)
     return (
-      <OperationalPage title={t("settings.profile")}>
+      <OperationalPage centered sideBackground title={t("settings.profile")}>
         <p role="alert">{t("myProfile.loadError")}</p>
+      </OperationalPage>
+    );
+
+  if (editing)
+    return (
+      <OperationalPage title={t("settings.profile")} centered form formBackground>
+        <ProfileEditForm
+          plain
+          title={professionalProfile ? tProfile("professionalTitle") : tProfile("personTitle")}
+          fields={fields}
+          onCancel={() => setEditing(false)}
+          onSave={handleSave}
+          saving={saving}
+          error={error ? t("myProfile.saveError") : undefined}
+          notice={mockMode ? tProfile("mockNotice") : professionalProfile ? tProfile("professionalReadOnly") : undefined}
+        />
       </OperationalPage>
     );
 
@@ -110,44 +126,35 @@ export default function UserProfile() {
       name={user.username}
       subtitle={getAuthSession()?.email}
       actions={
-        <button type="button" onClick={() => setEditing((current) => !current)} className="rounded-medium bg-orange px-4 py-2 font-medium text-white">
-          {editing ? t("actions.cancel") : t("actions.edit")}
-        </button>
-      }>
-      {editing ? (
-        <ProfileEditForm
-          title={professionalProfile ? tProfile("professionalTitle") : tProfile("personTitle")}
-          fields={fields}
-          onCancel={() => setEditing(false)}
-          onSave={handleSave}
-          saving={saving}
-          error={error ? t("myProfile.saveError") : undefined}
-          notice={mockMode ? tProfile("mockNotice") : professionalProfile ? tProfile("professionalReadOnly") : undefined}
+        <ToolbarAction
+          icon={editing ? "x" : "edit"}
+          onClick={() => setEditing((value) => !value)}
+          label={editing ? t("actions.cancel") : t("actions.edit")}
+          content={editing ? t("actions.cancel") : t("actions.edit")}
+          backgroundColor="var(--color-input-bg)"
         />
-      ) : null}
-      {!editing && (
-        <>
-          <ProfileInfoSection title={tProfile("personTitle")}>
+      }>
+      <>
+        <ProfileInfoSection title={tProfile("personTitle")}>
+          <dl className="divide-y divide-black/5">
+            <ProfileInfoRow label={tProfile("username")} value={user.username} />
+            <ProfileInfoRow label={tProfile("email")} value={professionalProfile?.email || getAuthSession()?.email} />
+          </dl>
+        </ProfileInfoSection>
+        {professionalProfile && (
+          <ProfileInfoSection title={tProfile("professionalTitle")}>
             <dl className="divide-y divide-black/5">
-              <ProfileInfoRow label={tProfile("username")} value={user.username} />
-              <ProfileInfoRow label={tProfile("email")} value={professionalProfile?.email || getAuthSession()?.email} />
+              <ProfileInfoRow label={tProfile("name")} value={professionalProfile.name} />
+              <ProfileInfoRow label={tProfile("phone")} value={professionalProfile.phone} />
+              <ProfileInfoRow label={tProfile("profession")} value={professionalProfile.profession} />
+              <ProfileInfoRow label={tProfile("crea")} value={professionalProfile.crea} />
+              <ProfileInfoRow label={tProfile("council")} value={professionalProfile.council} />
+              <ProfileInfoRow label={tProfile("registrationNumber")} value={professionalProfile.registrationNumber} />
+              <ProfileInfoRow label={tProfile("expirationDate")} value={professionalProfile.expirationDate} />
             </dl>
           </ProfileInfoSection>
-          {professionalProfile && (
-            <ProfileInfoSection title={tProfile("professionalTitle")}>
-              <dl className="divide-y divide-black/5">
-                <ProfileInfoRow label={tProfile("name")} value={professionalProfile.name} />
-                <ProfileInfoRow label={tProfile("phone")} value={professionalProfile.phone} />
-                <ProfileInfoRow label={tProfile("profession")} value={professionalProfile.profession} />
-                <ProfileInfoRow label={tProfile("crea")} value={professionalProfile.crea} />
-                <ProfileInfoRow label={tProfile("council")} value={professionalProfile.council} />
-                <ProfileInfoRow label={tProfile("registrationNumber")} value={professionalProfile.registrationNumber} />
-                <ProfileInfoRow label={tProfile("expirationDate")} value={professionalProfile.expirationDate} />
-              </dl>
-            </ProfileInfoSection>
-          )}
-        </>
-      )}
+        )}
+      </>
     </ProfilePage>
   );
 }
