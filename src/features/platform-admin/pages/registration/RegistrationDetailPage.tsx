@@ -1,6 +1,10 @@
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import LogoLoader from "@@/feedback/logo-loader/LogoLoader";
+import StatusField from "@@/ui/status-field/StatusField";
+import ToolbarAction from "@@/ui/button/ToolbarAction";
+import RegistrationDecision from "../decision/Decision";
 import { useTranslation } from "react-i18next";
 
 import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
@@ -10,8 +14,12 @@ import { approveCompany, getCompany, rejectCompany } from "@/features/companies/
 import { decideProfessional, listProfessionalReviews } from "@/features/professionals/review/review.service";
 import type { ProfessionalReview } from "@/features/professionals/review/review.d";
 
+import Review from "@/features/professionals/review/Review";
+import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
+
 export default function RegistrationDetailPage() {
   const { kind = "", id = "" } = useParams<{ kind: string; id: string }>();
+  if (kind === "professional" && !isAlwaysMockMode()) return <Review key={id} id={id} />;
   return <RegistrationDetail key={`${kind}:${id}`} kind={kind} id={id} />;
 }
 
@@ -23,7 +31,6 @@ function RegistrationDetail({ kind, id }: { kind: string; id: string }) {
   const [company, setCompany] = useState<Company | null>(null);
   const [professional, setProfessional] = useState<ProfessionalReview | null>(null);
   const [state, setState] = useState<"loading" | "ready" | "notFound" | "error">("loading");
-  const [failed, setFailed] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -49,13 +56,17 @@ function RegistrationDetail({ kind, id }: { kind: string; id: string }) {
   }, [kind, id]);
 
   async function decide(approve: boolean) {
-    try {
-      if (kind === "professional") await decideProfessional(id, approve);
-      else await (approve ? approveCompany(id) : rejectCompany(id));
-      navigate(routePaths.registrationsManagement(lang));
-    } catch {
-      setFailed(true);
-    }
+    if (kind === "professional") await decideProfessional(id, approve);
+    else await (approve ? approveCompany(id) : rejectCompany(id));
+    navigate(`${routePaths.registrationsManagement(lang)}?tab=${kind === "professional" ? "professionals" : "companies"}`);
+  }
+
+  if (state === "loading") {
+    return (
+      <main aria-busy="true" className="flex min-h-full w-full items-center justify-center">
+        <LogoLoader />
+      </main>
+    );
   }
 
   const status = company?.status ?? professional?.status;
@@ -72,40 +83,94 @@ function RegistrationDetail({ kind, id }: { kind: string; id: string }) {
         [t("type"), t("PROFESSIONAL")],
       ];
 
+  const name = company?.tradeName ?? professional?.person.name ?? t("detailTitle");
+  const documents = professional
+    ? [
+        { label: "NR-10", url: professional.certNr10Url },
+        { label: "NR-35", url: professional.certNr35Url },
+      ].filter((item): item is { label: string; url: string } => !!item.url && isDocumentUrl(item.url))
+    : [];
+
   return (
     <OperationalPage
-      title={t("detailTitle")}
-      loading={state === "loading"}
-      compact
-      actions={<Link to={routePaths.registrationsManagement(lang)}>{t("back")}</Link>}>
-      {state === "notFound" ? <p role="alert">{t("notFound")}</p> : null}
-      {state === "error" ? <p role="alert">{t("detailError")}</p> : null}
-      {state === "ready" && status ? (
-        <>
-          <dl className="grid gap-4 rounded-small border border-operational-border p-4">
-            {[...rows, [t("statusLabel"), t(`status.${status}`, { defaultValue: status })] as [string, string]].map(([label, value]) => (
-              <div key={label}>
-                <dt className="text-sm text-operational-muted">{label}</dt>
-                <dd>{value ?? "—"}</dd>
-              </div>
-            ))}
-          </dl>
-          {status === "UNDER_ANALYSIS" ? (
-            <div className="flex gap-3">
-              <button type="button" onClick={() => void decide(true)} className="rounded-small bg-orange px-4 py-2 text-white">
-                {t("approve")}
-              </button>
-              <button
-                type="button"
-                onClick={() => void decide(false)}
-                className="rounded-small border border-operational-border px-4 py-2 text-red-700">
-                {t("reject")}
-              </button>
+      title={name}
+      description={t("detailTitle")}
+      centered
+      sideBackground
+      actions={
+        <ToolbarAction
+          icon="chevronLeft"
+          content={t("back")}
+          label={t("back")}
+          to={`${routePaths.registrationsManagement(lang)}?tab=${kind === "professional" ? "professionals" : "companies"}`}
+        />
+      }>
+      {state === "notFound" && <p role="alert">{t("notFound")}</p>}
+      {state === "error" && <p role="alert">{t("detailError")}</p>}
+      {state === "ready" && status && (
+        <div className="mx-auto grid w-full max-w-operational-form gap-6 lg:grid-cols-2">
+          <section className="flex min-w-0 flex-col gap-6 rounded-surface border-ui bg-white shadow-surface p-6">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <h2 className="text-body font-semi-bold leading-6">{t("information")}</h2>
+              <StatusField
+                state={status === "APPROVED" ? "approved" : status === "REJECTED" ? "rejected" : "pending"}
+                label={t(`status.${status}`)}
+              />
             </div>
-          ) : null}
-          {failed ? <p role="alert">{t("decisionError")}</p> : null}
-        </>
-      ) : null}
+            <dl className="flex flex-col gap-5">
+              {rows.map(([label, value]) => (
+                <div key={label} className="min-w-0">
+                  <dt className="mb-1 text-body text-operational-muted">{label}</dt>
+                  <dd className="break-words font-medium">{value || "\u2014"}</dd>
+                </div>
+              ))}
+            </dl>
+            {status === "UNDER_ANALYSIS" && (
+              <div className="border-t border-operational-border pt-5">
+                <RegistrationDecision name={name} onDecision={decide} />
+              </div>
+            )}
+          </section>
+          <section className="flex min-w-0 flex-col gap-4 rounded-surface border-ui bg-white shadow-surface p-6">
+            <h2 className="text-body font-semi-bold leading-6">{t("certificates")}</h2>
+            {documents.length ? (
+              documents.map((document) => <Certificate key={document.label} label={document.label} url={document.url} />)
+            ) : (
+              <p className="text-body text-operational-muted leading-6">{t("noCertificates")}</p>
+            )}
+          </section>
+        </div>
+      )}
     </OperationalPage>
+  );
+}
+
+function isDocumentUrl(value: string) {
+  try {
+    return ["http:", "https:"].includes(new URL(value, window.location.origin).protocol);
+  } catch {
+    return false;
+  }
+}
+
+function Certificate({ label, url }: { label: string; url: string }) {
+  const { t } = useTranslation("commons", { keyPrefix: "registrations" });
+  const [failed, setFailed] = useState(false);
+  return (
+    <figure className="overflow-hidden rounded-medium border border-operational-border">
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`${t("openCertificate")}: ${label}`}
+        className="block bg-operational-surface p-3">
+        {failed ? (
+          <p className="text-body text-operational-muted leading-6">{t("certificateError")}</p>
+        ) : (
+          <img src={url} alt={label} onError={() => setFailed(true)} className="max-h-80 w-full object-contain" />
+        )}
+      </a>
+      <figcaption className="border-t border-operational-border px-4 py-3 text-body font-medium">{label}</figcaption>
+    </figure>
   );
 }
