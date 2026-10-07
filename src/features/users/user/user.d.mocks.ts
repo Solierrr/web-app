@@ -6,8 +6,7 @@ const userMock = [
   {
     id: "user-1",
     authId: "auth-1",
-    avatar: "https://i.pravatar.cc/150?img=12",
-    bannerUrl: "https://fastly.picsum.photos/id/1015/1600/400.jpg",
+
     active: true,
     name: "Marina Alves Ferreira",
     cpf: "12345678901",
@@ -24,8 +23,7 @@ const userMock = [
   {
     id: "user-2",
     authId: "auth-2",
-    avatar: "https://i.pravatar.cc/150?img=33",
-    bannerUrl: "https://fastly.picsum.photos/id/1039/1600/400.jpg",
+
     active: true,
     name: "Rafael Costa Nunes",
     cpf: "98765432100",
@@ -58,8 +56,11 @@ export default userMock;
 export function createMockUser(id = getAuthSession()?.userId ?? "mock-user"): MyUser {
   const session = getAuthSession();
   return {
-    id, authId: id,
+    id,
+    authId: id,
     username: localStorage.getItem(`solaria.mock.username.${id}`) ?? (id === session?.userId ? session.email.split("@")[0] : id),
-    avatar: null, banner: null, active: true,
+    avatar: null,
+    banner: null,
+    active: true,
   };
 }

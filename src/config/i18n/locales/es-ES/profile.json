@@ -56,5 +56,17 @@
       "bannerHeading": "Personaliza el banner del perfil",
       "avatarHeading": "Elige la foto del perfil"
     }
+  },
+  "company": {
+    "about": "Sobre la empresa",
+    "offers": "Ofertas",
+    "projects": "Proyectos",
+    "navigation": "Contenido del perfil de la empresa",
+    "projectsPrivate": "Proyectos de esta empresa a los que tienes acceso. Esta área privada depende de tu participación o permiso de gestión.",
+    "retry": "Intentar de nuevo",
+    "offersFailed": "No se pudieron cargar las ofertas de esta empresa.",
+    "loadingOffers": "Cargando ofertas...",
+    "noOffers": "Esta empresa todavía no tiene ofertas disponibles.",
+    "publicProfile": "Ver perfil en el marketplace"
   }
 }

@@ -56,5 +56,17 @@
       "bannerHeading": "Customize the profile banner",
       "avatarHeading": "Choose the profile photo"
     }
+  },
+  "company": {
+    "about": "About the company",
+    "offers": "Offers",
+    "projects": "Projects",
+    "navigation": "Company profile content",
+    "projectsPrivate": "Projects from this company that you can access. This private area depends on your participation or management permission.",
+    "retry": "Try again",
+    "offersFailed": "Unable to load offers from this company.",
+    "loadingOffers": "Loading offers...",
+    "noOffers": "This company has no available offers yet.",
+    "publicProfile": "View marketplace profile"
   }
 }
