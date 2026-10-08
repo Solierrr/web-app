@@ -3,6 +3,7 @@ import { isSupportedLanguage, type SupportedLanguage } from "@/config/i18n/brows
 
 export const SEGMENT = [
   "solarPanels",
+  "infrastructure",
   "professionals",
   "companies",
   "search",
@@ -31,6 +32,11 @@ export const SEGMENT = [
   "offers",
   "units",
   "registrations",
+  "brandRequests",
+  "projects",
+  "newProject",
+  "editProject",
+  "brands",
   "resetPassword",
   "privacy",
   "sessions",
@@ -39,6 +45,10 @@ export const SEGMENT = [
   "policy",
   "terms",
   "cookies",
+  "cart",
+  "orders",
+  "sales",
+  "plan",
 ] as const;
 
 export type RouteSegmentKey = (typeof SEGMENT)[number];
@@ -52,11 +62,22 @@ export function joinSegments(lang: SupportedLanguage, ...keys: RouteSegmentKey[]
 }
 
 export const routePaths = {
+  projectCreate: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "projects", "newProject")}`,
+  projectDetail: (lang: SupportedLanguage, id: string) => `/${lang}/${joinSegments(lang, "projects")}/${encodeURIComponent(id)}`,
+  projectEdit: (lang: SupportedLanguage, id: string) =>
+    `/${lang}/${joinSegments(lang, "projects")}/${encodeURIComponent(id)}/${joinSegments(lang, "editProject")}`,
+
+  projects: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "projects")}`,
+  brandDetail: (lang: SupportedLanguage, id: string) => `/${lang}/${joinSegments(lang, "brands")}/${encodeURIComponent(id)}`,
+  brandRequests: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "brandRequests")}`,
   termsPolicy: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "policy", "terms")}`,
   privacyPolicy: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "policy", "privacy")}`,
   cookiePolicy: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "policy", "cookies")}`,
   home: (lang: SupportedLanguage) => `/${lang}`,
 
+  infrastructureFeed: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "infrastructure")}`,
+  infrastructureDetail: (lang: SupportedLanguage, companySlug: string, slug: string) =>
+    `/${lang}/${joinSegments(lang, "infrastructure")}/${encodeURIComponent(companySlug)}/${encodeURIComponent(slug)}`,
   solarPanelsFeed: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "solarPanels")}`,
   professionalsFeed: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "professionals")}`,
   companiesFeed: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "companies")}`,
@@ -117,6 +138,11 @@ export const routePaths = {
   settingsSessions: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "settings", "sessions")}`,
   resetPassword: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "resetPassword")}`,
   dashboard: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "dashboard")}`,
+  cart: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "cart")}`,
+  orders: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "orders")}`,
+  orderDetail: (lang: SupportedLanguage, id: string) => `/${lang}/${joinSegments(lang, "orders")}/${encodeURIComponent(id)}`,
+  sales: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin", "sales")}`,
+  plan: (lang: SupportedLanguage) => `/${lang}/${joinSegments(lang, "admin", "plan")}`,
 };
 
 export function translatePathToLanguage(pathname: string, targetLang: SupportedLanguage): string {

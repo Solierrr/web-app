@@ -9,7 +9,9 @@ export default function LanguageLayout() {
   const supported = isSupportedLanguage(lang);
 
   useEffect(() => {
-    if (supported && lang && i18n.language !== lang) {
+    if (!supported || !lang) return;
+    document.documentElement.lang = lang;
+    if (i18n.language !== lang) {
       i18n.changeLanguage(lang);
     }
   }, [supported, lang]);
