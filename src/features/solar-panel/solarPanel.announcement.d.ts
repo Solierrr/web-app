@@ -21,6 +21,8 @@ export interface SolarPanelAnnouncement {
   availableUnits: number;
   serviceRegions: string[];
   expirationDate?: string;
+  publishedAt?: string;
+  trendingScore?: number;
 
   // NOTE: `model`/`offer` (api-core) não têm coluna de slug. `slug` é gerado
   // a partir de `title`; `companySlug` é uma denormalização de `company.slug`,
@@ -33,5 +35,5 @@ export interface SolarPanelAnnouncement {
 
 export type SolarPanelFeedSummary = Pick<
   SolarPanelAnnouncement,
-  "id" | "slug" | "companySlug" | "title" | "unitPrice" | "discountPercentage" | "photos"
+  "id" | "slug" | "companySlug" | "title" | "unitPrice" | "discountPercentage" | "photos" | "publishedAt" | "trendingScore"
 >;

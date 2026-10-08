@@ -1,3 +1,4 @@
+import { selectedMockBrand, mockBrandId, canSelectMockModel, visibleMockModel } from "@/features/brands/brand.mocks";
 import i18n from "@/config/i18n/internationalization";
 import { createServiceError } from "@/config/logging/serviceError.utils";
 import type { SolarPanel } from "./solarPanel";
@@ -27,17 +28,22 @@ interface CatalogOffer {
   modelId: string;
   brand: string;
   model: string;
-  type: "MONOCRYSTALLINE" | "POLYCRYSTALLINE" | "THIN_FILM";
-  powerWp: number;
-  efficiency: number;
-  width: number;
-  length: number;
-  weight: number;
+  productType?: "PANEL" | "INFRASTRUCTURE";
+  infrastructureType?: SolarPanel["infrastructureType"] | null;
+  material?: string | null;
+  type: "MONOCRYSTALLINE" | "POLYCRYSTALLINE" | "THIN_FILM" | null;
+  powerWp: number | null;
+  efficiency: number | null;
+  width: number | null;
+  length: number | null;
+  weight: number | null;
   unitPrice: number;
   discountPercentage: number | null;
   availability: number;
   serviceRegions: string[] | null;
   photoUrls: string[];
+  publishedAt?: string;
+  trendingScore?: number;
 }
 
 function toAnnouncement(offer: CatalogOffer): SolarPanelAnnouncement {
@@ -47,9 +53,13 @@ function toAnnouncement(offer: CatalogOffer): SolarPanelAnnouncement {
       ? SolarPanelType.THINFILM
       : offer.type === "POLYCRYSTALLINE"
         ? SolarPanelType.POLYCRYSTALLINE
-        : SolarPanelType.MONOCRYSTALLINE;
+        : offer.type === "MONOCRYSTALLINE"
+          ? SolarPanelType.MONOCRYSTALLINE
+          : undefined;
   return {
     id: offer.id,
+    publishedAt: offer.publishedAt,
+    trendingScore: offer.trendingScore,
     supplierId: offer.companyId,
     company: { id: offer.companyId, slug: offer.companySlug, tradeName: offer.companyTradeName },
     companySlug: offer.companySlug,
@@ -59,13 +69,16 @@ function toAnnouncement(offer: CatalogOffer): SolarPanelAnnouncement {
     details: offer.details ? [offer.details] : undefined,
     panel: {
       id: offer.modelId,
+      productType: offer.productType ?? "PANEL",
+      infrastructureType: offer.infrastructureType ?? undefined,
+      material: offer.material ?? undefined,
       brand: offer.brand,
       model: offer.model,
       type,
-      powerOutput: offer.powerWp,
-      efficiency: offer.efficiency,
-      dimension: { width: offer.width, length: offer.length },
-      weight: offer.weight,
+      powerOutput: offer.powerWp ?? undefined,
+      efficiency: offer.efficiency ?? undefined,
+      dimension: offer.width != null && offer.length != null ? { width: offer.width, length: offer.length } : undefined,
+      weight: offer.weight ?? undefined,
       status: SolarPanelModelStatus.APPROVED,
     },
     photos: {
@@ -79,16 +92,17 @@ function toAnnouncement(offer: CatalogOffer): SolarPanelAnnouncement {
   };
 }
 
-export function getCatalogSolarPanels(lang: SupportedLanguage): Promise<SolarPanelAnnouncement[]> {
+export function getCatalogSolarPanels(lang: SupportedLanguage, productType?: SolarPanel["productType"]): Promise<SolarPanelAnnouncement[]> {
   return resolveWithMocks(
     () =>
-      httpJson<CatalogOffer[]>(`${API}/api/catalog/offers?locale=${encodeURIComponent(lang)}`, {
+      httpJson<CatalogOffer[]>(`${API}/api/catalog/offers?locale=${encodeURIComponent(lang)}${productType ? `&productType=${productType}` : ""}`, {
         service: SERVICE_NAME,
         operation: "getCatalogSolarPanels",
         authenticated: false,
         errorMessage: i18n.t("services:solarPanel.getCatalogSolarPanels"),
       }).then((offers) => offers.map(toAnnouncement)),
-    () => solarPanelAnnouncementMocks,
+    () =>
+      productType ? solarPanelAnnouncementMocks.filter((item) => (item.panel.productType ?? "PANEL") === productType) : solarPanelAnnouncementMocks,
   );
 }
 
@@ -113,6 +127,7 @@ export function getSolarPanelBySlug(companySlug: string, slug: string, lang: Sup
 }
 
 interface ModelDTO {
+  brandId: string;
   id: string;
   creatorCompanyId?: string | null;
   brand: string;
@@ -143,6 +158,7 @@ function toSolarPanel(dto: ModelDTO): SolarPanel {
     id: dto.id,
     creatorCompanyId: dto.creatorCompanyId,
     brand: dto.brand,
+    brandId: dto.brandId,
     model: dto.model,
     type: fromBackendType(dto.type),
     powerOutput: dto.powerWp,
@@ -155,7 +171,7 @@ function toSolarPanel(dto: ModelDTO): SolarPanel {
 
 function toModelPayload(payload: Omit<SolarPanel, "id" | "status">) {
   return {
-    brand: payload.brand,
+    brandId: payload.brandId,
     model: payload.model,
     type: toBackendType(payload.type),
     powerWp: payload.powerOutput,
@@ -169,7 +185,9 @@ function toModelPayload(payload: Omit<SolarPanel, "id" | "status">) {
 export async function listSolarPanelModels(): Promise<SolarPanel[]> {
   if (isAlwaysMockMode()) {
     await waitForMockService();
-    return getMockModels();
+    return getMockModels()
+      .filter(visibleMockModel)
+      .map((m) => ({ ...m, brandId: m.brandId ?? mockBrandId(m.brand ?? "") }));
   }
   return httpJson<ModelDTO[]>(`${API}/api/models`, {
     service: SERVICE_NAME,
@@ -181,7 +199,7 @@ export async function listSolarPanelModels(): Promise<SolarPanel[]> {
 export async function listApprovedSolarPanelModels(): Promise<SolarPanel[]> {
   if (isAlwaysMockMode()) {
     await waitForMockService();
-    return getMockModels().filter((item) => item.status === SolarPanelModelStatus.APPROVED);
+    return getMockModels().filter((item) => item.status === SolarPanelModelStatus.APPROVED && canSelectMockModel(item));
   }
   return httpJson<ModelDTO[]>(`${API}/api/models/status/APPROVED`, {
     service: SERVICE_NAME,
@@ -193,7 +211,7 @@ export async function listApprovedSolarPanelModels(): Promise<SolarPanel[]> {
 export async function listSolarPanelModelsByStatus(status: SolarPanelModelStatus): Promise<SolarPanel[]> {
   if (isAlwaysMockMode()) {
     await waitForMockService();
-    return getMockModels().filter((item) => item.status === status);
+    return getMockModels().filter((item) => item.status === status && visibleMockModel(item));
   }
   return httpJson<ModelDTO[]>(`${API}/api/models/status/${encodeURIComponent(status)}`, {
     service: SERVICE_NAME,
@@ -233,6 +251,7 @@ export async function createSolarPanel(payload: Omit<SolarPanel, "id" | "status"
     await waitForMockService();
     return saveMockModel({
       ...payload,
+      brand: selectedMockBrand(payload.brandId ?? "").name,
       id: crypto.randomUUID(),
       creatorCompanyId: getSelectedContext(),
       status: SolarPanelModelStatus.UNDERANALYSIS,
@@ -250,6 +269,7 @@ export async function createSolarPanel(payload: Omit<SolarPanel, "id" | "status"
 export async function updateSolarPanel(id: string, payload: Omit<SolarPanel, "id" | "status">): Promise<SolarPanel> {
   if (isAlwaysMockMode()) {
     await waitForMockService();
+    if (getMockModels().find((item) => item.id === id)?.brandId !== payload.brandId) selectedMockBrand(payload.brandId ?? "");
     return saveMockModel({ ...getMockModels().find((item) => item.id === id), ...payload, id, status: SolarPanelModelStatus.UNDERANALYSIS });
   }
   return httpJson<ModelDTO>(`${API}/api/models/${encodeURIComponent(id)}`, {

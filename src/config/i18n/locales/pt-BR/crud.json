@@ -1,6 +1,9 @@
 {
   "solarPanelModel": {
-    "title": "Modelos de placa solar",
+    "sections": {
+      "technical": "Características técnicas"
+    },
+    "title": "Placas Solares",
     "description": "Gerencie o catálogo de modelos disponíveis para oferta.",
     "createHeading": "Novo modelo",
     "editHeading": "Editar modelo",
@@ -9,26 +12,118 @@
       "model": "Modelo",
       "type": "Tipo",
       "status": "Status",
-      "powerOutput": "Potência (Wp)",
-      "efficiency": "Eficiência (%)",
-      "weight": "Peso (kg)",
-      "width": "Largura (m)",
-      "length": "Comprimento (m)"
+      "powerOutput": "Potência",
+      "efficiency": "Eficiência",
+      "weight": "Peso",
+      "width": "Largura",
+      "length": "Comprimento"
     },
     "actions": {
+      "loadingOptions": "Opções do modelo carregando",
       "save": "Salvar",
       "saveDescription": "Salvar modelo",
       "add": "Adicionar",
       "cancel": "Cancelar",
       "cancelDescription": "Cancelar edição",
       "edit": "Editar",
-      "remove": "Remover"
+      "remove": "Remover",
+      "addModel": "Adicionar modelo",
+      "view": "Ver detalhes",
+      "saving": "Salvando…",
+      "options": "Opções de {{name}}"
     },
     "table": {
       "brandModel": "Marca / Modelo",
       "type": "Tipo",
       "power": "Potência",
-      "status": "Status"
+      "status": "Status",
+      "actions": "Ações",
+      "efficiency": "Eficiência",
+      "width": "Largura",
+      "length": "Comprimento",
+      "weight": "Peso",
+      "id": "ID do modelo",
+      "creatorCompany": "ID da empresa criadora",
+      "brand": "Marca",
+      "model": "Modelo",
+      "indicatorsLegend": "↑ acima · ↓ abaixo · − próximo da média · marcador = posição na faixa",
+      "indicatorsHelp": "Entender os indicadores comparativos",
+      "indicatorsExplanation": "Comparação entre modelos do mesmo tipo no catálogo carregado. As referências não mudam ao filtrar ou trocar de página. Setas não indicam evolução no tempo. Verde na eficiência indica valor acima da média; dimensões mostram posição na faixa. Grupos com um único valor não recebem avaliação.",
+      "comparison": "{{value}} — {{direction}} de {{mean}}; diferença de {{difference}}; base: {{count}} modelos {{type}} no catálogo carregado.",
+      "above": "acima da média",
+      "below": "abaixo da média",
+      "near": "próximo da média",
+      "percentagePoints": "p.p.",
+      "hideIndicators": "Ocultar indicadores comparativos",
+      "showIndicators": "Mostrar indicadores comparativos",
+      "referenceSummary": "{{field}}: média {{mean}} · {{count}} valores",
+      "relativePower": "Potência relativa ao catálogo: de {{min}} a {{max}} Wp. Não indica tendência.",
+      "settings": "Configurações da tabela",
+      "refresh": "Atualizar dados",
+      "refreshed": "Dados atualizados",
+      "refreshError": "Não foi possível atualizar os dados. Tente novamente.",
+      "removeError": "Não foi possível remover o modelo. Tente novamente.",
+      "removed": "Modelo removido."
+    },
+    "saveError": "Não foi possível salvar o modelo. Tente novamente.",
+    "empty": "Nenhum modelo cadastrado.",
+    "statuses": {
+      "APPROVED": "Aprovada",
+      "REJECTED": "Recusada",
+      "UNDER_ANALYSIS": "Em análise"
+    },
+    "details": {
+      "description": "Consulte as características e o status deste modelo de placa solar.",
+      "overview": "Visão geral",
+      "identification": "Identificação do modelo",
+      "performance": "Desempenho",
+      "physical": "Dimensões e peso"
+    },
+    "photos": {
+      "none": "Nenhuma foto cadastrada.",
+      "view": "Visualizar foto {{number}}",
+      "primary": "Foto principal",
+      "gallery": "Fotos do produto",
+      "addPrimary": "Selecionar foto principal",
+      "title": "Fotos da placa",
+      "hint": "JPEG, PNG ou WebP, até 8 MB por imagem. As fotos serão enviadas ao salvar o modelo.",
+      "add": "Selecionar fotos",
+      "error": "Nao foi possivel salvar ou carregar as fotos. O modelo salvo pode ser editado para tentar novamente.",
+      "invalid": "Selecione imagens JPEG, PNG ou WebP de até 8 MB. As imagens já selecionadas foram mantidas.",
+      "help": "Formato e limites das imagens",
+      "selected_one": "{{count}} foto selecionada",
+      "selected_other": "{{count}} fotos selecionadas",
+      "removeSelection": "Remover imagem selecionada",
+      "uploading": "Enviando imagem {{current}} de {{total}}…",
+      "loadError": "Não foi possível carregar as fotos. Reabra o formulário para tentar novamente.",
+      "selected_zero": "Nenhuma foto selecionada ainda"
+    },
+    "dimensions": "Dimensões",
+    "navigation": "Navegação do formulário",
+    "saved": "Modelo salvo com sucesso.",
+    "placeholders": {
+      "powerOutput": "Ex.: 450",
+      "efficiency": "Ex.: 21.5",
+      "weight": "Ex.: 22",
+      "width": "Ex.: 1.13",
+      "length": "Ex.: 1.72"
+    },
+    "filters": {
+      "title": "Filtros",
+      "all": "Todos",
+      "attribute": "Característica",
+      "min": "Mínimo",
+      "max": "Máximo",
+      "clear": "Limpar filtros",
+      "clearSort": "Remover ordenação",
+      "remove": "Remover filtro de {{field}}",
+      "hint": "Combine tipo, status e intervalos. Clique em uma coluna para ordenar: crescente, decrescente e sem ordenação.",
+      "empty": "Nenhum modelo corresponde aos filtros.",
+      "help": "Ajuda dos filtros",
+      "search": "Buscar marca, modelo ou tipo",
+      "close": "Fechar filtros",
+      "hideBar": "Ocultar barra de pesquisa",
+      "showBar": "Mostrar barra de pesquisa"
     }
   }
 }
