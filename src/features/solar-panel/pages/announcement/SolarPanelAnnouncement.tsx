@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import type { SolarPanelAnnouncement } from "@/features/solar-panel/solarPanel.announcement";
@@ -10,6 +10,8 @@ import { getSolarPanelBySlug } from "@/features/solar-panel/solarPanel.service";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
 import { SoftIconButton } from "@@/ui/button/Button.presets";
+import { notify } from "@@/feedback/toast/Toast.utils";
+import { putCartItem } from "@/features/purchases/purchases.service";
 
 import { useTranslation } from "react-i18next";
 import WrapperLayout from "@/config/WrapperLayout";
@@ -20,11 +22,21 @@ interface SolarPanelAnnouncementProps {
   product: SolarPanelAnnouncement;
 }
 
-function SolarPanelAnnouncementPacked({ product }: SolarPanelAnnouncementProps) {
+export function SolarPanelAnnouncementPacked({ product }: SolarPanelAnnouncementProps) {
   const { t } = useTranslation("announcements", { keyPrefix: "solarPanel" });
   const { t: c } = useTranslation("commons");
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
+  const navigate = useNavigate();
+
+  async function addToCart() {
+    try {
+      await putCartItem(product.id, 1);
+      navigate(routePaths.cart(lang));
+    } catch (cause) {
+      notify(cause instanceof Error ? cause.message : t("actions.addToCartError"));
+    }
+  }
 
   return (
     <div>
@@ -32,11 +44,15 @@ function SolarPanelAnnouncementPacked({ product }: SolarPanelAnnouncementProps) 
         <div className="flex flex-col">
           <div className="flex flex-row relative gap-12">
             <div className="w-[40%] flex justify-center">
-              <img
-                className="w-[80%] h-fit sticky top-10 pb-10 object-cover"
-                src={product.photos.heroImage.url}
-                alt={product.photos.heroImage.description}
-              />
+              {product.photos.heroImage.url ? (
+                <img
+                  className="w-[80%] h-fit sticky top-10 pb-10 object-cover"
+                  src={product.photos.heroImage.url}
+                  alt={product.photos.heroImage.description}
+                />
+              ) : (
+                <ImageSkeleton className="w-[80%]! h-80!" />
+              )}
             </div>
 
             <section className="w-[60%] flex flex-col gap-announcement">
@@ -50,20 +66,24 @@ function SolarPanelAnnouncementPacked({ product }: SolarPanelAnnouncementProps) 
                       )}
                       <span className="text-hyperlink">{t("general.announcedBy", { company: product.company.tradeName })}</span>
                     </Link>
-                    <h3 className="text-black/90">
-                      {regionsService(product.serviceRegions, {
-                        and: c("and"),
-                        message: t("general.service"),
-                      })}
-                    </h3>
+                    {product.serviceRegions.length > 0 && (
+                      <h3 className="text-black/90">
+                        {regionsService(product.serviceRegions, {
+                          and: c("and"),
+                          message: t("general.service"),
+                        })}
+                      </h3>
+                    )}
                   </div>
                   <div className="flex flex-col gap-8">
                     <div className="flex flex-row gap-6 items-baseline justify-between">
                       <div className="flex flex-row gap-4 items-baseline">
-                        <span className="flex flex-row items-baseline gap-1">
-                          <h2>{product.discountPercentage}</h2>
-                          <span className="font-bold">%</span>
-                        </span>
+                        {product.discountPercentage != null && product.discountPercentage > 0 && (
+                          <span className="flex flex-row items-baseline gap-1">
+                            <h2>{product.discountPercentage}</h2>
+                            <span className="font-bold">%</span>
+                          </span>
+                        )}
                         <div className="flex flex-row gap-1 h-min items-baseline">
                           <h5 className="font-semi-bold no-leading">R$</h5>
                           <h3 className="no-leading leading-none text-nowrap">
@@ -76,10 +96,12 @@ function SolarPanelAnnouncementPacked({ product }: SolarPanelAnnouncementProps) 
                       </h3>
                     </div>
                     <div className="flex flex-row gap-2">
-                      <Link to={routePaths.contactCompany(lang, product.company.id, product.title)} className="rounded-full bg-orange px-8 py-2 text-white">
+                      <Link
+                        to={routePaths.contactCompany(lang, product.company.id, product.title)}
+                        className="rounded-full bg-orange px-8 py-2 text-white">
                         {t("actions.contactSupplier")}
                       </Link>
-                      <SoftIconButton description={t("actions.addToCart")} icon="shoppingCart" />
+                      <SoftIconButton description={t("actions.addToCart")} icon="shoppingCart" onClick={() => void addToCart()} />
                       <SoftIconButton description={t("actions.addToCart")} icon="heart" />
                     </div>
                   </div>
