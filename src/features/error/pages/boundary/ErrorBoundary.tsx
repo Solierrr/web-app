@@ -1,5 +1,8 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
+import ErrorPage from "../generic/Generic";
+import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
+import { routePaths } from "@/config/i18n/paths";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -9,18 +12,13 @@ interface ErrorBoundaryState {
   error: Error | null;
 }
 
-function ErrorFallback({ error }: { error: Error }) {
+function ErrorFallback() {
   const { t } = useTranslation("commons", { keyPrefix: "errorBoundary" });
+  const parameter = window.location.pathname.split("/")[1];
+  const lang = isSupportedLanguage(parameter) ? parameter : DEFAULT;
 
   return (
-    <section className="flex flex-col gap-4 p-8">
-      <p>{t("label")}</p>
-      <h1>{t("title")}</h1>
-      <p>{error.message}</p>
-      <button type="button" onClick={() => window.location.reload()}>
-        {t("reload")}
-      </button>
-    </section>
+    <ErrorPage title={t("title")} message={t("message")} actionLabel={t("back")} onReturn={() => window.location.assign(routePaths.home(lang))} />
   );
 }
 
@@ -39,7 +37,7 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
     const { error } = this.state;
 
     if (error) {
-      return <ErrorFallback error={error} />;
+      return <ErrorFallback />;
     }
 
     return this.props.children;
