@@ -1,13 +1,22 @@
+vi.mock("@@/layout/access/canvas/SideCanvas", () => ({ default: () => null }));
 import { MemoryRouter } from "react-router-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import DashboardPage from "./DashboardPage";
 import { rememberPage } from "../dashboard.utils";
 import { useActiveContext } from "@/lib/shared/context/ActiveContext";
 
 vi.mock("@/lib/shared/context/ActiveContext", () => ({ useActiveContext: vi.fn() }));
 
-const supplier = { id: "c1", status: "APPROVED", type: "SUPPLIER", cnpj: "1", tradeName: "Solaria", corporateName: "Solaria Ltda", slug: "solaria" } as never;
+const supplier = {
+  id: "c1",
+  status: "APPROVED",
+  type: "SUPPLIER",
+  cnpj: "1",
+  tradeName: "Solaria",
+  corporateName: "Solaria Ltda",
+  slug: "solaria",
+} as never;
 
 function renderPage() {
   render(
@@ -19,19 +28,47 @@ function renderPage() {
 
 describe("DashboardPage", () => {
   beforeEach(() => {
-    localStorage.clear();
+    const stored = new Map<string, string>();
+    vi.stubGlobal("localStorage", {
+      getItem: (key: string) => stored.get(key) ?? null,
+      setItem: (key: string, value: string) => stored.set(key, String(value)),
+      removeItem: (key: string) => stored.delete(key),
+      clear: () => stored.clear(),
+      key: (index: number) => [...stored.keys()][index] ?? null,
+      get length() {
+        return stored.size;
+      },
+    } satisfies Storage);
   });
+  afterEach(() => vi.unstubAllGlobals());
 
   it("shows a loading state", () => {
-    vi.mocked(useActiveContext).mockReturnValue({ loading: true, kind: "personal", setKind: vi.fn(), company: null, isAdmin: false, hasCompany: false, isPlatformAdmin: false });
+    vi.mocked(useActiveContext).mockReturnValue({
+      loading: true,
+      kind: "personal",
+      setKind: vi.fn(),
+      company: null,
+      isAdmin: false,
+      hasCompany: false,
+      isPlatformAdmin: false,
+    });
 
     renderPage();
 
-    expect(screen.getByRole("status")).toHaveTextContent("Carregando área operacional...");
+    expect(screen.getByRole("status")).toHaveAccessibleName("Carregando área operacional...");
+    expect(screen.queryByRole("heading")).not.toBeInTheDocument();
   });
 
   it("shows only the personal shortcuts when there is no company", () => {
-    vi.mocked(useActiveContext).mockReturnValue({ loading: false, kind: "personal", setKind: vi.fn(), company: null, isAdmin: false, hasCompany: false, isPlatformAdmin: false });
+    vi.mocked(useActiveContext).mockReturnValue({
+      loading: false,
+      kind: "personal",
+      setKind: vi.fn(),
+      company: null,
+      isAdmin: false,
+      hasCompany: false,
+      isPlatformAdmin: false,
+    });
 
     renderPage();
 
@@ -43,20 +80,34 @@ describe("DashboardPage", () => {
 
   it("shows the company shortcuts for a supplier company", () => {
     vi.mocked(useActiveContext).mockReturnValue({
-      loading: false, kind: "company", setKind: vi.fn(), company: supplier, isAdmin: true, hasCompany: true, isPlatformAdmin: false, can: () => true,
+      loading: false,
+      kind: "company",
+      setKind: vi.fn(),
+      company: supplier,
+      isAdmin: true,
+      hasCompany: true,
+      isPlatformAdmin: false,
+      can: () => true,
     });
 
     renderPage();
 
     expect(screen.getByRole("link", { name: "Perfil da empresa" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Ofertas" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Modelos de placas solares" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Placas Solares" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Assistente" })).toBeInTheDocument();
   });
 
   it("filters the shortcuts by the search query and reports when nothing matches", () => {
     vi.mocked(useActiveContext).mockReturnValue({
-      loading: false, kind: "company", setKind: vi.fn(), company: supplier, isAdmin: true, hasCompany: true, isPlatformAdmin: false, can: () => true,
+      loading: false,
+      kind: "company",
+      setKind: vi.fn(),
+      company: supplier,
+      isAdmin: true,
+      hasCompany: true,
+      isPlatformAdmin: false,
+      can: () => true,
     });
 
     renderPage();
@@ -68,12 +119,23 @@ describe("DashboardPage", () => {
 
     fireEvent.change(search, { target: { value: "inexistente" } });
     expect(screen.getByText("Nenhuma tela encontrada.")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Limpar busca" }));
+    expect(search).toHaveValue("");
+    expect(screen.getByRole("link", { name: "Mensagens" })).toBeInTheDocument();
+    expect(screen.queryByText("Nenhuma tela encontrada.")).not.toBeInTheDocument();
   });
 
   it("lists the recently visited screens", () => {
     rememberPage("c1", "offers");
     vi.mocked(useActiveContext).mockReturnValue({
-      loading: false, kind: "company", setKind: vi.fn(), company: supplier, isAdmin: true, hasCompany: true, isPlatformAdmin: false, can: () => true,
+      loading: false,
+      kind: "company",
+      setKind: vi.fn(),
+      company: supplier,
+      isAdmin: true,
+      hasCompany: true,
+      isPlatformAdmin: false,
+      can: () => true,
     });
 
     renderPage();
