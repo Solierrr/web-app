@@ -14,7 +14,11 @@ export interface AuthSession {
   accessTokenExpiresAt: string;
   userId: string;
   email: string;
+  sessionId?: string;
+  clientId?: string;
+  context?: string;
   isMock?: boolean;
+  managedByCompany?: { id: string; name: string };
 }
 
 export interface RegisterResult {

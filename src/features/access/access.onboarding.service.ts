@@ -42,7 +42,7 @@ export function getSelectedContext(): string | null {
 
 export function selectContext(context: string): void {
   localStorage.setItem(`solaria.context.${getAuthSession()?.userId ?? "visitor"}`, context);
-  if (isAlwaysMockMode()) saveOperationalAccount({ ...getOperationalAccount(), selectedContext: context });
+  if (isAlwaysMockMode("AUTH")) saveOperationalAccount({ ...getOperationalAccount(), selectedContext: context });
   else window.dispatchEvent(new Event("solaria:context"));
 }
 
@@ -52,13 +52,13 @@ export function clearRegistrationDraft(kind: RegistrationKind): void {
 
 export function getOperationalAccount(): OperationalAccount {
   const session = getAuthSession();
-  if (!isAlwaysMockMode() || !session?.isMock) return { professional: false, memberships: [] };
+  if (!isAlwaysMockMode("AUTH") || !session?.isMock) return { professional: false, memberships: [] };
   return readStored(`solaria.mock.account.${session.userId}`, { professional: false, memberships: [] });
 }
 
 export function saveOperationalAccount(account: OperationalAccount): void {
   const session = getAuthSession();
-  if (!isAlwaysMockMode() || !session?.isMock) return;
+  if (!isAlwaysMockMode("AUTH") || !session?.isMock) return;
   localStorage.setItem(`solaria.mock.account.${session.userId}`, JSON.stringify(account));
   window.dispatchEvent(new Event("solaria:context"));
 }

@@ -16,10 +16,10 @@ export default function RequirePlatformAdmin({ children }: RequirePlatformAdminP
   const { t } = useTranslation("saas");
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
-  const [isPlatformAdmin, setIsPlatformAdmin] = useState<boolean | undefined>(isAlwaysMockMode() ? true : undefined);
+  const [isPlatformAdmin, setIsPlatformAdmin] = useState<boolean | undefined>(isAlwaysMockMode("AUTH") ? true : undefined);
 
   useEffect(() => {
-    if (isAlwaysMockMode()) return;
+    if (isAlwaysMockMode("AUTH")) return;
     let active = true;
     getMyPlatformAdmin()
       .then((admin) => {

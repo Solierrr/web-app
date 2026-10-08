@@ -1,0 +1,112 @@
+{
+  "loading": "Carregando…",
+  "mobile": {
+    "title": "Entrar no Solaria Mobile",
+    "professionalOnly": "O aplicativo é exclusivo para profissionais com cadastro completo e aprovado.",
+    "continueAs": "Continuar como {{email}}",
+    "ineligible": "Esta conta ainda não está habilitada para acessar o aplicativo. Conclua o cadastro e aguarde a aprovação aqui no web.",
+    "verify": "Confirmar meu email",
+    "registration": "Concluir cadastro profissional",
+    "switch": "Usar outra conta",
+    "cancel": "Cancelar",
+    "cancelled": "Entrada cancelada. Volte ao aplicativo para iniciar novamente.",
+    "opening": "Sua entrada foi autorizada. Abrindo o aplicativo…",
+    "open": "Abrir aplicativo",
+    "fallback": "Se o aplicativo não abrir, instale-o e inicie uma nova entrada pelo aplicativo.",
+    "install": "Instalar aplicativo"
+  },
+  "errors": {
+    "UNAVAILABLE": "Não foi possível concluir. Tente novamente.",
+    "INVALID_TRANSACTION": "Esta solicitação não é válida. Inicie a entrada pelo aplicativo.",
+    "TRANSACTION_EXPIRED": "Esta solicitação expirou. Inicie uma nova entrada pelo aplicativo.",
+    "MOBILE_ACCOUNT_NOT_ALLOWED": "Esta conta não está habilitada para acessar o aplicativo.",
+    "EMAIL_NOT_VERIFIED": "Confirme seu email antes de continuar.",
+    "WEB_SESSION_REQUIRED": "Entre na sua conta pelo web antes de continuar.",
+    "ELIGIBILITY_UNAVAILABLE": "Não foi possível verificar seu cadastro. Tente novamente.",
+    "CONFIRMATION_REQUIRED": "Confirme a conta para continuar."
+  },
+  "email": {
+    "title": "Confirme seu email",
+    "pending": "Abra o link enviado para seu email e confirme para continuar.",
+    "sent": "Solicitação recebida. Verifique sua caixa de entrada.",
+    "verified": "Email confirmado.",
+    "continue": "Continuar",
+    "confirm": "Confirmar email",
+    "check": "Já confirmei meu email",
+    "resend": "Enviar email de confirmação",
+    "cooldown": "Enviar novamente em {{seconds}}s",
+    "unavailable": "O envio de email está indisponível. Tente novamente mais tarde."
+  },
+  "professional": {
+    "title": "Cadastro profissional",
+    "preserved": "Seus dados aprovados e seu acesso são preservados enquanto a proposta de alteração é analisada.",
+    "suspended": "O acesso profissional está suspenso. Entre em contato com o Solaria.",
+    "refresh": "Atualizar análise",
+    "choose": "Escolha sua profissão",
+    "manualPolicy": "Os requisitos desta profissão ainda precisam ser confirmados pelo administrador. O cadastro será encaminhado para análise manual.",
+    "documents": "{{count}} documento(s) anexado(s).",
+    "document": "Documento {{number}}",
+    "remove": "Remover da proposta",
+    "optional": "Outros certificados são opcionais e podem valorizar seu perfil.",
+    "save": "Salvar rascunho",
+    "submit": "Enviar para análise",
+    "saveError": "Não foi possível salvar ou enviar. Confira os dados e documentos ou atualize o estado da análise.",
+    "fileError": "Selecione PDF, DOCX, JPEG, PNG ou WebP de até 10 MB."
+  },
+  "fields": {
+    "name": "Nome completo",
+    "cpf": "CPF (somente números)",
+    "birthDate": "Data de nascimento",
+    "email": "Email de contato",
+    "phone": "Telefone (somente números)",
+    "professionId": "Profissão",
+    "council": "Conselho profissional",
+    "registrationNumber": "Número do registro profissional",
+    "registrationExpiration": "Validade do registro"
+  },
+  "documents": {
+    "IDENTITY": "Foto do RG",
+    "NR10": "Certificado NR-10",
+    "NR35": "Certificado NR-35",
+    "REGISTRATION": "Comprovante do registro profissional",
+    "CERTIFICATE": "Outros certificados (opcionais)"
+  },
+  "criteria": {
+    "IDENTITY_MATCH": "Identidade",
+    "NR10": "NR-10",
+    "NR35": "NR-35",
+    "REGISTRATION": "Registro profissional"
+  },
+  "status": {
+    "QUEUED": "Aguardando validação",
+    "VALIDATING": "Em validação",
+    "RETRY_PENDING": "Validação temporariamente indisponível; nova tentativa pendente",
+    "MANUAL_REVIEW": "Aguardando análise do administrador",
+    "APPROVED": "Aprovado",
+    "REJECTED": "Proposta rejeitada",
+    "SUSPENDED": "Suspenso",
+    "REINSTATED": "Acesso restabelecido",
+    "PASSED": "Validado",
+    "FAILED": "Não validado",
+    "INCONCLUSIVE": "Inconclusivo"
+  },
+  "review": {
+    "title": "Análise profissional",
+    "field": "Campo",
+    "approved": "Dados aprovados",
+    "proposed": "Proposta",
+    "reason": "Motivo da decisão",
+    "approve": "Aprovar proposta",
+    "reject": "Rejeitar proposta",
+    "conflict": "Não foi possível aplicar a decisão. Atualize a análise e confira se a proposta ainda aguarda decisão."
+  },
+  "migration": {
+    "choosePassword": "Sua conta foi identificada. Escolha uma nova senha com pelo menos 12 caracteres para concluir a migração.",
+    "newPassword": "Nova senha"
+  },
+  "link": {
+    "explanation": "Já existe uma conta com este email. Digite a senha dessa conta e confirme o vínculo com o provedor escolhido.",
+    "confirm": "Confirmo que desejo vincular este provedor à minha conta",
+    "submit": "Confirmar vínculo"
+  }
+}

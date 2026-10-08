@@ -7,7 +7,6 @@ import { refresh } from "@/features/access/access.service";
 import { clearAuthSession, getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
 import Loading from "@@/helpers/accessibility/loading/Loading";
-import Logo from "@@/brand/logo/Logo";
 
 export default function RequireAuth() {
   const { lang: langParam } = useParams<{ lang: string }>();
@@ -21,7 +20,7 @@ export default function RequireAuth() {
 
     async function ensureSession() {
       const stored = getAuthSession();
-      if (!stored || (stored.isMock && !isAlwaysMockMode())) {
+      if (!stored || (stored.isMock && !isAlwaysMockMode("AUTH"))) {
         if (active) setAuthenticated(false);
         return;
       }
@@ -48,11 +47,7 @@ export default function RequireAuth() {
   }, []);
 
   if (authenticated === null)
-    return (
-      <Loading>
-        <Logo width={4} />
-      </Loading>
-    );
+    return <Loading />;
   if (!authenticated) {
     return <Navigate to={routePaths.login(lang)} replace state={{ returnTo: `${location.pathname}${location.search}${location.hash}` }} />;
   }

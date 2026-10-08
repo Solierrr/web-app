@@ -11,7 +11,7 @@ const API = `${import.meta.env.VITE_API_AUTH}/auth`;
 const SERVICE_NAME = "access";
 
 export async function loginWithMockMicrosoft(): Promise<AuthSession> {
-  if (!isAlwaysMockMode()) throw new Error("Mock login is unavailable");
+  if (!isAlwaysMockMode("AUTH")) throw new Error("Mock login is unavailable");
   await waitForMockService();
   const session = createMockSession(MOCK_TEST_EMAIL, MOCK_TEST_USER_ID);
   setAuthSession(session);
@@ -34,7 +34,7 @@ export async function loginWithMockMicrosoft(): Promise<AuthSession> {
 }
 
 export async function login(credentials: LoginCredentials): Promise<AuthSession> {
-  if (isAlwaysMockMode()) {
+  if (isAlwaysMockMode("AUTH")) {
     await waitForMockService();
     const session = createMockSession(credentials.email);
     setAuthSession(session);
@@ -53,7 +53,7 @@ export async function login(credentials: LoginCredentials): Promise<AuthSession>
 }
 
 export async function register(credentials: RegisterCredentials): Promise<RegisterResult> {
-  if (isAlwaysMockMode()) {
+  if (isAlwaysMockMode("AUTH")) {
     await waitForMockService();
     const session = createMockSession(credentials.email);
     return { id: session.userId, email: session.email, message: i18n.t("services:access.registrationSuccess") };
@@ -104,8 +104,9 @@ export function refresh(): Promise<AuthSession | null> {
   const renew = async () => {
     const latest = getAuthSession();
     if (!latest || latest.refreshToken !== currentSession.refreshToken) return latest;
-    if (isAlwaysMockMode() && latest.isMock) {
+    if (isAlwaysMockMode("AUTH") && latest.isMock) {
       const renewed = createMockSession(latest.email, latest.userId);
+      renewed.managedByCompany = latest.managedByCompany;
       setAuthSession(renewed);
       return renewed;
     }
@@ -130,11 +131,11 @@ export function refresh(): Promise<AuthSession | null> {
 }
 
 export async function logout(): Promise<void> {
-  if (isAlwaysMockMode() && getAuthSession()?.isMock) {
+  if (isAlwaysMockMode("AUTH") && getAuthSession()?.isMock) {
     clearAuthSession();
     return;
   }
-  await httpJson<void>(`${API}/logout`, {
+  await httpJson<void>(`${API}/sessions/current/logout`, {
     service: SERVICE_NAME,
     operation: "logout",
     method: "POST",
