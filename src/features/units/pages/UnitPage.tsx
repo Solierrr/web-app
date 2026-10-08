@@ -1,5 +1,7 @@
+import { DetailField } from "@@/layout/operational-page/OperationalDetails";
+import ToolbarAction from "@@/ui/button/ToolbarAction";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
@@ -14,6 +16,8 @@ export default function UnitPage() {
   const lang = isSupportedLanguage(parameter) ? parameter : DEFAULT;
   const { company } = useActiveContext();
   const [unit, setUnit] = useState<LocalUnit | null>(null);
+  const requestKey = `${company?.id}:${unitId}`;
+  const [loadedKey, setLoadedKey] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   useEffect(() => {
@@ -23,43 +27,49 @@ export default function UnitPage() {
       .then((items) => {
         const item = items.find((entry) => entry.id === unitId);
         if (!item) throw new Error("Unit not found");
-        if (active) setUnit(item);
+        if (active) {
+          setUnit(item);
+          setError(false);
+        }
       })
       .catch(() => {
         if (active) setError(true);
       })
       .finally(() => {
-        if (active) setLoading(false);
+        if (active) {
+          setLoading(false);
+          setLoadedKey(requestKey);
+        }
       });
     return () => {
       active = false;
     };
-  }, [company, unitId]);
+  }, [company, unitId, requestKey]);
   return (
     <OperationalPage
       title={t("title")}
-      loading={loading}
+      loading={loading || loadedKey !== requestKey}
       compact
-      actions={<Link to={routePaths.unitsManagement(lang)}>{tSaas("details.back")}</Link>}>
+      centered
+      sideBackground
+      actions={
+        <ToolbarAction to={routePaths.unitsManagement(lang)} icon="chevronLeft" label={tSaas("details.back")} content={tSaas("details.back")} />
+      }>
       {error ? (
         <p role="alert">{tSaas("details.error")}</p>
       ) : (
         unit && (
-          <dl className="grid gap-4 rounded-small border border-operational-border p-4">
-            <div>
-              <dt className="text-sm text-operational-muted">{t("street")}</dt>
-              <dd>{unit.address ? `${unit.address.street}, ${unit.address.number ?? "—"}` : t("noAddress")}</dd>
-            </div>
-            <div>
-              <dt className="text-sm text-operational-muted">{t("city")}</dt>
-              <dd>
-                {unit.address?.city} / {unit.address?.state}
-              </dd>
-            </div>
-            <div>
-              <dt className="text-sm text-operational-muted">{t("zipCode")}</dt>
-              <dd>{unit.address?.zipCode ?? "—"}</dd>
-            </div>
+          <dl className="grid gap-4 rounded-surface border-ui bg-white shadow-surface p-6 sm:grid-cols-2">
+            <DetailField label={t("street")} value={unit.address ? `${unit.address.street}, ${unit.address.number ?? "—"}` : t("noAddress")} />
+            <DetailField
+              label={t("city")}
+              value={
+                <>
+                  {unit.address?.city} / {unit.address?.state}
+                </>
+              }
+            />
+            <DetailField label={t("zipCode")} value={unit.address?.zipCode ?? "—"} />
             {unit.address && (
               <div>
                 <a
@@ -73,14 +83,8 @@ export default function UnitPage() {
                 </a>
               </div>
             )}
-            <div>
-              <dt className="text-sm text-operational-muted">{t("complement")}</dt>
-              <dd>{unit.complement ?? "—"}</dd>
-            </div>
-            <div>
-              <dt className="text-sm text-operational-muted">{t("locationType")}</dt>
-              <dd>{t(`locationTypes.${unit.locationType}`)}</dd>
-            </div>
+            <DetailField label={t("complement")} value={unit.complement ?? "—"} />
+            <DetailField label={t("locationType")} value={t(`locationTypes.${unit.locationType.toLowerCase()}`)} />
           </dl>
         )
       )}
