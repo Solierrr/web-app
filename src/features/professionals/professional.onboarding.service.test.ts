@@ -1,11 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import {
-  createContact,
-  createPerson,
-  createProfessionalRegistration,
-  createTechnician,
-  getProfessions,
-} from "./professional.onboarding.service";
+import { createPerson, createProfessionalRegistration, createTechnician, getProfessions } from "./professional.onboarding.service";
 import { httpJson } from "@/lib/shared/http/http.service";
 
 vi.mock("@/lib/shared/http/http.service", () => ({ httpJson: vi.fn() }));
@@ -17,23 +11,14 @@ describe("professional.onboarding.service", () => {
     expect(httpJson).toHaveBeenCalledWith(expect.stringContaining("/professions"), expect.objectContaining({ operation: "getProfessions" }));
   });
 
-  it("creates a contact", async () => {
-    vi.mocked(httpJson).mockResolvedValue({ id: "contact-1" });
-    await createContact({ email: "user@example.com" });
-    expect(httpJson).toHaveBeenCalledWith(
-      expect.stringContaining("/contacts"),
-      expect.objectContaining({ method: "POST", body: { email: "user@example.com" } }),
-    );
-  });
-
-  it("creates a person linked to the user and contact", async () => {
+  it("creates a person with the contact nested in the same request", async () => {
     vi.mocked(httpJson).mockResolvedValue({ id: "person-1" });
-    await createPerson({ userId: "user-1", contactId: "contact-1", name: "Fulano", cpf: "52998224725", birthDate: "1990-01-01" });
+    await createPerson({ name: "Fulano", cpf: "52998224725", birthDate: "1990-01-01", contact: { email: "user@example.com" } });
     expect(httpJson).toHaveBeenCalledWith(
       expect.stringContaining("/persons"),
       expect.objectContaining({
         method: "POST",
-        body: { userId: "user-1", contactId: "contact-1", name: "Fulano", cpf: "52998224725", birthDate: "1990-01-01" },
+        body: { name: "Fulano", cpf: "52998224725", birthDate: "1990-01-01", contact: { email: "user@example.com" } },
       }),
     );
   });

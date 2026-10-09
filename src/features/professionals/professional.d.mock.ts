@@ -6,7 +6,7 @@ const professionalMockData = [
   {
     id: "professional-1",
     name: "Carlos Eduardo Lima",
-    avatar: "https://i.pravatar.cc/150?img=15",
+
     contact: {
       number: "31991112222",
       email: "carlos.lima@gmail.com",
@@ -28,7 +28,7 @@ const professionalMockData = [
   {
     id: "professional-2",
     name: "Fernanda Ribeiro Alves",
-    avatar: "https://i.pravatar.cc/150?img=32",
+
     contact: {
       number: "41988882222",
       email: "fernanda.alves@outlook.com",

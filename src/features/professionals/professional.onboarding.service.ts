@@ -26,17 +26,12 @@ export async function getProfessions(): Promise<Profession[]> {
   });
 }
 
-export function createContact(payload: { email?: string; phone?: string }): Promise<{ id: string }> {
-  return httpJson<{ id: string }>(`${API_CORE_URL}/contacts`, {
-    service: SERVICE_NAME,
-    operation: "createContact",
-    method: "POST",
-    body: payload,
-    errorMessage: i18n.t("services:professionalOnboarding.createContact"),
-  });
-}
-
-export function createPerson(payload: { userId: string; contactId: string; name: string; cpf: string; birthDate: string }): Promise<{ id: string }> {
+export function createPerson(payload: {
+  name: string;
+  cpf: string;
+  birthDate: string;
+  contact?: { email?: string; phone?: string };
+}): Promise<{ id: string }> {
   return httpJson<{ id: string }>(`${API_CORE_URL}/persons`, {
     service: SERVICE_NAME,
     operation: "createPerson",

@@ -4,6 +4,7 @@ import { resolveWithMocks } from "@/config/mocks/fallback.service";
 import { httpJson } from "@/lib/shared/http/http.service";
 import { API_CORE_URL } from "@/lib/shared/http/apiCore.utils";
 import { professionalMocks } from "@/config/mocks/registry";
+import type { TechnicalAffiliationType } from "./professional.enum";
 
 const SERVICE_NAME = "professional";
 
@@ -13,6 +14,7 @@ export interface CatalogTechnician {
   name: string;
   crea: string;
   professions: string[];
+  affiliationType?: TechnicalAffiliationType;
 }
 
 function mockCatalogTechnician(professional: {
@@ -20,12 +22,14 @@ function mockCatalogTechnician(professional: {
   name: string;
   slug: string;
   registrations?: { profession: string }[];
+  affiliationType?: TechnicalAffiliationType;
 }): CatalogTechnician {
   return {
     id: professional.id,
     slug: professional.slug,
     name: professional.name,
     crea: "",
+    affiliationType: professional.affiliationType,
     professions: professional.registrations?.map((registration) => registration.profession) ?? [],
   };
 }
