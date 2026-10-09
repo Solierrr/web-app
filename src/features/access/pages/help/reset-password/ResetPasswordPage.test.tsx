@@ -2,11 +2,11 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import ResetPasswordPage from "./ResetPasswordPage";
-import { completePasswordReset } from "@/config/firebase/auth/auth.service";
+import { completePasswordReset } from "@/features/access/access.credentials.service";
 
-vi.mock("@/config/firebase/auth/auth.service", () => ({ completePasswordReset: vi.fn() }));
+vi.mock("@/features/access/access.credentials.service", () => ({ completePasswordReset: vi.fn() }));
 
-function renderPage(search = "?oobCode=abc") {
+function renderPage(search = "?token=abc") {
   render(
     <MemoryRouter initialEntries={[`/pt-BR/redefinir-senha${search}`]}>
       <ResetPasswordPage />
@@ -23,6 +23,7 @@ function fill(password: string, confirmation: string) {
 describe("ResetPasswordPage", () => {
   beforeEach(() => {
     vi.stubEnv("VITE_MOCKS", "DEACTIVATED");
+    vi.stubEnv("VITE_AUTH_MOCKS", "DEACTIVATED");
     vi.mocked(completePasswordReset).mockReset();
   });
 
@@ -81,6 +82,7 @@ describe("ResetPasswordPage", () => {
 
   it("lets the mocked flow proceed without a code", async () => {
     vi.stubEnv("VITE_MOCKS", "ALWAYS");
+    vi.stubEnv("VITE_AUTH_MOCKS", "ALWAYS");
     vi.stubEnv("VITE_MOCKS_DELAY_SECONDS", "0");
     renderPage("");
 

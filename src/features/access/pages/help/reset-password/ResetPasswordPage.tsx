@@ -5,18 +5,18 @@ import Access from "@/lib/components/layout/access/Access";
 import Hyperlink from "@/lib/components/ui/link/Hyperlink";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
-import { completePasswordReset } from "@/config/firebase/auth/auth.service";
+import { completePasswordReset } from "@/features/access/access.credentials.service";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
 
 export default function ResetPasswordPage() {
   const { t } = useTranslation("access");
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
-  const code = useSearchParams()[0].get("oobCode");
+  const code = useSearchParams()[0].get("token");
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const mock = isAlwaysMockMode();
+  const mock = isAlwaysMockMode("AUTH");
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     if (busy) return;

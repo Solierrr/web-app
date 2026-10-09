@@ -1,12 +1,17 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import ForgotPasswordPage from "./ForgotPasswordPage";
-import { requestPasswordReset } from "@/config/firebase/auth/auth.service";
+import { requestPasswordReset } from "@/features/access/access.credentials.service";
 
-vi.mock("@/config/firebase/auth/auth.service", () => ({ requestPasswordReset: vi.fn() }));
+vi.mock("@/features/access/access.credentials.service", () => ({ requestPasswordReset: vi.fn() }));
 
 describe("ForgotPasswordPage", () => {
+  beforeEach(() => {
+    vi.stubEnv("VITE_MOCKS", "DEACTIVATED");
+    vi.stubEnv("VITE_AUTH_MOCKS", "DEACTIVATED");
+    vi.clearAllMocks();
+  });
   it("renders the email field and submit button", () => {
     render(
       <MemoryRouter>
@@ -28,7 +33,7 @@ describe("ForgotPasswordPage", () => {
     expect(screen.getByRole("link", { name: "Voltar para o login" })).toHaveAttribute("href", "/pt-BR/login");
   });
 
-  it("sends a firebase password reset email and shows a confirmation", async () => {
+  it("requests an internal password reset email and shows a confirmation", async () => {
     vi.mocked(requestPasswordReset).mockResolvedValue(undefined);
     render(
       <MemoryRouter>

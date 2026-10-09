@@ -5,7 +5,7 @@ import Access from "@/lib/components/layout/access/Access";
 import Hyperlink from "@/lib/components/ui/link/Hyperlink";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
-import { requestPasswordReset } from "@/config/firebase/auth/auth.service";
+import { requestPasswordReset } from "@/features/access/access.credentials.service";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
 
 export default function ForgotPasswordPage() {
@@ -22,7 +22,7 @@ export default function ForgotPasswordPage() {
     setError(null);
     setBusy(true);
     try {
-      if (isAlwaysMockMode()) await waitForMockService();
+      if (isAlwaysMockMode("AUTH")) await waitForMockService();
       else await requestPasswordReset(String(data.get("email") ?? ""));
       setSent(true);
     } catch {
