@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.3.0](https://github.com/Solierrr/web-app/compare/v3.2.0...v3.3.0) (2026-10-09)
+
+
+### Features
+
+* add the local run commands ([6765868](https://github.com/Solierrr/web-app/commit/6765868ac10c763216f3c5e61f4368f1ff088676))
+
 ## [3.2.0](https://github.com/Solierrr/web-app/compare/v3.1.0...v3.2.0) (2026-10-01)
 
 
