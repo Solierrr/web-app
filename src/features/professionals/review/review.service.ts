@@ -2,6 +2,7 @@ import i18n from "@/config/i18n/internationalization";
 import { httpJson } from "@/lib/shared/http/http.service";
 import { API_CORE_URL } from "@/lib/shared/http/apiCore.utils";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
+import { listReviewQueue } from "../professional.submission.service";
 import type { ProfessionalReview } from "./review.d";
 import { getMockProfessionalReviews, decideMockProfessional } from "./review.d.mocks";
 
@@ -10,11 +11,8 @@ export async function listProfessionalReviews(): Promise<ProfessionalReview[]> {
     await waitForMockService();
     return getMockProfessionalReviews();
   }
-  return httpJson<ProfessionalReview[]>(`${API_CORE_URL}/technicians`, {
-    service: "professionalReview",
-    operation: "listProfessionalReviews",
-    errorMessage: i18n.t("services:professionalReview.listProfessionalReviews"),
-  });
+  const submissions = await listReviewQueue();
+  return submissions.map((item) => ({ id: item.id, status: "UNDER_ANALYSIS", crea: item.registrationNumber ?? "", person: { name: item.name } }));
 }
 
 export async function decideProfessional(id: string, approved: boolean): Promise<void> {
