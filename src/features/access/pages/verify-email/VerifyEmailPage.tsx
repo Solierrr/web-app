@@ -1,160 +1,71 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Access from "@/lib/components/layout/access/Access";
 import { routePaths } from "@/config/i18n/paths";
 import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
-import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
-import { linkFirebase, login } from "@/features/access/access.service";
+import { getAccountIdentity, confirmEmailVerification, requestEmailVerification } from "@/features/access/access.credentials.service";
 import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
-import {
-  getCurrentFirebaseUser,
-  login as loginFirebase,
-  register as registerFirebase,
-  reloadCurrentFirebaseUser,
-  sendVerificationEmail,
-} from "@/config/firebase/auth/auth.service";
-
-const RESEND_COOLDOWN_SECONDS = 60;
-type Status = "checking" | "no-account" | "pending" | "verified" | "linked";
 
 export default function VerifyEmailPage() {
-  const { lang: parameter } = useParams<{ lang: string }>();
+  const { lang: parameter } = useParams();
   const lang = isSupportedLanguage(parameter) ? parameter : DEFAULT;
-  const { t } = useTranslation("access", { keyPrefix: "verifyEmail" });
-  const { t: tAccess } = useTranslation("access");
+  const { t } = useTranslation("deeplink");
+  const [search, setSearch] = useSearchParams();
+  const token = search.get("token");
   const location = useLocation();
   const navigate = useNavigate();
-  const [status, setStatus] = useState<Status>(isAlwaysMockMode() ? "linked" : "checking");
-  const [cooldown, setCooldown] = useState(0);
+  const [verified, setVerified] = useState(isAlwaysMockMode("AUTH"));
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const cooldownTimer = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
+  const [error, setError] = useState("");
+  const [sent, setSent] = useState(false);
+  const [cooldown, setCooldown] = useState(0);
   const returnTo = (location.state as { returnTo?: string } | null)?.returnTo;
   const destination = returnTo?.startsWith(`/${lang}/`) ? returnTo : routePaths.dashboard(lang);
 
   useEffect(() => {
-    if (isAlwaysMockMode()) return;
+    if (isAlwaysMockMode("AUTH")) return;
     let active = true;
-    reloadCurrentFirebaseUser()
-      .then((user) => {
-        if (!active) return;
-        const matching = user?.email?.toLowerCase() === getAuthSession()?.email.toLowerCase();
-        setStatus(user && matching ? (user.emailVerified ? "verified" : "pending") : "no-account");
-      })
-      .catch(() => {
-        if (active) setStatus("no-account");
-      });
-    return () => {
-      active = false;
-    };
-  }, []);
+    getAccountIdentity().then((account) => { if (active) setVerified(account.emailVerified); })
+      .catch(() => { if (active) setError(t("errors.UNAVAILABLE")); });
+    return () => { active = false; };
+  }, [t]);
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const timer = setTimeout(() => setCooldown(cooldown - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [cooldown]);
 
-  useEffect(() => () => clearInterval(cooldownTimer.current), []);
-
-  async function handleResend() {
-    const user = getCurrentFirebaseUser();
-    if (busy || cooldown > 0 || !user || user.email?.toLowerCase() !== getAuthSession()?.email.toLowerCase()) return;
-    setBusy(true);
-    setError(null);
-    try {
-      await sendVerificationEmail(user);
-      setCooldown(RESEND_COOLDOWN_SECONDS);
-      clearInterval(cooldownTimer.current);
-      cooldownTimer.current = setInterval(() => {
-        setCooldown((current) => {
-          if (current <= 1) {
-            clearInterval(cooldownTimer.current);
-            return 0;
-          }
-          return current - 1;
-        });
-      }, 1000);
-    } catch {
-      setError(t("resendError"));
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function check() {
     if (busy) return;
-    if (status === "linked") {
-      navigate(destination, { replace: true });
-      return;
-    }
-    const password = String(new FormData(event.currentTarget).get("password") ?? "");
-    const email = getAuthSession()?.email;
     setBusy(true);
-    setError(null);
+    setError("");
     try {
-      if (status === "no-account" && email) {
-        await login({ email, password });
-        const { user } = await loginFirebase(email, password).catch(async (failure) => {
-          if (failure?.code !== "auth/user-not-found" && failure?.code !== "auth/invalid-credential") throw failure;
-          return registerFirebase(email, password);
-        });
-        if (!user.emailVerified) await sendVerificationEmail(user);
-        setStatus(user.emailVerified ? "verified" : "pending");
-      } else {
-        const user = await reloadCurrentFirebaseUser();
-        if (!user || !email || user.email?.toLowerCase() !== email.toLowerCase()) {
-          setStatus("no-account");
-          return;
-        }
-        if (!user.emailVerified) {
-          setStatus("pending");
-          setError(t("notConfirmed"));
-          return;
-        }
-        if (status === "pending") {
-          setStatus("verified");
-          return;
-        }
-        await linkFirebase(email, password, await user.getIdToken(true));
-        setStatus("linked");
-      }
-    } catch {
-      setError(t("linkError"));
-    } finally {
-      setBusy(false);
-    }
+      if (token) { await confirmEmailVerification(token); setSearch({}, { replace: true }); }
+      const account = await getAccountIdentity();
+      setVerified(account.emailVerified);
+      if (!account.emailVerified) setError(t("email.pending"));
+    } catch { setError(t("errors.UNAVAILABLE")); }
+    finally { setBusy(false); }
+  }
+  async function resend() {
+    if (busy || cooldown > 0) return;
+    setBusy(true);
+    setError("");
+    try { await requestEmailVerification(); setSent(true); setCooldown(60); }
+    catch { setError(t("email.unavailable")); }
+    finally { setBusy(false); }
   }
 
-  const passwordRequired = status === "verified" || status === "no-account";
-  return (
-    <Access
-      heading={t("title")}
-      animatedBackground={false}
-      busy={busy || status === "checking"}
-      error={error}
-      fields={passwordRequired ? [{ name: "password", password: true, placeholder: tAccess("fields.password.placeholder") }] : []}
-      submitLabel={status === "checking" ? undefined : status === "pending" ? t("check") : status === "linked" ? t("continue") : t("linkSubmit")}
-      onSubmit={handleSubmit}
-      footer={
-        status === "pending" ? (
-          <div className="flex flex-col gap-3">
-            <button type="button" disabled={busy || cooldown > 0} onClick={() => void handleResend()}>
-              {cooldown > 0 ? t("resendCooldown", { seconds: cooldown }) : t("resend")}
-            </button>
-            <Link to={destination}>{t("continueLater")}</Link>
-          </div>
-        ) : undefined
-      }>
-      <p role="status">
-        {t(
-          status === "checking"
-            ? "checking"
-            : status === "no-account"
-              ? "noFirebaseAccount"
-              : status === "pending"
-                ? "pending"
-                : status === "linked"
-                  ? "linkSuccess"
-                  : "verified",
-        )}
-      </p>
-      {passwordRequired && <p>{t(status === "no-account" ? "resume" : "linkDescription")}</p>}
-    </Access>
-  );
+  return <Access heading={t("email.title")} animatedBackground={false} busy={busy} error={error}>
+    <div className="flex flex-col gap-4">
+      <p role="status">{t(verified ? "email.verified" : sent ? "email.sent" : "email.pending")}</p>
+      {verified ? <button type="button" onClick={() => navigate(destination, { replace: true })}>{t("email.continue")}</button> : <>
+        <button type="button" disabled={busy} onClick={() => void check()}>{t(token ? "email.confirm" : "email.check")}</button>
+        <button type="button" disabled={busy || cooldown > 0} onClick={() => void resend()}>
+          {cooldown > 0 ? t("email.cooldown", { seconds: cooldown }) : t("email.resend")}
+        </button>
+      </>}
+    </div>
+  </Access>;
 }
