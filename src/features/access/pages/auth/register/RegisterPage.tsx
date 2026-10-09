@@ -6,7 +6,7 @@ import Hyperlink from "@/lib/components/ui/link/Hyperlink";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
 import { login, register } from "@/features/access/access.service";
-import { register as registerFirebase, sendVerificationEmail } from "@/config/firebase/auth/auth.service";
+import { requestEmailVerification } from "@/features/access/access.credentials.service";
 import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
 
 export default function RegisterPage() {
@@ -35,10 +35,9 @@ export default function RegisterPage() {
     try {
       await register({ email, password });
       await login({ email, password });
-      if (!isAlwaysMockMode()) {
+      if (!isAlwaysMockMode("AUTH")) {
         try {
-          const { user } = await registerFirebase(email, password);
-          await sendVerificationEmail(user);
+          await requestEmailVerification();
         } catch {
           navigate(routePaths.verifyEmail(lang), { replace: true, state: location.state });
           return;
@@ -57,7 +56,7 @@ export default function RegisterPage() {
       heading={t("register.title")}
       compact
       animatedBackground={false}
-      formHeader={<p className="text-center text-sm text-operational-muted">{t("register.helperText")}</p>}
+      formHeader={<p className="text-center text-body text-operational-muted">{t("register.helperText")}</p>}
       fields={[
         {
           name: "email",
@@ -89,16 +88,16 @@ export default function RegisterPage() {
       onSubmit={handleSubmit}
       footer={
         <div className="flex w-full flex-col items-center gap-6">
-          <div className="flex flex-wrap items-center justify-center gap-1 text-sm">
+          <div className="flex flex-wrap items-center justify-center gap-1 text-body">
             <span className="text-operational-muted">{t("register.hasAccountPrefix")}</span>
             <Hyperlink content={t("register.login")} url={routePaths.login(lang)} state={location.state} className="text-orange" />
           </div>
           <div className="flex flex-col items-center gap-1 text-center">
-            <p className="text-xs text-operational-muted">{t("login.policiesIntro")}</p>
+            <p className="text-body text-operational-muted">{t("login.policiesIntro")}</p>
             <div className="flex flex-wrap justify-center gap-1">
-              <Hyperlink content={t("login.terms")} url={routePaths.termsPolicy(lang)} className="text-xs underline underline-offset-4" />
-              <Hyperlink content={t("login.privacy")} url={routePaths.privacyPolicy(lang)} className="text-xs underline underline-offset-4" />
-              <Hyperlink content={t("login.cookies")} url={routePaths.cookiePolicy(lang)} className="text-xs underline underline-offset-4" />
+              <Hyperlink content={t("login.terms")} url={routePaths.termsPolicy(lang)} className="text-body underline underline-offset-4" />
+              <Hyperlink content={t("login.privacy")} url={routePaths.privacyPolicy(lang)} className="text-body underline underline-offset-4" />
+              <Hyperlink content={t("login.cookies")} url={routePaths.cookiePolicy(lang)} className="text-body underline underline-offset-4" />
             </div>
           </div>
         </div>

@@ -8,8 +8,10 @@ import Hyperlink from "@@/ui/link/Hyperlink";
 import Colors from "@/lib/shared/styles/colors/colors.enum";
 import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
-import { login, loginWithFirebase, loginWithMockMicrosoft } from "@/features/access/access.service";
+import { login, loginWithFirebase, loginWithMockMicrosoft, linkFirebase } from "@/features/access/access.service";
 import type { AuthSession } from "@/features/access/access";
+import { HttpResponseError } from "@/lib/shared/http/http.service";
+import { migratePassword } from "@/features/access/access.credentials.service";
 import { login as loginFirebase, loginWithGoogle, loginWithMicrosoft } from "@/config/firebase/auth/auth.service";
 import { LoginWithGoogle, LoginWithMicrosoft } from "@/config/firebase/auth/layout/LoginWithProvider";
 import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
@@ -24,9 +26,13 @@ export default function LoginPage({ background }: { background?: ReactNode } = {
   const [remembered, setRemembered] = useState(getRememberedLogin);
   const [showForm, setShowForm] = useState(() => !remembered);
   const [remember, setRemember] = useState(() => Boolean(remembered));
-  const [email, setEmail] = useState(remembered?.email ?? "");
+  const [email, setEmail] = useState(remembered?.email ?? (import.meta.env.DEV ? (import.meta.env.VITE_DEV_LOGIN_EMAIL ?? "") : ""));
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [linkProof, setLinkProof] = useState<{ token: string; email: string; method: "google" | "microsoft" } | null>(null);
+  const [linkConfirmed, setLinkConfirmed] = useState(false);
+  const [migrationProof, setMigrationProof] = useState<string | null>(null);
+  const { t: tDeeplink } = useTranslation("deeplink");
   const returnTo = (location.state as { returnTo?: string } | null)?.returnTo;
   const destination = returnTo?.startsWith(`/${lang}/`) ? returnTo : routePaths.dashboard(lang);
 
@@ -39,18 +45,27 @@ export default function LoginPage({ background }: { background?: ReactNode } = {
     if (busy) return;
     setBusy(true);
     setError(null);
+    let candidate: { token: string; email: string; method: "google" | "microsoft" } | null = null;
     try {
       let session: AuthSession;
-      if (isAlwaysMockMode())
+      if (isAlwaysMockMode("AUTH"))
         session =
           method === "microsoft" ? await loginWithMockMicrosoft() : await login({ email: savedEmail ?? `${method}@example.com`, password: "" });
       else {
         const user = await (method === "google" ? loginWithGoogle(savedEmail) : loginWithMicrosoft(savedEmail));
-        session = await loginWithFirebase(await user.getIdToken());
+        const token = await user.getIdToken();
+        candidate = { token, email: user.email ?? "", method };
+        session = await loginWithFirebase(token);
       }
       finish(session, method);
-    } catch {
-      setError(t("login.error"));
+    } catch (failure) {
+      if (candidate && failure instanceof Error && failure.cause instanceof HttpResponseError && failure.cause.code === "ACCOUNT_LINK_REQUIRED") {
+        setLinkProof(candidate);
+        setLinkConfirmed(false);
+        setEmail(candidate.email);
+        setShowForm(true);
+        setError(tDeeplink("link.explanation"));
+      } else setError(t("login.error"));
     } finally {
       setBusy(false);
     }
@@ -64,12 +79,33 @@ export default function LoginPage({ background }: { background?: ReactNode } = {
     setError(null);
     try {
       let session: AuthSession;
+      if (linkProof) {
+        if (!linkConfirmed) {
+          setError(tDeeplink("link.confirm"));
+          return;
+        }
+        session = await linkFirebase(linkProof.email, password, linkProof.token);
+        finish(session, linkProof.method);
+        setLinkProof(null);
+        return;
+      }
+      if (migrationProof) {
+        await migratePassword(migrationProof, password);
+        session = await login({ email: normalizedEmail, password });
+        setMigrationProof(null);
+        finish(session, "password");
+        return;
+      }
       try {
         session = await login({ email: normalizedEmail, password });
-        if (!isAlwaysMockMode()) await loginFirebase(normalizedEmail, password).catch(() => undefined);
       } catch {
         const { user } = await loginFirebase(normalizedEmail, password);
-        session = await loginWithFirebase(await user.getIdToken());
+        const proof = await user.getIdToken(true);
+        await loginWithFirebase(proof);
+        setMigrationProof(proof);
+        setError(tDeeplink("migration.choosePassword"));
+        setShowForm(true);
+        return;
       }
       finish(session, "password");
     } catch {
@@ -80,6 +116,9 @@ export default function LoginPage({ background }: { background?: ReactNode } = {
   }
 
   function chooseAnotherAccount() {
+    setMigrationProof(null);
+    setLinkProof(null);
+    setLinkConfirmed(false);
     setEmail("");
     setError(null);
     setShowForm(true);
@@ -96,7 +135,7 @@ export default function LoginPage({ background }: { background?: ReactNode } = {
   const divider = (
     <div className="flex items-center gap-4" role="separator" aria-label={t("login.or")}>
       <span className="h-px flex-1 bg-operational-border" />
-      <span className="text-xs text-operational-muted">{t("login.or")}</span>
+      <span className="text-body text-operational-muted">{t("login.or")}</span>
       <span className="h-px flex-1 bg-operational-border" />
     </div>
   );
@@ -104,6 +143,7 @@ export default function LoginPage({ background }: { background?: ReactNode } = {
     <Access
       heading={t("login.title")}
       compact
+      submitVariant="soft"
       animatedBackground
       background={background}
       busy={busy}
@@ -140,7 +180,7 @@ export default function LoginPage({ background }: { background?: ReactNode } = {
                 onClick={forgetAccount}
               />
             </div>
-            <span className="text-center text-xs text-operational-muted">
+            <span className="text-center text-body text-operational-muted">
               {t("login.lastUsed")} ·{" "}
               {remembered.method === "password" ? t("login.emailMethod") : remembered.method === "google" ? "Google" : "Microsoft"}
             </span>
@@ -167,30 +207,46 @@ export default function LoginPage({ background }: { background?: ReactNode } = {
                 value: email,
                 onChange: (event) => setEmail(event.target.value),
                 autoComplete: "username",
+                readOnly: Boolean(migrationProof || linkProof),
               },
               {
                 name: "password",
                 label: t("login.passwordLabel"),
-                placeholder: t("login.passwordPlaceholder"),
+                placeholder: migrationProof ? tDeeplink("migration.newPassword") : t("login.passwordPlaceholder"),
+                minLength: migrationProof ? 12 : undefined,
+                autoComplete: migrationProof ? "new-password" : "current-password",
+                defaultValue:
+                  import.meta.env.DEV && !migrationProof && !linkProof && email === import.meta.env.VITE_DEV_LOGIN_EMAIL
+                    ? import.meta.env.VITE_DEV_LOGIN_PASSWORD
+                    : undefined,
                 password: true,
-                autoComplete: "current-password",
                 autoFocus: Boolean(remembered && email === remembered.email),
               },
             ]
       }
       beforeSubmit={
-        <Checkbox
-          label={t("login.remember")}
-          checked={remember}
-          disabled={busy}
-          onChange={(event) => {
-            setRemember(event.target.checked);
-            if (!event.target.checked) saveRememberedLogin(null);
-          }}
-          className="my-1"
-        />
+        <>
+          {linkProof && (
+            <Checkbox
+              label={tDeeplink("link.confirm")}
+              checked={linkConfirmed}
+              disabled={busy}
+              onChange={(event) => setLinkConfirmed(event.target.checked)}
+            />
+          )}
+          <Checkbox
+            label={t("login.remember")}
+            checked={remember}
+            disabled={busy}
+            onChange={(event) => {
+              setRemember(event.target.checked);
+              if (!event.target.checked) saveRememberedLogin(null);
+            }}
+            className="my-1"
+          />
+        </>
       }
-      submitLabel={rememberedView ? undefined : t("login.signIn")}
+      submitLabel={rememberedView ? undefined : linkProof ? tDeeplink("link.submit") : t("login.signIn")}
       onSubmit={handleSubmit}
       footer={
         <div className="flex w-full flex-col items-center gap-6">
@@ -210,17 +266,17 @@ export default function LoginPage({ background }: { background?: ReactNode } = {
           )}
           <div className="flex flex-col items-center gap-2">
             <div className="flex flex-wrap items-center justify-center gap-1">
-              <span className="text-sm text-operational-muted">{t("login.noAccountPrefix")}</span>
-              <Hyperlink content={t("login.register")} url={routePaths.register(lang)} state={location.state} className="text-sm text-orange" />
+              <span className="text-body text-operational-muted">{t("login.noAccountPrefix")}</span>
+              <Hyperlink content={t("login.register")} url={routePaths.register(lang)} state={location.state} className="text-body text-orange" />
             </div>
-            {!rememberedView && <Hyperlink content={t("login.forgotPassword")} url={routePaths.forgotPassword(lang)} className="text-sm" />}
+            {!rememberedView && <Hyperlink content={t("login.forgotPassword")} url={routePaths.forgotPassword(lang)} className="text-body" />}
           </div>
           <div className="flex flex-col items-center gap-1 text-center">
-            <p className="text-xs text-operational-muted">{t("login.policiesIntro")}</p>
+            <p className="text-body text-operational-muted">{t("login.policiesIntro")}</p>
             <div className="flex flex-wrap justify-center gap-x-1 gap-y-1">
-              <Hyperlink content={t("login.terms")} url={routePaths.termsPolicy(lang)} className="text-xs underline underline-offset-4" />
-              <Hyperlink content={t("login.privacy")} url={routePaths.privacyPolicy(lang)} className="text-xs underline underline-offset-4" />
-              <Hyperlink content={t("login.cookies")} url={routePaths.cookiePolicy(lang)} className="text-xs underline underline-offset-4" />
+              <Hyperlink content={t("login.terms")} url={routePaths.termsPolicy(lang)} className="text-body underline underline-offset-4" />
+              <Hyperlink content={t("login.privacy")} url={routePaths.privacyPolicy(lang)} className="text-body underline underline-offset-4" />
+              <Hyperlink content={t("login.cookies")} url={routePaths.cookiePolicy(lang)} className="text-body underline underline-offset-4" />
             </div>
           </div>
         </div>
