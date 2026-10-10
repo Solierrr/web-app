@@ -10,7 +10,8 @@
     "actions": {
       "contactSupplier": "Entrar em contato",
       "contactSupplierDescription": "Entrar em contato com o fornecedor",
-      "addToCart": "Adicionar ao carrinho"
+      "addToCart": "Adicionar ao carrinho",
+      "addToCartError": "Não foi possível adicionar ao carrinho."
     },
     "sections": {
       "description": "Descrição",

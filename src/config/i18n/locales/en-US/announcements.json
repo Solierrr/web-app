@@ -10,7 +10,8 @@
     "actions": {
       "contactSupplier": "Contact",
       "contactSupplierDescription": "Contact the supplier",
-      "addToCart": "Add to cart"
+      "addToCart": "Add to cart",
+      "addToCartError": "Could not add to the cart."
     },
     "sections": {
       "description": "Description",

@@ -1,8 +1,10 @@
+import { selectedMockBrand, mockBrandId } from "@/features/brands/brand.mocks";
+import { getMockModels } from "@/features/solar-panel/solarPanel.d.mocks";
 import i18n from "@/config/i18n/internationalization";
 import { httpJson } from "@/lib/shared/http/http.service";
 import { API_CORE_URL } from "@/lib/shared/http/apiCore.utils";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
-import { getMockOffers, saveMockOffer, deleteMockOffer } from "./offer.d.mocks";
+import { getMockOffers, saveMockOffer, deleteMockOffer, setMockOfferStatus } from "./offer.d.mocks";
 import type { OfferStatus } from "./offer.utils";
 
 const SERVICE_NAME = "offer";
@@ -14,6 +16,7 @@ export interface OfferModel {
 }
 
 export interface Offer {
+  commercialStatus?: OfferStatus;
   id: string;
   supplierId: string;
   model: OfferModel;
@@ -24,6 +27,7 @@ export interface Offer {
   discountPercentage: number | null;
   serviceRegions: string[] | null;
   translationStatus: string;
+  sourceLocale?: string | null;
   translations: { locale: string; title: string; description: string; details: string | null }[];
 }
 
@@ -72,6 +76,9 @@ export interface OfferPayload {
 export async function createOffer(payload: OfferPayload): Promise<Offer> {
   if (isAlwaysMockMode()) {
     await waitForMockService();
+    const model = getMockModels().find((m) => m.id === payload.modelId);
+    if (!model) throw new Error("Modelo indisponível");
+    selectedMockBrand(model.brandId ?? mockBrandId(model.brand ?? ""));
     return saveMockOffer(payload);
   }
   return httpJson<Offer>(`${API_CORE_URL}/offers`, {
@@ -83,9 +90,6 @@ export async function createOffer(payload: OfferPayload): Promise<Offer> {
   });
 }
 
-// OfferRequestDTO exige title/description não-vazios mesmo na atualização
-// (a API ignora esses dois campos no update — só a tradução "PENDING" do
-// cadastro é usada — mas a validação do DTO ainda os exige no corpo).
 export async function updateOffer(id: string, payload: OfferPayload): Promise<Offer> {
   if (isAlwaysMockMode()) {
     await waitForMockService();
@@ -114,51 +118,17 @@ export async function deleteOffer(id: string): Promise<void> {
   });
 }
 
-const REOPEN_DAYS = 30;
-
-function stockKey(id: string): string {
-  return `solaria.offerStock.${id}`;
-}
-
-function rememberStock(id: string, value: number): void {
-  try {
-    localStorage.setItem(stockKey(id), String(value));
-  } catch {
-    return;
+export async function changeOfferStatus(offer: Offer, status: OfferStatus): Promise<Offer> {
+  if (isAlwaysMockMode()) {
+    await waitForMockService();
+    return setMockOfferStatus(offer, status);
   }
-}
-
-function recallStock(id: string): number {
-  try {
-    return Number(localStorage.getItem(stockKey(id))) || 1;
-  } catch {
-    return 1;
-  }
-}
-
-export function changeOfferStatus(offer: Offer, status: OfferStatus): Promise<Offer> {
-  const translation = offer.translations[0];
-  let availability = offer.availability;
-  let expirationDate = offer.expirationDate ?? undefined;
-  if (status === "PAUSED") {
-    if (availability > 0) rememberStock(offer.id, availability);
-    availability = 0;
-  } else if (status === "ACTIVE") {
-    if (availability === 0) availability = recallStock(offer.id);
-    if (expirationDate && Date.parse(expirationDate) <= Date.now()) expirationDate = new Date(Date.now() + REOPEN_DAYS * 86_400_000).toISOString();
-  } else {
-    expirationDate = new Date().toISOString();
-  }
-  return updateOffer(offer.id, {
-    supplierId: offer.supplierId,
-    modelId: offer.model.id,
-    title: translation?.title ?? offer.slug,
-    description: translation?.description ?? offer.slug,
-    details: translation?.details ?? undefined,
-    unitPrice: offer.unitPrice,
-    availability,
-    expirationDate,
-    discountPercentage: offer.discountPercentage ?? undefined,
-    serviceRegions: offer.serviceRegions ?? undefined,
+  const result = await httpJson<{ commercialStatus: OfferStatus }>(`${API_CORE_URL}/offers/${encodeURIComponent(offer.id)}/status`, {
+    service: SERVICE_NAME,
+    operation: "changeOfferStatus",
+    method: "PATCH",
+    body: { status },
+    errorMessage: i18n.t("services:offer.updateOffer", { id: offer.id }),
   });
+  return { ...offer, commercialStatus: result.commercialStatus };
 }
