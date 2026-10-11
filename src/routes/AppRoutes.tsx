@@ -1,3 +1,8 @@
+import ProjectPage from "@/features/projects/pages/ProjectPage";
+import ProjectFormPage from "@/features/projects/pages/ProjectFormPage";
+import ProjectsPage from "@/features/projects/pages/ProjectsPage";
+import BrandDetailsPage from "@/features/brands/pages/BrandDetailsPage";
+import BrandRequestsPage from "@/features/brands/pages/BrandRequestsPage";
 import type { ReactNode } from "react";
 import { Navigate, Route, Routes, useLocation, useParams } from "react-router-dom";
 
@@ -13,6 +18,7 @@ import { DEFAULT, isSupportedLanguage, SUPPORTED, type SupportedLanguage } from 
 import { joinSegments, routePaths } from "@/config/i18n/paths";
 
 import SolarPanelAnnouncement from "@/features/solar-panel/pages/announcement/SolarPanelAnnouncement";
+import InfrastructureFeed from "@/features/infrastructure/pages/InfrastructureFeed";
 import SolarPanelFeed from "@/features/solar-panel/pages/feed/SolarPanelFeed";
 import ProfessionalFeed from "@/features/professionals/pages/feed/ProfessionalFeed";
 import CompanyFeed from "@/features/companies/pages/feed/CompanyFeed";
@@ -32,6 +38,7 @@ import SolarPanelModelPage from "@/features/solar-panel/pages/crud/SolarPanelMod
 import Inbox from "@/features/messages/pages/Inbox";
 import ContactCompany from "@/features/messages/pages/ContactCompany";
 import ChatbotPage from "@/features/messages/pages/ChatbotPage";
+import Mobile from "@/features/access/mobile/Mobile";
 import LoginPage from "@/features/access/pages/auth/login/LoginPage";
 import RegisterPage from "@/features/access/pages/auth/register/RegisterPage";
 import ForgotPasswordPage from "@/features/access/pages/help/forgot-password/ForgotPasswordPage";
@@ -59,6 +66,11 @@ import RegistrationsPage from "@/features/platform-admin/pages/registrations/Reg
 import TermsPolicyPage from "@/features/policy/pages/terms/TermsPolicyPage";
 import PrivacyPolicyPage from "@/features/policy/pages/privacy/PrivacyPolicyPage";
 import CookiePolicyPage from "@/features/policy/pages/cookies/CookiePolicyPage";
+import CartPage from "@/features/purchases/pages/CartPage";
+import OrdersPage from "@/features/purchases/pages/OrdersPage";
+import OrderPage from "@/features/purchases/pages/OrderPage";
+import SalesPage from "@/features/purchases/pages/SalesPage";
+import PlanPage from "@/features/purchases/pages/PlanPage";
 
 interface RouteDefinition {
   key: string;
@@ -67,6 +79,7 @@ interface RouteDefinition {
 }
 
 const ACCESS: RouteDefinition[] = [
+  { key: "mobileAuthorization", path: (lang) => `${lang}/auth/mobile`, element: <Mobile /> },
   { key: "login", path: (lang) => joinSegments(lang, "login"), element: <LoginPage /> },
   { key: "register", path: (lang) => joinSegments(lang, "register"), element: <RegisterPage /> },
   { key: "forgotPassword", path: (lang) => joinSegments(lang, "forgotPassword"), element: <ForgotPasswordPage /> },
@@ -77,6 +90,12 @@ const APP: RouteDefinition[] = [
   { key: "termsPolicy", path: (lang) => joinSegments(lang, "policy", "terms"), element: <TermsPolicyPage /> },
   { key: "privacyPolicy", path: (lang) => joinSegments(lang, "policy", "privacy"), element: <PrivacyPolicyPage /> },
   { key: "cookiePolicy", path: (lang) => joinSegments(lang, "policy", "cookies"), element: <CookiePolicyPage /> },
+  { key: "infrastructureFeed", path: (lang) => joinSegments(lang, "infrastructure"), element: <InfrastructureFeed /> },
+  {
+    key: "infrastructureDetail",
+    path: (lang) => `${joinSegments(lang, "infrastructure")}/:companySlug/:productSlug`,
+    element: <SolarPanelAnnouncement />,
+  },
   { key: "solarPanelsFeed", path: (lang) => joinSegments(lang, "solarPanels"), element: <SolarPanelFeed /> },
   { key: "professionalsFeed", path: (lang) => joinSegments(lang, "professionals"), element: <ProfessionalFeed /> },
   { key: "companiesFeed", path: (lang) => joinSegments(lang, "companies"), element: <CompanyFeed /> },
@@ -96,6 +115,33 @@ const APP: RouteDefinition[] = [
 ];
 
 const SAAS: RouteDefinition[] = [
+  { key: "projectCreate", path: (lang) => joinSegments(lang, "projects", "newProject"), element: <ProjectFormPage /> },
+  {
+    key: "projectEdit",
+    path: (lang) => `${joinSegments(lang, "projects")}/:projectId/${joinSegments(lang, "editProject")}`,
+    element: <ProjectFormPage />,
+  },
+  { key: "projectDetail", path: (lang) => `${joinSegments(lang, "projects")}/:projectId`, element: <ProjectPage /> },
+
+  { key: "projects", path: (lang) => joinSegments(lang, "projects"), element: <ProjectsPage /> },
+  {
+    key: "brandDetail",
+    path: (lang) => `${joinSegments(lang, "brands")}/:brandId`,
+    element: (
+      <RequireCompany permission="GET /api/brands">
+        <BrandDetailsPage />
+      </RequireCompany>
+    ),
+  },
+  {
+    key: "brandRequests",
+    path: (lang) => joinSegments(lang, "brandRequests"),
+    element: (
+      <RequireCompany permission="GET /api/brand-requests">
+        <BrandRequestsPage />
+      </RequireCompany>
+    ),
+  },
   {
     key: "modelDetail",
     path: (lang) => `${joinSegments(lang, "admin", "solarPanelModels")}/:modelId`,
@@ -199,6 +245,27 @@ const SAAS: RouteDefinition[] = [
       </RequireCompany>
     ),
   },
+  { key: "cart", path: (lang) => joinSegments(lang, "cart"), element: <CartPage /> },
+  { key: "orders", path: (lang) => joinSegments(lang, "orders"), element: <OrdersPage /> },
+  { key: "orderDetail", path: (lang) => `${joinSegments(lang, "orders")}/:orderId`, element: <OrderPage /> },
+  {
+    key: "sales",
+    path: (lang) => joinSegments(lang, "admin", "sales"),
+    element: (
+      <RequireCompany type="SUPPLIER" permission="GET /api/sales">
+        <SalesPage />
+      </RequireCompany>
+    ),
+  },
+  {
+    key: "plan",
+    path: (lang) => joinSegments(lang, "admin", "plan"),
+    element: (
+      <RequireCompany type="SUPPLIER" permission="GET /api/subscription">
+        <PlanPage />
+      </RequireCompany>
+    ),
+  },
   { key: "analytics", path: (lang) => joinSegments(lang, "analytics"), element: <AnalyticsPage /> },
   { key: "registrationStatus", path: (lang) => joinSegments(lang, "registrationStatus"), element: <RegistrationStatusPage /> },
   {
@@ -264,9 +331,8 @@ export function AppRoutes() {
           <Route index element={<SolarPanelFeed />} />
 
           {SUPPORTED.flatMap((lang) => APP.map(({ key, path, element }) => <Route key={`${lang}-${key}`} path={path(lang)} element={element} />))}
-
-          <Route path="*" element={<NotFoundPage />} />
         </Route>
+        <Route path="*" element={<NotFoundPage />} />
         <Route element={<RequireAuth />}>
           {SUPPORTED.map((lang) => (
             <Route key={`${lang}-verifyEmail`} path={joinSegments(lang, "verifyEmail")} element={<VerifyEmailPage />} />
