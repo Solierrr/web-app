@@ -1,5 +1,26 @@
 import logger from "@/config/logging/logger";
+import i18n from "@/config/i18n/internationalization";
+import { getSelectedContext } from "@/features/access/access.onboarding.service";
 import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
+
+export class HttpResponseError extends Error {
+  constructor(
+    public readonly status: number,
+    public readonly code: string,
+    public readonly detail?: string,
+  ) {
+    super(`HTTP ${status}`);
+  }
+}
+
+export function getHttpErrorMessage(error: unknown, fallback: string): string {
+  const response = error instanceof HttpResponseError ? error : error instanceof Error ? error.cause : null;
+  if (response instanceof HttpResponseError && /^[A-Z][A-Z0-9_]{0,79}$/.test(response.code)) {
+    const key = `errors:${response.code}`;
+    if (i18n.exists(key)) return i18n.t(key);
+  }
+  return fallback;
+}
 
 type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
@@ -17,8 +38,17 @@ export async function httpJson<T>(url: string, options: HttpJsonOptions): Promis
 
   const accessToken = authenticated ? getAuthSession()?.accessToken : undefined;
   const headers: Record<string, string> = {};
-  if (body !== undefined) headers["Content-Type"] = "application/json";
+  const multipart = typeof FormData !== "undefined" && body instanceof FormData;
+  if (body !== undefined && !multipart) headers["Content-Type"] = "application/json";
   if (accessToken) headers["Authorization"] = `Bearer ${accessToken}`;
+  const selectedCompany = authenticated ? getSelectedContext() : null;
+  if (
+    url.startsWith(`${import.meta.env.VITE_API_CORE}/api/`) &&
+    selectedCompany &&
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(selectedCompany)
+  ) {
+    headers["X-Company-Id"] = selectedCompany;
+  }
 
   let response: Response;
 
@@ -26,7 +56,7 @@ export async function httpJson<T>(url: string, options: HttpJsonOptions): Promis
     response = await fetch(url, {
       method,
       headers,
-      body: body === undefined ? undefined : JSON.stringify(body),
+      body: multipart ? (body as FormData) : body === undefined ? undefined : JSON.stringify(body),
     });
   } catch (error) {
     logger.serviceError({ service, operation, error });
@@ -35,8 +65,28 @@ export async function httpJson<T>(url: string, options: HttpJsonOptions): Promis
 
   if (!response.ok) {
     const error = new Error(`${service}.${operation} returned HTTP ${response.status}`);
-    logger.serviceError({ service, operation, status: response.status, error });
-    throw new Error(errorMessage, { cause: error });
+    let code = "HTTP_ERROR";
+    let detail: string | undefined;
+    try {
+      const data = await response.json();
+      if (data && typeof data === "object") {
+        if (typeof data.detail === "string" && data.detail.length <= 2000) detail = data.detail;
+        if (typeof data.errorCode === "string") code = data.errorCode;
+        else if (typeof data.code === "string") code = data.code;
+        else if (typeof data.status === "string") code = data.status;
+      }
+    } catch {
+      code = "HTTP_ERROR";
+    }
+    const cause = new HttpResponseError(response.status, code, detail);
+    logger.serviceError({
+      service,
+      operation,
+      status: response.status,
+      errorCode: /^[A-Z][A-Z0-9_]{0,79}$/.test(code) ? code : "HTTP_ERROR",
+      error,
+    });
+    throw new Error(getHttpErrorMessage(cause, errorMessage), { cause });
   }
 
   if (response.status === 204) return undefined as T;
