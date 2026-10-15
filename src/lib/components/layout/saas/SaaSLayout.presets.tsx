@@ -1,4 +1,4 @@
-import { routePaths } from "@/config/inter/paths";
+import { routePaths } from "@/config/i18n/paths";
 import type { SaaSNavigationGroup } from "@/features/saas/saas";
 import { ANALYTICS_PERMISSIONS } from "@/features/analytics/analytics.utils";
 
@@ -23,7 +23,21 @@ export function getOperationalNavigation({
       label: "navigation.groups.overview",
       items: [
         { key: "dashboard", label: "navigation.items.dashboard", icon: "home", to: routePaths.dashboard },
-        { key: "messages", label: "navigation.items.messages", icon: "messages", to: routePaths.inbox },
+        { key: "chatbot", label: "navigation.items.chatbot", icon: "sparkles", to: routePaths.operationalChatbot },
+      ],
+    },
+    {
+      key: "workspace",
+      label: "navigation.groups.workspace",
+      items: [
+        { key: "projects", label: "navigation.items.projects", icon: "folder", to: routePaths.projects },
+        { key: "messages", label: "navigation.items.messages", icon: "messagesSquare", to: routePaths.inbox },
+        ...(companyType !== "SUPPLIER"
+          ? [
+              { key: "cart", label: "navigation.items.cart", icon: "shoppingCart" as const, to: routePaths.cart },
+              { key: "orders", label: "navigation.items.orders", icon: "clock" as const, to: routePaths.orders },
+            ]
+          : []),
         ...((companyType && ANALYTICS_PERMISSIONS.some((permission) => can(permission))) || platformAdmin
           ? [{ key: "analytics", label: "navigation.items.analytics", icon: "chart" as const, to: routePaths.analytics }]
           : []),
@@ -37,9 +51,6 @@ export function getOperationalNavigation({
               },
             ]
           : []),
-        ...(company || platformAdmin
-          ? [{ key: "chatbot", label: "navigation.items.chatbot", icon: "messages" as const, to: routePaths.operationalChatbot }]
-          : []),
       ],
     },
     ...(company
@@ -48,7 +59,10 @@ export function getOperationalNavigation({
             key: "company",
             label: "navigation.groups.company",
             items: [
-              { key: "companyProfile", label: "navigation.items.companyProfile", icon: "building" as const, to: routePaths.ownCompanyProfile },
+              ...(can("GET /api/brand-requests")
+                ? [{ key: "brandRequests", label: "navigation.items.brandRequests", icon: "clock" as const, to: routePaths.brandRequests }]
+                : []),
+              { key: "companyProfile", label: "navigation.items.companyProfile", icon: "companySettings" as const, to: routePaths.ownCompanyProfile },
               ...(companyType === "SUPPLIER"
                 ? [
                     ...(can("GET /api/models")
@@ -64,13 +78,19 @@ export function getOperationalNavigation({
                     ...(can("GET /api/offers/company/{companyId}")
                       ? [{ key: "offers", label: "navigation.items.offers", icon: "shoppingCart" as const, to: routePaths.offersManagement }]
                       : []),
+                    ...(can("GET /api/sales")
+                      ? [{ key: "sales", label: "navigation.items.sales", icon: "chart" as const, to: routePaths.sales }]
+                      : []),
+                    ...(can("GET /api/subscription")
+                      ? [{ key: "plan", label: "navigation.items.plan", icon: "companySettings" as const, to: routePaths.plan }]
+                      : []),
                   ]
                 : []),
               ...(companyType === "DEMANDANT" && can("GET /api/local-units/company/{companyId}")
                 ? [{ key: "units", label: "navigation.items.units", icon: "building" as const, to: routePaths.unitsManagement }]
                 : []),
               ...(companyType && can("GET /api/user-companies/company/{companyId}")
-                ? [{ key: "employees", label: "navigation.items.employees", icon: "users" as const, to: routePaths.employeesManagement }]
+                ? [{ key: "employees", label: "navigation.items.employees", icon: "employeeAccess" as const, to: routePaths.employeesManagement }]
                 : []),
             ],
           },
@@ -82,7 +102,12 @@ export function getOperationalNavigation({
             key: "administration",
             label: "navigation.groups.administration",
             items: [
-              { key: "registrations", label: "navigation.items.registrations", icon: "settings" as const, to: routePaths.registrationsManagement },
+              {
+                key: "registrations",
+                label: "navigation.items.registrations",
+                icon: "registrations" as const,
+                to: routePaths.registrationsManagement,
+              },
             ],
           },
         ]

@@ -30,6 +30,6 @@ describe("Message", () => {
   it("renders the formatted hour", () => {
     render(<Message message={message} owner={owner} />);
 
-    expect(screen.getByText("9:5")).toBeInTheDocument();
+    expect(screen.getByText("09:05")).toBeInTheDocument();
   });
 });

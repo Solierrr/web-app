@@ -65,13 +65,21 @@ describe("resolveWithMocks", () => {
     await expect(resultPromise).resolves.toBe("mock");
   });
 
-  it("defaults to the FALLBACK behavior when VITE_MOCKS is unset or invalid", async () => {
+  it("propagates API failures when VITE_MOCKS is unset or invalid", async () => {
     vi.stubEnv("VITE_MOCKS", "");
     const apiCall = vi.fn().mockRejectedValue(new Error("boom"));
     const mockCall = vi.fn().mockReturnValue("mock");
 
-    const result = await resolveWithMocks(apiCall, mockCall);
-
-    expect(result).toBe("mock");
+    await expect(resolveWithMocks(apiCall, mockCall)).rejects.toThrow("boom");
+    expect(mockCall).not.toHaveBeenCalled();
   });
+});
+
+it("does not replace seeded API data with legacy mocks in development", async () => {
+  vi.stubEnv("MODE", "development");
+  vi.stubEnv("DEV", true);
+  vi.stubEnv("VITE_MOCKS", MocksMode.ALWAYS);
+  const mockCall = vi.fn();
+  await expect(resolveWithMocks(vi.fn().mockRejectedValue(new Error("offline")), mockCall)).rejects.toThrow("offline");
+  expect(mockCall).not.toHaveBeenCalled();
 });

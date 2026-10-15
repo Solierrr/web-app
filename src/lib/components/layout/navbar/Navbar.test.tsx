@@ -1,9 +1,11 @@
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
-import "@/config/inter/internationalization";
+import "@/config/i18n/internationalization";
 import Navbar from "./Navbar";
+
+vi.mock("@/lib/shared/auth/authToken.utils", () => ({ getAuthSession: () => null }));
 
 describe("Navbar", () => {
   it("renders the main navigation links", () => {
@@ -13,10 +15,11 @@ describe("Navbar", () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByRole("link", { name: "Aplicativo" })).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Aplicativo" })).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Placas Solares" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Profissionais" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Credenciar-se" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Serviços" })).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Credenciar-se" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Entrar" })).toHaveAttribute("href", "/pt-BR/login");
     expect(screen.getByRole("link", { name: "Suporte" })).toBeInTheDocument();
   });
 

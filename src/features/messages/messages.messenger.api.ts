@@ -1,9 +1,17 @@
+import i18n from "@/config/i18n/internationalization";
 import { httpJson } from "@/lib/shared/http/http.service";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
-import { getMockMessenger, getMockConversation, createMockConversation, sendMockMessage } from "./messages.messenger.d.mocks";
+import {
+  getMockMessenger,
+  getMockConversation,
+  createMockConversation,
+  createMockChatbotConversation,
+  sendMockMessage,
+  markMockConversationRead,
+} from "./messages.messenger.d.mocks";
 import { userMocks } from "@/config/mocks/registry";
 
-const API = `${import.meta.env.VITE_API_MESSENGER}/messaging`;
+const API = `${import.meta.env.VITE_API_MESSENGER?.replace(/\/$/, "")}/messaging`;
 
 export interface ConversationDto {
   id: string;
@@ -11,7 +19,9 @@ export interface ConversationDto {
   participantIds: string[];
   title: string | null;
   lastInteractionAt: string | null;
-  unreadCount: number;
+  unreadCount?: number;
+  communityId?: string | null;
+  projectGeneral?: boolean;
 }
 
 export interface MessageDto {
@@ -21,34 +31,36 @@ export interface MessageDto {
   content: string;
   timestamp: string;
   sequence: number;
+  role?: string;
+  messageType?: "USER_TO_USER" | "USER_TO_GROUP" | "USER_TO_CHATBOT" | "CHATBOT_TO_USER";
 }
 
 export async function getConversations(): Promise<ConversationDto[]> {
-  if (isAlwaysMockMode()) {
+  if (isAlwaysMockMode("MESSENGER")) {
     await waitForMockService();
     return getMockMessenger().conversations;
   }
   return httpJson<ConversationDto[]>(`${API}/conversations/me`, {
     service: "messenger",
     operation: "getConversations",
-    errorMessage: "Não foi possível carregar as conversas",
+    errorMessage: i18n.t("services:messenger.getConversations"),
   });
 }
 
 export async function getConversation(id: string): Promise<ConversationDto> {
-  if (isAlwaysMockMode()) {
+  if (isAlwaysMockMode("MESSENGER")) {
     await waitForMockService();
     return getMockConversation(id);
   }
   return httpJson<ConversationDto>(`${API}/conversations/${encodeURIComponent(id)}`, {
     service: "messenger",
     operation: "getConversation",
-    errorMessage: "Não foi possível carregar a conversa",
+    errorMessage: i18n.t("services:messenger.getConversation"),
   });
 }
 
 export async function createDirectConversation(recipientId: string): Promise<ConversationDto> {
-  if (isAlwaysMockMode()) {
+  if (isAlwaysMockMode("MESSENGER")) {
     await waitForMockService();
     return createMockConversation(recipientId);
   }
@@ -57,54 +69,53 @@ export async function createDirectConversation(recipientId: string): Promise<Con
     operation: "createDirectConversation",
     method: "POST",
     body: { recipientId },
-    errorMessage: "Não foi possível iniciar a conversa",
+    errorMessage: i18n.t("services:messenger.createDirectConversation"),
   });
 }
 
 export async function getConversationMessages(id: string, beforeSequence?: number): Promise<MessageDto[]> {
-  if (isAlwaysMockMode()) {
+  if (isAlwaysMockMode("MESSENGER")) {
     await waitForMockService();
     return getMockMessenger()
       .messages.filter((item) => item.conversationId === id && (beforeSequence === undefined || item.sequence < beforeSequence))
       .slice(-100);
   }
-  const params = new URLSearchParams({ limit: "100" });
-  if (beforeSequence !== undefined) params.set("beforeSequence", String(beforeSequence));
-  return httpJson<MessageDto[]>(`${API}/messages/conversation/${encodeURIComponent(id)}/history?${params}`, {
-    service: "messenger",
-    operation: "getConversationMessages",
-    errorMessage: "Não foi possível carregar as mensagens",
-  });
+  const messages: MessageDto[] = [];
+  let cursor = 0;
+  while (true) {
+    const page = await getConversationMessagesSince(id, cursor);
+    messages.push(...page);
+    const next = page.reduce((highest, message) => Math.max(highest, message.sequence), cursor);
+    if (page.length < 100 || next <= cursor || (beforeSequence !== undefined && next >= beforeSequence)) break;
+    cursor = next;
+  }
+  return messages.filter((message) => beforeSequence === undefined || message.sequence < beforeSequence).slice(-100);
 }
 
 export async function getConversationMessagesSince(id: string, sequence: number): Promise<MessageDto[]> {
-  if (isAlwaysMockMode()) {
+  if (isAlwaysMockMode("MESSENGER")) {
     await waitForMockService();
     return getMockMessenger().messages.filter((item) => item.conversationId === id && item.sequence > sequence);
   }
   return httpJson<MessageDto[]>(`${API}/messages/conversation/${encodeURIComponent(id)}?sinceSequence=${sequence}&limit=100`, {
     service: "messenger",
     operation: "syncConversationMessages",
-    errorMessage: "Não foi possível sincronizar as mensagens",
+    errorMessage: i18n.t("services:messenger.syncConversationMessages"),
   });
 }
 
-export async function markConversationRead(id: string, sequence: number): Promise<ConversationDto> {
-  if (isAlwaysMockMode()) {
-    await waitForMockService();
-    return { ...getMockConversation(id), unreadCount: 0 };
-  }
-  return httpJson<ConversationDto>(`${API}/conversations/${encodeURIComponent(id)}/read`, {
-    service: "messenger",
-    operation: "markConversationRead",
-    method: "POST",
-    body: { sequence },
-    errorMessage: "Não foi possível atualizar a leitura da conversa",
-  });
+export async function markConversationRead(id: string, sequence: number): Promise<ConversationDto | undefined> {
+  if (!isAlwaysMockMode("MESSENGER")) return;
+  await waitForMockService();
+  if (sequence > 0) return markMockConversationRead(id);
 }
 
-export async function sendConversationMessage(conversationId: string, content: string): Promise<MessageDto> {
-  if (isAlwaysMockMode()) {
+export async function sendConversationMessage(
+  conversationId: string,
+  content: string,
+  conversationType: ConversationDto["conversationType"] = "DIRECT",
+): Promise<MessageDto> {
+  if (isAlwaysMockMode("MESSENGER")) {
     await waitForMockService();
     return sendMockMessage(conversationId, content);
   }
@@ -112,15 +123,51 @@ export async function sendConversationMessage(conversationId: string, content: s
     service: "messenger",
     operation: "sendConversationMessage",
     method: "POST",
-    body: { conversationId, messageType: "USER_TO_USER", content },
-    errorMessage: "Não foi possível enviar a mensagem",
+    body: {
+      conversationId,
+      messageType: conversationType === "GROUP" ? "USER_TO_GROUP" : conversationType === "CHAT_BOT" ? "USER_TO_CHATBOT" : "USER_TO_USER",
+      content,
+    },
+    errorMessage: i18n.t("services:messenger.sendConversationMessage"),
+  });
+}
+
+export async function createChatbotConversation(userType: string): Promise<ConversationDto> {
+  if (isAlwaysMockMode("MESSENGER")) {
+    await waitForMockService();
+    return createMockChatbotConversation();
+  }
+  return httpJson<ConversationDto>(`${API}/conversations/chatbot-conversations`, {
+    service: "messenger",
+    operation: "createChatbotConversation",
+    method: "POST",
+    body: { userType },
+    errorMessage: i18n.t("chat:createError"),
+  });
+}
+
+export interface MessengerContact {
+  authId: string;
+  username: string;
+  avatar: string | null;
+}
+
+export async function getMessengerContacts(): Promise<MessengerContact[]> {
+  if (isAlwaysMockMode("MESSENGER")) {
+    await waitForMockService();
+    return userMocks.map((user) => ({ authId: user.authId || user.id, username: user.name, avatar: user.avatar ?? null }));
+  }
+  return httpJson<MessengerContact[]>(`${import.meta.env.VITE_API_CORE}/api/connections`, {
+    service: "user",
+    operation: "getMessengerContacts",
+    errorMessage: i18n.t("chat:contactsError"),
   });
 }
 
 export async function getUserSummary(authId: string): Promise<{ username: string; avatar: string | null }> {
-  if (isAlwaysMockMode()) {
+  if (isAlwaysMockMode("MESSENGER")) {
     await waitForMockService();
-    const user = userMocks.find((item) => item.id === authId) ?? userMocks[0];
+    const user = userMocks.find((item) => item.id === authId || item.authId === authId) ?? userMocks[0];
     return { username: user.name, avatar: user.avatar ?? null };
   }
   return httpJson<{ username: string; avatar: string | null }>(
@@ -128,7 +175,7 @@ export async function getUserSummary(authId: string): Promise<{ username: string
     {
       service: "user",
       operation: "getUserSummary",
-      errorMessage: "Não foi possível carregar o participante",
+      errorMessage: i18n.t("services:user.getUserSummary"),
     },
   );
 }

@@ -1,3 +1,7 @@
+import Checkbox from "@@/ui/checkbox/Checkbox";
+import { PrimaryButton } from "@@/ui/button/Button.presets";
+import { NativeSelect as Select } from "@@/ui/select/Select";
+import OperationalForm from "@@/layout/operational-page/OperationalForm";
 import { useEffect, useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -76,17 +80,19 @@ export default function Permissions({ positionId, companyType, disabled = false 
   }
 
   return (
-    <form onSubmit={save} className="flex flex-col gap-4" aria-busy={loading || saving}>
+    <OperationalForm plain onSubmit={save} aria-busy={loading || saving}>
       <h2 className="font-semi-bold">{t("permissions.title")}</h2>
       {loading ? (
         <p role="status">{t("shell.loading")}</p>
       ) : (
         <fieldset disabled={disabled || saving || (feedback === "error" && permissions.length === 0)} className="flex flex-col gap-4">
-          <label className="flex flex-col gap-2 text-sm">
+          <label className="flex flex-col gap-2 text-body">
             {t("permissions.template")}
-            <select
+            <Select
+              name="permissionTemplate"
+              aria-label={t("permissions.template")}
               defaultValue=""
-              className="rounded-small border border-operational-border p-2"
+              className="w-full"
               onChange={(event) => {
                 const template = getPermissionTemplate(event.target.value);
                 if (template)
@@ -102,28 +108,24 @@ export default function Permissions({ positionId, companyType, disabled = false 
                   {template.title}
                 </option>
               ))}
-            </select>
+            </Select>
           </label>
           <div className="flex flex-col gap-3">
             {permissions
               .filter((item) => allowedNames.has(item.permissionName) || granted.some((link) => link.permission.id === item.id))
               .map((item) => (
-                <label key={item.id} className="flex items-start gap-3 text-sm">
-                  <input
-                    type="checkbox"
-                    checked={selected.includes(item.id)}
-                    onChange={(event) => setSelected((value) => (event.target.checked ? [...value, item.id] : value.filter((id) => id !== item.id)))}
-                  />
-                  <span>{item.name || item.permissionName}</span>
-                </label>
+                <Checkbox
+                  key={item.id}
+                  label={item.name || item.permissionName}
+                  checked={selected.includes(item.id)}
+                  onChange={(event) => setSelected((value) => (event.target.checked ? [...value, item.id] : value.filter((id) => id !== item.id)))}
+                />
               ))}
           </div>
-          <button type="submit" className="self-start rounded-small border border-operational-border px-4 py-2 hover:bg-operational-hover">
-            {t("permissions.save")}
-          </button>
+          <PrimaryButton type="submit" className="min-h-12 w-full" content={t("permissions.save")} description={t("permissions.save")} />
         </fieldset>
       )}
       {feedback && <p role={feedback === "error" ? "alert" : "status"}>{t(`permissions.${feedback}`)}</p>}
-    </form>
+    </OperationalForm>
   );
 }

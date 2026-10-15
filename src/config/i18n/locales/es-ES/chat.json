@@ -1,0 +1,113 @@
+{
+  "composerInstructions": {
+    "newLine": "Nueva línea",
+    "send": "Enviar"
+  },
+  "newConversation": "Nueva conversación",
+  "newAssistant": "Hablar con el asistente",
+  "createError": "No se pudo iniciar la conversación. Inténtalo de nuevo.",
+  "contactsError": "No se pudieron cargar tus conexiones.",
+  "conversations": "Tus conversaciones",
+  "searchConversations": "Buscar conversación",
+  "searchContacts": "Buscar en tus conexiones",
+  "noMatches": "No se encontraron conversaciones.",
+  "noContacts": "Tus conexiones aparecerán aquí. Encuentra a alguien en el catálogo para iniciar una conversación.",
+  "findPeople": "Encontrar personas en el catálogo",
+  "addPerson": "Hablar con una persona",
+  "selectConversation": "Selecciona una conversación",
+  "selectConversationDescription": "Elige una persona, un grupo o una sesión del asistente en la lista.",
+  "startConversation": "Cada conversación empieza con un mensaje",
+  "startConversationDescription": "Habla con una persona o inicia una sesión con el asistente. Tu historial aparecerá aquí.",
+  "participant": "Participante",
+  "group": "Grupo",
+  "actionsClose": "Cerrar",
+  "filterConversations": "Filtrar conversaciones",
+  "filters": {
+    "ALL": "Todas",
+    "DIRECT": "Personas",
+    "GROUP": "Grupos",
+    "CHAT_BOT": "Asistente"
+  },
+  "you": "Tú",
+  "draftPlaceholder": "Escribe un mensaje...",
+  "send": "Enviar",
+  "loadOlder": "Cargar mensajes anteriores",
+  "sendDescription": "Enviar mensaje",
+  "typing": "Escribiendo...",
+  "inbox": "Mensajes",
+  "conversation": "Conversación",
+  "loading": "Cargando conversaciones...",
+  "loadError": "No se pudo cargar la conversación.",
+  "sendError": "No se pudo enviar el mensaje. Inténtalo de nuevo.",
+  "emptyInbox": "Todavía no tienes conversaciones.",
+  "emptyConversation": "Envía un mensaje para iniciar la conversación.",
+  "openingConversation": "Abriendo conversación...",
+  "contactError": "No se pudo iniciar el contacto con esta empresa.",
+  "mockContactUnavailable": "Esta empresa es de demostración. Para iniciar una conversación, usa una empresa registrada en el entorno real.",
+  "companyLoadError": "No se pudo cargar la empresa.",
+  "demandantOnly": "El contacto con proveedores está disponible para cuentas Demandantes.",
+  "backToCompanies": "Volver a empresas",
+  "contactAbout": "Hola, me interesa {{title}}.",
+  "productContext": "Contacto iniciado desde el panel: {{title}}",
+  "unreadCount_one": "{{count}} mensaje sin leer",
+  "unreadCount_other": "{{count}} mensajes sin leer",
+  "realtimeUnavailable": "La conexión en tiempo real se interrumpió. Los mensajes se actualizarán periódicamente mientras intentamos reconectar.",
+  "chatbot": {
+    "panelDescription": "¿Qué vamos a hacer hoy?",
+    "ask": "Preguntar",
+    "needHelp": "¿Quieres explorar tus opciones?",
+    "explore": "Catálogo",
+    "privacyNotice": "Evita compartir datos sensibles. Consulta nuestra",
+    "privacyPolicy": "Política de Privacidad.",
+    "suggestionTitles": {
+      "catalog": "Paneles solares",
+      "compare": "Compara tus opciones",
+      "help": "Empieza con Solaria"
+    },
+    "suggestionDescriptions": {
+      "catalog": "Encuentra un panel para tu proyecto",
+      "compare": "Comprende las diferencias del catálogo",
+      "help": "Descubre los primeros pasos"
+    },
+    "newConversation": "Nueva conversación",
+    "welcomeTitle": "¿Cómo puedo ayudarte?",
+    "welcomeDescription": "Elige una sugerencia o escribe tu pregunta sobre Solaria.",
+    "composerHint": "Enter envía · Shift + Enter añade una línea",
+    "suggestions": {
+      "catalog": "¿Cómo encontrar un panel solar?",
+      "compare": "¿Cómo comparar las opciones del catálogo?",
+      "help": "¿Cómo empezar a usar Solaria?"
+    },
+    "greeting": "¡Hola! ¿Cómo puedo ayudarte hoy?",
+    "draftPlaceholder": "Pregúntale algo al asistente...",
+    "sendDescription": "Enviar mensaje al asistente",
+    "assistantName": "Asistente Solaria"
+  },
+  "attachments": {
+    "remove": "Eliminar {{name}}",
+    "image": "Imagen",
+    "rejected": "Selecciona hasta 5 archivos de hasta 20 MB: imágenes, PDF, texto o documentos de Office.",
+    "document": "Documento",
+    "add": "Añadir archivo"
+  },
+  "speech": {
+    "unsupported": "Dictado no disponible en este navegador.",
+    "listening": "Escuchando… pulsa el micrófono para detener.",
+    "denied": "Permite el acceso al micrófono para dictar.",
+    "start": "Dictar mensaje",
+    "stop": "Detener dictado",
+    "error": "No se pudo iniciar el dictado. Inténtalo de nuevo."
+  },
+  "participantCount": "{{count}} participantes",
+  "formatting": {
+    "label": "Dar formato",
+    "textType": "Tipo de texto",
+    "bold": "Negrita",
+    "italic": "Cursiva",
+    "paragraph": "Texto",
+    "h1": "Título 1",
+    "h2": "Título 2",
+    "h3": "Título 3",
+    "tooLong": "El formato supera el límite del mensaje."
+  }
+}

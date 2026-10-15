@@ -1,6 +1,6 @@
 /// <reference types="vitest/config" />
 import { fileURLToPath, URL } from 'node:url';
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import react, { reactCompilerPreset } from '@vitejs/plugin-react';
 import babel from '@rolldown/plugin-babel';
 import tailwindcss from '@tailwindcss/vite';
@@ -9,13 +9,21 @@ import tailwindcss from '@tailwindcss/vite';
 import path from 'node:path';
 import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
 import { playwright } from '@vitest/browser-playwright';
-const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
+const dirname = import.meta.dirname;
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
-export default defineConfig({
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), "VITE_");
+  return {
   plugins: [react(), tailwindcss(), babel({
     presets: [reactCompilerPreset()]
   })],
+  server: {
+    proxy: {
+      '/local-api/core': { target: env.VITE_LOCAL_API_CORE_TARGET ?? 'http://localhost:8080', changeOrigin: true, headers: { Origin: 'http://localhost:5173' }, rewrite: (url) => url.replace(/^\/local-api\/core/, '') },
+      '/local-api/auth': { target: 'http://localhost:8081', changeOrigin: true, headers: { Origin: 'http://localhost:5173' }, rewrite: (url) => url.replace(/^\/local-api\/auth/, '') }
+    }
+  },
   resolve: {
     alias: {
       '@@': fileURLToPath(new URL('./src/lib/components', import.meta.url)),
@@ -56,4 +64,5 @@ export default defineConfig({
       }
     }]
   }
+};
 });

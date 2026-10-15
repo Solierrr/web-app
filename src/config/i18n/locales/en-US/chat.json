@@ -1,0 +1,113 @@
+{
+  "composerInstructions": {
+    "newLine": "New line",
+    "send": "Send"
+  },
+  "newConversation": "New conversation",
+  "newAssistant": "Chat with the assistant",
+  "createError": "Could not start the conversation. Try again.",
+  "contactsError": "Could not load your connections.",
+  "conversations": "Your conversations",
+  "searchConversations": "Search conversations",
+  "searchContacts": "Search your connections",
+  "noMatches": "No conversations found.",
+  "noContacts": "Your connections will appear here. Find someone in the catalog to start a conversation.",
+  "findPeople": "Find people in the catalog",
+  "addPerson": "Chat with a person",
+  "selectConversation": "Select a conversation",
+  "selectConversationDescription": "Choose a person, a group or an assistant session from the list.",
+  "startConversation": "Every conversation starts with a message",
+  "startConversationDescription": "Chat with a person or start an assistant session. Your history will appear here.",
+  "participant": "Participant",
+  "group": "Group",
+  "actionsClose": "Close",
+  "filterConversations": "Filter conversations",
+  "filters": {
+    "ALL": "All",
+    "DIRECT": "People",
+    "GROUP": "Groups",
+    "CHAT_BOT": "Assistant"
+  },
+  "you": "You",
+  "draftPlaceholder": "Write a message...",
+  "send": "Send",
+  "loadOlder": "Load earlier messages",
+  "sendDescription": "Send message",
+  "typing": "Typing...",
+  "inbox": "Messages",
+  "conversation": "Conversation",
+  "loading": "Loading conversations...",
+  "loadError": "Could not load the conversation.",
+  "sendError": "Could not send the message. Please try again.",
+  "emptyInbox": "You do not have any conversations yet.",
+  "emptyConversation": "Send a message to start the conversation.",
+  "openingConversation": "Opening conversation...",
+  "contactError": "Could not start a conversation with this company.",
+  "mockContactUnavailable": "This company is sample data. To start a conversation, use a company registered in the live environment.",
+  "companyLoadError": "Could not load the company.",
+  "demandantOnly": "Contacting suppliers is available to buyer accounts.",
+  "backToCompanies": "Back to companies",
+  "contactAbout": "Hi, I am interested in {{title}}.",
+  "productContext": "Contact started from solar panel: {{title}}",
+  "unreadCount_one": "{{count}} unread message",
+  "unreadCount_other": "{{count}} unread messages",
+  "realtimeUnavailable": "The live connection was interrupted. Messages will refresh periodically while we reconnect.",
+  "chatbot": {
+    "panelDescription": "What are we doing today?",
+    "ask": "Ask",
+    "needHelp": "Want to explore your options?",
+    "explore": "Catalog",
+    "privacyNotice": "Avoid sharing sensitive data. Read our",
+    "privacyPolicy": "Privacy Policy.",
+    "suggestionTitles": {
+      "catalog": "Solar panels",
+      "compare": "Compare your options",
+      "help": "Get started with Solaria"
+    },
+    "suggestionDescriptions": {
+      "catalog": "Find a panel for your project",
+      "compare": "Understand catalog differences",
+      "help": "Discover the first steps"
+    },
+    "newConversation": "New conversation",
+    "welcomeTitle": "How can I help?",
+    "welcomeDescription": "Choose a suggestion or write your question about Solaria.",
+    "composerHint": "Enter sends · Shift + Enter adds a line",
+    "suggestions": {
+      "catalog": "How can I find a solar panel?",
+      "compare": "How can I compare catalog options?",
+      "help": "How can I get started with Solaria?"
+    },
+    "greeting": "Hi! How can I help you today?",
+    "draftPlaceholder": "Ask the assistant something...",
+    "sendDescription": "Send message to the assistant",
+    "assistantName": "Solaria Assistant"
+  },
+  "attachments": {
+    "remove": "Remove {{name}}",
+    "image": "Image",
+    "rejected": "Select up to 5 files of up to 20 MB: images, PDF, text or Office documents.",
+    "document": "Document",
+    "add": "Add attachment"
+  },
+  "speech": {
+    "unsupported": "Dictation is unavailable in this browser.",
+    "listening": "Listening… click the microphone to stop.",
+    "denied": "Allow microphone access to dictate.",
+    "start": "Dictate message",
+    "stop": "Stop dictation",
+    "error": "Could not start dictation. Try again."
+  },
+  "participantCount": "{{count}} participants",
+  "formatting": {
+    "label": "Format text",
+    "textType": "Text type",
+    "bold": "Bold",
+    "italic": "Italic",
+    "paragraph": "Text",
+    "h1": "Heading 1",
+    "h2": "Heading 2",
+    "h3": "Heading 3",
+    "tooLong": "Formatting exceeds the message length limit."
+  }
+}

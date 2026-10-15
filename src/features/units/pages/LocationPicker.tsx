@@ -1,3 +1,4 @@
+import Input from "@@/ui/input/Input";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -78,26 +79,28 @@ export default function LocationPicker({ value, onChange }: LocationPickerProps)
   if (!apiKey || mapError) {
     return (
       <div className="flex flex-col gap-2">
-        <p className="text-sm text-gray-600">{t("mapUnavailable")}</p>
+        <p className="text-body text-operational-muted">{t("mapUnavailable")}</p>
         <div className="grid grid-cols-2 gap-3">
-          <label className="flex flex-col gap-1 text-sm">
+          <label className="flex flex-col gap-1 text-body">
             {t("latitude")}
-            <input
+            <Input
+              name="latitude"
               type="number"
               step="0.000001"
               value={value?.lat ?? ""}
               onChange={(event) => onChange({ lat: Number(event.target.value), lng: value?.lng ?? 0 })}
-              className="rounded-lg border border-gray-300 p-2"
+              className="w-full"
             />
           </label>
-          <label className="flex flex-col gap-1 text-sm">
+          <label className="flex flex-col gap-1 text-body">
             {t("longitude")}
-            <input
+            <Input
+              name="longitude"
               type="number"
               step="0.000001"
               value={value?.lng ?? ""}
               onChange={(event) => onChange({ lat: value?.lat ?? 0, lng: Number(event.target.value) })}
-              className="rounded-lg border border-gray-300 p-2"
+              className="w-full"
             />
           </label>
         </div>

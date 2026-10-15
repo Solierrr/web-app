@@ -12,6 +12,7 @@ vi.mock("@/config/logging/logger", () => ({
 
 import CurrencyCode from "./exchange.enum";
 import { convertCurrency, getExchangeRate } from "./exchange.service";
+import i18n from "@/config/i18n/internationalization";
 
 describe("exchange.service", () => {
   const fetchMock = vi.fn();
@@ -56,7 +57,9 @@ describe("exchange.service", () => {
     it("logs and throws when the API responds with an error status", async () => {
       fetchMock.mockResolvedValue({ ok: false, status: 503 });
 
-      await expect(getExchangeRate(CurrencyCode.BRL, CurrencyCode.USD)).rejects.toThrow("Unable to get exchange rate for BRL/USD");
+      await expect(getExchangeRate(CurrencyCode.BRL, CurrencyCode.USD)).rejects.toThrow(
+        i18n.t("services:exchange.getExchangeRate", { from: "BRL", to: "USD" }),
+      );
 
       expect(loggerMock.serviceError).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -70,7 +73,9 @@ describe("exchange.service", () => {
     it("logs and throws when the network request fails", async () => {
       fetchMock.mockRejectedValue(new Error("Network unavailable"));
 
-      await expect(getExchangeRate(CurrencyCode.BRL, CurrencyCode.USD)).rejects.toThrow("Unable to get exchange rate for BRL/USD");
+      await expect(getExchangeRate(CurrencyCode.BRL, CurrencyCode.USD)).rejects.toThrow(
+        i18n.t("services:exchange.getExchangeRate", { from: "BRL", to: "USD" }),
+      );
 
       expect(loggerMock.serviceError).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -86,7 +91,9 @@ describe("exchange.service", () => {
         json: async () => ({ rate: 0 }),
       });
 
-      await expect(getExchangeRate(CurrencyCode.BRL, CurrencyCode.USD)).rejects.toThrow("Unable to get exchange rate for BRL/USD");
+      await expect(getExchangeRate(CurrencyCode.BRL, CurrencyCode.USD)).rejects.toThrow(
+        i18n.t("services:exchange.getExchangeRate", { from: "BRL", to: "USD" }),
+      );
 
       expect(loggerMock.serviceError).toHaveBeenCalledWith(
         expect.objectContaining({

@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import Icon, { type IconName } from "@@/ui/icon/Icon";
-import Colors from "@/lib/shared/styles/colors/colors.enum";
+import { SIDEBAR_ICON_SIZE, sidebarItemClass, sidebarLabelClass } from "./Sidebar.styles";
 import { useSidebarCollapsed } from "./Sidebar";
 
 interface SidebarOptionProps {
@@ -19,9 +19,13 @@ export function SidebarOption({ to, content, icon }: SidebarOptionProps) {
       <Link
         to={to}
         title={content}
-        className={`flex items-center-safe gap-3 px-3 py-2 rounded-medium *:font-semibold! ${active ? "bg-input-bg" : "hover:bg-input-bg"}`}>
-        <Icon name={icon} color={active ? Colors.ORANGE : Colors.BLACK} />
-        {!collapsed && <span className={active ? "text-orange" : ""}>{content}</span>}
+        aria-label={content}
+        aria-current={active ? "page" : undefined}
+        className={`${sidebarItemClass(collapsed)} text-operational-ink ${active ? "bg-input-bg" : "hover:bg-input-bg"}`}>
+        <Icon name={icon} motion={icon === "folder" ? "folder" : undefined} size={SIDEBAR_ICON_SIZE} className="shrink-0" />
+        <span aria-hidden={collapsed} className={sidebarLabelClass(collapsed)}>
+          {content}
+        </span>
       </Link>
     </li>
   );

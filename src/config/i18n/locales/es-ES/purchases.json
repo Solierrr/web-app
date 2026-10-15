@@ -1,0 +1,118 @@
+{
+  "methods": {
+    "PIX": "Pix",
+    "CREDIT_CARD": "Tarjeta de crédito",
+    "BOLETO": "Boleto",
+    "TRANSFER": "Transferencia"
+  },
+  "cart": {
+    "title": "Carrito",
+    "description": "Revisa las unidades y finaliza la compra.",
+    "items": "Artículos del carrito",
+    "empty": "Tu carrito está vacío.",
+    "model": "Producto",
+    "unitPrice": "Precio unitario",
+    "quantity": "Cantidad",
+    "lineTotal": "Total",
+    "remove": "Quitar",
+    "unavailable": "No disponible o sin stock",
+    "summary": "Resumen",
+    "subtotal": "Subtotal",
+    "fee": "Tarifa de la plataforma ({{percentage}}%)",
+    "total": "Total",
+    "paymentMethod": "Forma de pago",
+    "fictitious": "Pago ficticio: no se cobra ningún valor real.",
+    "pay": "Pagar",
+    "paid": "Compra realizada.",
+    "error": "No se pudo completar la operación."
+  },
+  "orders": {
+    "title": "Mis pedidos",
+    "description": "Historial de tus compras.",
+    "list": "Pedidos",
+    "empty": "Aún no has hecho compras.",
+    "date": "Fecha",
+    "items": "Unidades",
+    "total": "Total",
+    "status": "Estado",
+    "statuses": {
+      "PAID": "Pagado",
+      "CANCELED": "Cancelado"
+    },
+    "error": "No se pudieron cargar los pedidos."
+  },
+  "order": {
+    "title": "Pedido",
+    "back": "Volver",
+    "items": "Artículos",
+    "empty": "Sin artículos.",
+    "model": "Producto",
+    "unitPrice": "Precio unitario",
+    "quantity": "Cantidad",
+    "lineTotal": "Total",
+    "subtotal": "Subtotal",
+    "fee": "Tarifa de la plataforma ({{percentage}}%)",
+    "total": "Total",
+    "statuses": {
+      "PAID": "Pagado",
+      "CANCELED": "Cancelado"
+    },
+    "paymentStatuses": {
+      "PAID": "Pago aprobado",
+      "REFUNDED": "Pago reembolsado"
+    },
+    "paymentVia": "Pagado con {{method}}",
+    "fictitious": "Comprobante de pago ficticio: no se cobró ningún valor real.",
+    "cancel": "Cancelar pedido",
+    "canceled": "Pedido cancelado.",
+    "error": "No se pudo completar la operación."
+  },
+  "sales": {
+    "title": "Ventas",
+    "description": "Unidades vendidas por tu empresa.",
+    "list": "Ventas",
+    "empty": "Aún no hay ventas.",
+    "date": "Fecha",
+    "model": "Producto",
+    "buyer": "Comprador",
+    "quantity": "Cantidad",
+    "total": "Total",
+    "status": "Estado",
+    "statuses": {
+      "PAID": "Pagado",
+      "CANCELED": "Cancelado"
+    },
+    "error": "No se pudieron cargar las ventas."
+  },
+  "plan": {
+    "title": "Plan",
+    "description": "Suscripción de la empresa y cobros.",
+    "current": "Plan actual",
+    "charges": "Cobros",
+    "empty": "Sin cobros.",
+    "dueDate": "Vencimiento",
+    "amount": "Valor",
+    "method": "Forma de pago",
+    "status": "Estado",
+    "pay": "Pagar cobro",
+    "paid": "Cobro pagado.",
+    "since": "Desde {{date}}",
+    "cycles": {
+      "MONTHLY": "mensual",
+      "YEARLY": "anual"
+    },
+    "statuses": {
+      "PAID": "Al día",
+      "IN_DEBT": "En mora",
+      "SUSPENDED": "Suspendido"
+    },
+    "chargeStatuses": {
+      "PENDING": "Pendiente",
+      "PAID": "Pagado",
+      "CANCELED": "Cancelado",
+      "REFUNDED": "Reembolsado"
+    },
+    "fictitious": "Pago ficticio: no se cobra ningún valor real.",
+    "error": "No se pudo completar la operación."
+  }
+}

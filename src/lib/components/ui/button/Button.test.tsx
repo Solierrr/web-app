@@ -132,6 +132,7 @@ describe("Button", () => {
     });
 
     it("calls action and shows a spinner in place of the label while it resolves", async () => {
+      vi.stubEnv("VITE_MOCKS", MocksMode.DEACTIVATED);
       let resolveAction!: () => void;
       const action = vi.fn(
         () =>

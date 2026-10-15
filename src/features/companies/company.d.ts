@@ -1,4 +1,5 @@
 import type CompanyStatus from "@/features/companies/company.enum";
+import type { CompanyActivity } from "./company.enum";
 import type { Address } from "@/lib/shared/types/address/address";
 import type { BusinessContact } from "@/lib/shared/types/business-contact/businessContact";
 
@@ -13,5 +14,7 @@ export interface Company {
   businessContact?: BusinessContact;
   logoUrl?: string;
   bannerUrl?: string;
+  activities?: CompanyActivity[];
+  hasTechnicalTeam?: boolean;
   slug: string;
 }

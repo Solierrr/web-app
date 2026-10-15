@@ -1,14 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import Sidebar from "./Sidebar";
 import { SidebarOption } from "./Sidebar.reusables";
-import { routePaths } from "@/config/inter/paths";
-import SupportedLanguages from "@/config/inter/supported.enum";
+import { routePaths } from "@/config/i18n/paths";
+import SupportedLanguages from "@/config/i18n/supported.enum";
 
 const LANG = SupportedLanguages.PTBR;
 
 const meta = {
   title: "Layout/Sidebar",
   component: Sidebar,
+  subcomponents: { SidebarOption },
   parameters: {
     layout: "fullscreen",
   },

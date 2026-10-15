@@ -35,6 +35,7 @@ export function saveMockOffer(payload: OfferPayload, id: string = crypto.randomU
   const items = getMockOffers(companyId);
   const panel = solarPanelAnnouncementMocks.find((item) => item.panel.id === payload.modelId)?.panel;
   const offer: Offer = {
+    commercialStatus: items.find((item) => item.id === id)?.commercialStatus ?? "ACTIVE",
     id,
     supplierId: payload.supplierId,
     model: { id: payload.modelId, brand: panel?.brand ?? "", model: panel?.model ?? "" },
@@ -54,4 +55,12 @@ export function saveMockOffer(payload: OfferPayload, id: string = crypto.randomU
 export function deleteMockOffer(id: string): void {
   const companyId = getSelectedContext() ?? "mock-company";
   localStorage.setItem(key(companyId), JSON.stringify(getMockOffers(companyId).filter((item) => item.id !== id)));
+}
+
+export function setMockOfferStatus(offer: Offer, status: NonNullable<Offer["commercialStatus"]>): Offer {
+  if (offer.commercialStatus === "CLOSED" && status !== "CLOSED") throw new Error("Closed offer cannot be reopened");
+  const companyId = getSelectedContext() ?? offer.supplierId;
+  const updated = { ...offer, commercialStatus: status };
+  localStorage.setItem(key(companyId), JSON.stringify(getMockOffers(companyId).map((item) => (item.id === offer.id ? updated : item))));
+  return updated;
 }

@@ -1,4 +1,5 @@
 import type { AuthSession } from "@/features/access/access";
+import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
 
 const STORAGE_KEY = "solaria.authSession";
 
@@ -7,7 +8,10 @@ export function getAuthSession(): AuthSession | null {
   if (!raw) return null;
 
   try {
-    return JSON.parse(raw) as AuthSession;
+    const session = JSON.parse(raw) as AuthSession;
+    // A session issued by the retired local login cannot authenticate API calls.
+    if (session.isMock && !isAlwaysMockMode("AUTH")) return null;
+    return session;
   } catch {
     return null;
   }

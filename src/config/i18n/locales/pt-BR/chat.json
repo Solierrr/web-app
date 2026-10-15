@@ -1,0 +1,113 @@
+{
+  "composerInstructions": {
+    "newLine": "Nova linha",
+    "send": "Enviar"
+  },
+  "newConversation": "Nova conversa",
+  "newAssistant": "Conversar com o assistente",
+  "createError": "Não foi possível iniciar a conversa. Tente novamente.",
+  "contactsError": "Não foi possível carregar suas conexões.",
+  "conversations": "Suas conversas",
+  "searchConversations": "Buscar conversa",
+  "searchContacts": "Buscar pessoa nas suas conexões",
+  "noMatches": "Nenhuma conversa encontrada.",
+  "noContacts": "Suas conexões aparecerão aqui. Encontre alguém no catálogo para iniciar uma conversa.",
+  "findPeople": "Encontrar pessoas no catálogo",
+  "addPerson": "Conversar com uma pessoa",
+  "selectConversation": "Selecione uma conversa",
+  "selectConversationDescription": "Escolha uma pessoa, um grupo ou uma sessão do assistente na lista ao lado.",
+  "startConversation": "Toda conversa começa com uma mensagem",
+  "startConversationDescription": "Converse com uma pessoa ou comece uma sessão com o assistente. Seu histórico aparecerá aqui.",
+  "participant": "Participante",
+  "group": "Grupo",
+  "actionsClose": "Fechar",
+  "filterConversations": "Filtrar conversas",
+  "filters": {
+    "ALL": "Todas",
+    "DIRECT": "Pessoas",
+    "GROUP": "Grupos",
+    "CHAT_BOT": "Assistente"
+  },
+  "you": "Você",
+  "draftPlaceholder": "Escreva uma mensagem...",
+  "send": "Enviar",
+  "loadOlder": "Carregar mensagens anteriores",
+  "sendDescription": "Enviar mensagem",
+  "typing": "Digitando...",
+  "inbox": "Mensagens",
+  "conversation": "Conversa",
+  "loading": "Carregando conversas...",
+  "loadError": "Não foi possível carregar a conversa.",
+  "sendError": "Não foi possível enviar a mensagem. Tente novamente.",
+  "emptyInbox": "Você ainda não tem conversas.",
+  "emptyConversation": "Envie uma mensagem para começar a conversa.",
+  "openingConversation": "Abrindo conversa...",
+  "contactError": "Não foi possível iniciar o contato com esta empresa.",
+  "mockContactUnavailable": "Esta empresa é apenas demonstrativa. Para iniciar uma conversa, use uma empresa cadastrada no ambiente real.",
+  "companyLoadError": "Não foi possível carregar a empresa.",
+  "demandantOnly": "O contato com fornecedores está disponível para contas Demandantes.",
+  "backToCompanies": "Voltar às empresas",
+  "contactAbout": "Olá, tenho interesse em {{title}}.",
+  "productContext": "Contato iniciado pela placa: {{title}}",
+  "unreadCount_one": "{{count}} mensagem não lida",
+  "unreadCount_other": "{{count}} mensagens não lidas",
+  "realtimeUnavailable": "Conexão em tempo real interrompida. As mensagens serão atualizadas periodicamente enquanto tentamos reconectar.",
+  "chatbot": {
+    "panelDescription": "O que vamos fazer hoje?",
+    "ask": "Perguntar",
+    "needHelp": "Quer explorar as opções?",
+    "explore": "Catálogo",
+    "privacyNotice": "Evite compartilhar dados sensíveis. Consulte nossa",
+    "privacyPolicy": "Política de Privacidade.",
+    "suggestionTitles": {
+      "catalog": "Placas solares",
+      "compare": "Compare suas opções",
+      "help": "Comece pelo Solaria"
+    },
+    "suggestionDescriptions": {
+      "catalog": "Encontre uma placa para seu projeto",
+      "compare": "Entenda as diferenças do catálogo",
+      "help": "Conheça os primeiros passos"
+    },
+    "newConversation": "Nova conversa",
+    "welcomeTitle": "Como posso ajudar?",
+    "welcomeDescription": "Escolha uma sugestão ou escreva sua pergunta sobre o Solaria.",
+    "composerHint": "Enter envia · Shift + Enter quebra a linha",
+    "suggestions": {
+      "catalog": "Como encontrar uma placa solar?",
+      "compare": "Como comparar as opções do catálogo?",
+      "help": "Como começar a usar o Solaria?"
+    },
+    "greeting": "Olá! Como posso te ajudar hoje?",
+    "draftPlaceholder": "Pergunte algo ao assistente...",
+    "sendDescription": "Enviar mensagem ao assistente",
+    "assistantName": "Assistente Solaria"
+  },
+  "attachments": {
+    "remove": "Remover {{name}}",
+    "image": "Imagem",
+    "rejected": "Selecione até 5 arquivos de até 20 MB: imagens, PDF, texto ou documentos do Office.",
+    "document": "Documento",
+    "add": "Adicionar anexo"
+  },
+  "speech": {
+    "unsupported": "Ditado indisponível neste navegador.",
+    "listening": "Ouvindo… clique no microfone para parar.",
+    "denied": "Permita o acesso ao microfone para ditar.",
+    "start": "Ditar mensagem",
+    "stop": "Parar ditado",
+    "error": "Não foi possível iniciar o ditado. Tente novamente."
+  },
+  "participantCount": "{{count}} participantes",
+  "formatting": {
+    "label": "Formatar texto",
+    "textType": "Tipo de texto",
+    "bold": "Negrito",
+    "italic": "Itálico",
+    "paragraph": "Texto",
+    "h1": "Título 1",
+    "h2": "Título 2",
+    "h3": "Título 3",
+    "tooLong": "A formatação ultrapassa o limite da mensagem."
+  }
+}

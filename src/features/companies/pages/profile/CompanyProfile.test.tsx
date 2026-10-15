@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi, beforeEach } from "vitest";
+vi.mock("@/lib/shared/auth/authToken.utils", () => ({ getAuthSession: () => null }));
 import CompanyProfile from "./CompanyProfile";
 
 vi.mock("@/features/companies/company.service", () => ({
@@ -82,7 +83,7 @@ describe("CompanyProfile", () => {
     );
 
     expect(await screen.findByRole("heading", { name: "Solaria Energia" })).toBeInTheDocument();
-    expect(screen.getByText("São Paulo/SP")).toBeInTheDocument();
+    expect(screen.getByText("São Paulo / SP")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "entrar em contato" })).toHaveAttribute("href", "/pt-BR/mensagens/empresa/company-1");
   });
 

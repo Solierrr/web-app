@@ -33,10 +33,11 @@ export function getMockConversation(id: string): ConversationDto {
 
 export function createMockConversation(recipientId: string): ConversationDto {
   const state = getMockMessenger();
-  const existing = state.conversations.find((item) => item.participantIds.includes(recipientId));
+  const existing = state.conversations.find((item) => item.conversationType === "DIRECT" && item.participantIds.includes(recipientId));
   if (existing) return existing;
   const conversation = { ...getMockConversation(crypto.randomUUID()), participantIds: [getAuthSession()?.userId ?? "mock-user", recipientId] };
   localStorage.setItem(key(), JSON.stringify({ ...state, conversations: [...state.conversations, conversation] }));
+  window.dispatchEvent(new Event("solaria:messenger"));
   return conversation;
 }
 
@@ -50,6 +51,13 @@ export function sendMockMessage(conversationId: string, content: string): Messag
     content,
     timestamp: new Date().toISOString(),
     sequence,
+    role: "user",
+    messageType:
+      getMockConversation(conversationId).conversationType === "GROUP"
+        ? "USER_TO_GROUP"
+        : getMockConversation(conversationId).conversationType === "CHAT_BOT"
+          ? "USER_TO_CHATBOT"
+          : "USER_TO_USER",
   };
   const conversation = { ...getMockConversation(conversationId), lastInteractionAt: message.timestamp };
   localStorage.setItem(
@@ -59,5 +67,44 @@ export function sendMockMessage(conversationId: string, content: string): Messag
       messages: [...state.messages, message],
     }),
   );
+  window.dispatchEvent(new Event("solaria:messenger"));
   return message;
+}
+
+export function createMockChatbotConversation(): ConversationDto {
+  const state = getMockMessenger();
+  const conversation: ConversationDto = {
+    id: crypto.randomUUID(),
+    conversationType: "CHAT_BOT",
+    participantIds: [getAuthSession()?.userId ?? "mock-user"],
+    title: null,
+    lastInteractionAt: new Date().toISOString(),
+    unreadCount: 0,
+  };
+  localStorage.setItem(key(), JSON.stringify({ ...state, conversations: [...state.conversations, conversation] }));
+  window.dispatchEvent(new Event("solaria:messenger"));
+  return conversation;
+}
+
+export function markMockConversationRead(id: string): ConversationDto {
+  const state = getMockMessenger();
+  const conversation = { ...getMockConversation(id), unreadCount: 0 };
+  if (state.conversations.some((item) => item.id === id && item.unreadCount !== 0)) {
+    localStorage.setItem(
+      key(),
+      JSON.stringify({ ...state, conversations: state.conversations.map((item) => (item.id === id ? conversation : item)) }),
+    );
+    window.dispatchEvent(new Event("solaria:messenger"));
+  }
+  return conversation;
+}
+
+/** Registers a project group in the same local messenger store used by Conversation. */
+export function saveMockProjectConversation(conversation: ConversationDto): ConversationDto {
+  const s = getMockMessenger();
+  const existing = s.conversations.find((c) => c.id === conversation.id);
+  if (existing) return existing;
+  localStorage.setItem(key(), JSON.stringify({ ...s, conversations: [...s.conversations, conversation] }));
+  window.dispatchEvent(new Event("solaria:messenger"));
+  return conversation;
 }

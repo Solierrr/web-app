@@ -3,3 +3,10 @@ export enum CompanyStatus {
   REJECTED = "REJECTED",
   UNDERANALYSIS = "UNDER_ANALYSIS",
 }
+
+export enum CompanyActivity {
+  SOLAR_PANELS = "SOLAR_PANELS",
+  TECHNICIANS = "TECHNICIANS",
+  MAINTENANCE = "MAINTENANCE",
+  INSPECTION = "INSPECTION",
+}

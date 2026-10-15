@@ -1,9 +1,10 @@
 import { Route } from "react-router-dom";
 
 import { AppLayout } from "@/config/AppLayout";
-import ForgotPasswordPage from "@/features/access/pages/forgot-password/ForgotPasswordPage";
-import LoginPage from "@/features/access/pages/login/LoginPage";
-import RegisterPage from "@/features/access/pages/register/RegisterPage";
+import ForgotPasswordPage from "@/features/access/pages/help/forgot-password/ForgotPasswordPage";
+import LoginPage from "@/features/access/pages/auth/login/LoginPage";
+import CanvasPreview from "@/features/access/pages/auth/login/canvas/CanvasPreview";
+import RegisterPage from "@/features/access/pages/auth/register/RegisterPage";
 import SolarPanelAnnouncement from "@/features/solar-panel/pages/announcement/SolarPanelAnnouncement";
 import Chat from "@/features/messages/pages/Chat";
 import ChatbotPage from "@/features/messages/pages/ChatbotPage";
@@ -25,6 +26,10 @@ export function TestRoutes() {
   return (
     <>
       <Route path="test/login" element={<LoginPage />} />
+      <Route path="test/login/canvas" element={<CanvasPreview />} />
+      <Route path="test/login/canvas/dots" element={<CanvasPreview variant="dots" />} />
+      <Route path="test/login/canvas/grid" element={<CanvasPreview variant="grid" />} />
+      <Route path="test/login/canvas/waves" element={<CanvasPreview variant="waves" />} />
       <Route path="test/register" element={<RegisterPage />} />
       <Route path="test/forgot-password" element={<ForgotPasswordPage />} />
 

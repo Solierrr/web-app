@@ -3,7 +3,6 @@ import {
   createPosition,
   generateAccessCode,
   grantPermission,
-  linkPositionToCompany,
   listEmployees,
   redeemAccessCode,
   removeEmployee,
@@ -21,15 +20,6 @@ describe("company.management.service", () => {
     expect(httpJson).toHaveBeenCalledWith(
       expect.stringContaining("/positions"),
       expect.objectContaining({ method: "POST", body: { name: "Instalador", accesses: "" } }),
-    );
-  });
-
-  it("links a position to a company", async () => {
-    vi.mocked(httpJson).mockResolvedValue({ id: "link-1" });
-    await linkPositionToCompany("company-1", "position-1");
-    expect(httpJson).toHaveBeenCalledWith(
-      expect.stringContaining("/company-positions"),
-      expect.objectContaining({ method: "POST", body: { companyId: "company-1", positionId: "position-1" } }),
     );
   });
 

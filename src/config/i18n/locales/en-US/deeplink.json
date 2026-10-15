@@ -1,0 +1,112 @@
+{
+  "loading": "Loading…",
+  "mobile": {
+    "title": "Sign in to Solaria Mobile",
+    "professionalOnly": "The app is exclusively for professionals with complete, approved registration.",
+    "continueAs": "Continue as {{email}}",
+    "ineligible": "This account cannot access the app yet. Complete registration and wait for approval on the web.",
+    "verify": "Verify my email",
+    "registration": "Complete professional registration",
+    "switch": "Use another account",
+    "cancel": "Cancel",
+    "cancelled": "Sign-in cancelled. Start again from the app.",
+    "opening": "Sign-in authorized. Opening the app…",
+    "open": "Open app",
+    "fallback": "If the app does not open, install it and start a new sign-in from the app.",
+    "install": "Install app"
+  },
+  "errors": {
+    "UNAVAILABLE": "Unable to complete. Try again.",
+    "INVALID_TRANSACTION": "Invalid request. Start sign-in from the app.",
+    "TRANSACTION_EXPIRED": "Request expired. Start a new sign-in from the app.",
+    "MOBILE_ACCOUNT_NOT_ALLOWED": "This account cannot access the app.",
+    "EMAIL_NOT_VERIFIED": "Verify your email before continuing.",
+    "WEB_SESSION_REQUIRED": "Sign in on the web before continuing.",
+    "ELIGIBILITY_UNAVAILABLE": "Unable to check registration. Try again.",
+    "CONFIRMATION_REQUIRED": "Confirm the account to continue."
+  },
+  "email": {
+    "title": "Verify your email",
+    "pending": "Open the link sent to your email and confirm to continue.",
+    "sent": "Request received. Check your inbox.",
+    "verified": "Email verified.",
+    "continue": "Continue",
+    "confirm": "Verify email",
+    "check": "I have verified my email",
+    "resend": "Send verification email",
+    "cooldown": "Resend in {{seconds}}s",
+    "unavailable": "Email delivery is unavailable. Try again later."
+  },
+  "professional": {
+    "title": "Professional registration",
+    "preserved": "Your approved information and access remain available while proposed changes are reviewed.",
+    "suspended": "Professional access is suspended. Contact Solaria.",
+    "refresh": "Refresh review",
+    "choose": "Choose your profession",
+    "manualPolicy": "The administrator must confirm the requirements for this profession. Registration will receive manual review.",
+    "documents": "{{count}} document(s) attached.",
+    "document": "Document {{number}}",
+    "remove": "Remove from proposal",
+    "optional": "Other certificates are optional and can improve your profile.",
+    "save": "Save draft",
+    "submit": "Submit for review",
+    "saveError": "Unable to save or submit. Check information and documents or refresh the review.",
+    "fileError": "Select PDF, DOCX, JPEG, PNG or WebP up to 10 MB."
+  },
+  "fields": {
+    "name": "Full name",
+    "cpf": "CPF (digits only)",
+    "birthDate": "Date of birth",
+    "email": "Contact email",
+    "phone": "Phone (digits only)",
+    "professionId": "Profession",
+    "council": "Professional council",
+    "registrationNumber": "Registration number",
+    "registrationExpiration": "Registration expiry"
+  },
+  "documents": {
+    "IDENTITY": "RG identity photo",
+    "NR10": "NR-10 certificate",
+    "NR35": "NR-35 certificate",
+    "REGISTRATION": "Professional registration evidence",
+    "CERTIFICATE": "Other certificates (optional)"
+  },
+  "criteria": {
+    "IDENTITY_MATCH": "Identity",
+    "NR10": "NR-10",
+    "NR35": "NR-35",
+    "REGISTRATION": "Professional registration"
+  },
+  "status": {
+    "QUEUED": "Awaiting validation",
+    "VALIDATING": "Validating",
+    "RETRY_PENDING": "Validation temporarily unavailable; retry pending",
+    "MANUAL_REVIEW": "Awaiting administrator review",
+    "APPROVED": "Approved",
+    "REJECTED": "Proposal rejected",
+    "SUSPENDED": "Suspended",
+    "REINSTATED": "Access restored",
+    "PASSED": "Passed",
+    "FAILED": "Failed",
+    "INCONCLUSIVE": "Inconclusive"
+  },
+  "review": {
+    "title": "Professional review",
+    "field": "Field",
+    "approved": "Approved information",
+    "proposed": "Proposal",
+    "reason": "Decision reason",
+    "approve": "Approve proposal",
+    "reject": "Reject proposal",
+    "conflict": "Unable to apply decision. Refresh and check whether the proposal is still awaiting a decision."
+  },
+  "migration": {
+    "choosePassword": "Your account has been identified. Choose a new password with at least 12 characters to finish migration.",
+    "newPassword": "New password"
+  },
+  "link": {
+    "explanation": "An account already exists with this email. Enter its password and confirm linking the selected provider.",
+    "confirm": "I confirm linking this provider to my account",
+    "submit": "Confirm link"
+  }
+}

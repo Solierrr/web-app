@@ -1,19 +1,32 @@
+import Marketplace from "@/features/marketplace/Marketplace";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
+import { getFeedView, sortOffers } from "@/features/marketplace/marketplace.utils";
 import Skeleton from "@@/feedback/skeleton/Skeleton";
 import { ImageSkeleton } from "@@/feedback/skeleton/Skeleton.presets";
 import { getCatalogSolarPanels } from "@/features/solar-panel/solarPanel.service";
 import type { SolarPanelFeedSummary } from "@/features/solar-panel/solarPanel.announcement";
-import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
-import { routePaths } from "@/config/inter/paths";
+import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
+import { routePaths } from "@/config/i18n/paths";
 import WrapperLayout from "@/config/WrapperLayout";
 
 function SolarPanelSearchContent({ items }: { items: SolarPanelFeedSummary[] }) {
   const [query, setQuery] = useState("");
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
-  const normalizedQuery = query.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-  const filtered = items.filter((item) => item.title.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().includes(normalizedQuery));
+  const [params] = useSearchParams();
+  const ordered = sortOffers(items, getFeedView("solarPanels", params.get("view")));
+  const normalizedQuery = query
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+  const filtered = ordered.filter((item) =>
+    item.title
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .includes(normalizedQuery),
+  );
 
   return (
     <div className="flex flex-col gap-8">
@@ -22,13 +35,16 @@ function SolarPanelSearchContent({ items }: { items: SolarPanelFeedSummary[] }) 
         <p className="text-black/70">As principais placas solares disponíveis no mercado, com os principais e mais famosos fornecedores do cenário</p>
       </div>
 
-      <div className="flex w-fit flex-row gap-2 rounded-full bg-input-bg p-1">
-        <span className="rounded-full bg-white px-4 py-2 font-medium text-orange">placas solares</span>
-        <span className="px-4 py-2 font-medium text-input-text">serviços</span>
-        <span className="px-4 py-2 font-medium text-input-text">fornecedores</span>
-      </div>
+      <Marketplace category="solarPanels" search />
 
-      <input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar placa solar" aria-label="Buscar placa solar" className="w-full max-w-md rounded-lg border border-gray-300 p-3" />
+      <input
+        type="search"
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
+        placeholder="Buscar placa solar"
+        aria-label="Buscar placa solar"
+        className="w-full max-w-md rounded-lg border border-gray-300 p-3"
+      />
 
       <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
         {filtered.map((item) => (
@@ -56,7 +72,7 @@ function SolarPanelSearchSkeleton() {
         <Skeleton height="1.5rem" />
       </div>
 
-      <Skeleton height="2.5rem" width="20rem" className="rounded-full" />
+      <Marketplace category="solarPanels" search />
 
       <div className="flex flex-row flex-wrap items-center gap-4">
         <Skeleton height="2.5rem" width="15rem" />
@@ -87,16 +103,28 @@ export default function SolarPanelSearch() {
   useEffect(() => {
     let active = true;
 
-    getCatalogSolarPanels(lang).then((result) => {
-      if (active) setItems(result);
-    }).catch(() => {
-      if (active) setError(true);
-    });
+    getCatalogSolarPanels(lang, "PANEL")
+      .then((result) => {
+        if (active) setItems(result);
+      })
+      .catch(() => {
+        if (active) setError(true);
+      });
 
     return () => {
       active = false;
     };
   }, [lang]);
 
-  return <WrapperLayout ptop>{error ? <p role="alert">Não foi possível carregar as placas solares.</p> : items ? <SolarPanelSearchContent items={items} /> : <SolarPanelSearchSkeleton />}</WrapperLayout>;
+  return (
+    <WrapperLayout ptop>
+      {error ? (
+        <p role="alert">Não foi possível carregar as placas solares.</p>
+      ) : items ? (
+        <SolarPanelSearchContent items={items} />
+      ) : (
+        <SolarPanelSearchSkeleton />
+      )}
+    </WrapperLayout>
+  );
 }

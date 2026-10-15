@@ -4,51 +4,56 @@ import { useTranslation } from "react-i18next";
 import ProfilePage from "@/lib/components/layout/profile/ProfilePage";
 import ProfilePageSkeleton from "@/lib/components/layout/profile/ProfilePageSkeleton";
 import { getCatalogTechnicianBySlug, type CatalogTechnician } from "@/features/professionals/professional.service";
+import { ProfileInfoRow, ProfileInfoSection } from "@/lib/components/layout/profile/ProfilePage.reusable";
 
 interface ProfessionalProfilePackedProps {
-    professional: CatalogTechnician;
+  professional: CatalogTechnician;
 }
 
 function ProfessionalProfilePacked({ professional }: ProfessionalProfilePackedProps) {
-    const { t } = useTranslation("commons", { keyPrefix: "professionalProfile" });
+  const { t } = useTranslation("profile", { keyPrefix: "edit" });
 
-    return (
-        <ProfilePage
-            name={professional.name}
-            subtitle={professional.professions[0]}
-        >
-            <div className="flex flex-col gap-2">
-                {professional.professions.length > 1 && (
-                    <p className="text-input-text">{professional.professions.join(", ")}</p>
-                )}
-                {professional.crea && (
-                    <p className="text-input-text">{t("crea")}: {professional.crea}</p>
-                )}
-            </div>
-        </ProfilePage>
-    );
+  return (
+    <ProfilePage name={professional.name} subtitle={professional.professions[0]}>
+      <ProfileInfoSection title={t("professionalTitle")}>
+        <dl className="divide-y divide-black/5">
+          <ProfileInfoRow label={t("profession")} value={professional.professions.join(", ")} />
+          <ProfileInfoRow label={t("crea")} value={professional.crea} />
+        </dl>
+      </ProfileInfoSection>
+    </ProfilePage>
+  );
 }
 
 export default function ProfessionalProfile() {
-    const { professionalSlug = "" } = useParams<{ professionalSlug: string }>();
-    const { t } = useTranslation("commons", { keyPrefix: "professionalProfile" });
-    const [professional, setProfessional] = useState<CatalogTechnician | null>(null);
-    const [error, setError] = useState(false);
+  const { professionalSlug = "" } = useParams<{ professionalSlug: string }>();
+  const { t } = useTranslation("commons", { keyPrefix: "professionalProfile" });
+  const [professional, setProfessional] = useState<CatalogTechnician | null>(null);
+  const [error, setError] = useState(false);
 
-    useEffect(() => {
-        let active = true;
+  useEffect(() => {
+    let active = true;
 
-        getCatalogTechnicianBySlug(professionalSlug).then((result) => {
-            if (active) setProfessional(result);
-        }).catch(() => {
-            if (active) setError(true);
-        });
+    getCatalogTechnicianBySlug(professionalSlug)
+      .then((result) => {
+        if (active) setProfessional(result);
+      })
+      .catch(() => {
+        if (active) setError(true);
+      });
 
-        return () => { active = false; };
-    }, [professionalSlug]);
+    return () => {
+      active = false;
+    };
+  }, [professionalSlug]);
 
-    if (error) return <p role="alert" className="p-6">{t("loadError")}</p>;
-    if (!professional) return <ProfilePageSkeleton />;
+  if (error)
+    return (
+      <p role="alert" className="p-6">
+        {t("loadError")}
+      </p>
+    );
+  if (!professional) return <ProfilePageSkeleton />;
 
-    return <ProfessionalProfilePacked professional={professional} />;
+  return <ProfessionalProfilePacked professional={professional} />;
 }

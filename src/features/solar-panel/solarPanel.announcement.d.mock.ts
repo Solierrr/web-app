@@ -5504,8 +5504,15 @@ const solarPanelAnnouncementMockData = [
 
 // `company` é derivada aqui a partir de `companySlug` + `companyMock` em vez
 // de duplicar os dados da empresa em cada anúncio (ver `company.d.mock.ts`).
+const offerFeedMetadata: Record<string, { publishedAt: string; trendingScore: number }> = {
+  "1": { publishedAt: "2026-10-01T10:00:00Z", trendingScore: 90 },
+  "2": { publishedAt: "2026-10-04T10:00:00Z", trendingScore: 60 },
+  "3": { publishedAt: "2026-10-03T10:00:00Z", trendingScore: 100 },
+  "4": { publishedAt: "2026-10-02T10:00:00Z", trendingScore: 75 },
+};
 const solarPanelAnnouncementMock = solarPanelAnnouncementMockData.map((announcement) => ({
   ...announcement,
+  ...offerFeedMetadata[announcement.id],
   company: companyMock.find((company) => company.slug === announcement.companySlug) ?? companyMock[0],
 })) as SolarPanelAnnouncement[];
 
