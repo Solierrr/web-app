@@ -5,17 +5,22 @@ import { useTranslation } from "react-i18next";
 import Combobox from "@@/ui/combobox/Combobox";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
 import Popover from "@@/overlay/popover/Popover";
+import Dialog from "@@/overlay/dialog/Dialog";
 import Alert from "@@/feedback/alert/Alert";
 import BrandManager from "../manager/BrandManager";
 import { listBrands } from "../brand.service";
 import type { Brand } from "../brand";
-export default function BrandSelect({ value, label, selectedName, invalid, errorId, onChange }: BrandSelectProps) {
+export default function BrandSelect({ value, label, selectedName, invalid, errorId, onChange, presentation = "popover" }: BrandSelectProps) {
   const { t } = useTranslation("brands");
   const [brands, setBrands] = useState<Brand[]>([]),
     [open, setOpen] = useState(false),
     [error, setError] = useState(false);
   const anchor = useRef<HTMLButtonElement>(null);
-  const close = useCallback(() => setOpen(false), []);
+  const [busy, setBusy] = useState(false);
+  const close = useCallback(() => {
+    setOpen(false);
+    setBusy(false);
+  }, []);
   const load = useCallback(async () => {
     try {
       setBrands(await listBrands());
@@ -75,7 +80,26 @@ export default function BrandSelect({ value, label, selectedName, invalid, error
           <WhiteButton type="button" content={t("retry")} description={t("retry")} onClick={() => void load()} />
         </>
       )}
-      {open && (
+      {open && presentation === "dialog" && (
+        <Dialog title={t("manage")} message={t("manageDescription")} variant="tonal" busy={busy} onClose={close}>
+          {(dismiss) => (
+            <BrandManager
+              brands={brands}
+              presentation="dialog"
+              onBusyChange={setBusy}
+              onSaved={async (b) => {
+                await load();
+                if (b) {
+                  onChange(b.id, b.name);
+                  dismiss();
+                }
+              }}
+              onClose={dismiss}
+            />
+          )}
+        </Dialog>
+      )}
+      {open && presentation === "popover" && (
         <Popover label={t("manage")} anchorRef={anchor} onClose={close} className="w-[min(28rem,calc(100vw-2rem))] max-h-[80vh] overflow-y-auto">
           <BrandManager
             brands={brands}
