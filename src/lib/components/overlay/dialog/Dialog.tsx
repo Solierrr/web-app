@@ -10,6 +10,7 @@ export default function Dialog({
   busy = false,
   message,
   compact = false,
+  variant = "default",
 }: {
   title: string;
   children: ReactNode | ((dismiss: () => void, closing: boolean) => ReactNode);
@@ -17,6 +18,7 @@ export default function Dialog({
   busy?: boolean;
   message?: string;
   compact?: boolean;
+  variant?: "default" | "tonal";
 }) {
   const ref = useRef<HTMLDialogElement>(null),
     id = useId();
@@ -36,7 +38,7 @@ export default function Dialog({
         e.preventDefault();
         dismiss();
       }}
-      className={`dialog-surface fixed inset-0 m-auto w-[calc(100%_-_2rem)] ${compact ? "max-w-md" : "max-w-operational-form"} max-h-[85dvh] overflow-y-auto rounded-surface border-0 bg-white px-6 pb-6 pt-12 text-operational-ink shadow-overlay backdrop:bg-dialog-backdrop`}>
+      className={`dialog-surface fixed inset-0 m-auto w-[calc(100%_-_2rem)] ${compact ? "max-w-md" : variant === "tonal" ? "max-w-xl" : "max-w-operational-form"} max-h-[85dvh] overflow-y-auto overscroll-contain rounded-surface border-0 ${variant === "tonal" ? "bg-surface-container px-5 pb-5 pt-12 sm:px-8 sm:pb-8" : "bg-white px-6 pb-6 pt-12"} text-operational-ink shadow-overlay backdrop:bg-dialog-backdrop`}>
       <ToolbarAction
         icon="x"
         label={t("actions.close", "Fechar")}

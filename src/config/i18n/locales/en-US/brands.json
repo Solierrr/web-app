@@ -79,5 +79,7 @@
   "permissionDenied": "You do not have permission for this operation.",
   "conflict": "A duplicate or concurrent change was detected. Refresh before trying again.",
   "retry": "Try again",
-  "duplicateName": "Your company already has this brand. Choose the existing record."
+  "duplicateName": "Your company already has this brand. Choose the existing record.",
+  "manageDescription": "Create a brand or update an existing brand’s information.",
+  "cancel": "Cancel"
 }
