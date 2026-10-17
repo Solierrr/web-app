@@ -119,7 +119,7 @@ describe("RegistrationDetailPage", () => {
     renderAt("/pt-BR/admin/cadastros/company/c1");
     fireEvent.click(await screen.findByRole("button", { name: "Aprovar" }));
     fireEvent.click(screen.getByRole("button", { name: "cancelar" }));
-    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
     expect(approveCompany).not.toHaveBeenCalled();
   });
 
