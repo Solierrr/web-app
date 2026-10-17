@@ -1,3 +1,4 @@
+import i18n from "@/config/i18n/internationalization";
 import { httpJson } from "@/lib/shared/http/http.service";
 import { API_CORE_URL } from "@/lib/shared/http/apiCore.utils";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
@@ -36,7 +37,7 @@ export async function getMyRequester(companyId: string): Promise<Requester | nul
   return httpJson<{ id: string; company: { id: string } }[]>(`${API_CORE_URL}/requesters/company/${encodeURIComponent(companyId)}`, {
     service: SERVICE_NAME,
     operation: "getMyRequester",
-    errorMessage: "Não foi possível carregar os dados de solicitante",
+    errorMessage: i18n.t("services:unit.getMyRequester"),
   }).then((requesters) => {
     const first = requesters[0];
     return first ? { id: first.id, companyId: first.company.id } : null;
@@ -51,7 +52,7 @@ export async function listCompanyUnits(companyId: string): Promise<LocalUnit[]> 
   return httpJson<LocalUnit[]>(`${API_CORE_URL}/local-units/company/${encodeURIComponent(companyId)}`, {
     service: SERVICE_NAME,
     operation: "listCompanyUnits",
-    errorMessage: "Não foi possível carregar as unidades",
+    errorMessage: i18n.t("services:unit.listCompanyUnits"),
   });
 }
 
@@ -74,7 +75,7 @@ export async function createAddress(payload: AddressPayload): Promise<{ id: stri
     operation: "createAddress",
     method: "POST",
     body: payload,
-    errorMessage: "Não foi possível cadastrar o endereço",
+    errorMessage: i18n.t("services:unit.createAddress"),
   });
 }
 
@@ -88,7 +89,7 @@ export async function createGeolocalization(addressId: string, latitude: number,
     operation: "createGeolocalization",
     method: "POST",
     body: { addressId, latitude, longitude },
-    errorMessage: "Não foi possível salvar a localização no mapa",
+    errorMessage: i18n.t("services:unit.createGeolocalization"),
   });
 }
 
@@ -109,7 +110,7 @@ export async function createUnit(payload: UnitPayload): Promise<LocalUnit> {
     operation: "createUnit",
     method: "POST",
     body: payload,
-    errorMessage: "Não foi possível cadastrar a unidade",
+    errorMessage: i18n.t("services:unit.createUnit"),
   });
 }
 
@@ -123,7 +124,7 @@ export async function updateUnit(id: string, payload: UnitPayload): Promise<Loca
     operation: "updateUnit",
     method: "PUT",
     body: payload,
-    errorMessage: `Não foi possível atualizar a unidade ${id}`,
+    errorMessage: i18n.t("services:unit.updateUnit", { id }),
   });
 }
 
@@ -137,6 +138,6 @@ export async function deleteUnit(id: string): Promise<void> {
     service: SERVICE_NAME,
     operation: "deleteUnit",
     method: "DELETE",
-    errorMessage: `Não foi possível remover a unidade ${id}`,
+    errorMessage: i18n.t("services:unit.deleteUnit", { id }),
   });
 }

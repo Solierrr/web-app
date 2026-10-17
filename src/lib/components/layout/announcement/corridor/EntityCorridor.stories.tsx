@@ -4,7 +4,7 @@ import professionalMock from "@/features/professionals/professional.d.mock";
 import companyMock from "@/features/companies/company.d.mock";
 import { toCardItem as toProfessionalCardItem } from "@/features/professionals/pages/feed/ProfessionalFeed.utils";
 import { toCardItem as toCompanyCardItem } from "@/features/companies/pages/feed/CompanyFeed.utils";
-import { DEFAULT as DEFAULT_LANGUAGE } from "@/config/inter/browser/languages";
+import { DEFAULT as DEFAULT_LANGUAGE } from "@/config/i18n/browser/languages";
 
 const meta = {
   title: "Layout/Announcement/EntityCorridor",
@@ -20,26 +20,36 @@ type Story = StoryObj<typeof meta>;
 export const Professionals: Story = {
   args: {
     title: "Profissionais credenciados",
-    items: professionalMock.map((professional) => toProfessionalCardItem({
-      id: professional.id,
-      slug: professional.slug,
-      name: professional.name,
-      crea: professional.registrations?.[0]?.council ?? "",
-      professions: professional.registrations?.map((registration) => registration.profession) ?? [],
-    }, DEFAULT_LANGUAGE)),
+    items: professionalMock.map((professional) =>
+      toProfessionalCardItem(
+        {
+          id: professional.id,
+          slug: professional.slug,
+          name: professional.name,
+          crea: professional.registrations?.[0]?.council ?? "",
+          professions: professional.registrations?.map((registration) => registration.profession) ?? [],
+        },
+        DEFAULT_LANGUAGE,
+      ),
+    ),
   },
 };
 
 export const Companies: Story = {
   args: {
     title: "Empresas credenciadas",
-    items: companyMock.map((company) => toCompanyCardItem({
-      id: company.id,
-      tradeName: company.tradeName,
-      slug: company.slug,
-      city: company.address?.city ?? null,
-      state: company.address?.state ?? null,
-      logoUrl: company.logoUrl,
-    }, DEFAULT_LANGUAGE)),
+    items: companyMock.map((company) =>
+      toCompanyCardItem(
+        {
+          id: company.id,
+          tradeName: company.tradeName,
+          slug: company.slug,
+          city: company.address?.city ?? null,
+          state: company.address?.state ?? null,
+          logoUrl: company.logoUrl,
+        },
+        DEFAULT_LANGUAGE,
+      ),
+    ),
   },
 };

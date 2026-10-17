@@ -3,6 +3,7 @@ import { changeOfferStatus, createOffer, deleteOffer, getMySupplier, listCompany
 import { httpJson } from "@/lib/shared/http/http.service";
 
 vi.mock("@/lib/shared/http/http.service", () => ({ httpJson: vi.fn() }));
+vi.mock("@/config/mocks/mockMode.utils", () => ({ isAlwaysMockMode: () => false }));
 
 describe("offer.service", () => {
   it("returns the first supplier for a company", async () => {
@@ -65,52 +66,20 @@ describe("offer.service", () => {
       return (vi.mocked(httpJson).mock.calls.at(-1)?.[1] as { body: Record<string, unknown> }).body;
     }
 
-    it("pauses by zeroing the stock and remembers it to resume later", async () => {
-      localStorage.clear();
-      vi.mocked(httpJson).mockResolvedValue(offer);
-
-      await changeOfferStatus(offer, "PAUSED");
-      expect(sentBody()).toMatchObject({ availability: 0, modelId: "model-1", title: "Painel", discountPercentage: 5 });
-
-      await changeOfferStatus({ ...offer, availability: 0 }, "ACTIVE");
-      expect(sentBody().availability).toBe(10);
+    it("changes status without changing stock, dates or source texts", async () => {
+      vi.mocked(httpJson).mockResolvedValue({ commercialStatus: "PAUSED" });
+      const result = await changeOfferStatus(offer, "PAUSED");
+      expect(sentBody()).toEqual({ status: "PAUSED" });
+      expect(result.availability).toBe(10);
+      expect(result.expirationDate).toBeNull();
+      expect(result.translations).toEqual(offer.translations);
+      expect(result.commercialStatus).toBe("PAUSED");
+      expect(httpJson).toHaveBeenLastCalledWith(expect.stringContaining("/offers/offer-1/status"), expect.objectContaining({ method: "PATCH" }));
     });
-
-    it("reopens a paused offer without a remembered stock with a single unit", async () => {
-      localStorage.clear();
-      vi.mocked(httpJson).mockResolvedValue(offer);
-
-      await changeOfferStatus({ ...offer, availability: 0 }, "ACTIVE");
-
-      expect(sentBody().availability).toBe(1);
-    });
-
-    it("still sends the change when the browser storage is unavailable", async () => {
-      vi.mocked(httpJson).mockResolvedValue(offer);
-      const failing = vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
-        throw new Error("blocked");
-      });
-      const reading = vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => {
-        throw new Error("blocked");
-      });
-
-      await changeOfferStatus(offer, "PAUSED");
-      expect(sentBody().availability).toBe(0);
-      await changeOfferStatus({ ...offer, availability: 0 }, "ACTIVE");
-      expect(sentBody().availability).toBe(1);
-
-      failing.mockRestore();
-      reading.mockRestore();
-    });
-
-    it("closes by expiring the offer now and reopens with a future date", async () => {
-      vi.mocked(httpJson).mockResolvedValue(offer);
-
-      await changeOfferStatus(offer, "CLOSED");
-      expect(Date.parse(String(sentBody().expirationDate))).toBeLessThanOrEqual(Date.now());
-
-      await changeOfferStatus({ ...offer, expirationDate: "2020-01-01T00:00:00Z" }, "ACTIVE");
-      expect(Date.parse(String(sentBody().expirationDate))).toBeGreaterThan(Date.now());
+    it("closes through the lifecycle endpoint", async () => {
+      vi.mocked(httpJson).mockResolvedValue({ commercialStatus: "CLOSED" });
+      expect((await changeOfferStatus(offer, "CLOSED")).commercialStatus).toBe("CLOSED");
+      expect(sentBody()).toEqual({ status: "CLOSED" });
     });
   });
 });

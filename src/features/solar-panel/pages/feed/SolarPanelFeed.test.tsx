@@ -51,9 +51,8 @@ describe("SolarPanelFeed", () => {
     );
 
     expect(await screen.findByRole("heading", { name: "Placas Solares" })).toBeInTheDocument();
-    expect(screen.getByText("placas solares")).toBeInTheDocument();
-    expect(screen.getByText("serviços")).toBeInTheDocument();
-    expect(screen.getByText("fornecedores")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Recentes" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Em alta" })).toBeInTheDocument();
   });
 
   it("renders the mocked solar panels inside the feed corridors", async () => {

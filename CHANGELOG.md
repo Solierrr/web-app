@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.2.0](https://github.com/Solierrr/web-app/compare/v3.1.0...v3.2.0) (2026-10-01)
+
+
+### Features
+
+* add offer status actions, admin invitations by e-mail and unit map link ([#63](https://github.com/Solierrr/web-app/issues/63)) ([b3c6dcf](https://github.com/Solierrr/web-app/commit/b3c6dcfb8ca6199beb0fda4fcec284f810e76fcc))
+* add password reset, privacy and sessions settings and onboarding layout ([#61](https://github.com/Solierrr/web-app/issues/61)) ([e43df25](https://github.com/Solierrr/web-app/commit/e43df255bea82f65279fe097d694c47bedae8a17))
+* add registration status for registrants and filtered review with request details ([#64](https://github.com/Solierrr/web-app/issues/64)) ([1dd379e](https://github.com/Solierrr/web-app/commit/1dd379e9cf9a5e0c7e3c2f2775faf3834b0b156e))
+* add scoped analytics page with platform and company indicators ([#65](https://github.com/Solierrr/web-app/issues/65)) ([fd1820d](https://github.com/Solierrr/web-app/commit/fd1820dbca4eb050c80068d48f97aa77b18fec86))
+* close front-only gaps of the plan in company registration and activation ([#66](https://github.com/Solierrr/web-app/issues/66)) ([5e8a07b](https://github.com/Solierrr/web-app/commit/5e8a07ba80a2ac36c6b9b65c57ba08e93a3745b4))
+* expand access onboarding and operational workspace flows ([#56](https://github.com/Solierrr/web-app/issues/56)) ([3497bc0](https://github.com/Solierrr/web-app/commit/3497bc0c93067817cead6df57f85a0c06a03909c))
+* show the active context with profile, company type and role in the saas header ([#62](https://github.com/Solierrr/web-app/issues/62)) ([2b9f4d3](https://github.com/Solierrr/web-app/commit/2b9f4d3c22dbff844771465250bd7ae743539290))
+
 ## [3.1.0](https://github.com/Solierrr/web-app/compare/v3.0.1...v3.1.0) (2026-09-30)
 
 

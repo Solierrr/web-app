@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import "@/config/inter/internationalization";
+import "@/config/i18n/internationalization";
 import { ContextMenuProvider } from "@@/overlay/contextMenu/provider/ContextMenuProvider";
 
 vi.mock("@/features/solar-panel/solarPanel.service", () => ({

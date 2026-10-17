@@ -1,38 +1,49 @@
+import Marketplace from "@/features/marketplace/Marketplace";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
+import { getFeedView } from "@/features/marketplace/marketplace.utils";
+import { TechnicalAffiliationType } from "@/features/professionals/professional.enum";
+import { getCatalogTeams, teamCompany, type CatalogTeam } from "@/features/professionals/professionalTeam.service";
+import CompanyFeaturedCard from "@/features/companies/pages/feed/CompanyFeaturedCard";
 import { useTranslation } from "react-i18next";
 import EntityCorridor from "@/lib/components/layout/announcement/corridor/EntityCorridor";
 import Skeleton from "@@/feedback/skeleton/Skeleton";
 import { ImageSkeleton } from "@@/feedback/skeleton/Skeleton.presets";
 import { getCatalogTechnicians, type CatalogTechnician } from "@/features/professionals/professional.service";
-import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
-import { routePaths } from "@/config/inter/paths";
+import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { toCardItem } from "./ProfessionalFeed.utils";
 import WrapperLayout from "@/config/WrapperLayout";
 
-function ProfessionalFeedContent({ items }: { items: CatalogTechnician[] }) {
+function ProfessionalFeedContent({ items, teams }: { items: CatalogTechnician[]; teams?: CatalogTeam[] }) {
   const { t } = useTranslation("commons");
   const { t: tFeed } = useTranslation("feed");
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
+  const [params] = useSearchParams();
+  const view = getFeedView("professionals", params.get("view"));
+  const filtered = view === "independent" ? items.filter((item) => item.affiliationType === TechnicalAffiliationType.INDEPENDENT) : items;
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-2">
-        <h1>{t("navbar.professionals")}</h1>
+      <div className="flex flex-col items-center gap-2 text-center">
+        <h1>{tFeed("services.title")}</h1>
         <p className="text-black/70">{tFeed("professional.description")}</p>
       </div>
 
-      <div className="flex w-fit flex-row gap-2 rounded-full bg-input-bg p-1">
-        <Link to={routePaths.professionalsFeed(lang)} className="rounded-full bg-white px-4 py-2 font-medium text-orange">
-          {t("navbar.professionals")}
-        </Link>
-        <Link to={routePaths.companiesFeed(lang)} className="px-4 py-2 font-medium text-input-text">
-          {t("navbar.companies")}
-        </Link>
+      <div className="flex justify-center">
+        <Marketplace category="professionals" />
       </div>
 
-      <EntityCorridor title={t("navbar.professionals")} items={items.map((professional) => toCardItem(professional, lang))} />
+      {view === "teams" ? (
+        <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 xl:grid-cols-3">
+          {teams?.map((team) => (
+            <CompanyFeaturedCard key={team.id} company={teamCompany(team)} lang={lang} />
+          ))}
+        </div>
+      ) : (
+        <EntityCorridor title={t("navbar.professionals")} items={filtered.map((professional) => toCardItem(professional, lang))} />
+      )}
+      {(view === "teams" ? !teams?.length : !filtered.length) && <p>{tFeed("services.empty")}</p>}
     </div>
   );
 }
@@ -40,12 +51,14 @@ function ProfessionalFeedContent({ items }: { items: CatalogTechnician[] }) {
 function ProfessionalFeedSkeleton() {
   return (
     <div className="flex flex-col gap-8" aria-busy="true">
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col items-center gap-2 text-center">
         <Skeleton height="2.25rem" width="12rem" />
         <Skeleton height="1.5rem" width="60%" />
       </div>
 
-      <Skeleton height="2.5rem" width="16rem" className="rounded-full" />
+      <div className="flex justify-center">
+        <Marketplace category="professionals" />
+      </div>
 
       <div className="flex flex-col gap-4">
         <Skeleton height="1.65rem" width="10rem" />
@@ -66,28 +79,63 @@ export default function ProfessionalFeed() {
   const [items, setItems] = useState<CatalogTechnician[] | null>(null);
   const [error, setError] = useState(false);
   const { t } = useTranslation("feed");
+  const [params] = useSearchParams();
+  const view = getFeedView("professionals", params.get("view"));
+  const [teams, setTeams] = useState<CatalogTeam[] | null>(null);
+  const [teamError, setTeamError] = useState(false);
+
+  useEffect(() => {
+    if (view !== "teams") return;
+    let active = true;
+    getCatalogTeams()
+      .then((result) => {
+        if (active) {
+          setTeams(result);
+          setTeamError(false);
+        }
+      })
+      .catch(() => {
+        if (active) setTeamError(true);
+      });
+    return () => {
+      active = false;
+    };
+  }, [view]);
 
   useEffect(() => {
     let active = true;
 
-    getCatalogTechnicians().then((result) => {
-      if (active) setItems(result);
-    }).catch(() => {
-      if (active) setError(true);
-    });
+    getCatalogTechnicians()
+      .then((result) => {
+        if (active) setItems(result);
+      })
+      .catch(() => {
+        if (active) setError(true);
+      });
 
     return () => {
       active = false;
     };
   }, []);
 
-  if (error) {
-    return <WrapperLayout><p role="alert">{t("professional.loadError")}</p></WrapperLayout>;
-  }
-  if (items) {
+  if (view === "teams" ? teamError : error) {
     return (
       <WrapperLayout>
-        <ProfessionalFeedContent items={items} />
+        <div className="flex flex-col items-center gap-2 text-center">
+          <h1>{t("services.title")}</h1>
+          <p className="text-black/70">{t("professional.description")}</p>
+        </div>
+        <div className="my-8 flex justify-center">
+          <Marketplace category="professionals" />
+        </div>
+        <p role="alert">{t("professional.loadError")}</p>
+      </WrapperLayout>
+    );
+  }
+  if (view === "teams" ? teams !== null : items !== null) {
+    return (
+      <WrapperLayout>
+        <ProfessionalFeedContent items={items ?? []} teams={teams ?? undefined} />
       </WrapperLayout>
     );
   } else {

@@ -1,3 +1,6 @@
+import Checkbox from "@@/ui/checkbox/Checkbox";
+import { PrimaryButton } from "@@/ui/button/Button.presets";
+import OperationalForm from "@@/layout/operational-page/OperationalForm";
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
@@ -20,22 +23,14 @@ export default function SettingsPrivacyPage() {
   }
 
   return (
-    <OperationalPage title={t("title")} description={t("description")} compact>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <label className="flex items-center gap-3">
-          <input type="checkbox" checked={preferences.showContact} onChange={() => toggle("showContact")} />
-          {t("showContact")}
-        </label>
-        <label className="flex items-center gap-3">
-          <input type="checkbox" checked={preferences.showInSearch} onChange={() => toggle("showInSearch")} />
-          {t("showInSearch")}
-        </label>
+    <OperationalPage title={t("title")} description={t("description")} compact form centered formBackground>
+      <OperationalForm plain onSubmit={handleSubmit}>
+        <Checkbox label={t("showContact")} checked={preferences.showContact} onChange={() => toggle("showContact")} />
+        <Checkbox label={t("showInSearch")} checked={preferences.showInSearch} onChange={() => toggle("showInSearch")} />
         {saved === true ? <p role="status">{t("saved")}</p> : null}
         {saved === false ? <p role="alert">{t("saveError")}</p> : null}
-        <button type="submit" className="self-start rounded-small bg-orange px-4 py-2 text-white">
-          {t("save")}
-        </button>
-      </form>
+        <PrimaryButton type="submit" className="min-h-12 w-full" content={t("save")} description={t("save")} />
+      </OperationalForm>
     </OperationalPage>
   );
 }

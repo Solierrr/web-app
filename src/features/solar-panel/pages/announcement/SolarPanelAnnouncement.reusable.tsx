@@ -61,6 +61,7 @@ export function ProductImages({ images }: ImagesProps) {
 }
 
 export function Characteristics({ panel }: { panel: SolarPanel }) {
+  const { t: tCatalog } = useTranslation("feed", { keyPrefix: "catalog" });
   const { t } = useTranslation("announcements", {
     keyPrefix: "solarPanel.characteristics",
   });
@@ -76,6 +77,11 @@ export function Characteristics({ panel }: { panel: SolarPanel }) {
     efficiency: t("efficiency"),
     unity: c("unit"),
   });
+
+  if (panel.productType === "INFRASTRUCTURE") {
+    if (panel.infrastructureType) characteristics.unshift({ label: tCatalog("type"), value: tCatalog(`types.${panel.infrastructureType}`) });
+    if (panel.material) characteristics.push({ label: tCatalog("material"), value: panel.material });
+  }
 
   if (characteristics.length === 0) {
     return <p>{t("empty")}</p>;

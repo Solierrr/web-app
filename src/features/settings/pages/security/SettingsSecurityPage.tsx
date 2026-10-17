@@ -1,8 +1,12 @@
+import { PrimaryButton } from "@@/ui/button/Button.presets";
+import Input from "@@/ui/input/Input";
+import OperationalForm from "@@/layout/operational-page/OperationalForm";
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 
-import { changePassword, getCurrentFirebaseUser } from "@/config/firebase/auth/auth.service";
+import { changePassword } from "@/features/access/access.credentials.service";
+import { getAuthSession, clearAuthSession } from "@/lib/shared/auth/authToken.utils";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
 
 export default function SettingsSecurityPage() {
@@ -15,7 +19,7 @@ export default function SettingsSecurityPage() {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!isAlwaysMockMode() && !getCurrentFirebaseUser()) {
+    if (!isAlwaysMockMode() && !getAuthSession()) {
       setError("unlinked");
       return;
     }
@@ -24,7 +28,10 @@ export default function SettingsSecurityPage() {
     setSuccess(false);
     try {
       if (isAlwaysMockMode()) await waitForMockService();
-      else await changePassword(currentPassword, newPassword);
+      else {
+        await changePassword(currentPassword, newPassword);
+        clearAuthSession();
+      }
       setSuccess(true);
       setCurrentPassword("");
       setNewPassword("");
@@ -36,44 +43,48 @@ export default function SettingsSecurityPage() {
   }
 
   return (
-    <OperationalPage title={t("title")} compact>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+    <OperationalPage title={t("title")} compact form centered formBackground>
+      <OperationalForm plain onSubmit={handleSubmit}>
         <label className="flex flex-col gap-1">
           {t("currentPassword")}
-          <input
+          <Input
+            name="currentPassword"
+            aria-label={t("currentPassword")}
+            placeholder={t("currentPassword")}
             type="password"
             value={currentPassword}
             onChange={(event) => setCurrentPassword(event.target.value)}
             required
-            className="rounded-small border border-operational-border p-2"
+            className="w-full"
           />
         </label>
         <label className="flex flex-col gap-1">
           {t("newPassword")}
-          <input
+          <Input
+            name="newPassword"
+            aria-label={t("newPassword")}
+            placeholder={t("newPassword")}
             type="password"
             value={newPassword}
             onChange={(event) => setNewPassword(event.target.value)}
             required
             minLength={12}
-            className="rounded-small border border-operational-border p-2"
+            className="w-full"
           />
         </label>
         {error === "unlinked" ? (
-          <p role="alert" className="text-red-700">
+          <p role="alert" className="text-feedback-error">
             {t("unlinkedError")}
           </p>
         ) : null}
         {error === "failed" ? (
-          <p role="alert" className="text-red-700">
+          <p role="alert" className="text-feedback-error">
             {t("changeError")}
           </p>
         ) : null}
         {success ? <p role="status">{t("changeSuccess")}</p> : null}
-        <button type="submit" disabled={saving} className="rounded-small bg-orange px-4 py-2 text-white disabled:opacity-50">
-          {t("submit")}
-        </button>
-      </form>
+        <PrimaryButton type="submit" disabled={saving} className="min-h-12 w-full" content={t("submit")} description={t("submit")} />
+      </OperationalForm>
     </OperationalPage>
   );
 }

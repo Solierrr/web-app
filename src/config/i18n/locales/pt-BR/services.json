@@ -1,0 +1,158 @@
+{
+  "access": {
+    "login": "Não foi possível fazer login",
+    "register": "Não foi possível concluir o cadastro",
+    "loginWithFirebase": "Não foi possível fazer login",
+    "linkFirebase": "Não foi possível vincular sua conta ao Firebase",
+    "refresh": "Não foi possível renovar a sessão",
+    "logout": "Não foi possível encerrar a sessão",
+    "registrationSuccess": "Cadastro realizado"
+  },
+  "companyManagement": {
+    "listPositions": "Não foi possível carregar os cargos",
+    "createPosition": "Não foi possível criar o cargo",
+    "listPermissions": "Não foi possível carregar as permissões",
+    "listPositionPermissions": "Não foi possível carregar as permissões do cargo",
+    "grantPermission": "Não foi possível conceder a permissão",
+    "revokePermission": "Não foi possível revogar a permissão",
+    "listEmployees": "Não foi possível carregar os funcionários",
+    "updateEmployeePosition": "Não foi possível atualizar o cargo do funcionário",
+    "removeEmployee": "Não foi possível desligar o funcionário",
+    "generateAccessCode": "Não foi possível gerar o código de acesso",
+    "listAccessCodes": "Não foi possível carregar os códigos de acesso",
+    "revokeAccessCode": "Não foi possível revogar o código de acesso",
+    "redeemAccessCode": "Não foi possível usar o código de acesso"
+  },
+  "company": {
+    "createCompany": "Não foi possível cadastrar a empresa",
+    "createAddress": "Não foi possível cadastrar o endereço",
+    "createBusinessContact": "Não foi possível cadastrar o contato comercial",
+    "attachCompanyAddress": "Não foi possível vincular o endereço à empresa",
+    "attachCompanyBusinessContact": "Não foi possível vincular o contato comercial à empresa",
+    "getCatalogCompanies": "Não foi possível carregar os fornecedores",
+    "getCatalogCompanyBySlug": "Não foi possível carregar o fornecedor",
+    "getMyCompanyMembership": "Não foi possível carregar o vínculo com a empresa",
+    "getMyCompany": "Não foi possível carregar sua empresa",
+    "getCompany": "Não foi possível obter a empresa {{id}}",
+    "getCompanyBySlug": "Não foi possível obter a empresa {{slug}}",
+    "approveCompany": "Não foi possível aprovar a empresa {{id}}",
+    "rejectCompany": "Não foi possível rejeitar a empresa {{id}}",
+    "listAllCompanies": "Não foi possível obter as empresas",
+    "getCompanies": "Não foi possível obter as empresas",
+    "supplierNotFound": "Fornecedor não encontrado: {{slug}}",
+    "profileEditingUnavailable": "A edição do perfil empresarial ainda não está disponível na API.",
+    "activeCompanyNotFound": "Não foi possível encontrar a empresa ativa."
+  },
+  "messenger": {
+    "getConversations": "Não foi possível carregar as conversas",
+    "getConversation": "Não foi possível carregar a conversa",
+    "createDirectConversation": "Não foi possível iniciar a conversa",
+    "getConversationMessages": "Não foi possível carregar as mensagens",
+    "syncConversationMessages": "Não foi possível sincronizar as mensagens",
+    "markConversationRead": "Não foi possível atualizar a leitura da conversa",
+    "sendConversationMessage": "Não foi possível enviar a mensagem",
+    "sessionUnavailable": "Sessão indisponível"
+  },
+  "user": {
+    "getUserSummary": "Não foi possível carregar o participante",
+    "getMyUser": "Não foi possível carregar seu perfil",
+    "updateMyUser": "Não foi possível salvar seu perfil",
+    "getUser": "Não foi possível obter o usuário {{id}}"
+  },
+  "messages": {
+    "getMessages": "Não foi possível obter as mensagens do chat {{chatId}}",
+    "sendMessage": "Não foi possível enviar a mensagem no chat {{chatId}}"
+  },
+  "offer": {
+    "getMySupplier": "Não foi possível carregar os dados de fornecedor",
+    "listCompanyOffers": "Não foi possível carregar as ofertas",
+    "createOffer": "Não foi possível criar a oferta",
+    "updateOffer": "Não foi possível atualizar a oferta {{id}}",
+    "deleteOffer": "Não foi possível remover a oferta {{id}}"
+  },
+  "platformAdmin": {
+    "getMyPlatformAdmin": "Não foi possível verificar o status de Admin Solaria"
+  },
+  "professionalOnboarding": {
+    "getProfessions": "Não foi possível carregar as profissões",
+    "createContact": "Não foi possível cadastrar o contato",
+    "createPerson": "Não foi possível cadastrar seus dados pessoais",
+    "createTechnician": "Não foi possível cadastrar seu registro profissional",
+    "createProfessionalRegistration": "Não foi possível concluir o registro profissional",
+    "installer": "Instalador de sistemas solares",
+    "engineer": "Engenheiro eletricista"
+  },
+  "professional": {
+    "getCatalogTechnicians": "Não foi possível carregar os profissionais",
+    "getCatalogTechnicianBySlug": "Não foi possível carregar o profissional",
+    "notFound": "Profissional não encontrado: {{slug}}"
+  },
+  "professionalReview": {
+    "listProfessionalReviews": "Não foi possível carregar os profissionais em análise",
+    "decideProfessional": "Não foi possível analisar o profissional"
+  },
+  "saas": {
+    "getOperationalContext": "Não foi possível obter o perfil operacional"
+  },
+  "solarPanel": {
+    "getCatalogSolarPanels": "Não foi possível carregar as placas solares",
+    "getSolarPanelBySlug": "Não foi possível obter o painel solar {{companySlug}}/{{slug}}",
+    "listSolarPanelModels": "Não foi possível obter os modelos de placa solar",
+    "listApprovedSolarPanelModels": "Não foi possível obter os modelos aprovados",
+    "listSolarPanelModelsByStatus": "Não foi possível obter os modelos de placa solar",
+    "approveSolarPanel": "Não foi possível aprovar o modelo {{id}}",
+    "rejectSolarPanel": "Não foi possível rejeitar o modelo {{id}}",
+    "createSolarPanel": "Não foi possível criar o modelo de placa solar",
+    "updateSolarPanel": "Não foi possível atualizar o modelo {{id}}",
+    "deleteSolarPanel": "Não foi possível remover o modelo {{id}}",
+    "notFound": "Painel solar não encontrado: {{companySlug}}/{{slug}}"
+  },
+  "unit": {
+    "getMyRequester": "Não foi possível carregar os dados de solicitante",
+    "listCompanyUnits": "Não foi possível carregar as unidades",
+    "createAddress": "Não foi possível cadastrar o endereço",
+    "createGeolocalization": "Não foi possível salvar a localização no mapa",
+    "createUnit": "Não foi possível cadastrar a unidade",
+    "updateUnit": "Não foi possível atualizar a unidade {{id}}",
+    "deleteUnit": "Não foi possível remover a unidade {{id}}"
+  },
+  "aiValidation": {
+    "validateCnpjCategory": "Não foi possível validar o CNPJ",
+    "validateCertificates": "Não foi possível validar os certificados"
+  },
+  "settings": {
+    "revokeSessionUnavailable": "Encerrar a sessão {{id}} ainda não é suportado pelo servidor"
+  },
+  "exchange": {
+    "notConfigured": "A API de câmbio não está configurada",
+    "getExchangeRate": "Não foi possível obter a taxa de câmbio de {{from}}/{{to}}"
+  },
+  "firebaseAuth": {
+    "sessionUnavailable": "Nenhuma sessão do Firebase disponível",
+    "register": "Não foi possível concluir o cadastro",
+    "login": "Não foi possível fazer login",
+    "logout": "Não foi possível encerrar a sessão",
+    "loginWithGoogle": "Não foi possível fazer login com o Google",
+    "reloadCurrentFirebaseUser": "Não foi possível atualizar a sessão",
+    "sendVerificationEmail": "Não foi possível enviar o e-mail de confirmação",
+    "requestPasswordReset": "Não foi possível solicitar a redefinição de senha",
+    "changePassword": "Não foi possível alterar a senha",
+    "completePasswordReset": "Não foi possível redefinir a senha",
+    "loginWithMicrosoft": "Não foi possível entrar com a Microsoft. Tente novamente."
+  },
+  "typingStatus": {
+    "setTypingStatus": "Não foi possível atualizar o indicador de digitação"
+  },
+  "purchases": {
+    "getCart": "Não foi possível carregar o carrinho.",
+    "putCartItem": "Não foi possível atualizar o carrinho.",
+    "removeCartItem": "Não foi possível remover o item.",
+    "checkout": "Não foi possível concluir a compra.",
+    "listOrders": "Não foi possível carregar os pedidos.",
+    "getOrder": "Não foi possível carregar o pedido.",
+    "cancelOrder": "Não foi possível cancelar o pedido.",
+    "listSales": "Não foi possível carregar as vendas.",
+    "getSubscription": "Não foi possível carregar o plano.",
+    "payCharge": "Não foi possível pagar a cobrança."
+  }
+}

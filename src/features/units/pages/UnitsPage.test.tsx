@@ -1,3 +1,4 @@
+vi.mock("@@/layout/access/canvas/SideCanvas", () => ({ default: () => null }));
 import { MemoryRouter } from "react-router-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
@@ -51,6 +52,7 @@ describe("UnitsPage", () => {
       </MemoryRouter>,
     );
 
+    fireEvent.click(await screen.findByRole("button", { name: "Nova unidade" }));
     expect(await screen.findByText(/Mapa interativo indisponível/)).toBeInTheDocument();
   });
 
@@ -85,14 +87,51 @@ describe("UnitsPage", () => {
       </MemoryRouter>,
     );
     await screen.findByText("Nenhuma unidade cadastrada ainda.");
+    fireEvent.click(screen.getByRole("button", { name: "Nova unidade" }));
+    expect(screen.queryByRole("table")).not.toBeInTheDocument();
 
     fireEvent.change(screen.getByLabelText("CEP"), { target: { value: "13010000" } });
-    fireEvent.change(screen.getByLabelText("UF"), { target: { value: "SP" } });
+    fireEvent.change(screen.getByRole("combobox", { name: "UF" }), { target: { value: "SP" } });
     fireEvent.change(screen.getByLabelText("Cidade"), { target: { value: "Campinas" } });
     fireEvent.change(screen.getByLabelText("Rua"), { target: { value: "Rua das Flores" } });
     fireEvent.click(screen.getByRole("button", { name: "Cadastrar unidade" }));
 
     await waitFor(() => expect(unitService.createAddress).toHaveBeenCalledWith(expect.objectContaining({ city: "Campinas", state: "SP" })));
     expect(unitService.createUnit).toHaveBeenCalledWith(expect.objectContaining({ requesterId: "requester-1", addressId: "address-1" }));
+  });
+  it("confirms deletion before calling the service", async () => {
+    vi.mocked(unitService.listCompanyUnits)
+      .mockResolvedValueOnce([
+        {
+          id: "unit-1",
+          requesterId: "requester-1",
+          address: {
+            id: "address-1",
+            state: "SP",
+            city: "Campinas",
+            neighborhood: null,
+            zipCode: "13010000",
+            street: "Rua das Flores",
+            number: "250",
+          },
+          complement: null,
+          locationType: "HOUSE",
+        },
+      ])
+      .mockResolvedValue([]);
+    vi.mocked(unitService.deleteUnit).mockResolvedValue(undefined);
+    render(
+      <MemoryRouter>
+        <UnitsPage />
+      </MemoryRouter>,
+    );
+    fireEvent.click((await screen.findAllByRole("button", { name: /Opções do registro/ }))[0]);
+    fireEvent.click(screen.getByRole("button", { name: "Remover" }));
+    expect(unitService.deleteUnit).not.toHaveBeenCalled();
+    fireEvent.pointerDown(screen.getByRole("button", { name: "confirmar" }));
+    expect(screen.getByRole("button", { name: "confirmar" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "confirmar" }));
+    await waitFor(() => expect(unitService.deleteUnit).toHaveBeenCalledWith("unit-1"));
+    expect(await screen.findByText("Nenhuma unidade cadastrada ainda.")).toBeInTheDocument();
   });
 });

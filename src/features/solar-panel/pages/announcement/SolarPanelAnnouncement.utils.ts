@@ -1,5 +1,5 @@
 import type { SolarPanel } from "@/features/solar-panel/solarPanel";
-import { Capitalize } from "@/config/inter/utils";
+import { Capitalize } from "@/config/i18n/utils";
 
 export interface RegionsServiceI18n {
   message: string;

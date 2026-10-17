@@ -4,5 +4,6 @@ export type OfferStatus = "ACTIVE" | "PAUSED" | "CLOSED";
 
 export function getOfferStatus(offer: Offer, now = Date.now()): OfferStatus {
   if (offer.expirationDate && Date.parse(offer.expirationDate) <= now) return "CLOSED";
+  if (offer.commercialStatus) return offer.commercialStatus;
   return offer.availability === 0 ? "PAUSED" : "ACTIVE";
 }

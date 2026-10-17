@@ -46,7 +46,8 @@ describe("ProfessionalProfile", () => {
     );
 
     expect(await screen.findByRole("heading", { name: "Carlos Eduardo Lima" })).toBeInTheDocument();
-    expect(screen.getByText("CREA: MG-123456")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Registro profissional" })).toBeInTheDocument();
+    expect(screen.getByText("MG-123456")).toBeInTheDocument();
   });
 
   it("shows an error message when loading fails", async () => {

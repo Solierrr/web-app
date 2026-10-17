@@ -1,0 +1,112 @@
+{
+  "fields": {
+    "email": {
+      "placeholder": "youremailhere@email.com"
+    },
+    "password": {
+      "placeholder": "yourpasswordhere"
+    },
+    "name": {
+      "placeholder": "yournamehere"
+    },
+    "confirmPassword": {
+      "placeholder": "confirmyourpassword"
+    }
+  },
+  "login": {
+    "helperTextPrefix": "Can't find your company?",
+    "contactSupport": "Contact support",
+    "submit": "Proceed",
+    "forgotPassword": "Forgot my password",
+    "noAccountPrefix": "Don't have an account?",
+    "register": "Sign up",
+    "error": "Invalid email or password",
+    "helperText": "Sign in to your account to continue",
+    "title": "Sign in",
+    "google": "Continue with Google",
+    "or": "or",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "emailPlaceholder": "Enter your email address",
+    "passwordPlaceholder": "Enter your password",
+    "signIn": "Sign in",
+    "remember": "Remember my email and sign-in method on this device",
+    "continueAs": "Continue as {{email}}",
+    "forgetAccount": "Forget this account on this device",
+    "anotherAccount": "Sign in with another account",
+    "lastUsed": "Last used",
+    "emailMethod": "Email and password",
+    "policiesIntro": "Read the Solaria policies:",
+    "terms": "Terms of use",
+    "privacy": "Privacy policy",
+    "cookies": "Cookie policy",
+    "microsoft": "Continue with Microsoft"
+  },
+  "register": {
+    "helperText": "Create your account to access the marketplace",
+    "submit": "Register",
+    "hasAccountPrefix": "Already have an account?",
+    "login": "Sign in",
+    "passwordMismatch": "Passwords do not match",
+    "error": "Could not complete the registration",
+    "title": "Create an account",
+    "confirmPasswordPlaceholder": "Repeat your password",
+    "emailPlaceholder": "Enter your email here",
+    "confirmPasswordLabel": "Confirm password",
+    "passwordPlaceholder": "Create a password"
+  },
+  "forgotPassword": {
+    "helperText": "Enter your email to receive recovery instructions",
+    "submit": "Send",
+    "sent": "If that email is registered, you will receive a link to reset your password.",
+    "error": "Could not send the recovery email. Please try again.",
+    "rememberedPasswordPrefix": "Remembered your password?",
+    "backToLogin": "Back to login"
+  },
+  "verifyEmail": {
+    "title": "Verify your email",
+    "pending": "We sent a verification link to your email. Check your inbox.",
+    "verified": "Your email is already verified.",
+    "resend": "Resend email",
+    "resendCooldown": "Wait {{seconds}}s to resend",
+    "resendError": "Could not resend the verification email.",
+    "checking": "Checking...",
+    "linkTitle": "Confirm your password to finish",
+    "linkDescription": "Enter your current password to link the verification to your account.",
+    "linkSubmit": "Confirm",
+    "linkError": "Could not confirm the verification. Check your password and try again.",
+    "linkSuccess": "Email verified and linked successfully.",
+    "noFirebaseAccount": "Your email verification has not started yet.",
+    "check": "I have confirmed my email",
+    "continue": "Go to dashboard",
+    "continueLater": "Continue and verify later",
+    "notConfirmed": "Your email is not verified yet. Open the link you received and try again.",
+    "resume": "Confirm your password to resume email verification."
+  },
+  "resetPassword": {
+    "helperText": "Choose a new password with at least 12 characters",
+    "submit": "Reset password",
+    "success": "Password reset. Sign in with your new password.",
+    "error": "We could not reset the password. Request a new link and try again.",
+    "invalidLink": "This reset link is invalid or has expired.",
+    "mismatch": "The passwords do not match.",
+    "requestNewLink": "Request a new link"
+  },
+  "canvas": {
+    "waves": {
+      "title": "Fine waves",
+      "description": "Slow-moving energy lines that bend around the pointer. Click to create a pulse."
+    },
+    "dots": {
+      "title": "Reactive dots",
+      "description": "Move the pointer to light up the dots. Click to create a pulse. A subtle solar texture that keeps the focus on the form."
+    },
+    "reference": "View original reference",
+    "preview": "Login background preview",
+    "navigation": "Compare login backgrounds",
+    "grid": {
+      "title": "Interactive grid",
+      "description": "Hover to light up only the square under the pointer. Click to spread a wave of color through nearby squares."
+    }
+  }
+}

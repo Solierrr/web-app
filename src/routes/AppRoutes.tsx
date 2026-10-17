@@ -1,18 +1,24 @@
+import ProjectPage from "@/features/projects/pages/ProjectPage";
+import ProjectFormPage from "@/features/projects/pages/ProjectFormPage";
+import ProjectsPage from "@/features/projects/pages/ProjectsPage";
+import BrandDetailsPage from "@/features/brands/pages/BrandDetailsPage";
+import BrandRequestsPage from "@/features/brands/pages/BrandRequestsPage";
 import type { ReactNode } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation, useParams } from "react-router-dom";
 
 import AppMode from "@/config/vite/mode.enum";
 
 import { TestRoutes } from "./TestRoutes";
 import { AppLayout } from "../config/AppLayout";
 import { SaaSLayout } from "@/lib/components/layout/saas/SaaSLayout";
-import LanguageLayout, { RootRedirect } from "../config/inter/browser/LanguageLayout";
+import LanguageLayout, { RootRedirect } from "../config/i18n/browser/LanguageLayout";
 import { NotFoundPage } from "../features/error/pages/not-found/NotFound";
 
-import { SUPPORTED, type SupportedLanguage } from "@/config/inter/browser/languages";
-import { joinSegments } from "@/config/inter/paths";
+import { DEFAULT, isSupportedLanguage, SUPPORTED, type SupportedLanguage } from "@/config/i18n/browser/languages";
+import { joinSegments, routePaths } from "@/config/i18n/paths";
 
 import SolarPanelAnnouncement from "@/features/solar-panel/pages/announcement/SolarPanelAnnouncement";
+import InfrastructureFeed from "@/features/infrastructure/pages/InfrastructureFeed";
 import SolarPanelFeed from "@/features/solar-panel/pages/feed/SolarPanelFeed";
 import ProfessionalFeed from "@/features/professionals/pages/feed/ProfessionalFeed";
 import CompanyFeed from "@/features/companies/pages/feed/CompanyFeed";
@@ -22,27 +28,26 @@ import CompanySearch from "@/features/companies/pages/search/CompanySearch";
 import ProfileOnboarding from "@/lib/components/layout/profile/ProfileOnboarding";
 import CompanyOnboarding from "@/features/companies/pages/onboarding/CompanyOnboarding";
 import ProfessionalOnboarding from "@/features/professionals/pages/onboarding/ProfessionalOnboarding";
-import AccountSetupPage from "@/features/access/pages/account-setup/AccountSetupPage";
-import AccessInfoPage from "@/features/access/pages/access-info/AccessInfoPage";
+import CompanyAccessPage from "@/features/companies/pages/access/CompanyAccessPage";
 import EnterpriseProfile from "@/features/companies/pages/profile/EnterpriseProfile";
 import CompanyProfile from "@/features/companies/pages/profile/CompanyProfile";
 import UserProfile from "@/features/users/pages/profile/UserProfile";
 import ProfessionalProfile from "@/features/professionals/pages/profile/ProfessionalProfile";
 import SolarPanelModelCrud from "@/features/solar-panel/pages/crud/SolarPanelModelCrud";
 import SolarPanelModelPage from "@/features/solar-panel/pages/crud/SolarPanelModelPage";
-import Chat from "@/features/messages/pages/Chat";
 import Inbox from "@/features/messages/pages/Inbox";
 import ContactCompany from "@/features/messages/pages/ContactCompany";
 import ChatbotPage from "@/features/messages/pages/ChatbotPage";
-import LoginPage from "@/features/access/pages/login/LoginPage";
-import OnboardingPage from "@/features/access/pages/onboarding/OnboardingPage";
-import ForgotPasswordPage from "@/features/access/pages/forgot-password/ForgotPasswordPage";
+import Mobile from "@/features/access/mobile/Mobile";
+import LoginPage from "@/features/access/pages/auth/login/LoginPage";
+import RegisterPage from "@/features/access/pages/auth/register/RegisterPage";
+import ForgotPasswordPage from "@/features/access/pages/help/forgot-password/ForgotPasswordPage";
 import VerifyEmailPage from "@/features/access/pages/verify-email/VerifyEmailPage";
 import SettingsPage from "@/features/settings/pages/SettingsPage";
 import SettingsSecurityPage from "@/features/settings/pages/security/SettingsSecurityPage";
 import SettingsPrivacyPage from "@/features/settings/pages/privacy/SettingsPrivacyPage";
 import SettingsSessionsPage from "@/features/settings/pages/sessions/SettingsSessionsPage";
-import ResetPasswordPage from "@/features/access/pages/reset-password/ResetPasswordPage";
+import ResetPasswordPage from "@/features/access/pages/help/reset-password/ResetPasswordPage";
 import DashboardPage from "@/features/dashboard/pages/DashboardPage";
 import EmployeesPage from "@/features/companies/pages/employees/EmployeesPage";
 import EmployeePage from "@/features/companies/pages/employees/EmployeePage";
@@ -50,14 +55,22 @@ import OffersPage from "@/features/offers/pages/OffersPage";
 import OfferPage from "@/features/offers/pages/OfferPage";
 import UnitsPage from "@/features/units/pages/UnitsPage";
 import UnitPage from "@/features/units/pages/UnitPage";
-import RequireAuth from "@/features/access/require-auth/RequireAuth";
-import RequireVerifiedEmail from "@/features/access/require-verified-email/RequireVerifiedEmail";
-import RequireCompany from "@/features/access/require-company/RequireCompany";
-import RequirePlatformAdmin from "@/features/access/require-platform-admin/RequirePlatformAdmin";
+import RequireAuth from "@/features/access/require/RequireAuth";
+import RequireVerifiedEmail from "@/features/access/require/RequireVerifiedEmail";
+import RequireCompany from "@/features/access/require/RequireCompany";
+import RequirePlatformAdmin from "@/features/access/require/RequirePlatformAdmin";
 import AnalyticsPage from "@/features/analytics/pages/AnalyticsPage";
-import RegistrationStatusPage from "@/features/access/pages/registration-status/RegistrationStatusPage";
+import RegistrationStatusPage from "@/features/companies/pages/registration-status/RegistrationStatusPage";
 import RegistrationDetailPage from "@/features/platform-admin/pages/registration/RegistrationDetailPage";
 import RegistrationsPage from "@/features/platform-admin/pages/registrations/RegistrationsPage";
+import TermsPolicyPage from "@/features/policy/pages/terms/TermsPolicyPage";
+import PrivacyPolicyPage from "@/features/policy/pages/privacy/PrivacyPolicyPage";
+import CookiePolicyPage from "@/features/policy/pages/cookies/CookiePolicyPage";
+import CartPage from "@/features/purchases/pages/CartPage";
+import OrdersPage from "@/features/purchases/pages/OrdersPage";
+import OrderPage from "@/features/purchases/pages/OrderPage";
+import SalesPage from "@/features/purchases/pages/SalesPage";
+import PlanPage from "@/features/purchases/pages/PlanPage";
 
 interface RouteDefinition {
   key: string;
@@ -66,20 +79,23 @@ interface RouteDefinition {
 }
 
 const ACCESS: RouteDefinition[] = [
+  { key: "mobileAuthorization", path: (lang) => `${lang}/auth/mobile`, element: <Mobile /> },
   { key: "login", path: (lang) => joinSegments(lang, "login"), element: <LoginPage /> },
-  { key: "register", path: (lang) => joinSegments(lang, "register"), element: <OnboardingPage key="professional" kind="professional" /> },
-  { key: "registerCompany", path: (lang) => joinSegments(lang, "register", "company"), element: <OnboardingPage key="company" kind="company" /> },
-  {
-    key: "registerProfessional",
-    path: (lang) => joinSegments(lang, "register", "professional"),
-    element: <OnboardingPage key="professional" kind="professional" />,
-  },
-  { key: "activateAccess", path: (lang) => joinSegments(lang, "register", "access"), element: <OnboardingPage key="invitation" kind="invitation" /> },
+  { key: "register", path: (lang) => joinSegments(lang, "register"), element: <RegisterPage /> },
   { key: "forgotPassword", path: (lang) => joinSegments(lang, "forgotPassword"), element: <ForgotPasswordPage /> },
   { key: "resetPassword", path: (lang) => joinSegments(lang, "resetPassword"), element: <ResetPasswordPage /> },
 ];
 
 const APP: RouteDefinition[] = [
+  { key: "termsPolicy", path: (lang) => joinSegments(lang, "policy", "terms"), element: <TermsPolicyPage /> },
+  { key: "privacyPolicy", path: (lang) => joinSegments(lang, "policy", "privacy"), element: <PrivacyPolicyPage /> },
+  { key: "cookiePolicy", path: (lang) => joinSegments(lang, "policy", "cookies"), element: <CookiePolicyPage /> },
+  { key: "infrastructureFeed", path: (lang) => joinSegments(lang, "infrastructure"), element: <InfrastructureFeed /> },
+  {
+    key: "infrastructureDetail",
+    path: (lang) => `${joinSegments(lang, "infrastructure")}/:companySlug/:productSlug`,
+    element: <SolarPanelAnnouncement />,
+  },
   { key: "solarPanelsFeed", path: (lang) => joinSegments(lang, "solarPanels"), element: <SolarPanelFeed /> },
   { key: "professionalsFeed", path: (lang) => joinSegments(lang, "professionals"), element: <ProfessionalFeed /> },
   { key: "companiesFeed", path: (lang) => joinSegments(lang, "companies"), element: <CompanyFeed /> },
@@ -99,6 +115,33 @@ const APP: RouteDefinition[] = [
 ];
 
 const SAAS: RouteDefinition[] = [
+  { key: "projectCreate", path: (lang) => joinSegments(lang, "projects", "newProject"), element: <ProjectFormPage /> },
+  {
+    key: "projectEdit",
+    path: (lang) => `${joinSegments(lang, "projects")}/:projectId/${joinSegments(lang, "editProject")}`,
+    element: <ProjectFormPage />,
+  },
+  { key: "projectDetail", path: (lang) => `${joinSegments(lang, "projects")}/:projectId`, element: <ProjectPage /> },
+
+  { key: "projects", path: (lang) => joinSegments(lang, "projects"), element: <ProjectsPage /> },
+  {
+    key: "brandDetail",
+    path: (lang) => `${joinSegments(lang, "brands")}/:brandId`,
+    element: (
+      <RequireCompany permission="GET /api/brands">
+        <BrandDetailsPage />
+      </RequireCompany>
+    ),
+  },
+  {
+    key: "brandRequests",
+    path: (lang) => joinSegments(lang, "brandRequests"),
+    element: (
+      <RequireCompany permission="GET /api/brand-requests">
+        <BrandRequestsPage />
+      </RequireCompany>
+    ),
+  },
   {
     key: "modelDetail",
     path: (lang) => `${joinSegments(lang, "admin", "solarPanelModels")}/:modelId`,
@@ -137,15 +180,14 @@ const SAAS: RouteDefinition[] = [
     ),
   },
   { key: "dashboard", path: (lang) => joinSegments(lang, "dashboard"), element: <DashboardPage /> },
-  { key: "verifyEmail", path: (lang) => joinSegments(lang, "verifyEmail"), element: <VerifyEmailPage /> },
   { key: "settings", path: (lang) => joinSegments(lang, "settings"), element: <SettingsPage /> },
   { key: "settingsSecurity", path: (lang) => joinSegments(lang, "settings", "security"), element: <SettingsSecurityPage /> },
   { key: "settingsPrivacy", path: (lang) => joinSegments(lang, "settings", "privacy"), element: <SettingsPrivacyPage /> },
   { key: "settingsSessions", path: (lang) => joinSegments(lang, "settings", "sessions"), element: <SettingsSessionsPage /> },
-  { key: "accountSetup", path: (lang) => joinSegments(lang, "profileSetup"), element: <AccountSetupPage /> },
+  { key: "accountSetup", path: (lang) => joinSegments(lang, "profileSetup"), element: <LegacyAccessRedirect destination={routePaths.dashboard} /> },
   { key: "profileOnboardingCompany", path: (lang) => joinSegments(lang, "profileSetup", "company"), element: <CompanyOnboarding /> },
   { key: "profileOnboardingProfessional", path: (lang) => joinSegments(lang, "profileSetup", "professional"), element: <ProfessionalOnboarding /> },
-  { key: "profileOnboardingAccess", path: (lang) => joinSegments(lang, "profileSetup", "access"), element: <AccessInfoPage /> },
+  { key: "profileOnboardingAccess", path: (lang) => joinSegments(lang, "profileSetup", "access"), element: <CompanyAccessPage /> },
   { key: "contactCompany", path: (lang) => `${joinSegments(lang, "messages", "company")}/:companyId`, element: <ContactCompany /> },
   {
     key: "inbox",
@@ -161,7 +203,7 @@ const SAAS: RouteDefinition[] = [
     path: (lang) => `${joinSegments(lang, "messages")}/:conversationId`,
     element: (
       <RequireVerifiedEmail>
-        <Chat />
+        <Inbox />
       </RequireVerifiedEmail>
     ),
   },
@@ -203,6 +245,27 @@ const SAAS: RouteDefinition[] = [
       </RequireCompany>
     ),
   },
+  { key: "cart", path: (lang) => joinSegments(lang, "cart"), element: <CartPage /> },
+  { key: "orders", path: (lang) => joinSegments(lang, "orders"), element: <OrdersPage /> },
+  { key: "orderDetail", path: (lang) => `${joinSegments(lang, "orders")}/:orderId`, element: <OrderPage /> },
+  {
+    key: "sales",
+    path: (lang) => joinSegments(lang, "admin", "sales"),
+    element: (
+      <RequireCompany type="SUPPLIER" permission="GET /api/sales">
+        <SalesPage />
+      </RequireCompany>
+    ),
+  },
+  {
+    key: "plan",
+    path: (lang) => joinSegments(lang, "admin", "plan"),
+    element: (
+      <RequireCompany type="SUPPLIER" permission="GET /api/subscription">
+        <PlanPage />
+      </RequireCompany>
+    ),
+  },
   { key: "analytics", path: (lang) => joinSegments(lang, "analytics"), element: <AnalyticsPage /> },
   { key: "registrationStatus", path: (lang) => joinSegments(lang, "registrationStatus"), element: <RegistrationStatusPage /> },
   {
@@ -225,24 +288,55 @@ const SAAS: RouteDefinition[] = [
   },
 ];
 
+function LegacyAccessRedirect({ destination }: { destination: (lang: SupportedLanguage) => string }) {
+  const { lang: parameter } = useParams<{ lang: string }>();
+  const lang = isSupportedLanguage(parameter) ? parameter : DEFAULT;
+  const location = useLocation();
+  return <Navigate to={destination(lang) + location.search + location.hash} replace state={location.state} />;
+}
+
+const LEGACY_ACCESS: RouteDefinition[] = [
+  {
+    key: "registerCompany",
+    path: (lang) => joinSegments(lang, "register", "company"),
+    element: <LegacyAccessRedirect destination={routePaths.profileOnboardingCompany} />,
+  },
+  {
+    key: "registerProfessional",
+    path: (lang) => joinSegments(lang, "register", "professional"),
+    element: <LegacyAccessRedirect destination={routePaths.profileOnboardingProfessional} />,
+  },
+  {
+    key: "activateAccess",
+    path: (lang) => joinSegments(lang, "register", "access"),
+    element: <LegacyAccessRedirect destination={routePaths.profileOnboardingAccess} />,
+  },
+];
+
 export function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<RootRedirect />} />
 
       <Route path="/:lang" element={<LanguageLayout />}>
-        {import.meta.env.VITE_APP_MODE === AppMode.TEST && <TestRoutes />}
+        {import.meta.env.VITE_APP_MODE === AppMode.TEST && TestRoutes()}
 
         {SUPPORTED.flatMap((lang) => ACCESS.map(({ key, path, element }) => <Route key={`${lang}-${key}`} path={path(lang)} element={element} />))}
+
+        {SUPPORTED.flatMap((lang) =>
+          LEGACY_ACCESS.map(({ key, path, element }) => <Route key={`${lang}-${key}`} path={path(lang)} element={element} />),
+        )}
 
         <Route element={<AppLayout />}>
           <Route index element={<SolarPanelFeed />} />
 
           {SUPPORTED.flatMap((lang) => APP.map(({ key, path, element }) => <Route key={`${lang}-${key}`} path={path(lang)} element={element} />))}
-
-          <Route path="*" element={<NotFoundPage />} />
         </Route>
+        <Route path="*" element={<NotFoundPage />} />
         <Route element={<RequireAuth />}>
+          {SUPPORTED.map((lang) => (
+            <Route key={`${lang}-verifyEmail`} path={joinSegments(lang, "verifyEmail")} element={<VerifyEmailPage />} />
+          ))}
           <Route element={<SaaSLayout />}>
             {SUPPORTED.flatMap((lang) => SAAS.map(({ key, path, element }) => <Route key={`${lang}-${key}`} path={path(lang)} element={element} />))}
           </Route>

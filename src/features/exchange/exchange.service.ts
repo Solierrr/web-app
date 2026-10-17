@@ -1,3 +1,4 @@
+import i18n from "@/config/i18n/internationalization";
 import logger from "@/config/logging/logger";
 
 import CurrencyCode from "./exchange.enum";
@@ -6,18 +7,22 @@ import type { ExchangeRateResponse } from "./exchange";
 const SERVICE_NAME = "exchange";
 
 function isExchangeRateResponse(value: unknown): value is ExchangeRateResponse {
-  if (typeof value !== "object" || value === null) { return false; }
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
   const { rate } = value as Record<string, unknown>;
   return typeof rate === "number" && Number.isFinite(rate) && rate > 0;
 }
 
 export async function getExchangeRate(from: CurrencyCode, to: CurrencyCode): Promise<number> {
-  if (from === to) { return 1; }
+  if (from === to) {
+    return 1;
+  }
 
   const api = import.meta.env.VITE_EXCHANGE_API;
 
   if (!api) {
-    const error = new Error("Exchange API is not configured");
+    const error = new Error(i18n.t("services:exchange.notConfigured"));
     logger.serviceError({
       service: SERVICE_NAME,
       operation: "getExchangeRate",
@@ -36,7 +41,7 @@ export async function getExchangeRate(from: CurrencyCode, to: CurrencyCode): Pro
       operation: "getExchangeRate",
       error,
     });
-    throw new Error(`Unable to get exchange rate for ${from}/${to}`, {
+    throw new Error(i18n.t("services:exchange.getExchangeRate", { from, to }), {
       cause: error,
     });
   }
@@ -49,7 +54,7 @@ export async function getExchangeRate(from: CurrencyCode, to: CurrencyCode): Pro
       status: response.status,
       error,
     });
-    throw new Error(`Unable to get exchange rate for ${from}/${to}`, {
+    throw new Error(i18n.t("services:exchange.getExchangeRate", { from, to }), {
       cause: error,
     });
   }
@@ -64,7 +69,7 @@ export async function getExchangeRate(from: CurrencyCode, to: CurrencyCode): Pro
       operation: "getExchangeRate",
       error,
     });
-    throw new Error(`Unable to get exchange rate for ${from}/${to}`, {
+    throw new Error(i18n.t("services:exchange.getExchangeRate", { from, to }), {
       cause: error,
     });
   }
@@ -76,7 +81,7 @@ export async function getExchangeRate(from: CurrencyCode, to: CurrencyCode): Pro
       operation: "getExchangeRate",
       error,
     });
-    throw new Error(`Unable to get exchange rate for ${from}/${to}`, {
+    throw new Error(i18n.t("services:exchange.getExchangeRate", { from, to }), {
       cause: error,
     });
   }

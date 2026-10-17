@@ -15,6 +15,8 @@ const meta = {
   },
   args: {
     options,
+    activeUrl: options[0].url,
+    label: "Tipo de conta",
   },
 } satisfies Meta<typeof Switcher>;
 

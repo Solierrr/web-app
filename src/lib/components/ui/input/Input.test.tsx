@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { act, render, screen, fireEvent } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import Input from "./Input";
 
@@ -68,5 +68,35 @@ describe("Input", () => {
 
     expect(handleChange).toHaveBeenCalledTimes(1);
     expect((screen.getByRole("textbox") as HTMLInputElement).value).toBe("a@b.com");
+  });
+});
+
+describe("input unit sizing", () => {
+  it("restores the unit measurement with the native value after form reset", async () => {
+    const { container } = render(
+      <form>
+        <Input name="width" suffix="m" defaultValue="1" />
+      </form>,
+    );
+    const input = screen.getByRole("textbox", { name: "width" });
+    fireEvent.change(input, { target: { value: "12345" } });
+    const mirror = input.previousElementSibling;
+    expect(mirror).toHaveTextContent("12345");
+    await act(async () => container.querySelector("form")!.reset());
+    expect(input).toHaveValue("1");
+    expect(mirror).toHaveTextContent("1");
+  });
+
+  it("keeps both the value and measurement when reset is cancelled", async () => {
+    const { container } = render(
+      <form onReset={(event) => event.preventDefault()}>
+        <Input name="width" suffix="m" defaultValue="1" />
+      </form>,
+    );
+    const input = screen.getByRole("textbox", { name: "width" });
+    fireEvent.change(input, { target: { value: "12345" } });
+    await act(async () => container.querySelector("form")!.reset());
+    expect(input).toHaveValue("12345");
+    expect(input.previousElementSibling).toHaveTextContent("12345");
   });
 });

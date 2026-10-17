@@ -61,12 +61,16 @@ export function validateCpf(input: string): ResultValidation {
   return { isValid: true };
 }
 
-export function validateCnpj(input: string): ResultValidation {
-  const digits = input.replace(/\D/g, "");
-  if (!digits) return { isValid: false, message: "CNPJ é obrigatório" };
-  if (digits.length !== 14 || /^(\d)\1{13}$/.test(digits)) return { isValid: false, message: "CNPJ inválido" };
+export function normalizeCnpj(input: string): string {
+  return input.toUpperCase().replace(/[./\s-]/g, "");
+}
 
-  const numbers = digits.split("").map(Number);
+export function validateCnpj(input: string): ResultValidation {
+  const digits = normalizeCnpj(input);
+  if (!digits) return { isValid: false, message: "CNPJ é obrigatório" };
+  if (!/^[A-Z0-9]{12}[0-9]{2}$/.test(digits) || /^(\d)\1{13}$/.test(digits)) return { isValid: false, message: "CNPJ inválido" };
+
+  const numbers = digits.split("").map((character) => character.charCodeAt(0) - 48);
   const firstCheck = checkDigit(numbers.slice(0, 12), 5);
   const secondCheck = checkDigit(numbers.slice(0, 13), 6);
   if (firstCheck !== numbers[12] || secondCheck !== numbers[13]) return { isValid: false, message: "CNPJ inválido" };

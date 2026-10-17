@@ -1,57 +1,56 @@
-import { MemoryRouter } from "react-router-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { MemoryRouter } from "react-router-dom";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import VerifyEmailPage from "./VerifyEmailPage";
-import * as authService from "@/config/firebase/auth/auth.service";
-import { linkFirebase } from "@/features/access/access.service";
+import { confirmEmailVerification, getAccountIdentity, requestEmailVerification } from "@/features/access/access.credentials.service";
 
-vi.mock("@/config/firebase/auth/auth.service", () => ({
-  getCurrentFirebaseUser: vi.fn(),
-  reloadCurrentFirebaseUser: vi.fn(),
-  sendVerificationEmail: vi.fn(),
+vi.mock("@/features/access/access.credentials.service", () => ({
+  getAccountIdentity: vi.fn(),
+  confirmEmailVerification: vi.fn(),
+  requestEmailVerification: vi.fn(),
 }));
-vi.mock("@/features/access/access.service", () => ({ linkFirebase: vi.fn() }));
-vi.mock("@/lib/shared/auth/authToken.utils", () => ({ getAuthSession: () => ({ email: "user@example.com" }) }));
+vi.mock("@/config/mocks/mockMode.utils", () => ({ isAlwaysMockMode: () => false }));
+
+beforeEach(() => {
+  vi.clearAllMocks();
+  vi.mocked(getAccountIdentity).mockResolvedValue({ emailVerified: false } as never);
+});
 
 describe("VerifyEmailPage", () => {
-  it("shows the pending state with a resend button when the email is not verified yet", async () => {
-    vi.mocked(authService.reloadCurrentFirebaseUser).mockResolvedValue({ email: "user@example.com", emailVerified: false } as never);
-
-    render(<MemoryRouter><VerifyEmailPage /></MemoryRouter>);
-
-    expect(await screen.findByRole("button", { name: "Reenviar e-mail" })).toBeInTheDocument();
+  it("checks verification in api-auth and requests a confirmation email", async () => {
+    vi.mocked(requestEmailVerification).mockResolvedValue(undefined);
+    render(
+      <MemoryRouter>
+        <VerifyEmailPage />
+      </MemoryRouter>,
+    );
+    fireEvent.click(await screen.findByRole("button", { name: "Enviar email de confirmação" }));
+    await waitFor(() => expect(requestEmailVerification).toHaveBeenCalledOnce());
+    expect(await screen.findByText("Solicitação recebida. Verifique sua caixa de entrada.")).toBeInTheDocument();
   });
-
-  it("shows the password confirmation form once the email is verified", async () => {
-    vi.mocked(authService.reloadCurrentFirebaseUser).mockResolvedValue({ email: "user@example.com", emailVerified: true } as never);
-
-    render(<MemoryRouter><VerifyEmailPage /></MemoryRouter>);
-
-    expect(await screen.findByRole("button", { name: "Confirmar" })).toBeInTheDocument();
+  it("requires an explicit click before consuming the email token", async () => {
+    vi.mocked(confirmEmailVerification).mockResolvedValue(undefined);
+    render(
+      <MemoryRouter initialEntries={["/pt-BR/verificar-email?token=one-time-proof"]}>
+        <VerifyEmailPage />
+      </MemoryRouter>,
+    );
+    const button = await screen.findByRole("button", { name: "Confirmar email" });
+    expect(confirmEmailVerification).not.toHaveBeenCalled();
+    vi.mocked(getAccountIdentity).mockResolvedValue({ emailVerified: true } as never);
+    fireEvent.click(button);
+    await waitFor(() => expect(confirmEmailVerification).toHaveBeenCalledWith("one-time-proof"));
+    expect(await screen.findByRole("button", { name: "Continuar" })).toBeInTheDocument();
   });
-
-  it("links the account after submitting the password", async () => {
-    const getIdToken = vi.fn().mockResolvedValue("id-token");
-    vi.mocked(authService.reloadCurrentFirebaseUser).mockResolvedValue({ email: "user@example.com", emailVerified: true } as never);
-    vi.mocked(authService.getCurrentFirebaseUser).mockReturnValue({ email: "user@example.com", getIdToken } as never);
-    vi.mocked(linkFirebase).mockResolvedValue({} as never);
-
-    render(<MemoryRouter><VerifyEmailPage /></MemoryRouter>);
-    await screen.findByRole("button", { name: "Confirmar" });
-
-    const passwordInput = document.querySelector<HTMLInputElement>("input[type='password']");
-    fireEvent.change(passwordInput!, { target: { value: "current-password" } });
-    fireEvent.click(screen.getByRole("button", { name: "Confirmar" }));
-
-    await waitFor(() => expect(linkFirebase).toHaveBeenCalledWith("user@example.com", "current-password", "id-token"));
-    expect(await screen.findByRole("status")).toBeInTheDocument();
-  });
-
-  it("shows a fallback message when there is no firebase account to verify", async () => {
-    vi.mocked(authService.reloadCurrentFirebaseUser).mockResolvedValue(null);
-
-    render(<MemoryRouter><VerifyEmailPage /></MemoryRouter>);
-
-    expect(await screen.findByText(/Não encontramos uma verificação em andamento/)).toBeInTheDocument();
+  it("shows transport failure without claiming that an email was sent", async () => {
+    vi.mocked(requestEmailVerification).mockRejectedValue(new Error("disabled"));
+    render(
+      <MemoryRouter>
+        <VerifyEmailPage />
+      </MemoryRouter>,
+    );
+    fireEvent.click(await screen.findByRole("button", { name: "Enviar email de confirmação" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("O envio de email está indisponível");
+    expect(screen.queryByText("Solicitação recebida. Verifique sua caixa de entrada.")).not.toBeInTheDocument();
   });
 });

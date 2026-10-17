@@ -1,3 +1,4 @@
+import i18n from "@/config/i18n/internationalization";
 import { httpJson } from "@/lib/shared/http/http.service";
 
 const API = `${import.meta.env.VITE_API_VALIDATION}/api/v1`;
@@ -28,7 +29,7 @@ export function validateCnpjCategory(cnpj: string): Promise<CnpjValidationResult
     method: "POST",
     body: { cnpj },
     authenticated: false,
-    errorMessage: "Não foi possível validar o CNPJ",
+    errorMessage: i18n.t("services:aiValidation.validateCnpjCategory"),
   });
 }
 
@@ -39,6 +40,6 @@ export function validateCertificates(certNr10Url: string, certNr35Url: string): 
     method: "POST",
     body: { cert_nr10_url: certNr10Url, cert_nr35_url: certNr35Url },
     authenticated: false,
-    errorMessage: "Não foi possível validar os certificados",
+    errorMessage: i18n.t("services:aiValidation.validateCertificates"),
   });
 }

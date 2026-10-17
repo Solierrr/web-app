@@ -1,4 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import i18n from "@/config/i18n/internationalization";
 
 const { authMock, createUserMock, signInMock, reloadMock, updatePasswordMock, signOutMock, confirmResetMock } = vi.hoisted(() => ({
   authMock: { currentUser: null as unknown },
@@ -31,6 +32,20 @@ describe("auth.service", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     authMock.currentUser = null;
+  });
+
+  afterEach(async () => {
+    await i18n.changeLanguage("pt-BR");
+    signInMock.mockReset();
+  });
+
+  it("returns a localized authentication error while preserving the Firebase code and cause", async () => {
+    await i18n.changeLanguage("es-ES");
+    const cause = Object.assign(new Error("Firebase: invalid credentials"), { code: "auth/invalid-credential" });
+    signInMock.mockRejectedValueOnce(cause);
+    const failure = await login("user@example.com", "secret").catch((error: unknown) => error);
+
+    expect(failure).toMatchObject({ message: "No se pudo iniciar sesión", code: "auth/invalid-credential", cause });
   });
 
   it("registers and logs in with email and password against the firebase auth instance", async () => {

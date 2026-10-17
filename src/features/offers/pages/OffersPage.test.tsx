@@ -1,3 +1,4 @@
+vi.mock("@@/layout/access/canvas/SideCanvas", () => ({ default: () => null }));
 import { MemoryRouter } from "react-router-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
@@ -53,6 +54,7 @@ describe("OffersPage", () => {
       </MemoryRouter>,
     );
 
+    fireEvent.click(await screen.findByRole("button", { name: "Nova oferta" }));
     expect(await screen.findByText(/Nenhum modelo de placa solar aprovado/)).toBeInTheDocument();
   });
 
@@ -106,6 +108,8 @@ describe("OffersPage", () => {
       </MemoryRouter>,
     );
     await screen.findByText("Nenhuma oferta cadastrada ainda.");
+    fireEvent.click(screen.getByRole("button", { name: "Nova oferta" }));
+    expect(screen.queryByRole("table")).not.toBeInTheDocument();
 
     fireEvent.change(screen.getByLabelText("Modelo de placa"), { target: { value: "model-1" } });
     fireEvent.change(screen.getByLabelText("Título"), { target: { value: "Painel X" } });
@@ -153,6 +157,7 @@ describe("OffersPage", () => {
     );
     await screen.findByText(/Ativa/);
 
+    fireEvent.click(screen.getAllByRole("button", { name: /Opções do registro/ })[0]);
     fireEvent.click(screen.getByRole("button", { name: "Pausar" }));
 
     await waitFor(() => expect(offerService.changeOfferStatus).toHaveBeenCalledWith(offer, "PAUSED"));
@@ -184,6 +189,7 @@ describe("OffersPage", () => {
     );
     await screen.findByText(/Pausada/);
 
+    fireEvent.click(screen.getAllByRole("button", { name: /Opções do registro/ })[0]);
     fireEvent.click(screen.getByRole("button", { name: "Reativar" }));
     await waitFor(() => expect(offerService.changeOfferStatus).toHaveBeenCalledWith({ ...baseOffer, availability: 0 }, "ACTIVE"));
 
@@ -191,7 +197,7 @@ describe("OffersPage", () => {
     await waitFor(() => expect(offerService.changeOfferStatus).toHaveBeenLastCalledWith({ ...baseOffer, availability: 0 }, "CLOSED"));
   });
 
-  it("offers to reopen a closed offer and hides the pause action", async () => {
+  it("hides reopen and pause actions for closed offers", async () => {
     const closed = { ...baseOffer, expirationDate: "2020-01-01T00:00:00Z" };
     vi.mocked(listApprovedSolarPanelModels).mockResolvedValue([]);
     vi.mocked(offerService.listCompanyOffers).mockResolvedValue([closed]);
@@ -204,10 +210,10 @@ describe("OffersPage", () => {
     );
     await screen.findByText(/Encerrada/);
 
+    fireEvent.click(screen.getAllByRole("button", { name: /Opções do registro/ })[0]);
     expect(screen.queryByRole("button", { name: "Pausar" })).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Reabrir" }));
-
-    await waitFor(() => expect(offerService.changeOfferStatus).toHaveBeenCalledWith(closed, "ACTIVE"));
+    expect(screen.queryByRole("button", { name: "Reabrir" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Encerrar" })).not.toBeInTheDocument();
   });
 
   it("blocks a second status change while the first one is running", async () => {
@@ -227,6 +233,7 @@ describe("OffersPage", () => {
     );
     await screen.findByText(/Ativa/);
 
+    fireEvent.click(screen.getAllByRole("button", { name: /Opções do registro/ })[0]);
     fireEvent.click(screen.getByRole("button", { name: "Pausar" }));
 
     expect(await screen.findByRole("button", { name: "Pausar" })).toBeDisabled();
@@ -247,6 +254,7 @@ describe("OffersPage", () => {
     );
     await screen.findByText(/Ativa/);
 
+    fireEvent.click(screen.getAllByRole("button", { name: /Opções do registro/ })[0]);
     fireEvent.click(screen.getByRole("button", { name: "Pausar" }));
 
     expect(await screen.findByRole("alert")).toBeInTheDocument();

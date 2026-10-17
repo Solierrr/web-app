@@ -1,13 +1,15 @@
 import type { Preview } from "@storybook/react-vite";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Routes, Route } from "react-router-dom";
 import "../src/index.css";
-import "../src/config/inter/internationalization";
+import "../src/config/i18n/internationalization";
 
 const preview: Preview = {
+  tags: ["autodocs"],
   parameters: {
+    docs: { story: { inline: false, height: "480px" } },
     controls: {
       matchers: {
-        color: /(background|color)$/i,
+        color: /(backgroundColor|color)$/i,
         date: /Date$/i,
       },
     },
@@ -18,9 +20,11 @@ const preview: Preview = {
   },
 
   decorators: [
-    (Story) => (
-      <MemoryRouter initialEntries={["/pt-BR"]}>
-        <Story />
+    (Story, context) => (
+      <MemoryRouter key={context.id} initialEntries={[context.parameters.router?.path ?? "/pt-BR"]}>
+        <Routes>
+          <Route path="/:lang/*" element={<Story />} />
+        </Routes>
       </MemoryRouter>
     ),
   ],

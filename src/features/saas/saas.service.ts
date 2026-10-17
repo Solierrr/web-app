@@ -1,3 +1,4 @@
+import i18n from "@/config/i18n/internationalization";
 import type { OperationalContext } from "./saas";
 
 import { resolveWithMocks } from "@/config/mocks/fallback.service";
@@ -50,7 +51,7 @@ export function getOperationalContext(): Promise<OperationalContext | null> {
       httpJson<OperationalContext | null>(`${API_CORE_URL}/user-companies/me`, {
         service: SERVICE_NAME,
         operation: "getOperationalContext",
-        errorMessage: "Não foi possível obter o perfil operacional",
+        errorMessage: i18n.t("services:saas.getOperationalContext"),
       }),
     getMockContextForSession,
   );
@@ -60,10 +61,7 @@ export function setMockOperationalContext(companyType: OperationalContext["compa
   const session = getAuthSession();
   if (!session) return;
 
-  localStorage.setItem(
-    `${MOCK_CONTEXT_KEY_PREFIX}${session.userId}`,
-    JSON.stringify({ ...mockOperationalContext, companyId, companyType }),
-  );
+  localStorage.setItem(`${MOCK_CONTEXT_KEY_PREFIX}${session.userId}`, JSON.stringify({ ...mockOperationalContext, companyId, companyType }));
 }
 
 export function setMockProfessionalContext(): void {

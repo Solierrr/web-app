@@ -1,9 +1,6 @@
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import WrapperLayout from "@/config/WrapperLayout";
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
-
-const DEFAULT_BANNER = "https://fastly.picsum.photos/id/918/1600/400.jpg?hmac=1gEvFp6O-XDh4848VnlwyOIrVy8s_aJNhYyTzxN9_JA";
-const DEFAULT_AVATAR = "https://i.pravatar.cc/300";
 
 interface ProfilePageProps {
   bannerUrl?: string;
@@ -25,8 +22,8 @@ interface ProfilePageProps {
  * de cada perfil é passado via `children`, já dentro do `WrapperLayout`.
  */
 export default function ProfilePage({
-  bannerUrl = DEFAULT_BANNER,
-  avatarUrl = DEFAULT_AVATAR,
+  bannerUrl,
+  avatarUrl,
   name,
   subtitle,
   actions,
@@ -34,33 +31,56 @@ export default function ProfilePage({
   operational = false,
   operationalTitle,
 }: ProfilePageProps) {
+  const [failedBanner, setFailedBanner] = useState<string>();
+  const [failedAvatar, setFailedAvatar] = useState<string>();
   const ContentWrapper = operational ? "div" : WrapperLayout;
+  const ContentMain = operational ? "div" : "main";
   const NameHeading = operational ? "h2" : "h1";
   const content = (
-    <div>
-      <section className="h-60 w-full bg-input-bg bg-cover bg-center sm:h-80" style={{ backgroundImage: `url(${bannerUrl})` }} />
+    <div className="pb-8">
+      <section className="relative h-56 w-full overflow-hidden bg-input-bg sm:h-72">
+        {bannerUrl && failedBanner !== bannerUrl && (
+          <>
+            <img src={bannerUrl} alt="" className="h-full w-full object-cover" onError={() => setFailedBanner(bannerUrl)} />
+            <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+          </>
+        )}
+      </section>
 
       <ContentWrapper className={operational ? "px-4 pb-8 sm:px-8 lg:px-10" : undefined}>
-        <section className="flex flex-col gap-6">
-          <div className="-mt-16 flex flex-col items-start gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <ContentMain className="flex flex-col gap-8">
+          <header className="-mt-14 flex flex-col items-start justify-between gap-5 rounded-surface border-ui bg-white p-5 shadow-surface sm:-mt-16 sm:flex-row sm:items-end sm:p-7">
             <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-end">
-              <img src={avatarUrl} alt={name} className="h-32 w-32 rounded-full border-4 border-white bg-input-bg object-cover" />
+              {avatarUrl && failedAvatar !== avatarUrl ? (
+                <img
+                  src={avatarUrl}
+                  alt={name}
+                  className="h-28 w-28 rounded-full border-4 border-white bg-input-bg object-cover shadow-hard sm:h-32 sm:w-32"
+                  onError={() => setFailedAvatar(avatarUrl)}
+                />
+              ) : (
+                <div
+                  aria-hidden="true"
+                  className="flex h-28 w-28 items-center justify-center rounded-full border-4 border-white bg-input-bg text-label font-semi-bold text-operational-muted sm:h-32 sm:w-32">
+                  {name.trim().charAt(0).toLocaleUpperCase()}
+                </div>
+              )}
               <div className="flex flex-col gap-1 pb-2">
-                <NameHeading>{name}</NameHeading>
-                {subtitle && <p className="text-input-text">{subtitle}</p>}
+                <NameHeading className="text-xl font-semi-bold sm:text-2xl">{name}</NameHeading>
+                {subtitle && <p className="text-body text-input-text sm:text-body">{subtitle}</p>}
               </div>
             </div>
 
             {actions && !operational && <div className="flex flex-row gap-2">{actions}</div>}
-          </div>
+          </header>
 
-          {children}
-        </section>
+          <section className="flex flex-col gap-6">{children}</section>
+        </ContentMain>
       </ContentWrapper>
     </div>
   );
   return operational ? (
-    <OperationalPage title={operationalTitle ?? name} actions={actions} profile>
+    <OperationalPage title={operationalTitle ?? name} actions={actions} profile centered sideBackground>
       {content}
     </OperationalPage>
   ) : (
