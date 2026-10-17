@@ -56,7 +56,7 @@ describe("SolarPanelModelPage", () => {
     renderPage();
     expect(await screen.findByRole("heading", { name: "SolTech ST-450" })).toBeInTheDocument();
     expect(screen.getByText("Aprovada")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Editar modelo" })).toHaveAttribute("href", "/pt-BR/admin/modelos-de-placa-solar?edit=panel-1");
+    expect(screen.queryByRole("link", { name: "Editar modelo" })).not.toBeInTheDocument();
     for (const value of ["450 Wp", "0 %", "1,2 m", "2,3 m", "22,5 kg"]) expect(screen.getByText(value)).toBeInTheDocument();
     expect(screen.queryByRole("status")).not.toBeInTheDocument();
   });

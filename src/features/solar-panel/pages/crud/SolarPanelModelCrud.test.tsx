@@ -85,7 +85,7 @@ describe("SolarPanelModelCrud", () => {
   });
 
   it("opens the existing prefilled form from the details edit URL", async () => {
-    mockedListSolarPanelModels.mockResolvedValue(items);
+    mockedListSolarPanelModels.mockResolvedValue([{ ...items[0], creatorCompanyId: "company-1", status: SolarPanelModelStatus.UNDERANALYSIS }]);
     render(
       <MemoryRouter initialEntries={["/pt-BR/admin/modelos-de-placa-solar?edit=panel-1"]}>
         <SolarPanelModelCrud />
