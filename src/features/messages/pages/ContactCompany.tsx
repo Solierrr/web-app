@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
-import { routePaths } from "@/config/inter/paths";
+import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
+import { routePaths } from "@/config/i18n/paths";
 import { createDirectConversation } from "@/features/messages/messages.messenger.api";
 import { getMyCompany } from "@/features/companies/company.service";
 import { httpJson } from "@/lib/shared/http/http.service";
@@ -58,7 +58,7 @@ export default function ContactCompany() {
 
   if (error) {
     return (
-      <OperationalPage title={t("conversation")}>
+      <OperationalPage title={t("conversation")} centered sideBackground compact>
         <p role="alert">{t(error === "mock" ? "mockContactUnavailable" : error === "role" ? "demandantOnly" : "contactError")}</p>
         <Link to={routePaths.companiesFeed(lang)} className="text-orange">
           {t("backToCompanies")}

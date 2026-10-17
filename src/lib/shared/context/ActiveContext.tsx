@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
 import type { Company } from "@/features/companies/company";
-import { getMyCompany, getMyMembership } from "@/features/companies/company.service";
+import { getMyCompany, getMyMembership, getMyContexts } from "@/features/companies/company.service";
 import { getMyPlatformAdmin } from "@/features/platform-admin/platformAdmin.service";
 import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
 import { getOperationalAccount, getSelectedContext, selectContext } from "@/features/access/access.onboarding.service";
@@ -21,6 +21,7 @@ interface ActiveContextValue {
   memberships?: OperationalMembership[];
   selectCompany?: (id: string) => void;
   needsContextChoice?: boolean;
+  managedByCompanyId?: string | null;
 }
 
 const ActiveContextContext = createContext<ActiveContextValue | null>(null);
@@ -33,6 +34,7 @@ export function ActiveContextProvider({ children }: { children: ReactNode }) {
   const [kind, setKind] = useState<ContextKind>("company");
   const [memberships, setMemberships] = useState<OperationalMembership[]>([]);
   const [needsContextChoice, setNeedsContextChoice] = useState(false);
+  const [managedByCompanyId, setManagedByCompanyId] = useState<string | null>(null);
   const [permissions, setPermissions] = useState<string[]>([]);
 
   useEffect(() => {
@@ -40,20 +42,39 @@ export function ActiveContextProvider({ children }: { children: ReactNode }) {
     let generation = 0;
     function load() {
       const current = ++generation;
-      setLoading(true);
-      Promise.all([getMyMembership(), getMyCompany(), isAlwaysMockMode() ? Promise.resolve(null) : getMyPlatformAdmin().catch(() => null)])
-        .then(([membership, loadedCompany, platformAdmin]) => {
+      Promise.all([
+        getMyMembership(),
+        getMyCompany(),
+        getMyPlatformAdmin().catch(() => null),
+        isAlwaysMockMode() ? Promise.resolve(null) : getMyContexts(),
+      ])
+        .then(([membership, loadedCompany, platformAdmin, contexts]) => {
           if (!active || current !== generation) return;
+          setManagedByCompanyId(contexts?.managedByCompanyId ?? null);
           setCompany(loadedCompany);
           setIsAdmin(membership?.position.name === "ADMIN");
           setPermissions(membership?.permissions ?? []);
           setIsPlatformAdmin(platformAdmin !== null);
           const account = getOperationalAccount();
-          setMemberships(account.memberships);
+          const available = contexts
+            ? contexts.companies.flatMap((item) =>
+                item.type
+                  ? [
+                      {
+                        id: item.id,
+                        name: item.tradeName,
+                        type: item.type,
+                        admin: contexts.memberships.find((m) => m.companyId === item.id)?.position.name === "ADMIN",
+                      },
+                    ]
+                  : [],
+              )
+            : account.memberships;
+          setMemberships(available);
           const selected = getSelectedContext();
-          const valid = selected === "personal" || selected === loadedCompany?.id || account.memberships.some((item) => item.id === selected);
+          const valid = selected === "personal" || selected === loadedCompany?.id || available.some((item) => item.id === selected);
           setNeedsContextChoice(Boolean(loadedCompany) && !valid);
-          setKind(selected === "personal" ? "personal" : loadedCompany ? "company" : "personal");
+          setKind(selected === "personal" && !contexts?.managedByCompanyId ? "personal" : loadedCompany ? "company" : "personal");
         })
         .catch(() => {
           if (active && current === generation) {
@@ -82,6 +103,7 @@ export function ActiveContextProvider({ children }: { children: ReactNode }) {
       loading,
       kind: company ? kind : "personal",
       setKind: (next) => {
+        if (managedByCompanyId && next === "personal") return;
         setKind(next);
         selectContext(next === "personal" ? "personal" : (company?.id ?? "personal"));
       },
@@ -91,10 +113,13 @@ export function ActiveContextProvider({ children }: { children: ReactNode }) {
       isPlatformAdmin,
       can: (permission) => isAlwaysMockMode() || (kind === "company" && company !== null && (isAdmin || permissions.includes(permission))),
       memberships,
-      selectCompany: selectContext,
+      selectCompany: (id) => {
+        if ((!managedByCompanyId || managedByCompanyId === id) && memberships.some((m) => m.id === id)) selectContext(id);
+      },
+      managedByCompanyId,
       needsContextChoice,
     }),
-    [loading, kind, company, isAdmin, isPlatformAdmin, permissions, memberships, needsContextChoice],
+    [loading, kind, company, isAdmin, isPlatformAdmin, permissions, memberships, needsContextChoice, managedByCompanyId],
   );
 
   return <ActiveContextContext.Provider value={value}>{children}</ActiveContextContext.Provider>;

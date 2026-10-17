@@ -1,15 +1,17 @@
 import type { Company } from "./company";
+import { CompanyActivity } from "./company.enum";
 import { slugNormalization } from "@/lib/utils/normalization.utils";
 
 const companyMockData = [
   {
     id: "company-1",
+    type: "SUPPLIER",
+    activities: [CompanyActivity.SOLAR_PANELS, CompanyActivity.MAINTENANCE],
     status: "APPROVED",
     cnpj: "12345678000190",
     tradeName: "Solaria Energia",
     corporateName: "Solaria Energia Solar Ltda",
-    logoUrl: "https://i.pravatar.cc/150?img=68",
-    bannerUrl: "https://fastly.picsum.photos/id/918/1600/400.jpg?hmac=1gEvFp6O-XDh4848VnlwyOIrVy8s_aJNhYyTzxN9_JA",
+
     address: {
       street: "Avenida das Nações",
       number: "1200",
@@ -67,6 +69,51 @@ const companyMockData = [
       phone: "81997776666",
       website: "https://www.luminafv.com.br",
     },
+  },
+  {
+    id: "company-4",
+    hasTechnicalTeam: true,
+    type: "SUPPLIER",
+    status: "APPROVED",
+    cnpj: "12345678000433",
+    tradeName: "Equipe Solar",
+    corporateName: "Equipe Solar Serviços Ltda",
+    logoUrl: "/images/mocks/companies/logos/company-04.jpg",
+    bannerUrl: "/images/mocks/companies/banners/company-04.jpg",
+    activities: [CompanyActivity.TECHNICIANS, CompanyActivity.MAINTENANCE],
+    address: { street: "Rua Solar", number: "100", neighborhood: "Centro", city: "São Paulo", state: "SP", country: "Brasil", zipCode: "01001000" },
+  },
+  {
+    id: "company-5",
+    type: "SUPPLIER",
+    status: "APPROVED",
+    cnpj: "12345678000514",
+    tradeName: "Revisa Energia",
+    corporateName: "Revisa Energia Inspeções Ltda",
+    logoUrl: "/images/mocks/companies/logos/company-05.jpg",
+    bannerUrl: "/images/mocks/companies/banners/company-05.jpg",
+    activities: [CompanyActivity.INSPECTION, CompanyActivity.MAINTENANCE],
+    address: {
+      street: "Rua da Energia",
+      number: "200",
+      neighborhood: "Centro",
+      city: "Curitiba",
+      state: "PR",
+      country: "Brasil",
+      zipCode: "80010000",
+    },
+  },
+  {
+    id: "company-6",
+    type: "DEMANDANT",
+    status: "APPROVED",
+    cnpj: "12345678000603",
+    tradeName: "Horizonte Energia",
+    corporateName: "Horizonte Energia Ltda",
+    activities: [],
+    logoUrl: "/images/mocks/companies/logos/company-06.jpg",
+    bannerUrl: "/images/mocks/companies/banners/company-06.jpg",
+    address: { street: "Rua Horizonte", number: "300", neighborhood: "Centro", city: "Recife", state: "PE", country: "Brasil", zipCode: "50060000" },
   },
 ] as Company[];
 

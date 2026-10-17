@@ -1,0 +1,118 @@
+{
+  "methods": {
+    "PIX": "Pix",
+    "CREDIT_CARD": "Cartão de crédito",
+    "BOLETO": "Boleto",
+    "TRANSFER": "Transferência"
+  },
+  "cart": {
+    "title": "Carrinho",
+    "description": "Revise as unidades e finalize a compra.",
+    "items": "Itens do carrinho",
+    "empty": "Seu carrinho está vazio.",
+    "model": "Produto",
+    "unitPrice": "Preço unitário",
+    "quantity": "Quantidade",
+    "lineTotal": "Total",
+    "remove": "Remover",
+    "unavailable": "Indisponível ou sem estoque",
+    "summary": "Resumo",
+    "subtotal": "Subtotal",
+    "fee": "Taxa da plataforma ({{percentage}}%)",
+    "total": "Total",
+    "paymentMethod": "Forma de pagamento",
+    "fictitious": "Pagamento fictício: nenhum valor real é cobrado.",
+    "pay": "Pagar",
+    "paid": "Compra realizada.",
+    "error": "Não foi possível concluir a operação."
+  },
+  "orders": {
+    "title": "Meus pedidos",
+    "description": "Histórico das suas compras.",
+    "list": "Pedidos",
+    "empty": "Você ainda não fez compras.",
+    "date": "Data",
+    "items": "Unidades",
+    "total": "Total",
+    "status": "Status",
+    "statuses": {
+      "PAID": "Pago",
+      "CANCELED": "Cancelado"
+    },
+    "error": "Não foi possível carregar os pedidos."
+  },
+  "order": {
+    "title": "Pedido",
+    "back": "Voltar",
+    "items": "Itens",
+    "empty": "Sem itens.",
+    "model": "Produto",
+    "unitPrice": "Preço unitário",
+    "quantity": "Quantidade",
+    "lineTotal": "Total",
+    "subtotal": "Subtotal",
+    "fee": "Taxa da plataforma ({{percentage}}%)",
+    "total": "Total",
+    "statuses": {
+      "PAID": "Pago",
+      "CANCELED": "Cancelado"
+    },
+    "paymentStatuses": {
+      "PAID": "Pagamento aprovado",
+      "REFUNDED": "Pagamento estornado"
+    },
+    "paymentVia": "Pago via {{method}}",
+    "fictitious": "Comprovante de pagamento fictício: nenhum valor real foi cobrado.",
+    "cancel": "Cancelar pedido",
+    "canceled": "Pedido cancelado.",
+    "error": "Não foi possível concluir a operação."
+  },
+  "sales": {
+    "title": "Vendas",
+    "description": "Unidades vendidas pela sua empresa.",
+    "list": "Vendas",
+    "empty": "Nenhuma venda ainda.",
+    "date": "Data",
+    "model": "Produto",
+    "buyer": "Comprador",
+    "quantity": "Quantidade",
+    "total": "Total",
+    "status": "Status",
+    "statuses": {
+      "PAID": "Pago",
+      "CANCELED": "Cancelado"
+    },
+    "error": "Não foi possível carregar as vendas."
+  },
+  "plan": {
+    "title": "Plano",
+    "description": "Assinatura da empresa e cobranças.",
+    "current": "Plano atual",
+    "charges": "Cobranças",
+    "empty": "Nenhuma cobrança.",
+    "dueDate": "Vencimento",
+    "amount": "Valor",
+    "method": "Forma de pagamento",
+    "status": "Status",
+    "pay": "Pagar cobrança",
+    "paid": "Cobrança paga.",
+    "since": "Desde {{date}}",
+    "cycles": {
+      "MONTHLY": "mensal",
+      "YEARLY": "anual"
+    },
+    "statuses": {
+      "PAID": "Em dia",
+      "IN_DEBT": "Em atraso",
+      "SUSPENDED": "Suspenso"
+    },
+    "chargeStatuses": {
+      "PENDING": "Pendente",
+      "PAID": "Paga",
+      "CANCELED": "Cancelada",
+      "REFUNDED": "Estornada"
+    },
+    "fictitious": "Pagamento fictício: nenhum valor real é cobrado.",
+    "error": "Não foi possível concluir a operação."
+  }
+}

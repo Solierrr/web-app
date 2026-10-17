@@ -27,7 +27,7 @@ export const AllIcons: Story = {
       {ICON_NAMES.map((name) => (
         <div key={name} className="flex flex-col items-center gap-2">
           <Icon name={name} color={Colors.ORANGE} />
-          <span className="text-lower">{name}</span>
+          <span className="text-body">{name}</span>
         </div>
       ))}
     </div>

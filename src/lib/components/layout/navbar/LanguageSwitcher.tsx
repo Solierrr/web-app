@@ -3,8 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Icon from "@@/ui/icon/Icon";
 import { MenuList, MenuItem } from "@@/overlay/Menu";
-import { SUPPORTED as SUPPORTED_LANGUAGES, type SupportedLanguage } from "@/config/inter/browser/languages";
-import { translatePathToLanguage } from "@/config/inter/paths";
+import { SUPPORTED as SUPPORTED_LANGUAGES, type SupportedLanguage } from "@/config/i18n/browser/languages";
+import { translatePathToLanguage } from "@/config/i18n/paths";
 
 const LANGUAGE_LABELS: Record<SupportedLanguage, string> = {
   "pt-BR": "Português",
@@ -57,10 +57,10 @@ export default function LanguageSwitcher() {
         aria-label={t("language")}
         aria-haspopup="listbox"
         aria-expanded={open}
-        className="flex items-center-safe gap-1 cursor-pointer"
+        className="flex h-9 items-center-safe gap-1 rounded-small px-2 cursor-pointer transition-colors hover:bg-operational-hover"
         onClick={() => setOpen((isOpen) => !isOpen)}>
-        <Icon name="globe" />
-        <Icon name="chevronDown" size={16} className={`transition-transform ${open ? "rotate-180" : ""}`} />
+        <Icon name="globe" size={20} />
+        <Icon name="chevronDown" size={20} className={`transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
 
       {open && (

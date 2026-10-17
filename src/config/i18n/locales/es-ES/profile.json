@@ -1,0 +1,72 @@
+{
+  "edit": {
+    "description": "Revisa los datos del perfil antes de guardar.",
+    "mockNotice": "Estos cambios se guardan solo en este navegador hasta conectar el flujo real de edición.",
+    "save": "Guardar cambios",
+    "saving": "Guardando...",
+    "cancel": "Cancelar",
+    "companyTitle": "Información de la empresa",
+    "personTitle": "Información personal",
+    "professionalTitle": "Registro profesional",
+    "companyDetails": "Datos empresariales",
+    "contactDetails": "Contacto comercial",
+    "addressDetails": "Ubicación",
+    "name": "Nombre",
+    "tradeName": "Nombre comercial",
+    "corporateName": "Razón social",
+    "cnpj": "CNPJ",
+    "companyType": "Tipo de empresa",
+    "supplier": "Proveedor",
+    "demandant": "Demandante",
+    "email": "Correo electrónico",
+    "phone": "Teléfono",
+    "website": "Sitio web",
+    "street": "Calle y número",
+    "number": "Número",
+    "neighborhood": "Barrio",
+    "city": "Ciudad",
+    "state": "Estado",
+    "zipCode": "Código postal",
+    "country": "País",
+    "username": "Nombre de usuario",
+    "profession": "Profesión",
+    "crea": "Registro profesional",
+    "council": "Consejo",
+    "registrationNumber": "Número de registro",
+    "expirationDate": "Vencimiento del registro",
+    "notAvailable": "Sin información",
+    "companyReadOnly": "La edición empresarial aún no está conectada a un endpoint de API. En modo de mocks, los cambios se guardan localmente.",
+    "professionalReadOnly": "Los datos del registro profesional solo se pueden editar en modo de mocks hasta que la API ofrezca un perfil propio.",
+    "saveError": "No se pudieron guardar los cambios. Inténtalo de nuevo."
+  },
+  "onboarding": {
+    "previewFallbackName": "Vista previa",
+    "bannerPlaceholder": "URL de la imagen de banner",
+    "avatarPlaceholder": "URL de la foto de perfil",
+    "avatarAlt": "User avatar profile",
+    "complete": "Concluir",
+    "completeDescription": "Concluir la personalización del perfil",
+    "skip": "Omitir",
+    "skipDescription": "Omitir la personalización del perfil",
+    "company": {
+      "bannerHeading": "Personaliza el banner de la empresa",
+      "avatarHeading": "Elige el logo de la empresa"
+    },
+    "user": {
+      "bannerHeading": "Personaliza el banner del perfil",
+      "avatarHeading": "Elige la foto del perfil"
+    }
+  },
+  "company": {
+    "about": "Sobre la empresa",
+    "offers": "Ofertas",
+    "projects": "Proyectos",
+    "navigation": "Contenido del perfil de la empresa",
+    "projectsPrivate": "Proyectos de esta empresa a los que tienes acceso. Esta área privada depende de tu participación o permiso de gestión.",
+    "retry": "Intentar de nuevo",
+    "offersFailed": "No se pudieron cargar las ofertas de esta empresa.",
+    "loadingOffers": "Cargando ofertas...",
+    "noOffers": "Esta empresa todavía no tiene ofertas disponibles.",
+    "publicProfile": "Ver perfil en el marketplace"
+  }
+}

@@ -18,10 +18,10 @@ export default function RegistrationStatus({ status, reason }: RegistrationStatu
 
   return (
     <div className="flex flex-col gap-2">
-      <span className={`w-fit rounded-full px-3 py-1 text-sm font-medium ${STYLES[status]}`}>
+      <span className={`w-fit rounded-full px-3 py-1 text-body font-medium ${STYLES[status]}`}>
         {t(status.toLowerCase())}
       </span>
-      {reason ? <p className="text-sm text-gray-600">{reason}</p> : null}
+      {reason ? <p className="text-body text-gray-600">{reason}</p> : null}
     </div>
   );
 }

@@ -1,0 +1,112 @@
+{
+  "fields": {
+    "email": {
+      "placeholder": "tucorreoaqui@email.com"
+    },
+    "password": {
+      "placeholder": "tucontraseñaaqui"
+    },
+    "name": {
+      "placeholder": "tunombreaqui"
+    },
+    "confirmPassword": {
+      "placeholder": "confirmatucontraseña"
+    }
+  },
+  "login": {
+    "helperTextPrefix": "¿No encuentras tu empresa?",
+    "contactSupport": "Contactar con soporte",
+    "submit": "Continuar",
+    "forgotPassword": "Olvidé mi contraseña",
+    "noAccountPrefix": "¿No tienes una cuenta?",
+    "register": "Regístrate",
+    "error": "Correo electrónico o contraseña incorrectos",
+    "helperText": "Inicia sesión en tu cuenta para continuar",
+    "title": "Iniciar sesión",
+    "google": "Continuar con Google",
+    "or": "o",
+    "emailLabel": "Correo electrónico",
+    "passwordLabel": "Contraseña",
+    "emailPlaceholder": "Introduce tu correo electrónico",
+    "passwordPlaceholder": "Introduce tu contraseña",
+    "signIn": "Iniciar sesión",
+    "remember": "Recordar mi correo y método de acceso en este dispositivo",
+    "continueAs": "Continuar como {{email}}",
+    "forgetAccount": "Olvidar esta cuenta en este dispositivo",
+    "anotherAccount": "Iniciar sesión con otra cuenta",
+    "lastUsed": "Último acceso",
+    "emailMethod": "Correo y contraseña",
+    "policiesIntro": "Consulta las políticas de Solaria:",
+    "terms": "Términos de uso",
+    "privacy": "Política de privacidad",
+    "cookies": "Política de cookies",
+    "microsoft": "Continuar con Microsoft"
+  },
+  "register": {
+    "helperText": "Crea tu cuenta para acceder al marketplace",
+    "submit": "Registrarse",
+    "hasAccountPrefix": "¿Ya tienes una cuenta?",
+    "login": "Iniciar sesión",
+    "passwordMismatch": "Las contraseñas no coinciden",
+    "error": "No se pudo completar el registro",
+    "title": "Crear cuenta",
+    "confirmPasswordPlaceholder": "Repite tu contraseña",
+    "emailPlaceholder": "Introduce tu correo aquí",
+    "confirmPasswordLabel": "Confirmar contraseña",
+    "passwordPlaceholder": "Crea una contraseña"
+  },
+  "forgotPassword": {
+    "helperText": "Indica tu correo electrónico para recibir las instrucciones de recuperación",
+    "submit": "Enviar",
+    "sent": "Si ese correo está registrado, recibirás un enlace para restablecer tu contraseña.",
+    "error": "No se pudo enviar el correo de recuperación. Inténtalo de nuevo.",
+    "rememberedPasswordPrefix": "¿Recordaste tu contraseña?",
+    "backToLogin": "Volver al inicio de sesión"
+  },
+  "verifyEmail": {
+    "title": "Verifica tu correo",
+    "pending": "Enviamos un enlace de verificación a tu correo. Revisa tu bandeja de entrada.",
+    "verified": "Tu correo ya está verificado.",
+    "resend": "Reenviar correo",
+    "resendCooldown": "Espera {{seconds}}s para reenviar",
+    "resendError": "No se pudo reenviar el correo de verificación.",
+    "checking": "Verificando...",
+    "linkTitle": "Confirma tu contraseña para finalizar",
+    "linkDescription": "Ingresa tu contraseña actual para vincular la verificación a tu cuenta.",
+    "linkSubmit": "Confirmar",
+    "linkError": "No se pudo confirmar la verificación. Revisa tu contraseña e inténtalo de nuevo.",
+    "linkSuccess": "Correo verificado y vinculado correctamente.",
+    "noFirebaseAccount": "La verificación de tu correo aún no ha comenzado.",
+    "check": "Ya confirmé mi correo",
+    "continue": "Ir al panel",
+    "continueLater": "Continuar y verificar después",
+    "notConfirmed": "Tu correo aún no está verificado. Abre el enlace recibido e inténtalo de nuevo.",
+    "resume": "Confirma tu contraseña para retomar la verificación del correo."
+  },
+  "resetPassword": {
+    "helperText": "Elige una nueva contraseña de al menos 12 caracteres",
+    "submit": "Restablecer contraseña",
+    "success": "Contraseña restablecida. Inicia sesión con la nueva contraseña.",
+    "error": "No se pudo restablecer la contraseña. Solicita un nuevo enlace e inténtalo de nuevo.",
+    "invalidLink": "Este enlace de restablecimiento no es válido o ha caducado.",
+    "mismatch": "Las contraseñas no coinciden.",
+    "requestNewLink": "Solicitar nuevo enlace"
+  },
+  "canvas": {
+    "waves": {
+      "title": "Ondas finas",
+      "description": "Líneas de energía de movimiento lento que se deforman con el cursor. Haz clic para crear un pulso."
+    },
+    "dots": {
+      "title": "Puntos reactivos",
+      "description": "Mueve el cursor para iluminar los puntos. Haz clic para crear un pulso. Una textura solar sutil que mantiene el foco en el formulario."
+    },
+    "reference": "Ver referencia original",
+    "preview": "Vista previa del fondo",
+    "navigation": "Comparar fondos de inicio de sesión",
+    "grid": {
+      "title": "Cuadrícula interactiva",
+      "description": "Pasa el cursor para iluminar solo el cuadrado que está debajo. Haz clic para propagar una onda de color por los cuadrados cercanos."
+    }
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "professional": {
+    "description": "Encuentra profesionales, autónomos y equipos para tus proyectos.",
+    "loadError": "No se pudieron cargar los profesionales."
+  },
+  "company": {
+    "loadError": "No se pudieron cargar las empresas.",
+    "description": "Encuentra proveedores de paneles solares, equipos técnicos, mantenimiento y revisión para tu proyecto.",
+    "activities": {
+      "SOLAR_PANELS": "Paneles solares",
+      "INSPECTION": "Revisión e inspección",
+      "MAINTENANCE": "Mantenimiento",
+      "TECHNICIANS": "Equipo técnico"
+    },
+    "empty": "No hay empresas disponibles en esta categoría."
+  },
+  "marketplace": {
+    "label": "Categorías del marketplace",
+    "solarPanels": "paneles solares",
+    "services": "servicios",
+    "suppliers": "proveedores"
+  },
+  "offers": {
+    "description": "Explora ofertas de paneles solares de empresas proveedoras.",
+    "trending": "Ofertas en tendencia",
+    "recent": "Ofertas más recientes"
+  },
+  "views": {
+    "trending": "En tendencia",
+    "teams": "Equipos",
+    "professionals": "Profesionales",
+    "other": "Otras",
+    "providers": "Prestadoras",
+    "independent": "Autónomos",
+    "suppliers": "Proveedores",
+    "labels": {
+      "solarPanels": "Ordenar ofertas",
+      "companies": "Tipos de empresas",
+      "professionals": "Tipos de servicios",
+      "infrastructure": "Infraestructura"
+    },
+    "recent": "Recientes"
+  },
+  "services": {
+    "title": "Servicios",
+    "empty": "No hay resultados disponibles en esta categoría."
+  },
+  "catalog": {
+    "panelsTitle": "Paneles Solares",
+    "infrastructureTitle": "Infraestructura",
+    "panelsDescription": "Compara ofertas de paneles solares y encuentra el modelo para tu proyecto.",
+    "infrastructureDescription": "Encuentra rieles, fijaciones, soportes y kits para tu sistema solar.",
+    "search": "Buscar oferta, marca o proveedor",
+    "filters": "Filtros",
+    "clearFilters": "Limpiar filtros",
+    "refresh": "Actualizar ofertas",
+    "supplier": "Proveedor",
+    "allSuppliers": "Todos los proveedores",
+    "type": "Tipo de infraestructura",
+    "allTypes": "Todos los tipos",
+    "recent": "Ofertas disponibles",
+    "trending": "Ofertas populares",
+    "failed": "No se pudieron cargar las ofertas.",
+    "retry": "Intentar de nuevo",
+    "noResults": "Ninguna oferta coincide con tu búsqueda.",
+    "empty": "Todavía no hay ofertas disponibles en esta categoría.",
+    "perUnit": "por unidad",
+    "discount": "{{value}}% de descuento",
+    "types": {
+      "RAIL": "Rieles",
+      "CLAMP": "Fijaciones",
+      "BRACKET": "Soportes",
+      "HOOK": "Ganchos",
+      "KIT": "Kits",
+      "OTHER": "Otros"
+    },
+    "material": "Material"
+  }
+}

@@ -1,20 +1,23 @@
 import { describe, expect, it, vi } from "vitest";
 
-import {
-  createSolarPanel,
-  deleteSolarPanel,
-  listApprovedSolarPanelModels,
-  listSolarPanelModels,
-  updateSolarPanel,
-} from "./solarPanel.service";
+import { createSolarPanel, deleteSolarPanel, listApprovedSolarPanelModels, listSolarPanelModels, updateSolarPanel } from "./solarPanel.service";
 import { SolarPanelType } from "./solarPanel.enum";
 import { httpJson } from "@/lib/shared/http/http.service";
 
 vi.mock("@/lib/shared/http/http.service", () => ({ httpJson: vi.fn() }));
 
 const modelDto = {
-  id: "model-1", brand: "SolarTech", model: "ST-450W", type: "MONOCRYSTALLINE" as const,
-  powerWp: 450, efficiency: 21.5, width: 1, length: 2.1, weight: 23.5, status: "APPROVED" as const,
+  id: "model-1",
+  brandId: "brand-1",
+  brand: "SolarTech",
+  model: "ST-450W",
+  type: "MONOCRYSTALLINE" as const,
+  powerWp: 450,
+  efficiency: 21.5,
+  width: 1,
+  length: 2.1,
+  weight: 23.5,
+  status: "APPROVED" as const,
 };
 
 describe("solarPanel.service models", () => {
@@ -24,10 +27,20 @@ describe("solarPanel.service models", () => {
     const result = await listSolarPanelModels();
 
     expect(httpJson).toHaveBeenCalledWith(expect.stringContaining("/api/models"), expect.anything());
-    expect(result).toEqual([{
-      id: "model-1", brand: "SolarTech", model: "ST-450W", type: SolarPanelType.MONOCRYSTALLINE,
-      powerOutput: 450, efficiency: 21.5, dimension: { width: 1, length: 2.1 }, weight: 23.5, status: "APPROVED",
-    }]);
+    expect(result).toEqual([
+      {
+        id: "model-1",
+        brandId: "brand-1",
+        brand: "SolarTech",
+        model: "ST-450W",
+        type: SolarPanelType.MONOCRYSTALLINE,
+        powerOutput: 450,
+        efficiency: 21.5,
+        dimension: { width: 1, length: 2.1 },
+        weight: 23.5,
+        status: "APPROVED",
+      },
+    ]);
   });
 
   it("lists only approved models", async () => {
@@ -42,28 +55,46 @@ describe("solarPanel.service models", () => {
     vi.mocked(httpJson).mockResolvedValue(modelDto);
 
     await createSolarPanel({
-      brand: "SolarTech", model: "ST-450W", type: SolarPanelType.MONOCRYSTALLINE,
-      powerOutput: 450, efficiency: 21.5, dimension: { width: 1, length: 2.1 }, weight: 23.5,
+      brandId: "brand-1",
+      brand: "SolarTech",
+      model: "ST-450W",
+      type: SolarPanelType.MONOCRYSTALLINE,
+      powerOutput: 450,
+      efficiency: 21.5,
+      dimension: { width: 1, length: 2.1 },
+      weight: 23.5,
     });
 
-    expect(httpJson).toHaveBeenCalledWith(expect.stringContaining("/api/models"), expect.objectContaining({
-      method: "POST",
-      body: { brand: "SolarTech", model: "ST-450W", type: "MONOCRYSTALLINE", powerWp: 450, efficiency: 21.5, width: 1, length: 2.1, weight: 23.5 },
-    }));
+    expect(httpJson).toHaveBeenCalledWith(
+      expect.stringContaining("/api/models"),
+      expect.objectContaining({
+        method: "POST",
+        body: { brandId: "brand-1", model: "ST-450W", type: "MONOCRYSTALLINE", powerWp: 450, efficiency: 21.5, width: 1, length: 2.1, weight: 23.5 },
+      }),
+    );
   });
 
   it("updates a model", async () => {
     vi.mocked(httpJson).mockResolvedValue(modelDto);
 
     await updateSolarPanel("model-1", {
-      brand: "SolarTech", model: "ST-450W", type: SolarPanelType.THINFILM,
-      powerOutput: 450, efficiency: 21.5, dimension: { width: 1, length: 2.1 }, weight: 23.5,
+      brandId: "brand-1",
+      brand: "SolarTech",
+      model: "ST-450W",
+      type: SolarPanelType.THINFILM,
+      powerOutput: 450,
+      efficiency: 21.5,
+      dimension: { width: 1, length: 2.1 },
+      weight: 23.5,
     });
 
-    expect(httpJson).toHaveBeenCalledWith(expect.stringContaining("/api/models/model-1"), expect.objectContaining({
-      method: "PUT",
-      body: expect.objectContaining({ type: "THIN_FILM" }),
-    }));
+    expect(httpJson).toHaveBeenCalledWith(
+      expect.stringContaining("/api/models/model-1"),
+      expect.objectContaining({
+        method: "PUT",
+        body: expect.objectContaining({ type: "THIN_FILM" }),
+      }),
+    );
   });
 
   it("deletes a model", async () => {

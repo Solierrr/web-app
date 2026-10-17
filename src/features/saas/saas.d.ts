@@ -14,7 +14,7 @@ export interface SaaSNavigationItem {
   key: string;
   label: string;
   icon: import("@@/ui/icon/Icon").IconName;
-  to: (lang: import("@/config/inter/browser/languages").SupportedLanguage) => string;
+  to: (lang: import("@/config/i18n/browser/languages").SupportedLanguage) => string;
 }
 
 export interface SaaSNavigationGroup {

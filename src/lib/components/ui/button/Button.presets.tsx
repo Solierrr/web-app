@@ -19,6 +19,33 @@ export function PrimaryButton(props: ButtonPresetProps) {
   return <Button {...props} bgColor={Colors.ORANGE} txtColor={Colors.WHITE} />;
 }
 
+export function WhiteButton({ className = "", variant = "flat", ...props }: ButtonPresetProps) {
+  return (
+    <Button
+      {...props}
+      variant={variant}
+      bgColor={Colors.WHITE}
+      txtColor={Colors.BLACK}
+      className={`${variant === "advanced" ? "aspect-button-white aspect-button-neutral" : variant === "soft" || variant === "surface" ? "" : "border-ui"} ${className}`}
+    />
+  );
+}
+
+/** Fundo branco com profundidade neutra; texto e ícone laranja. */
+export function WhiteSoftButton(props: Omit<ButtonPresetProps, "variant">) {
+  return <Button {...props} variant="soft" bgColor={Colors.WHITE} txtColor={Colors.ORANGE} />;
+}
+
+/** Fundo branco sólido, sem degradê ou sombra; conteúdo laranja. */
+export function WhiteSolidButton({ className = "", ...props }: Omit<ButtonPresetProps, "variant">) {
+  return <WhiteSoftButton {...props} className={`bg-none! shadow-none! ${className}`} />;
+}
+
+/** Ação discreta com fundo uniforme da área operacional. */
+export function SurfaceButton(props: Omit<ButtonPresetProps, "variant">) {
+  return <Button {...props} variant="surface" bgColor={Colors.WHITE} txtColor={Colors.BLACK} />;
+}
+
 /**
  * Secondary
  *

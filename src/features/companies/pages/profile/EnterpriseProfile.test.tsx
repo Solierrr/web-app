@@ -1,5 +1,7 @@
-import { render, screen } from "@testing-library/react";
+vi.mock("@@/layout/access/canvas/SideCanvas", () => ({ default: () => null }));
+import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
+import { MemoryRouter } from "react-router-dom";
 import EnterpriseProfile from "./EnterpriseProfile";
 
 vi.mock("@/features/companies/company.service", () => ({
@@ -29,7 +31,11 @@ describe("EnterpriseProfile", () => {
   it("renders a skeleton while the company is loading", () => {
     mockedGetCompany.mockReturnValue(new Promise(() => {}));
 
-    render(<EnterpriseProfile />);
+    render(
+      <MemoryRouter>
+        <EnterpriseProfile />
+      </MemoryRouter>,
+    );
 
     expect(screen.queryByText("Solaria Energia")).not.toBeInTheDocument();
   });
@@ -37,9 +43,25 @@ describe("EnterpriseProfile", () => {
   it("renders the mocked company once loaded", async () => {
     mockedGetCompany.mockResolvedValue(company);
 
-    render(<EnterpriseProfile />);
+    render(
+      <MemoryRouter>
+        <EnterpriseProfile />
+      </MemoryRouter>,
+    );
 
     expect(await screen.findByRole("heading", { name: "Solaria Energia" })).toBeInTheDocument();
     expect(screen.getByText("Solaria Energia Solar Ltda")).toBeInTheDocument();
+  });
+  it("reloads the profile after switching the active company", async () => {
+    mockedGetCompany.mockResolvedValueOnce(company).mockResolvedValueOnce({ ...company, id: "company-2", tradeName: "Outra empresa" });
+    render(
+      <MemoryRouter>
+        <EnterpriseProfile />
+      </MemoryRouter>,
+    );
+    expect(await screen.findByRole("heading", { name: "Solaria Energia" })).toBeInTheDocument();
+    fireEvent(window, new Event("solaria:context"));
+    expect(await screen.findByRole("heading", { name: "Outra empresa" })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Solaria Energia" })).not.toBeInTheDocument();
   });
 });

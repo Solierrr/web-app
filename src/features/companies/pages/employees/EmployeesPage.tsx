@@ -1,9 +1,17 @@
+import OperationalTable from "@@/layout/operational-page/OperationalTable";
+import ToolbarAction from "@@/ui/button/ToolbarAction";
+import ConfirmedAction from "@@/overlay/confirmation/ConfirmedAction";
+import Checkbox from "@@/ui/checkbox/Checkbox";
+import { PrimaryButton, WhiteButton } from "@@/ui/button/Button.presets";
+import Input from "@@/ui/input/Input";
+import { NativeSelect as Select } from "@@/ui/select/Select";
+import OperationalForm from "@@/layout/operational-page/OperationalForm";
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { useEffect, useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
-import { DEFAULT, isSupportedLanguage } from "@/config/inter/browser/languages";
-import { routePaths } from "@/config/inter/paths";
+import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
+import { routePaths } from "@/config/i18n/paths";
 import { getPermissionTemplate, isPermissionCompatible, permissionTemplates } from "@/features/permissions/permissions.utils";
 
 import { useActiveContext } from "@/lib/shared/context/ActiveContext";
@@ -14,9 +22,8 @@ import {
   grantPermission,
   listPermissions,
   generateAccessCode,
-  linkPositionToCompany,
   listAccessCodes,
-  listCompanyPositions,
+  listPositions,
   listEmployees,
   removeEmployee,
   revokeAccessCode,
@@ -38,8 +45,9 @@ export default function EmployeesPage() {
   const { lang: parameter } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(parameter) ? parameter : DEFAULT;
   const canInvite = can("POST /api/access-codes");
-  const canCreatePosition =
-    can("POST /api/positions") && can("POST /api/company-positions") && can("POST /api/position-permissions") && can("GET /api/permissions");
+  const canCreatePosition = can("POST /api/positions") && can("POST /api/position-permissions") && can("GET /api/permissions");
+  const { t: tCommon } = useTranslation("commons");
+  const [formOpen, setFormOpen] = useState(false);
   const companyId = company?.id;
 
   const [employees, setEmployees] = useState<EmployeeRow[] | null>(null);
@@ -83,7 +91,7 @@ export default function EmployeesPage() {
   async function load(id: string) {
     const [employeeLinks, positions, codes] = await Promise.all([
       listEmployees(id),
-      can("GET /api/company-positions/company/{companyId}") ? listCompanyPositions(id) : Promise.resolve([]),
+      can("GET /api/positions") ? listPositions() : Promise.resolve([]),
       can("GET /api/access-codes/company/{companyId}") ? listAccessCodes(id) : Promise.resolve([]),
     ]);
     const withNames = await Promise.all(
@@ -96,7 +104,7 @@ export default function EmployeesPage() {
         }
       }),
     );
-    return { employees: withNames, positions: positions.map((link) => link.position), codes: codes.filter((code) => code.status === "ACTIVE") };
+    return { employees: withNames, positions, codes: codes.filter((code) => code.status === "ACTIVE") };
   }
 
   function apply(data: Awaited<ReturnType<typeof load>>) {
@@ -137,7 +145,6 @@ export default function EmployeesPage() {
       let positionId = selectedPositionId;
       if (!positionId && newPositionName.trim()) {
         const position = await createPosition(newPositionName.trim());
-        await linkPositionToCompany(companyId, position.id);
         for (const permissionId of newPermissions) await grantPermission(position.id, permissionId);
         positionId = position.id;
       }
@@ -166,107 +173,132 @@ export default function EmployeesPage() {
   }
 
   async function handleRemove(employeeId: string) {
-    if (!companyId) return;
+    if (!companyId) throw new Error("Missing company");
     try {
       await removeEmployee(employeeId);
       await reload(companyId);
     } catch {
-      setError(true);
+      throw new Error(t("loadError"));
     }
   }
 
   async function handleRevokeCode(codeId: string) {
-    if (!companyId) return;
+    if (!companyId) throw new Error("Missing company");
     try {
       await revokeAccessCode(codeId, companyId);
       await reload(companyId);
     } catch {
-      setError(true);
+      throw new Error(t("loadError"));
     }
   }
 
   if (error)
     return (
-      <OperationalPage title={t("title")}>
+      <OperationalPage title={t("title")} centered sideBackground>
         <p role="alert">{t("loadError")}</p>
       </OperationalPage>
     );
   if (contextLoading || !employees) return <OperationalPage title={t("title")} loading />;
-  const admins = employees.filter((employee) => employee.position.name === "ADMIN");
-  const team = employees.filter((employee) => employee.position.name !== "ADMIN");
 
   return (
-    <OperationalPage title={t("title")}>
-      {admins.length > 0 ? (
-        <section className="flex flex-col gap-3">
-          <h2 className="font-medium">{t("adminsTitle")}</h2>
-          <ul className="divide-y divide-operational-border rounded-small border border-operational-border">
-            {admins.map((employee) => (
-              <li key={employee.id} className="flex flex-wrap items-center justify-between gap-3 p-4">
-                <div>
-                  <Link className="font-medium hover:underline" to={`${routePaths.employeesManagement(lang)}/${encodeURIComponent(employee.id)}`}>
-                    {employee.username}
-                  </Link>
-                  <p className="text-sm text-gray-600">{employee.position.name}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
-
-      <section className="flex flex-col gap-3">
-        <h2 className="font-medium">{t("listTitle")}</h2>
-        <ul className="divide-y divide-operational-border rounded-small border border-operational-border">
-          {team.map((employee) => (
-            <li key={employee.id} className="flex flex-wrap items-center justify-between gap-3 p-4">
-              <div>
+    <OperationalPage
+      description={!formOpen ? t("description") : undefined}
+      centered
+      sideBackground={!formOpen}
+      form={formOpen}
+      formBackground={formOpen}
+      title={formOpen ? t("inviteTitle") : t("title")}
+      actions={
+        !formOpen && canInvite ? (
+          <PrimaryButton
+            content={t("inviteTitle")}
+            description={t("inviteTitle")}
+            onClick={() => {
+              setFormOpen(true);
+              setGeneratedCode(null);
+            }}
+          />
+        ) : undefined
+      }>
+      {!formOpen && (
+        <OperationalTable
+          label={t("listTitle")}
+          items={employees}
+          onRefresh={async () => apply(await load(companyId!))}
+          getKey={(employee) => employee.id}
+          empty={t("empty")}
+          columns={[
+            {
+              key: "name",
+              label: tCommon("settings.profile"),
+              render: (employee) => (
                 <Link className="font-medium hover:underline" to={`${routePaths.employeesManagement(lang)}/${encodeURIComponent(employee.id)}`}>
                   {employee.username}
                 </Link>
-                <p className="text-sm text-gray-600">{employee.position.name}</p>
-              </div>
-              {employee.position.name !== "ADMIN" ? (
-                <div className="flex items-center gap-2">
-                  {can("PATCH /api/user-companies/{id}/position") && companyPositions.length > 0 && (
-                    <select
-                      value={employee.position.id}
-                      onChange={(event) => void handleChangePosition(employee.id, event.target.value)}
-                      className="rounded-small border border-operational-border p-1 text-sm">
-                      {companyPositions.map((position) => (
+              ),
+            },
+            {
+              key: "position",
+              value: (employee) => employee.position.name,
+              filterable: true,
+              label: tSaas("details.position"),
+              render: (employee) =>
+                employee.position.name === "ADMIN" || !can("PATCH /api/user-companies/{id}/position") || !companyPositions.length ? (
+                  employee.position.name
+                ) : (
+                  <Select
+                    name={`position-${employee.id}`}
+                    aria-label={`${tSaas("details.position")} ${employee.username}`}
+                    value={employee.position.id}
+                    onChange={(event) => void handleChangePosition(employee.id, event.target.value)}
+                    className="w-full">
+                    {companyPositions
+                      .filter((position) => position.name !== "ADMIN" || isAdmin)
+                      .map((position) => (
                         <option key={position.id} value={position.id}>
                           {position.name}
                         </option>
                       ))}
-                    </select>
-                  )}
-                  {can("DELETE /api/user-companies/{id}") && (
-                    <button type="button" onClick={() => void handleRemove(employee.id)} className="text-sm text-red-700">
-                      {t("remove")}
-                    </button>
+                  </Select>
+                ),
+            },
+            {
+              key: "actions",
+              label: tCommon("operational.actions"),
+              render: (employee) => (
+                <div className="flex items-center gap-2">
+                  <ToolbarAction
+                    icon="eye"
+                    label={tCommon("actions.view")}
+                    to={`${routePaths.employeesManagement(lang)}/${encodeURIComponent(employee.id)}`}
+                    backgroundColor="var(--color-input-bg)"
+                    className="h-8!"
+                  />
+                  {employee.position.name !== "ADMIN" && can("DELETE /api/user-companies/{id}") && (
+                    <ConfirmedAction label={t("remove")} name={employee.username} onConfirm={() => handleRemove(employee.id)} />
                   )}
                 </div>
-              ) : null}
-            </li>
-          ))}
-          {team.length === 0 && admins.length === 0 ? <li className="p-4 text-gray-600">{t("empty")}</li> : null}
-        </ul>
-      </section>
+              ),
+            },
+          ]}
+        />
+      )}
 
       {canInvite || can("GET /api/access-codes/company/{companyId}") ? (
         <section className="flex flex-col gap-3">
-          <h2 className="font-medium">{t("inviteTitle")}</h2>
-          {canInvite && (
-            <form onSubmit={handleGenerateCode} className="flex flex-wrap items-end gap-3">
-              <label className="flex flex-col gap-1 text-sm">
+          {formOpen && canInvite && (
+            <OperationalForm plain onSubmit={handleGenerateCode}>
+              <label className="flex flex-col gap-1 text-body">
                 {t("existingPosition")}
-                <select
+                <Select
+                  name="selectedPositionId"
+                  aria-label={t("existingPosition")}
                   value={selectedPositionId}
                   onChange={(event) => {
                     setSelectedPositionId(event.target.value);
                     setNewPositionName("");
                   }}
-                  className="rounded-small border border-operational-border p-2">
+                  className="w-full">
                   <option value="">{t("selectPosition")}</option>
                   {companyPositions
                     .filter((position) => position.name !== "ADMIN" || isAdmin)
@@ -275,22 +307,27 @@ export default function EmployeesPage() {
                         {position.name}
                       </option>
                     ))}
-                </select>
+                </Select>
               </label>
-              <label className="flex flex-col gap-1 text-sm">
+              <label className="flex flex-col gap-1 text-body">
                 {t("guestEmail")}
-                <input
+                <Input
+                  name="guestEmail"
+                  aria-label={t("guestEmail")}
+                  placeholder={t("guestEmail")}
                   type="email"
                   value={guestEmail}
                   onChange={(event) => setGuestEmail(event.target.value)}
-                  className="rounded-small border border-operational-border p-2"
+                  className="w-full"
                 />
               </label>
-              <span className="text-sm text-gray-500">{t("or")}</span>
+              <span className="text-body text-operational-muted">{t("or")}</span>
               {canCreatePosition && (
-                <label className="flex flex-col gap-1 text-sm">
+                <label className="flex flex-col gap-1 text-body">
                   {t("newPosition")}
-                  <input
+                  <Input
+                    name="newPositionName"
+                    aria-label={t("newPosition")}
                     value={newPositionName}
                     onChange={(event) => {
                       setNewPositionName(event.target.value);
@@ -298,18 +335,20 @@ export default function EmployeesPage() {
                     }}
                     maxLength={12}
                     placeholder={t("newPositionPlaceholder")}
-                    className="rounded-small border border-operational-border p-2"
+                    className="w-full"
                   />
                 </label>
               )}
               {newPositionName.trim() && (
                 <fieldset disabled={generating || permissionsLoading} className="flex w-full flex-col gap-3">
                   <legend className="mb-2 font-medium">{tSaas("permissions.title")}</legend>
-                  <label className="flex flex-col gap-2 text-sm">
+                  <label className="flex flex-col gap-2 text-body">
                     {tSaas("permissions.template")}
-                    <select
+                    <Select
+                      name="permissionTemplate"
+                      aria-label={tSaas("permissions.template")}
                       defaultValue="Consulta"
-                      className="rounded-small border border-operational-border p-2"
+                      className="w-full"
                       onChange={(event) => {
                         const template = getPermissionTemplate(event.target.value);
                         if (template)
@@ -324,32 +363,39 @@ export default function EmployeesPage() {
                             {item.title}
                           </option>
                         ))}
-                    </select>
+                    </Select>
                   </label>
                   {availablePermissions.map((item) => (
-                    <label key={item.id} className="flex items-center gap-2 text-sm">
-                      <input
-                        type="checkbox"
-                        checked={newPermissions.includes(item.id)}
-                        onChange={(event) =>
-                          setNewPermissions((items) => (event.target.checked ? [...items, item.id] : items.filter((id) => id !== item.id)))
-                        }
-                      />
-                      {item.name}
-                    </label>
+                    <Checkbox
+                      key={item.id}
+                      label={item.name}
+                      checked={newPermissions.includes(item.id)}
+                      onChange={(event) =>
+                        setNewPermissions((items) => (event.target.checked ? [...items, item.id] : items.filter((id) => id !== item.id)))
+                      }
+                    />
                   ))}
                 </fieldset>
               )}
-              <button
+              <PrimaryButton
                 type="submit"
                 disabled={generating || permissionsLoading || (!selectedPositionId && (!canCreatePosition || !newPositionName.trim()))}
-                className="rounded-small bg-orange px-4 py-2 text-white disabled:opacity-50">
-                {t("generate")}
-              </button>
-            </form>
+                className="min-h-12 w-full"
+                content={t("generate")}
+                description={t("generate")}
+              />
+              <WhiteButton
+                type="button"
+                content={tCommon("actions.cancel")}
+                description={tCommon("actions.cancel")}
+                onClick={() => setFormOpen(false)}
+                disabled={generating}
+                className="min-h-12 w-full"
+              />
+            </OperationalForm>
           )}
           {generatedCode ? (
-            <p role="status" className="rounded-small bg-green-50 p-3 text-sm">
+            <p role="status" className="rounded-small bg-green-50 p-3 text-body">
               {t("generatedCode", { code: generatedCode })}
               {invitedEmail ? (
                 <>
@@ -370,21 +416,27 @@ export default function EmployeesPage() {
             </p>
           ) : null}
 
-          <h3 className="mt-2 text-sm font-medium">{t("activeCodesTitle")}</h3>
-          <ul className="divide-y divide-operational-border rounded-small border border-operational-border">
-            {accessCodes.map((code) => (
-              <li key={code.id} className="flex items-center justify-between gap-3 p-3 text-sm">
-                <span className="font-mono">{code.code}</span>
-                <span className="text-gray-600">{code.position.name}</span>
-                {can("DELETE /api/access-codes/{id}/company/{companyId}") && (
-                  <button type="button" onClick={() => void handleRevokeCode(code.id)} className="text-red-700">
-                    {t("revoke")}
-                  </button>
-                )}
-              </li>
-            ))}
-            {accessCodes.length === 0 ? <li className="p-3 text-gray-600">{t("noActiveCodes")}</li> : null}
-          </ul>
+          {!formOpen && (
+            <OperationalTable
+              label={t("activeCodesTitle")}
+              items={accessCodes}
+              onRefresh={async () => apply(await load(companyId!))}
+              getKey={(code) => code.id}
+              empty={t("noActiveCodes")}
+              columns={[
+                { key: "code", label: t("activeCodesTitle"), render: (code) => <span className="font-mono">{code.code}</span> },
+                { key: "position", label: tSaas("details.position"), render: (code) => code.position.name },
+                {
+                  key: "actions",
+                  label: tCommon("operational.actions"),
+                  render: (code) =>
+                    can("DELETE /api/access-codes/{id}/company/{companyId}") ? (
+                      <ConfirmedAction icon="x" label={t("revoke")} name={code.code} onConfirm={() => handleRevokeCode(code.id)} />
+                    ) : null,
+                },
+              ]}
+            />
+          )}
         </section>
       ) : null}
     </OperationalPage>

@@ -4,6 +4,7 @@ type ServiceErrorContext = {
   service: string;
   operation: string;
   status?: number;
+  errorCode?: string;
   error?: unknown;
 };
 
@@ -29,9 +30,10 @@ const logger = {
     }
   },
 
-  serviceError({ service, operation, status, error }: ServiceErrorContext) {
+  serviceError({ service, operation, status, errorCode, error }: ServiceErrorContext) {
     const statusLabel = status === undefined ? "" : ` (HTTP ${status})`;
-    this.error(`${service}.${operation} failed${statusLabel}`, error);
+    const codeLabel = errorCode ? ` [${errorCode}]` : "";
+    this.error(`${service}.${operation} failed${statusLabel}${codeLabel}`, error);
   },
 
   debug(message: string, data?: unknown) {

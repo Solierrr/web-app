@@ -1,3 +1,4 @@
+import ToolbarAction from "@@/ui/button/ToolbarAction";
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -7,6 +8,8 @@ import { useActiveContext } from "@/lib/shared/context/ActiveContext";
 import type { AnalyticsScope, KpiResult } from "../analytics";
 import { getCompanyKpis, getPlatformKpis } from "../analytics.service";
 import { ANALYTICS_PERMISSIONS, kpisToCsv } from "../analytics.utils";
+import Dashboard from "@@/dashboard/Dashboard";
+import { MetricCard } from "@@/dashboard/dashboard.presets";
 
 interface ContentProps {
   scope: AnalyticsScope | null;
@@ -37,7 +40,7 @@ function OperationalLoading() {
 }
 
 function AnalyticsContent({ scope, company, can }: ContentProps) {
-  const { t } = useTranslation("commons", { keyPrefix: "analytics" });
+  const { t, i18n } = useTranslation("commons", { keyPrefix: "analytics" });
   const [result, setResult] = useState<KpiResult | null>(null);
   const [error, setError] = useState(false);
 
@@ -74,14 +77,20 @@ function AnalyticsContent({ scope, company, can }: ContentProps) {
 
   return (
     <OperationalPage
+      centered
+      sideBackground
       title={t("title")}
       description={scope ? t(`scope.${scope}`) : undefined}
       loading={scope !== null && !result && !error}
       actions={
         result?.kpis.length ? (
-          <button type="button" onClick={exportCsv} className="rounded-small border border-operational-border px-3 py-2">
-            {t("exportCsv")}
-          </button>
+          <ToolbarAction
+            icon="document"
+            label={t("exportCsv")}
+            content={t("exportCsv")}
+            onClick={exportCsv}
+            backgroundColor="var(--color-input-bg)"
+          />
         ) : undefined
       }>
       {scope === null ? <p>{t("personal")}</p> : null}
@@ -90,14 +99,17 @@ function AnalyticsContent({ scope, company, can }: ContentProps) {
         <>
           {result.failed ? <p role="alert">{t("partial")}</p> : null}
           {result.kpis.length ? (
-            <dl className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            <Dashboard className="mx-auto w-full lg:w-[85%]">
               {result.kpis.map((kpi) => (
-                <div key={kpi.key} className="rounded-small border border-operational-border bg-white p-4">
-                  <dt className="text-sm text-operational-muted">{t(`kpi.${kpi.key}`)}</dt>
-                  <dd className="mt-2 text-3xl font-semi-bold">{kpi.value}</dd>
-                </div>
+                <MetricCard
+                  key={kpi.key}
+                  title={t(`kpi.${kpi.key}`)}
+                  locale={i18n.resolvedLanguage}
+                  payload={{ value: kpi.value }}
+                  className="md:col-span-3 xl:col-span-4"
+                />
               ))}
-            </dl>
+            </Dashboard>
           ) : (
             <p>{t("empty")}</p>
           )}

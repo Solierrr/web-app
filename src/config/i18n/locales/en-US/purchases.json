@@ -1,0 +1,118 @@
+{
+  "methods": {
+    "PIX": "Pix",
+    "CREDIT_CARD": "Credit card",
+    "BOLETO": "Bank slip",
+    "TRANSFER": "Bank transfer"
+  },
+  "cart": {
+    "title": "Cart",
+    "description": "Review the units and complete the purchase.",
+    "items": "Cart items",
+    "empty": "Your cart is empty.",
+    "model": "Product",
+    "unitPrice": "Unit price",
+    "quantity": "Quantity",
+    "lineTotal": "Total",
+    "remove": "Remove",
+    "unavailable": "Unavailable or out of stock",
+    "summary": "Summary",
+    "subtotal": "Subtotal",
+    "fee": "Platform fee ({{percentage}}%)",
+    "total": "Total",
+    "paymentMethod": "Payment method",
+    "fictitious": "Fictitious payment: no real money is charged.",
+    "pay": "Pay",
+    "paid": "Purchase completed.",
+    "error": "The operation could not be completed."
+  },
+  "orders": {
+    "title": "My orders",
+    "description": "History of your purchases.",
+    "list": "Orders",
+    "empty": "You have not made any purchases yet.",
+    "date": "Date",
+    "items": "Units",
+    "total": "Total",
+    "status": "Status",
+    "statuses": {
+      "PAID": "Paid",
+      "CANCELED": "Canceled"
+    },
+    "error": "Orders could not be loaded."
+  },
+  "order": {
+    "title": "Order",
+    "back": "Back",
+    "items": "Items",
+    "empty": "No items.",
+    "model": "Product",
+    "unitPrice": "Unit price",
+    "quantity": "Quantity",
+    "lineTotal": "Total",
+    "subtotal": "Subtotal",
+    "fee": "Platform fee ({{percentage}}%)",
+    "total": "Total",
+    "statuses": {
+      "PAID": "Paid",
+      "CANCELED": "Canceled"
+    },
+    "paymentStatuses": {
+      "PAID": "Payment approved",
+      "REFUNDED": "Payment refunded"
+    },
+    "paymentVia": "Paid via {{method}}",
+    "fictitious": "Fictitious payment receipt: no real money was charged.",
+    "cancel": "Cancel order",
+    "canceled": "Order canceled.",
+    "error": "The operation could not be completed."
+  },
+  "sales": {
+    "title": "Sales",
+    "description": "Units sold by your company.",
+    "list": "Sales",
+    "empty": "No sales yet.",
+    "date": "Date",
+    "model": "Product",
+    "buyer": "Buyer",
+    "quantity": "Quantity",
+    "total": "Total",
+    "status": "Status",
+    "statuses": {
+      "PAID": "Paid",
+      "CANCELED": "Canceled"
+    },
+    "error": "Sales could not be loaded."
+  },
+  "plan": {
+    "title": "Plan",
+    "description": "Company subscription and charges.",
+    "current": "Current plan",
+    "charges": "Charges",
+    "empty": "No charges.",
+    "dueDate": "Due date",
+    "amount": "Amount",
+    "method": "Payment method",
+    "status": "Status",
+    "pay": "Pay charge",
+    "paid": "Charge paid.",
+    "since": "Since {{date}}",
+    "cycles": {
+      "MONTHLY": "monthly",
+      "YEARLY": "yearly"
+    },
+    "statuses": {
+      "PAID": "Up to date",
+      "IN_DEBT": "Overdue",
+      "SUSPENDED": "Suspended"
+    },
+    "chargeStatuses": {
+      "PENDING": "Pending",
+      "PAID": "Paid",
+      "CANCELED": "Canceled",
+      "REFUNDED": "Refunded"
+    },
+    "fictitious": "Fictitious payment: no real money is charged.",
+    "error": "The operation could not be completed."
+  }
+}

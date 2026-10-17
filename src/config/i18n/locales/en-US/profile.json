@@ -1,0 +1,72 @@
+{
+  "edit": {
+    "description": "Review the profile details before saving.",
+    "mockNotice": "These profile changes are stored only in this browser until the real editing flow is connected.",
+    "save": "Save changes",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "companyTitle": "Company information",
+    "personTitle": "Personal information",
+    "professionalTitle": "Professional registration",
+    "companyDetails": "Business details",
+    "contactDetails": "Business contact",
+    "addressDetails": "Location",
+    "name": "Name",
+    "tradeName": "Trade name",
+    "corporateName": "Legal name",
+    "cnpj": "CNPJ",
+    "companyType": "Company type",
+    "supplier": "Supplier",
+    "demandant": "Demandant",
+    "email": "Email",
+    "phone": "Phone",
+    "website": "Website",
+    "street": "Street and number",
+    "number": "Number",
+    "neighborhood": "Neighborhood",
+    "city": "City",
+    "state": "State",
+    "zipCode": "ZIP code",
+    "country": "Country",
+    "username": "Username",
+    "profession": "Profession",
+    "crea": "Professional registration",
+    "council": "Council",
+    "registrationNumber": "Registration number",
+    "expirationDate": "Registration expiration",
+    "notAvailable": "Not provided",
+    "companyReadOnly": "Company editing is not connected to an API endpoint yet. In mock mode, changes are saved locally.",
+    "professionalReadOnly": "Professional registration details can only be edited in mock mode until the API provides a personal profile endpoint.",
+    "saveError": "The changes could not be saved. Try again."
+  },
+  "onboarding": {
+    "previewFallbackName": "Preview",
+    "bannerPlaceholder": "Banner image URL",
+    "avatarPlaceholder": "Profile photo URL",
+    "avatarAlt": "",
+    "complete": "Finish",
+    "completeDescription": "Finish profile customization",
+    "skip": "Skip",
+    "skipDescription": "Skip profile customization",
+    "company": {
+      "bannerHeading": "Customize the company banner",
+      "avatarHeading": "Choose the company logo"
+    },
+    "user": {
+      "bannerHeading": "Customize the profile banner",
+      "avatarHeading": "Choose the profile photo"
+    }
+  },
+  "company": {
+    "about": "About the company",
+    "offers": "Offers",
+    "projects": "Projects",
+    "navigation": "Company profile content",
+    "projectsPrivate": "Projects from this company that you can access. This private area depends on your participation or management permission.",
+    "retry": "Try again",
+    "offersFailed": "Unable to load offers from this company.",
+    "loadingOffers": "Loading offers...",
+    "noOffers": "This company has no available offers yet.",
+    "publicProfile": "View marketplace profile"
+  }
+}

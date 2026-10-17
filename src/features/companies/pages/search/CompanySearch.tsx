@@ -5,7 +5,7 @@ import EntityCard from "@/lib/components/layout/announcement/entity-card/EntityC
 import Skeleton from "@@/feedback/skeleton/Skeleton";
 import { ImageSkeleton } from "@@/feedback/skeleton/Skeleton.presets";
 import { getCatalogCompanies, type CatalogCompany } from "@/features/companies/company.service";
-import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
+import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { toCardItem } from "./CompanySearch.utils";
 import WrapperLayout from "@/config/WrapperLayout";
 

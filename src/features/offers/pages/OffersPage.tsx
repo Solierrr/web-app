@@ -1,9 +1,18 @@
+import StatusField from "@@/ui/status-field/StatusField";
+import OperationalTable from "@@/layout/operational-page/OperationalTable";
+import ToolbarAction from "@@/ui/button/ToolbarAction";
+import ConfirmedAction from "@@/overlay/confirmation/ConfirmedAction";
+import { PrimaryButton, WhiteButton } from "@@/ui/button/Button.presets";
+import Textarea from "@@/ui/textarea/Textarea";
+import Input from "@@/ui/input/Input";
+import { NativeSelect as Select } from "@@/ui/select/Select";
+import OperationalForm, { FormSection } from "@@/layout/operational-page/OperationalForm";
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { useEffect, useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
-import { DEFAULT, isSupportedLanguage } from "@/config/inter/browser/languages";
-import { routePaths } from "@/config/inter/paths";
+import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
+import { routePaths } from "@/config/i18n/paths";
 
 import { useActiveContext } from "@/lib/shared/context/ActiveContext";
 import { listApprovedSolarPanelModels } from "@/features/solar-panel/solarPanel.service";
@@ -19,9 +28,9 @@ import {
 } from "@/features/offers/offer.service";
 import { getOfferStatus, type OfferStatus } from "@/features/offers/offer.utils";
 
-function offerTitle(offer: Offer): string {
+function offerTitle(offer: Offer, locale: string): string {
   return (
-    offer.translations.find((translation) => translation.locale === "pt-BR")?.title ??
+    offer.translations.find((translation) => translation.locale === locale)?.title ??
     offer.translations[0]?.title ??
     `${offer.model.brand} ${offer.model.model}`
   );
@@ -52,12 +61,14 @@ export default function OffersPage() {
   const { company, can = () => false, loading: contextLoading } = useActiveContext();
   const { lang: parameter } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(parameter) ? parameter : DEFAULT;
+  const { t: tCommon } = useTranslation("commons");
   const companyId = company?.id;
 
   const [supplierId, setSupplierId] = useState<string | null>(null);
   const [models, setModels] = useState<SolarPanel[]>([]);
   const [offers, setOffers] = useState<Offer[] | null>(null);
   const [error, setError] = useState(false);
+  const [formOpen, setFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
@@ -103,16 +114,22 @@ export default function OffersPage() {
   }, [companyId]);
 
   function startCreate() {
+    setFormOpen(true);
     setEditingId(null);
     setForm(EMPTY_FORM);
   }
 
   function startEdit(offer: Offer) {
+    const source =
+      offer.translations.find((item) => item.locale === offer.sourceLocale) ??
+      offer.translations.find((item) => item.locale === "und") ??
+      offer.translations[0];
+    setFormOpen(true);
     setEditingId(offer.id);
     setForm({
       modelId: offer.model.id,
-      title: offerTitle(offer),
-      description: offer.translations[0]?.description ?? offerTitle(offer),
+      title: source?.title ?? offerTitle(offer, lang),
+      description: source?.description ?? offerTitle(offer, lang),
       unitPrice: String(offer.unitPrice),
       availability: String(offer.availability),
       discountPercentage: offer.discountPercentage != null ? String(offer.discountPercentage) : "",
@@ -130,7 +147,13 @@ export default function OffersPage() {
         .split(",")
         .map((region) => region.trim())
         .filter(Boolean);
+      const source = offers?.find((item) => item.id === editingId);
+      const sourceTranslation =
+        source?.translations.find((item) => item.locale === source.sourceLocale) ??
+        source?.translations.find((item) => item.locale === "und") ??
+        source?.translations[0];
       const payload = {
+        details: sourceTranslation?.details ?? undefined,
         supplierId,
         modelId: form.modelId,
         title: form.title.trim(),
@@ -145,7 +168,8 @@ export default function OffersPage() {
       } else {
         await createOffer(payload);
       }
-      startCreate();
+      setFormOpen(false);
+      setEditingId(null);
       await reload(companyId!);
     } catch {
       setError(true);
@@ -155,12 +179,12 @@ export default function OffersPage() {
   }
 
   async function handleDelete(id: string) {
-    if (!companyId) return;
+    if (!companyId) throw new Error("Missing company");
     try {
       await deleteOffer(id);
       await reload(companyId);
     } catch {
-      setError(true);
+      throw new Error(t("error"));
     }
   }
 
@@ -179,33 +203,45 @@ export default function OffersPage() {
 
   if (error && !offers)
     return (
-      <OperationalPage title={t("title")}>
+      <OperationalPage title={t("title")} centered sideBackground>
         <p role="alert">{t("error")}</p>
       </OperationalPage>
     );
   if (contextLoading || !offers) return <OperationalPage title={t("title")} loading />;
 
   return (
-    <OperationalPage title={t("title")}>
+    <OperationalPage
+      description={!formOpen ? t("description") : undefined}
+      centered
+      sideBackground={!formOpen}
+      form={formOpen}
+      formBackground={formOpen}
+      title={formOpen ? (editingId ? t("editHeading") : t("createHeading")) : t("title")}
+      actions={
+        !formOpen && can("POST /api/offers") ? (
+          <PrimaryButton content={t("createHeading")} description={t("createHeading")} onClick={startCreate} />
+        ) : undefined
+      }>
       {error ? (
-        <p role="alert" className="text-red-700">
+        <p role="alert" className="text-feedback-error">
           {t("error")}
         </p>
       ) : null}
 
-      {(editingId ? can("PUT /api/offers/{id}") : can("POST /api/offers")) && (
-        <section className="flex flex-col gap-3 rounded-small border border-operational-border p-4">
-          <h2 className="font-medium">{editingId ? t("editHeading") : t("createHeading")}</h2>
-          {models.length === 0 ? <p className="text-sm text-gray-600">{t("noApprovedModels")}</p> : null}
-          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-            <label className="flex flex-col gap-1 text-sm">
+      {formOpen && (editingId ? can("PUT /api/offers/{id}") : can("POST /api/offers")) && (
+        <section className="flex flex-col gap-3">
+          {models.length === 0 ? <p className="text-body text-operational-muted">{t("noApprovedModels")}</p> : null}
+          <OperationalForm plain onSubmit={handleSubmit}>
+            <label className="flex flex-col gap-1 text-body">
               {t("model")}
-              <select
+              <Select
+                name="modelId"
+                aria-label={t("model")}
                 value={form.modelId}
                 onChange={(event) => setForm({ ...form, modelId: event.target.value })}
                 required
                 disabled={!!editingId}
-                className="rounded-small border border-operational-border p-2">
+                className="w-full">
                 <option value="" disabled>
                   {t("selectModel")}
                 </option>
@@ -214,136 +250,202 @@ export default function OffersPage() {
                     {model.brand} {model.model}
                   </option>
                 ))}
-              </select>
+              </Select>
             </label>
-            <label className="flex flex-col gap-1 text-sm">
+            <label className="flex flex-col gap-1 text-body">
               {t("offerTitle")}
-              <input
+              <Input
+                name="title"
+                aria-label={t("offerTitle")}
+                placeholder={t("offerTitle")}
                 value={form.title}
                 onChange={(event) => setForm({ ...form, title: event.target.value })}
                 required
-                className="rounded-small border border-operational-border p-2"
+                className="w-full"
               />
             </label>
-            <label className="flex flex-col gap-1 text-sm">
+            <label className="flex flex-col gap-1 text-body">
               {t("offerDescription")}
-              <textarea
+              <Textarea
+                name="description"
+                aria-label={t("offerDescription")}
+                placeholder={t("offerDescription")}
                 value={form.description}
                 onChange={(event) => setForm({ ...form, description: event.target.value })}
                 required
-                className="rounded-small border border-operational-border p-2"
+                className="w-full"
               />
             </label>
-            <div className="grid grid-cols-2 gap-3">
-              <label className="flex flex-col gap-1 text-sm">
-                {t("unitPrice")}
-                <input
-                  type="number"
-                  step="0.01"
-                  min="0.01"
-                  value={form.unitPrice}
-                  onChange={(event) => setForm({ ...form, unitPrice: event.target.value })}
-                  required
-                  className="rounded-small border border-operational-border p-2"
-                />
-              </label>
-              <label className="flex flex-col gap-1 text-sm">
-                {t("availability")}
-                <input
-                  type="number"
-                  min="0"
-                  value={form.availability}
-                  onChange={(event) => setForm({ ...form, availability: event.target.value })}
-                  required
-                  className="rounded-small border border-operational-border p-2"
-                />
-              </label>
-              <label className="flex flex-col gap-1 text-sm">
-                {t("discount")}
-                <input
-                  type="number"
-                  min="0"
-                  max="100"
-                  value={form.discountPercentage}
-                  onChange={(event) => setForm({ ...form, discountPercentage: event.target.value })}
-                  className="rounded-small border border-operational-border p-2"
-                />
-              </label>
-              <label className="flex flex-col gap-1 text-sm">
-                {t("serviceRegions")}
-                <input
-                  value={form.serviceRegions}
-                  onChange={(event) => setForm({ ...form, serviceRegions: event.target.value })}
-                  placeholder="SP, RJ, MG"
-                  className="rounded-small border border-operational-border p-2"
-                />
-              </label>
+            <FormSection title={t("commercialSection")} collapsible defaultExpanded={false}>
+              <div className="flex flex-col gap-4">
+                <label className="flex flex-col gap-1 text-body">
+                  {t("unitPrice")}
+                  <Input
+                    name="unitPrice"
+                    aria-label={t("unitPrice")}
+                    placeholder={t("unitPrice")}
+                    type="number"
+                    step="0.01"
+                    min="0.01"
+                    value={form.unitPrice}
+                    onChange={(event) => setForm({ ...form, unitPrice: event.target.value })}
+                    required
+                    className="w-full"
+                  />
+                </label>
+                <label className="flex flex-col gap-1 text-body">
+                  {t("availability")}
+                  <Input
+                    name="availability"
+                    aria-label={t("availability")}
+                    placeholder={t("availability")}
+                    type="number"
+                    min="0"
+                    value={form.availability}
+                    onChange={(event) => setForm({ ...form, availability: event.target.value })}
+                    required
+                    className="w-full"
+                  />
+                </label>
+                <label className="flex flex-col gap-1 text-body">
+                  {t("discount")}
+                  <Input
+                    name="discountPercentage"
+                    aria-label={t("discount")}
+                    placeholder={t("discount")}
+                    type="number"
+                    min="0"
+                    max="100"
+                    value={form.discountPercentage}
+                    onChange={(event) => setForm({ ...form, discountPercentage: event.target.value })}
+                    className="w-full"
+                  />
+                </label>
+                <label className="flex flex-col gap-1 text-body">
+                  {t("serviceRegions")}
+                  <Input
+                    name="serviceRegions"
+                    aria-label={t("serviceRegions")}
+                    value={form.serviceRegions}
+                    onChange={(event) => setForm({ ...form, serviceRegions: event.target.value })}
+                    placeholder="SP, RJ, MG"
+                    className="w-full"
+                  />
+                </label>
+              </div>
+            </FormSection>
+            <div className="flex flex-col gap-3">
+              <PrimaryButton
+                type="submit"
+                disabled={saving || !supplierId}
+                className="min-h-12 w-full"
+                content={editingId ? t("save") : t("add")}
+                description={editingId ? t("save") : t("add")}
+              />
+              <WhiteButton
+                type="button"
+                onClick={() => setFormOpen(false)}
+                disabled={saving}
+                className="min-h-12 w-full"
+                content={t("cancel")}
+                description={t("cancel")}
+              />
             </div>
-            <div className="flex gap-2">
-              <button type="submit" disabled={saving || !supplierId} className="rounded-small bg-orange px-4 py-2 text-white disabled:opacity-50">
-                {editingId ? t("save") : t("add")}
-              </button>
-              {editingId ? (
-                <button type="button" onClick={startCreate} className="rounded-small border border-operational-border px-4 py-2">
-                  {t("cancel")}
-                </button>
-              ) : null}
-            </div>
-          </form>
+          </OperationalForm>
         </section>
       )}
 
-      <section className="flex flex-col gap-3">
-        <h2 className="font-medium">{t("listTitle")}</h2>
-        <ul className="divide-y divide-operational-border rounded-small border border-operational-border">
-          {offers.map((offer) => {
-            const status = getOfferStatus(offer);
-            return (
-              <li key={offer.id} className="flex flex-wrap items-center justify-between gap-3 p-4">
-                <div>
-                  <Link className="font-medium hover:underline" to={`${routePaths.offersManagement(lang)}/${encodeURIComponent(offer.id)}`}>
-                    {offerTitle(offer)}
-                  </Link>
-                  <p className="text-sm text-gray-600">
-                    {offer.model.brand} {offer.model.model} · R$ {offer.unitPrice} · {offer.availability} {t("units")} · {t(`status.${status}`)}
-                  </p>
-                </div>
-                <div className="flex gap-2">
-                  {can("PUT /api/offers/{id}") && status !== "CLOSED" && (
-                    <button
-                      type="button"
-                      disabled={busyId !== null}
-                      onClick={() => void handleStatus(offer, status === "PAUSED" ? "ACTIVE" : "PAUSED")}
-                      className="text-sm text-orange">
-                      {status === "PAUSED" ? t("resume") : t("pause")}
-                    </button>
-                  )}
-                  {can("PUT /api/offers/{id}") && (
-                    <button
-                      type="button"
-                      disabled={busyId !== null}
-                      onClick={() => void handleStatus(offer, status === "CLOSED" ? "ACTIVE" : "CLOSED")}
-                      className="text-sm text-orange">
-                      {status === "CLOSED" ? t("reopen") : t("close")}
-                    </button>
-                  )}
-                  {can("PUT /api/offers/{id}") && (
-                    <button type="button" onClick={() => startEdit(offer)} className="text-sm text-orange">
-                      {t("edit")}
-                    </button>
-                  )}
-                  {can("DELETE /api/offers/{id}") && (
-                    <button type="button" onClick={() => void handleDelete(offer.id)} className="text-sm text-red-700">
-                      {t("remove")}
-                    </button>
-                  )}
-                </div>
-              </li>
-            );
-          })}
-          {offers.length === 0 ? <li className="p-4 text-gray-600">{t("empty")}</li> : null}
-        </ul>
-      </section>
+      {!formOpen && (
+        <OperationalTable
+          label={t("listTitle")}
+          items={offers}
+          onRefresh={async () => apply(await load(companyId!))}
+          getKey={(offer) => offer.id}
+          empty={t("empty")}
+          columns={[
+            {
+              key: "title",
+              value: (offer) => offerTitle(offer, lang),
+              label: t("offerTitle"),
+              render: (offer) => (
+                <Link className="font-medium hover:underline" to={`${routePaths.offersManagement(lang)}/${encodeURIComponent(offer.id)}`}>
+                  {offerTitle(offer, lang)}
+                </Link>
+              ),
+            },
+            { key: "model", label: t("model"), render: (offer) => `${offer.model.brand} ${offer.model.model}` },
+            {
+              key: "price",
+              value: (offer) => offer.unitPrice,
+              label: t("unitPrice"),
+              render: (offer) => new Intl.NumberFormat(lang, { style: "currency", currency: "BRL" }).format(offer.unitPrice),
+            },
+            { key: "availability", label: t("availability"), render: (offer) => offer.availability },
+            {
+              key: "status",
+              filterable: true,
+              value: (offer) => t(`status.${getOfferStatus(offer)}`),
+              label: t("statusLabel"),
+              render: (offer) => (
+                <StatusField
+                  state={getOfferStatus(offer) === "ACTIVE" ? "approved" : getOfferStatus(offer) === "PAUSED" ? "pending" : "rejected"}
+                  label={t(`status.${getOfferStatus(offer)}`)}
+                />
+              ),
+            },
+            {
+              key: "actions",
+              label: tCommon("operational.actions"),
+              render: (offer) => {
+                const status = getOfferStatus(offer);
+                return (
+                  <div className="flex items-center gap-1">
+                    <ToolbarAction
+                      icon="eye"
+                      label={tCommon("actions.view")}
+                      to={`${routePaths.offersManagement(lang)}/${encodeURIComponent(offer.id)}`}
+                      backgroundColor="var(--color-input-bg)"
+                      className="h-8! w-10!"
+                    />
+                    {can("PATCH /api/offers/{id}/status") && status !== "CLOSED" && (
+                      <ToolbarAction
+                        icon={status === "PAUSED" ? "check" : "stop"}
+                        label={status === "PAUSED" ? t("resume") : t("pause")}
+                        disabled={busyId !== null}
+                        onClick={() => void handleStatus(offer, status === "PAUSED" ? "ACTIVE" : "PAUSED")}
+                        backgroundColor="var(--color-input-bg)"
+                        className="h-8! w-10!"
+                      />
+                    )}
+                    {can("PATCH /api/offers/{id}/status") && status !== "CLOSED" && (
+                      <ToolbarAction
+                        icon="x"
+                        label={t("close")}
+                        disabled={busyId !== null}
+                        onClick={() => void handleStatus(offer, "CLOSED")}
+                        backgroundColor="var(--color-input-bg)"
+                        className="h-8! w-10!"
+                      />
+                    )}
+                    {can("PUT /api/offers/{id}") && (
+                      <ToolbarAction
+                        icon="edit"
+                        label={t("edit")}
+                        onClick={() => startEdit(offer)}
+                        backgroundColor="var(--color-input-bg)"
+                        className="h-8! w-10!"
+                      />
+                    )}
+                    {can("DELETE /api/offers/{id}") && (
+                      <ConfirmedAction label={t("remove")} name={offerTitle(offer, lang)} onConfirm={() => handleDelete(offer.id)} />
+                    )}
+                  </div>
+                );
+              },
+            },
+          ]}
+        />
+      )}
     </OperationalPage>
   );
 }

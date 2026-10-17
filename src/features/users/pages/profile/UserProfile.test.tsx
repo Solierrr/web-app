@@ -1,3 +1,4 @@
+vi.mock("@@/layout/access/canvas/SideCanvas", () => ({ default: () => null }));
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import UserProfile from "./UserProfile";
@@ -40,6 +41,6 @@ describe("UserProfile", () => {
     render(<UserProfile />);
 
     expect(await screen.findByRole("heading", { name: "marina_alves" })).toBeInTheDocument();
-    expect(screen.getByText("marina@example.test")).toBeInTheDocument();
+    expect(screen.getAllByText("marina@example.test")).toHaveLength(2);
   });
 });

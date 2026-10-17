@@ -1,10 +1,13 @@
+import OperationalTable from "@@/layout/operational-page/OperationalTable";
+import ToolbarAction from "@@/ui/button/ToolbarAction";
+import ConfirmedAction from "@@/overlay/confirmation/ConfirmedAction";
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/inter/browser/languages";
-import { routePaths } from "@/config/inter/paths";
+import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
+import { routePaths } from "@/config/i18n/paths";
 import { logout } from "@/features/access/access.service";
 import type { DeviceSession } from "../../settings";
 import { listSessions, revokeSession } from "../../settings.service";
@@ -13,9 +16,10 @@ export default function SettingsSessionsPage() {
   const { t, i18n } = useTranslation("commons", { keyPrefix: "settingsSessions" });
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
+  const { t: tCommon } = useTranslation("commons");
   const navigate = useNavigate();
   const [sessions, setSessions] = useState<DeviceSession[] | null>(null);
-  const [message, setMessage] = useState<"revoked" | "error" | "revokeError" | null>(null);
+  const [message, setMessage] = useState<"error" | "revokeError" | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -35,9 +39,9 @@ export default function SettingsSessionsPage() {
     try {
       await revokeSession(id);
       setSessions((items) => items?.filter((item) => item.id !== id) ?? null);
-      setMessage("revoked");
+      setMessage(null);
     } catch {
-      setMessage("revokeError");
+      throw new Error(t("revokeError"));
     }
   }
 
@@ -47,30 +51,46 @@ export default function SettingsSessionsPage() {
   }
 
   return (
-    <OperationalPage title={t("title")} description={t("description")} loading={sessions === null && message === null} compact>
-      <ul className="flex flex-col divide-y divide-operational-border rounded-small border border-operational-border">
-        {sessions?.map((session) => (
-          <li key={session.id} className="flex flex-wrap items-center justify-between gap-3 p-4">
-            <div className="min-w-0">
-              <p className="truncate font-medium">{session.current ? t("current") : session.device}</p>
-              <p className="text-sm text-operational-muted">
-                {t("lastActive", { date: new Date(session.lastActive).toLocaleDateString(i18n.language) })}
-              </p>
-            </div>
-            {session.current ? (
-              <button type="button" onClick={() => void handleSignOut()} className="rounded-small border border-operational-border px-3 py-2">
-                {t("signOut")}
-              </button>
-            ) : (
-              <button type="button" onClick={() => void handleRevoke(session.id)} className="rounded-small border border-operational-border px-3 py-2">
-                {t("revoke")}
-              </button>
-            )}
-          </li>
-        ))}
-      </ul>
-      {sessions && sessions.length === 1 ? <p className="text-sm text-operational-muted">{t("onlyCurrent")}</p> : null}
-      {message ? <p role={message === "revoked" ? "status" : "alert"}>{t(message)}</p> : null}
+    <OperationalPage title={t("title")} description={t("description")} loading={sessions === null && message === null} centered sideBackground>
+      <OperationalTable
+        label={t("title")}
+        items={sessions ?? []}
+        onRefresh={async () => setSessions(await listSessions())}
+        getKey={(session) => session.id}
+        empty={tCommon("operational.empty")}
+        columns={[
+          {
+            key: "device",
+            value: (session) => (session.current ? t("current") : session.device),
+            label: t("device"),
+            render: (session) => <span className="font-medium">{session.current ? t("current") : session.device}</span>,
+          },
+          {
+            key: "active",
+            value: (session) => Date.parse(session.lastActive),
+            label: t("lastActiveLabel"),
+            render: (session) => new Date(session.lastActive).toLocaleDateString(i18n.language),
+          },
+          {
+            key: "actions",
+            label: tCommon("operational.actions"),
+            render: (session) =>
+              session.current ? (
+                <ToolbarAction
+                  icon="logout"
+                  label={t("signOut")}
+                  onClick={() => void handleSignOut()}
+                  backgroundColor="var(--color-input-bg)"
+                  className="h-8!"
+                />
+              ) : (
+                <ConfirmedAction icon="x" label={t("revoke")} name={session.device} onConfirm={() => handleRevoke(session.id)} />
+              ),
+          },
+        ]}
+      />
+      {sessions && sessions.length === 1 ? <p className="text-body text-operational-muted">{t("onlyCurrent")}</p> : null}
+      {message ? <p role="alert">{t(message)}</p> : null}
     </OperationalPage>
   );
 }

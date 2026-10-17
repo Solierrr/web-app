@@ -9,8 +9,7 @@ const companyMockData = [
     cnpj: "12345678000190",
     tradeName: "Solaria Energia",
     corporateName: "Solaria Energia Solar Ltda",
-    logoUrl: "https://i.pravatar.cc/150?img=68",
-    bannerUrl: "https://fastly.picsum.photos/id/918/1600/400.jpg?hmac=1gEvFp6O-XDh4848VnlwyOIrVy8s_aJNhYyTzxN9_JA",
+
     address: {
       street: "Avenida das Nações",
       number: "1200",
@@ -86,12 +85,14 @@ export function getMockCompanyReviews(): Company[] {
   try {
     const raw = localStorage.getItem("solaria.mock.companyReviews");
     return raw ? JSON.parse(raw) : companyMock;
-  } catch { return companyMock; }
+  } catch {
+    return companyMock;
+  }
 }
 
 export function decideMockCompany(id: string, status: Company["status"]): Company {
   const items = getMockCompanyReviews();
   const company = { ...(items.find((item) => item.id === id) ?? items[0]), status };
-  localStorage.setItem("solaria.mock.companyReviews", JSON.stringify(items.map((item) => item.id === company.id ? company : item)));
+  localStorage.setItem("solaria.mock.companyReviews", JSON.stringify(items.map((item) => (item.id === company.id ? company : item))));
   return company;
 }
