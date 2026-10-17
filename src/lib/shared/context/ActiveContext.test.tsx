@@ -7,6 +7,7 @@ import { getMyPlatformAdmin } from "@/features/platform-admin/platformAdmin.serv
 vi.mock("@/features/companies/company.service", () => ({
   getMyCompany: vi.fn(),
   getMyMembership: vi.fn(),
+  getMyContexts: vi.fn(),
 }));
 
 vi.mock("@/features/platform-admin/platformAdmin.service", () => ({
