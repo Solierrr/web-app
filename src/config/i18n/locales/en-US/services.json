@@ -34,7 +34,6 @@
     "getMyCompanyMembership": "Unable to load the company membership",
     "getMyCompany": "Unable to load your company",
     "getCompany": "Unable to get company {{id}}",
-    "getCompanyBySlug": "Unable to get company {{slug}}",
     "approveCompany": "Unable to approve company {{id}}",
     "rejectCompany": "Unable to reject company {{id}}",
     "listAllCompanies": "Unable to get the companies",
