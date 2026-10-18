@@ -34,7 +34,6 @@
     "getMyCompanyMembership": "No se pudo cargar el vínculo con la empresa",
     "getMyCompany": "No se pudo cargar tu empresa",
     "getCompany": "No se pudo obtener la empresa {{id}}",
-    "getCompanyBySlug": "No se pudo obtener la empresa {{slug}}",
     "approveCompany": "No se pudo aprobar la empresa {{id}}",
     "rejectCompany": "No se pudo rechazar la empresa {{id}}",
     "listAllCompanies": "No se pudo obtener las empresas",
