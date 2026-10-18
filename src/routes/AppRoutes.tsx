@@ -79,7 +79,7 @@ interface RouteDefinition {
 }
 
 const ACCESS: RouteDefinition[] = [
-  { key: "mobileAuthorization", path: (lang) => `${lang}/auth/mobile`, element: <Mobile /> },
+  { key: "mobileAuthorization", path: () => "auth/mobile", element: <Mobile /> },
   { key: "login", path: (lang) => joinSegments(lang, "login"), element: <LoginPage /> },
   { key: "register", path: (lang) => joinSegments(lang, "register"), element: <RegisterPage /> },
   { key: "forgotPassword", path: (lang) => joinSegments(lang, "forgotPassword"), element: <ForgotPasswordPage /> },
