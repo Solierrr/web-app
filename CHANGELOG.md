@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.3.0](https://github.com/Solierrr/web-app/compare/v3.2.0...v3.3.0) (2026-10-18)
+
+
+### Features
+
+* add firestore rules for qa device administration ([#73](https://github.com/Solierrr/web-app/issues/73)) ([043c613](https://github.com/Solierrr/web-app/commit/043c6137fb0ee354ebec0182014d9f5fbc2602ee))
+* add the local run commands ([6765868](https://github.com/Solierrr/web-app/commit/6765868ac10c763216f3c5e61f4368f1ff088676))
+* modernize the web application interface and add the purchase flow ([#71](https://github.com/Solierrr/web-app/issues/71)) ([88632ce](https://github.com/Solierrr/web-app/commit/88632ce9cb7c22e3134ab3100f874d1e5115df59))
+
+
+### Bug Fixes
+
+* serve the mobile authorization page under the language segment ([#81](https://github.com/Solierrr/web-app/issues/81)) ([12cc08a](https://github.com/Solierrr/web-app/commit/12cc08a4627f478dd066e419be9af8ad56b1afb4))
+
 ## [3.2.0](https://github.com/Solierrr/web-app/compare/v3.1.0...v3.2.0) (2026-10-01)
 
 
