@@ -238,18 +238,6 @@ export function getCompany(id: string): Promise<Company> {
   );
 }
 
-export function getCompanyBySlug(slug: string): Promise<Company> {
-  return resolveWithMocks(
-    () =>
-      httpJson<Company>(`${API_CORE_URL}/companies/slug/${slug}`, {
-        service: SERVICE_NAME,
-        operation: "getCompanyBySlug",
-        errorMessage: i18n.t("services:company.getCompanyBySlug", { slug }),
-      }),
-    () => companyMocks.find((company) => company.slug === slug) ?? companyMocks[0],
-  );
-}
-
 // Admin Solaria: aprovação/rejeição de empresas fica restrita ao platform admin
 // no backend (ver RbacAuthorizationService.PLATFORM_ADMIN_ONLY_ENDPOINTS).
 export async function approveCompany(id: string): Promise<Company> {
