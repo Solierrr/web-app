@@ -62,3 +62,5 @@ describe("ForgotPasswordPage", () => {
     expect(await screen.findByText("Não foi possível enviar o e-mail de recuperação. Tente novamente.")).toBeInTheDocument();
   });
 });
+
+vi.mock("@@/brand/logo/OrganicLogo", () => ({ default: () => <span role="img" aria-label="Solaria" /> }));

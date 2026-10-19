@@ -1,5 +1,21 @@
 import "@testing-library/jest-dom";
 import "@/config/i18n/internationalization";
+import { vi } from "vitest";
+
+Object.defineProperty(window, "matchMedia", {
+  configurable: true,
+  writable: true,
+  value: vi.fn((media: string) => ({
+    matches: false,
+    media,
+    onchange: null,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(() => true),
+  })),
+});
 
 // Node 25+ expõe um `localStorage` global sem os métodos de Storage quando não recebe
 // `--localstorage-file`, e ele tapa o do jsdom (`localStorage.clear is not a function`).

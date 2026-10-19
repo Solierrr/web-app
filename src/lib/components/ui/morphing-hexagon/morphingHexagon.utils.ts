@@ -9,7 +9,7 @@ const CENTER = 50;
 const TARGET_AREA = Math.PI * 34 * 34;
 const INNER_RADIUS = 31;
 const ROUNDING = 7;
-const ROTATION_PER_MS = (2 * Math.PI) / 18000;
+export const ROTATION_PER_MS = (2 * Math.PI) / 18000;
 const DAMPING = 0.6;
 const NATURAL_FREQUENCY = 12;
 
@@ -97,13 +97,33 @@ export function spring(progress: number) {
   return 1 - Math.exp(-decay * seconds) * (Math.cos(damped * seconds) + (decay / damped) * Math.sin(damped * seconds));
 }
 
-export function framePoints(elapsed: number): Point[] {
-  const step = Math.floor(elapsed / STEP_MS);
-  const local = elapsed - step * STEP_MS;
+export function framePoints(
+  elapsed: number,
+  motion: "expressive" | "subtle" = "expressive",
+  timing: { holdMs?: number; transitionMs?: number; rotateShape?: boolean; rotationElapsed?: number } = {},
+): Point[] {
+  const hold = Math.max(0, timing.holdMs ?? (motion === "subtle" ? 5000 : HOLD_MS));
+  const duration = Math.max(1, timing.transitionMs ?? (motion === "subtle" ? 500 : MORPH_MS));
+  const stepMs = hold + duration;
+  const rotation = (timing.rotateShape ?? motion === "expressive") ? (timing.rotationElapsed ?? elapsed) * ROTATION_PER_MS : 0;
+  if (motion === "subtle") {
+    const shapes = [0, 4];
+    const step = Math.floor(elapsed / (hold + duration));
+    const progress = Math.max(0, ((elapsed % (hold + duration)) - hold) / duration);
+    const eased = progress * progress * (3 - 2 * progress);
+    const from = shapeRadii(shapes[step % shapes.length]);
+    const to = shapeRadii(shapes[(step + 1) % shapes.length]);
+    return from.map((start, index): Point => {
+      const radius = start + (to[index] - start) * eased;
+      const angle = (index * 2 * Math.PI) / SAMPLES + rotation;
+      return [CENTER + radius * Math.cos(angle), CENTER + radius * Math.sin(angle)];
+    });
+  }
+  const step = Math.floor(elapsed / stepMs);
+  const local = elapsed - step * stepMs;
   const from = shapeRadii(step % SHAPE_COUNT);
   const to = shapeRadii((step + 1) % SHAPE_COUNT);
-  const progress = local <= HOLD_MS ? 0 : spring((local - HOLD_MS) / MORPH_MS);
-  const rotation = elapsed * ROTATION_PER_MS;
+  const progress = local <= hold ? 0 : spring((local - hold) / duration);
   return from.map((start, index): Point => {
     const radius = start + (to[index] - start) * progress;
     const angle = (index * 2 * Math.PI) / SAMPLES + rotation;

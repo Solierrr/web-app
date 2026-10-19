@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Sidebar from "@@/layout/sidebar/Sidebar";
+import { SIDEBAR_ICON_SIZE } from "@@/layout/sidebar/Sidebar.styles";
 import Icon from "@@/ui/icon/Icon";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
 import Loading from "@@/helpers/accessibility/loading/Loading";
@@ -19,7 +20,7 @@ import { clearAuthSession, getAuthSession } from "@/lib/shared/auth/authToken.ut
 import SaaSAccount from "./account/SaaSAccount";
 import { ActiveContextProvider, useActiveContext } from "@/lib/shared/context/ActiveContext";
 import { CompanyStatus } from "@/features/companies/company.enum";
-import { SaaSAccountNavigation, SaaSNavigation } from "./SaaSLayout.reusable";
+import { SaaSNavigation } from "./SaaSLayout.reusable";
 import { getOperationalNavigation } from "./SaaSLayout.presets";
 import ChatbotPage from "@/features/messages/pages/ChatbotPage";
 import SaaSContext from "@@/layout/saas-context/SaaSContext";
@@ -55,7 +56,7 @@ function SaaSLayoutContent() {
     () => window.matchMedia("(min-width: 1024px)").matches,
     () => true,
   );
-  const [collapsed, setCollapsed] = useState(() => localStorage.getItem("solaria.sidebar.collapsed") === "true");
+  const [collapsed, setCollapsed] = useState(true);
   const [mockEntryLoading, setMockEntryLoading] = useState(isAlwaysMockMode);
 
   useEffect(() => {
@@ -98,6 +99,7 @@ function SaaSLayoutContent() {
     document.body.style.overflow = "hidden";
     drawer.current?.querySelector<HTMLElement>("button, select, a")?.focus();
     function handleKey(event: KeyboardEvent) {
+      if (event.target instanceof Element && event.target.closest('[role="menu"]')) return;
       if (event.key === "Escape") {
         setOpen(false);
         menuButton.current?.focus();
@@ -140,7 +142,7 @@ function SaaSLayoutContent() {
   const companies = memberships.length ? memberships : company ? [{ id: company.id, name: company.tradeName }] : [];
   return (
     <div
-      className="operational-shell flex flex-col lg:flex-row h-dvh overflow-hidden bg-white"
+      className="operational-shell flex flex-col lg:flex-row h-dvh overflow-hidden bg-operational-shell"
       onContextMenu={(event) => {
         if (event.defaultPrevented) return;
         event.preventDefault();
@@ -167,19 +169,17 @@ function SaaSLayoutContent() {
         inert={!desktop && !open ? true : undefined}
         className={`fixed inset-y-0 left-0 z-40 transition-transform duration-250 ease-in-out motion-reduce:transition-none lg:static ${!desktop && !open ? "-translate-x-full pointer-events-none" : "translate-x-0"}`}>
         <Sidebar
+          hideToggle
           collapsed={effectiveCollapsed}
-          onCollapsedChange={(next) => {
-            setCollapsed(next);
-            localStorage.setItem("solaria.sidebar.collapsed", String(next));
-          }}
+          onCollapsedChange={setCollapsed}
           collapseLabel={t("shell.collapseSidebar")}
           expandLabel={t("shell.expandSidebar")}
           header={
             <>
-              <SaaSContext collapsed={effectiveCollapsed} />
+              <SaaSContext collapsed={effectiveCollapsed} onToggle={desktop ? () => setCollapsed(!collapsed) : undefined} />
               {!desktop && (
-                <button type="button" onClick={() => setOpen(false)} className="flex min-h-12 w-full items-center gap-3 px-6">
-                  <Icon name="x" size={20} />
+                <button type="button" onClick={() => setOpen(false)} className="flex min-h-11 w-full items-center gap-2 px-6 text-sidebar hover:bg-sidebar-hover">
+                  <Icon name="x" size={SIDEBAR_ICON_SIZE} />
                   {t("shell.closeMenu")}
                 </button>
               )}
@@ -197,7 +197,6 @@ function SaaSLayoutContent() {
                   onNavigate={() => setOpen(false)}
                 />
               }
-              after={<SaaSAccountNavigation collapsed={effectiveCollapsed} signingOut={signingOut} onLogout={handleLogout} />}
               groups={groups}
               lang={lang}
               context={companyContext ? company.id : "personal"}
@@ -209,10 +208,11 @@ function SaaSLayoutContent() {
         </Sidebar>
       </div>
       <div className="flex min-h-0 min-w-0 flex-1 flex-col">
-        <header className="navbar-frame justify-between gap-4">
+        <header className="navbar-frame bg-operational-shell! justify-between gap-4">
           <ToolbarAction
             ref={menuButton}
             icon="menu"
+            iconSize={SIDEBAR_ICON_SIZE}
             label={t("shell.openMenu")}
             content={t("shell.openMenu")}
             aria-controls="operational-sidebar"
@@ -224,6 +224,7 @@ function SaaSLayoutContent() {
             <ToolbarAction
               to={routePaths.home(lang)}
               icon="layoutGrid"
+              iconSize={SIDEBAR_ICON_SIZE}
               label={t("shell.exploreCatalog")}
               content={t("shell.exploreCatalog")}
               hideContentOnMobile
@@ -231,6 +232,7 @@ function SaaSLayoutContent() {
             <ToolbarAction
               ref={assistantButton}
               icon="sparkles"
+              iconSize={SIDEBAR_ICON_SIZE}
               iconGradient="orange"
               label={t("navigation.items.chatbot")}
               aria-controls="operational-assistant"
@@ -241,7 +243,7 @@ function SaaSLayoutContent() {
                 setAssistantOpen(true);
               }}
             />
-            <SaaSAccount email={session?.email ?? ""} managedCompanyName={session?.managedByCompany?.name} />
+            <SaaSAccount signingOut={signingOut} onLogout={handleLogout} email={session?.email ?? ""} managedCompanyName={session?.managedByCompany?.name} />
           </div>
         </header>
         <div

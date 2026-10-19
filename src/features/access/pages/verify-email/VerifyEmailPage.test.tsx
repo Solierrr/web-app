@@ -17,6 +17,19 @@ beforeEach(() => {
 });
 
 describe("VerifyEmailPage", () => {
+  it("preserves delivery feedback from a completed registration", async () => {
+    render(
+      <MemoryRouter
+        initialEntries={[
+          { pathname: "/pt-BR/verificar-email", state: { verificationError: "O envio de e-mail está indisponível. Tente novamente mais tarde." } },
+        ]}>
+        <VerifyEmailPage />
+      </MemoryRouter>,
+    );
+    expect(await screen.findByRole("alert")).toHaveTextContent("O envio de e-mail está indisponível");
+    expect(screen.getByRole("button", { name: "Enviar email de confirmação" })).toBeEnabled();
+  });
+
   it("checks verification in api-auth and requests a confirmation email", async () => {
     vi.mocked(requestEmailVerification).mockResolvedValue(undefined);
     render(
@@ -54,3 +67,5 @@ describe("VerifyEmailPage", () => {
     expect(screen.queryByText("Solicitação recebida. Verifique sua caixa de entrada.")).not.toBeInTheDocument();
   });
 });
+
+vi.mock("@@/brand/logo/OrganicLogo", () => ({ default: () => <span role="img" aria-label="Solaria" /> }));

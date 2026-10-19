@@ -8,6 +8,7 @@ import { routePaths } from "@/config/i18n/paths";
 import { login, register } from "@/features/access/access.service";
 import { requestEmailVerification } from "@/features/access/access.credentials.service";
 import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
+import { getAccessErrorMessage } from "@/features/access/access.utils";
 
 export default function RegisterPage() {
   const { t } = useTranslation("access");
@@ -17,6 +18,7 @@ export default function RegisterPage() {
   const location = useLocation();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [createdEmail, setCreatedEmail] = useState<string | null>(null);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     if (busy) return;
@@ -33,19 +35,25 @@ export default function RegisterPage() {
 
     setBusy(true);
     try {
-      await register({ email, password });
+      if (createdEmail !== email) {
+        await register({ email, password });
+        setCreatedEmail(email);
+      }
       await login({ email, password });
       if (!isAlwaysMockMode("AUTH")) {
         try {
           await requestEmailVerification();
-        } catch {
-          navigate(routePaths.verifyEmail(lang), { replace: true, state: location.state });
+        } catch (failure) {
+          navigate(routePaths.verifyEmail(lang), {
+            replace: true,
+            state: { ...location.state, verificationError: getAccessErrorMessage(failure, t("feedback.emailUnavailable")) },
+          });
           return;
         }
       }
       navigate(routePaths.verifyEmail(lang), { replace: true, state: location.state });
-    } catch {
-      setError(t("register.error"));
+    } catch (failure) {
+      setError(getAccessErrorMessage(failure, t("register.error")));
     } finally {
       setBusy(false);
     }
@@ -56,6 +64,7 @@ export default function RegisterPage() {
       heading={t("register.title")}
       compact
       animatedBackground={false}
+      notice={createdEmail ? t("register.accountCreated") : undefined}
       formHeader={<p className="text-center text-body text-operational-muted">{t("register.helperText")}</p>}
       fields={[
         {
@@ -64,6 +73,7 @@ export default function RegisterPage() {
           label: t("login.emailLabel"),
           placeholder: t("register.emailPlaceholder"),
           autoComplete: "email",
+          readOnly: Boolean(createdEmail),
         },
         {
           name: "password",
@@ -82,7 +92,7 @@ export default function RegisterPage() {
           minLength: 12,
         },
       ]}
-      submitLabel={t("register.submit")}
+      submitLabel={t(createdEmail ? "login.signIn" : "register.submit")}
       busy={busy}
       error={error}
       onSubmit={handleSubmit}

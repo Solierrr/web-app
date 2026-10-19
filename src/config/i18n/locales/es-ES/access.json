@@ -40,7 +40,8 @@
     "terms": "Términos de uso",
     "privacy": "Política de privacidad",
     "cookies": "Política de cookies",
-    "microsoft": "Continuar con Microsoft"
+    "microsoft": "Continuar con Microsoft",
+    "welcome": "Qué gusto tenerte por aquí"
   },
   "register": {
     "helperText": "Crea tu cuenta para acceder al marketplace",
@@ -53,7 +54,8 @@
     "confirmPasswordPlaceholder": "Repite tu contraseña",
     "emailPlaceholder": "Introduce tu correo aquí",
     "confirmPasswordLabel": "Confirmar contraseña",
-    "passwordPlaceholder": "Crea una contraseña"
+    "passwordPlaceholder": "Crea una contraseña",
+    "accountCreated": "Tu cuenta ha sido creada. Inicia sesión para continuar; no necesitas registrarte de nuevo."
   },
   "forgotPassword": {
     "helperText": "Indica tu correo electrónico para recibir las instrucciones de recuperación",
@@ -61,7 +63,8 @@
     "sent": "Si ese correo está registrado, recibirás un enlace para restablecer tu contraseña.",
     "error": "No se pudo enviar el correo de recuperación. Inténtalo de nuevo.",
     "rememberedPasswordPrefix": "¿Recordaste tu contraseña?",
-    "backToLogin": "Volver al inicio de sesión"
+    "backToLogin": "Volver al inicio de sesión",
+    "title": "Recuperar contraseña"
   },
   "verifyEmail": {
     "title": "Verifica tu correo",
@@ -90,7 +93,8 @@
     "error": "No se pudo restablecer la contraseña. Solicita un nuevo enlace e inténtalo de nuevo.",
     "invalidLink": "Este enlace de restablecimiento no es válido o ha caducado.",
     "mismatch": "Las contraseñas no coinciden.",
-    "requestNewLink": "Solicitar nuevo enlace"
+    "requestNewLink": "Solicitar nuevo enlace",
+    "title": "Restablecer contraseña"
   },
   "canvas": {
     "waves": {
@@ -108,5 +112,30 @@
       "title": "Cuadrícula interactiva",
       "description": "Pasa el cursor para iluminar solo el cuadrado que está debajo. Haz clic para propagar una onda de color por los cuadrados cercanos."
     }
+  },
+  "feedback": {
+    "required": "Completa este campo.",
+    "invalidEmail": "Introduce un correo electrónico válido.",
+    "minLength": "Usa al menos {{count}} caracteres.",
+    "unavailable": "El servicio de acceso no está disponible temporalmente. Inténtalo más tarde.",
+    "connection": "No se pudo conectar con el servicio. Revisa tu conexión e inténtalo de nuevo.",
+    "tooManyAttempts": "Demasiados intentos. Espera un momento antes de volver a intentarlo.",
+    "popupBlocked": "Permite la ventana de acceso en el navegador e inténtalo de nuevo.",
+    "cancelled": "Se canceló el acceso. Puedes volver a intentarlo cuando quieras.",
+    "providerUnavailable": "Este método de acceso no está disponible. Usa correo y contraseña o inténtalo más tarde.",
+    "providerFailed": "No se pudo completar el acceso con este proveedor. Inténtalo de nuevo.",
+    "signInFailed": "No se pudo iniciar sesión. Inténtalo de nuevo.",
+    "invalidLink": "Este enlace no es válido, ha caducado o ya se utilizó. Solicita uno nuevo.",
+    "emailUnavailable": "El envío de correo no está disponible. Inténtalo más tarde.",
+    "passwordPolicy": "Usa una contraseña de al menos 12 caracteres. Si es demasiado larga, acórtala.",
+    "requiredHelp": "Completa todos los campos obligatorios para continuar."
+  },
+  "entry": {
+    "title": "¿Cómo quieres continuar?",
+    "description": "Elige lo que quieres hacer para continuar.",
+    "signIn": "Ya tengo una cuenta",
+    "register": "Quiero crear una cuenta",
+    "email": "Continuar con correo y contraseña",
+    "back": "Volver a las opciones"
   }
 }

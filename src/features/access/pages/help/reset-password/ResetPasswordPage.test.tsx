@@ -92,3 +92,5 @@ describe("ResetPasswordPage", () => {
     expect(completePasswordReset).not.toHaveBeenCalled();
   });
 });
+
+vi.mock("@@/brand/logo/OrganicLogo", () => ({ default: () => <span role="img" aria-label="Solaria" /> }));
