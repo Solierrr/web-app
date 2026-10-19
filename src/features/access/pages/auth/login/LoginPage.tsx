@@ -17,6 +17,7 @@ import { getRememberedLogin, saveRememberedLogin, type RememberedLogin } from ".
 import { getAccessErrorMessage, getAccessHttpError } from "@/features/access/access.utils";
 import { LoginEntryChoices, LoginShortcuts } from "./LoginPage.reusable";
 import Surface from "@@/ui/surface/Surface";
+import LanguageSwitcher from "@@/layout/navbar/LanguageSwitcher";
 
 export default function LoginPage({ background }: { background?: ReactNode } = {}) {
   const { t } = useTranslation("access");
@@ -155,6 +156,7 @@ export default function LoginPage({ background }: { background?: ReactNode } = {
     return (
       <Access
         key="entry"
+        topAction={<LanguageSwitcher />}
         heading={t("entry.title")}
         helperText={t("entry.description")}
         logoWidth={7}
@@ -190,6 +192,7 @@ export default function LoginPage({ background }: { background?: ReactNode } = {
   return (
     <Access
       key="signin"
+      topAction={<LanguageSwitcher />}
       backAction={
         <ToolbarAction
           icon="chevronLeft"

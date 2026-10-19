@@ -45,6 +45,7 @@ interface AccessProps {
   logoWidth?: number;
   logoInteractive?: boolean;
   backAction?: ReactNode;
+  topAction?: ReactNode;
 }
 
 export default function Access({
@@ -67,6 +68,7 @@ export default function Access({
   logoWidth = 7,
   logoInteractive = false,
   backAction,
+  topAction,
 }: AccessProps) {
   const { t } = useTranslation("access");
   const id = useId();
@@ -102,6 +104,7 @@ export default function Access({
 
   return (
     <main className="relative isolate flex min-h-dvh w-full flex-col items-center gap-6 bg-white px-6 pt-8 pb-10 scrollbar-none sm:px-12">
+      {topAction && <div className="absolute right-6 top-6 z-20">{topAction}</div>}
       {animatedBackground &&
         (background ? (
           <div aria-hidden="true" className="absolute inset-0 -z-10 overflow-hidden">
