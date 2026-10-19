@@ -6,6 +6,9 @@ import { routePaths } from "@/config/i18n/paths";
 import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { getAccountIdentity, confirmEmailVerification, requestEmailVerification } from "@/features/access/access.credentials.service";
 import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
+import { getAccessErrorMessage } from "@/features/access/access.utils";
+import Alert from "@@/feedback/alert/Alert";
+import { PrimaryButton, SurfaceButton } from "@@/ui/button/Button.presets";
 
 export default function VerifyEmailPage() {
   const { lang: parameter } = useParams();
@@ -17,7 +20,7 @@ export default function VerifyEmailPage() {
   const navigate = useNavigate();
   const [verified, setVerified] = useState(isAlwaysMockMode("AUTH"));
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState((location.state as { verificationError?: string } | null)?.verificationError ?? "");
   const [sent, setSent] = useState(false);
   const [cooldown, setCooldown] = useState(0);
   const returnTo = (location.state as { returnTo?: string } | null)?.returnTo;
@@ -26,9 +29,16 @@ export default function VerifyEmailPage() {
   useEffect(() => {
     if (isAlwaysMockMode("AUTH")) return;
     let active = true;
-    getAccountIdentity().then((account) => { if (active) setVerified(account.emailVerified); })
-      .catch(() => { if (active) setError(t("errors.UNAVAILABLE")); });
-    return () => { active = false; };
+    getAccountIdentity()
+      .then((account) => {
+        if (active) setVerified(account.emailVerified);
+      })
+      .catch((failure) => {
+        if (active) setError(getAccessErrorMessage(failure, t("errors.UNAVAILABLE")));
+      });
+    return () => {
+      active = false;
+    };
   }, [t]);
   useEffect(() => {
     if (cooldown <= 0) return;
@@ -41,31 +51,65 @@ export default function VerifyEmailPage() {
     setBusy(true);
     setError("");
     try {
-      if (token) { await confirmEmailVerification(token); setSearch({}, { replace: true }); }
+      if (token) {
+        await confirmEmailVerification(token);
+        setSearch({}, { replace: true });
+      }
       const account = await getAccountIdentity();
       setVerified(account.emailVerified);
-      if (!account.emailVerified) setError(t("email.pending"));
-    } catch { setError(t("errors.UNAVAILABLE")); }
-    finally { setBusy(false); }
+    } catch (failure) {
+      setError(getAccessErrorMessage(failure, t("errors.UNAVAILABLE")));
+    } finally {
+      setBusy(false);
+    }
   }
   async function resend() {
     if (busy || cooldown > 0) return;
     setBusy(true);
     setError("");
-    try { await requestEmailVerification(); setSent(true); setCooldown(60); }
-    catch { setError(t("email.unavailable")); }
-    finally { setBusy(false); }
+    try {
+      await requestEmailVerification();
+      setSent(true);
+      setCooldown(60);
+    } catch (failure) {
+      setError(getAccessErrorMessage(failure, t("email.unavailable")));
+    } finally {
+      setBusy(false);
+    }
   }
 
-  return <Access heading={t("email.title")} animatedBackground={false} busy={busy} error={error}>
-    <div className="flex flex-col gap-4">
-      <p role="status">{t(verified ? "email.verified" : sent ? "email.sent" : "email.pending")}</p>
-      {verified ? <button type="button" onClick={() => navigate(destination, { replace: true })}>{t("email.continue")}</button> : <>
-        <button type="button" disabled={busy} onClick={() => void check()}>{t(token ? "email.confirm" : "email.check")}</button>
-        <button type="button" disabled={busy || cooldown > 0} onClick={() => void resend()}>
-          {cooldown > 0 ? t("email.cooldown", { seconds: cooldown }) : t("email.resend")}
-        </button>
-      </>}
-    </div>
-  </Access>;
+  return (
+    <Access heading={t("email.title")} animatedBackground={false} busy={busy} error={error}>
+      <div className="flex flex-col gap-4">
+        <Alert state={verified || sent ? "success" : "info"}>{t(verified ? "email.verified" : sent ? "email.sent" : "email.pending")}</Alert>
+        {verified ? (
+          <PrimaryButton
+            variant="soft"
+            type="button"
+            content={t("email.continue")}
+            description={t("email.continue")}
+            onClick={() => navigate(destination, { replace: true })}
+          />
+        ) : (
+          <>
+            <PrimaryButton
+              variant="soft"
+              type="button"
+              disabled={busy}
+              content={t(token ? "email.confirm" : "email.check")}
+              description={t(token ? "email.confirm" : "email.check")}
+              onClick={() => void check()}
+            />
+            <SurfaceButton
+              type="button"
+              disabled={busy || cooldown > 0}
+              onClick={() => void resend()}
+              content={cooldown > 0 ? t("email.cooldown", { seconds: cooldown }) : t("email.resend")}
+              description={t("email.resend")}
+            />
+          </>
+        )}
+      </div>
+    </Access>
+  );
 }

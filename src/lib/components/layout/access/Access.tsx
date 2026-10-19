@@ -1,9 +1,14 @@
-import type { ChangeEventHandler, FormEvent, ReactNode } from "react";
+import { useId, useState, type ChangeEventHandler, type FormEvent, type ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import Input from "@@/ui/input/Input";
 import { PasswordInput } from "@@/ui/input/Input.presets";
 import { PrimaryButton } from "@@/ui/button/Button.presets";
-import Logo from "@/lib/components/brand/logo/Logo";
-import Canvas from "./canvas/Canvas";
+import OrganicLogo from "@@/brand/logo/OrganicLogo";
+import SideCanvas from "./canvas/SideCanvas";
+import Alert from "@@/feedback/alert/Alert";
+import FieldFeedback from "@@/feedback/field-feedback/FieldFeedback";
+import { notify } from "@@/feedback/toast/Toast.utils";
+import Surface from "@@/ui/surface/Surface";
 
 export interface AccessField {
   name: string;
@@ -27,6 +32,7 @@ interface AccessProps {
   submitLabel?: string;
   submitVariant?: "advanced" | "flat" | "soft";
   error?: ReactNode;
+  notice?: ReactNode;
   footer?: ReactNode;
   onSubmit?: (event: FormEvent<HTMLFormElement>) => void;
   children?: ReactNode;
@@ -36,6 +42,9 @@ interface AccessProps {
   formHeader?: ReactNode;
   beforeSubmit?: ReactNode;
   background?: ReactNode;
+  logoWidth?: number;
+  logoInteractive?: boolean;
+  backAction?: ReactNode;
 }
 
 export default function Access({
@@ -43,80 +52,167 @@ export default function Access({
   helperText,
   fields = [],
   submitLabel,
-  submitVariant = "flat",
+  submitVariant = "soft",
   error,
+  notice,
   footer,
   onSubmit,
   children,
   busy = false,
   animatedBackground = true,
-  compact = false,
+  compact = true,
   formHeader,
   beforeSubmit,
   background,
+  logoWidth = 7,
+  logoInteractive = false,
+  backAction,
 }: AccessProps) {
+  const { t } = useTranslation("access");
+  const id = useId();
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [fieldValues, setFieldValues] = useState<Record<string, string>>({});
+
+  function getFieldError(field: AccessField, value: string): string {
+    if (!value.trim()) return t("feedback.required");
+    if (field.type === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())) return t("feedback.invalidEmail");
+    if (field.minLength && value.length < field.minLength) return t("feedback.minLength", { count: field.minLength });
+    return "";
+  }
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (busy) return;
+    const errors: Record<string, string> = {};
+    for (const field of fields) {
+      const input = event.currentTarget.elements.namedItem(field.name);
+      if (!(input instanceof HTMLInputElement)) continue;
+      const message = getFieldError(field, input.value);
+      if (message) errors[field.name] = message;
+    }
+    setFieldErrors(errors);
+    if (Object.keys(errors).length) {
+      if (Object.values(errors).includes(t("feedback.required"))) notify(t("feedback.requiredHelp"));
+      const input = event.currentTarget.elements.namedItem(Object.keys(errors)[0]);
+      if (input instanceof HTMLInputElement) input.focus();
+      return;
+    }
     onSubmit?.(event);
   }
 
   return (
-    <div className="flex min-h-screen w-full bg-white scrollbar-none">
-      <div
-        className={`flex flex-col w-full justify-center items-center-safe ${compact ? "px-6 py-10 sm:px-12" : "sm:px-20"} ${animatedBackground ? (compact ? "lg:w-1/2 lg:shrink-0" : "lg:w-7/11") : ""}`}>
+    <main className="relative isolate flex min-h-dvh w-full flex-col items-center gap-6 bg-white px-6 pt-8 pb-10 scrollbar-none sm:px-12">
+      {animatedBackground &&
+        (background ? (
+          <div aria-hidden="true" className="absolute inset-0 -z-10 overflow-hidden">
+            {background}
+          </div>
+        ) : (
+          <SideCanvas centerWidth="36rem" centerHeight="48rem" />
+        ))}
+      <div className="relative flex h-28 w-full shrink-0 items-center justify-center">
+        {backAction && <div className="absolute left-0 top-1/2 -translate-y-1/2">{backAction}</div>}
+        <OrganicLogo width={logoWidth} interactive={logoInteractive} />
+      </div>
+      <div className="flex w-full flex-col items-center justify-center">
         <div className={`flex flex-col w-full ${compact ? "max-w-96" : "max-w-120 max-md:px-8 max-sm:px-4"} gap-6 items-center-safe h-min`}>
-          <div className={`flex flex-col w-full ${compact ? "gap-7" : "gap-12"}`}>
-            <Logo className={compact ? "self-center" : "self-baseline"} />
-            {heading !== "Solaria" && <h1 className={`text-2xl font-semi-bold ${compact ? "text-center" : ""}`}>{heading}</h1>}
+          <div className="flex flex-col w-full gap-6">
+            {(heading !== "Solaria" || helperText) && (
+              <div className="flex flex-col gap-1 text-center">
+                {heading !== "Solaria" && <h1 className="text-subtitle font-semi-bold leading-tight text-operational-ink">{heading}</h1>}
+                {helperText && <div className="text-label leading-relaxed text-operational-muted">{helperText}</div>}
+              </div>
+            )}
             {formHeader}
+            {notice && <Alert state="info">{notice}</Alert>}
 
             {submitLabel ? (
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
+              <form
+                noValidate
+                aria-busy={busy}
+                onSubmit={handleSubmit}
+                onChange={(event) => {
+                  const input = event.target;
+                  if (!(input instanceof HTMLInputElement)) return;
+                  const field = fields.find((item) => item.name === input.name);
+                  if (!field) return;
+                  setFieldValues((current) => ({ ...current, [input.name]: input.value }));
+                  if (fieldErrors[input.name]) setFieldErrors((current) => ({ ...current, [input.name]: getFieldError(field, input.value) }));
+                }}
+                className="flex flex-col gap-4 w-full">
                 {children}
-                {fields.map((field) => (
-                  <div key={field.name} className="flex flex-col gap-2">
-                    {field.label && (
-                      <label htmlFor={`access-${field.name}`} className="text-body font-medium">
-                        {field.label}
-                      </label>
-                    )}
-                    {field.password ? (
-                      <PasswordInput
-                        id={`access-${field.name}`}
-                        name={field.name}
-                        placeholder={field.placeholder}
-                        minLength={field.minLength}
-                        required
-                        defaultValue={field.defaultValue}
-                        value={field.value}
-                        onChange={field.onChange}
-                        autoComplete={field.autoComplete}
-                        autoFocus={field.autoFocus}
-                        readOnly={field.readOnly}
-                        disabled={busy}
-                        aria-label={field.label ?? field.name}
-                        className={`w-full ${compact ? "min-h-12" : ""}`}
-                      />
-                    ) : (
-                      <Input
-                        id={`access-${field.name}`}
-                        name={field.name}
-                        type={field.type ?? "text"}
-                        placeholder={field.placeholder}
-                        required
-                        defaultValue={field.defaultValue}
-                        value={field.value}
-                        onChange={field.onChange}
-                        autoComplete={field.autoComplete}
-                        autoFocus={field.autoFocus}
-                        readOnly={field.readOnly}
-                        disabled={busy}
-                        aria-label={field.label ?? field.name}
-                        className={`w-full ${compact ? "min-h-12" : ""}`}
-                      />
-                    )}
-                  </div>
-                ))}
+                {fields.length > 0 && (
+                  <Surface contentClassName="divide-y divide-operational-border/60">
+                    {fields.map((field) => (
+                      <div key={field.name} className="group relative flex flex-col px-4 py-1">
+                        {field.label && (
+                          <label
+                            htmlFor={`${id}-${field.name}`}
+                            className="absolute left-4 top-8 z-10 -translate-y-1/2 cursor-text text-body font-medium text-operational-muted transition-all duration-150 group-focus-within:top-3 group-focus-within:text-sidebar group-has-[input:not(:placeholder-shown)]:top-3 group-has-[input:not(:placeholder-shown)]:text-sidebar motion-reduce:transition-none">
+                            {field.label}
+                            {getFieldError(field, field.value ?? fieldValues[field.name] ?? field.defaultValue ?? "") && (
+                              <span aria-hidden="true" className="text-feedback-error">
+                                {" "}
+                                *
+                              </span>
+                            )}
+                          </label>
+                        )}
+                        {field.password ? (
+                          <PasswordInput
+                            id={`${id}-${field.name}`}
+                            name={field.name}
+                            placeholder={field.placeholder}
+                            minLength={field.minLength}
+                            required
+                            defaultValue={field.defaultValue}
+                            value={field.value}
+                            onChange={field.onChange}
+                            autoComplete={field.autoComplete}
+                            autoFocus={field.autoFocus}
+                            readOnly={field.readOnly}
+                            disabled={busy}
+                            aria-label={field.label ?? field.name}
+                            aria-invalid={Boolean(fieldErrors[field.name])}
+                            aria-describedby={
+                              fieldErrors[field.name] && fieldErrors[field.name] !== t("feedback.required")
+                                ? `${id}-${field.name}-feedback`
+                                : undefined
+                            }
+                            className="w-full min-h-14 bg-transparent! rounded-none! [&_input]:px-0 [&_input::placeholder]:text-transparent [&_input:focus::placeholder]:text-input-text [&_input]:pt-5 [&_input]:pb-1 [&_button]:mr-0"
+                          />
+                        ) : (
+                          <Input
+                            id={`${id}-${field.name}`}
+                            name={field.name}
+                            type={field.type ?? "text"}
+                            placeholder={field.placeholder}
+                            required
+                            defaultValue={field.defaultValue}
+                            value={field.value}
+                            onChange={field.onChange}
+                            autoComplete={field.autoComplete}
+                            autoFocus={field.autoFocus}
+                            readOnly={field.readOnly}
+                            disabled={busy}
+                            aria-label={field.label ?? field.name}
+                            aria-invalid={Boolean(fieldErrors[field.name])}
+                            aria-describedby={
+                              fieldErrors[field.name] && fieldErrors[field.name] !== t("feedback.required")
+                                ? `${id}-${field.name}-feedback`
+                                : undefined
+                            }
+                            className="w-full min-h-14 bg-transparent! rounded-none! [&_input]:px-0 [&_input::placeholder]:text-transparent [&_input:focus::placeholder]:text-input-text [&_input]:pt-5 [&_input]:pb-1 [&_button]:mr-0"
+                          />
+                        )}
+                        <FieldFeedback
+                          id={`${id}-${field.name}-feedback`}
+                          message={fieldErrors[field.name] === t("feedback.required") ? undefined : fieldErrors[field.name]}
+                        />
+                      </div>
+                    ))}
+                  </Surface>
+                )}
                 {beforeSubmit}
                 <PrimaryButton
                   variant={submitVariant}
@@ -131,23 +227,11 @@ export default function Access({
             ) : (
               <div className="flex flex-col gap-4 w-full">{children}</div>
             )}
-            {error && (
-              <div role="alert" className="text-orange">
-                {error}
-              </div>
-            )}
+            {error && <Alert>{error}</Alert>}
           </div>
-          {helperText && <div className="text-black/70">{helperText}</div>}
           {footer}
         </div>
       </div>
-
-      {animatedBackground &&
-        (background ?? (
-          <section className="relative hidden min-h-screen min-w-0 flex-1 overflow-hidden bg-white lg:block">
-            <Canvas variant="grid" />
-          </section>
-        ))}
-    </div>
+    </main>
   );
 }

@@ -40,7 +40,8 @@
     "terms": "Terms of use",
     "privacy": "Privacy policy",
     "cookies": "Cookie policy",
-    "microsoft": "Continue with Microsoft"
+    "microsoft": "Continue with Microsoft",
+    "welcome": "Good to have you here"
   },
   "register": {
     "helperText": "Create your account to access the marketplace",
@@ -53,7 +54,8 @@
     "confirmPasswordPlaceholder": "Repeat your password",
     "emailPlaceholder": "Enter your email here",
     "confirmPasswordLabel": "Confirm password",
-    "passwordPlaceholder": "Create a password"
+    "passwordPlaceholder": "Create a password",
+    "accountCreated": "Your account was created. Sign in to continue; you do not need to register again."
   },
   "forgotPassword": {
     "helperText": "Enter your email to receive recovery instructions",
@@ -61,7 +63,8 @@
     "sent": "If that email is registered, you will receive a link to reset your password.",
     "error": "Could not send the recovery email. Please try again.",
     "rememberedPasswordPrefix": "Remembered your password?",
-    "backToLogin": "Back to login"
+    "backToLogin": "Back to login",
+    "title": "Recover password"
   },
   "verifyEmail": {
     "title": "Verify your email",
@@ -90,7 +93,8 @@
     "error": "We could not reset the password. Request a new link and try again.",
     "invalidLink": "This reset link is invalid or has expired.",
     "mismatch": "The passwords do not match.",
-    "requestNewLink": "Request a new link"
+    "requestNewLink": "Request a new link",
+    "title": "Reset password"
   },
   "canvas": {
     "waves": {
@@ -108,5 +112,30 @@
       "title": "Interactive grid",
       "description": "Hover to light up only the square under the pointer. Click to spread a wave of color through nearby squares."
     }
+  },
+  "feedback": {
+    "required": "Fill in this field.",
+    "invalidEmail": "Enter a valid email address.",
+    "minLength": "Use at least {{count}} characters.",
+    "unavailable": "The sign-in service is temporarily unavailable. Please try again later.",
+    "connection": "Could not connect to the service. Check your connection and try again.",
+    "tooManyAttempts": "Too many attempts. Wait a moment before trying again.",
+    "popupBlocked": "Allow the sign-in popup in your browser and try again.",
+    "cancelled": "Sign-in was cancelled. You can try again whenever you are ready.",
+    "providerUnavailable": "This sign-in method is currently unavailable. Use email and password or try again later.",
+    "providerFailed": "Could not complete sign-in with this provider. Please try again.",
+    "signInFailed": "Could not sign in. Please try again.",
+    "invalidLink": "This link is invalid, expired or already used. Request a new link.",
+    "emailUnavailable": "Email delivery is unavailable. Please try again later.",
+    "passwordPolicy": "Use a password with at least 12 characters. If it is too long, shorten it.",
+    "requiredHelp": "Fill in all required fields to continue."
+  },
+  "entry": {
+    "title": "How would you like to continue?",
+    "description": "Choose what you would like to do next.",
+    "signIn": "I already have an account",
+    "register": "I want to create an account",
+    "email": "Continue with email and password",
+    "back": "Back to options"
   }
 }
