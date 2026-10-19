@@ -3,7 +3,8 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 import { NotFoundPage } from "./NotFound";
 
-vi.mock("@@/layout/access/canvas/Canvas", () => ({ default: () => <div data-testid="error-canvas" /> }));
+vi.mock("@@/layout/access/canvas/SideCanvas", () => ({ default: () => <div data-testid="error-canvas" /> }));
+vi.mock("@@/brand/logo/OrganicLogo", () => ({ default: () => <span role="img" aria-label="Solaria" /> }));
 
 describe("NotFoundPage", () => {
   it("renders the error with side canvas and returns home even on a direct visit", () => {
