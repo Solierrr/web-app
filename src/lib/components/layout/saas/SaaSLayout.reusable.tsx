@@ -35,10 +35,10 @@ export function SaaSNavigation({ groups, lang, collapsed, onNavigate, context, b
           {collapsed && index > 0 && <div aria-hidden="true" className="mx-3 mb-4 h-px rounded-full bg-operational-border" />}
           <h2
             aria-hidden={collapsed}
-            className={`text-body font-medium leading-5 text-operational-muted transition-[height,opacity,margin] duration-250 ease-in-out motion-reduce:transition-none ${collapsed ? "h-0 mb-0 overflow-hidden whitespace-nowrap opacity-0" : "min-h-5 mb-2 whitespace-normal opacity-100"}`}>
+            className={`text-sidebar-group font-medium leading-5 text-operational-muted transition-[height,opacity,margin] duration-250 ease-in-out motion-reduce:transition-none ${collapsed ? "h-0 mb-0 overflow-hidden whitespace-nowrap opacity-0" : "min-h-5 mb-1 px-3 whitespace-normal opacity-100"}`}>
             {t(group.label)}
           </h2>
-          <ul className="flex flex-col gap-2">
+          <ul className="flex flex-col gap-1">
             {group.items.map((item) => {
               const to = item.to(lang);
               const active = to === activePath;
@@ -51,7 +51,7 @@ export function SaaSNavigation({ groups, lang, collapsed, onNavigate, context, b
                     aria-label={t(item.label)}
                     aria-current={active ? "page" : undefined}
                     onClick={onNavigate}
-                    className={`${sidebarItemClass(collapsed)} ${active ? "bg-operational-hover text-operational-ink" : "text-operational-ink hover:bg-operational-hover"}`}>
+                    className={`${sidebarItemClass(collapsed)} ${active ? "bg-sidebar-active text-operational-ink" : "text-operational-ink hover:bg-sidebar-hover"}`}>
                     <Icon name={item.icon} motion={item.icon === "folder" ? "folder" : undefined} size={SIDEBAR_ICON_SIZE} className="shrink-0" />
                     <span aria-hidden={collapsed} className={sidebarLabelClass(collapsed)}>
                       {t(item.label)}
@@ -61,7 +61,7 @@ export function SaaSNavigation({ groups, lang, collapsed, onNavigate, context, b
               );
             })}
           </ul>
-          {group.key === "overview" && <Recent groups={groups} lang={lang} context={context} collapsed={collapsed} onNavigate={onNavigate} />}
+          {group.key === "overview" && !collapsed && <Recent groups={groups} lang={lang} context={context} collapsed={collapsed} onNavigate={onNavigate} />}
         </section>
       ))}
       {after}
@@ -86,7 +86,7 @@ export function SaaSAccountNavigation({ collapsed, signingOut, onLogout }: SaaSA
         onClick={() => void onLogout().catch(() => undefined)}
         title={t("shell.logout")}
         aria-label={t("shell.logout")}
-        className={`${sidebarItemClass(collapsed)} w-full text-operational-ink hover:bg-operational-hover disabled:cursor-default disabled:opacity-50`}>
+        className={`${sidebarItemClass(collapsed)} w-full text-operational-ink hover:bg-sidebar-hover disabled:cursor-default disabled:opacity-50`}>
         <Icon name="logout" size={SIDEBAR_ICON_SIZE} className="shrink-0" />
         <span aria-hidden={collapsed} className={sidebarLabelClass(collapsed)}>
           {t("shell.logout")}

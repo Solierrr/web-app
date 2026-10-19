@@ -1,5 +1,6 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
+import { SIDEBAR_ICON_SIZE } from "@@/layout/sidebar/Sidebar.styles";
 interface SidePanelProps {
   open: boolean;
   wide?: boolean;
@@ -55,10 +56,10 @@ export default function SidePanel({ open, wide = false, title, closeLabel, onClo
       aria-label={title}
       aria-hidden={!open}
       inert={!open}
-      className={`flex min-h-0 shrink-0 flex-col overflow-hidden bg-white transition-[width] duration-250 motion-reduce:transition-none ${open ? (wide ? "fixed inset-y-0 right-0 z-30 w-full shadow-surface lg:static lg:z-auto lg:w-[45%] lg:max-w-160" : "h-1/2 w-full lg:h-full lg:w-96") : "h-0 w-0 pointer-events-none lg:h-full"}`}>
+      className={`flex min-h-0 shrink-0 flex-col overflow-hidden bg-operational-shell transition-[width] duration-250 motion-reduce:transition-none ${open ? (wide ? "fixed inset-y-0 right-0 z-30 w-full shadow-surface lg:static lg:z-auto lg:w-[45%] lg:max-w-160" : "h-1/2 w-full lg:h-full lg:w-96") : "h-0 w-0 pointer-events-none lg:h-full"}`}>
       <header className="flex min-h-16 shrink-0 items-center justify-between gap-3 px-4 py-3">
         <h2 className="min-w-0 text-body font-semi-bold">{title}</h2>
-        <ToolbarAction icon="x" label={closeLabel} disabled={closeDisabled} onClick={onClose} />
+        <ToolbarAction icon="x" iconSize={SIDEBAR_ICON_SIZE} label={closeLabel} disabled={closeDisabled} onClick={onClose} />
       </header>
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden">{children}</div>
     </aside>

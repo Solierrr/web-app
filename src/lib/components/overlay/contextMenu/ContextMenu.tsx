@@ -25,6 +25,7 @@ interface ContextMenuProps {
   autoFocus?: boolean;
   triggerRef?: RefObject<HTMLElement | null>;
   align?: "start" | "end";
+  portalWithinDialog?: boolean;
 }
 
 interface Position {
@@ -48,9 +49,10 @@ interface Position {
  * @returns O componente de menu de contexto renderizado (via portal).
  */
 export const ContextMenu = forwardRef<ContextMenuHandle, ContextMenuProps>(function ContextMenu(
-  { className, header, id, label, onClose, autoFocus = false, triggerRef, align = "start" },
+  { className, header, id, label, onClose, autoFocus = false, triggerRef, align = "start", portalWithinDialog = false },
   ref,
 ) {
+  const [portalRoot, setPortalRoot] = useState<Element | null>(null);
   const [position, setPosition] = useState<Position | null>(null);
   const [items, setItems] = useState<ContextMenuItem[]>([]);
   const menuRef = useRef<HTMLUListElement>(null);
@@ -59,6 +61,7 @@ export const ContextMenu = forwardRef<ContextMenuHandle, ContextMenuProps>(funct
     ref,
     () => ({
       open: (items, x, y) => {
+        setPortalRoot(portalWithinDialog ? (triggerRef?.current?.closest('[role="dialog"]') ?? null) : null);
         setItems(items);
         setPosition({ x, y });
       },
@@ -67,7 +70,7 @@ export const ContextMenu = forwardRef<ContextMenuHandle, ContextMenuProps>(funct
         onClose?.();
       },
     }),
-    [onClose],
+    [onClose, portalWithinDialog, triggerRef],
   );
 
   useEffect(() => {
@@ -161,6 +164,6 @@ export const ContextMenu = forwardRef<ContextMenuHandle, ContextMenuProps>(funct
         </MenuItem>
       ))}
     </MenuList>,
-    document.body,
+    portalRoot ?? document.body,
   );
 });
