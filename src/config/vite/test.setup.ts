@@ -6,7 +6,7 @@ Object.defineProperty(window, "matchMedia", {
   configurable: true,
   writable: true,
   value: vi.fn((media: string) => ({
-    matches: media === "(prefers-reduced-motion: reduce)",
+    matches: false,
     media,
     onchange: null,
     addListener: vi.fn(),
