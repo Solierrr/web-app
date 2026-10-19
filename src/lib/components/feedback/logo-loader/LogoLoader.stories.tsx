@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import LogoLoader from "./LogoLoader";
-const meta = { title: "Feedback/LogoLoader", component: LogoLoader, args: { label: "Carregando informações", size: 4 } } satisfies Meta<
+const meta = { title: "Feedback/LogoLoader", component: LogoLoader, args: { label: "Carregando informações", size: 8 } } satisfies Meta<
   typeof LogoLoader
 >;
 export default meta;

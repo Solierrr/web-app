@@ -510,5 +510,8 @@
     "actionSuccess": "Ação concluída.",
     "actionError": "Não foi possível concluir a ação.",
     "empty": "Nenhum item para exibir."
+  },
+  "logo": {
+    "changeShape": "Mudar a forma da logo"
   }
 }

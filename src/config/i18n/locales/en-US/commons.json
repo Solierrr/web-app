@@ -510,5 +510,8 @@
     "actionSuccess": "Action completed.",
     "actionError": "Unable to complete the action.",
     "empty": "No items to display."
+  },
+  "logo": {
+    "changeShape": "Change the logo shape"
   }
 }
