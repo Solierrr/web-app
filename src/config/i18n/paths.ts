@@ -1,5 +1,6 @@
 import i18n from "@/config/i18n/internationalization";
-import { isSupportedLanguage, type SupportedLanguage } from "@/config/i18n/browser/languages";
+import { type SupportedLanguage } from "@/config/i18n/browser/languages";
+import { localizePath } from "./routing/routing";
 
 export const SEGMENT = [
   "solarPanels",
@@ -146,14 +147,5 @@ export const routePaths = {
 };
 
 export function translatePathToLanguage(pathname: string, targetLang: SupportedLanguage): string {
-  const [, currentLang, ...rest] = pathname.split("/");
-
-  if (!isSupportedLanguage(currentLang)) return `/${targetLang}`;
-
-  const translatedRest = rest.map((segment) => {
-    const matchedKey = SEGMENT.find((key) => routeSegment(currentLang, key) === segment);
-    return matchedKey ? routeSegment(targetLang, matchedKey) : segment;
-  });
-
-  return `/${[targetLang, ...translatedRest].join("/")}`;
+  return localizePath(pathname, targetLang);
 }
