@@ -70,7 +70,7 @@
       "help": "Discover the first steps"
     },
     "newConversation": "New conversation",
-    "welcomeTitle": "How can I help?",
+    "welcomeTitle": "Where shall we start?",
     "welcomeDescription": "Choose a suggestion or write your question about Solaria.",
     "composerHint": "Enter sends · Shift + Enter adds a line",
     "suggestions": {
@@ -79,7 +79,7 @@
       "help": "How can I get started with Solaria?"
     },
     "greeting": "Hi! How can I help you today?",
-    "draftPlaceholder": "Ask the assistant something...",
+    "draftPlaceholder": "Ask the assistant",
     "sendDescription": "Send message to the assistant",
     "assistantName": "Solaria Assistant"
   },

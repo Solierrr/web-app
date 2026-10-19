@@ -70,7 +70,7 @@
       "help": "Conheça os primeiros passos"
     },
     "newConversation": "Nova conversa",
-    "welcomeTitle": "Como posso ajudar?",
+    "welcomeTitle": "Por onde começamos?",
     "welcomeDescription": "Escolha uma sugestão ou escreva sua pergunta sobre o Solaria.",
     "composerHint": "Enter envia · Shift + Enter quebra a linha",
     "suggestions": {
@@ -79,7 +79,7 @@
       "help": "Como começar a usar o Solaria?"
     },
     "greeting": "Olá! Como posso te ajudar hoje?",
-    "draftPlaceholder": "Pergunte algo ao assistente...",
+    "draftPlaceholder": "Peça ao assistente",
     "sendDescription": "Enviar mensagem ao assistente",
     "assistantName": "Assistente Solaria"
   },

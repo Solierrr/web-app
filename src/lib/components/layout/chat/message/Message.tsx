@@ -1,21 +1,34 @@
 import type { Message } from "@/features/messages/messages";
 import type { User } from "@/features/users/user/user";
 import { useTranslation } from "react-i18next";
-import MessageBubble from "./MessageBubble";
+import MessageBubble, { type ConversationKind } from "./MessageBubble";
 
 interface MessageProps {
   message: Message;
   owner: User;
   placeholderAvatar?: boolean;
+  presentation?: "bubbles" | "timeline";
+  grouped?: boolean;
+  conversationKind?: ConversationKind;
 }
 
-export default function Message({ message, owner, placeholderAvatar = false }: MessageProps) {
+export default function Message({
+  message,
+  owner,
+  placeholderAvatar = false,
+  presentation = "bubbles",
+  grouped = false,
+  conversationKind = "direct",
+}: MessageProps) {
   const { i18n, t } = useTranslation("chat");
   const own = message.user.id === owner.id;
   return (
     <MessageBubble
+      conversationKind={conversationKind}
+      presentation={presentation}
+      grouped={grouped}
       own={own}
-      author={own ? t("you") : message.user.name}
+      author={own && presentation === "bubbles" ? t("you") : message.user.name}
       content={message.message}
       timestamp={message.time.toISOString()}
       locale={i18n.resolvedLanguage ?? i18n.language}

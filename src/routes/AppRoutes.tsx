@@ -87,6 +87,7 @@ const ACCESS: RouteDefinition[] = [
 ];
 
 const APP: RouteDefinition[] = [
+  { key: "legacyChatbot", path: () => "chatbot", element: <LegacyAccessRedirect destination={routePaths.chatbot} /> },
   { key: "termsPolicy", path: (lang) => joinSegments(lang, "policy", "terms"), element: <TermsPolicyPage /> },
   { key: "privacyPolicy", path: (lang) => joinSegments(lang, "policy", "privacy"), element: <PrivacyPolicyPage /> },
   { key: "cookiePolicy", path: (lang) => joinSegments(lang, "policy", "cookies"), element: <CookiePolicyPage /> },
@@ -115,6 +116,11 @@ const APP: RouteDefinition[] = [
 ];
 
 const SAAS: RouteDefinition[] = [
+  {
+    key: "legacyOperationalChatbot",
+    path: (lang) => `${joinSegments(lang, "dashboard")}/chatbot`,
+    element: <LegacyAccessRedirect destination={routePaths.operationalChatbot} />,
+  },
   { key: "projectCreate", path: (lang) => joinSegments(lang, "projects", "newProject"), element: <ProjectFormPage /> },
   {
     key: "projectEdit",

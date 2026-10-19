@@ -24,6 +24,7 @@ import ToolbarAction from "@@/ui/button/ToolbarAction";
 import InboxFilters from "./InboxFilters";
 import MessageComposer from "@@/ui/message-composer/MessageComposer";
 import LogoLoader from "@@/feedback/logo-loader/LogoLoader";
+import MorphingHexagon from "@@/ui/morphing-hexagon/MorphingHexagon";
 
 export default function Inbox() {
   const { lang: langParam, conversationId } = useParams<{ lang: string; conversationId: string }>();
@@ -318,9 +319,7 @@ export default function Inbox() {
               <Conversation key={conversationId} conversationId={conversationId} embedded />
             ) : (
               <div className="m-auto flex w-full max-w-operational-form flex-col items-center gap-4 p-4 text-center">
-                <div className="flex h-16 w-16 items-center justify-center rounded-hard bg-input-bg" aria-hidden="true">
-                  <Icon name="messagesSquare" size={24} />
-                </div>
+                <MorphingHexagon icon="messagesSquare" rotateSymbol={false} className="size-28 shrink-0" />
                 <h2 className="text-label font-medium">{t(hasList ? "selectConversation" : "startConversation")}</h2>
                 <p className="max-w-operational-copy text-body text-operational-muted">
                   {t(hasList ? "selectConversationDescription" : "startConversationDescription")}
