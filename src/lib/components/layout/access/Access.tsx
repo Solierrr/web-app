@@ -105,7 +105,7 @@ export default function Access({
 
   return (
     <main className="relative isolate flex min-h-dvh w-full flex-col items-center gap-6 bg-white px-6 pt-8 pb-10 scrollbar-none sm:px-12">
-      {backAction && <div className="absolute left-6 top-6 z-20 [&>button]:w-15! [&>a]:w-15!">{backAction}</div>}
+      {backAction && <div className="absolute left-6 top-6 z-20 [&>button]:w-9! [&>a]:w-9!">{backAction}</div>}
       {topAction && <div className="absolute right-6 top-6 z-20">{topAction}</div>}
       {animatedBackground &&
         (background ? (
