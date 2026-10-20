@@ -4,5 +4,6 @@ export interface BrandSelectProps {
   selectedName?: string;
   invalid?: boolean;
   errorId?: string;
+  presentation?: "popover" | "dialog";
   onChange: (id: string, name: string) => void;
 }

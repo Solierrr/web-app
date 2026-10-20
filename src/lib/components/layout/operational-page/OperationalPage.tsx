@@ -19,6 +19,7 @@ interface OperationalPageProps {
   tabs?: boolean;
   navigation?: ReactNode;
   breadcrumbs?: ReactNode;
+  formWidth?: "default" | "comfortable";
 }
 
 export default function OperationalPage({
@@ -37,6 +38,7 @@ export default function OperationalPage({
   tabs = false,
   navigation,
   breadcrumbs,
+  formWidth = "default",
 }: OperationalPageProps) {
   const { t } = useTranslation("saas");
 
@@ -54,7 +56,7 @@ export default function OperationalPage({
       {(formBackground || sideBackground) && <SideCanvas centerWidth={formBackground ? "24rem" : "var(--spacing-operational-copy)"} />}
       {breadcrumbs && <div className="relative flex w-full justify-start px-4 pt-4 sm:px-8 lg:px-10">{breadcrumbs}</div>}
       <header
-        className={`flex shrink-0 flex-col gap-4 px-4 pb-6 pt-8 sm:px-8 ${formBackground ? "mx-auto w-full max-w-120 text-center" : `lg:px-10 ${form ? "mx-auto w-full max-w-operational-form text-center" : ""}`}`}>
+        className={`flex shrink-0 flex-col gap-4 px-4 pb-6 pt-8 sm:px-8 ${formBackground ? `mx-auto w-full ${formWidth === "comfortable" ? "max-w-operational-form" : "max-w-120"} text-center` : `lg:px-10 ${form ? "mx-auto w-full max-w-operational-form text-center" : ""}`}`}>
         <div className={`flex flex-wrap gap-4 ${centered ? "flex-col items-center text-center" : "items-start justify-between"}`}>
           <div className={`min-w-0 ${form ? "w-full" : ""}`}>
             <h1 className="text-operational-title font-semi-bold leading-8">{title}</h1>
@@ -69,7 +71,7 @@ export default function OperationalPage({
         )}
       </header>
       <div
-        className={`flex min-w-0 flex-col gap-6 ${formBackground ? "mx-auto w-full max-w-120 px-4 pb-10 sm:px-12" : profile ? "" : "px-4 pb-8 sm:px-8 lg:px-10"} ${sideBackground && !formBackground ? "mx-auto w-full max-w-operational-page" : ""} ${compact && !form ? "mx-auto w-full max-w-operational-form" : ""} ${chat ? "min-h-0 flex-1" : ""}`}>
+        className={`flex min-w-0 flex-col gap-6 ${formBackground ? `mx-auto w-full ${formWidth === "comfortable" ? "max-w-operational-form" : "max-w-120"} px-4 pb-10 sm:px-12` : profile ? "" : "px-4 pb-8 sm:px-8 lg:px-10"} ${sideBackground && !formBackground ? "mx-auto w-full max-w-operational-page" : ""} ${compact && !form ? "mx-auto w-full max-w-operational-form" : ""} ${chat ? "min-h-0 flex-1" : ""}`}>
         {children}
       </div>
     </main>

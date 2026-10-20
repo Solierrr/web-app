@@ -50,6 +50,8 @@
   --color-sidebar-active: #dce0e5;
   --text-sidebar: 0.875rem;
   --text-sidebar-group: 0.8125rem;
+  --color-surface-container-low: var(--color-operational-surface);
+  --color-surface-container: var(--color-operational-hover);
   --color-feedback-error: #b42318;
   --color-feedback-success: #18794e;
   --color-feedback-warning: #925c12;

@@ -49,3 +49,30 @@ describe("BrandManager", () => {
     expect(createBrand).toHaveBeenCalledOnce();
   });
 });
+
+it("delegates the dialog title and close control to the shared shell", () => {
+  const close = vi.fn();
+  render(<BrandManager presentation="dialog" brands={[]} onSaved={vi.fn()} onClose={close} />);
+  expect(screen.queryByRole("heading", { name: "Gerenciar marcas" })).not.toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: "Fechar" })).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Cancelar" }));
+  expect(close).toHaveBeenCalledOnce();
+});
+
+it("blocks dialog actions while saving and reports the busy state", async () => {
+  let finish!: (value: Brand) => void;
+  vi.mocked(createBrand).mockReturnValueOnce(
+    new Promise<Brand>((resolve) => {
+      finish = resolve;
+    }),
+  );
+  const busy = vi.fn();
+  render(<BrandManager presentation="dialog" brands={[]} onSaved={vi.fn().mockResolvedValue(undefined)} onClose={vi.fn()} onBusyChange={busy} />);
+  fireEvent.change(screen.getByRole("textbox", { name: "Nome da marca" }), { target: { value: "Solar" } });
+  fireEvent.click(screen.getByRole("button", { name: "Salvar marca" }));
+  await waitFor(() => expect(busy).toHaveBeenLastCalledWith(true));
+  expect(screen.getByRole("button", { name: "Cancelar" })).toBeDisabled();
+  expect(screen.getByRole("textbox", { name: "Nome da marca" })).toBeDisabled();
+  finish(brand);
+  await waitFor(() => expect(busy).toHaveBeenLastCalledWith(false));
+});

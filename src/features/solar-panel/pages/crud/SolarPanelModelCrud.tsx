@@ -31,6 +31,7 @@ import InputGroup from "@@/ui/input-group/InputGroup";
 import ImageInput from "@@/ui/image-input/ImageInput";
 import Breadcrumbs from "@@/ui/breadcrumbs/Breadcrumbs";
 import Tooltip from "@@/feedback/tooltip/Tooltip";
+import Alert from "@@/feedback/alert/Alert";
 import { notify } from "@@/feedback/toast/Toast.utils";
 import Select from "@@/ui/select/Select";
 import { PrimaryButton, WhiteSolidButton } from "@@/ui/button/Button.presets";
@@ -429,6 +430,7 @@ export default function SolarPanelModelCrud() {
       sideBackground
       form={formOpen}
       formBackground={formOpen}
+      formWidth="comfortable"
       breadcrumbs={
         formOpen ? (
           <Breadcrumbs
@@ -456,7 +458,9 @@ export default function SolarPanelModelCrud() {
         {formOpen && (editingId ? can("PUT /api/models/{id}") : can("POST /api/models")) && (
           <OperationalForm
             plain
+            tone="tonal"
             noValidate
+            className="gap-4!"
             autoComplete="off"
             onInvalidCapture={(event) => event.preventDefault()}
             onChangeCapture={(event) => {
@@ -473,10 +477,11 @@ export default function SolarPanelModelCrud() {
               setInvalidField(null);
               void handleSave();
             }}>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-5 rounded-surface bg-surface-container-low p-5 sm:p-6">
               <label className="flex min-w-0 flex-col gap-2 text-body font-medium">
                 {t("fields.brand")}
                 <BrandSelect
+                  presentation="dialog"
                   label={t("fields.brand")}
                   value={form.brandId ?? ""}
                   selectedName={form.brand}
@@ -518,7 +523,7 @@ export default function SolarPanelModelCrud() {
                 />
               </label>
             </div>
-            <FormSection title={t("sections.technical")} collapsible defaultExpanded={false}>
+            <FormSection variant="tonal" title={t("sections.technical")} collapsible defaultExpanded={false}>
               <label className="flex min-w-0 flex-col gap-2 text-body font-medium">
                 {t("fields.powerOutput")}
                 <Input
@@ -578,7 +583,7 @@ export default function SolarPanelModelCrud() {
                 {fieldFeedback("weight")}
               </label>
             </FormSection>
-            <FormSection title={t("dimensions")} collapsible defaultExpanded={false}>
+            <FormSection variant="tonal" title={t("dimensions")} collapsible defaultExpanded={false}>
               <InputGroup label={t("dimensions")} hideLabel>
                 <label className="flex min-w-0 flex-col gap-2 text-body font-medium">
                   {t("fields.width")}
@@ -622,6 +627,7 @@ export default function SolarPanelModelCrud() {
             </FormSection>
 
             <FormSection
+              variant="tonal"
               title={t("photos.title")}
               collapsible
               defaultExpanded={false}
@@ -695,15 +701,7 @@ export default function SolarPanelModelCrud() {
               </div>
             </FormSection>
             <FormError message={photoError} />
-            <div className="flex flex-col gap-2">
-              <PrimaryButton
-                variant="soft"
-                content={saving ? t("actions.saving") : editingId ? t("actions.save") : t("actions.add")}
-                description={t("actions.saveDescription")}
-                type="submit"
-                className="w-full min-h-12"
-                disabled={saving}
-              />
+            <div className="grid grid-cols-2 gap-3 pt-3">
               <WhiteSolidButton
                 type="button"
                 content={t("actions.cancel")}
@@ -711,6 +709,14 @@ export default function SolarPanelModelCrud() {
                 className="w-full min-h-12"
                 disabled={saving}
                 onClick={closeForm}
+              />
+              <PrimaryButton
+                variant="soft"
+                content={saving ? t("actions.saving") : editingId ? t("actions.save") : t("actions.add")}
+                description={t("actions.saveDescription")}
+                type="submit"
+                className="w-full min-h-12"
+                disabled={saving}
               />
             </div>
             <FormError message={error} />

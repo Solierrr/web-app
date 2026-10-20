@@ -20,12 +20,14 @@ export function FormSection({
   collapsible = false,
   defaultExpanded = true,
   titleAccessory,
+  variant = "default",
 }: {
   title: string;
   children: ReactNode;
   collapsible?: boolean;
   defaultExpanded?: boolean;
   titleAccessory?: ReactNode;
+  variant?: "default" | "tonal";
 }) {
   const [expanded, setExpanded] = useState(defaultExpanded);
   const id = useId();
@@ -33,9 +35,10 @@ export function FormSection({
     return (
       <section
         aria-labelledby={`${id}-title`}
-        className="flex w-full min-w-0 flex-col gap-4"
+        className={`flex w-full min-w-0 flex-col ${variant === "tonal" ? "gap-0 rounded-surface bg-surface-container px-5 sm:px-6" : "gap-4"}`}
         onInvalidCapture={() => flushSync(() => setExpanded(true))}>
-        <div className="flex items-center justify-between gap-3 border-b border-operational-border pb-2">
+        <div
+          className={`flex items-center justify-between gap-3 ${variant === "tonal" ? "min-h-16 py-2" : "border-b border-operational-border pb-2"}`}>
           <div className="flex min-w-0 items-center gap-2">
             <h2 id={`${id}-title`} className="text-body font-semi-bold">
               {title}
@@ -55,7 +58,7 @@ export function FormSection({
         </div>
         <div id={id} aria-hidden={!expanded} inert={!expanded} className={`form-section-body ${expanded ? "is-expanded" : ""}`}>
           <div className="min-h-0 overflow-hidden">
-            <div className="flex w-full min-w-0 flex-col gap-4">{children}</div>
+            <div className={`flex w-full min-w-0 flex-col gap-4 ${variant === "tonal" ? "pb-6 pt-2" : ""}`}>{children}</div>
           </div>
         </div>
       </section>
@@ -69,11 +72,17 @@ export function FormSection({
   );
 }
 
-export default function OperationalForm({ children, className = "", plain = false, ...props }: ComponentProps<"form"> & { plain?: boolean }) {
+export default function OperationalForm({
+  children,
+  className = "",
+  plain = false,
+  tone = "default",
+  ...props
+}: ComponentProps<"form"> & { plain?: boolean; tone?: "default" | "tonal" }) {
   const form = (
     <form
       {...props}
-      className={`operational-form flex w-full min-w-0 flex-col gap-6 [&>:is(div,label):has(+section)]:pb-2 ${plain ? "operational-form-login [&_[role=combobox]]:min-h-12" : ""} ${className}`}>
+      className={`operational-form flex w-full min-w-0 flex-col gap-6 [&>:is(div,label):has(+section)]:pb-2 ${plain ? "operational-form-login [&_[role=combobox]]:min-h-12" : ""} ${tone === "tonal" ? "[&_.bg-input-bg]:transition-colors [&_.bg-input-bg:focus-within]:ring-2 [&_.bg-input-bg:focus-within]:ring-operational-muted/30 [&_.bg-input-bg:has([aria-invalid=true])]:ring-2 [&_.bg-input-bg:has([aria-invalid=true])]:ring-feedback-error/40" : ""} ${className}`}>
       {children}
     </form>
   );
