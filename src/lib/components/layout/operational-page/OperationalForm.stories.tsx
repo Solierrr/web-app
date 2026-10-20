@@ -68,3 +68,26 @@ export const FormSurfaceOnly: Story = {
     </FormSurface>
   ),
 };
+
+export const Tonal: Story = {
+  args: {
+    tone: "tonal",
+    children: (
+      <>
+        <div className="flex flex-col gap-5 rounded-surface bg-surface-container-low p-6">
+          <label className="flex flex-col gap-2">
+            Modelo
+            <Input name="model" placeholder="Ex.: CS6W-550MS" className="w-full" />
+          </label>
+        </div>
+        <FormSection variant="tonal" title="Características técnicas" collapsible defaultExpanded={false}>
+          <Input name="power" suffix="Wp" placeholder="550" className="w-full" />
+        </FormSection>
+        <div className="grid grid-cols-2 gap-3">
+          <WhiteSolidButton content="Cancelar" description="Cancelar" />
+          <PrimaryButton content="Adicionar" description="Adicionar" />
+        </div>
+      </>
+    ),
+  },
+};

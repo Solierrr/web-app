@@ -79,5 +79,7 @@
   "permissionDenied": "Você não tem permissão para esta operação.",
   "conflict": "Há um cadastro duplicado ou uma alteração simultânea. Atualize os dados antes de tentar novamente.",
   "retry": "Tentar novamente",
-  "duplicateName": "Sua empresa já possui essa marca. Escolha o cadastro existente."
+  "duplicateName": "Sua empresa já possui essa marca. Escolha o cadastro existente.",
+  "manageDescription": "Cadastre uma marca ou atualize as informações de uma marca existente.",
+  "cancel": "Cancelar"
 }

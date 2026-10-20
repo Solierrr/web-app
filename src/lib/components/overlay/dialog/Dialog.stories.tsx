@@ -44,3 +44,5 @@ export const Default: Story = {
 };
 export const Compact: Story = { args: { compact: true } };
 export const Busy: Story = { args: { busy: true, message: "Aguarde enquanto as informações são salvas." } };
+
+export const Tonal: Story = { args: { variant: "tonal", title: "Gerenciar marcas", message: "Cadastre uma marca ou atualize uma marca existente." } };

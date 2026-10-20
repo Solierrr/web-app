@@ -4,4 +4,6 @@ export interface BrandManagerProps {
   initialBrandId?: string;
   onSaved: (b?: Brand) => Promise<void>;
   onClose: () => void;
+  presentation?: "inline" | "dialog";
+  onBusyChange?: (busy: boolean) => void;
 }
