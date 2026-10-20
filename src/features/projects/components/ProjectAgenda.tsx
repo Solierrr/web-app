@@ -1,3 +1,4 @@
+import FormError from "@@/feedback/toast/FormError";
 import { useCallback, useState, type FormEvent } from "react";
 import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import ProjectAgendaView from "./ProjectAgendaView";
@@ -187,7 +188,7 @@ export default function ProjectAgenda({ project: p }: { project: Project }) {
                 ))}
               {members.error && <Alert>{members.error}</Alert>}
             </fieldset>
-            {formError && <Alert>{formError}</Alert>}
+            <FormError message={formError} />
             <PrimaryButton
               variant="soft"
               type="submit"

@@ -1,3 +1,8 @@
+import Toast from "@@/feedback/toast/Toast";
+import { beforeEach as beforeToastTest } from "vitest";
+beforeToastTest(() => {
+  render(<Toast />);
+});
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -93,7 +98,7 @@ describe("CompanyOnboarding", () => {
     if (screen.getByRole("button", { name: "Endereço" }).getAttribute("aria-expanded") === "false")
       fireEvent.click(screen.getByRole("button", { name: "Endereço" }));
     fireEvent.change(screen.getByLabelText("CEP"), { target: { value: "01001000" } });
-    expect(await screen.findByRole("status")).toHaveTextContent("Não foi possível consultar o CEP");
+    expect(await screen.findByText("Não foi possível consultar o CEP", { exact: false })).toBeInTheDocument();
     fireEvent.change(screen.getByLabelText("Cidade"), { target: { value: "Cidade manual" } });
     expect(screen.getByLabelText("Cidade")).toHaveValue("Cidade manual");
   });
@@ -122,7 +127,7 @@ describe("CompanyOnboarding", () => {
     fireEvent.change(screen.getByLabelText("CNPJ"), { target: { value: "11.111.111/1111-11" } });
     fireEvent.click(screen.getByRole("button", { name: "Cadastrar empresa" }));
 
-    expect(await screen.findByRole("alert")).toHaveTextContent("CNPJ inválido");
+    expect(await screen.findByText("CNPJ inválido", { exact: false })).toBeInTheDocument();
     expect(companyService.createCompany).not.toHaveBeenCalled();
   });
 
@@ -161,8 +166,8 @@ describe("CompanyOnboarding", () => {
       ),
     );
 
-    expect(await screen.findByText("Em análise")).toBeInTheDocument();
-    expect(screen.getByText("CNPJ compatível com o setor solar/elétrico.")).toBeInTheDocument();
+    expect(await screen.findByText("Em análise", { exact: false })).toBeInTheDocument();
+    expect(screen.getByText("CNPJ compatível com o setor solar/elétrico.", { exact: false })).toBeInTheDocument();
   });
 
   it("does not call the cnpj category validation for demandant companies", async () => {
@@ -179,7 +184,7 @@ describe("CompanyOnboarding", () => {
     fireEvent.click(screen.getByRole("option", { name: "Demandante" }));
     fireEvent.click(screen.getByRole("button", { name: "Cadastrar empresa" }));
 
-    await screen.findByText("Em análise");
+    await screen.findByText("Em análise", { exact: false });
     expect(validateCnpjCategory).not.toHaveBeenCalled();
   });
 

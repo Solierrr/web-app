@@ -40,7 +40,8 @@
     "terms": "Termos de uso",
     "privacy": "Política de privacidade",
     "cookies": "Política de cookies",
-    "microsoft": "Continuar com Microsoft"
+    "microsoft": "Continuar com Microsoft",
+    "welcome": "Que bom ter você por aqui"
   },
   "register": {
     "helperText": "Crie sua conta para acessar o marketplace",
@@ -53,7 +54,8 @@
     "confirmPasswordPlaceholder": "Repita sua senha novamente",
     "emailPlaceholder": "Insira seu e-mail aqui",
     "confirmPasswordLabel": "Confirmar senha",
-    "passwordPlaceholder": "Crie uma senha"
+    "passwordPlaceholder": "Crie uma senha",
+    "accountCreated": "Sua conta foi criada. Entre para continuar; não é necessário se cadastrar novamente."
   },
   "forgotPassword": {
     "helperText": "Informe seu e-mail para receber as instruções de recuperação",
@@ -61,7 +63,8 @@
     "sent": "Se esse e-mail estiver cadastrado, você vai receber um link para redefinir sua senha.",
     "error": "Não foi possível enviar o e-mail de recuperação. Tente novamente.",
     "rememberedPasswordPrefix": "Lembrou a senha?",
-    "backToLogin": "Voltar para o login"
+    "backToLogin": "Voltar para o login",
+    "title": "Recuperar senha"
   },
   "verifyEmail": {
     "title": "Verifique seu e-mail",
@@ -90,7 +93,8 @@
     "error": "Não foi possível redefinir a senha. Peça um novo link e tente novamente.",
     "invalidLink": "Este link de redefinição é inválido ou expirou.",
     "mismatch": "As senhas não conferem.",
-    "requestNewLink": "Solicitar novo link"
+    "requestNewLink": "Solicitar novo link",
+    "title": "Redefinir senha"
   },
   "canvas": {
     "waves": {
@@ -108,5 +112,30 @@
       "title": "Grade interativa",
       "description": "Passe o cursor para iluminar apenas o quadrado sob ele. Clique para espalhar uma onda de cor pelos quadrados próximos."
     }
+  },
+  "feedback": {
+    "required": "Preencha este campo.",
+    "invalidEmail": "Informe um e-mail válido.",
+    "minLength": "Use pelo menos {{count}} caracteres.",
+    "unavailable": "O serviço de acesso está temporariamente indisponível. Tente novamente mais tarde.",
+    "connection": "Não foi possível conectar ao serviço. Verifique sua conexão e tente novamente.",
+    "tooManyAttempts": "Muitas tentativas em pouco tempo. Aguarde um momento antes de tentar novamente.",
+    "popupBlocked": "Permita a abertura da janela de acesso no navegador e tente novamente.",
+    "cancelled": "O acesso foi cancelado. Você pode tentar novamente quando quiser.",
+    "providerUnavailable": "Este método de acesso está indisponível no momento. Use e-mail e senha ou tente mais tarde.",
+    "providerFailed": "Não foi possível concluir o acesso com esse provedor. Tente novamente.",
+    "signInFailed": "Não foi possível entrar. Tente novamente.",
+    "invalidLink": "Este link é inválido, expirou ou já foi utilizado. Solicite um novo link.",
+    "emailUnavailable": "O envio de e-mail está indisponível. Tente novamente mais tarde.",
+    "passwordPolicy": "Use uma senha com pelo menos 12 caracteres. Se ela for muito longa, reduza o tamanho.",
+    "requiredHelp": "Preencha todos os campos obrigatórios para continuar."
+  },
+  "entry": {
+    "title": "Como você quer continuar?",
+    "description": "Escolha o que deseja fazer para seguir.",
+    "signIn": "Já tenho uma conta",
+    "register": "Quero criar uma conta",
+    "email": "Continuar com e-mail e senha",
+    "back": "Voltar às opções"
   }
 }

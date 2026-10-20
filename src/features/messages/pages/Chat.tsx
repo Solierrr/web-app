@@ -1,12 +1,12 @@
-import OperationalPage from "@@/layout/operational-page/OperationalPage";
+import ChatHeader from "@@/layout/chat/chat-header/ChatHeader";
 import MessageBubble from "@@/layout/chat/message/MessageBubble";
 import Skeleton from "@@/feedback/skeleton/Skeleton";
 import ValueField from "@@/ui/value-field/ValueField";
-import Icon from "@@/ui/icon/Icon";
+import MorphingHexagon from "@@/ui/morphing-hexagon/MorphingHexagon";
 import MessageComposer from "@@/ui/message-composer/MessageComposer";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
@@ -54,6 +54,7 @@ export function Conversation({
   const product = navigationState?.product;
   const userId = getAuthSession()?.userId;
   const [conversation, setConversation] = useState<ConversationDto | null>(null);
+  const [participantAvatar, setParticipantAvatar] = useState<string | null>(null);
   const [participantName, setParticipantName] = useState<string | null>(null);
   const [participantNames, setParticipantNames] = useState<Record<string, string>>({});
   const [messages, setMessages] = useState<MessageDto[]>([]);
@@ -141,7 +142,10 @@ export function Conversation({
         if (otherId)
           void getUserSummary(otherId)
             .then((user) => {
-              if (active) setParticipantName(user.username);
+              if (active) {
+                setParticipantName(user.username);
+                setParticipantAvatar(user.avatar);
+              }
             })
             .catch(() => undefined);
       })
@@ -239,25 +243,13 @@ export function Conversation({
     t("conversation");
   const content = (
     <section className="flex h-full min-h-0 min-w-0 flex-col gap-4">
-      {embedded && (
-        <header className="flex shrink-0 items-center justify-between gap-3">
-          <div className="flex min-w-0 items-center gap-3">
-            <div aria-hidden="true" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-medium bg-white">
-              <Icon
-                name={conversation?.conversationType === "GROUP" ? "users" : conversation?.conversationType === "CHAT_BOT" ? "sparkles" : "user"}
-                size={20}
-              />
-            </div>
-            <div className="min-w-0">
-              <h2 className="truncate text-body! font-semi-bold">{title}</h2>
-              {conversation && (
-                <p className="mt-1 text-body text-operational-muted">{t("participantCount", { count: conversation.participantIds.length })}</p>
-              )}
-            </div>
-          </div>
-          <ToolbarAction to={routePaths.inbox(lang)} icon="panelLeftOpen" label={t("inbox")} className="@xl/messages:hidden" />
-        </header>
-      )}
+      <ChatHeader
+        title={title}
+        avatar={conversation?.conversationType === "GROUP" || conversation?.conversationType === "CHAT_BOT" ? null : participantAvatar}
+        assistant={conversation?.conversationType === "CHAT_BOT"}
+        group={conversation?.conversationType === "GROUP"}>
+        <ToolbarAction to={routePaths.inbox(lang)} icon="panelLeftOpen" label={t("inbox")} className={embedded ? "@xl/messages:hidden" : undefined} />
+      </ChatHeader>
       {product && <p className="rounded-medium bg-orange/10 p-3 text-body">{t("productContext", { title: product })}</p>}
       {loading && (
         <div role="status" aria-label={t("loading")} className="flex flex-col gap-3">
@@ -294,9 +286,7 @@ export function Conversation({
         )}
         {!loading && !error && messages.length === 0 && (
           <div className="m-auto flex max-w-operational-copy flex-col items-center gap-3 px-5 text-center text-body text-operational-muted">
-            <span aria-hidden="true" className="flex size-12 items-center justify-center rounded-medium bg-white">
-              <Icon name="messages" />
-            </span>
+            <MorphingHexagon icon="messages" rotateSymbol={false} className="size-24 shrink-0" />
             <p>{t("emptyConversation")}</p>
           </div>
         )}
@@ -329,13 +319,16 @@ export function Conversation({
                 </div>
               )}
               <MessageBubble
+                conversationKind={
+                  conversation?.conversationType === "GROUP" ? "group" : conversation?.conversationType === "CHAT_BOT" ? "assistant" : "direct"
+                }
                 content={message.content}
                 timestamp={message.timestamp}
                 locale={lang}
                 author={author}
                 own={own}
                 assistant={assistant}
-                showAuthor={!grouped}
+                showAuthor={conversation?.conversationType === "GROUP" && !own && !grouped}
               />
             </div>
           );
@@ -354,18 +347,5 @@ export function Conversation({
       />
     </section>
   );
-  return embedded ? (
-    content
-  ) : (
-    <OperationalPage
-      chat
-      title={title}
-      actions={
-        <Link to={routePaths.inbox(lang)} className="text-orange">
-          {t("inbox")}
-        </Link>
-      }>
-      {content}
-    </OperationalPage>
-  );
+  return embedded ? content : <main className="mx-auto flex h-full min-h-0 w-full max-w-operational-page flex-col p-4 sm:px-8">{content}</main>;
 }

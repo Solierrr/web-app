@@ -1,3 +1,8 @@
+import Toast from "@@/feedback/toast/Toast";
+import { beforeEach as beforeToastTest } from "vitest";
+beforeToastTest(() => {
+  render(<Toast />);
+});
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -17,6 +22,19 @@ beforeEach(() => {
 });
 
 describe("VerifyEmailPage", () => {
+  it("preserves delivery feedback from a completed registration", async () => {
+    render(
+      <MemoryRouter
+        initialEntries={[
+          { pathname: "/pt-BR/verificar-email", state: { verificationError: "O envio de e-mail está indisponível. Tente novamente mais tarde." } },
+        ]}>
+        <VerifyEmailPage />
+      </MemoryRouter>,
+    );
+    expect(await screen.findByText("O envio de e-mail está indisponível", { exact: false })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Enviar email de confirmação" })).toBeEnabled();
+  });
+
   it("checks verification in api-auth and requests a confirmation email", async () => {
     vi.mocked(requestEmailVerification).mockResolvedValue(undefined);
     render(
@@ -26,7 +44,7 @@ describe("VerifyEmailPage", () => {
     );
     fireEvent.click(await screen.findByRole("button", { name: "Enviar email de confirmação" }));
     await waitFor(() => expect(requestEmailVerification).toHaveBeenCalledOnce());
-    expect(await screen.findByText("Solicitação recebida. Verifique sua caixa de entrada.")).toBeInTheDocument();
+    expect(await screen.findByText("Solicitação recebida. Verifique sua caixa de entrada.", { exact: false })).toBeInTheDocument();
   });
   it("requires an explicit click before consuming the email token", async () => {
     vi.mocked(confirmEmailVerification).mockResolvedValue(undefined);
@@ -50,7 +68,9 @@ describe("VerifyEmailPage", () => {
       </MemoryRouter>,
     );
     fireEvent.click(await screen.findByRole("button", { name: "Enviar email de confirmação" }));
-    expect(await screen.findByRole("alert")).toHaveTextContent("O envio de email está indisponível");
+    expect(await screen.findByText("O envio de email está indisponível", { exact: false })).toBeInTheDocument();
     expect(screen.queryByText("Solicitação recebida. Verifique sua caixa de entrada.")).not.toBeInTheDocument();
   });
 });
+
+vi.mock("@@/brand/logo/OrganicLogo", () => ({ default: () => <span role="img" aria-label="Solaria" /> }));

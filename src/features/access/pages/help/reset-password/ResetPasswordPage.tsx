@@ -7,6 +7,8 @@ import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/
 import { routePaths } from "@/config/i18n/paths";
 import { completePasswordReset } from "@/features/access/access.credentials.service";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
+import { getAccessErrorMessage } from "@/features/access/access.utils";
+import Alert from "@@/feedback/alert/Alert";
 
 export default function ResetPasswordPage() {
   const { t } = useTranslation("access");
@@ -32,8 +34,8 @@ export default function ResetPasswordPage() {
       if (mock) await waitForMockService();
       else await completePasswordReset(code ?? "", password);
       setDone(true);
-    } catch {
-      setError(t("resetPassword.error"));
+    } catch (failure) {
+      setError(getAccessErrorMessage(failure, t("resetPassword.error")));
     } finally {
       setBusy(false);
     }
@@ -41,8 +43,8 @@ export default function ResetPasswordPage() {
 
   if (done || (!code && !mock)) {
     return (
-      <Access heading="Solaria" animatedBackground={false}>
-        <p role={done ? "status" : "alert"}>{done ? t("resetPassword.success") : t("resetPassword.invalidLink")}</p>
+      <Access heading={t("resetPassword.title")} animatedBackground={false}>
+        <Alert state={done ? "success" : "error"}>{done ? t("resetPassword.success") : t("resetPassword.invalidLink")}</Alert>
         <Hyperlink
           content={done ? t("forgotPassword.backToLogin") : t("resetPassword.requestNewLink")}
           url={done ? routePaths.login(lang) : routePaths.forgotPassword(lang)}
@@ -53,12 +55,26 @@ export default function ResetPasswordPage() {
 
   return (
     <Access
-      heading="Solaria"
+      heading={t("resetPassword.title")}
       animatedBackground={false}
       helperText={t("resetPassword.helperText")}
       fields={[
-        { name: "password", placeholder: t("fields.password.placeholder"), password: true, minLength: 12 },
-        { name: "confirmPassword", placeholder: t("fields.confirmPassword.placeholder"), password: true, minLength: 12 },
+        {
+          name: "password",
+          label: t("login.passwordLabel"),
+          placeholder: t("fields.password.placeholder"),
+          password: true,
+          minLength: 12,
+          autoComplete: "new-password",
+        },
+        {
+          name: "confirmPassword",
+          label: t("register.confirmPasswordLabel"),
+          placeholder: t("fields.confirmPassword.placeholder"),
+          password: true,
+          minLength: 12,
+          autoComplete: "new-password",
+        },
       ]}
       submitLabel={t("resetPassword.submit")}
       busy={busy}

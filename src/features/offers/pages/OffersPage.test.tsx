@@ -1,3 +1,8 @@
+import Toast from "@@/feedback/toast/Toast";
+import { beforeEach as beforeToastTest } from "vitest";
+beforeToastTest(() => {
+  render(<Toast />);
+});
 vi.mock("@@/layout/access/canvas/SideCanvas", () => ({ default: () => null }));
 import { MemoryRouter } from "react-router-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
@@ -257,6 +262,6 @@ describe("OffersPage", () => {
     fireEvent.click(screen.getAllByRole("button", { name: /Opções do registro/ })[0]);
     fireEvent.click(screen.getByRole("button", { name: "Pausar" }));
 
-    expect(await screen.findByRole("alert")).toBeInTheDocument();
+    expect(await screen.findByRole("status")).toBeInTheDocument();
   });
 });

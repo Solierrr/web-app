@@ -22,6 +22,7 @@ interface MessageComposerProps {
   disabled?: boolean;
   maxLength?: number;
   compact?: boolean;
+  assistant?: boolean;
   active?: boolean;
   attachments?: MessageAttachment[];
   onFilesSelected?: (files: File[]) => void;
@@ -39,6 +40,7 @@ export default function MessageComposer({
   disabled = false,
   maxLength,
   compact = false,
+  assistant = false,
   active = true,
   attachments = [],
   onFilesSelected,
@@ -110,7 +112,7 @@ export default function MessageComposer({
   return (
     <form
       ref={form}
-      className={`relative shrink-0 gap-2 rounded-medium bg-input-bg p-3 ${compact ? "flex flex-col" : "grid grid-cols-[minmax(0,1fr)_auto] items-end"}`}
+      className={`relative shrink-0 rounded-medium bg-input-bg ${assistant ? "grid min-h-10 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2 gap-y-0 pl-4 pr-1 py-0" : `gap-2 p-3 ${compact ? "flex flex-col" : "grid grid-cols-[minmax(0,1fr)_auto] items-end"}`}`}
       onSubmit={(event) => {
         event.preventDefault();
         if (canSend) {
@@ -173,7 +175,8 @@ export default function MessageComposer({
           ))}
         </ul>
       )}
-      <div className={`flex items-end justify-between gap-3 ${compact ? "" : "col-start-2 row-start-1"}`}>
+      <div
+        className={`flex justify-between ${assistant ? "items-center gap-2" : "items-end gap-3"} ${assistant || !compact ? "col-start-2 row-start-1" : ""}`}>
         {hint && (
           <div id={`${id}-hint`} className="sr-only">
             <span className="inline-flex items-center gap-2">
@@ -190,12 +193,14 @@ export default function MessageComposer({
           <div ref={attachmentMenu} className="relative">
             <ToolbarAction
               ref={attachmentTrigger}
-              icon="paperclip"
+              icon={assistant ? "plus" : "paperclip"}
               label={t("attachments.add")}
               aria-expanded={attachmentsOpen && active}
               aria-controls={`${id}-attachments`}
               aria-haspopup="menu"
-              className="size-8! rounded-full!"
+              className={assistant ? undefined : "size-8! rounded-full!"}
+              iconSize={assistant ? 18 : 20}
+              color={assistant ? "var(--color-operational-muted)" : undefined}
               disabled={disabled}
               onClick={() => setAttachmentsOpen((open) => !open)}
             />
@@ -204,7 +209,7 @@ export default function MessageComposer({
                 id={`${id}-attachments`}
                 role="menu"
                 aria-label={t("attachments.add")}
-                className="absolute bottom-full left-0 z-10 mb-2 w-52"
+                className={`absolute bottom-full z-10 mb-2 w-52 ${assistant ? "right-0" : "left-0"}`}
                 onKeyDown={(event) => {
                   if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
                   event.preventDefault();
@@ -261,7 +266,8 @@ export default function MessageComposer({
             icon={speech.listening ? "stop" : "microphone"}
             label={t(speech.listening ? "speech.stop" : "speech.start")}
             aria-pressed={speech.listening}
-            className="ml-auto size-8! rounded-full!"
+            className={`ml-auto ${assistant ? "" : "size-8! rounded-full!"}`}
+            iconSize={assistant ? 18 : 20}
             color={speech.listening ? "var(--color-orange)" : "var(--color-operational-muted)"}
             disabled={disabled || speech.starting}
             onClick={() => {
@@ -278,11 +284,12 @@ export default function MessageComposer({
           type="submit"
           icon="arrowUp"
           label={sendLabel}
-          className={`size-8! rounded-full! ${compact ? "" : "ml-auto"}`}
+          className={`${assistant ? "" : "size-8! rounded-full!"} ${compact ? "" : "ml-auto"}`}
+          iconSize={assistant ? 18 : 20}
           disabled={!canSend}
-          color="var(--color-white)"
-          backgroundColor="var(--color-orange)"
-          hoverBackgroundColor="var(--color-dark-orange)"
+          color={assistant ? "var(--color-operational-ink)" : "var(--color-white)"}
+          backgroundColor={assistant ? undefined : "var(--color-orange)"}
+          hoverBackgroundColor={assistant ? undefined : "var(--color-dark-orange)"}
         />
       </div>
     </form>

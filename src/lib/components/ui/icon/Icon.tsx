@@ -40,6 +40,9 @@ import {
   IconSend as Send,
   IconEdit as SquarePen,
   IconUserCheck as UserRoundCheck,
+  IconUserPlus,
+  IconKey,
+  IconShieldCheck,
   IconArrowUp as ArrowUp,
   IconMinus as Minus,
   IconPaperclip as Paperclip,
@@ -67,7 +70,7 @@ import {
 } from "@tabler/icons-react";
 import Colors from "@/lib/shared/styles/colors/colors.enum";
 import { FcGoogle } from "react-icons/fc";
-import { FaMicrosoft } from "react-icons/fa";
+import MicrosoftIcon from "./Icon.microsoft";
 import { InvalidIconError } from "@/features/error/invalid-icon/InvalidIcon.error";
 
 const icons = {
@@ -93,6 +96,9 @@ const icons = {
   send: Send,
   newConversation: SquarePen,
   userRoundCheck: UserRoundCheck,
+  userPlus: IconUserPlus,
+  key: IconKey,
+  shieldCheck: IconShieldCheck,
   arrowUp: ArrowUp,
   minus: Minus,
   paperclip: Paperclip,
@@ -105,7 +111,7 @@ const icons = {
   edit: Pencil,
   trash: Trash2,
   google: FcGoogle,
-  microsoft: FaMicrosoft,
+  microsoft: MicrosoftIcon,
   check: Check,
   panelLeftOpen: PanelLeftOpen,
   panelLeftClose: PanelLeftClose,
@@ -164,6 +170,7 @@ export default function Icon({
   const gradientId = useId();
   const IconComponent = icons[name];
   if (!IconComponent) throw InvalidIconError.notFound(name);
+  const filled = name === "google" || name === "microsoft";
 
   const gradientDefinition = gradient && (
     <defs>
@@ -193,7 +200,7 @@ export default function Icon({
     <IconComponent
       size={size}
       color={gradient ? `url(#${gradientId})` : color}
-      strokeWidth={absoluteStrokeWidth && size > 0 ? (strokeWidth * 24) / size : strokeWidth}
+      strokeWidth={filled ? 0 : absoluteStrokeWidth && size > 0 ? (strokeWidth * 24) / size : strokeWidth}
       aria-hidden="true"
       focusable="false"
       className={`${className ?? ""} ${gradient ? "ai-orange-gradient" : ""}`}>

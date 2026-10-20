@@ -1,3 +1,4 @@
+import FormError from "@@/feedback/toast/FormError";
 import FieldFeedback from "@@/feedback/field-feedback/FieldFeedback";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -144,7 +145,7 @@ export default function BrandRequestsTable({ admin = false }: { admin?: boolean 
               {selected.decisionReason && <DetailField label={t("reason")} value={selected.decisionReason} />}
             </DetailSection>
             {selected.proposedLogoUrl && <img src={selected.proposedLogoUrl} alt={selected.proposedName} className="h-40 w-full object-contain" />}
-            {error && !reasonError && <Alert>{error}</Alert>}
+            <FormError message={!reasonError ? error : null} />
             {selected.status === "PENDING" &&
               (admin ? (
                 <>

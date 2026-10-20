@@ -1,3 +1,8 @@
+import Toast from "@@/feedback/toast/Toast";
+import { beforeEach as beforeToastTest } from "vitest";
+beforeToastTest(() => {
+  render(<Toast />);
+});
 import { useState } from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -43,9 +48,9 @@ describe("image selection", () => {
     const image = new File(["image"], "panel.png", { type: "image/png" });
     fireEvent.change(input, { target: { files: [image] } });
     expect(screen.getByAltText("panel.png")).toBeVisible();
-    expect(screen.getByRole("status")).toHaveTextContent("1 selecionadas");
+    expect(screen.getByText("1 selecionadas", { exact: false })).toBeInTheDocument();
     fireEvent.change(input, { target: { files: [new File(["text"], "invalid.txt", { type: "text/plain" })] } });
-    expect(screen.getByRole("alert")).toHaveTextContent("Imagem inválida");
+    expect(screen.getByText("Imagem inválida")).toBeInTheDocument();
     expect(screen.getByAltText("panel.png")).toBeVisible();
     fireEvent.click(screen.getByRole("button", { name: "Remover: panel.png" }));
     expect(screen.queryByAltText("panel.png")).not.toBeInTheDocument();
@@ -61,7 +66,7 @@ describe("image selection", () => {
       new File([new Uint8Array(8 * 1024 * 1024 + 1)], "large.png", { type: "image/png" }),
     ]) {
       fireEvent.change(input, { target: { files: [file] } });
-      expect(screen.getByRole("alert")).toHaveTextContent("Imagem inválida");
+      expect(screen.getByText("Imagem inválida")).toBeInTheDocument();
       expect(screen.queryByRole("img")).not.toBeInTheDocument();
     }
   });

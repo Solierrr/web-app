@@ -1,6 +1,9 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import Access from "./Access";
+import Toast from "@@/feedback/toast/Toast";
+
+vi.mock("./canvas/SideCanvas", () => ({ default: () => null }));
 
 describe("Access", () => {
   it("renders the helper text", () => {
@@ -55,8 +58,47 @@ describe("Access", () => {
   });
 
   it("renders the error message when provided", () => {
-    render(<Access heading="Solaria" fields={[]} submitLabel="Prosseguir" error="Credenciais inválidas" />);
+    render(
+      <>
+        <Toast />
+        <Access heading="Solaria" fields={[]} submitLabel="Prosseguir" error="Credenciais inválidas" />
+      </>,
+    );
 
-    expect(screen.getByText("Credenciais inválidas")).toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent("Credenciais inválidas");
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+  });
+
+  it("keeps invalid fields out of submission and associates their feedback", () => {
+    const onSubmit = vi.fn();
+    render(
+      <>
+        <Toast />
+        <Access
+          heading="Entrar"
+          fields={[{ name: "email", type: "email", label: "E-mail", placeholder: "E-mail" }]}
+          submitLabel="Entrar"
+          onSubmit={onSubmit}
+        />
+      </>,
+    );
+    const input = screen.getByRole("textbox", { name: "E-mail" });
+    fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
+    expect(onSubmit).not.toHaveBeenCalled();
+    expect(input).toHaveAttribute("aria-invalid", "true");
+    expect(screen.getByRole("status")).toHaveTextContent("Preencha todos os campos obrigatórios para continuar.");
+    expect(screen.queryByText("Preencha este campo.")).not.toBeInTheDocument();
+    expect(screen.getByText("E-mail", { selector: "label" })).toHaveTextContent("E-mail *");
+    expect(input).toHaveFocus();
+    fireEvent.change(input, { target: { value: "invalid" } });
+    fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
+    expect(input).toHaveAccessibleDescription("Informe um e-mail válido.");
+    fireEvent.change(input, { target: { value: "user@example.com" } });
+    expect(screen.getByText("E-mail", { selector: "label" })).not.toHaveTextContent("*");
+    fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
+    expect(onSubmit).toHaveBeenCalledOnce();
+    expect(input).toHaveAttribute("aria-invalid", "false");
   });
 });
+
+vi.mock("@@/brand/logo/OrganicLogo", () => ({ default: () => <span role="img" aria-label="Solaria" /> }));

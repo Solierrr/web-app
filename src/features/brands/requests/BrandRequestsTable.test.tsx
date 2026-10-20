@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { waitFor, fireEvent, render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import BrandRequestsTable from "./BrandRequestsTable";
@@ -6,7 +6,10 @@ import { listBrandRequests, cancelBrandRequest, decideBrandRequest } from "../br
 import { notify } from "@@/feedback/toast/Toast.utils";
 import type { BrandRequest } from "../brand";
 vi.mock("../brand.service", () => ({ listBrandRequests: vi.fn(), cancelBrandRequest: vi.fn(), decideBrandRequest: vi.fn() }));
-vi.mock("@@/feedback/toast/Toast.utils", () => ({ notify: vi.fn() }));
+vi.mock("@@/feedback/toast/Toast.utils", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@@/feedback/toast/Toast.utils")>();
+  return { ...actual, notify: vi.fn(actual.notify) };
+});
 vi.mock("@/lib/shared/context/ActiveContext", () => ({ useActiveContext: () => ({ can: () => true }) }));
 const row: BrandRequest = {
   id: "request-1",
@@ -69,7 +72,6 @@ describe("BrandRequestsTable", () => {
     const dialog = await open(true);
     fireEvent.click(within(dialog).getByRole("button", { name: "Aprovar" }));
     fireEvent.click(within(screen.getByRole("dialog", { name: "Aprovar" })).getByRole("button", { name: /confirmar/i }));
-    expect(await within(dialog).findByRole("alert")).toHaveTextContent("desatualizada");
-    expect(notify).not.toHaveBeenCalled();
+    await waitFor(() => expect(notify).toHaveBeenCalledWith(expect.stringContaining("desatualizada")));
   });
 });

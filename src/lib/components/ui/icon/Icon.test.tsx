@@ -6,6 +6,19 @@ import { InvalidIconError } from "@/features/error/invalid-icon/InvalidIcon.erro
 import { ACCOUNT_SQUARE, ACCOUNT_HEXAGON, ACCOUNT_PENTAGON, FOLDER_CLOSED, FOLDER_OPEN } from "./Icon.motion.paths";
 
 describe("Icon", () => {
+  it("does not add an outline to filled brand icons", () => {
+    const { container } = render(
+      <>
+        <Icon name="google" strokeWidth={3} />
+        <Icon name="microsoft" strokeWidth={3} />
+        <Icon name="home" strokeWidth={3} />
+      </>,
+    );
+    const icons = container.querySelectorAll("svg");
+    expect(icons[0]).toHaveAttribute("stroke-width", "0");
+    expect(icons[1]).toHaveAttribute("stroke-width", "0");
+    expect(icons[2]).toHaveAttribute("stroke-width", "3");
+  });
   it("animates one SVG contour while keeping the user drawing in place", () => {
     const { container } = render(<Icon name="account" motion="account" size={20} />);
     expect(container.querySelectorAll("svg")).toHaveLength(1);

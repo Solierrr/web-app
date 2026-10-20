@@ -1,3 +1,8 @@
+import Toast from "@@/feedback/toast/Toast";
+import { beforeEach as beforeToastTest } from "vitest";
+beforeToastTest(() => {
+  render(<Toast />);
+});
 vi.mock("@@/layout/access/canvas/SideCanvas", () => ({ default: () => null }));
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
@@ -21,6 +26,6 @@ describe("CompanyAccessPage", () => {
     fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
 
     await waitFor(() => expect(redeemAccessCode).toHaveBeenCalledWith("ABC12345"));
-    expect(await screen.findByRole("alert")).toBeInTheDocument();
+    expect(await screen.findByRole("status")).toBeInTheDocument();
   });
 });

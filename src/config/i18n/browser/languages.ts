@@ -1,4 +1,5 @@
 import SupportedLanguages from "@/config/i18n/supported.enum";
+import { cookieLanguage, languageCookie, preferredLanguage } from "../routing/routing";
 
 export const SUPPORTED = Object.values(SupportedLanguages);
 export type SupportedLanguage = SupportedLanguages;
@@ -9,16 +10,12 @@ export function isSupportedLanguage(value: string | undefined): value is Support
 }
 
 export function detectLanguage(): SupportedLanguage {
+  const remembered = cookieLanguage(document.cookie);
   const browserLanguages = navigator.languages?.length ? navigator.languages : [navigator.language];
+  const selected = remembered ?? preferredLanguage(browserLanguages.join(","));
+  return SUPPORTED.find((language) => language === selected) ?? DEFAULT;
+}
 
-  for (const browserLanguage of browserLanguages) {
-    const exactMatch = SUPPORTED.find((supported) => supported.toLowerCase() === browserLanguage.toLowerCase());
-    if (exactMatch) return exactMatch;
-
-    const languageOnly = browserLanguage.split("-")[0];
-    const partialMatch = SUPPORTED.find((supported) => supported.split("-")[0] === languageOnly);
-    if (partialMatch) return partialMatch;
-  }
-
-  return DEFAULT;
+export function rememberLanguage(language: SupportedLanguage) {
+  document.cookie = languageCookie(language, window.location.protocol === "https:");
 }

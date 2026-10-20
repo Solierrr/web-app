@@ -1,11 +1,9 @@
 import { type FormEvent, type ReactNode, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Access from "@/lib/components/layout/access/Access";
-import Button from "@@/ui/button/Button";
+import ToolbarAction from "@@/ui/button/ToolbarAction";
 import Checkbox from "@@/ui/checkbox/Checkbox";
-import Hyperlink from "@@/ui/link/Hyperlink";
-import Colors from "@/lib/shared/styles/colors/colors.enum";
 import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
 import { login, loginWithFirebase, loginWithMockMicrosoft, linkFirebase } from "@/features/access/access.service";
@@ -16,6 +14,10 @@ import { login as loginFirebase, loginWithGoogle, loginWithMicrosoft } from "@/c
 import { LoginWithGoogle, LoginWithMicrosoft } from "@/config/firebase/auth/layout/LoginWithProvider";
 import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
 import { getRememberedLogin, saveRememberedLogin, type RememberedLogin } from "./LoginPage.utils";
+import { getAccessErrorMessage, getAccessHttpError } from "@/features/access/access.utils";
+import { LoginEntryChoices, LoginShortcuts } from "./LoginPage.reusable";
+import Surface from "@@/ui/surface/Surface";
+import LanguageSwitcher from "@@/layout/navbar/LanguageSwitcher";
 
 export default function LoginPage({ background }: { background?: ReactNode } = {}) {
   const { t } = useTranslation("access");
@@ -24,10 +26,10 @@ export default function LoginPage({ background }: { background?: ReactNode } = {
   const navigate = useNavigate();
   const location = useLocation();
   const [remembered, setRemembered] = useState(getRememberedLogin);
-  const [showForm, setShowForm] = useState(() => !remembered);
-  const [remember, setRemember] = useState(() => Boolean(remembered));
+  const [search, setSearch] = useSearchParams();
   const [email, setEmail] = useState(remembered?.email ?? (import.meta.env.DEV ? (import.meta.env.VITE_DEV_LOGIN_EMAIL ?? "") : ""));
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [linkProof, setLinkProof] = useState<{ token: string; email: string; method: "google" | "microsoft" } | null>(null);
   const [linkConfirmed, setLinkConfirmed] = useState(false);
@@ -36,8 +38,19 @@ export default function LoginPage({ background }: { background?: ReactNode } = {
   const returnTo = (location.state as { returnTo?: string } | null)?.returnTo;
   const destination = returnTo?.startsWith(`/${lang}/`) ? returnTo : routePaths.dashboard(lang);
 
+  function openSignIn() {
+    setSearch(
+      (current) => {
+        const next = new URLSearchParams(current);
+        next.set("step", "signin");
+        return next;
+      },
+      { state: location.state },
+    );
+  }
+
   function finish(session: AuthSession, method: RememberedLogin["method"]) {
-    saveRememberedLogin(remember ? { email: session.email, method } : null);
+    saveRememberedLogin({ email: session.email, method });
     navigate(destination, { replace: true });
   }
 
@@ -45,6 +58,10 @@ export default function LoginPage({ background }: { background?: ReactNode } = {
     if (busy) return;
     setBusy(true);
     setError(null);
+    setNotice(null);
+    setLinkProof(null);
+    setMigrationProof(null);
+    setLinkConfirmed(false);
     let candidate: { token: string; email: string; method: "google" | "microsoft" } | null = null;
     try {
       let session: AuthSession;
@@ -63,9 +80,9 @@ export default function LoginPage({ background }: { background?: ReactNode } = {
         setLinkProof(candidate);
         setLinkConfirmed(false);
         setEmail(candidate.email);
-        setShowForm(true);
-        setError(tDeeplink("link.explanation"));
-      } else setError(t("login.error"));
+        openSignIn();
+        setNotice(tDeeplink("link.explanation"));
+      } else setError(getAccessErrorMessage(failure, t("feedback.providerFailed")));
     } finally {
       setBusy(false);
     }
@@ -98,18 +115,20 @@ export default function LoginPage({ background }: { background?: ReactNode } = {
       }
       try {
         session = await login({ email: normalizedEmail, password });
-      } catch {
+      } catch (failure) {
+        const response = getAccessHttpError(failure);
+        if (response?.status !== 401 || response.code !== "INVALID_CREDENTIALS") throw failure;
         const { user } = await loginFirebase(normalizedEmail, password);
         const proof = await user.getIdToken(true);
         await loginWithFirebase(proof);
         setMigrationProof(proof);
-        setError(tDeeplink("migration.choosePassword"));
-        setShowForm(true);
+        setNotice(tDeeplink("migration.choosePassword"));
+        openSignIn();
         return;
       }
       finish(session, "password");
-    } catch {
-      setError(t("login.error"));
+    } catch (failure) {
+      setError(getAccessErrorMessage(failure, t("feedback.signInFailed")));
     } finally {
       setBusy(false);
     }
@@ -121,109 +140,123 @@ export default function LoginPage({ background }: { background?: ReactNode } = {
     setLinkConfirmed(false);
     setEmail("");
     setError(null);
-    setShowForm(true);
+    setNotice(null);
+    openSignIn();
   }
 
   function forgetAccount() {
     saveRememberedLogin(null);
     setRemembered(null);
-    setRemember(false);
-    chooseAnotherAccount();
+    setEmail("");
+    setError(null);
+    setNotice(null);
   }
 
-  const rememberedView = Boolean(remembered && !showForm);
-  const divider = (
-    <div className="flex items-center gap-4" role="separator" aria-label={t("login.or")}>
-      <span className="h-px flex-1 bg-operational-border" />
-      <span className="text-body text-operational-muted">{t("login.or")}</span>
-      <span className="h-px flex-1 bg-operational-border" />
-    </div>
-  );
+  if (search.get("step") !== "signin")
+    return (
+      <Access
+        key="entry"
+        topAction={<LanguageSwitcher />}
+        heading={t("entry.title")}
+        helperText={t("entry.description")}
+        logoWidth={7}
+        logoInteractive
+        background={background}
+        busy={busy}
+        error={error}
+        notice={notice}
+        footer={<LoginShortcuts lang={lang} state={location.state} policiesOnly />}>
+        <LoginEntryChoices
+          lang={lang}
+          state={location.state}
+          remembered={remembered}
+          busy={busy}
+          onSignIn={chooseAnotherAccount}
+          onForget={forgetAccount}
+          onContinue={() => {
+            if (!remembered) return;
+            if (remembered.method !== "password") void handleProvider(remembered.method, remembered.email);
+            else {
+              setError(null);
+              setNotice(null);
+              setLinkProof(null);
+              setMigrationProof(null);
+              setLinkConfirmed(false);
+              setEmail(remembered.email);
+              openSignIn();
+            }
+          }}
+        />
+      </Access>
+    );
   return (
     <Access
-      heading={t("login.title")}
+      key="signin"
+      topAction={<LanguageSwitcher />}
+      backAction={
+        <ToolbarAction
+          icon="chevronLeft"
+          label={t("entry.back")}
+          disabled={busy}
+          onClick={() => {
+            setLinkProof(null);
+            setMigrationProof(null);
+            setLinkConfirmed(false);
+            setError(null);
+            setNotice(null);
+            setSearch(
+              (current) => {
+                const next = new URLSearchParams(current);
+                next.delete("step");
+                return next;
+              },
+              { state: location.state },
+            );
+          }}
+        />
+      }
+      heading={t("login.welcome")}
+      logoWidth={7}
+      logoInteractive
       compact
       submitVariant="soft"
       animatedBackground
       background={background}
       busy={busy}
       error={error}
+      notice={notice}
       formHeader={
-        rememberedView && remembered ? (
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2">
-              <Button
-                type="button"
-                content={remembered.email.length > 28 ? `${remembered.email.slice(0, 25)}…` : remembered.email}
-                title={remembered.email}
-                description={t("login.continueAs", { email: remembered.email })}
-                icon={{ name: remembered.method === "password" ? "user" : remembered.method, inverse: true }}
-                bgColor={Colors.WHITE}
-                txtColor={Colors.BLACK}
-                className="min-h-12 min-w-0 flex-1"
-                disabled={busy}
-                onClick={() => {
-                  if (remembered.method !== "password") void handleProvider(remembered.method, remembered.email);
-                  else {
-                    setEmail(remembered.email);
-                    setShowForm(true);
-                  }
-                }}
-              />
-              <Button
-                type="button"
-                icon={{ name: "x" }}
-                description={t("login.forgetAccount")}
-                bgColor={Colors.WHITE}
-                txtColor={Colors.BLACK}
-                disabled={busy}
-                onClick={forgetAccount}
-              />
-            </div>
-            <span className="text-center text-body text-operational-muted">
-              {t("login.lastUsed")} ·{" "}
-              {remembered.method === "password" ? t("login.emailMethod") : remembered.method === "google" ? "Google" : "Microsoft"}
-            </span>
-          </div>
-        ) : (
-          <div className="flex flex-col gap-6">
-            <div className="flex items-center justify-center gap-4">
-              <LoginWithGoogle disabled={busy} onClick={() => void handleProvider("google")} />
-              <LoginWithMicrosoft disabled={busy} onClick={() => void handleProvider("microsoft")} />
-            </div>
-            {divider}
-          </div>
-        )
+        <Surface className="self-center" contentClassName="flex items-center justify-center gap-3 p-1">
+          <LoginWithGoogle disabled={busy} onClick={() => void handleProvider("google")} />
+          <LoginWithMicrosoft disabled={busy} onClick={() => void handleProvider("microsoft")} />
+        </Surface>
       }
-      fields={
-        rememberedView
-          ? []
-          : [
-              {
-                name: "email",
-                type: "email",
-                label: t("login.emailLabel"),
-                placeholder: t("login.emailPlaceholder"),
-                value: email,
-                onChange: (event) => setEmail(event.target.value),
-                autoComplete: "username",
-                readOnly: Boolean(migrationProof || linkProof),
-              },
-              {
-                name: "password",
-                label: t("login.passwordLabel"),
-                placeholder: migrationProof ? tDeeplink("migration.newPassword") : t("login.passwordPlaceholder"),
-                minLength: migrationProof ? 12 : undefined,
-                autoComplete: migrationProof ? "new-password" : "current-password",
-                defaultValue:
-                  import.meta.env.DEV && !migrationProof && !linkProof && email === import.meta.env.VITE_DEV_LOGIN_EMAIL
-                    ? import.meta.env.VITE_DEV_LOGIN_PASSWORD
-                    : undefined,
-                password: true,
-                autoFocus: Boolean(remembered && email === remembered.email),
-              },
-            ]
-      }
+      fields={[
+        {
+          name: "email",
+          type: "email",
+          label: t("login.emailLabel"),
+          placeholder: t("login.emailPlaceholder"),
+          value: email,
+          onChange: (event) => setEmail(event.target.value),
+          autoComplete: "username",
+          readOnly: Boolean(migrationProof || linkProof),
+          autoFocus: !remembered || email !== remembered.email,
+        },
+        {
+          name: "password",
+          label: t("login.passwordLabel"),
+          placeholder: migrationProof ? tDeeplink("migration.newPassword") : t("login.passwordPlaceholder"),
+          minLength: migrationProof ? 12 : undefined,
+          autoComplete: migrationProof ? "new-password" : "current-password",
+          defaultValue:
+            import.meta.env.DEV && !migrationProof && !linkProof && email === import.meta.env.VITE_DEV_LOGIN_EMAIL
+              ? import.meta.env.VITE_DEV_LOGIN_PASSWORD
+              : undefined,
+          password: true,
+          autoFocus: Boolean(remembered && email === remembered.email),
+        },
+      ]}
       beforeSubmit={
         <>
           {linkProof && (
@@ -234,51 +267,13 @@ export default function LoginPage({ background }: { background?: ReactNode } = {
               onChange={(event) => setLinkConfirmed(event.target.checked)}
             />
           )}
-          <Checkbox
-            label={t("login.remember")}
-            checked={remember}
-            disabled={busy}
-            onChange={(event) => {
-              setRemember(event.target.checked);
-              if (!event.target.checked) saveRememberedLogin(null);
-            }}
-            className="my-1"
-          />
         </>
       }
-      submitLabel={rememberedView ? undefined : linkProof ? tDeeplink("link.submit") : t("login.signIn")}
+      submitLabel={linkProof ? tDeeplink("link.submit") : t("login.signIn")}
       onSubmit={handleSubmit}
       footer={
         <div className="flex w-full flex-col items-center gap-6">
-          {rememberedView && (
-            <>
-              <div className="w-full">{divider}</div>
-              <Button
-                type="button"
-                content={t("login.anotherAccount")}
-                description={t("login.anotherAccount")}
-                bgColor={Colors.WHITE}
-                txtColor={Colors.BLACK}
-                disabled={busy}
-                onClick={chooseAnotherAccount}
-              />
-            </>
-          )}
-          <div className="flex flex-col items-center gap-2">
-            <div className="flex flex-wrap items-center justify-center gap-1">
-              <span className="text-body text-operational-muted">{t("login.noAccountPrefix")}</span>
-              <Hyperlink content={t("login.register")} url={routePaths.register(lang)} state={location.state} className="text-body text-orange" />
-            </div>
-            {!rememberedView && <Hyperlink content={t("login.forgotPassword")} url={routePaths.forgotPassword(lang)} className="text-body" />}
-          </div>
-          <div className="flex flex-col items-center gap-1 text-center">
-            <p className="text-body text-operational-muted">{t("login.policiesIntro")}</p>
-            <div className="flex flex-wrap justify-center gap-x-1 gap-y-1">
-              <Hyperlink content={t("login.terms")} url={routePaths.termsPolicy(lang)} className="text-body underline underline-offset-4" />
-              <Hyperlink content={t("login.privacy")} url={routePaths.privacyPolicy(lang)} className="text-body underline underline-offset-4" />
-              <Hyperlink content={t("login.cookies")} url={routePaths.cookiePolicy(lang)} className="text-body underline underline-offset-4" />
-            </div>
-          </div>
+          <LoginShortcuts lang={lang} state={location.state} />
         </div>
       }
     />

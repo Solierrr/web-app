@@ -1,6 +1,6 @@
 import { act, createRef } from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ContextMenu, type ContextMenuHandle, type ContextMenuItem } from "./ContextMenu";
 
 const ITEMS: ContextMenuItem[] = [
@@ -8,7 +8,37 @@ const ITEMS: ContextMenuItem[] = [
   { label: "Excluir", onClick: vi.fn() },
 ];
 
+beforeEach(() => {
+  vi.stubGlobal(
+    "ResizeObserver",
+    class {
+      observe() {}
+      disconnect() {}
+    },
+  );
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
+  vi.unstubAllGlobals();
+});
+
 describe("ContextMenu", () => {
+  it("keeps a menu near the lower right corner inside the viewport", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(DOMRect.fromRect({ width: 240, height: 120 }));
+    vi.spyOn(HTMLElement.prototype, "scrollHeight", "get").mockReturnValue(120);
+    const ref = createRef<ContextMenuHandle>();
+    render(<ContextMenu ref={ref} />);
+    act(() => ref.current!.open(ITEMS, window.innerWidth, window.innerHeight - 8));
+    const menu = screen.getByRole("menu");
+    expect(menu.style.left).toBe(`${window.innerWidth - 248}px`);
+    expect(menu.style.top).toBe(`${window.innerHeight - 128}px`);
+    expect(menu.style.maxWidth).toBe(`${window.innerWidth - 16}px`);
+    expect(menu.style.overflowY).toBe("auto");
+    act(() => ref.current!.open(ITEMS, -100, -100));
+    expect(menu.style.left).toBe("8px");
+    expect(menu.style.top).toBe("8px");
+  });
   it("renders nothing until open() is called", () => {
     render(<ContextMenu />);
 

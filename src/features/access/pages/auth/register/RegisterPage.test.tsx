@@ -1,7 +1,13 @@
+import Toast from "@@/feedback/toast/Toast";
+import { beforeEach as beforeToastTest } from "vitest";
+beforeToastTest(() => {
+  render(<Toast />);
+});
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import RegisterPage from "./RegisterPage";
+import { HttpResponseError } from "@/lib/shared/http/http.service";
 vi.mock("@/features/access/access.credentials.service", () => ({ requestEmailVerification: vi.fn().mockResolvedValue(undefined) }));
 
 vi.mock("@/features/access/access.service", () => ({
@@ -22,6 +28,23 @@ function fillForm({ password, confirmPassword }: { password: string; confirmPass
 }
 
 describe("RegisterPage", () => {
+  it("retries sign-in without registering again after partial success", async () => {
+    mockedRegister.mockResolvedValue({ id: "user-1", email: "user@solaria.com", message: "Created" });
+    mockedLogin.mockRejectedValue(new Error("unavailable", { cause: new HttpResponseError(503, "HTTP_ERROR") }));
+    render(
+      <MemoryRouter>
+        <RegisterPage />
+      </MemoryRouter>,
+    );
+    fillForm({ password: "supersecret123", confirmPassword: "supersecret123" });
+    expect(await screen.findByText("temporariamente indisponível", { exact: false })).toBeInTheDocument();
+    expect(screen.getByText("Sua conta foi criada", { exact: false })).toBeInTheDocument();
+    expect(screen.getByLabelText("E-mail")).toHaveAttribute("readonly");
+    fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
+    await waitFor(() => expect(mockedLogin).toHaveBeenCalledTimes(2));
+    expect(mockedRegister).toHaveBeenCalledOnce();
+  });
+
   beforeEach(() => {
     vi.stubEnv("VITE_MOCKS", "DEACTIVATED");
     vi.stubEnv("VITE_AUTH_MOCKS", "DEACTIVATED");
@@ -85,7 +108,9 @@ describe("RegisterPage", () => {
 
     fillForm({ password: "supersecret123", confirmPassword: "different123" });
 
-    expect(screen.getByText("As senhas não coincidem")).toBeInTheDocument();
+    expect(screen.getByText("As senhas não coincidem", { exact: false })).toBeInTheDocument();
     expect(mockedRegister).not.toHaveBeenCalled();
   });
 });
+
+vi.mock("@@/brand/logo/OrganicLogo", () => ({ default: () => <span role="img" aria-label="Solaria" /> }));

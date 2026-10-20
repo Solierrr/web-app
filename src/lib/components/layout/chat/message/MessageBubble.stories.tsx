@@ -16,7 +16,7 @@ type Story = StoryObj<typeof meta>;
 export const Received: Story = {};
 export const Sent: Story = { args: { own: true, author: "Você" } };
 export const Grouped: Story = { args: { showAuthor: false, content: "Os registros já estão na galeria do projeto." } };
-export const Assistant: Story = { args: { assistant: true, author: "Assistente Solaria" } };
+export const Assistant: Story = { args: { conversationKind: "assistant", assistant: true, author: "Assistente Solaria" } };
 export const LongContent: Story = {
   args: {
     content:
@@ -25,3 +25,7 @@ export const LongContent: Story = {
       "documentacao".repeat(25),
   },
 };
+
+export const DirectTimeline: Story = { args: { presentation: "timeline", conversationKind: "direct" } };
+export const GroupTimeline: Story = { args: { presentation: "timeline", conversationKind: "group" } };
+export const AssistantTimeline: Story = { args: { presentation: "timeline", conversationKind: "assistant" } };

@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Icon from "@@/ui/icon/Icon";
 import { MenuList, MenuItem } from "@@/overlay/Menu";
-import { SUPPORTED as SUPPORTED_LANGUAGES, type SupportedLanguage } from "@/config/i18n/browser/languages";
+import { SUPPORTED as SUPPORTED_LANGUAGES, rememberLanguage, type SupportedLanguage } from "@/config/i18n/browser/languages";
 import { translatePathToLanguage } from "@/config/i18n/paths";
 
 const LANGUAGE_LABELS: Record<SupportedLanguage, string> = {
@@ -46,7 +46,8 @@ export default function LanguageSwitcher() {
   // ela pra refletir a escolha.
   function handleSelect(language: SupportedLanguage) {
     const translatedPath = translatePathToLanguage(location.pathname, language);
-    navigate(translatedPath);
+    rememberLanguage(language);
+    navigate(translatedPath + location.search + location.hash, { state: location.state });
     setOpen(false);
   }
 
