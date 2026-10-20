@@ -105,6 +105,7 @@ export default function Access({
 
   return (
     <main className="relative isolate flex min-h-dvh w-full flex-col items-center gap-6 bg-white px-6 pt-8 pb-10 scrollbar-none sm:px-12">
+      {backAction && <div className="absolute left-6 top-6 z-20 [&>button]:w-15! [&>a]:w-15!">{backAction}</div>}
       {topAction && <div className="absolute right-6 top-6 z-20">{topAction}</div>}
       {animatedBackground &&
         (background ? (
@@ -115,7 +116,6 @@ export default function Access({
           <SideCanvas centerWidth="36rem" centerHeight="48rem" />
         ))}
       <div className="relative flex h-28 w-full shrink-0 items-center justify-center">
-        {backAction && <div className="absolute left-0 top-1/2 -translate-y-1/2">{backAction}</div>}
         <OrganicLogo width={logoWidth} interactive={logoInteractive} />
       </div>
       <div className="flex w-full flex-col items-center justify-center">

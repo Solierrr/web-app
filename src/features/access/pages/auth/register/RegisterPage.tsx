@@ -2,7 +2,9 @@ import { type FormEvent, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Access from "@/lib/components/layout/access/Access";
-import Hyperlink from "@/lib/components/ui/link/Hyperlink";
+import ToolbarAction from "@@/ui/button/ToolbarAction";
+import LanguageSwitcher from "@@/layout/navbar/LanguageSwitcher";
+import { LoginShortcuts } from "../login/LoginPage.reusable";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
 import { login, register } from "@/features/access/access.service";
@@ -62,10 +64,12 @@ export default function RegisterPage() {
   return (
     <Access
       heading={t("register.title")}
+      helperText={t("register.helperText")}
+      topAction={<LanguageSwitcher />}
+      backAction={<ToolbarAction icon="chevronLeft" label={t("register.login")} to={routePaths.login(lang)} state={location.state} />}
+      logoInteractive
       compact
-      animatedBackground={false}
       notice={createdEmail ? t("register.accountCreated") : undefined}
-      formHeader={<p className="text-center text-body text-operational-muted">{t("register.helperText")}</p>}
       fields={[
         {
           name: "email",
@@ -96,22 +100,7 @@ export default function RegisterPage() {
       busy={busy}
       error={error}
       onSubmit={handleSubmit}
-      footer={
-        <div className="flex w-full flex-col items-center gap-6">
-          <div className="flex flex-wrap items-center justify-center gap-1 text-body">
-            <span className="text-operational-muted">{t("register.hasAccountPrefix")}</span>
-            <Hyperlink content={t("register.login")} url={routePaths.login(lang)} state={location.state} className="text-orange" />
-          </div>
-          <div className="flex flex-col items-center gap-1 text-center">
-            <p className="text-body text-operational-muted">{t("login.policiesIntro")}</p>
-            <div className="flex flex-wrap justify-center gap-1">
-              <Hyperlink content={t("login.terms")} url={routePaths.termsPolicy(lang)} className="text-body underline underline-offset-4" />
-              <Hyperlink content={t("login.privacy")} url={routePaths.privacyPolicy(lang)} className="text-body underline underline-offset-4" />
-              <Hyperlink content={t("login.cookies")} url={routePaths.cookiePolicy(lang)} className="text-body underline underline-offset-4" />
-            </div>
-          </div>
-        </div>
-      }
+      footer={<LoginShortcuts lang={lang} state={location.state} policiesOnly />}
     />
   );
 }
