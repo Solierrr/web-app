@@ -1,3 +1,4 @@
+import FormError from "@@/feedback/toast/FormError";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Input from "@@/ui/input/Input";
@@ -195,7 +196,7 @@ export default function BrandManager({ brands, onSaved, onClose, initialBrandId 
         />
         {logoUrl && !files.length && <img src={logoUrl} alt={name} className="h-20 w-full object-contain" />}
         {brand?.visibility === "PUBLIC" && <Alert state="info">{t("publicHelp")}</Alert>}
-        {error && !invalid && <Alert>{error}</Alert>}
+        <FormError message={!invalid ? error : null} />
         {allowed(brand?.visibility === "PUBLIC" ? "POST /api/brands/{id}/requests" : id ? "PUT /api/brands/{id}" : "POST /api/brands") &&
           (!(!id && visibility === "PUBLIC") || allowed("POST /api/brands/{id}/requests")) && (
             <PrimaryButton type="submit" disabled={blocked} content={actionLabel} description={actionLabel} className="w-full min-h-12" />

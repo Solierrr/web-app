@@ -1,3 +1,4 @@
+import FormError from "@@/feedback/toast/FormError";
 import StatusField from "@@/ui/status-field/StatusField";
 import OperationalTable from "@@/layout/operational-page/OperationalTable";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
@@ -222,11 +223,7 @@ export default function OffersPage() {
           <PrimaryButton content={t("createHeading")} description={t("createHeading")} onClick={startCreate} />
         ) : undefined
       }>
-      {error ? (
-        <p role="alert" className="text-feedback-error">
-          {t("error")}
-        </p>
-      ) : null}
+      <FormError message={error ? t("error") : null} />
 
       {formOpen && (editingId ? can("PUT /api/offers/{id}") : can("POST /api/offers")) && (
         <section className="flex flex-col gap-3">

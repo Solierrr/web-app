@@ -1,3 +1,4 @@
+import FormError from "@@/feedback/toast/FormError";
 import { PrimaryButton } from "@@/ui/button/Button.presets";
 import Input from "@@/ui/input/Input";
 import OperationalForm from "@@/layout/operational-page/OperationalForm";
@@ -52,11 +53,7 @@ export default function CompanyAccessPage() {
             className="w-full"
           />
         </label>
-        {error ? (
-          <p role="alert" className="text-feedback-error">
-            {t("error")}
-          </p>
-        ) : null}
+        <FormError message={error ? t("error") : null} />
         <PrimaryButton type="submit" disabled={saving || !code.trim()} className="min-h-12 w-full" content={t("submit")} description={t("submit")} />
       </OperationalForm>
     </OperationalPage>

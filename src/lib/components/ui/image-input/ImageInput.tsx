@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { WhiteButton } from "@@/ui/button/Button.presets";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
-import Alert from "@@/feedback/alert/Alert";
+import FormError from "@@/feedback/toast/FormError";
 
 interface ImageInputProps {
   name: string;
@@ -94,7 +94,7 @@ export default function ImageInput({
           {progress ?? summary}
         </p>
       </div>
-      {error && <Alert>{error}</Alert>}
+      <FormError message={error} />
       {files.length > 0 && (
         <ul className="flex min-w-0 flex-col gap-2">
           {files.map((file, index) => (

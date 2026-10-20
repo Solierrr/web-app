@@ -1,3 +1,8 @@
+import Toast from "@@/feedback/toast/Toast";
+import { beforeEach as beforeToastTest } from "vitest";
+beforeToastTest(() => {
+  render(<Toast />);
+});
 vi.mock("@/features/brands/brand.service", () => ({
   listBrands: vi.fn().mockResolvedValue(
     ["SolTech", "PreviewBrand", "Nova marca", "Brand"].map((name) => ({
@@ -10,7 +15,10 @@ vi.mock("@/features/brands/brand.service", () => ({
   ),
 }));
 import { notify } from "@@/feedback/toast/Toast.utils";
-vi.mock("@@/feedback/toast/Toast.utils", () => ({ notify: vi.fn() }));
+vi.mock("@@/feedback/toast/Toast.utils", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@@/feedback/toast/Toast.utils")>();
+  return { ...actual, notify: vi.fn(actual.notify) };
+});
 import { listModelPhotos, uploadModelPhoto, type ModelPhoto } from "@/features/solar-panel/solarPanel.photo.service";
 vi.mock("@/features/solar-panel/solarPanel.photo.service", () => ({
   listModelPhotos: vi.fn().mockResolvedValue([]),
@@ -19,7 +27,7 @@ vi.mock("@/features/solar-panel/solarPanel.photo.service", () => ({
 }));
 import { MemoryRouter } from "react-router-dom";
 import { HttpResponseError } from "@/lib/shared/http/http.service";
-import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, within, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import SolarPanelModelCrud from "./SolarPanelModelCrud";
 import { useActiveContext } from "@/lib/shared/context/ActiveContext";
@@ -71,10 +79,16 @@ describe("SolarPanelModelCrud", () => {
   it("displays the translated API reason when a model cannot be removed", async () => {
     const pending = { ...items[0], creatorCompanyId: "company-1", status: SolarPanelModelStatus.UNDERANALYSIS };
     mockedListSolarPanelModels.mockResolvedValue([pending]);
-    vi.mocked(deleteSolarPanel).mockRejectedValueOnce(new Error("Service failure", {
-      cause: new HttpResponseError(422, "MODEL_NOT_REMOVABLE", "Untranslated server detail"),
-    }));
-    render(<MemoryRouter><SolarPanelModelCrud /></MemoryRouter>);
+    vi.mocked(deleteSolarPanel).mockRejectedValueOnce(
+      new Error("Service failure", {
+        cause: new HttpResponseError(422, "MODEL_NOT_REMOVABLE", "Untranslated server detail"),
+      }),
+    );
+    render(
+      <MemoryRouter>
+        <SolarPanelModelCrud />
+      </MemoryRouter>,
+    );
     await screen.findByText("ST-450");
     fireEvent.click(screen.getByRole("button", { name: "Opções de SolTech ST-450" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Remover" }));
@@ -283,7 +297,7 @@ describe("SolarPanelModelCrud", () => {
     fireEvent.click(screen.getByRole("button", { name: "Última página" }));
     expect(screen.getAllByRole("row")).toHaveLength(3);
     expect(screen.getByRole("button", { name: "Próxima página" })).toBeDisabled();
-    expect(screen.getByRole("status")).toHaveTextContent("3 de 3");
+    expect(screen.getByText("3 de 3", { exact: false })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Primeira página" }));
     expect(screen.getByText("ST-0")).toBeInTheDocument();
   });
@@ -329,17 +343,17 @@ describe("SolarPanelModelCrud", () => {
     fireEvent.click(screen.getByRole("button", { name: "Potência" }));
     expect(screen.getByRole("columnheader", { name: "Potência" })).toHaveAttribute("aria-sort", "ascending");
     expect(screen.getAllByRole("row")[1]).toHaveTextContent("SORT-11");
-    expect(screen.getByRole("status")).toHaveTextContent("1 de 3");
+    expect(screen.getByText("1 de 3", { exact: false })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Potência" }));
     expect(screen.getAllByRole("row")[1]).toHaveTextContent("SORT-0");
     fireEvent.click(screen.getByRole("button", { name: "Filtros" }));
     fireEvent.change(screen.getByRole("spinbutton", { name: "Potência: Mínimo" }), { target: { value: "500" } });
     expect(screen.getAllByRole("row")).toHaveLength(4);
-    expect(screen.getByRole("status")).toHaveTextContent("1 de 1");
+    expect(screen.getByText("1 de 1", { exact: false })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Remover filtro de Potência" }));
-    expect(screen.getByRole("status")).toHaveTextContent("1 de 3");
+    expect(screen.getByText("1 de 3", { exact: false })).toBeInTheDocument();
     fireEvent.change(screen.getByRole("spinbutton", { name: "Potência: Mínimo" }), { target: { value: "900" } });
-    expect(screen.getByRole("status")).toHaveTextContent("0 de 0");
+    expect(screen.getByText("0 de 0", { exact: false })).toBeInTheDocument();
     expect(screen.getByText("Nenhum modelo corresponde aos filtros.")).toBeVisible();
     expect(within(screen.getByRole("dialog", { name: "Filtros" })).queryByRole("button", { name: "Limpar filtros" })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Fechar filtros" }));
@@ -456,7 +470,7 @@ describe("SolarPanelModelCrud", () => {
     fireEvent.click(screen.getByRole("button", { name: "Filtros" }));
     expect(screen.getByRole("dialog", { name: "Filtros" })).toBeVisible();
     fireEvent.change(screen.getByRole("spinbutton", { name: "Pot\u00eancia: M\u00ednimo" }), { target: { value: "500" } });
-    expect(screen.getByRole("status")).toHaveTextContent("0 de 0");
+    expect(screen.getByText("0 de 0", { exact: false })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Fechar filtros" }));
     fireEvent.click(screen.getByRole("button", { name: "Configura\u00e7\u00f5es da tabela" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Ocultar barra de pesquisa" }));
@@ -494,7 +508,7 @@ describe("SolarPanelModelCrud", () => {
     fireEvent.change(screen.getByLabelText("Modelo"), { target: { value: "Novo modelo" } });
     fillTechnicalFields();
     fireEvent.click(screen.getByRole("button", { name: "Salvar modelo" }));
-    expect(await screen.findByRole("alert")).toHaveTextContent("Não foi possível salvar");
+    expect(await screen.findByText("Não foi possível salvar", { exact: false })).toBeInTheDocument();
     expect(screen.getByLabelText("Marca")).toHaveValue("Nova marca");
     expect(screen.queryByRole("table")).not.toBeInTheDocument();
   });
@@ -529,7 +543,7 @@ describe("SolarPanelModelCrud", () => {
     fireEvent.change(screen.getByLabelText("Selecionar fotos", { selector: "input" }), { target: { files: [first, second] } });
     fillTechnicalFields();
     fireEvent.click(screen.getByRole("button", { name: "Salvar modelo" }));
-    expect(await screen.findByRole("alert")).toHaveTextContent("fotos");
+    await waitFor(() => expect(screen.getAllByRole("status").some((item) => item.textContent?.includes("fotos"))).toBe(true));
     expect(createSolarPanel).toHaveBeenCalledOnce();
     await act(async () => resolvePhotos([]));
     expect(screen.getAllByAltText("Brand Model")).toHaveLength(1);

@@ -1,3 +1,4 @@
+import FormError from "@@/feedback/toast/FormError";
 import { useCallback, useRef, useState, type FormEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useActiveContext } from "@/lib/shared/context/ActiveContext";
@@ -222,7 +223,7 @@ function ProjectForm({ project: p, options, companyId }: { project: Project | nu
             </label>
           </InputGroup>
         </FormSection>
-        {error && <Alert>{error}</Alert>}
+        <FormError message={error} />
         <PrimaryButton variant="soft" type="submit" content={t("save")} description={t("save")} disabled={busy} className="min-h-12 w-full" />
         <WhiteSolidButton
           type="button"

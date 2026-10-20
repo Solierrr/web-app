@@ -1,3 +1,4 @@
+import FormError from "@@/feedback/toast/FormError";
 import { useEffect, useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 import OperationalForm, { FormSection } from "@@/layout/operational-page/OperationalForm";
@@ -124,7 +125,7 @@ export default function Submission() {
   return (
     <OperationalPage title={t("professional.title")} compact form centered formBackground loading={!account && !error}>
       <OperationalForm plain onSubmit={(event) => void save(event)} className="flex flex-col gap-5">
-        {error && <p role="alert">{error}</p>}
+        <FormError message={error} />
         {account?.approved && <p role="status">{t("professional.preserved")}</p>}
         {account?.suspended && <p role="alert">{t("professional.suspended")}</p>}
         {account?.submissions.map((item) => (

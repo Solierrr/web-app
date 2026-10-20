@@ -1,3 +1,4 @@
+import FormError from "@@/feedback/toast/FormError";
 import OperationalForm from "@@/layout/operational-page/OperationalForm";
 import { useState, type FormEvent, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
@@ -104,11 +105,7 @@ export function ProfileEditForm({ title, fields, onCancel, onSave, saving = fals
             {notice}
           </p>
         )}
-        {error && (
-          <p role="alert" className="text-body text-red-700">
-            {error}
-          </p>
-        )}
+        <FormError message={error} />
 
         <div className="flex flex-col gap-3">
           <PrimaryButton

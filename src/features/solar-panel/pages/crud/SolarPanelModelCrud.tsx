@@ -1,3 +1,4 @@
+import FormError from "@@/feedback/toast/FormError";
 import FieldFeedback from "@@/feedback/field-feedback/FieldFeedback";
 import { getHttpErrorMessage } from "@/lib/shared/http/http.service";
 import { firstInvalidField, clearFieldValidity } from "@/lib/shared/forms/form.utils";
@@ -30,7 +31,6 @@ import InputGroup from "@@/ui/input-group/InputGroup";
 import ImageInput from "@@/ui/image-input/ImageInput";
 import Breadcrumbs from "@@/ui/breadcrumbs/Breadcrumbs";
 import Tooltip from "@@/feedback/tooltip/Tooltip";
-import Alert from "@@/feedback/alert/Alert";
 import { notify } from "@@/feedback/toast/Toast.utils";
 import Select from "@@/ui/select/Select";
 import { PrimaryButton, WhiteSolidButton } from "@@/ui/button/Button.presets";
@@ -694,7 +694,7 @@ export default function SolarPanelModelCrud() {
                   ))}
               </div>
             </FormSection>
-            {photoError && <Alert>{photoError}</Alert>}
+            <FormError message={photoError} />
             <div className="flex flex-col gap-2">
               <PrimaryButton
                 variant="soft"
@@ -713,7 +713,7 @@ export default function SolarPanelModelCrud() {
                 onClick={closeForm}
               />
             </div>
-            {error && <Alert>{error}</Alert>}
+            <FormError message={error} />
           </OperationalForm>
         )}
 

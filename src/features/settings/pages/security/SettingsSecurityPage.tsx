@@ -1,3 +1,4 @@
+import FormError from "@@/feedback/toast/FormError";
 import { PrimaryButton } from "@@/ui/button/Button.presets";
 import Input from "@@/ui/input/Input";
 import OperationalForm from "@@/layout/operational-page/OperationalForm";
@@ -72,16 +73,8 @@ export default function SettingsSecurityPage() {
             className="w-full"
           />
         </label>
-        {error === "unlinked" ? (
-          <p role="alert" className="text-feedback-error">
-            {t("unlinkedError")}
-          </p>
-        ) : null}
-        {error === "failed" ? (
-          <p role="alert" className="text-feedback-error">
-            {t("changeError")}
-          </p>
-        ) : null}
+        <FormError message={error === "unlinked" ? t("unlinkedError") : null} />
+        <FormError message={error === "failed" ? t("changeError") : null} />
         {success ? <p role="status">{t("changeSuccess")}</p> : null}
         <PrimaryButton type="submit" disabled={saving} className="min-h-12 w-full" content={t("submit")} description={t("submit")} />
       </OperationalForm>
