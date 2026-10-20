@@ -1,3 +1,4 @@
+import FormError from "@@/feedback/toast/FormError";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
 import { PrimaryButton } from "@@/ui/button/Button.presets";
 import Input from "@@/ui/input/Input";
@@ -393,11 +394,7 @@ export default function CompanyOnboarding() {
             />
           </label>
         </FormSection>
-        {error ? (
-          <p role="alert" className="text-red-700">
-            {error}
-          </p>
-        ) : null}
+        <FormError message={error ? error : null} />
         <PrimaryButton type="submit" disabled={saving} className="w-full min-h-12" content={t("submit")} description={t("submit")} />
       </OperationalForm>
     </OperationalPage>

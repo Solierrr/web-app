@@ -1,3 +1,4 @@
+import FormError from "@@/feedback/toast/FormError";
 import { useId, useState, type ChangeEventHandler, type FormEvent, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import Input from "@@/ui/input/Input";
@@ -31,7 +32,7 @@ interface AccessProps {
   fields?: AccessField[];
   submitLabel?: string;
   submitVariant?: "advanced" | "flat" | "soft";
-  error?: ReactNode;
+  error?: string | null;
   notice?: ReactNode;
   footer?: ReactNode;
   onSubmit?: (event: FormEvent<HTMLFormElement>) => void;
@@ -45,6 +46,7 @@ interface AccessProps {
   logoWidth?: number;
   logoInteractive?: boolean;
   backAction?: ReactNode;
+  topAction?: ReactNode;
 }
 
 export default function Access({
@@ -67,6 +69,7 @@ export default function Access({
   logoWidth = 7,
   logoInteractive = false,
   backAction,
+  topAction,
 }: AccessProps) {
   const { t } = useTranslation("access");
   const id = useId();
@@ -102,6 +105,8 @@ export default function Access({
 
   return (
     <main className="relative isolate flex min-h-dvh w-full flex-col items-center gap-6 bg-white px-6 pt-8 pb-10 scrollbar-none sm:px-12">
+      {backAction && <div className="absolute left-6 top-6 z-20 [&>button]:w-9! [&>a]:w-9!">{backAction}</div>}
+      {topAction && <div className="absolute right-6 top-6 z-20">{topAction}</div>}
       {animatedBackground &&
         (background ? (
           <div aria-hidden="true" className="absolute inset-0 -z-10 overflow-hidden">
@@ -111,7 +116,6 @@ export default function Access({
           <SideCanvas centerWidth="36rem" centerHeight="48rem" />
         ))}
       <div className="relative flex h-28 w-full shrink-0 items-center justify-center">
-        {backAction && <div className="absolute left-0 top-1/2 -translate-y-1/2">{backAction}</div>}
         <OrganicLogo width={logoWidth} interactive={logoInteractive} />
       </div>
       <div className="flex w-full flex-col items-center justify-center">
@@ -148,7 +152,7 @@ export default function Access({
                         {field.label && (
                           <label
                             htmlFor={`${id}-${field.name}`}
-                            className="absolute left-4 top-8 z-10 -translate-y-1/2 cursor-text text-body font-medium text-operational-muted transition-all duration-150 group-focus-within:top-3 group-focus-within:text-sidebar group-has-[input:not(:placeholder-shown)]:top-3 group-has-[input:not(:placeholder-shown)]:text-sidebar motion-reduce:transition-none">
+                            className="absolute left-4 top-8 z-10 -translate-y-1/2 cursor-text text-body font-medium text-operational-muted transition-all duration-150 group-focus-within:top-4 group-focus-within:text-sidebar group-has-[input:not(:placeholder-shown)]:top-4 group-has-[input:not(:placeholder-shown)]:text-sidebar motion-reduce:transition-none">
                             {field.label}
                             {getFieldError(field, field.value ?? fieldValues[field.name] ?? field.defaultValue ?? "") && (
                               <span aria-hidden="true" className="text-feedback-error">
@@ -179,7 +183,7 @@ export default function Access({
                                 ? `${id}-${field.name}-feedback`
                                 : undefined
                             }
-                            className="w-full min-h-14 bg-transparent! rounded-none! [&_input]:px-0 [&_input::placeholder]:text-transparent [&_input:focus::placeholder]:text-input-text [&_input]:pt-5 [&_input]:pb-1 [&_button]:mr-0"
+                            className="w-full min-h-14 bg-transparent! rounded-none! [&_input]:px-0 [&_input::placeholder]:text-transparent [&_input:focus::placeholder]:text-input-text [&_input]:pt-7 [&_input]:pb-1 [&_button]:mr-0"
                           />
                         ) : (
                           <Input
@@ -202,7 +206,7 @@ export default function Access({
                                 ? `${id}-${field.name}-feedback`
                                 : undefined
                             }
-                            className="w-full min-h-14 bg-transparent! rounded-none! [&_input]:px-0 [&_input::placeholder]:text-transparent [&_input:focus::placeholder]:text-input-text [&_input]:pt-5 [&_input]:pb-1 [&_button]:mr-0"
+                            className="w-full min-h-14 bg-transparent! rounded-none! [&_input]:px-0 [&_input::placeholder]:text-transparent [&_input:focus::placeholder]:text-input-text [&_input]:pt-7 [&_input]:pb-1 [&_button]:mr-0"
                           />
                         )}
                         <FieldFeedback
@@ -227,7 +231,7 @@ export default function Access({
             ) : (
               <div className="flex flex-col gap-4 w-full">{children}</div>
             )}
-            {error && <Alert>{error}</Alert>}
+            <FormError message={error} />
           </div>
           {footer}
         </div>

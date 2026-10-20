@@ -58,9 +58,15 @@ describe("Access", () => {
   });
 
   it("renders the error message when provided", () => {
-    render(<Access heading="Solaria" fields={[]} submitLabel="Prosseguir" error="Credenciais inválidas" />);
+    render(
+      <>
+        <Toast />
+        <Access heading="Solaria" fields={[]} submitLabel="Prosseguir" error="Credenciais inválidas" />
+      </>,
+    );
 
-    expect(screen.getByText("Credenciais inválidas")).toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent("Credenciais inválidas");
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
 
   it("keeps invalid fields out of submission and associates their feedback", () => {

@@ -1,3 +1,8 @@
+import Toast from "@@/feedback/toast/Toast";
+import { beforeEach as beforeToastTest } from "vitest";
+beforeToastTest(() => {
+  render(<Toast />);
+});
 vi.mock("@@/layout/access/canvas/SideCanvas", () => ({ default: () => null }));
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -25,7 +30,7 @@ describe("SettingsPrivacyPage", () => {
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
     expect(getPrivacyPreferences()).toEqual({ showContact: true, showInSearch: false });
-    expect(screen.getByRole("status")).toHaveTextContent("Preferências salvas neste dispositivo.");
+    expect(screen.getByText("Preferências salvas neste dispositivo.", { exact: false })).toBeInTheDocument();
   });
 
   it("warns when the device blocks saving", () => {
@@ -36,7 +41,7 @@ describe("SettingsPrivacyPage", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
-    expect(screen.getByRole("alert")).toHaveTextContent("Não foi possível salvar as preferências");
+    expect(screen.getByText("Não foi possível salvar as preferências", { exact: false })).toBeInTheDocument();
     vi.restoreAllMocks();
   });
 });

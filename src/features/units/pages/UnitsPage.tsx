@@ -1,3 +1,4 @@
+import FormError from "@@/feedback/toast/FormError";
 import { CepInput, UfInput } from "@@/ui/input/Input.presets";
 import OperationalTable from "@@/layout/operational-page/OperationalTable";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
@@ -182,11 +183,7 @@ export default function UnitsPage() {
           <PrimaryButton content={t("createHeading")} description={t("createHeading")} onClick={startCreate} />
         ) : undefined
       }>
-      {error ? (
-        <p role="alert" className="text-feedback-error">
-          {t("error")}
-        </p>
-      ) : null}
+      <FormError message={error ? t("error") : null} />
 
       {formOpen && (editingId ? can("PUT /api/local-units/{id}") : can("POST /api/local-units")) && (
         <section className="flex flex-col gap-3">

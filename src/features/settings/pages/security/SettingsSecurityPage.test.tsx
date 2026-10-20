@@ -1,3 +1,8 @@
+import Toast from "@@/feedback/toast/Toast";
+import { beforeEach as beforeToastTest } from "vitest";
+beforeToastTest(() => {
+  render(<Toast />);
+});
 vi.mock("@@/layout/access/canvas/SideCanvas", () => ({ default: () => null }));
 vi.mock("@/lib/shared/auth/authToken.utils", () => ({ getAuthSession: vi.fn(), clearAuthSession: vi.fn() }));
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
@@ -19,7 +24,7 @@ describe("SettingsSecurityPage", () => {
     fireEvent.change(screen.getByLabelText("Nova senha"), { target: { value: "a-very-long-password" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
-    expect(await screen.findByRole("alert")).toHaveTextContent(/verificar/);
+    expect(await screen.findByText(/verificar/)).toBeInTheDocument();
     expect(changePassword).not.toHaveBeenCalled();
   });
 

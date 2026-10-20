@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import Icon from "@@/ui/icon/Icon";
@@ -16,7 +16,7 @@ export default function Toast() {
   const { t } = useTranslation("commons");
   const front = notifications[0];
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const receive = (event: Event) => {
       const notification = (event as CustomEvent<ToastMessage>).detail;
       const item = { ...notification, id: ++nextId.current, remaining: notification.duration };
@@ -34,7 +34,7 @@ export default function Toast() {
     }, front.remaining);
     return () => {
       window.clearTimeout(timeout);
-      front.remaining = Math.max(0, front.remaining - (Date.now() - started));
+      front.remaining = Math.min(front.duration, Math.max(0, front.remaining - (Date.now() - started)));
     };
   }, [front]);
 

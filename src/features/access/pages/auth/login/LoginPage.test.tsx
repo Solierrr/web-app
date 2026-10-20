@@ -1,3 +1,4 @@
+import Toast from "@@/feedback/toast/Toast";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
@@ -160,6 +161,7 @@ describe("LoginPage", () => {
     saveRememberedLogin(null);
   });
   beforeEach(() => {
+    render(<Toast />);
     mockedLogin.mockReset();
     vi.mocked(loginWithFirebase).mockReset();
     vi.mocked(loginWithGoogle).mockClear();
@@ -258,7 +260,7 @@ describe("LoginPage", () => {
     fireEvent.change(screen.getByLabelText("E-mail"), { target: { value: "user@solaria.com" } });
     fireEvent.change(screen.getByLabelText("Senha"), { target: { value: "wrong" } });
     fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
-    expect(await screen.findByRole("alert")).toHaveTextContent(message);
+    expect(await screen.findByRole("status")).toHaveTextContent(message);
     expect(loginFirebase).not.toHaveBeenCalled();
     expect(getRememberedLogin()).toBeNull();
   });

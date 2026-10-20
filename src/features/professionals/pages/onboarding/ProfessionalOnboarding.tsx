@@ -1,3 +1,4 @@
+import FormError from "@@/feedback/toast/FormError";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
 import { PrimaryButton } from "@@/ui/button/Button.presets";
 import { NativeSelect as Select } from "@@/ui/select/Select";
@@ -328,11 +329,7 @@ function LegacyProfessionalOnboarding() {
             />
           </label>
         </FormSection>
-        {error ? (
-          <p role="alert" className="text-feedback-error">
-            {error}
-          </p>
-        ) : null}
+        <FormError message={error ? error : null} />
         <PrimaryButton type="submit" disabled={saving} className="min-h-12 w-full" content={t("submit")} description={t("submit")} />
       </OperationalForm>
     </OperationalPage>

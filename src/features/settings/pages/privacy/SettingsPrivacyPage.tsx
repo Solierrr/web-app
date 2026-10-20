@@ -1,3 +1,4 @@
+import FormError from "@@/feedback/toast/FormError";
 import Checkbox from "@@/ui/checkbox/Checkbox";
 import { PrimaryButton } from "@@/ui/button/Button.presets";
 import OperationalForm from "@@/layout/operational-page/OperationalForm";
@@ -28,7 +29,7 @@ export default function SettingsPrivacyPage() {
         <Checkbox label={t("showContact")} checked={preferences.showContact} onChange={() => toggle("showContact")} />
         <Checkbox label={t("showInSearch")} checked={preferences.showInSearch} onChange={() => toggle("showInSearch")} />
         {saved === true ? <p role="status">{t("saved")}</p> : null}
-        {saved === false ? <p role="alert">{t("saveError")}</p> : null}
+        <FormError message={saved === false ? t("saveError") : null} />
         <PrimaryButton type="submit" className="min-h-12 w-full" content={t("save")} description={t("save")} />
       </OperationalForm>
     </OperationalPage>

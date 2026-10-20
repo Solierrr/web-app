@@ -37,12 +37,19 @@ export function SearchInput(props: InputPresetProps) {
  */
 export function PasswordInput({ showIcon = true, ...props }: PasswordInputProps) {
   const [visible, setVisible] = useState(false);
+  const [hasValue, setHasValue] = useState(() => String(props.defaultValue ?? "").length > 0);
+  const filled = props.value !== undefined ? String(props.value).length > 0 : hasValue;
 
   return (
     <Input
       {...props}
+      onChange={(event) => {
+        setHasValue(event.currentTarget.value.length > 0);
+        if (!event.currentTarget.value) setVisible(false);
+        props.onChange?.(event);
+      }}
       type={visible ? "text" : "password"}
-      icon={showIcon ? { name: visible ? "eyeOff" : "eye", inverse: false, onClick: () => setVisible((isVisible) => !isVisible) } : undefined}
+      icon={showIcon && filled ? { name: visible ? "eyeOff" : "eye", inverse: false, onClick: () => setVisible((isVisible) => !isVisible) } : undefined}
     />
   );
 }
