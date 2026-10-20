@@ -1,3 +1,8 @@
+import Toast from "@@/feedback/toast/Toast";
+import { beforeEach as beforeToastTest } from "vitest";
+beforeToastTest(() => {
+  render(<Toast />);
+});
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -34,7 +39,7 @@ describe("ResetPasswordPage", () => {
   it("asks for a new link when the reset code is missing", () => {
     renderPage("");
 
-    expect(screen.getByRole("alert")).toHaveTextContent("Este link de redefinição é inválido ou expirou.");
+    expect(screen.getByText("Este link de redefinição é inválido ou expirou.")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Solicitar novo link" })).toHaveAttribute("href", "/pt-BR/esqueci-senha");
   });
 
@@ -43,7 +48,7 @@ describe("ResetPasswordPage", () => {
 
     fill("senha-muito-segura-1", "senha-muito-segura-2");
 
-    expect(screen.getByRole("alert")).toHaveTextContent("As senhas não conferem.");
+    expect(screen.getByText("As senhas não conferem.")).toBeInTheDocument();
     expect(completePasswordReset).not.toHaveBeenCalled();
   });
 
@@ -54,7 +59,7 @@ describe("ResetPasswordPage", () => {
     fill("senha-muito-segura-1", "senha-muito-segura-1");
 
     await waitFor(() => expect(completePasswordReset).toHaveBeenCalledWith("abc", "senha-muito-segura-1"));
-    expect(await screen.findByRole("status")).toHaveTextContent("Senha redefinida");
+    expect(await screen.findByText("Senha redefinida", { exact: false })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Voltar para o login" })).toHaveAttribute("href", "/pt-BR/login");
   });
 
@@ -64,7 +69,7 @@ describe("ResetPasswordPage", () => {
 
     fill("senha-muito-segura-1", "senha-muito-segura-1");
 
-    expect(await screen.findByRole("alert")).toHaveTextContent("Não foi possível redefinir a senha");
+    expect(await screen.findByText("Não foi possível redefinir a senha", { exact: false })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Solicitar novo link" })).toHaveAttribute("href", "/pt-BR/esqueci-senha");
   });
 
@@ -88,7 +93,7 @@ describe("ResetPasswordPage", () => {
 
     fill("senha-muito-segura-1", "senha-muito-segura-1");
 
-    expect(await screen.findByRole("status")).toHaveTextContent("Senha redefinida");
+    expect(await screen.findByText("Senha redefinida", { exact: false })).toBeInTheDocument();
     expect(completePasswordReset).not.toHaveBeenCalled();
   });
 });

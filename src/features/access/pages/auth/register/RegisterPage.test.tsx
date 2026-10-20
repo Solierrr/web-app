@@ -1,3 +1,8 @@
+import Toast from "@@/feedback/toast/Toast";
+import { beforeEach as beforeToastTest } from "vitest";
+beforeToastTest(() => {
+  render(<Toast />);
+});
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi, beforeEach } from "vitest";
@@ -32,8 +37,8 @@ describe("RegisterPage", () => {
       </MemoryRouter>,
     );
     fillForm({ password: "supersecret123", confirmPassword: "supersecret123" });
-    expect(await screen.findByRole("alert")).toHaveTextContent("temporariamente indisponível");
-    expect(screen.getByRole("status")).toHaveTextContent("Sua conta foi criada");
+    expect(await screen.findByText("temporariamente indisponível", { exact: false })).toBeInTheDocument();
+    expect(screen.getByText("Sua conta foi criada", { exact: false })).toBeInTheDocument();
     expect(screen.getByLabelText("E-mail")).toHaveAttribute("readonly");
     fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
     await waitFor(() => expect(mockedLogin).toHaveBeenCalledTimes(2));
@@ -103,7 +108,7 @@ describe("RegisterPage", () => {
 
     fillForm({ password: "supersecret123", confirmPassword: "different123" });
 
-    expect(screen.getByText("As senhas não coincidem")).toBeInTheDocument();
+    expect(screen.getByText("As senhas não coincidem", { exact: false })).toBeInTheDocument();
     expect(mockedRegister).not.toHaveBeenCalled();
   });
 });

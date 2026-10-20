@@ -1,3 +1,4 @@
+import FormError from "@@/feedback/toast/FormError";
 import { useId, useState, type ChangeEventHandler, type FormEvent, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import Input from "@@/ui/input/Input";
@@ -31,7 +32,7 @@ interface AccessProps {
   fields?: AccessField[];
   submitLabel?: string;
   submitVariant?: "advanced" | "flat" | "soft";
-  error?: ReactNode;
+  error?: string | null;
   notice?: ReactNode;
   footer?: ReactNode;
   onSubmit?: (event: FormEvent<HTMLFormElement>) => void;
@@ -230,7 +231,7 @@ export default function Access({
             ) : (
               <div className="flex flex-col gap-4 w-full">{children}</div>
             )}
-            {error && <Alert>{error}</Alert>}
+            <FormError message={error} />
           </div>
           {footer}
         </div>
