@@ -151,7 +151,7 @@ export default function Access({
                         {field.label && (
                           <label
                             htmlFor={`${id}-${field.name}`}
-                            className="absolute left-4 top-8 z-10 -translate-y-1/2 cursor-text text-body font-medium text-operational-muted transition-all duration-150 group-focus-within:top-3 group-focus-within:text-sidebar group-has-[input:not(:placeholder-shown)]:top-3 group-has-[input:not(:placeholder-shown)]:text-sidebar motion-reduce:transition-none">
+                            className="absolute left-4 top-8 z-10 -translate-y-1/2 cursor-text text-body font-medium text-operational-muted transition-all duration-150 group-focus-within:top-4 group-focus-within:text-sidebar group-has-[input:not(:placeholder-shown)]:top-4 group-has-[input:not(:placeholder-shown)]:text-sidebar motion-reduce:transition-none">
                             {field.label}
                             {getFieldError(field, field.value ?? fieldValues[field.name] ?? field.defaultValue ?? "") && (
                               <span aria-hidden="true" className="text-feedback-error">
@@ -182,7 +182,7 @@ export default function Access({
                                 ? `${id}-${field.name}-feedback`
                                 : undefined
                             }
-                            className="w-full min-h-14 bg-transparent! rounded-none! [&_input]:px-0 [&_input::placeholder]:text-transparent [&_input:focus::placeholder]:text-input-text [&_input]:pt-5 [&_input]:pb-1 [&_button]:mr-0"
+                            className="w-full min-h-14 bg-transparent! rounded-none! [&_input]:px-0 [&_input::placeholder]:text-transparent [&_input:focus::placeholder]:text-input-text [&_input]:pt-7 [&_input]:pb-1 [&_button]:mr-0"
                           />
                         ) : (
                           <Input
@@ -205,7 +205,7 @@ export default function Access({
                                 ? `${id}-${field.name}-feedback`
                                 : undefined
                             }
-                            className="w-full min-h-14 bg-transparent! rounded-none! [&_input]:px-0 [&_input::placeholder]:text-transparent [&_input:focus::placeholder]:text-input-text [&_input]:pt-5 [&_input]:pb-1 [&_button]:mr-0"
+                            className="w-full min-h-14 bg-transparent! rounded-none! [&_input]:px-0 [&_input::placeholder]:text-transparent [&_input:focus::placeholder]:text-input-text [&_input]:pt-7 [&_input]:pb-1 [&_button]:mr-0"
                           />
                         )}
                         <FieldFeedback
