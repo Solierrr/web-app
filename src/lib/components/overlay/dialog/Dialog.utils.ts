@@ -1,6 +1,20 @@
 import { useEffect, useRef, useState, type RefObject } from "react";
-let openDialogs = 0;
-let originalOverflow = "";
+const bodyLocks = new WeakMap<HTMLElement, { count: number; originalOverflow: string }>();
+function lockBody(body: HTMLElement) {
+  let lock = bodyLocks.get(body);
+  if (!lock) {
+    lock = { count: 0, originalOverflow: body.style.overflow };
+    bodyLocks.set(body, lock);
+  }
+  if (lock.count++ === 0) body.style.overflow = "hidden";
+  return () => {
+    lock!.count--;
+    if (lock!.count === 0) {
+      body.style.overflow = lock!.originalOverflow;
+      bodyLocks.delete(body);
+    }
+  };
+}
 export function useDialog(ref: RefObject<HTMLDialogElement | null>) {
   const [closing, setClosing] = useState(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -8,16 +22,13 @@ export function useDialog(ref: RefObject<HTMLDialogElement | null>) {
     const dialog = ref.current;
     if (!dialog) return;
     const previous = document.activeElement as HTMLElement | null;
-    if (openDialogs++ === 0) {
-      originalOverflow = document.body.style.overflow;
-      document.body.style.overflow = "hidden";
-    }
+    const unlockBody = lockBody(dialog.ownerDocument.body);
     if (typeof dialog.showModal === "function") dialog.showModal();
     else dialog.setAttribute("open", "");
     return () => {
       if (closeTimer.current !== null) clearTimeout(closeTimer.current);
       dialog.close?.();
-      if (--openDialogs === 0) document.body.style.overflow = originalOverflow;
+      unlockBody();
       previous?.focus();
     };
   }, [ref]);
