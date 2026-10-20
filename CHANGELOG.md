@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.0](https://github.com/Solierrr/web-app/compare/v3.4.0...v3.5.0) (2026-10-20)
+
+
+### Features
+
+* refine branding navigation chat and access flows ([#84](https://github.com/Solierrr/web-app/issues/84)) ([f6be8fa](https://github.com/Solierrr/web-app/commit/f6be8faf1f60f9afa7da673bd91e701d48c61b29))
+
 ## [3.4.0](https://github.com/Solierrr/web-app/compare/v3.3.0...v3.4.0) (2026-10-20)
 
 
