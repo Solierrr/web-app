@@ -112,7 +112,7 @@ export default function MessageComposer({
   return (
     <form
       ref={form}
-      className={`relative shrink-0 rounded-medium bg-input-bg ${assistant ? "grid min-h-10 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2 gap-y-0 pl-4 pr-1 py-0" : `gap-2 p-3 ${compact ? "flex flex-col" : "grid grid-cols-[minmax(0,1fr)_auto] items-end"}`}`}
+      className={`relative shrink-0 rounded-3xl bg-input-bg ${assistant ? "grid min-h-10 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2 gap-y-0 pl-4 pr-1 py-0" : `gap-2 p-3 ${compact ? "flex flex-col" : "grid grid-cols-[minmax(0,1fr)_auto] items-end"}`}`}
       onSubmit={(event) => {
         event.preventDefault();
         if (canSend) {
