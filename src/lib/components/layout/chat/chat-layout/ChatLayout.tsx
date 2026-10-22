@@ -11,32 +11,42 @@ interface ChatLayoutProps {
   conversationKind?: ConversationKind;
 }
 
+function continues(previous: MessageInterface, current: MessageInterface) {
+  return (
+    previous.user.id === current.user.id &&
+    current.time.toDateString() === previous.time.toDateString() &&
+    current.time.getTime() >= previous.time.getTime() &&
+    current.time.getTime() - previous.time.getTime() < 5 * 60 * 1000
+  );
+}
+
 /**
  * ChatLayout
  *
  * Lista de mensagens compartilhada pelo chat entre usuários (`Chat`) e pelo
- * chatbot (`ChatbotPage`). Sem estilo definitivo ainda — estrutura genérica.
+ * chatbot (`ChatbotPage`). Mensagens seguidas do mesmo autor formam uma sequência: ficam coladas e só a última
+ * mostra a hora.
  */
 export default function ChatLayout({ owner, messages, assistantId, presentation = "bubbles", conversationKind = "direct" }: ChatLayoutProps) {
   return (
-    <section className={`flex min-w-0 flex-col ${presentation === "timeline" ? "gap-1" : "gap-6"}`}>
-      {messages.map((message, index) => (
-        <Message
-          key={index}
-          conversationKind={conversationKind}
-          presentation={presentation}
-          grouped={
-            index > 0 &&
-            messages[index - 1].user.id === message.user.id &&
-            message.time.toDateString() === messages[index - 1].time.toDateString() &&
-            message.time.getTime() >= messages[index - 1].time.getTime() &&
-            message.time.getTime() - messages[index - 1].time.getTime() < 5 * 60 * 1000
-          }
-          message={message}
-          owner={owner}
-          placeholderAvatar={message.user.id === assistantId}
-        />
-      ))}
+    <section className={`flex min-w-0 flex-col ${presentation === "timeline" ? "gap-1" : "gap-0.5"}`}>
+      {messages.map((message, index) => {
+        const grouped = index > 0 && continues(messages[index - 1], message);
+        const endOfGroup = !(index < messages.length - 1 && continues(message, messages[index + 1]));
+        return (
+          <div key={index} className={presentation === "bubbles" && !grouped && index > 0 ? "mt-4" : undefined}>
+            <Message
+              conversationKind={conversationKind}
+              presentation={presentation}
+              grouped={grouped}
+              endOfGroup={endOfGroup}
+              message={message}
+              owner={owner}
+              placeholderAvatar={message.user.id === assistantId}
+            />
+          </div>
+        );
+      })}
     </section>
   );
 }
