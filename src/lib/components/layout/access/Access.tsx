@@ -1,5 +1,6 @@
 import FormError from "@@/feedback/toast/FormError";
-import { useId, useState, type ChangeEventHandler, type FormEvent, type ReactNode } from "react";
+import { createContext, useContext, useId, useState, type ChangeEventHandler, type FormEvent, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import Input from "@@/ui/input/Input";
 import { PasswordInput } from "@@/ui/input/Input.presets";
@@ -7,9 +8,8 @@ import { PrimaryButton } from "@@/ui/button/Button.presets";
 import OrganicLogo from "@@/brand/logo/OrganicLogo";
 import SideCanvas from "./canvas/SideCanvas";
 import Alert from "@@/feedback/alert/Alert";
-import FieldFeedback from "@@/feedback/field-feedback/FieldFeedback";
 import { notify } from "@@/feedback/toast/Toast.utils";
-import Surface from "@@/ui/surface/Surface";
+import SurfaceGroup from "@@/ui/surface/SurfaceGroup";
 
 export interface AccessField {
   name: string;
@@ -26,13 +26,13 @@ export interface AccessField {
   readOnly?: boolean;
 }
 
-interface AccessProps {
+export interface AccessProps {
   heading: string;
   helperText?: ReactNode;
   fields?: AccessField[];
   submitLabel?: string;
   submitVariant?: "advanced" | "flat" | "soft";
-  error?: string | null;
+  error?: ReactNode;
   notice?: ReactNode;
   footer?: ReactNode;
   onSubmit?: (event: FormEvent<HTMLFormElement>) => void;
@@ -47,9 +47,10 @@ interface AccessProps {
   logoInteractive?: boolean;
   backAction?: ReactNode;
   topAction?: ReactNode;
+  stepKey?: string;
 }
 
-export default function Access({
+function AccessBody({
   heading,
   helperText,
   fields = [],
@@ -61,15 +62,9 @@ export default function Access({
   onSubmit,
   children,
   busy = false,
-  animatedBackground = true,
   compact = true,
   formHeader,
   beforeSubmit,
-  background,
-  logoWidth = 7,
-  logoInteractive = false,
-  backAction,
-  topAction,
 }: AccessProps) {
   const { t } = useTranslation("access");
   const id = useId();
@@ -95,7 +90,7 @@ export default function Access({
     }
     setFieldErrors(errors);
     if (Object.keys(errors).length) {
-      if (Object.values(errors).includes(t("feedback.required"))) notify(t("feedback.requiredHelp"));
+      for (const message of new Set(Object.values(errors))) notify(message === t("feedback.required") ? t("feedback.requiredHelp") : message);
       const input = event.currentTarget.elements.namedItem(Object.keys(errors)[0]);
       if (input instanceof HTMLInputElement) input.focus();
       return;
@@ -104,20 +99,6 @@ export default function Access({
   }
 
   return (
-    <main className="relative isolate flex min-h-dvh w-full flex-col items-center gap-6 bg-white px-6 pt-8 pb-10 scrollbar-none sm:px-12">
-      {backAction && <div className="absolute left-6 top-6 z-20 [&>button]:w-9! [&>a]:w-9!">{backAction}</div>}
-      {topAction && <div className="absolute right-6 top-6 z-20">{topAction}</div>}
-      {animatedBackground &&
-        (background ? (
-          <div aria-hidden="true" className="absolute inset-0 -z-10 overflow-hidden">
-            {background}
-          </div>
-        ) : (
-          <SideCanvas centerWidth="36rem" centerHeight="48rem" />
-        ))}
-      <div className="relative flex h-28 w-full shrink-0 items-center justify-center">
-        <OrganicLogo width={logoWidth} interactive={logoInteractive} />
-      </div>
       <div className="flex w-full flex-col items-center justify-center">
         <div className={`flex flex-col w-full ${compact ? "max-w-96" : "max-w-120 max-md:px-8 max-sm:px-4"} gap-6 items-center-safe h-min`}>
           <div className="flex flex-col w-full gap-6">
@@ -146,13 +127,13 @@ export default function Access({
                 className="flex flex-col gap-4 w-full">
                 {children}
                 {fields.length > 0 && (
-                  <Surface contentClassName="divide-y divide-operational-border/60">
+                  <SurfaceGroup>
                     {fields.map((field) => (
                       <div key={field.name} className="group relative flex flex-col px-4 py-1">
                         {field.label && (
                           <label
                             htmlFor={`${id}-${field.name}`}
-                            className="absolute left-4 top-8 z-10 -translate-y-1/2 cursor-text text-body font-medium text-operational-muted transition-all duration-150 group-focus-within:top-4 group-focus-within:text-sidebar group-has-[input:not(:placeholder-shown)]:top-4 group-has-[input:not(:placeholder-shown)]:text-sidebar motion-reduce:transition-none">
+                            className="absolute left-4 top-8 z-10 -translate-y-1/2 cursor-text text-body font-medium text-operational-muted transition-all duration-150 group-focus-within:top-[1.125rem] group-focus-within:text-sidebar group-has-[input:not(:placeholder-shown)]:top-[1.125rem] group-has-[input:not(:placeholder-shown)]:text-sidebar motion-reduce:transition-none">
                             {field.label}
                             {getFieldError(field, field.value ?? fieldValues[field.name] ?? field.defaultValue ?? "") && (
                               <span aria-hidden="true" className="text-feedback-error">
@@ -178,11 +159,6 @@ export default function Access({
                             disabled={busy}
                             aria-label={field.label ?? field.name}
                             aria-invalid={Boolean(fieldErrors[field.name])}
-                            aria-describedby={
-                              fieldErrors[field.name] && fieldErrors[field.name] !== t("feedback.required")
-                                ? `${id}-${field.name}-feedback`
-                                : undefined
-                            }
                             className="w-full min-h-14 bg-transparent! rounded-none! [&_input]:px-0 [&_input::placeholder]:text-transparent [&_input:focus::placeholder]:text-input-text [&_input]:pt-7 [&_input]:pb-1 [&_button]:mr-0"
                           />
                         ) : (
@@ -201,21 +177,12 @@ export default function Access({
                             disabled={busy}
                             aria-label={field.label ?? field.name}
                             aria-invalid={Boolean(fieldErrors[field.name])}
-                            aria-describedby={
-                              fieldErrors[field.name] && fieldErrors[field.name] !== t("feedback.required")
-                                ? `${id}-${field.name}-feedback`
-                                : undefined
-                            }
                             className="w-full min-h-14 bg-transparent! rounded-none! [&_input]:px-0 [&_input::placeholder]:text-transparent [&_input:focus::placeholder]:text-input-text [&_input]:pt-7 [&_input]:pb-1 [&_button]:mr-0"
                           />
                         )}
-                        <FieldFeedback
-                          id={`${id}-${field.name}-feedback`}
-                          message={fieldErrors[field.name] === t("feedback.required") ? undefined : fieldErrors[field.name]}
-                        />
                       </div>
                     ))}
-                  </Surface>
+                  </SurfaceGroup>
                 )}
                 {beforeSubmit}
                 <PrimaryButton
@@ -231,11 +198,75 @@ export default function Access({
             ) : (
               <div className="flex flex-col gap-4 w-full">{children}</div>
             )}
-            <FormError message={error} />
+            {typeof error === "string" ? <FormError message={error} /> : error}
           </div>
           {footer}
         </div>
       </div>
-    </main>
+  );
+}
+
+interface AccessSlots {
+  back: HTMLDivElement | null;
+  top: HTMLDivElement | null;
+  background: HTMLDivElement | null;
+}
+
+const AccessShellContext = createContext<AccessSlots | null>(null);
+
+export interface AccessShellProps {
+  children: ReactNode;
+  logoWidth?: number;
+  logoInteractive?: boolean;
+}
+
+export function AccessShell({ children, logoWidth = 7, logoInteractive = true }: AccessShellProps) {
+  const [back, setBack] = useState<HTMLDivElement | null>(null);
+  const [top, setTop] = useState<HTMLDivElement | null>(null);
+  const [background, setBackground] = useState<HTMLDivElement | null>(null);
+
+  return (
+    <AccessShellContext.Provider value={{ back, top, background }}>
+      <main className="access-shell relative isolate flex min-h-dvh w-full flex-col items-center gap-6 bg-white px-6 pt-14 pb-10 scrollbar-none sm:px-12">
+        <div ref={setBack} className="absolute left-6 top-6 z-20 [&>button]:w-9! [&>a]:w-9!" />
+        <div ref={setTop} className="absolute right-6 top-6 z-20" />
+        <div ref={setBackground} aria-hidden="true" className="absolute inset-0 -z-10 overflow-hidden" />
+        <div className="relative flex h-28 w-full shrink-0 items-center justify-center">
+          <OrganicLogo
+            width={logoWidth}
+            interactive={logoInteractive}
+            motion="expressive"
+            rotateSymbol
+            rotateShape
+            holdMs={1571}
+            transitionMs={1000}
+          />
+        </div>
+        {children}
+      </main>
+    </AccessShellContext.Provider>
+  );
+}
+
+function AccessContent(props: AccessProps) {
+  const slots = useContext(AccessShellContext);
+  const { backAction, topAction, animatedBackground = true, background, stepKey } = props;
+  return (
+    <>
+      {slots?.back && backAction && createPortal(backAction, slots.back)}
+      {slots?.top && topAction && createPortal(topAction, slots.top)}
+      {slots?.background && animatedBackground && createPortal(background ?? <SideCanvas centerWidth="36rem" centerHeight="48rem" />, slots.background)}
+      <AccessBody key={stepKey} {...props} />
+    </>
+  );
+}
+
+export default function Access(props: AccessProps) {
+  const insideShell = useContext(AccessShellContext) !== null;
+  if (insideShell) return <AccessContent {...props} />;
+  return (
+    <AccessShell logoWidth={props.logoWidth} logoInteractive={props.logoInteractive}>
+      <AccessContent {...props} />
+    </AccessShell>
   );
 }

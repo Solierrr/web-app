@@ -417,3 +417,20 @@ input:not([type="checkbox"]):not([type="radio"]) {
 .form-section-body { display: grid; grid-template-rows: 0fr; opacity: 0; visibility: hidden; transition: grid-template-rows 300ms ease, opacity 200ms ease, visibility 300ms; }
 .form-section-body.is-expanded { grid-template-rows: 1fr; opacity: 1; visibility: visible; }
 @media (prefers-reduced-motion: reduce) { .form-section-body { transition: none; } }
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: var(--color-operational-ink);
+  caret-color: var(--color-operational-ink);
+  transition: background-color 600000s 0s, color 600000s 0s;
+}
+
+html:has(.access-shell) {
+  scrollbar-width: none;
+}
+
+html:has(.access-shell)::-webkit-scrollbar {
+  display: none;
+}

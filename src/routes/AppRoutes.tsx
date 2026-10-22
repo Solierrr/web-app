@@ -4,7 +4,7 @@ import ProjectsPage from "@/features/projects/pages/ProjectsPage";
 import BrandDetailsPage from "@/features/brands/pages/BrandDetailsPage";
 import BrandRequestsPage from "@/features/brands/pages/BrandRequestsPage";
 import type { ReactNode } from "react";
-import { Navigate, Route, Routes, useLocation, useParams } from "react-router-dom";
+import { Navigate, Outlet, Route, Routes, useLocation, useParams } from "react-router-dom";
 
 import AppMode from "@/config/vite/mode.enum";
 
@@ -38,6 +38,7 @@ import SolarPanelModelPage from "@/features/solar-panel/pages/crud/SolarPanelMod
 import Inbox from "@/features/messages/pages/Inbox";
 import ContactCompany from "@/features/messages/pages/ContactCompany";
 import ChatbotPage from "@/features/messages/pages/ChatbotPage";
+import { AccessShell } from "@@/layout/access/Access";
 import Mobile from "@/features/access/mobile/Mobile";
 import LoginPage from "@/features/access/pages/auth/login/LoginPage";
 import RegisterPage from "@/features/access/pages/auth/register/RegisterPage";
@@ -294,6 +295,14 @@ const SAAS: RouteDefinition[] = [
   },
 ];
 
+function AccessLayout() {
+  return (
+    <AccessShell>
+      <Outlet />
+    </AccessShell>
+  );
+}
+
 function LegacyAccessRedirect({ destination }: { destination: (lang: SupportedLanguage) => string }) {
   const { lang: parameter } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(parameter) ? parameter : DEFAULT;
@@ -327,7 +336,9 @@ export function AppRoutes() {
       <Route path="/:lang" element={<LanguageLayout />}>
         {import.meta.env.VITE_APP_MODE === AppMode.TEST && TestRoutes()}
 
-        {SUPPORTED.flatMap((lang) => ACCESS.map(({ key, path, element }) => <Route key={`${lang}-${key}`} path={path(lang)} element={element} />))}
+        <Route element={<AccessLayout />}>
+          {SUPPORTED.flatMap((lang) => ACCESS.map(({ key, path, element }) => <Route key={`${lang}-${key}`} path={path(lang)} element={element} />))}
+        </Route>
 
         {SUPPORTED.flatMap((lang) =>
           LEGACY_ACCESS.map(({ key, path, element }) => <Route key={`${lang}-${key}`} path={path(lang)} element={element} />),

@@ -69,7 +69,7 @@ describe("Access", () => {
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
 
-  it("keeps invalid fields out of submission and associates their feedback", () => {
+  it("keeps invalid fields out of submission and reports them only as a stacked toast", () => {
     const onSubmit = vi.fn();
     render(
       <>
@@ -92,7 +92,8 @@ describe("Access", () => {
     expect(input).toHaveFocus();
     fireEvent.change(input, { target: { value: "invalid" } });
     fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
-    expect(input).toHaveAccessibleDescription("Informe um e-mail válido.");
+    expect(screen.getAllByRole("status").some((item) => item.textContent?.includes("Informe um e-mail válido."))).toBe(true);
+    expect(input).not.toHaveAccessibleDescription();
     fireEvent.change(input, { target: { value: "user@example.com" } });
     expect(screen.getByText("E-mail", { selector: "label" })).not.toHaveTextContent("*");
     fireEvent.click(screen.getByRole("button", { name: "Entrar" }));

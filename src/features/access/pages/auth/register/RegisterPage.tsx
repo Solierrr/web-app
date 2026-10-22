@@ -67,7 +67,6 @@ export default function RegisterPage() {
       helperText={t("register.helperText")}
       topAction={<LanguageSwitcher />}
       backAction={<ToolbarAction icon="chevronLeft" label={t("register.login")} to={routePaths.login(lang)} state={location.state} />}
-      logoInteractive
       compact
       notice={createdEmail ? t("register.accountCreated") : undefined}
       fields={[
