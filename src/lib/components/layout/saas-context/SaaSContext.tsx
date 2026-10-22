@@ -18,7 +18,7 @@ export default function SaaSContext({ collapsed = false, onToggle }: SaaSContext
     <div className="shrink-0 pb-3">
       <div className={`flex min-h-16 items-center gap-2 px-3 ${collapsed ? "flex-col py-3" : ""}`}>
         <OrganicLogo width={2.5} holdMs={5000} transitionMs={500} label="Elos" />
-        {!collapsed && <span className="min-w-0 flex-1 text-body font-semi-bold text-operational-ink">Elos</span>}
+        {!collapsed && <span className="min-w-0 flex-1" />}
         {onToggle && (
           <button
             type="button"
