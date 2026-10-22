@@ -80,7 +80,6 @@ interface RouteDefinition {
 }
 
 const ACCESS: RouteDefinition[] = [
-  { key: "mobileAuthorization", path: () => "auth/mobile", element: <Mobile /> },
   { key: "login", path: (lang) => joinSegments(lang, "login"), element: <LoginPage /> },
   { key: "register", path: (lang) => joinSegments(lang, "register"), element: <RegisterPage /> },
   { key: "forgotPassword", path: (lang) => joinSegments(lang, "forgotPassword"), element: <ForgotPasswordPage /> },
@@ -335,6 +334,8 @@ export function AppRoutes() {
 
       <Route path="/:lang" element={<LanguageLayout />}>
         {import.meta.env.VITE_APP_MODE === AppMode.TEST && TestRoutes()}
+
+        <Route path="auth/mobile" element={<Mobile />} />
 
         <Route element={<AccessLayout />}>
           {SUPPORTED.flatMap((lang) => ACCESS.map(({ key, path, element }) => <Route key={`${lang}-${key}`} path={path(lang)} element={element} />))}

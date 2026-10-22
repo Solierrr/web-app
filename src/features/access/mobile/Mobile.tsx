@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
-import { Link, Navigate, useLocation, useParams, useSearchParams } from "react-router-dom";
+import { Navigate, useLocation, useParams, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import Access from "@/lib/components/layout/access/Access";
+import StatusPage from "@@/layout/status-page/StatusPage";
+import Alert from "@@/feedback/alert/Alert";
+import ActionLink from "@@/ui/button/ActionLink";
+import { PrimaryButton, SurfaceButton, WhiteSoftButton } from "@@/ui/button/Button.presets";
 import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
 import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
@@ -69,29 +72,96 @@ export default function Mobile() {
 
   if (!session || signedOut) return <Navigate to={routePaths.login(lang)} state={{ returnTo }} replace />;
   const expired = transaction !== null && new Date(transaction.expiresAt).getTime() <= now;
-  return <Access heading={t("mobile.title")} animatedBackground={false} busy={busy}>
-    <div className="flex flex-col gap-4">
-      {error && <p role="alert">{t(`errors.${error}`, { defaultValue: t("errors.UNAVAILABLE") })}</p>}
-      {cancelled ? <p role="status">{t("mobile.cancelled")}</p> : callback ? <>
-        <p>{t("mobile.opening")}</p>
-        <a href={callback} rel="noreferrer" className="text-orange underline">{t("mobile.open")}</a>
-        <p>{t("mobile.fallback")}</p>
-        {import.meta.env.VITE_MOBILE_INSTALL_URL && <a href={import.meta.env.VITE_MOBILE_INSTALL_URL} rel="noreferrer">{t("mobile.install")}</a>}
-      </> : transaction ? <>
-        <p>{t("mobile.professionalOnly")}</p>
-        {expired ? <p role="alert">{t("errors.TRANSACTION_EXPIRED")}</p> : transaction.eligible ?
-          <button type="button" disabled={busy} onClick={() => void confirm()} className="rounded-xl bg-orange px-4 py-3 text-white">
-            {t("mobile.continueAs", { email: transaction.email })}
-          </button> : <>
-            <p role="status">{t("mobile.ineligible")}</p>
-            {!transaction.emailVerified && <Link to={routePaths.verifyEmail(lang)} state={{ returnTo }}>{t("mobile.verify")}</Link>}
-            <Link to={routePaths.profileOnboardingProfessional(lang)} state={{ returnTo }}>
-              {t("mobile.registration")}
-            </Link>
-          </>}
-        <button type="button" disabled={busy} onClick={() => void switchAccount()}>{t("mobile.switch")}</button>
-        <button type="button" disabled={busy} onClick={() => void cancel()}>{t("mobile.cancel")}</button>
-      </> : !error && <p role="status">{t("loading")}</p>}
-    </div>
-  </Access>;
+  const errorText = error ? t(`errors.${error}`, { defaultValue: t("errors.UNAVAILABLE") }) : "";
+  const accountActions = (
+    <>
+      <WhiteSoftButton type="button" rounded content={t("mobile.switch")} description={t("mobile.switch")} disabled={busy} onClick={() => void switchAccount()} className="min-h-12" />
+      <SurfaceButton type="button" rounded content={t("mobile.cancel")} description={t("mobile.cancel")} disabled={busy} onClick={() => void cancel()} className="min-h-12" />
+    </>
+  );
+
+  if (cancelled) return <StatusPage title={t("mobile.title")} message={<span role="status">{t("mobile.cancelled")}</span>} />;
+
+  if (callback)
+    return (
+      <StatusPage
+        title={t("mobile.title")}
+        message={t("mobile.opening")}
+        actions={
+          <>
+            <PrimaryButton
+              rounded
+              variant="soft"
+              type="button"
+              content={t("mobile.open")}
+              description={t("mobile.open")}
+              onClick={() => window.location.assign(callback)}
+              className="min-h-12"
+            />
+            {import.meta.env.VITE_MOBILE_INSTALL_URL && (
+              <SurfaceButton
+                type="button"
+                rounded
+                content={t("mobile.install")}
+                description={t("mobile.install")}
+                onClick={() => window.location.assign(import.meta.env.VITE_MOBILE_INSTALL_URL)}
+                className="min-h-12"
+              />
+            )}
+          </>
+        }>
+        <p className="text-center text-body text-operational-muted">{t("mobile.fallback")}</p>
+      </StatusPage>
+    );
+
+  if (!transaction)
+    return (
+      <StatusPage title={t("mobile.title")} message={error ? undefined : t("loading")} busy={!error}>
+        {error && <Alert state="error">{errorText}</Alert>}
+      </StatusPage>
+    );
+
+  return (
+    <StatusPage
+      title={t("mobile.title")}
+      message={t("mobile.professionalOnly")}
+      busy={busy}
+      actions={
+        <>
+          {!expired && transaction.eligible && (
+            <PrimaryButton
+              rounded
+              variant="soft"
+              type="button"
+              disabled={busy}
+              content={t("email.continue")}
+              description={t("mobile.continueAs", { email: transaction.email })}
+              onClick={() => void confirm()}
+              className="min-h-12"
+            />
+          )}
+          {!expired && !transaction.eligible && (
+            <>
+              {!transaction.emailVerified && (
+                <ActionLink content={t("mobile.verify")} description={t("mobile.verify")} to={routePaths.verifyEmail(lang)} state={{ returnTo }} className="min-h-12" />
+              )}
+              <ActionLink
+                variant={transaction.emailVerified ? "primary" : "surface"}
+                content={t("mobile.registration")}
+                description={t("mobile.registration")}
+                to={routePaths.profileOnboardingProfessional(lang)}
+                state={{ returnTo }}
+                className="min-h-12"
+              />
+            </>
+          )}
+          {accountActions}
+        </>
+      }>
+      <p className="text-center text-body font-medium text-operational-ink [overflow-wrap:anywhere]">{transaction.email}</p>
+      {error && <Alert state="error">{errorText}</Alert>}
+      {expired && <Alert state="error">{t("errors.TRANSACTION_EXPIRED")}</Alert>}
+      {!expired && !transaction.eligible && <Alert state="info">{t("mobile.ineligible")}</Alert>}
+    </StatusPage>
+  );
 }

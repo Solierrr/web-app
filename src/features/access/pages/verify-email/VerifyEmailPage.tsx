@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import Access from "@/lib/components/layout/access/Access";
+import StatusPage from "@@/layout/status-page/StatusPage";
 import { routePaths } from "@/config/i18n/paths";
 import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { getAccountIdentity, confirmEmailVerification, requestEmailVerification } from "@/features/access/access.credentials.service";
 import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
 import { getAccessErrorMessage } from "@/features/access/access.utils";
 import Alert from "@@/feedback/alert/Alert";
-import { PrimaryButton, SurfaceButton } from "@@/ui/button/Button.presets";
+import { PrimaryButton, WhiteSoftButton } from "@@/ui/button/Button.presets";
 
 export default function VerifyEmailPage() {
   const { lang: parameter } = useParams();
@@ -78,38 +78,48 @@ export default function VerifyEmailPage() {
     }
   }
 
+  const status = t(verified ? "email.verified" : sent ? "email.sent" : "email.pending");
   return (
-    <Access heading={t("email.title")} animatedBackground={false} busy={busy} error={error}>
-      <div className="flex flex-col gap-4">
-        <Alert state={verified || sent ? "success" : "info"}>{t(verified ? "email.verified" : sent ? "email.sent" : "email.pending")}</Alert>
-        {verified ? (
+    <StatusPage
+      title={t("email.title")}
+      message={<span role="status">{status}</span>}
+      busy={busy}
+      actions={
+        verified ? (
           <PrimaryButton
+            rounded
             variant="soft"
             type="button"
             content={t("email.continue")}
             description={t("email.continue")}
             onClick={() => navigate(destination, { replace: true })}
+            className="min-h-12"
           />
         ) : (
           <>
             <PrimaryButton
+              rounded
               variant="soft"
               type="button"
               disabled={busy}
               content={t(token ? "email.confirm" : "email.check")}
               description={t(token ? "email.confirm" : "email.check")}
               onClick={() => void check()}
+              className="min-h-12"
             />
-            <SurfaceButton
+            <WhiteSoftButton
+              rounded
               type="button"
               disabled={busy || cooldown > 0}
               onClick={() => void resend()}
               content={cooldown > 0 ? t("email.cooldown", { seconds: cooldown }) : t("email.resend")}
               description={t("email.resend")}
+              className="min-h-12"
             />
           </>
-        )}
-      </div>
-    </Access>
+        )
+      }>
+      {error && <Alert state="error">{error}</Alert>}
+    </StatusPage>
   );
 }
