@@ -99,6 +99,28 @@ function AccessBody({
   }
 
   return (
+    <main className="relative isolate flex min-h-dvh w-full flex-col items-center gap-6 bg-white px-6 pt-16 pb-10 scrollbar-none sm:px-12">
+      {backAction && <div className="absolute left-6 top-6 z-20 [&>button]:w-9! [&>a]:w-9!">{backAction}</div>}
+      {topAction && <div className="absolute right-6 top-6 z-20">{topAction}</div>}
+      {animatedBackground &&
+        (background ? (
+          <div aria-hidden="true" className="absolute inset-0 -z-10 overflow-hidden">
+            {background}
+          </div>
+        ) : (
+          <SideCanvas centerWidth="36rem" centerHeight="48rem" />
+        ))}
+      <div className="relative flex h-28 w-full shrink-0 items-center justify-center">
+        <OrganicLogo
+          width={logoWidth}
+          interactive={logoInteractive}
+          motion="expressive"
+          rotateSymbol
+          rotateShape
+          holdMs={1571}
+          transitionMs={1000}
+        />
+      </div>
       <div className="flex w-full flex-col items-center justify-center">
         <div className={`flex flex-col w-full ${compact ? "max-w-96" : "max-w-120 max-md:px-8 max-sm:px-4"} gap-6 items-center-safe h-min`}>
           <div className="flex flex-col w-full gap-6">
