@@ -1,5 +1,5 @@
 import { loginWithGoogle, loginWithMicrosoft } from "../auth.service";
-import ToolbarAction from "@@/ui/button/ToolbarAction";
+import GroupAction from "@@/ui/button/GroupAction";
 import { useTranslation } from "react-i18next";
 import logger from "@/config/logging/logger";
 
@@ -17,7 +17,7 @@ export function LoginWithGoogle({ onClick, disabled }: ProviderProps = {}) {
       logger.error("Google sign-in failed", error);
     }
   }
-  return <ToolbarAction icon="google" disabled={disabled} label={t("login.google")} onClick={onClick ?? handleLogin} />;
+  return <GroupAction layout="icon" icon="google" disabled={disabled} label={t("login.google")} onClick={onClick ?? handleLogin} />;
 }
 
 export function LoginWithMicrosoft({ onClick, disabled }: ProviderProps = {}) {
@@ -29,5 +29,5 @@ export function LoginWithMicrosoft({ onClick, disabled }: ProviderProps = {}) {
       logger.error("Microsoft sign-in failed", error);
     }
   }
-  return <ToolbarAction icon="microsoft" disabled={disabled} label={t("login.microsoft")} onClick={onClick ?? handleLogin} />;
+  return <GroupAction layout="icon" icon="microsoft" disabled={disabled} label={t("login.microsoft")} onClick={onClick ?? handleLogin} />;
 }

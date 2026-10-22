@@ -156,6 +156,23 @@ describe("LoginPage", () => {
     expect(screen.queryByText("Último acesso")).not.toBeInTheDocument();
   });
 
+  it.each([
+    ["password", "Entrar com e-mail"],
+    ["google", "Entrar com Google"],
+    ["microsoft", "Entrar com Microsoft"],
+  ] as const)("names the %s method in the remembered account button instead of a loose last-used line", (method, label) => {
+    saveRememberedLogin({ email: "saved@example.com", method });
+    render(
+      <MemoryRouter initialEntries={["/pt-BR/login"]}>
+        <LoginPage />
+      </MemoryRouter>,
+    );
+    const button = screen.getByRole("button", { name: "Continuar como saved@example.com" });
+    expect(button).toHaveTextContent(label);
+    expect(button).toHaveTextContent("saved@example.com");
+    expect(screen.queryByText(/Último acesso/)).not.toBeInTheDocument();
+  });
+
   afterEach(() => {
     vi.unstubAllEnvs();
     saveRememberedLogin(null);
