@@ -14,6 +14,8 @@ export interface MessageBubbleProps {
   children?: ReactNode;
   presentation?: "bubbles" | "timeline";
   grouped?: boolean;
+  /** Última mensagem de uma sequência do mesmo autor: recebe o canto marcado e mostra a hora. */
+  endOfGroup?: boolean;
   conversationKind?: ConversationKind;
 }
 export default function MessageBubble({
@@ -27,6 +29,7 @@ export default function MessageBubble({
   children,
   presentation = "bubbles",
   grouped = false,
+  endOfGroup = true,
   conversationKind = "direct",
 }: MessageBubbleProps) {
   const messageStyle = {
@@ -56,25 +59,24 @@ export default function MessageBubble({
       </article>
     );
   }
+  const fullDate = new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "short" }).format(new Date(timestamp));
+  const tail = endOfGroup ? (own ? "rounded-br-sm" : "rounded-bl-sm") : "";
   return (
-    <article aria-label={author} className={`flex min-w-0 max-w-full gap-3 ${own ? "justify-end" : "justify-start"}`}>
+    <article aria-label={author} className={`flex min-w-0 max-w-full flex-col gap-1 ${own ? "items-end" : "items-start"}`}>
       <div
         style={messageStyle}
-        className={`flex min-w-0 flex-col gap-2 rounded-medium px-4 py-3 ${own ? "max-w-[85%] bg-chat-sent sm:max-w-[75%]" : assistant ? "w-full bg-chat-received" : "max-w-[85%] bg-chat-received sm:max-w-[75%]"}`}>
+        className={`flex min-w-0 flex-col gap-2 rounded-[1.25rem] px-4 py-2.5 ${tail} ${own ? "max-w-[85%] bg-chat-sent sm:max-w-[75%]" : assistant ? "w-full bg-chat-received" : "max-w-[85%] bg-chat-received sm:max-w-[75%]"}`}>
         {conversationKind === "group" && showAuthor && !own && (
           <p className="break-words text-sidebar font-semi-bold text-operational-ink">{author}</p>
         )}
         {content && <MarkdownMessage content={content} />}
         {children}
-        {conversationKind !== "assistant" && (
-          <time
-            dateTime={timestamp}
-            className="self-end text-sidebar-group text-[color:var(--message-muted)]"
-            title={new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "short" }).format(new Date(timestamp))}>
-            {hour}
-          </time>
-        )}
       </div>
+      {conversationKind !== "assistant" && endOfGroup && (
+        <time dateTime={timestamp} className="px-2 text-sidebar-group text-operational-muted" title={fullDate}>
+          {hour}
+        </time>
+      )}
     </article>
   );
 }

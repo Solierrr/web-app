@@ -9,6 +9,7 @@ interface MessageProps {
   placeholderAvatar?: boolean;
   presentation?: "bubbles" | "timeline";
   grouped?: boolean;
+  endOfGroup?: boolean;
   conversationKind?: ConversationKind;
 }
 
@@ -18,6 +19,7 @@ export default function Message({
   placeholderAvatar = false,
   presentation = "bubbles",
   grouped = false,
+  endOfGroup = true,
   conversationKind = "direct",
 }: MessageProps) {
   const { i18n, t } = useTranslation("chat");
@@ -27,6 +29,7 @@ export default function Message({
       conversationKind={conversationKind}
       presentation={presentation}
       grouped={grouped}
+      endOfGroup={endOfGroup}
       own={own}
       author={own && presentation === "bubbles" ? t("you") : message.user.name}
       content={message.message}

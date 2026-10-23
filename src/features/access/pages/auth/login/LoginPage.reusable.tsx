@@ -1,11 +1,11 @@
 import { useCallback, useId, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import ToolbarAction from "@@/ui/button/ToolbarAction";
+import GroupAction from "@@/ui/button/GroupAction";
 import { ContextMenu, type ContextMenuHandle } from "@@/overlay/contextMenu/ContextMenu";
 import { routePaths } from "@/config/i18n/paths";
 import type { SupportedLanguage } from "@/config/i18n/browser/languages";
-import Surface from "@@/ui/surface/Surface";
+import SurfaceGroup from "@@/ui/surface/SurfaceGroup";
 import type { RememberedLogin } from "./LoginPage.utils";
 
 export function LoginEntryChoices({
@@ -26,38 +26,27 @@ export function LoginEntryChoices({
   onForget: () => void;
 }) {
   const { t } = useTranslation("access");
-  const row = "h-auto! min-h-14 w-full justify-start px-4 py-3 font-medium";
+  const rememberedLabel =
+    remembered?.method === "google" ? t("entry.googleLogin") : remembered?.method === "microsoft" ? t("entry.microsoftLogin") : t("entry.emailLogin");
   return (
     <div className="flex flex-col gap-4">
       {remembered && (
-        <div className="flex flex-col gap-2">
-          <p title={remembered.email} className="truncate text-body font-medium text-operational-muted">
-            {t("login.lastUsed")} · {remembered.email}
-          </p>
-          <Surface contentClassName="flex items-center gap-1 p-1">
-            <ToolbarAction
-              icon={remembered.method === "password" ? "user" : remembered.method}
-              label={t("login.continueAs", { email: remembered.email })}
-              content={remembered.method === "password" ? t("entry.email") : t(`login.${remembered.method}`)}
-              className={`${row} min-w-0 flex-1`}
-              disabled={busy}
-              onClick={onContinue}
-            />
-            <ToolbarAction icon="x" label={t("login.forgetAccount")} disabled={busy} onClick={onForget} />
-          </Surface>
-        </div>
+        <SurfaceGroup direction="horizontal">
+          <GroupAction
+            icon={remembered.method === "password" ? "user" : remembered.method}
+            label={t("login.continueAs", { email: remembered.email })}
+            content={rememberedLabel}
+            detail={remembered.email}
+            disabled={busy}
+            onClick={onContinue}
+          />
+          <GroupAction layout="icon" icon="x" iconSize={18} label={t("login.forgetAccount")} disabled={busy} onClick={onForget} className="w-14" />
+        </SurfaceGroup>
       )}
-      <Surface contentClassName="flex flex-col gap-1 p-1">
-        <ToolbarAction icon="login" label={t("entry.signIn")} content={t("entry.signIn")} className={row} disabled={busy} onClick={onSignIn} />
-        <ToolbarAction
-          icon="userPlus"
-          label={t("entry.register")}
-          content={t("entry.register")}
-          className={row}
-          to={routePaths.register(lang)}
-          state={state}
-        />
-      </Surface>
+      <SurfaceGroup>
+        <GroupAction icon="login" label={t("entry.signIn")} content={t("entry.signIn")} disabled={busy} onClick={onSignIn} />
+        <GroupAction icon="userPlus" label={t("entry.register")} content={t("entry.register")} to={routePaths.register(lang)} state={state} />
+      </SurfaceGroup>
     </div>
   );
 }
@@ -75,10 +64,11 @@ export function LoginShortcuts({ lang, state, policiesOnly = false }: { lang: Su
   }, []);
 
   return (
-    <Surface contentClassName="flex items-center justify-center gap-3 p-1">
-      {!policiesOnly && <ToolbarAction icon="userPlus" label={t("login.register")} to={routePaths.register(lang)} state={state} />}
-      {!policiesOnly && <ToolbarAction icon="key" label={t("login.forgotPassword")} to={routePaths.forgotPassword(lang)} state={state} />}
-      <ToolbarAction
+    <SurfaceGroup direction="horizontal" divided={false} className="self-center">
+      {!policiesOnly && <GroupAction layout="icon" icon="userPlus" label={t("login.register")} to={routePaths.register(lang)} state={state} />}
+      {!policiesOnly && <GroupAction layout="icon" icon="key" label={t("login.forgotPassword")} to={routePaths.forgotPassword(lang)} state={state} />}
+      <GroupAction
+        layout="icon"
         ref={trigger}
         icon="shieldCheck"
         label={t("login.policiesIntro")}
@@ -105,6 +95,6 @@ export function LoginShortcuts({ lang, state, policiesOnly = false }: { lang: Su
         }}
       />
       <ContextMenu ref={menu} id={id} label={t("login.policiesIntro")} autoFocus triggerRef={trigger} align="end" onClose={close} />
-    </Surface>
+    </SurfaceGroup>
   );
 }

@@ -25,6 +25,8 @@
     "back": "volver",
     "cancel": "cancelar",
     "close": "cerrar",
+    "showMore": "ver todo",
+    "showLess": "contraer",
     "confirm": "confirmar",
     "continue": "continuar",
     "delete": "eliminar",

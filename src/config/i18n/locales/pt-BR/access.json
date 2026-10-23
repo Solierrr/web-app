@@ -136,6 +136,9 @@
     "signIn": "Já tenho uma conta",
     "register": "Quero criar uma conta",
     "email": "Continuar com e-mail e senha",
+    "emailLogin": "Entrar com e-mail",
+    "googleLogin": "Entrar com Google",
+    "microsoftLogin": "Entrar com Microsoft",
     "back": "Voltar às opções"
   }
 }

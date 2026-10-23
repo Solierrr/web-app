@@ -16,7 +16,7 @@ import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
 import { getRememberedLogin, saveRememberedLogin, type RememberedLogin } from "./LoginPage.utils";
 import { getAccessErrorMessage, getAccessHttpError } from "@/features/access/access.utils";
 import { LoginEntryChoices, LoginShortcuts } from "./LoginPage.reusable";
-import Surface from "@@/ui/surface/Surface";
+import SurfaceGroup from "@@/ui/surface/SurfaceGroup";
 import LanguageSwitcher from "@@/layout/navbar/LanguageSwitcher";
 
 export default function LoginPage({ background }: { background?: ReactNode } = {}) {
@@ -155,12 +155,10 @@ export default function LoginPage({ background }: { background?: ReactNode } = {
   if (search.get("step") !== "signin")
     return (
       <Access
-        key="entry"
+        stepKey="entry"
         topAction={<LanguageSwitcher />}
         heading={t("entry.title")}
         helperText={t("entry.description")}
-        logoWidth={7}
-        logoInteractive
         background={background}
         busy={busy}
         error={error}
@@ -191,7 +189,7 @@ export default function LoginPage({ background }: { background?: ReactNode } = {
     );
   return (
     <Access
-      key="signin"
+      stepKey="signin"
       topAction={<LanguageSwitcher />}
       backAction={
         <ToolbarAction
@@ -216,8 +214,6 @@ export default function LoginPage({ background }: { background?: ReactNode } = {
         />
       }
       heading={t("login.welcome")}
-      logoWidth={7}
-      logoInteractive
       compact
       submitVariant="soft"
       animatedBackground
@@ -226,10 +222,10 @@ export default function LoginPage({ background }: { background?: ReactNode } = {
       error={error}
       notice={notice}
       formHeader={
-        <Surface className="self-center" contentClassName="flex items-center justify-center gap-3 p-1">
+        <SurfaceGroup direction="horizontal" divided={false} className="self-center">
           <LoginWithGoogle disabled={busy} onClick={() => void handleProvider("google")} />
           <LoginWithMicrosoft disabled={busy} onClick={() => void handleProvider("microsoft")} />
-        </Surface>
+        </SurfaceGroup>
       }
       fields={[
         {

@@ -1,7 +1,6 @@
 import ChatHeader from "@@/layout/chat/chat-header/ChatHeader";
 import MessageBubble from "@@/layout/chat/message/MessageBubble";
 import Skeleton from "@@/feedback/skeleton/Skeleton";
-import ValueField from "@@/ui/value-field/ValueField";
 import MorphingHexagon from "@@/ui/morphing-hexagon/MorphingHexagon";
 import MessageComposer from "@@/ui/message-composer/MessageComposer";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
@@ -273,7 +272,7 @@ export function Conversation({
           const node = event.currentTarget;
           followLatest.current = node.scrollHeight - node.scrollTop - node.clientHeight < 80;
         }}
-        className="scrollbar-none flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto px-1 py-4"
+        className="scrollbar-none flex min-h-0 flex-1 flex-col overflow-y-auto px-1 py-2"
         aria-live="polite">
         {hasOlder && (
           <ToolbarAction
@@ -296,26 +295,28 @@ export function Conversation({
           const previous = messages[index - 1];
           const day = new Date(message.timestamp).toDateString();
           const newDay = !previous || day !== new Date(previous.timestamp).toDateString();
-          const grouped =
-            previous &&
-            !newDay &&
-            previous.senderId === message.senderId &&
-            previous.role === message.role &&
-            Date.parse(message.timestamp) - Date.parse(previous.timestamp) < 5 * 60 * 1000;
+          const continues = (before: typeof message, after: typeof message) =>
+            new Date(before.timestamp).toDateString() === new Date(after.timestamp).toDateString() &&
+            before.senderId === after.senderId &&
+            before.role === after.role &&
+            Date.parse(after.timestamp) - Date.parse(before.timestamp) < 5 * 60 * 1000;
+          const grouped = previous && !newDay && continues(previous, message);
+          const next = messages[index + 1];
+          const endOfGroup = !(next && continues(message, next));
           const author = own
             ? t("you")
             : assistant
               ? t("chatbot.assistantName")
               : (conversation?.conversationType === "GROUP" ? participantNames[message.senderId] : participantName) || t("participant");
           return (
-            <div key={message.id} className={`flex flex-col gap-3 ${!grouped && !newDay ? "mt-3" : ""}`}>
+            <div key={message.id} className={`mx-auto flex w-full max-w-3xl flex-col ${grouped ? "mt-0.5" : index > 0 && !newDay ? "mt-4" : ""}`}>
               {newDay && (
-                <div className="my-3 flex justify-center">
-                  <ValueField>
-                    <time dateTime={message.timestamp}>
-                      {new Intl.DateTimeFormat(lang, { day: "numeric", month: "long", year: "numeric" }).format(new Date(message.timestamp))}
-                    </time>
-                  </ValueField>
+                <div className={`flex justify-center ${index > 0 ? "mb-4 mt-6" : "mb-4"}`}>
+                  <time
+                    dateTime={message.timestamp}
+                    className="rounded-full bg-input-bg px-3 py-1 text-sidebar-group font-medium text-operational-muted">
+                    {new Intl.DateTimeFormat(lang, { weekday: "long", day: "numeric", month: "long" }).format(new Date(message.timestamp))}
+                  </time>
                 </div>
               )}
               <MessageBubble
@@ -328,23 +329,26 @@ export function Conversation({
                 author={author}
                 own={own}
                 assistant={assistant}
+                endOfGroup={endOfGroup}
                 showAuthor={conversation?.conversationType === "GROUP" && !own && !grouped}
               />
             </div>
           );
         })}
       </div>
-      <MessageComposer
-        value={draft}
-        onChange={setDraft}
-        onSend={() => void handleSend()}
-        placeholder={t("draftPlaceholder")}
-        label={t("draftPlaceholder")}
-        sendLabel={t("sendDescription")}
-        hint={t("chatbot.composerHint")}
-        maxLength={8000}
-        disabled={readOnly || sending || loading || !conversation}
-      />
+      <div className="mx-auto w-full max-w-3xl shrink-0">
+        <MessageComposer
+          value={draft}
+          onChange={setDraft}
+          onSend={() => void handleSend()}
+          placeholder={t("draftPlaceholder")}
+          label={t("draftPlaceholder")}
+          sendLabel={t("sendDescription")}
+          hint={t("chatbot.composerHint")}
+          maxLength={8000}
+          disabled={readOnly || sending || loading || !conversation}
+        />
+      </div>
     </section>
   );
   return embedded ? content : <main className="mx-auto flex h-full min-h-0 w-full max-w-operational-page flex-col p-4 sm:px-8">{content}</main>;

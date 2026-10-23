@@ -26,6 +26,12 @@ import MessageComposer from "@@/ui/message-composer/MessageComposer";
 import LogoLoader from "@@/feedback/logo-loader/LogoLoader";
 import MorphingHexagon from "@@/ui/morphing-hexagon/MorphingHexagon";
 
+function formatInteraction(iso: string, lang: string) {
+  const date = new Date(iso);
+  const sameDay = date.toDateString() === new Date().toDateString();
+  return new Intl.DateTimeFormat(lang, sameDay ? { hour: "2-digit", minute: "2-digit" } : { day: "2-digit", month: "short" }).format(date);
+}
+
 export default function Inbox() {
   const { lang: langParam, conversationId } = useParams<{ lang: string; conversationId: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT;
@@ -229,7 +235,7 @@ export default function Inbox() {
         <div className="flex min-h-0 min-w-0 flex-1 gap-4">
           {hasList && (
             <aside
-              className={`min-h-0 w-full shrink-0 flex-col gap-3 rounded-hard bg-white p-3 @xl/messages:flex @xl/messages:w-72 ${conversationId || contactsOpen ? "hidden" : "flex"}`}
+              className={`min-h-0 w-full shrink-0 flex-col gap-3 rounded-hard bg-white p-3 @xl/messages:flex @xl/messages:w-80 ${conversationId || contactsOpen ? "hidden" : "flex"}`}
               aria-label={t("conversations")}>
               <InboxFilters query={query} onQueryChange={setQuery} filter={filter} onFilterChange={setFilter} />
               <ul className="scrollbar-none min-h-0 flex-1 overflow-y-auto">
@@ -239,8 +245,8 @@ export default function Inbox() {
                       to={routePaths.chat(lang, item.id)}
                       onClick={() => setContactsOpen(false)}
                       aria-current={conversationId === item.id ? "page" : undefined}
-                      className={`flex items-center gap-3 rounded-medium p-3 transition-colors hover:bg-operational-hover ${conversationId === item.id ? "bg-input-bg" : ""}`}>
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-hard bg-input-bg" aria-hidden="true">
+                      className={`flex items-center gap-3 rounded-2xl p-3 transition-colors hover:bg-operational-hover ${conversationId === item.id ? "bg-operational-hover" : ""}`}>
+                      <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-input-bg" aria-hidden="true">
                         <Icon
                           name={item.conversationType === "CHAT_BOT" ? "sparkles" : item.conversationType === "GROUP" ? "users" : "user"}
                           size={20}
@@ -248,16 +254,23 @@ export default function Inbox() {
                         />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="truncate text-body font-medium">{title(item)}</p>
-                        <span className="text-body text-operational-muted">{t(`filters.${item.conversationType}`)}</span>
+                        <p className={`truncate text-body ${(item.unreadCount ?? 0) > 0 ? "font-semi-bold" : "font-medium"}`}>{title(item)}</p>
+                        <span className="text-sidebar text-operational-muted">{t(`filters.${item.conversationType}`)}</span>
                       </div>
-                      {(item.unreadCount ?? 0) > 0 && (
-                        <span
-                          className="rounded-full bg-orange px-2 text-body text-white"
-                          aria-label={t("unreadCount", { count: item.unreadCount })}>
-                          {item.unreadCount}
-                        </span>
-                      )}
+                      <div className="flex shrink-0 flex-col items-end gap-1">
+                        {item.lastInteractionAt && (
+                          <time dateTime={item.lastInteractionAt} className="text-sidebar-group text-operational-muted">
+                            {formatInteraction(item.lastInteractionAt, lang)}
+                          </time>
+                        )}
+                        {(item.unreadCount ?? 0) > 0 && (
+                          <span
+                            className="min-w-5 rounded-full bg-orange px-1.5 text-center text-sidebar-group font-medium text-white"
+                            aria-label={t("unreadCount", { count: item.unreadCount })}>
+                            {item.unreadCount}
+                          </span>
+                        )}
+                      </div>
                     </Link>
                   </li>
                 ))}
@@ -308,9 +321,7 @@ export default function Inbox() {
                       ))}
                   </ul>
                 )}
-                {!contactsLoading && !contactsError && contacts.length === 0 && (
-                  <p className="text-body text-operational-muted">{t("noContacts")}</p>
-                )}
+                {!contactsLoading && !contactsError && contacts.length === 0 && <p className="text-body text-operational-muted">{t("noContacts")}</p>}
                 <Link to={routePaths.professionalsFeed(lang)} className="text-body text-orange">
                   {t("findPeople")}
                 </Link>

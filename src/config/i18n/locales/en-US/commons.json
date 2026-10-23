@@ -25,6 +25,8 @@
     "back": "back",
     "cancel": "cancel",
     "close": "close",
+    "showMore": "show all",
+    "showLess": "collapse",
     "confirm": "confirm",
     "continue": "continue",
     "delete": "delete",
