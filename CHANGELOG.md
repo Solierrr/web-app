@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.6.0](https://github.com/Solierrr/web-app/compare/v3.5.0...v3.6.0) (2026-10-23)
+
+
+### Features
+
+* promote access, deeplink and chat interface improvements ([00d92ae](https://github.com/Solierrr/web-app/commit/00d92aee8ca6687c42e43f07a32a6a1d67dbc688))
+
+
+### Bug Fixes
+
+* align access page logo and favicon ([dd89f1d](https://github.com/Solierrr/web-app/commit/dd89f1d3e5542a1bb6497b319c53d1a5a24a343f))
+
 ## [3.5.0](https://github.com/Solierrr/web-app/compare/v3.4.0...v3.5.0) (2026-10-20)
 
 
