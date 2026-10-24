@@ -139,9 +139,6 @@
     "completePasswordReset": "Não foi possível redefinir a senha",
     "loginWithMicrosoft": "Não foi possível entrar com a Microsoft. Tente novamente."
   },
-  "typingStatus": {
-    "setTypingStatus": "Não foi possível atualizar o indicador de digitação"
-  },
   "purchases": {
     "getCart": "Não foi possível carregar o carrinho.",
     "putCartItem": "Não foi possível atualizar o carrinho.",
