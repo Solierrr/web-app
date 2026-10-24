@@ -16,7 +16,6 @@ const config: StorybookConfig = {
           "@stomp/stompjs",
           "firebase/app",
           "firebase/auth",
-          "firebase/firestore",
           "docx-preview",
           "echarts/core",
           "echarts/charts",
