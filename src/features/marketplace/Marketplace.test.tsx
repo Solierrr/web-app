@@ -51,7 +51,7 @@ describe("Marketplace page views", () => {
   it("sorts offers on the same page by recent publication or trending score", async () => {
     const { container } = renderFeed(<SolarPanelFeed />, "/pt-BR/placas-solares");
     await screen.findByText(solarPanelAnnouncementMocks[1].title);
-    const firstOffer = () => container.querySelector('[aria-label="Escolha em destaque"] h2')?.textContent;
+    const firstOffer = () => container.querySelector("[data-featured-offer]")?.textContent;
     expect(firstOffer()).toContain(solarPanelAnnouncementMocks[1].title);
     fireEvent.click(screen.getByRole("link", { name: "Em alta" }));
     await waitFor(() => expect(firstOffer()).toContain(solarPanelAnnouncementMocks[2].title));

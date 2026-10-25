@@ -15,12 +15,12 @@ describe("CatalogFeed", () => {
   it("keeps twelve unique offers per page across spotlight, grid and rail", async () => {
     const offers = Array.from({ length: 13 }, (_, i) => ({ ...panelOffer, id: `offer-${i}`, slug: `offer-${i}`, title: `Oferta ${i + 1}` }));
     view("PANEL", async () => offers);
-    await screen.findByRole("heading", { name: "Oferta 1" });
+    await screen.findByRole("link", { name: "Oferta 1" });
     expect(screen.getAllByRole("link", { name: /Oferta \d/ })).toHaveLength(12);
     expect(screen.queryByText("Oferta 13")).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Próxima página" }));
     expect(screen.getByRole("link", { name: /Oferta 13/ })).toBeInTheDocument();
-    expect(screen.queryByRole("heading", { name: "Oferta 1" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Oferta 1" })).not.toBeInTheDocument();
   });
   it("separates infrastructure from panels and links to its own detail route", async () => {
     view("INFRASTRUCTURE");

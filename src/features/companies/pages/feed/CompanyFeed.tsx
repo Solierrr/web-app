@@ -39,7 +39,7 @@ export default function CompanyFeed() {
           <h2 className="text-subtitle font-semi-bold">{t("partnersHeading")}</h2>
           <div className="grid min-w-0 grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
             {rest.map((company) => (
-              <CompanyFeaturedCard key={company.id} company={company} lang={lang} variant="logo" />
+              <CompanyFeaturedCard key={company.id} company={company} lang={lang} />
             ))}
           </div>
         </section>

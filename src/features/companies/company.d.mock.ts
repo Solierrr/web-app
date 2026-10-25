@@ -1,3 +1,4 @@
+import { mockCompanyBanners } from "@/config/mocks/catalogMedia";
 import type { Company } from "./company";
 import { CompanyActivity } from "./company.enum";
 import { slugNormalization } from "@/lib/utils/normalization.utils";
@@ -119,9 +120,11 @@ const companyMockData = [
 
 // `slug` não existe em `company` no schema-api-core.sql: gerado aqui a partir
 // de `tradeName` até existir essa coluna (ou rota amigável equivalente) na API.
-const companyMock = companyMockData.map((company) => ({
+const companyMock = companyMockData.map((company, index) => ({
   ...company,
   slug: slugNormalization(company.tradeName),
+  logoUrl: company.logoUrl ?? `/images/marketplace/company-logo-${(index % 3) + 1}.webp`,
+  bannerUrl: mockCompanyBanners[index % mockCompanyBanners.length],
 })) as Company[];
 
 export default companyMock;

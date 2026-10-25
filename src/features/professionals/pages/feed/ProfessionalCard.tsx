@@ -10,9 +10,14 @@ export default function ProfessionalCard({ professional, lang }: { professional:
   const { t } = useTranslation("marketplace");
   const profile = routePaths.professionalProfile(lang, professional.slug);
   return (
-    <article className="flex min-w-0 flex-col gap-5">
+    <article className="flex min-w-0 flex-col gap-3">
       <Link to={profile} className="group rounded-surface focus-visible:outline-orange" aria-label={professional.name}>
-        <MarketplaceImage src={professional.avatarUrl} alt={professional.name} fallback="users" className="aspect-[4/3] rounded-surface" />
+        <MarketplaceImage
+          src={professional.avatarUrl}
+          alt={professional.name}
+          fallback="users"
+          className="aspect-square rounded-surface [&_img]:object-[center_25%]"
+        />
       </Link>
       <h3 className="text-body font-semi-bold">
         <Link to={profile}>{professional.name}</Link>
@@ -24,7 +29,7 @@ export default function ProfessionalCard({ professional, lang }: { professional:
         content={t("contact")}
         icon="messages"
         color="var(--color-orange)"
-        className="mt-auto w-fit px-0!"
+        className="w-fit px-0!"
       />
     </article>
   );

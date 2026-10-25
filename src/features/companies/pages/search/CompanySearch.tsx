@@ -45,7 +45,7 @@ export default function CompanySearch() {
           onRetry={retry}>
           <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((company) => (
-              <CompanyFeaturedCard key={company.id} company={company} lang={lang} variant="logo" />
+              <CompanyFeaturedCard key={company.id} company={company} lang={lang} />
             ))}
           </div>
         </MarketplaceResults>

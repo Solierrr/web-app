@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import SurfaceGroup from "@@/ui/surface/SurfaceGroup";
-import GroupAction from "@@/ui/button/GroupAction";
+import Surface from "@@/ui/surface/Surface";
+import Icon from "@@/ui/icon/Icon";
 import { routePaths } from "@/config/i18n/paths";
 import type { SupportedLanguage } from "@/config/i18n/browser/languages";
 
@@ -13,11 +13,11 @@ export default function ServiceCollections({ lang }: { lang: SupportedLanguage }
       <Link
         to={routePaths.searchProfessionals(lang)}
         className="group relative flex min-h-80 flex-col justify-end overflow-hidden rounded-surface bg-operational-ink p-8 focus-visible:outline-orange">
-        <img src="/images/marketplace/professional-1.webp" alt="" className="absolute inset-0 h-full w-full object-cover object-top" />
+        <img src="/images/marketplace/professional-6.webp" alt="" className="absolute inset-0 h-full w-full object-cover object-[center_42%]" />
         <span className="absolute inset-0 bg-gradient-to-t from-operational-ink/90 to-transparent" />
-        <h2 className="relative text-subtitle font-semi-bold leading-tight text-white">{t("professionalsHeading")}</h2>
+        <h2 className="relative text-subtitle font-semi-bold leading-tight text-white">{t("serviceSpotlight")}</h2>
       </Link>
-      <SurfaceGroup>
+      <div className="grid min-w-0 gap-3">
         {(
           [
             ["install", "panels", "installation"],
@@ -25,17 +25,20 @@ export default function ServiceCollections({ lang }: { lang: SupportedLanguage }
             ["inspect", "search", "inspection"],
           ] as const
         ).map(([key, icon, filter]) => (
-          <GroupAction
-            key={key}
-            icon={icon}
-            label={t(key)}
-            content={t(key)}
-            detail={t(`${key}Description`)}
-            to={`${routePaths.searchProfessionals(lang)}?q=${encodeURIComponent(search(`professional.filters.${filter}`))}`}
-            className="flex-1 py-6!"
-          />
+          <Surface key={key} className="min-w-0" contentClassName="h-full">
+            <Link
+              to={`${routePaths.searchProfessionals(lang)}?q=${encodeURIComponent(search(`professional.filters.${filter}`))}`}
+              className="flex h-full items-center gap-4 px-5 py-5 transition-colors hover:bg-operational-hover focus-visible:outline-orange">
+              <Icon name={icon} size={24} className="shrink-0 text-orange" />
+              <div className="flex min-w-0 flex-1 flex-col gap-1">
+                <span className="text-body font-semi-bold">{t(key)}</span>
+                <span className="text-sidebar leading-5 text-operational-muted">{t(`${key}Description`)}</span>
+              </div>
+              <Icon name="chevronRight" size={16} className="shrink-0 text-operational-muted" />
+            </Link>
+          </Surface>
         ))}
-      </SurfaceGroup>
+      </div>
     </section>
   );
 }

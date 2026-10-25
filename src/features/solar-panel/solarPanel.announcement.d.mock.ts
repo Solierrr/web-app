@@ -1,3 +1,5 @@
+import { mockProductImages } from "@/config/mocks/catalogMedia";
+import { SolarPanelType } from "./solarPanel.enum";
 import type { SolarPanelAnnouncement } from "./solarPanel.announcement";
 import companyMock from "@/features/companies/company.d.mock";
 
@@ -5510,10 +5512,25 @@ const offerFeedMetadata: Record<string, { publishedAt: string; trendingScore: nu
   "3": { publishedAt: "2026-10-03T10:00:00Z", trendingScore: 100 },
   "4": { publishedAt: "2026-10-02T10:00:00Z", trendingScore: 75 },
 };
-const solarPanelAnnouncementMock = solarPanelAnnouncementMockData.map((announcement) => ({
-  ...announcement,
-  ...offerFeedMetadata[announcement.id],
-  company: companyMock.find((company) => company.slug === announcement.companySlug) ?? companyMock[0],
-})) as SolarPanelAnnouncement[];
+const solarPanelAnnouncementMock = solarPanelAnnouncementMockData.map((announcement, index) => {
+  const images =
+    announcement.panel.type === SolarPanelType.POLYCRYSTALLINE
+      ? mockProductImages.poly
+      : announcement.panel.type === SolarPanelType.THINFILM
+        ? mockProductImages.thin
+        : mockProductImages.mono;
+  return {
+    ...announcement,
+    ...offerFeedMetadata[announcement.id],
+    photos: {
+      heroImage: { url: images[index % images.length], description: announcement.title },
+      otherImages: announcement.photos.otherImages.map((_, offset) => ({
+        url: images[(index + offset + 1) % images.length],
+        description: announcement.title,
+      })),
+    },
+    company: companyMock.find((company) => company.slug === announcement.companySlug) ?? companyMock[0],
+  };
+}) as SolarPanelAnnouncement[];
 
 export default solarPanelAnnouncementMock;
