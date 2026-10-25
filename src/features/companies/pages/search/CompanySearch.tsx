@@ -1,110 +1,55 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import EntityCard from "@/lib/components/layout/announcement/entity-card/EntityCard";
-import Skeleton from "@@/feedback/skeleton/Skeleton";
-import { ImageSkeleton } from "@@/feedback/skeleton/Skeleton.presets";
-import { getCatalogCompanies, type CatalogCompany } from "@/features/companies/company.service";
-import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
-import { toCardItem } from "./CompanySearch.utils";
-import WrapperLayout from "@/config/WrapperLayout";
-
-function CompanySearchContent({ items }: { items: CatalogCompany[] }) {
-  const { t } = useTranslation("search");
-  const [query, setQuery] = useState("");
-  const { lang: langParam } = useParams<{ lang: string }>();
-  const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
-  const normalizedQuery = query
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase();
-  const filtered = items.filter((company) =>
-    [company.tradeName, company.city, company.state].some((value) =>
-      value
-        ?.normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .toLowerCase()
-        .includes(normalizedQuery),
-    ),
-  );
-
-  return (
-    <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-2">
-        <h1>{t("company.title")}</h1>
-        <p className="text-black/70">{t("company.description")}</p>
-      </div>
-
-      <input
-        type="search"
-        aria-label={t("company.queryPlaceholder")}
-        placeholder={t("company.queryPlaceholder")}
-        value={query}
-        onChange={(event) => setQuery(event.target.value)}
-        className="w-full max-w-md rounded-lg border border-gray-300 p-3"
-      />
-
-      <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
-        {filtered.map((item) => (
-          <EntityCard key={item.id} item={toCardItem(item, lang)} />
-        ))}
-      </div>
-      {filtered.length === 0 ? <p>{t("company.noResults")}</p> : null}
-    </div>
-  );
-}
-
-function CompanySearchSkeleton() {
-  return (
-    <div className="flex flex-col gap-8" aria-busy="true">
-      <div className="flex flex-col gap-2">
-        <Skeleton height="2.25rem" width="12rem" />
-        <Skeleton height="1.5rem" width="60%" />
-      </div>
-
-      <div className="flex flex-row flex-wrap items-center gap-4">
-        <Skeleton height="2.5rem" width="15rem" />
-        {Array.from({ length: 3 }, (_, index) => (
-          <Skeleton key={index} height="2.5rem" width="8rem" className="rounded-full" />
-        ))}
-      </div>
-
-      <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
-        {Array.from({ length: 8 }, (_, index) => (
-          <div key={index} className="flex flex-col items-center gap-2">
-            <ImageSkeleton className="rounded-full" />
-            <Skeleton height="1.25rem" width="80%" />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
+import Select from "@@/ui/select/Select";
+import MarketplaceLayout from "@/features/marketplace/components/MarketplaceLayout";
+import MarketplaceHeading from "@/features/marketplace/components/MarketplaceHeading";
+import MarketplaceSearch from "@/features/marketplace/components/MarketplaceSearch";
+import MarketplaceResults from "@/features/marketplace/components/MarketplaceResults";
+import { useMarketplaceCatalog, useMarketplaceQuery } from "@/features/marketplace/marketplace.hooks";
+import { filterCompanies, matchesMarketplaceQuery } from "@/features/marketplace/marketplace.utils";
+import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
+import { getCatalogCompanies } from "../../company.service";
+import CompanyFeaturedCard from "../feed/CompanyFeaturedCard";
 
 export default function CompanySearch() {
-  const [items, setItems] = useState<CatalogCompany[] | null>(null);
-  const [error, setError] = useState(false);
-  const { t } = useTranslation("search");
-
-  useEffect(() => {
-    let active = true;
-
-    getCatalogCompanies()
-      .then((result) => {
-        if (active) setItems(result);
-      })
-      .catch(() => {
-        if (active) setError(true);
-      });
-
-    return () => {
-      active = false;
-    };
-  }, []);
-
+  const { t } = useTranslation("marketplace");
+  const { t: feed } = useTranslation("feed");
+  const { t: search } = useTranslation("search");
+  const { lang: value } = useParams();
+  const lang = isSupportedLanguage(value) ? value : DEFAULT;
+  const { items, error, retry } = useMarketplaceCatalog(getCatalogCompanies);
+  const [query, setQuery] = useMarketplaceQuery();
+  const [type, setType] = useState("");
+  const filtered = (type ? filterCompanies(items ?? [], type) : (items ?? [])).filter((item) =>
+    matchesMarketplaceQuery(query, item.tradeName, item.city, item.state),
+  );
   return (
-    <WrapperLayout ptop>
-      {error ? <p role="alert">{t("company.loadError")}</p> : items ? <CompanySearchContent items={items} /> : <CompanySearchSkeleton />}
-    </WrapperLayout>
+    <MarketplaceLayout>
+      <MarketplaceHeading title={t("companiesSearchTitle")} description={t("companiesDescription")} centered />
+      <MarketplaceSearch domain="companies" lang={lang} query={query} onQueryChange={setQuery}>
+        <Select
+          clearable={false}
+          name={feed("views.labels.companies")}
+          value={type}
+          options={[[t("companies"), ""], ...["suppliers", "providers", "other"].map((key) => [feed(`views.${key}`), key] as const)]}
+          onChange={(value) => setType(value ?? "")}
+        />
+      </MarketplaceSearch>
+      <section className="flex flex-col gap-8">
+        <h2 className="text-label font-semi-bold">{t("results", { count: filtered.length })}</h2>
+        <MarketplaceResults
+          loading={!items && !error}
+          error={error ? search("company.loadError") : undefined}
+          empty={items && !filtered.length ? search("company.noResults") : undefined}
+          onRetry={retry}>
+          <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+            {filtered.map((company) => (
+              <CompanyFeaturedCard key={company.id} company={company} lang={lang} variant="logo" />
+            ))}
+          </div>
+        </MarketplaceResults>
+      </section>
+    </MarketplaceLayout>
   );
 }

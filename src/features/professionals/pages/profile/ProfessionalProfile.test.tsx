@@ -20,6 +20,17 @@ const professional: CatalogTechnician = {
 };
 
 describe("ProfessionalProfile", () => {
+  it("uses public contact details when available and shows an honest unavailable state otherwise", async () => {
+    mockedGetCatalogTechnicianBySlug.mockResolvedValue({ ...professional, contact: { email: "ana@example.test", number: "+55 (11) 99999-1234" } });
+    render(
+      <MemoryRouter>
+        <ProfessionalProfile />
+      </MemoryRouter>,
+    );
+    expect(await screen.findByRole("link", { name: "Enviar e-mail" })).toHaveAttribute("href", "mailto:ana%40example.test");
+    expect(screen.getByRole("link", { name: "Ligar" })).toHaveAttribute("href", "tel:+5511999991234");
+    expect(screen.queryByText("Este profissional ainda não disponibilizou contato público.")).not.toBeInTheDocument();
+  });
   beforeEach(() => {
     mockedGetCatalogTechnicianBySlug.mockReset();
   });

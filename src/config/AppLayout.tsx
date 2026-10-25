@@ -24,7 +24,7 @@ function AppLayoutContent() {
   }
 
   return (
-    <div className="min-h-screen min-w-screen" onContextMenu={handleContextMenu}>
+    <div className="min-h-screen w-full min-w-0" onContextMenu={handleContextMenu}>
       <Navbar />
       <div className="w-full h-full">
         <Outlet />

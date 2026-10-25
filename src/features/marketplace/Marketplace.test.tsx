@@ -51,7 +51,7 @@ describe("Marketplace page views", () => {
   it("sorts offers on the same page by recent publication or trending score", async () => {
     const { container } = renderFeed(<SolarPanelFeed />, "/pt-BR/placas-solares");
     await screen.findByText(solarPanelAnnouncementMocks[1].title);
-    const firstOffer = () => container.querySelector("section a")?.textContent;
+    const firstOffer = () => container.querySelector('[aria-label="Escolha em destaque"] h2')?.textContent;
     expect(firstOffer()).toContain(solarPanelAnnouncementMocks[1].title);
     fireEvent.click(screen.getByRole("link", { name: "Em alta" }));
     await waitFor(() => expect(firstOffer()).toContain(solarPanelAnnouncementMocks[2].title));
@@ -86,6 +86,8 @@ describe("Marketplace page views", () => {
   it("filters suppliers, service companies and other companies within the companies page", async () => {
     renderFeed(<CompanyFeed />, "/pt-BR/empresas");
     await screen.findByText("Solar");
+    expect(screen.getByText("Equipe")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("link", { name: "Fornecedores" }));
     expect(screen.queryByText("Equipe")).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("link", { name: "Prestadoras" }));
     expect(screen.getByText("Equipe")).toBeInTheDocument();

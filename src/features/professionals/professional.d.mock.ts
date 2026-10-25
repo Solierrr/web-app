@@ -72,8 +72,9 @@ const professionalMockData = [
 // `slug` não existe em `technician`/`person` no schema-api-core.sql: gerado
 // aqui a partir de `name` até existir essa coluna (ou rota amigável
 // equivalente) na API.
-const professionalMock = professionalMockData.map((professional) => ({
+const professionalMock = professionalMockData.map((professional, index) => ({
   ...professional,
+  avatar: `/images/marketplace/professional-${(index % 6) + 1}.webp`,
   slug: slugNormalization(professional.name),
 })) as Professional[];
 

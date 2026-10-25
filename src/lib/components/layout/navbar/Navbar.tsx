@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
 import LanguageSwitcher from "@@/layout/navbar/LanguageSwitcher";
@@ -21,8 +21,15 @@ export default function Navbar() {
   const { t: tAccess } = useTranslation("onboarding");
   const { t: tCommons } = useTranslation("commons");
   const { t: tFeed } = useTranslation("feed");
+  const { t: market } = useTranslation("marketplace");
+  const { pathname } = useLocation();
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
+  const searchTarget = [routePaths.companiesFeed(lang), routePaths.searchCompanies(lang)].some((path) => pathname.startsWith(path))
+    ? routePaths.searchCompanies(lang)
+    : [routePaths.professionalsFeed(lang), routePaths.searchProfessionals(lang)].some((path) => pathname.startsWith(path))
+      ? routePaths.searchProfessionals(lang)
+      : routePaths.searchSolarPanels(lang);
   const authenticated = useSyncExternalStore(
     subscribeSession,
     () => Boolean(getAuthSession()),
@@ -31,19 +38,14 @@ export default function Navbar() {
 
   return (
     <header className="w-full">
-      <div className="navbar-frame gap-2 w-full justify-center">
-        <ToolbarAction to={routePaths.solarPanelsFeed(lang)} content={t("solarPanels")} label={t("solarPanels")} />
-        <ToolbarAction
-          to={routePaths.infrastructureFeed(lang)}
-          content={tFeed("catalog.infrastructureTitle")}
-          label={tFeed("catalog.infrastructureTitle")}
-        />
+      <div className="navbar-frame h-auto! min-h-16 w-full flex-wrap justify-center gap-2 px-4 py-3">
+        <ToolbarAction to={routePaths.solarPanelsFeed(lang)} content={market("products")} label={market("products")} />
         <ToolbarAction to={routePaths.professionalsFeed(lang)} content={tFeed("services.title")} label={tFeed("services.title")} />
         <ToolbarAction to={routePaths.companiesFeed(lang)} content={t("companies")} label={t("companies")} />
         <ToolbarAction to={routePaths.registerCompany(lang)} content={tAccess("company")} label={tAccess("company")} />
         {authenticated && <ToolbarAction to={routePaths.dashboard(lang)} content={tAccess("operational")} label={tAccess("operational")} />}
         <ToolbarAction to={routePaths.chatbot(lang)} content={t("support")} label={t("support")} />
-        <ToolbarAction to={routePaths.searchSolarPanels(lang)} icon="search" label={tCommons("actions.search")} />
+        <ToolbarAction to={searchTarget} icon="search" label={tCommons("actions.search")} />
         <ToolbarAction to={routePaths.home(lang)} icon="shoppingCart" label={tCommons("navigation.home")} />
         <ToolbarAction to={routePaths.login(lang)} icon="login" label={t("login")} />
         <LanguageSwitcher />

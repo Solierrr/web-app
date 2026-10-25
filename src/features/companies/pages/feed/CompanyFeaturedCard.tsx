@@ -5,17 +5,33 @@ import Icon from "@@/ui/icon/Icon";
 import { routePaths } from "@/config/i18n/paths";
 import type { SupportedLanguage } from "@/config/i18n/browser/languages";
 import type { CatalogCompany } from "@/features/companies/company.service";
+import MarketplaceImage from "@/features/marketplace/components/MarketplaceImage";
 
 interface CompanyFeaturedCardProps {
   company: CatalogCompany;
   lang: SupportedLanguage;
+  variant?: "photo" | "logo";
 }
 
-export default function CompanyFeaturedCard({ company, lang }: CompanyFeaturedCardProps) {
+export default function CompanyFeaturedCard({ company, lang, variant = "photo" }: CompanyFeaturedCardProps) {
   const { t } = useTranslation("feed");
   const [bannerFailed, setBannerFailed] = useState(false);
   const [logoFailed, setLogoFailed] = useState(false);
   const location = [company.city, company.state].filter(Boolean).join(" / ");
+  if (variant === "logo")
+    return (
+      <Link
+        to={routePaths.companyProfile(lang, company.slug)}
+        aria-label={company.tradeName}
+        className="group flex min-w-0 flex-col gap-5 rounded-surface focus-visible:outline-orange">
+        <MarketplaceImage src={company.logoUrl} alt="" contain className="aspect-[3/2] rounded-surface" />
+        <h2 className="text-body font-semi-bold">{company.tradeName}</h2>
+        {company.activities?.length ? (
+          <p className="text-body text-operational-muted">{company.activities.map((activity) => t(`company.activities.${activity}`)).join(" · ")}</p>
+        ) : null}
+        {location && <p className="text-body text-operational-muted">{location}</p>}
+      </Link>
+    );
 
   return (
     <Link

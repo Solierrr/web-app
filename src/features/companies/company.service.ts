@@ -65,8 +65,8 @@ function mockCatalogCompany(company: Company): CatalogCompany {
     slug: company.slug,
     city: company.address?.city ?? null,
     state: company.address?.state ?? null,
-    logoUrl: company.logoUrl,
-    bannerUrl: company.bannerUrl,
+    logoUrl: company.logoUrl ?? `/images/marketplace/company-logo-${(companyMocks.indexOf(company) % 3) + 1}.webp`,
+    bannerUrl: company.bannerUrl ?? "/images/marketplace/solar-roof.webp",
     activities: company.activities,
     hasTechnicalTeam: company.hasTechnicalTeam,
   };

@@ -26,6 +26,7 @@
     "recent": "Latest offers"
   },
   "views": {
+    "all": "All",
     "trending": "Trending",
     "teams": "Teams",
     "professionals": "Professionals",

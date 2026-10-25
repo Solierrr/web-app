@@ -4,11 +4,20 @@ import type { SolarPanelFeedSummary } from "@/features/solar-panel/solarPanel.an
 
 export type FeedCategory = "solarPanels" | "infrastructure" | "professionals" | "companies";
 
+export function matchesMarketplaceQuery(query: string, ...values: (string | null | undefined)[]): boolean {
+  const normalize = (value: string) =>
+    value
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLocaleLowerCase();
+  return normalize(values.filter(Boolean).join(" ")).includes(normalize(query.trim()));
+}
+
 export const feedViews: Record<FeedCategory, string[]> = {
   solarPanels: ["recent", "trending"],
   infrastructure: ["recent", "trending"],
   professionals: ["professionals", "independent", "teams"],
-  companies: ["suppliers", "providers", "other"],
+  companies: ["all", "suppliers", "providers", "other"],
 };
 
 export function getFeedView(category: FeedCategory, value: string | null): string {
@@ -17,6 +26,7 @@ export function getFeedView(category: FeedCategory, value: string | null): strin
 
 export function filterCompanies(items: CatalogCompany[], view: string): CatalogCompany[] {
   return items.filter((company) => {
+    if (view === "all") return true;
     const activities = company.activities ?? [];
     if (view === "suppliers") return activities.includes(CompanyActivity.SOLAR_PANELS);
     if (view === "providers")
