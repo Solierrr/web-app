@@ -139,9 +139,6 @@
     "completePasswordReset": "No se pudo restablecer la contraseña",
     "loginWithMicrosoft": "No se pudo iniciar sesión con Microsoft. Inténtalo de nuevo."
   },
-  "typingStatus": {
-    "setTypingStatus": "No se pudo actualizar el indicador de escritura"
-  },
   "purchases": {
     "getCart": "No se pudo cargar el carrito.",
     "putCartItem": "No se pudo actualizar el carrito.",
