@@ -1,3 +1,4 @@
+import Pagination from "@@/ui/pagination/Pagination";
 import { useCallback, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -7,7 +8,7 @@ import MarketplaceLayout from "@/features/marketplace/components/MarketplaceLayo
 import MarketplaceHeading from "@/features/marketplace/components/MarketplaceHeading";
 import MarketplaceSearch from "@/features/marketplace/components/MarketplaceSearch";
 import MarketplaceResults from "@/features/marketplace/components/MarketplaceResults";
-import { useMarketplaceCatalog, useMarketplaceQuery } from "@/features/marketplace/marketplace.hooks";
+import { useMarketplaceCatalog, useMarketplaceQuery, useMarketplacePagination } from "@/features/marketplace/marketplace.hooks";
 import { matchesMarketplaceQuery } from "@/features/marketplace/marketplace.utils";
 import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { getCatalogSolarPanels } from "../../solarPanel.service";
@@ -26,6 +27,7 @@ export default function SolarPanelSearch() {
       (!type || (item.panel.productType ?? "PANEL") === type) &&
       matchesMarketplaceQuery(query, item.title, item.company.tradeName, item.panel.brand, item.panel.material),
   );
+  const paged = useMarketplacePagination(filtered, JSON.stringify([query, type, lang]));
   return (
     <MarketplaceLayout>
       <MarketplaceHeading title={t("productsSearchTitle")} description={t("productsDescription")} centered />
@@ -50,10 +52,11 @@ export default function SolarPanelSearch() {
           empty={items && !filtered.length ? t("noResults") : undefined}
           onRetry={retry}>
           <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((offer) => (
+            {paged.items.map((offer) => (
               <OfferCard key={offer.id} offer={offer} lang={lang} />
             ))}
           </div>
+          <Pagination {...paged.pagination} appearance="borderless" />
         </MarketplaceResults>
       </section>
     </MarketplaceLayout>

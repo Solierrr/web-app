@@ -1,3 +1,4 @@
+import Pagination from "@@/ui/pagination/Pagination";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -6,7 +7,7 @@ import MarketplaceLayout from "@/features/marketplace/components/MarketplaceLayo
 import MarketplaceHeading from "@/features/marketplace/components/MarketplaceHeading";
 import MarketplaceSearch from "@/features/marketplace/components/MarketplaceSearch";
 import MarketplaceResults from "@/features/marketplace/components/MarketplaceResults";
-import { useMarketplaceCatalog, useMarketplaceQuery } from "@/features/marketplace/marketplace.hooks";
+import { useMarketplaceCatalog, useMarketplaceQuery, useMarketplacePagination } from "@/features/marketplace/marketplace.hooks";
 import { filterCompanies, matchesMarketplaceQuery } from "@/features/marketplace/marketplace.utils";
 import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { getCatalogCompanies } from "../../company.service";
@@ -24,6 +25,7 @@ export default function CompanySearch() {
   const filtered = (type ? filterCompanies(items ?? [], type) : (items ?? [])).filter((item) =>
     matchesMarketplaceQuery(query, item.tradeName, item.city, item.state),
   );
+  const paged = useMarketplacePagination(filtered, JSON.stringify([query, type, lang]));
   return (
     <MarketplaceLayout>
       <MarketplaceHeading title={t("companiesSearchTitle")} description={t("companiesDescription")} centered />
@@ -44,10 +46,11 @@ export default function CompanySearch() {
           empty={items && !filtered.length ? search("company.noResults") : undefined}
           onRetry={retry}>
           <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((company) => (
+            {paged.items.map((company) => (
               <CompanyFeaturedCard key={company.id} company={company} lang={lang} />
             ))}
           </div>
+          <Pagination {...paged.pagination} appearance="borderless" />
         </MarketplaceResults>
       </section>
     </MarketplaceLayout>

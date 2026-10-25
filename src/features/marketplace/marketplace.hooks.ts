@@ -41,3 +41,13 @@ export function useMarketplaceQuery() {
     },
   ] as const;
 }
+
+export function useMarketplacePagination<T>(items: T[], resetKey: string, pageSize = 12) {
+  const [selection, setSelection] = useState({ key: resetKey, page: 1 });
+  if (selection.key !== resetKey) setSelection({ key: resetKey, page: 1 });
+  const page = Math.max(1, Math.min(selection.key === resetKey ? selection.page : 1, Math.ceil(items.length / pageSize)));
+  return {
+    items: items.slice((page - 1) * pageSize, page * pageSize),
+    pagination: { page, total: items.length, pageSize, onPageChange: (next: number) => setSelection({ key: resetKey, page: next }) },
+  };
+}

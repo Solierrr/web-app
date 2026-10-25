@@ -1,8 +1,9 @@
+import Pagination from "@@/ui/pagination/Pagination";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Marketplace from "@/features/marketplace/Marketplace";
 import { filterCompanies, getFeedView } from "@/features/marketplace/marketplace.utils";
-import { useMarketplaceCatalog } from "@/features/marketplace/marketplace.hooks";
+import { useMarketplaceCatalog, useMarketplacePagination } from "@/features/marketplace/marketplace.hooks";
 import MarketplaceLayout from "@/features/marketplace/components/MarketplaceLayout";
 import MarketplaceHeading from "@/features/marketplace/components/MarketplaceHeading";
 import MarketplaceResults from "@/features/marketplace/components/MarketplaceResults";
@@ -21,8 +22,9 @@ export default function CompanyFeed() {
   const [params] = useSearchParams();
   const { items, error, retry } = useMarketplaceCatalog(getCatalogCompanies);
   const filtered = filterCompanies(items ?? [], getFeedView("companies", params.get("view")));
-  const featured = filtered.length > 2 ? filtered.slice(0, 2) : [];
-  const rest = featured.length ? filtered.slice(2) : filtered;
+  const paged = useMarketplacePagination(filtered, JSON.stringify([params.get("view"), lang]));
+  const featured = paged.pagination.page === 1 && paged.items.length > 2 ? paged.items.slice(0, 2) : [];
+  const rest = featured.length ? paged.items.slice(2) : paged.items;
   return (
     <MarketplaceLayout>
       <MarketplaceHeading title={t("companiesTitle")} description={t("companiesDescription")} centered>
@@ -43,6 +45,7 @@ export default function CompanyFeed() {
             ))}
           </div>
         </section>
+        <Pagination {...paged.pagination} appearance="borderless" />
       </MarketplaceResults>
     </MarketplaceLayout>
   );

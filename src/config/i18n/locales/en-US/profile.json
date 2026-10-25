@@ -1,4 +1,14 @@
 {
+  "photos": {
+    "title": "Profile images",
+    "PROFILE": "Profile picture",
+    "BANNER": "Banner",
+    "remove": "Remove image",
+    "save": "Save image",
+    "limits": "JPEG, PNG or WebP · up to 5 MB",
+    "invalid": "Select a valid image up to 5 MB.",
+    "error": "Could not update the image."
+  },
   "edit": {
     "description": "Review the profile details before saving.",
     "mockNotice": "These profile changes are stored only in this browser until the real editing flow is connected.",

@@ -1,3 +1,4 @@
+import Pagination from "@@/ui/pagination/Pagination";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -6,7 +7,7 @@ import MarketplaceLayout from "@/features/marketplace/components/MarketplaceLayo
 import MarketplaceHeading from "@/features/marketplace/components/MarketplaceHeading";
 import MarketplaceSearch from "@/features/marketplace/components/MarketplaceSearch";
 import MarketplaceResults from "@/features/marketplace/components/MarketplaceResults";
-import { useMarketplaceCatalog, useMarketplaceQuery } from "@/features/marketplace/marketplace.hooks";
+import { useMarketplaceCatalog, useMarketplaceQuery, useMarketplacePagination } from "@/features/marketplace/marketplace.hooks";
 import { matchesMarketplaceQuery } from "@/features/marketplace/marketplace.utils";
 import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { getCatalogTechnicians } from "../../professional.service";
@@ -24,6 +25,7 @@ export default function ProfessionalSearch() {
   const filtered = (items ?? []).filter(
     (item) => (!specialty || item.professions.includes(specialty)) && matchesMarketplaceQuery(query, item.name, item.crea, ...item.professions),
   );
+  const paged = useMarketplacePagination(filtered, JSON.stringify([query, specialty, lang]));
   return (
     <MarketplaceLayout>
       <MarketplaceHeading title={t("servicesSearchTitle")} description={t("servicesDescription")} centered />
@@ -44,10 +46,11 @@ export default function ProfessionalSearch() {
           empty={items && !filtered.length ? t("noResults") : undefined}
           onRetry={retry}>
           <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((professional) => (
+            {paged.items.map((professional) => (
               <ProfessionalCard key={professional.id} professional={professional} lang={lang} />
             ))}
           </div>
+          <Pagination {...paged.pagination} appearance="borderless" />
         </MarketplaceResults>
       </section>
     </MarketplaceLayout>

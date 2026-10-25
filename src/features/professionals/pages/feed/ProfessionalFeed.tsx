@@ -1,9 +1,10 @@
+import Pagination from "@@/ui/pagination/Pagination";
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Marketplace from "@/features/marketplace/Marketplace";
 import { getFeedView } from "@/features/marketplace/marketplace.utils";
-import { useMarketplaceCatalog } from "@/features/marketplace/marketplace.hooks";
+import { useMarketplaceCatalog, useMarketplacePagination } from "@/features/marketplace/marketplace.hooks";
 import MarketplaceLayout from "@/features/marketplace/components/MarketplaceLayout";
 import MarketplaceHeading from "@/features/marketplace/components/MarketplaceHeading";
 import MarketplaceResults from "@/features/marketplace/components/MarketplaceResults";
@@ -45,6 +46,8 @@ export default function ProfessionalFeed() {
   }, [view, revision]);
   const filtered = (items ?? []).filter((item) => view !== "independent" || item.affiliationType === TechnicalAffiliationType.INDEPENDENT);
   const teamView = view === "teams";
+  const pagedProfessionals = useMarketplacePagination(filtered, `${view}:${lang}`);
+  const pagedTeams = useMarketplacePagination(teams ?? [], `${view}:${lang}`);
   return (
     <MarketplaceLayout>
       <MarketplaceHeading title={t("servicesTitle")} description={t("servicesDescription")} centered />
@@ -67,9 +70,10 @@ export default function ProfessionalFeed() {
           }>
           <div className="grid min-w-0 grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
             {teamView
-              ? teams?.map((team) => <CompanyFeaturedCard key={team.id} company={teamCompany(team)} lang={lang} />)
-              : filtered.map((professional) => <ProfessionalCard key={professional.id} professional={professional} lang={lang} />)}
+              ? pagedTeams.items.map((team) => <CompanyFeaturedCard key={team.id} company={teamCompany(team)} lang={lang} />)
+              : pagedProfessionals.items.map((professional) => <ProfessionalCard key={professional.id} professional={professional} lang={lang} />)}
           </div>
+          <Pagination {...(teamView ? pagedTeams.pagination : pagedProfessionals.pagination)} appearance="borderless" />
         </MarketplaceResults>
       </section>
     </MarketplaceLayout>

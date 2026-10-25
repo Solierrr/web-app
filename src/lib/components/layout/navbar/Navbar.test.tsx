@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 
@@ -27,8 +27,11 @@ describe("Navbar", () => {
     expect(screen.getByRole("link", { name: "Produtos" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Serviços" })).toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "Credenciar-se" })).not.toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Entrar" })).toHaveAttribute("href", "/pt-BR/login");
-    expect(screen.getByRole("link", { name: "Suporte" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Carrinho" })).toHaveAttribute("href", "/pt-BR/carrinho");
+    expect(screen.queryByRole("link", { name: "Suporte" })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Conta" }));
+    expect(screen.getByRole("menuitem", { name: "Entrar" })).toBeInTheDocument();
+    expect(screen.getByRole("menuitem", { name: "Suporte" })).toBeInTheDocument();
   });
 
   it("renders the language switcher", () => {

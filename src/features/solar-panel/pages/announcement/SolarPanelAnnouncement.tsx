@@ -1,4 +1,5 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import type { SolarPanelAnnouncement } from "@/features/solar-panel/solarPanel.announcement";
@@ -28,13 +29,23 @@ export function SolarPanelAnnouncementPacked({ product }: SolarPanelAnnouncement
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
   const navigate = useNavigate();
+  const location = useLocation();
+  const [adding, setAdding] = useState(false);
 
   async function addToCart() {
+    if (adding || product.availableUnits < 1) return;
+    if (!getAuthSession()) {
+      navigate(routePaths.login(lang), { state: { returnTo: location.pathname + location.search } });
+      return;
+    }
+    setAdding(true);
     try {
       await putCartItem(product.id, 1);
       navigate(routePaths.cart(lang));
     } catch (cause) {
       notify(cause instanceof Error ? cause.message : t("actions.addToCartError"));
+    } finally {
+      setAdding(false);
     }
   }
 
@@ -42,8 +53,8 @@ export function SolarPanelAnnouncementPacked({ product }: SolarPanelAnnouncement
     <div>
       <WrapperLayout ptop>
         <div className="flex flex-col">
-          <div className="flex flex-row relative gap-12">
-            <div className="w-[40%] flex justify-center">
+          <div className="flex flex-col lg:flex-row relative gap-8 lg:gap-12">
+            <div className="w-full lg:w-[40%] flex justify-center">
               {product.photos.heroImage.url ? (
                 <img
                   className="w-[80%] h-fit sticky top-10 pb-10 object-cover"
@@ -55,7 +66,7 @@ export function SolarPanelAnnouncementPacked({ product }: SolarPanelAnnouncement
               )}
             </div>
 
-            <section className="w-[60%] flex flex-col gap-announcement">
+            <section className="w-full min-w-0 lg:w-[60%] flex flex-col gap-announcement">
               <section title={t("general.information")}>
                 <div className="flex flex-col gap-6">
                   <div className="flex flex-col gap-2">
@@ -101,8 +112,12 @@ export function SolarPanelAnnouncementPacked({ product }: SolarPanelAnnouncement
                         className="rounded-full bg-orange px-8 py-2 text-white">
                         {t("actions.contactSupplier")}
                       </Link>
-                      <SoftIconButton description={t("actions.addToCart")} icon="shoppingCart" onClick={() => void addToCart()} />
-                      <SoftIconButton description={t("actions.addToCart")} icon="heart" />
+                      <SoftIconButton
+                        description={t("actions.addToCart")}
+                        disabled={adding || product.availableUnits < 1}
+                        icon="shoppingCart"
+                        onClick={() => void addToCart()}
+                      />
                     </div>
                   </div>
                 </div>
@@ -132,11 +147,11 @@ function SolarPanelAnnouncementSkeleton() {
     <div>
       <WrapperLayout ptop>
         <div className="flex flex-col" aria-busy="true">
-          <div className="flex flex-row relative gap-12">
-            <div className="w-[40%] flex justify-center">
+          <div className="flex flex-col lg:flex-row relative gap-8 lg:gap-12">
+            <div className="w-full lg:w-[40%] flex justify-center">
               <ImageSkeleton className="w-[80%]! max-h-[80vh]! sticky top-10 pb-10" />
             </div>
-            <section className="w-[60%] flex flex-col gap-announcement">
+            <section className="w-full min-w-0 lg:w-[60%] flex flex-col gap-announcement">
               <div className="flex flex-col gap-6">
                 <div className="flex flex-col gap-2">
                   <Skeleton height="6.25rem" width="100%" />

@@ -25,7 +25,6 @@ import CompanyFeed from "@/features/companies/pages/feed/CompanyFeed";
 import SolarPanelSearch from "@/features/solar-panel/pages/search/SolarPanelSearch";
 import ProfessionalSearch from "@/features/professionals/pages/search/ProfessionalSearch";
 import CompanySearch from "@/features/companies/pages/search/CompanySearch";
-import ProfileOnboarding from "@/lib/components/layout/profile/ProfileOnboarding";
 import CompanyOnboarding from "@/features/companies/pages/onboarding/CompanyOnboarding";
 import ProfessionalOnboarding from "@/features/professionals/pages/onboarding/ProfessionalOnboarding";
 import CompanyAccessPage from "@/features/companies/pages/access/CompanyAccessPage";
@@ -110,7 +109,11 @@ const APP: RouteDefinition[] = [
   { key: "companyProfile", path: (lang) => `${joinSegments(lang, "company")}/:companySlug`, element: <CompanyProfile /> },
   { key: "professionalProfile", path: (lang) => `${joinSegments(lang, "professional")}/:professionalSlug`, element: <ProfessionalProfile /> },
 
-  { key: "profileOnboardingUser", path: (lang) => joinSegments(lang, "profileSetup", "user"), element: <ProfileOnboarding kind="user" /> },
+  {
+    key: "profileOnboardingUser",
+    path: (lang) => joinSegments(lang, "profileSetup", "user"),
+    element: <LegacyAccessRedirect destination={routePaths.ownUserProfile} />,
+  },
 
   { key: "chatbot", path: (lang) => joinSegments(lang, "chatbot"), element: <ChatbotPage /> },
 ];

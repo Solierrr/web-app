@@ -39,17 +39,21 @@ export default function CartPage() {
   }, []);
 
   async function run(action: () => Promise<Cart>) {
+    if (busy) return false;
     setBusy(true);
     try {
       setCart(await action());
+      return true;
     } catch (cause) {
       notify(cause instanceof Error ? cause.message : t("error"));
+      return false;
     } finally {
       setBusy(false);
     }
   }
 
   async function handleCheckout() {
+    if (busy) return;
     setBusy(true);
     try {
       const order = await checkout(method);
@@ -94,9 +98,7 @@ export default function CartPage() {
                 render: (line) => (
                   <div className="flex flex-col">
                     <span>{formatMoney(line.netUnitPrice, lang)}</span>
-                    {line.discountPercentage > 0 && (
-                      <span className="text-operational-muted line-through">{formatMoney(line.unitPrice, lang)}</span>
-                    )}
+                    {line.discountPercentage > 0 && <span className="text-operational-muted line-through">{formatMoney(line.unitPrice, lang)}</span>}
                   </div>
                 ),
               },
@@ -105,6 +107,7 @@ export default function CartPage() {
                 label: t("quantity"),
                 render: (line) => (
                   <Input
+                    key={`${line.offerId}:${line.quantity}`}
                     name="quantity"
                     type="number"
                     min={1}
@@ -115,8 +118,16 @@ export default function CartPage() {
                     className="w-24"
                     onBlur={(event) => {
                       const quantity = Number(event.target.value);
-                      if (Number.isInteger(quantity) && quantity >= 1 && quantity !== line.quantity)
-                        void run(() => putCartItem(line.offerId, quantity));
+                      if (!Number.isInteger(quantity) || quantity < 1 || quantity > line.availability) {
+                        event.target.value = String(line.quantity);
+                        return;
+                      }
+                      if (quantity !== line.quantity) {
+                        const input = event.currentTarget;
+                        void run(() => putCartItem(line.offerId, quantity)).then((saved) => {
+                          if (!saved) input.value = String(line.quantity);
+                        });
+                      }
                     }}
                   />
                 ),
@@ -155,7 +166,11 @@ export default function CartPage() {
             </dl>
             <label className="flex flex-col gap-1 text-body">
               {t("paymentMethod")}
-              <Select name="paymentMethod" value={method} onChange={(event) => setMethod(event.target.value as PaymentMethod)} aria-label={t("paymentMethod")}>
+              <Select
+                name="paymentMethod"
+                value={method}
+                onChange={(event) => setMethod(event.target.value as PaymentMethod)}
+                aria-label={t("paymentMethod")}>
                 {METHODS.map((item) => (
                   <option key={item} value={item}>
                     {tMethods(item)}

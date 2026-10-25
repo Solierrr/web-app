@@ -4,7 +4,7 @@ import type { Company } from "@/features/companies/company";
 export function getEnterpriseProfileFields(company: Company, labels: Record<string, string>): ProfileEditField[] {
   return [
     { name: "tradeName", label: labels.tradeName, value: company.tradeName, required: true, maxLength: 100 },
-    { name: "corporateName", label: labels.corporateName, value: company.corporateName, required: true, maxLength: 150 },
+    { name: "corporateName", label: labels.corporateName, value: company.corporateName, required: true, maxLength: 120 },
     { name: "email", label: labels.email, value: company.businessContact?.companyEmail ?? "", type: "email", required: true },
     { name: "phone", label: labels.phone, value: company.businessContact?.phone ?? "", type: "tel" },
     { name: "website", label: labels.website, value: company.businessContact?.website ?? "", type: "url" },
@@ -38,7 +38,7 @@ export function toEnterpriseProfileUpdate(
           city: values.city.trim(),
           state: values.state.trim().toUpperCase(),
           zipCode: values.zipCode.replace(/\D/g, ""),
-          country: values.country.trim(),
+          country: (values.country ?? "").trim(),
         }
       : undefined,
   };

@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
-import { logout } from "@/features/access/access.service";
+import { logout, logoutAll } from "@/features/access/access.service";
 import type { DeviceSession } from "../../settings";
 import { listSessions, revokeSession } from "../../settings.service";
 
@@ -52,6 +52,18 @@ export default function SettingsSessionsPage() {
 
   return (
     <OperationalPage title={t("title")} description={t("description")} loading={sessions === null && message === null} centered sideBackground>
+      <div className="flex items-center justify-between gap-4">
+        <span className="text-body">{t("signOutAll")}</span>
+        <ConfirmedAction
+          icon="logout"
+          label={t("signOutAll")}
+          name={t("allDevices")}
+          onConfirm={async () => {
+            await logoutAll();
+            navigate(routePaths.login(lang), { replace: true });
+          }}
+        />
+      </div>
       <OperationalTable
         label={t("title")}
         items={sessions ?? []}
