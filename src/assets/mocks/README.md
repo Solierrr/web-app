@@ -23,3 +23,9 @@ Produtos e banners alimentam somente fixtures. As fotos editoriais são usadas n
 | enterprises-banners-solar-cf7b97846545.webp | enterprises/banners/solar        | Usina solar com paineis pretos em gramado         |
 | enterprises-banners-solar-26db9def2acc.webp | enterprises/banners/solar        | Parque solar visto do alto                        |
 | enterprises-banners-solar-ad95d2c56434.webp | enterprises/banners/solar        | Fileiras de paineis solares em campo verde        |
+| infrastructure-d9a5baac44f0.webp            | products/infrastructure/hero     | Kit de trilhos e fixadores em fundo branco        |
+| solar-panels-fb77b2f1d456.webp              | products/solar-panels/demo       | Casas de madeira com paineis integrados (Unsplash, Mischa Frank) |
+| solar-panels-0b1863beca2c.webp              | products/solar-panels/demo       | Casa com paineis no telhado inclinado (Unsplash, Watt A Lot) |
+| solar-panels-dc8178a8e3a2.webp              | products/solar-panels/demo       | Paineis ao entardecer com montanhas (Unsplash, Michael Pointner) |
+| solar-panels-f6b647281b36.webp              | products/solar-panels/demo       | Instalador posicionando painel no telhado (Unsplash, Bill Mead) |
+| solar-panels-09f4cb6ca1ac.webp              | products/solar-panels/demo       | Casa azul entre arvores com paineis (Unsplash, Michael Kahn) |

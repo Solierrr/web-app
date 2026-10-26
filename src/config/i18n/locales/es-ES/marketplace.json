@@ -53,5 +53,60 @@
   "noContact": "Este profesional aún no ha compartido datos de contacto públicos.",
   "email": "Enviar correo",
   "phone": "Llamar",
-  "retry": "Intentar de nuevo"
+  "retry": "Intentar de nuevo",
+  "feed": {
+    "previous": "Ver anteriores",
+    "next": "Ver siguientes",
+    "shelves": {
+      "trending": "Tendencia ahora.",
+      "recent": "Recién llegados.",
+      "efficiency": "Más energía en menos espacio.",
+      "power": "Para quien quiere generar más.",
+      "price": "Para empezar sin pesar.",
+      "discount": "Con descuento ahora.",
+      "supplier": "Elecciones de {{name}}.",
+      "all": "Todo para tu proyecto."
+    },
+    "highlights": {
+      "sunTitle": "Empieza\npor el sol.",
+      "sunAction": "Paneles solares",
+      "baseTitle": "La base de\ntodo.",
+      "projectTitle": "Piensa en\nel proyecto entero."
+    },
+    "mostWanted": "Más buscado",
+    "add": "Añadir {{title}} al carrito",
+    "added": "{{title}} se añadió al carrito.",
+    "banners": {
+      "sunset": {
+        "title": "El sol ya está aquí.\nEl siguiente paso es tuyo.",
+        "description": "Paneles de proveedores de todo Brasil, reunidos en un solo lugar.",
+        "action": "Explorar ofertas"
+      },
+      "installer": {
+        "title": "Quien instala\ntambién está aquí.",
+        "description": "Encuentra profesionales para sacar tu proyecto adelante.",
+        "action": "Encontrar profesionales"
+      },
+      "house": {
+        "title": "Todo panel necesita\nuna buena base.",
+        "description": "Rieles, fijaciones y kits para cada tipo de tejado.",
+        "action": "Ver estructuras"
+      },
+      "garden": {
+        "title": "Energía que combina\ncon tu casa.",
+        "description": "Conoce las empresas que hacen posible cada proyecto.",
+        "action": "Conocer empresas"
+      },
+      "cabins": {
+        "title": "Proyectos de\ntodos los tamaños.",
+        "description": "Compara potencia, eficiencia y precio antes de elegir.",
+        "action": "Comparar ofertas"
+      },
+      "field": {
+        "title": "Donde la energía\ngana escala.",
+        "description": "Proveedores preparados para plantas y proyectos mayores.",
+        "action": "Conocer proveedores"
+      }
+    }
+  }
 }

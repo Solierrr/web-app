@@ -53,5 +53,60 @@
   "noContact": "This professional has not shared public contact details yet.",
   "email": "Send an email",
   "phone": "Call",
-  "retry": "Try again"
+  "retry": "Try again",
+  "feed": {
+    "previous": "See previous",
+    "next": "See next",
+    "shelves": {
+      "trending": "Trending now.",
+      "recent": "Just arrived.",
+      "efficiency": "More energy in less space.",
+      "power": "For those who want to generate more.",
+      "price": "Start light.",
+      "discount": "On sale now.",
+      "supplier": "Picks from {{name}}.",
+      "all": "Everything for your project."
+    },
+    "highlights": {
+      "sunTitle": "Start\nwith the sun.",
+      "sunAction": "Solar panels",
+      "baseTitle": "The base of\neverything.",
+      "projectTitle": "Think about\nthe whole project."
+    },
+    "mostWanted": "Most wanted",
+    "add": "Add {{title}} to cart",
+    "added": "{{title}} was added to your cart.",
+    "banners": {
+      "sunset": {
+        "title": "The sun is already here.\nThe next step is yours.",
+        "description": "Panels from suppliers across Brazil, gathered in one place.",
+        "action": "Explore offers"
+      },
+      "installer": {
+        "title": "Installers\nare here too.",
+        "description": "Find professionals to get your project off the ground.",
+        "action": "Find professionals"
+      },
+      "house": {
+        "title": "Every panel needs\na good base.",
+        "description": "Rails, clamps and kits for every type of roof.",
+        "action": "See mounting"
+      },
+      "garden": {
+        "title": "Energy that fits\nyour home.",
+        "description": "Meet the companies that make every project happen.",
+        "action": "Meet companies"
+      },
+      "cabins": {
+        "title": "Projects of\nevery size.",
+        "description": "Compare power, efficiency and price before choosing.",
+        "action": "Compare offers"
+      },
+      "field": {
+        "title": "Where energy\ngains scale.",
+        "description": "Suppliers ready for solar farms and larger projects.",
+        "action": "Meet suppliers"
+      }
+    }
+  }
 }
