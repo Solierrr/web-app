@@ -57,7 +57,7 @@ export default function Popover({ label, anchorRef, onClose, children, className
       id={id}
       role="dialog"
       aria-label={label}
-      className={`fixed z-50 w-[calc(100vw-2rem)] max-w-xl rounded-medium bg-white p-4 text-body text-operational-ink shadow-overlay animate-fade-in ${className}`}>
+      className={`fixed z-50 w-[calc(100vw-2rem)] max-w-xl rounded-medium bg-white p-4 text-body text-operational-ink shadow-overlay animate-fade-in motion-reduce:animate-none ${className}`}>
       {children}
     </div>,
     document.body,

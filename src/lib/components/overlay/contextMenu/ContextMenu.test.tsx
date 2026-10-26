@@ -25,7 +25,9 @@ afterEach(() => {
 
 describe("ContextMenu", () => {
   it("keeps a menu near the lower right corner inside the viewport", () => {
-    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(DOMRect.fromRect({ width: 240, height: 120 }));
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(DOMRect.fromRect({ width: 216, height: 108 }));
+    vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(240);
+    vi.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(120);
     vi.spyOn(HTMLElement.prototype, "scrollHeight", "get").mockReturnValue(120);
     const ref = createRef<ContextMenuHandle>();
     render(<ContextMenu ref={ref} />);
