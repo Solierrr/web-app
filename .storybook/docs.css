@@ -8,3 +8,9 @@
   border-radius: var(--radius-surface);
   box-shadow: var(--shadow-surface);
 }
+
+:root,
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-orange) transparent;
+}

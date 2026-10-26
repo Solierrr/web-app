@@ -145,15 +145,32 @@ body:has([data-testid="sb-preview-toolbar"]) .sidebar-header button[aria-label="
   background: var(--solaria-hover);
 }
 
-.sidebar-item[data-selected="true"] {
+#storybook-sidebar-region .sidebar-item[data-selected="true"] {
+  overflow: hidden;
   background: var(--solaria-shell);
   color: var(--solaria-accent);
   box-shadow: var(--solaria-shadow);
 }
 
-.sidebar-item[data-selected="true"] a[rel="canonical"] {
+#storybook-sidebar-region .sidebar-item[data-selected="true"] a[rel="canonical"] {
+  flex: 1;
+  min-width: 0;
   border-radius: inherit;
   background: var(--solaria-shell);
+  color: var(--solaria-accent);
+}
+
+/* Keep the native skip link accessible without drawing it alongside the row. */
+.sidebar-item[data-selected="true"] > a:not([rel="canonical"]):not(:focus-visible) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  box-shadow: none;
+}
+
+#storybook-sidebar-region .sidebar-item[data-selected="true"] svg {
   color: var(--solaria-accent);
 }
 
@@ -165,6 +182,37 @@ body:has([data-testid="sb-preview-toolbar"]) .sidebar-header button[aria-label="
   box-sizing: border-box;
   width: calc(100% - 1.5rem);
   height: calc(100% - 2rem);
+  min-width: min(16rem, calc(100% - 1.5rem));
+  min-height: 10rem;
+  max-width: calc(100% - 1.5rem);
+  max-height: calc(100% - 2rem);
+  margin: 1rem auto;
+  overflow: hidden;
+  resize: both;
+  border: 0.5rem solid var(--solaria-shell);
+  border-radius: var(--solaria-radius);
+  background: var(--solaria-surface);
+  box-shadow: var(--solaria-shadow);
+}
+
+#storybook-preview-wrapper::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 1rem;
+  height: 1rem;
+  pointer-events: none;
+  background: repeating-linear-gradient(135deg, transparent 0 3px, var(--solaria-accent) 3px 4px);
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+}
+
+#storybook-panel-region {
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 0;
+  width: calc(100% - 1.5rem);
+  height: calc(100% - 2rem);
   margin: 1rem 1rem 1rem 0.5rem;
   overflow: hidden;
   border: 0.5rem solid var(--solaria-shell);
@@ -173,13 +221,51 @@ body:has([data-testid="sb-preview-toolbar"]) .sidebar-header button[aria-label="
   box-shadow: var(--solaria-shadow);
 }
 
+#storybook-panel-root {
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+}
+
+div:has(> #storybook-panel-region) {
+  border: 0;
+}
+
+div:has(> div > #storybook-panel-region),
+[role="separator"][aria-label="Addon panel resize handle"] {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+#storybook-panel-root > div:first-child {
+  background: var(--solaria-shell);
+}
+
+#storybook-panel-root [role="tab"] {
+  border-radius: 0.5rem;
+}
+
+#storybook-panel-root [role="tab"][aria-selected="true"] {
+  background: var(--solaria-hover);
+  box-shadow: none;
+}
+
+body,
+body * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--solaria-accent) transparent;
+}
+
 #storybook-preview-iframe {
   border-radius: calc(var(--solaria-radius) - 0.5rem);
 }
 
 @media (max-width: 600px) {
   #storybook-sidebar-region,
-  #storybook-preview-wrapper {
+  #storybook-preview-wrapper,
+  #storybook-panel-region {
     width: calc(100% - 1rem);
     height: calc(100% - 1rem);
     margin: 0.5rem;
