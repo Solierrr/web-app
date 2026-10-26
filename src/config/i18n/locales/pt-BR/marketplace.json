@@ -108,5 +108,10 @@
         "action": "Conhecer fornecedores"
       }
     }
+  },
+  "footer": {
+    "github": "Solaria no GitHub",
+    "email": "Enviar e-mail para a Solaria",
+    "copied": "E-mail copiado: {{email}}"
   }
 }

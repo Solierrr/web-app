@@ -108,5 +108,10 @@
         "action": "Meet suppliers"
       }
     }
+  },
+  "footer": {
+    "github": "Solaria on GitHub",
+    "email": "Email Solaria",
+    "copied": "Email copied: {{email}}"
   }
 }

@@ -4,6 +4,7 @@ import { ContextMenuProvider } from "@@/overlay/contextMenu/provider/ContextMenu
 import { useContextMenu } from "@@/overlay/contextMenu/useContextMenu";
 
 import Navbar from "@@/layout/navbar/Navbar";
+import Footer from "@@/layout/footer/Footer";
 
 export function AppLayout() {
   return (
@@ -24,11 +25,12 @@ function AppLayoutContent() {
   }
 
   return (
-    <div className="min-h-screen w-full min-w-0" onContextMenu={handleContextMenu}>
+    <div className="flex min-h-screen w-full min-w-0 flex-col" onContextMenu={handleContextMenu}>
       <Navbar />
-      <div className="w-full h-full">
+      <div className="w-full flex-1">
         <Outlet />
       </div>
+      <Footer />
     </div>
   );
 }
