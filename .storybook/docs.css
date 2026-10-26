@@ -1,0 +1,10 @@
+.sbdocs-wrapper .sbdocs-title {
+  font-size: var(--text-operational-title);
+  font-weight: var(--font-weight-semi-bold);
+}
+
+.sbdocs-wrapper .sbdocs-preview {
+  border: 0.5rem solid var(--color-white);
+  border-radius: var(--radius-surface);
+  box-shadow: var(--shadow-surface);
+}

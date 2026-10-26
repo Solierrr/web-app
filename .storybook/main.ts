@@ -1,7 +1,17 @@
 import type { StorybookConfig } from "@storybook/react-vite";
 import { fileURLToPath } from "node:url";
+import { readFileSync } from "node:fs";
+import { chromeTokens } from "./theme.ts";
 
 const config: StorybookConfig = {
+  managerHead: (head) => `${head}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root { ${Object.entries(chromeTokens).map(([name, value]) => `--solaria-${name}: ${value};`).join("\n")} }
+      ${readFileSync(new URL("./manager.css", import.meta.url), "utf8")}
+    </style>`,
   staticDirs: ["../public"],
   stories: ["../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
   addons: ["@chromatic-com/storybook", "@storybook/addon-vitest", "@storybook/addon-a11y", "@storybook/addon-docs", "@storybook/addon-mcp"],

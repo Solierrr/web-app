@@ -1,0 +1,41 @@
+import { create } from "storybook/theming";
+
+export const chromeTokens = {
+  shell: "#ffffff",
+  surface: "#fafafa",
+  hover: "#f3f4f6",
+  ink: "#242628",
+  muted: "#62676f",
+  accent: "#ff6500",
+  border: "#e5e7eb",
+  radius: "1.5rem",
+  shadow: "0 0.125rem 0.5rem #44444414",
+  font: '"Plus Jakarta Sans", sans-serif',
+};
+
+export const solariaTheme = create({
+  base: "light",
+  brandTitle: "Solaria · Web App",
+  brandImage: "./favicon.svg",
+  brandUrl: "./",
+  brandTarget: "_self",
+  fontBase: chromeTokens.font,
+  fontCode: "ui-monospace, monospace",
+  colorPrimary: chromeTokens.accent,
+  colorSecondary: chromeTokens.accent,
+  appBg: chromeTokens.shell,
+  appContentBg: chromeTokens.surface,
+  appPreviewBg: chromeTokens.surface,
+  appBorderColor: chromeTokens.border,
+  appBorderRadius: 16,
+  textColor: chromeTokens.ink,
+  textMutedColor: chromeTokens.muted,
+  barTextColor: chromeTokens.muted,
+  barHoverColor: chromeTokens.ink,
+  barSelectedColor: chromeTokens.accent,
+  barBg: chromeTokens.shell,
+  inputBg: chromeTokens.hover,
+  inputBorder: chromeTokens.hover,
+  inputTextColor: chromeTokens.ink,
+  inputBorderRadius: 12,
+});
