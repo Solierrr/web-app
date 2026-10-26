@@ -1,0 +1,117 @@
+{
+  "products": "Productos",
+  "services": "Servicios",
+  "companies": "Empresas",
+  "marketplace": "Marketplace",
+  "productsTitle": "Energía para tu próximo proyecto.",
+  "productsDescription": "Encuentra paneles, estructuras y lo que hace que todo funcione.",
+  "servicesTitle": "El próximo paso puede ser una conversación.",
+  "servicesDescription": "Descubre profesionales y equipos para tu proyecto.",
+  "companiesTitle": "Conexiones que generan nuevos proyectos.",
+  "companiesDescription": "Encuentra socios por lo que mejor hacen.",
+  "productSpotlight": "Potencia que encaja en tu plan.",
+  "infrastructureSpotlight": "La base de un buen proyecto.",
+  "featured": "Opción destacada",
+  "viewOffer": "Conocer la oferta",
+  "bannerFirst": "El sol ya está aquí.",
+  "bannerSecond": "El próximo paso es tuyo.",
+  "exploreOffers": "Explorar ofertas",
+  "start": "Encuentra tu punto de partida.",
+  "moreOffers": "Más posibilidades para tu proyecto.",
+  "allProducts": "Todos los productos",
+  "panels": "Paneles solares",
+  "infrastructure": "Infraestructura",
+  "install": "Quiero instalar",
+  "installDescription": "De la primera visita al sistema funcionando.",
+  "maintain": "Quiero cuidar",
+  "maintainDescription": "Mantenimiento para tu sistema.",
+  "inspect": "Quiero entender",
+  "inspectDescription": "Inspección y diagnóstico antes del próximo paso.",
+  "serviceSpotlight": "Personas que saben de energía.",
+  "professionalsHeading": "Conoce antes de contactar.",
+  "partnersHeading": "Un catálogo de buenas alianzas.",
+  "companyFeatured": "Conoce quién lo hace",
+  "viewCompany": "Conocer la empresa",
+  "explorePartners": "Explora nuevas alianzas.",
+  "searchProducts": "Buscar productos",
+  "searchServices": "Buscar servicios",
+  "searchCompanies": "Buscar empresas",
+  "searchScopes": "Tipo de búsqueda",
+  "productsSearchTitle": "Encuentra productos para tu proyecto.",
+  "servicesSearchTitle": "Encuentra quién puede ayudarte.",
+  "companiesSearchTitle": "Encuentra tu próxima alianza.",
+  "productsPlaceholder": "Introduce el producto, la marca o el proveedor aquí",
+  "servicesPlaceholder": "Introduce el nombre o la especialidad aquí",
+  "companiesPlaceholder": "Introduce la empresa o la ciudad aquí",
+  "results": "{{count}} resultados",
+  "noResults": "Ningún resultado coincide con tu búsqueda.",
+  "specialty": "Especialidad",
+  "allSpecialties": "Todas las especialidades",
+  "contact": "Entrar en contacto",
+  "viewProfile": "Conocer el perfil",
+  "contactDetails": "Contacto",
+  "noContact": "Este profesional aún no ha compartido datos de contacto públicos.",
+  "email": "Enviar correo",
+  "phone": "Llamar",
+  "retry": "Intentar de nuevo",
+  "feed": {
+    "previous": "Ver anteriores",
+    "next": "Ver siguientes",
+    "shelves": {
+      "trending": "Tendencia ahora.",
+      "recent": "Recién llegados.",
+      "efficiency": "Más energía en menos espacio.",
+      "power": "Para quien quiere generar más.",
+      "price": "Para empezar sin pesar.",
+      "discount": "Con descuento ahora.",
+      "supplier": "Elecciones de {{name}}.",
+      "all": "Todo para tu proyecto."
+    },
+    "highlights": {
+      "sunTitle": "Empieza\npor el sol.",
+      "sunAction": "Paneles solares",
+      "baseTitle": "La base de\ntodo.",
+      "projectTitle": "Piensa en\nel proyecto entero."
+    },
+    "mostWanted": "Más buscado",
+    "add": "Añadir {{title}} al carrito",
+    "added": "{{title}} se añadió al carrito.",
+    "banners": {
+      "sunset": {
+        "title": "El sol ya está aquí.\nEl siguiente paso es tuyo.",
+        "description": "Paneles de proveedores de todo Brasil, reunidos en un solo lugar.",
+        "action": "Explorar ofertas"
+      },
+      "installer": {
+        "title": "Quien instala\ntambién está aquí.",
+        "description": "Encuentra profesionales para sacar tu proyecto adelante.",
+        "action": "Encontrar profesionales"
+      },
+      "house": {
+        "title": "Todo panel necesita\nuna buena base.",
+        "description": "Rieles, fijaciones y kits para cada tipo de tejado.",
+        "action": "Ver estructuras"
+      },
+      "garden": {
+        "title": "Energía que combina\ncon tu casa.",
+        "description": "Conoce las empresas que hacen posible cada proyecto.",
+        "action": "Conocer empresas"
+      },
+      "cabins": {
+        "title": "Proyectos de\ntodos los tamaños.",
+        "description": "Compara potencia, eficiencia y precio antes de elegir.",
+        "action": "Comparar ofertas"
+      },
+      "field": {
+        "title": "Donde la energía\ngana escala.",
+        "description": "Proveedores preparados para plantas y proyectos mayores.",
+        "action": "Conocer proveedores"
+      }
+    }
+  },
+  "footer": {
+    "github": "Solaria en GitHub",
+    "email": "Enviar correo a Solaria",
+    "copied": "Correo copiado: {{email}}"
+  }
+}

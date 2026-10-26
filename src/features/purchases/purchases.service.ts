@@ -1,3 +1,4 @@
+import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
 import i18n from "@/config/i18n/internationalization";
 import { API_CORE_URL } from "@/lib/shared/http/apiCore.utils";
 import { httpJson } from "@/lib/shared/http/http.service";
@@ -5,7 +6,11 @@ import type { Cart, Order, PaymentMethod, PlanCharge, Sale, Subscription } from 
 
 const SERVICE_NAME = "purchases";
 
-function request<T>(path: string, operation: string, method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE" = "GET", body?: unknown) {
+async function request<T>(path: string, operation: string, method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE" = "GET", body?: unknown) {
+  if (isAlwaysMockMode() && (path.startsWith("/cart") || path.startsWith("/orders"))) {
+    const { mockPurchaseRequest } = await import("./purchases.mocks");
+    return mockPurchaseRequest(path, method, body) as T;
+  }
   return httpJson<T>(`${API_CORE_URL}${path}`, {
     service: SERVICE_NAME,
     operation,

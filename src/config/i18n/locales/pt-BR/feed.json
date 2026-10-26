@@ -26,6 +26,7 @@
     "recent": "Ofertas mais recentes"
   },
   "views": {
+    "all": "Todas",
     "trending": "Em alta",
     "teams": "Equipes",
     "professionals": "Profissionais",

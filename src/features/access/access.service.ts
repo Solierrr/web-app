@@ -135,11 +135,26 @@ export async function logout(): Promise<void> {
     clearAuthSession();
     return;
   }
-  await httpJson<void>(`${API}/sessions/current/logout`, {
-    service: SERVICE_NAME,
-    operation: "logout",
-    method: "POST",
-    errorMessage: i18n.t("services:access.logout"),
-  });
+  try {
+    await httpJson<void>(`${API}/sessions/current/logout`, {
+      service: SERVICE_NAME,
+      operation: "logout",
+      method: "POST",
+      errorMessage: i18n.t("services:access.logout"),
+    });
+  } finally {
+    clearAuthSession();
+  }
+}
+
+export async function logoutAll(): Promise<void> {
+  if (!(isAlwaysMockMode("AUTH") && getAuthSession()?.isMock)) {
+    await httpJson<void>(`${API}/sessions/logout-all`, {
+      service: SERVICE_NAME,
+      operation: "logoutAll",
+      method: "POST",
+      errorMessage: i18n.t("services:access.logout"),
+    });
+  }
   clearAuthSession();
 }

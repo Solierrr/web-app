@@ -25,6 +25,7 @@ export default function SettingsPrivacyPage() {
 
   return (
     <OperationalPage title={t("title")} description={t("description")} compact form centered formBackground>
+      <p className="text-body text-operational-muted">{t("localNotice")}</p>
       <OperationalForm plain onSubmit={handleSubmit}>
         <Checkbox label={t("showContact")} checked={preferences.showContact} onChange={() => toggle("showContact")} />
         <Checkbox label={t("showInSearch")} checked={preferences.showInSearch} onChange={() => toggle("showInSearch")} />

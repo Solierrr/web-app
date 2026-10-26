@@ -10,6 +10,7 @@ vi.mock("@/features/solar-panel/solarPanel.service", () => ({
 import { getCatalogSolarPanels } from "@/features/solar-panel/solarPanel.service";
 import type { SolarPanelAnnouncement } from "@/features/solar-panel/solarPanel.announcement";
 import { SolarPanelModelStatus as ModelStatus } from "@/features/solar-panel/solarPanel.enum";
+import { infrastructureOffer } from "@/features/marketplace/components/CatalogFeed.stories.fixtures";
 
 const mockedGetSolarPanels = vi.mocked(getCatalogSolarPanels);
 
@@ -37,6 +38,18 @@ const items: SolarPanelAnnouncement[] = [
 ];
 
 describe("SolarPanelSearch", () => {
+  it("searches products only, including infrastructure with its detail route", async () => {
+    mockedGetSolarPanels.mockResolvedValue([infrastructureOffer]);
+    render(
+      <MemoryRouter initialEntries={["/?q=aluminio"]}>
+        <SolarPanelSearch />
+      </MemoryRouter>,
+    );
+    expect(await screen.findByRole("link", { name: /Trilho de alumínio/ })).toHaveAttribute("href", "/pt-BR/infraestrutura/aurora/trilho-aluminio");
+    expect(mockedGetSolarPanels).toHaveBeenCalledWith("pt-BR");
+    expect(screen.getByRole("link", { name: "Serviços" })).toHaveAttribute("href", "/pt-BR/buscar/profissionais");
+    expect(screen.getByRole("link", { name: "Empresas" })).toHaveAttribute("href", "/pt-BR/buscar/empresas");
+  });
   beforeEach(() => {
     mockedGetSolarPanels.mockReset();
   });
@@ -50,8 +63,8 @@ describe("SolarPanelSearch", () => {
       </MemoryRouter>,
     );
 
-    expect(await screen.findByRole("heading", { name: "Placas Solares" })).toBeInTheDocument();
-    expect(screen.getByRole("searchbox", { name: "Buscar placa solar" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Encontre produtos para o seu projeto." })).toBeInTheDocument();
+    expect(screen.getByRole("searchbox", { name: "Buscar produtos" })).toBeInTheDocument();
   });
 
   it("renders the mocked solar panels in the results grid", async () => {

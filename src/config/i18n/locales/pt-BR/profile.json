@@ -1,4 +1,14 @@
 {
+  "photos": {
+    "title": "Imagens do perfil",
+    "PROFILE": "Foto de perfil",
+    "BANNER": "Banner",
+    "remove": "Remover imagem",
+    "save": "Salvar imagem",
+    "limits": "JPEG, PNG ou WebP · até 5 MB",
+    "invalid": "Selecione uma imagem válida de até 5 MB.",
+    "error": "Não foi possível atualizar a imagem."
+  },
   "edit": {
     "description": "Revise os dados do perfil antes de salvar.",
     "mockNotice": "As alterações deste perfil ficam salvas somente neste navegador enquanto o fluxo real de edição não está conectado.",

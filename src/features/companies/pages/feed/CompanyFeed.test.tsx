@@ -61,6 +61,6 @@ describe("CompanyFeed", () => {
       </MemoryRouter>,
     );
     expect(await screen.findByText("Nenhuma empresa disponível nesta categoria.")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Fornecedores" })).toHaveAttribute("aria-current", "page");
+    expect(screen.getByRole("link", { name: "Todas" })).toHaveAttribute("aria-current", "page");
   });
 });

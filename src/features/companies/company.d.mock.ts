@@ -1,3 +1,4 @@
+import { mockCompanyBanners } from "@/config/mocks/catalogMedia";
 import type { Company } from "./company";
 import { CompanyActivity } from "./company.enum";
 import { slugNormalization } from "@/lib/utils/normalization.utils";
@@ -78,8 +79,8 @@ const companyMockData = [
     cnpj: "12345678000433",
     tradeName: "Equipe Solar",
     corporateName: "Equipe Solar Serviços Ltda",
-    logoUrl: "/images/mocks/companies/logos/company-04.jpg",
-    bannerUrl: "/images/mocks/companies/banners/company-04.jpg",
+    logoUrl: "/images/marketplace/company-logo-1.webp",
+    bannerUrl: "/images/marketplace/solar-roof.webp",
     activities: [CompanyActivity.TECHNICIANS, CompanyActivity.MAINTENANCE],
     address: { street: "Rua Solar", number: "100", neighborhood: "Centro", city: "São Paulo", state: "SP", country: "Brasil", zipCode: "01001000" },
   },
@@ -90,8 +91,8 @@ const companyMockData = [
     cnpj: "12345678000514",
     tradeName: "Revisa Energia",
     corporateName: "Revisa Energia Inspeções Ltda",
-    logoUrl: "/images/mocks/companies/logos/company-05.jpg",
-    bannerUrl: "/images/mocks/companies/banners/company-05.jpg",
+    logoUrl: "/images/marketplace/company-logo-2.webp",
+    bannerUrl: "/images/marketplace/solar-roof.webp",
     activities: [CompanyActivity.INSPECTION, CompanyActivity.MAINTENANCE],
     address: {
       street: "Rua da Energia",
@@ -111,17 +112,19 @@ const companyMockData = [
     tradeName: "Horizonte Energia",
     corporateName: "Horizonte Energia Ltda",
     activities: [],
-    logoUrl: "/images/mocks/companies/logos/company-06.jpg",
-    bannerUrl: "/images/mocks/companies/banners/company-06.jpg",
+    logoUrl: "/images/marketplace/company-logo-3.webp",
+    bannerUrl: "/images/marketplace/solar-roof.webp",
     address: { street: "Rua Horizonte", number: "300", neighborhood: "Centro", city: "Recife", state: "PE", country: "Brasil", zipCode: "50060000" },
   },
 ] as Company[];
 
 // `slug` não existe em `company` no schema-api-core.sql: gerado aqui a partir
 // de `tradeName` até existir essa coluna (ou rota amigável equivalente) na API.
-const companyMock = companyMockData.map((company) => ({
+const companyMock = companyMockData.map((company, index) => ({
   ...company,
   slug: slugNormalization(company.tradeName),
+  logoUrl: company.logoUrl ?? `/images/marketplace/company-logo-${(index % 3) + 1}.webp`,
+  bannerUrl: mockCompanyBanners[index % mockCompanyBanners.length],
 })) as Company[];
 
 export default companyMock;

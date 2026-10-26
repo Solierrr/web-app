@@ -50,7 +50,7 @@ describe("SolarPanelFeed", () => {
       </MemoryRouter>,
     );
 
-    expect(await screen.findByRole("heading", { name: "Placas Solares" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Energia para o seu próximo projeto." })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Recentes" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Em alta" })).toBeInTheDocument();
   });

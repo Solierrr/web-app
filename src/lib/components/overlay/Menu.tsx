@@ -17,7 +17,7 @@ interface MenuListProps extends React.HTMLAttributes<HTMLUListElement> {
  */
 export const MenuList = forwardRef<HTMLUListElement, MenuListProps>(function MenuList({ className, children, ...props }, ref) {
   return (
-    <ul ref={ref} {...props} className={`overflow-hidden rounded-medium bg-white shadow-lg ${className ?? ""}`}>
+    <ul ref={ref} {...props} className={`overflow-hidden rounded-medium bg-white shadow-lg animate-fade-in motion-reduce:animate-none ${className ?? ""}`}>
       {children}
     </ul>
   );
@@ -55,7 +55,7 @@ export function MenuItem({ onSelect, disabled = false, selected, className, onKe
       tabIndex={disabled ? -1 : 0}
       aria-disabled={disabled}
       aria-selected={selected}
-      className={`flex items-center-safe gap-2 px-4 py-2 font-medium select-none focus:outline-none ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:bg-input-bg focus:bg-input-bg"} ${selected ? "bg-input-bg" : ""} ${className ?? ""}`}
+      className={`flex items-center-safe gap-2 px-4 py-2 font-medium select-none focus:outline-none ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:bg-input-bg focus-visible:bg-input-bg"} ${selected ? "bg-input-bg" : ""} ${className ?? ""}`}
       onClick={handleActivate}
       onKeyDown={(event) => {
         onKeyDown?.(event);

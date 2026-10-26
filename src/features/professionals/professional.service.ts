@@ -15,6 +15,8 @@ export interface CatalogTechnician {
   crea: string;
   professions: string[];
   affiliationType?: TechnicalAffiliationType;
+  avatarUrl?: string;
+  contact?: { email?: string; number?: string };
 }
 
 function mockCatalogTechnician(professional: {
@@ -23,6 +25,8 @@ function mockCatalogTechnician(professional: {
   slug: string;
   registrations?: { profession: string }[];
   affiliationType?: TechnicalAffiliationType;
+  avatar?: string;
+  contact?: { email?: string; number?: string };
 }): CatalogTechnician {
   return {
     id: professional.id,
@@ -31,6 +35,8 @@ function mockCatalogTechnician(professional: {
     crea: "",
     affiliationType: professional.affiliationType,
     professions: professional.registrations?.map((registration) => registration.profession) ?? [],
+    avatarUrl: professional.avatar,
+    contact: professional.contact,
   };
 }
 

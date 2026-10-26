@@ -83,6 +83,8 @@
     "back": "Volver al inicio"
   },
   "navbar": {
+    "account": "Cuenta",
+    "cart": "Carrito",
     "app": "Aplicación",
     "login": "Iniciar sesión",
     "solarPanels": "Paneles Solares",
@@ -430,6 +432,7 @@
     "default": "no se encontraron resultados."
   },
   "settingsPrivacy": {
+    "localNotice": "Estas preferencias se guardan solo en este navegador y todavía no cambian la visibilidad pública del perfil.",
     "title": "Privacidad",
     "description": "Elige qué pueden ver los demás usuarios. Las preferencias se guardan en este dispositivo y se aplicarán al perfil público cuando el servidor lo admita.",
     "showContact": "Mostrar mis datos de contacto en el perfil público",
@@ -439,6 +442,8 @@
     "saveError": "No se pudieron guardar las preferencias en este dispositivo."
   },
   "settingsSessions": {
+    "signOutAll": "Cerrar sesión en todos los dispositivos",
+    "allDevices": "todos los dispositivos",
     "title": "Sesiones y dispositivos",
     "description": "Dispositivos con acceso a tu cuenta.",
     "current": "Este dispositivo",
@@ -446,7 +451,7 @@
     "revoke": "Cerrar sesión",
     "revoked": "Sesión cerrada.",
     "signOut": "Salir de este dispositivo",
-    "onlyCurrent": "Por ahora solo puedes ver y cerrar la sesión de este dispositivo.",
+    "onlyCurrent": "La lista muestra solo este dispositivo. Puede cerrar esta sesión o cerrar todas las sesiones.",
     "error": "No se pudieron cargar las sesiones.",
     "revokeError": "No se pudo cerrar la sesión.",
     "device": "Dispositivo",
