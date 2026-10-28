@@ -7,6 +7,14 @@
   "newAssistant": "Conversar com o assistente",
   "createError": "Não foi possível iniciar a conversa. Tente novamente.",
   "contactsError": "Não foi possível carregar suas conexões.",
+  "connectionError": "Não foi possível adicionar a conexão.",
+  "collapseConversations": "Ocultar lista de conversas",
+  "expandConversations": "Mostrar lista de conversas",
+  "openConversation": "Abrir conversa",
+  "deleteConversation": "Excluir conversa",
+  "deleteConversationTitle": "Excluir conversa",
+  "deleteConversationMessage": "A conversa sai da sua lista neste navegador. As outras pessoas continuam com ela.",
+  "conversationOptions": "Opções da conversa",
   "conversations": "Suas conversas",
   "searchConversations": "Buscar conversa",
   "searchContacts": "Buscar pessoa nas suas conexões",
@@ -40,6 +48,7 @@
   "loadError": "Não foi possível carregar a conversa.",
   "sendError": "Não foi possível enviar a mensagem. Tente novamente.",
   "emptyInbox": "Você ainda não tem conversas.",
+  "emptyConversationTitle": "Nenhuma mensagem ainda",
   "emptyConversation": "Envie uma mensagem para começar a conversa.",
   "openingConversation": "Abrindo conversa...",
   "contactError": "Não foi possível iniciar o contato com esta empresa.",
@@ -53,6 +62,7 @@
   "unreadCount_other": "{{count}} mensagens não lidas",
   "realtimeUnavailable": "Conexão em tempo real interrompida. As mensagens serão atualizadas periodicamente enquanto tentamos reconectar.",
   "chatbot": {
+    "history": "Conversas",
     "panelDescription": "O que vamos fazer hoje?",
     "ask": "Perguntar",
     "needHelp": "Quer explorar as opções?",
@@ -70,6 +80,7 @@
       "help": "Conheça os primeiros passos"
     },
     "newConversation": "Nova conversa",
+    "welcomeSubtitle": "A conversa continua na tela de mensagens, onde fica salva.",
     "welcomeTitle": "Por onde começamos?",
     "welcomeDescription": "Escolha uma sugestão ou escreva sua pergunta sobre o Solaria.",
     "composerHint": "Enter envia · Shift + Enter quebra a linha",
@@ -81,7 +92,7 @@
     "greeting": "Olá! Como posso te ajudar hoje?",
     "draftPlaceholder": "Peça ao assistente",
     "sendDescription": "Enviar mensagem ao assistente",
-    "assistantName": "Assistente Solaria"
+    "assistantName": "Assistente"
   },
   "attachments": {
     "remove": "Remover {{name}}",

@@ -8,6 +8,8 @@ import {
   createMockChatbotConversation,
   sendMockMessage,
   markMockConversationRead,
+  getMockConnections,
+  addMockConnection,
 } from "./messages.messenger.d.mocks";
 import { userMocks } from "@/config/mocks/registry";
 
@@ -155,12 +157,31 @@ export interface MessengerContact {
 export async function getMessengerContacts(): Promise<MessengerContact[]> {
   if (isAlwaysMockMode("MESSENGER")) {
     await waitForMockService();
-    return userMocks.map((user) => ({ authId: user.authId || user.id, username: user.name, avatar: user.avatar ?? null }));
+    return [
+      ...userMocks.map((user) => ({ authId: user.authId || user.id, username: user.name, avatar: user.avatar ?? null })),
+      ...getMockConnections(),
+    ];
   }
   return httpJson<MessengerContact[]>(`${import.meta.env.VITE_API_CORE}/api/connections`, {
     service: "user",
     operation: "getMessengerContacts",
     errorMessage: i18n.t("chat:contactsError"),
+  });
+}
+
+/** Adiciona uma pessoa às conexões (`POST /api/connections`, com o id do usuário a conectar). */
+export async function addConnection(contact: { userId: string; username: string; avatar?: string | null }): Promise<void> {
+  if (isAlwaysMockMode("MESSENGER")) {
+    await waitForMockService();
+    addMockConnection({ authId: contact.userId, username: contact.username, avatar: contact.avatar ?? null });
+    return;
+  }
+  await httpJson<unknown>(`${import.meta.env.VITE_API_CORE}/api/connections`, {
+    service: "user",
+    operation: "addConnection",
+    method: "POST",
+    body: { connectedUserId: contact.userId },
+    errorMessage: i18n.t("chat:connectionError"),
   });
 }
 

@@ -1,6 +1,6 @@
 import SideCanvas from "@@/layout/access/canvas/SideCanvas";
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
@@ -8,9 +8,7 @@ import {
   getConversations,
   getUserSummary,
   createDirectConversation,
-  createChatbotConversation,
   getMessengerContacts,
-  sendConversationMessage,
   type ConversationDto,
   type MessengerContact,
 } from "@/features/messages/messages.messenger.api";
@@ -18,19 +16,21 @@ import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import { subscribeToConversations } from "@/features/messages/messages.messenger.socket";
 import { useActiveContext } from "@/lib/shared/context/ActiveContext";
 import { Conversation } from "./Chat";
-import Input from "@@/ui/input/Input";
-import Icon from "@@/ui/icon/Icon";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
-import InboxFilters from "./InboxFilters";
+import ConversationList from "./ConversationList";
+import ConversationActions from "./ConversationActions";
+import NewConversationDialog from "./NewConversationDialog";
+import SearchBar, { SearchBarAction } from "@@/ui/search-bar/SearchBar";
+import ConversationFilter from "./ConversationFilter";
+import GroupAction from "@@/ui/button/GroupAction";
+import SurfaceGroup from "@@/ui/surface/SurfaceGroup";
+import Confirmation from "@@/overlay/confirmation/Confirmation";
+import { getHiddenConversations, hideConversation } from "@/features/messages/conversations.utils";
+import { startAssistantConversation } from "@/features/messages/messages.assistant.service";
 import MessageComposer from "@@/ui/message-composer/MessageComposer";
+import Surface from "@@/ui/surface/Surface";
+import ConversationIntro from "@@/layout/chat/conversation-intro/ConversationIntro";
 import LogoLoader from "@@/feedback/logo-loader/LogoLoader";
-import MorphingHexagon from "@@/ui/morphing-hexagon/MorphingHexagon";
-
-function formatInteraction(iso: string, lang: string) {
-  const date = new Date(iso);
-  const sameDay = date.toDateString() === new Date().toDateString();
-  return new Intl.DateTimeFormat(lang, sameDay ? { hour: "2-digit", minute: "2-digit" } : { day: "2-digit", month: "short" }).format(date);
-}
 
 export default function Inbox() {
   const { lang: langParam, conversationId } = useParams<{ lang: string; conversationId: string }>();
@@ -44,11 +44,13 @@ export default function Inbox() {
   const [error, setError] = useState(false);
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<"ALL" | ConversationDto["conversationType"]>("ALL");
+  const [hidden, setHidden] = useState(getHiddenConversations);
+  const [listCollapsed, setListCollapsed] = useState(false);
+  const [toDelete, setToDelete] = useState<ConversationDto | null>(null);
   const [contactsOpen, setContactsOpen] = useState(false);
   const [contacts, setContacts] = useState<MessengerContact[]>([]);
   const [contactsLoading, setContactsLoading] = useState(false);
   const [contactsError, setContactsError] = useState(false);
-  const [contactQuery, setContactQuery] = useState("");
   const [creating, setCreating] = useState(false);
   const [createError, setCreateError] = useState(false);
   const [draft, setDraft] = useState("");
@@ -145,7 +147,6 @@ export default function Inbox() {
 
   function openContacts() {
     if (contactsOpen) return;
-    setContactQuery("");
     setContactsLoading(true);
     setContactsError(false);
     setCreateError(false);
@@ -179,27 +180,29 @@ export default function Inbox() {
     setCreating(true);
     setCreateError(false);
     try {
-      const item = await createChatbotConversation(context.kind === "company" ? (context.company?.type ?? "COMPANY") : "PERSONAL");
+      const { conversation, sendFailed } = await startAssistantConversation(
+        context.kind === "company" ? (context.company?.type ?? "COMPANY") : "PERSONAL",
+        text,
+      );
       if (!mounted.current) return;
-      if (text) {
-        try {
-          await sendConversationMessage(item.id, text, "CHAT_BOT");
-          if (mounted.current) setDraft("");
-        } catch {
-          if (mounted.current) {
-            setContactsOpen(false);
-            navigate(routePaths.chat(lang, item.id), { state: { initialDraft: text, initialSendError: true } });
-          }
-          return;
-        }
-        window.dispatchEvent(new Event("solaria:messenger"));
+      if (sendFailed) {
+        setContactsOpen(false);
+        navigate(routePaths.chat(lang, conversation.id), { state: { initialDraft: text, initialSendError: true } });
+        return;
       }
-      if (mounted.current) selectConversation(item);
+      if (text) setDraft("");
+      selectConversation(conversation);
     } catch {
       if (mounted.current) setCreateError(true);
     } finally {
       if (mounted.current) setCreating(false);
     }
+  }
+  function deleteConversation(item: ConversationDto) {
+    hideConversation(item.id);
+    setHidden(getHiddenConversations());
+    setToDelete(null);
+    if (conversationId === item.id) navigate(routePaths.inbox(lang));
   }
   const title = (item: ConversationDto) =>
     item.title ||
@@ -212,14 +215,17 @@ export default function Inbox() {
             .map((id) => names[id])
             .find(Boolean)) ||
     t("conversation");
-  const visible = conversations
+  const available = conversations.filter((item) => !hidden.includes(item.id));
+  const visible = available
     .filter((item) => (filter === "ALL" || item.conversationType === filter) && title(item).toLocaleLowerCase().includes(query.toLocaleLowerCase()))
     .sort((a, b) => (b.lastInteractionAt ?? "").localeCompare(a.lastInteractionAt ?? ""));
-  const hasList = conversations.length > 0;
+  const hasList = available.length > 0;
+  const collapsed = listCollapsed && !!conversationId;
+  const current = conversationId ? conversations.find((item) => item.id === conversationId) : undefined;
 
   return (
     <main className="relative isolate @container/messages flex h-full min-h-0 min-w-0 flex-col p-4 sm:p-6" aria-label={t("inbox")}>
-      {!loading && !conversationId && !contactsOpen && <SideCanvas centerWidth="var(--spacing-operational-copy)" />}
+      {!loading && !conversationId && <SideCanvas centerWidth="var(--spacing-operational-copy)" />}
       {error && (
         <p role="alert" className="mb-3 text-body">
           {t("loadError")}
@@ -230,143 +236,121 @@ export default function Inbox() {
           {t("createError")}
         </p>
       )}
+      {hasList && !conversationId && (
+        <div className="absolute right-4 top-4 z-10 sm:right-6 sm:top-6">
+          <ConversationActions onNew={openContacts} />
+        </div>
+      )}
       {loading && !hasList && !conversationId && <LogoLoader label={t("loading")} />}
       {(!loading || hasList || conversationId) && (
         <div className="flex min-h-0 min-w-0 flex-1 gap-4">
-          {hasList && (
+          {hasList && collapsed && (
+            <SurfaceGroup direction="horizontal" divided={false} className="animate-fade-in shrink-0 self-start motion-reduce:animate-none">
+              <GroupAction layout="icon" icon="panelLeftOpen" label={t("expandConversations")} onClick={() => setListCollapsed(false)} />
+            </SurfaceGroup>
+          )}
+          {hasList && !collapsed && (
             <aside
-              className={`min-h-0 w-full shrink-0 flex-col gap-3 rounded-hard bg-white p-3 @xl/messages:flex @xl/messages:w-80 ${conversationId || contactsOpen ? "hidden" : "flex"}`}
+              className={`min-h-0 w-full shrink-0 flex-col gap-3 transition-[width,margin] duration-350 ease-in-out motion-reduce:transition-none @xl/messages:flex ${conversationId ? "hidden @xl/messages:ml-0 @xl/messages:w-96" : "flex @xl/messages:ml-[calc(50%-18rem)] @xl/messages:w-144"}`}
               aria-label={t("conversations")}>
-              <InboxFilters query={query} onQueryChange={setQuery} filter={filter} onFilterChange={setFilter} />
-              <ul className="scrollbar-none min-h-0 flex-1 overflow-y-auto">
-                {visible.map((item) => (
-                  <li key={item.id}>
-                    <Link
-                      to={routePaths.chat(lang, item.id)}
-                      onClick={() => setContactsOpen(false)}
-                      aria-current={conversationId === item.id ? "page" : undefined}
-                      className={`flex items-center gap-3 rounded-2xl p-3 transition-colors hover:bg-operational-hover ${conversationId === item.id ? "bg-operational-hover" : ""}`}>
-                      <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-input-bg" aria-hidden="true">
-                        <Icon
-                          name={item.conversationType === "CHAT_BOT" ? "sparkles" : item.conversationType === "GROUP" ? "users" : "user"}
-                          size={20}
-                          gradient={item.conversationType === "CHAT_BOT" ? "orange" : undefined}
-                        />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className={`truncate text-body ${(item.unreadCount ?? 0) > 0 ? "font-semi-bold" : "font-medium"}`}>{title(item)}</p>
-                        <span className="text-sidebar text-operational-muted">{t(`filters.${item.conversationType}`)}</span>
-                      </div>
-                      <div className="flex shrink-0 flex-col items-end gap-1">
-                        {item.lastInteractionAt && (
-                          <time dateTime={item.lastInteractionAt} className="text-sidebar-group text-operational-muted">
-                            {formatInteraction(item.lastInteractionAt, lang)}
-                          </time>
-                        )}
-                        {(item.unreadCount ?? 0) > 0 && (
-                          <span
-                            className="min-w-5 rounded-full bg-orange px-1.5 text-center text-sidebar-group font-medium text-white"
-                            aria-label={t("unreadCount", { count: item.unreadCount })}>
-                            {item.unreadCount}
-                          </span>
-                        )}
-                      </div>
-                    </Link>
-                  </li>
-                ))}
-                {visible.length === 0 && <p className="p-4 text-center text-body text-operational-muted">{t("noMatches")}</p>}
-              </ul>
+              <SearchBar
+                name={t("searchConversations")}
+                placeholder={t("searchConversations")}
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                leading={
+                  conversationId && (
+                    <SearchBarAction icon="panelLeftClose" label={t("collapseConversations")} onClick={() => setListCollapsed(true)} />
+                  )
+                }
+                actions={<ConversationFilter value={filter} onChange={setFilter} />}
+              />
+              <Surface className="flex min-h-0 flex-col" contentClassName="flex min-h-0 flex-col overflow-hidden!">
+                {visible.length === 0 ? (
+                  <p className="p-4 text-center text-body text-operational-muted">{t("noMatches")}</p>
+                ) : (
+                  <ConversationList
+                    conversations={visible}
+                    title={title}
+                    lang={lang}
+                    activeId={conversationId}
+                    onOpen={(item) => {
+                      setContactsOpen(false);
+                      navigate(routePaths.chat(lang, item.id));
+                    }}
+                    onDelete={setToDelete}
+                  />
+                )}
+              </Surface>
             </aside>
           )}
           <div
-            className={`min-h-0 min-w-0 flex-1 ${hasList && !conversationId && !contactsOpen ? "hidden @xl/messages:flex @xl/messages:flex-col" : "flex flex-col"}`}>
-            {contactsOpen ? (
-              <section className="scrollbar-none flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto rounded-hard bg-white p-4">
-                <header className="flex items-center justify-between">
-                  <h2 className="text-label font-medium">{t("newConversation")}</h2>
-                  <ToolbarAction icon="x" label={t("actionsClose")} onClick={() => setContactsOpen(false)} />
-                </header>
-                <Input
-                  name={t("searchContacts")}
-                  placeholder={t("searchContacts")}
-                  value={contactQuery}
-                  onChange={(event) => setContactQuery(event.target.value)}
-                  className="w-full!"
-                />
-                {contactsLoading && (
-                  <p role="status" className="text-body">
-                    {t("loading")}
-                  </p>
-                )}
-                {contactsError && (
-                  <p role="alert" className="text-body">
-                    {t("contactsError")}
-                  </p>
-                )}
-                {!contactsLoading && !contactsError && (
-                  <ul className="flex flex-col gap-2">
-                    {contacts
-                      .filter((item) => item.username.toLocaleLowerCase().includes(contactQuery.toLocaleLowerCase()))
-                      .map((contact) => (
-                        <li key={contact.authId}>
-                          <ToolbarAction
-                            icon="user"
-                            label={contact.username}
-                            content={contact.username}
-                            onClick={() => void startPerson(contact)}
-                            disabled={creating}
-                            className="w-full! justify-start!"
-                          />
-                        </li>
-                      ))}
-                  </ul>
-                )}
-                {!contactsLoading && !contactsError && contacts.length === 0 && <p className="text-body text-operational-muted">{t("noContacts")}</p>}
-                <Link to={routePaths.professionalsFeed(lang)} className="text-body text-orange">
-                  {t("findPeople")}
-                </Link>
-              </section>
-            ) : conversationId ? (
-              <Conversation key={conversationId} conversationId={conversationId} embedded />
+            className={`min-h-0 min-w-0 flex-1 ${hasList && !conversationId ? "hidden" : "flex flex-col"} ${conversationId ? "animate-panel-in motion-reduce:animate-none" : ""}`}>
+            {conversationId ? (
+              <Conversation
+                key={conversationId}
+                conversationId={conversationId}
+                embedded
+                actions={<ConversationActions onNew={openContacts} onDelete={() => current && setToDelete(current)} />}
+              />
             ) : (
-              <div className="m-auto flex w-full max-w-operational-form flex-col items-center gap-4 p-4 text-center">
-                <MorphingHexagon icon="messagesSquare" rotateSymbol={false} className="size-28 shrink-0" />
-                <h2 className="text-label font-medium">{t(hasList ? "selectConversation" : "startConversation")}</h2>
-                <p className="max-w-operational-copy text-body text-operational-muted">
-                  {t(hasList ? "selectConversationDescription" : "startConversationDescription")}
-                </p>
-                {!hasList && (
-                  <>
-                    <div className="flex flex-wrap justify-center gap-2">
-                      <ToolbarAction icon="user" content={t("addPerson")} label={t("addPerson")} onClick={openContacts} disabled={creating} />
-                      <ToolbarAction
-                        icon="sparkles"
-                        iconGradient="orange"
-                        content={t("newAssistant")}
-                        label={t("newAssistant")}
-                        onClick={() => void startAssistant()}
-                        disabled={creating}
-                      />
-                    </div>
-                    <div className="mt-4 w-full max-w-operational-copy text-left">
-                      <MessageComposer
-                        value={draft}
-                        onChange={setDraft}
-                        onSend={() => void startAssistant(true)}
-                        placeholder={t("chatbot.draftPlaceholder")}
-                        label={t("draftPlaceholder")}
-                        sendLabel={t("chatbot.sendDescription")}
-                        hint={t("chatbot.composerHint")}
-                        maxLength={8000}
-                        disabled={creating || error}
-                      />
-                    </div>
-                  </>
-                )}
+              <div className="relative flex min-h-0 flex-1 flex-col">
+                <div className="m-auto flex w-full max-w-operational-form flex-col items-center gap-4 p-4 text-center">
+                  <ConversationIntro title={t("startConversation")} subtitle={t("startConversationDescription")} />
+                  {!hasList && (
+                    <>
+                      <div className="flex flex-wrap justify-center gap-2">
+                        <ToolbarAction icon="user" content={t("addPerson")} label={t("addPerson")} onClick={openContacts} disabled={creating} />
+                        <ToolbarAction
+                          icon="sparkles"
+                          iconGradient="orange"
+                          content={t("newAssistant")}
+                          label={t("newAssistant")}
+                          onClick={() => void startAssistant()}
+                          disabled={creating}
+                        />
+                      </div>
+                      <Surface field className="mt-2 w-full max-w-operational-copy text-left" contentClassName="overflow-visible! px-2 py-1">
+                        <MessageComposer
+                          assistant
+                          value={draft}
+                          onChange={setDraft}
+                          onSend={() => void startAssistant(true)}
+                          placeholder={t("chatbot.draftPlaceholder")}
+                          label={t("draftPlaceholder")}
+                          sendLabel={t("chatbot.sendDescription")}
+                          hint={t("chatbot.composerHint")}
+                          maxLength={8000}
+                          disabled={creating || error}
+                        />
+                      </Surface>
+                    </>
+                  )}
+                </div>
               </div>
             )}
           </div>
         </div>
+      )}
+      {contactsOpen && (
+        <NewConversationDialog
+          contacts={contacts}
+          loading={contactsLoading}
+          error={contactsError}
+          creating={creating}
+          onPerson={(contact) => void startPerson(contact)}
+          onAssistant={() => void startAssistant()}
+          onClose={() => setContactsOpen(false)}
+        />
+      )}
+      {toDelete && (
+        <Confirmation
+          title={t("deleteConversationTitle")}
+          message={t("deleteConversationMessage")}
+          busy={false}
+          onConfirm={() => deleteConversation(toDelete)}
+          onCancel={() => setToDelete(null)}
+        />
       )}
     </main>
   );

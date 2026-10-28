@@ -5,7 +5,7 @@ import MocksMode from "./mocksMode.enum";
 const DEFAULT_DELAY_SECONDS = 2;
 
 function isFixtureEnvironment(): boolean {
-  return import.meta.env.MODE === "test";
+  return import.meta.env.MODE === "test" || import.meta.env.DEV;
 }
 
 export function isAlwaysMockMode(service?: "AUTH" | "MESSENGER"): boolean {

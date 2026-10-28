@@ -9,6 +9,7 @@ import MessageComposer from "@@/ui/message-composer/MessageComposer";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
 import Icon from "@@/ui/icon/Icon";
 import MorphingHexagon from "@@/ui/morphing-hexagon/MorphingHexagon";
+import OrganicLogo from "@@/brand/logo/OrganicLogo";
 import Surface from "@@/ui/surface/Surface";
 import SideCanvas from "@@/layout/access/canvas/SideCanvas";
 import { useParams } from "react-router-dom";
@@ -85,6 +86,17 @@ export default function ChatbotPage({
     }
   }, [messages.length]);
 
+  function startNewConversation() {
+    focusComposer.current = true;
+    setMessages([{ user: botUser, message: t("greeting"), time: new Date() }]);
+    setDraft("");
+    attachmentUrls.current.forEach((url) => URL.revokeObjectURL(url));
+    attachmentUrls.current.clear();
+    setAttachments([]);
+    setAttachmentError(false);
+    composer.current?.querySelector("textarea")?.focus();
+  }
+
   function handleSend() {
     const text = draft.trim();
     if (!text && attachments.length === 0) return;
@@ -97,7 +109,7 @@ export default function ChatbotPage({
   }
 
   const composerContent = (
-    <div ref={composer} className={`shrink-0 ${operational ? "px-3 py-2" : ""}`}>
+    <div ref={composer} className={`shrink-0 ${operational ? "px-2 py-1" : ""}`}>
       {attachmentError && (
         <p role="alert" className="mb-2 text-body text-operational-muted">
           {tChat("attachments.rejected")}
@@ -123,54 +135,30 @@ export default function ChatbotPage({
 
   const content =
     operational && messages.length === 1 ? (
-      <section className="flex min-h-full w-full flex-col items-center justify-center gap-8 py-10">
+      <section className="flex min-h-full w-full flex-col items-center justify-center gap-6 py-8">
         <div className="flex flex-col items-center gap-4 text-center">
-          <MorphingHexagon paused={!active} icon="sparkles" className="size-16 shrink-0" />
-          <h1 className="text-operational-title font-medium leading-tight sm:text-3xl">{t("welcomeTitle")}</h1>
+          <OrganicLogo width={6} decorative paused={!active} motion="expressive" rotateSymbol rotateShape holdMs={1571} transitionMs={1000} />
+          <h1 className="text-operational-title font-semi-bold leading-8">{t("welcomeTitle")}</h1>
         </div>
-        <Surface className="w-full" contentClassName="overflow-visible!">
+        <Surface field className="w-full" contentClassName="overflow-visible!">
           {composerContent}
         </Surface>
-        <div className="flex flex-wrap justify-center gap-2">
-          {(["catalog", "compare", "help"] as const).map((key) => (
-            <ToolbarAction
-              key={key}
-              icon={key === "catalog" ? "layoutGrid" : key === "compare" ? "panels" : "sparkles"}
-              iconSize={18}
-              label={t(`suggestions.${key}`)}
-              content={t(`suggestionTitles.${key}`)}
-              backgroundColor="var(--color-input-bg)"
-              className="text-operational-muted"
-              onClick={() => {
-                setDraft(t(`suggestions.${key}`));
-                composer.current?.querySelector("textarea")?.focus();
-              }}
-            />
-          ))}
-        </div>
       </section>
     ) : (
       <section className={`flex min-h-0 min-w-0 flex-col ${panelStyle ? "gap-2" : "gap-4"} ${panelStyle ? "h-full flex-1" : "h-[min(44rem,80dvh)]"}`}>
         {(!panelStyle || ((operational || embedded) && messages.length > 1)) && (
           <ChatHeader title={t("assistantName")} assistant>
-            <ToolbarAction
-              icon="newConversation"
-              label={t("newConversation")}
-              content={t("newConversation")}
-              hideContentOnMobile
-              disabled={messages.length === 1 && !draft}
-              className="text-operational-muted"
-              onClick={() => {
-                focusComposer.current = true;
-                setMessages([{ user: botUser, message: t("greeting"), time: new Date() }]);
-                setDraft("");
-                attachmentUrls.current.forEach((url) => URL.revokeObjectURL(url));
-                attachmentUrls.current.clear();
-                setAttachments([]);
-                setAttachmentError(false);
-                composer.current?.querySelector("textarea")?.focus();
-              }}
-            />
+            {!operational && (
+              <ToolbarAction
+                icon="newConversation"
+                label={t("newConversation")}
+                content={t("newConversation")}
+                hideContentOnMobile
+                disabled={messages.length === 1 && !draft}
+                className="text-operational-muted"
+                onClick={startNewConversation}
+              />
+            )}
           </ChatHeader>
         )}
         {embedded && (
@@ -247,7 +235,7 @@ export default function ChatbotPage({
           )}
         </div>
         {operational ? (
-          <Surface className="w-full" contentClassName="overflow-visible!">
+          <Surface field className="w-full" contentClassName="overflow-visible!">
             {composerContent}
           </Surface>
         ) : (

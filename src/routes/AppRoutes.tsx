@@ -37,6 +37,7 @@ import SolarPanelModelPage from "@/features/solar-panel/pages/crud/SolarPanelMod
 import Inbox from "@/features/messages/pages/Inbox";
 import ContactCompany from "@/features/messages/pages/ContactCompany";
 import ChatbotPage from "@/features/messages/pages/ChatbotPage";
+import AssistantEntry from "@/features/messages/pages/AssistantEntry";
 import { AccessShell } from "@@/layout/access/Access";
 import Mobile from "@/features/access/mobile/Mobile";
 import LoginPage from "@/features/access/pages/auth/login/LoginPage";
@@ -160,7 +161,7 @@ const SAAS: RouteDefinition[] = [
       </RequireCompany>
     ),
   },
-  { key: "operationalChatbot", path: (lang) => joinSegments(lang, "dashboard", "chatbot"), element: <ChatbotPage operational /> },
+  { key: "operationalChatbot", path: (lang) => joinSegments(lang, "dashboard", "chatbot"), element: <AssistantEntry /> },
   {
     key: "offerDetail",
     path: (lang) => `${joinSegments(lang, "admin", "offers")}/:offerId`,
