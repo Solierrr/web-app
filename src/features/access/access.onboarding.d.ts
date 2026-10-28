@@ -15,6 +15,7 @@ export interface OperationalMembership {
 }
 
 export interface MockCompanyProfile {
+  description?: string;
   cnpj: string;
   corporateName: string;
   companyEmail: string;

@@ -79,10 +79,19 @@ function addScope(s: State, companyId: string | null) {
   const scope = companyId ?? "personal";
   if (s.scopes.includes(scope)) return;
   s.scopes.push(scope);
-  const samples = ["Instalação residencial — Jardim Europa", "Ampliação da usina — Unidade Central", "Revisão preventiva — São Paulo"];
+  const samples = [
+    "Instalação residencial — Jardim Europa",
+    "Ampliação da usina — Unidade Central",
+    "Revisão preventiva — São Paulo",
+    "Cobertura solar — Condomínio Vila Verde",
+    "Retrofit de inversores — Galpão Norte",
+    "Instalação comercial — Loja Pinheiros",
+    "Monitoramento remoto — Fazenda Santa Luzia",
+    "Substituição de painéis — Escola Municipal",
+  ];
   samples.forEach((name, index) => {
     const id = crypto.randomUUID();
-    const status = index === 1 ? "IN_PROGRESS" : index === 2 ? "COMPLETED" : "OPEN";
+    const status = index % 3 === 1 ? "IN_PROGRESS" : index % 3 === 2 ? "COMPLETED" : "OPEN";
     const p: Project = {
       id,
       name,
@@ -95,7 +104,7 @@ function addScope(s: State, companyId: string | null) {
       role: "OWNER",
       canManage: true,
       canContribute: status !== "COMPLETED",
-      createdAt: stamp(),
+      createdAt: new Date(Date.now() - index * 86400000).toISOString(),
       location: { city: "São Paulo", state: "SP", street: "Rua das Acácias", number: "240", zipCode: "01311000" },
     };
     s.projects.push(p);
@@ -117,7 +126,7 @@ function addScope(s: State, companyId: string | null) {
         title: "Visita técnica inicial",
         description: "Conferência da estrutura e do local de instalação.",
         type: "VISIT",
-        status: index === 2 ? "COMPLETED" : "OPEN",
+        status: status === "COMPLETED" ? "COMPLETED" : "OPEN",
         startsAt: new Date(Date.now() + 86400000).toISOString(),
         endsAt: new Date(Date.now() + 90000000).toISOString(),
         onsite: true,

@@ -17,8 +17,7 @@ export default function DashboardCard({
 }: DashboardCardProps) {
   const { t } = useTranslation("saas", { keyPrefix: "dashboard.analytics" });
   return (
-    <Surface
-      className={`min-w-0 [&>div]:h-full ${compact ? "p-0! rounded-hard [&>div]:rounded-hard shadow-none" : ""} ${className}`}>
+    <Surface className={`min-w-0 [&>div]:h-full ${compact ? "p-0! rounded-hard [&>div]:rounded-hard shadow-none" : ""} ${className}`}>
       <section
         aria-label={title}
         aria-busy={loading || undefined}

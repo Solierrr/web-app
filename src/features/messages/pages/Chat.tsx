@@ -1,10 +1,11 @@
 import ChatHeader from "@@/layout/chat/chat-header/ChatHeader";
 import MessageBubble from "@@/layout/chat/message/MessageBubble";
 import Skeleton from "@@/feedback/skeleton/Skeleton";
-import MorphingHexagon from "@@/ui/morphing-hexagon/MorphingHexagon";
+import ConversationIntro from "@@/layout/chat/conversation-intro/ConversationIntro";
 import MessageComposer from "@@/ui/message-composer/MessageComposer";
+import Surface from "@@/ui/surface/Surface";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -39,11 +40,13 @@ export function Conversation({
   embedded = false,
   readOnly = false,
   displayTitle,
+  actions,
 }: {
   conversationId: string;
   embedded?: boolean;
   readOnly?: boolean;
   displayTitle?: string;
+  actions?: ReactNode;
 }) {
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
@@ -246,8 +249,17 @@ export function Conversation({
         title={title}
         avatar={conversation?.conversationType === "GROUP" || conversation?.conversationType === "CHAT_BOT" ? null : participantAvatar}
         assistant={conversation?.conversationType === "CHAT_BOT"}
-        group={conversation?.conversationType === "GROUP"}>
-        <ToolbarAction to={routePaths.inbox(lang)} icon="panelLeftOpen" label={t("inbox")} className={embedded ? "@xl/messages:hidden" : undefined} />
+        group={conversation?.conversationType === "GROUP"}
+        column>
+        <div className="flex items-center gap-2">
+          <ToolbarAction
+            to={routePaths.inbox(lang)}
+            icon="panelLeftOpen"
+            label={t("inbox")}
+            className={embedded ? "@xl/messages:hidden" : undefined}
+          />
+          {actions}
+        </div>
       </ChatHeader>
       {product && <p className="rounded-medium bg-orange/10 p-3 text-body">{t("productContext", { title: product })}</p>}
       {loading && (
@@ -284,9 +296,8 @@ export function Conversation({
           />
         )}
         {!loading && !error && messages.length === 0 && (
-          <div className="m-auto flex max-w-operational-copy flex-col items-center gap-3 px-5 text-center text-body text-operational-muted">
-            <MorphingHexagon icon="messages" rotateSymbol={false} className="size-24 shrink-0" />
-            <p>{t("emptyConversation")}</p>
+          <div className="m-auto px-5">
+            <ConversationIntro title={t("emptyConversationTitle")} subtitle={t("emptyConversation")} />
           </div>
         )}
         {messages.map((message, index) => {
@@ -336,8 +347,9 @@ export function Conversation({
           );
         })}
       </div>
-      <div className="mx-auto w-full max-w-3xl shrink-0">
+      <Surface field className="mx-auto w-full max-w-3xl shrink-0" contentClassName="overflow-visible! px-2 py-1">
         <MessageComposer
+          assistant
           value={draft}
           onChange={setDraft}
           onSend={() => void handleSend()}
@@ -348,7 +360,7 @@ export function Conversation({
           maxLength={8000}
           disabled={readOnly || sending || loading || !conversation}
         />
-      </div>
+      </Surface>
     </section>
   );
   return embedded ? content : <main className="mx-auto flex h-full min-h-0 w-full max-w-operational-page flex-col p-4 sm:px-8">{content}</main>;

@@ -1,6 +1,5 @@
-import SearchBar from "@@/ui/search-bar/SearchBar";
+import SearchBar, { SearchBarAction } from "@@/ui/search-bar/SearchBar";
 import Surface from "@@/ui/surface/Surface";
-import ToolbarAction from "@@/ui/button/ToolbarAction";
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -12,7 +11,6 @@ import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { CompanyStatus } from "@/features/companies/company.enum";
 import { getOperationalNavigation } from "@@/layout/saas/SaaSLayout.presets";
 import { filterPages } from "../dashboard.utils";
-import { useRecentPages } from "../dashboard.hooks";
 import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
 import DashboardAnalytics from "./DashboardPage.analytics";
 
@@ -31,9 +29,6 @@ export default function DashboardPage() {
     pendingRegistration: companyContext && company.status !== CompanyStatus.APPROVED,
     can,
   }).map((group) => ({ ...group, items: group.items.filter((item) => item.key !== "dashboard") }));
-  const items = groups.flatMap((group) => group.items);
-  const recentKeys = useRecentPages(companyContext ? company.id : "personal");
-  const recent = recentKeys.flatMap((key) => items.filter((item) => item.key === key));
   const query = search.trim().toLocaleLowerCase(lang);
   const filtered = filterPages(groups, query, lang, t);
   const shortcutGroups = filtered.filter((group) => group.items.length > 0);
@@ -44,45 +39,16 @@ export default function DashboardPage() {
 
   return (
     <OperationalPage title={t("home.title")} description={t("home.description")} loading={loading} centered sideBackground>
-      <section aria-label={t("home.search")} className="mx-auto w-full max-w-3xl">
+      <section aria-label={t("home.search")} className="w-full">
         <SearchBar
           name="page-search"
           aria-label={t("home.search")}
           value={search}
           onChange={(event) => setSearch(event.target.value)}
           placeholder={t("home.search")}
-          actions={
-            search ? (
-              <ToolbarAction
-                icon="x"
-                label={t("home.clearSearch")}
-                className="h-10! w-10!"
-                backgroundColor="var(--color-input-bg)"
-                onClick={() => setSearch("")}
-              />
-            ) : undefined
-          }
+          actions={search ? <SearchBarAction icon="x" label={t("home.clearSearch")} onClick={() => setSearch("")} /> : undefined}
         />
       </section>
-      {!query && recent.length > 0 && (
-        <section aria-label={t("home.recent")} className="mx-auto flex w-full max-w-3xl flex-wrap items-center justify-center gap-3">
-          <h2 className="text-body font-medium text-operational-muted">{t("home.recent")}</h2>
-          <ul className="flex flex-wrap justify-center gap-2">
-            {recent.map((item) => (
-              <li key={item.key}>
-                <Link
-                  to={item.to(lang)}
-                  className="inline-flex items-center gap-2 rounded-medium bg-white px-3 py-2 text-body text-operational-ink transition-colors hover:bg-operational-hover focus-visible:outline-2 focus-visible:outline-operational-ink">
-                  <span aria-hidden="true">
-                    <Icon name={item.icon} size={16} color="currentColor" />
-                  </span>
-                  {t(item.label)}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
       <section aria-label={t("home.shortcuts")} className={`grid gap-4 ${shortcutColumns.length > 1 ? "md:grid-cols-2" : ""}`}>
         {shortcutColumns.map((column) => (
           <Surface key={column[0].key} className="min-w-0 [&>div]:h-full">
@@ -116,16 +82,15 @@ export default function DashboardPage() {
         ))}
       </section>
       {filtered.every((group) => group.items.length === 0) && (
-        <Surface className="mx-auto w-full max-w-3xl">
+        <Surface className="w-full">
           <p role="status" className="px-5 py-8 text-center text-operational-muted">
             {t("home.noResults")}
           </p>
         </Surface>
       )}
-      {!query && recent.length === 0 && <p className="text-center text-body text-operational-muted">{t("home.noRecent")}</p>}
       {isAlwaysMockMode() && <DashboardAnalytics />}
       <section aria-label={tSetup("title")} className="flex flex-col gap-4">
-        <h2 className="text-subtitle font-semi-bold">{tSetup("title")}</h2>
+        <h2 className="text-label font-semi-bold">{tSetup("title")}</h2>
         <div className="grid gap-4 sm:grid-cols-3">
           {[
             { to: routePaths.profileOnboardingCompany(lang), key: "company", icon: "building" as const },

@@ -1,0 +1,143 @@
+{
+  "products": "Produtos",
+  "services": "Serviços",
+  "companies": "Empresas",
+  "marketplace": "Marketplace",
+  "productsTitle": "Energia para o seu próximo projeto.",
+  "productsDescription": "Encontre placas, estruturas e o que faz tudo funcionar.",
+  "servicesTitle": "O próximo passo pode ser uma conversa.",
+  "servicesDescription": "Descubra profissionais e equipes pelo que o seu projeto precisa.",
+  "companiesTitle": "Boas empresas. Novas conexões.",
+  "companiesDescription": "Conheça quem fornece, instala e transforma projetos em energia.",
+  "companyGallery": {
+    "backToTop": "Voltar ao topo"
+  },
+  "productSpotlight": "Potência que cabe no seu plano.",
+  "infrastructureSpotlight": "A base de um bom projeto.",
+  "featured": "Escolha em destaque",
+  "viewOffer": "Conhecer a oferta",
+  "bannerFirst": "O sol já está aí.",
+  "bannerSecond": "O próximo passo é seu.",
+  "exploreOffers": "Explore as ofertas",
+  "start": "Encontre seu ponto de partida.",
+  "moreOffers": "Outras possibilidades para o seu projeto.",
+  "allProducts": "Todos os produtos",
+  "panels": "Placas solares",
+  "infrastructure": "Infraestrutura",
+  "install": "Quero instalar",
+  "installDescription": "Da primeira visita ao sistema funcionando.",
+  "maintain": "Quero cuidar",
+  "maintainDescription": "Manutenção para o seu sistema.",
+  "inspect": "Quero entender",
+  "inspectDescription": "Inspeção e diagnóstico antes do próximo passo.",
+  "serviceSpotlight": "Gente que entende de energia.",
+  "professionalsHeading": "Conheça antes de entrar em contato.",
+  "partnersHeading": "Um catálogo de boas parcerias.",
+  "companyFeatured": "Conheça quem faz",
+  "viewCompany": "Conhecer a empresa",
+  "explorePartners": "Explore novas parcerias.",
+  "searchProducts": "Buscar produtos",
+  "searchServices": "Buscar serviços",
+  "searchCompanies": "Buscar empresas",
+  "searchScopes": "Tipo de busca",
+  "productsSearchTitle": "Encontre produtos para o seu projeto.",
+  "servicesSearchTitle": "Encontre quem pode ajudar.",
+  "companiesSearchTitle": "Encontre sua próxima parceria.",
+  "productsPlaceholder": "Insira o produto, a marca ou o fornecedor aqui",
+  "servicesPlaceholder": "Insira o nome ou a especialidade aqui",
+  "companiesPlaceholder": "Insira a empresa ou a cidade aqui",
+  "results": "{{count}} resultados",
+  "noResults": "Nenhum resultado corresponde à sua busca.",
+  "specialty": "Especialidade",
+  "allSpecialties": "Todas as especialidades",
+  "contact": "Entrar em contato",
+  "viewProfile": "Conhecer o perfil",
+  "contactDetails": "Contato",
+  "noContact": "Este profissional ainda não disponibilizou contato público.",
+  "email": "Enviar e-mail",
+  "phone": "Ligar",
+  "retry": "Tentar novamente",
+  "feed": {
+    "previous": "Ver anteriores",
+    "next": "Ver próximos",
+    "shelves": {
+      "trending": "Em alta agora.",
+      "recent": "Acabaram de chegar.",
+      "efficiency": "Mais energia em menos espaço.",
+      "power": "Para quem quer gerar mais.",
+      "price": "Para começar sem pesar.",
+      "discount": "Com desconto agora.",
+      "supplier": "Escolhas da {{name}}.",
+      "all": "Tudo para o seu projeto."
+    },
+    "highlights": {
+      "sunTitle": "Comece\npelo sol.",
+      "sunAction": "Placas solares",
+      "baseTitle": "A base de\ntudo.",
+      "projectTitle": "Pense no\nprojeto inteiro."
+    },
+    "mostWanted": "Mais procurado",
+    "add": "Adicionar {{title}} ao carrinho",
+    "added": "{{title}} foi adicionado ao carrinho.",
+    "banners": {
+      "sunset": {
+        "title": "O sol já está aí.\nO próximo passo é seu.",
+        "description": "Placas de fornecedores de todo o Brasil, reunidas em um só lugar.",
+        "action": "Explorar ofertas"
+      },
+      "installer": {
+        "title": "Quem instala\ntambém está aqui.",
+        "description": "Encontre profissionais para tirar o seu projeto do papel.",
+        "action": "Encontrar profissionais"
+      },
+      "house": {
+        "title": "Toda placa precisa\nde uma boa base.",
+        "description": "Trilhos, fixadores e kits para cada tipo de telhado.",
+        "action": "Ver estruturas"
+      },
+      "garden": {
+        "title": "Energia que combina\ncom a sua casa.",
+        "description": "Conheça as empresas que fazem cada projeto acontecer.",
+        "action": "Conhecer empresas"
+      },
+      "cabins": {
+        "title": "Projetos de todos\nos tamanhos.",
+        "description": "Compare potência, eficiência e preço antes de escolher.",
+        "action": "Comparar ofertas"
+      },
+      "field": {
+        "title": "Onde a energia\nganha escala.",
+        "description": "Fornecedores preparados para usinas e projetos maiores.",
+        "action": "Conhecer fornecedores"
+      }
+    }
+  },
+  "footer": {
+    "heading": "Vamos conversar?",
+    "description": "Acompanhe o desenvolvimento ou entre em contato com a equipe.",
+    "navigation": "Projeto, contato e termos de uso",
+    "github": "Ver o código no GitHub",
+    "email": "Entrar em contato por e-mail",
+    "contact": "Contato",
+    "terms": "Termos"
+  },
+  "serviceFeed": {
+    "featured": "Profissional em destaque",
+    "spotlightTitle": "Seu projeto começa com uma boa conversa.",
+    "contact": "Entrar em contato",
+    "installationTitle": "Do primeiro painel ao sistema funcionando.",
+    "installationDescription": "Encontre quem instala, orienta e acompanha cada etapa.",
+    "installationAction": "Encontrar instaladores",
+    "maintenanceTitle": "Mais cuidado. Mais energia por mais tempo.",
+    "maintenanceAction": "Encontrar manutenção",
+    "inspectionTitle": "Entenda o seu sistema antes do próximo passo.",
+    "inspectionAction": "Encontrar especialistas",
+    "shelves": {
+      "all": "Gente que entende do seu projeto.",
+      "engineering": "Para planejar com segurança.",
+      "installation": "Quem faz a instalação acontecer.",
+      "maintenance": "Cuidado que faz a diferença.",
+      "inspection": "Um olhar técnico para o seu sistema."
+    }
+  }
+}

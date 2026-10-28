@@ -1,6 +1,6 @@
 # Rodando o Projeto Localmente
 
-Este repositório é TypeScript (React + Vite). O processo local é sempre o mesmo: clonar, abrir na IDE, instalar as dependências via `npm` e subir o servidor de desenvolvimento. Antes de iniciar, verifique a seção de impedimentos abaixo — o projeto depende de Firebase (Firestore) para o chat e possui um sistema de mocks que evita bloqueio total mesmo sem a API de persistência configurada.
+Este repositório é TypeScript (React + Vite). O processo local é sempre o mesmo: clonar, abrir na IDE, instalar as dependências via `npm` e subir o servidor de desenvolvimento. Antes de iniciar, verifique a seção de impedimentos abaixo — o projeto depende do Firebase Authentication para o login e possui um sistema de mocks que evita bloqueio total mesmo sem a API de persistência configurada.
 
 <p>
   <a href="https://github.com/syvixor/skills-icons">
@@ -11,7 +11,7 @@ Este repositório é TypeScript (React + Vite). O processo local é sempre o mes
 ## Possíveis Impedimentos
 
 - **Node.js na versão usada no `Dockerfile`** (`node:22-alpine` ou equivalente), rodar com uma versão diferente pode gerar builds inconsistentes com o que roda em produção.
-- **Firebase configurado**, o repositório usa Firestore (`firebase.json`, `firestore.rules`, `firestore.indexes.json`, projeto `solaria-authenticator` em `.firebaserc`) para o indicador de digitação do chat (`typingStatus.service.ts`) — sem acesso ao projeto Firebase, apenas essa funcionalidade específica fica indisponível, o restante do app funciona normalmente.
+- **Firebase configurado**, o repositório usa o Firebase Authentication (projeto `solaria-authenticator` em `.firebaserc`) para o login — sem acesso ao projeto Firebase, o login fica indisponível.
 - **Variáveis `VITE_*` em `.env.local`**, o repositório já traz um `.env.example` com os valores padrão de desenvolvimento; copie-o e ajuste conforme necessário antes de rodar `npm run dev`.
 
 ## Instalação do Projeto

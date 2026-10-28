@@ -1,6 +1,6 @@
 # Finalidade do repositório
 
-Este repositório contém o **Solaria**, a aplicação web (SPA) que serve como frontend do marketplace de energia solar da organização. É por aqui que usuários finais, profissionais instaladores e empresas do setor se cadastram, buscam painéis solares, publicam e consultam anúncios, montam perfis públicos e trocam mensagens em um chat integrado. O app é construído em React com TypeScript e Vite, consome APIs REST próprias e serviços do Firebase (Firestore) para funcionalidades em tempo real, e é internacionalizado para os idiomas `en-US`, `es-ES` e `pt-BR`. O build final é uma imagem Docker com Nginx servindo os arquivos estáticos gerados.
+Este repositório contém o **Solaria**, a aplicação web (SPA) que serve como frontend do marketplace de energia solar da organização. É por aqui que usuários finais, profissionais instaladores e empresas do setor se cadastram, buscam painéis solares, publicam e consultam anúncios, montam perfis públicos e trocam mensagens em um chat integrado. O app é construído em React com TypeScript e Vite, consome APIs REST próprias e usa o Firebase Authentication para autenticação, e é internacionalizado para os idiomas `en-US`, `es-ES` e `pt-BR`. O build final é uma imagem Docker com Nginx servindo os arquivos estáticos gerados.
 
 <p>
 

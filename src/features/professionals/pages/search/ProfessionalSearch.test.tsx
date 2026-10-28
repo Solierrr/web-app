@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import ProfessionalSearch from "./ProfessionalSearch";
@@ -16,6 +16,23 @@ const items: CatalogTechnician[] = [
 ];
 
 describe("ProfessionalSearch", () => {
+  it("filters the service catalog by name and keeps professional contact separate from offers", async () => {
+    mockedGetCatalogTechnicians.mockResolvedValue(items);
+    render(
+      <MemoryRouter>
+        <ProfessionalSearch />
+      </MemoryRouter>,
+    );
+    await screen.findByText("Carlos Eduardo Lima");
+    const query = screen.getByRole("searchbox", { name: "Buscar serviços" });
+    fireEvent.change(query, { target: { value: "eletricista" } });
+    expect(screen.getByText("Carlos Eduardo Lima")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Entrar em contato:/ })).toHaveAttribute("href", "/pt-BR/profissional/carlos-eduardo-lima#contato");
+    expect(screen.queryByText(/R\$/)).not.toBeInTheDocument();
+    fireEvent.change(query, { target: { value: "painel 550" } });
+    expect(screen.queryByText("Carlos Eduardo Lima")).not.toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent("Nenhum resultado corresponde à sua busca.");
+  });
   beforeEach(() => {
     mockedGetCatalogTechnicians.mockReset();
   });
@@ -29,9 +46,9 @@ describe("ProfessionalSearch", () => {
       </MemoryRouter>,
     );
 
-    expect(await screen.findByRole("heading", { name: "Profissionais" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "filtrar-busca" })).toBeInTheDocument();
-    expect(screen.getByText("Instalação")).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Encontre quem pode ajudar." })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Especialidade" })).toBeInTheDocument();
+    expect(screen.getByRole("searchbox", { name: "Buscar serviços" })).toBeInTheDocument();
   });
 
   it("renders the mocked professionals in the results grid", async () => {
@@ -44,5 +61,19 @@ describe("ProfessionalSearch", () => {
     );
 
     expect(await screen.findByText("Carlos Eduardo Lima")).toBeInTheDocument();
+  });
+
+  it("applies an editorial specialty link using the catalog value", async () => {
+    mockedGetCatalogTechnicians.mockResolvedValue([
+      ...items,
+      { id: "inspection", slug: "ana-costa", name: "Ana Costa", crea: "SP123", professions: ["Inspeção técnica"] },
+    ]);
+    render(
+      <MemoryRouter initialEntries={["/pt-BR/buscar/profissionais?specialty=Inspe%C3%A7%C3%A3o%20t%C3%A9cnica"]}>
+        <ProfessionalSearch />
+      </MemoryRouter>,
+    );
+    expect(await screen.findByRole("link", { name: "Ana Costa" })).toBeInTheDocument();
+    expect(screen.queryByText("Carlos Eduardo Lima")).not.toBeInTheDocument();
   });
 });

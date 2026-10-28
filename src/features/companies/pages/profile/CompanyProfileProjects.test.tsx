@@ -3,15 +3,7 @@ import { describe, expect, it, vi, beforeEach } from "vitest";
 import CompanyProfileProjects from "./CompanyProfileProjects";
 import { projectApi } from "@/features/projects/projects.service";
 vi.mock("@/features/projects/projects.service", () => ({ projectApi: { list: vi.fn() } }));
-vi.mock("@/features/projects/components/ProjectGrid", () => ({
-  default: ({ projects }: { projects: { id: string; name: string }[] | null }) => (
-    <div>
-      {projects?.map((p) => (
-        <p key={p.id}>{p.name}</p>
-      ))}
-    </div>
-  ),
-}));
+vi.mock("@/features/projects/components/ProjectCard", () => ({ default: ({ project }: { project: { name: string } }) => <p>{project.name}</p> }));
 describe("CompanyProfileProjects", () => {
   beforeEach(() => vi.clearAllMocks());
   it("requests accessible projects for this company and excludes records from other owners", async () => {

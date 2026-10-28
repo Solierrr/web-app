@@ -139,9 +139,6 @@
     "completePasswordReset": "Unable to reset the password",
     "loginWithMicrosoft": "Could not sign in with Microsoft. Please try again."
   },
-  "typingStatus": {
-    "setTypingStatus": "Unable to update the typing indicator"
-  },
   "purchases": {
     "getCart": "Could not load the cart.",
     "putCartItem": "Could not update the cart.",

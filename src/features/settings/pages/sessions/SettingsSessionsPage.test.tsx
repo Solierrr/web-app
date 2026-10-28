@@ -3,9 +3,9 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import SettingsSessionsPage from "./SettingsSessionsPage";
-import { logout } from "@/features/access/access.service";
+import { logout, logoutAll } from "@/features/access/access.service";
 
-vi.mock("@/features/access/access.service", () => ({ logout: vi.fn() }));
+vi.mock("@/features/access/access.service", () => ({ logout: vi.fn(), logoutAll: vi.fn() }));
 
 function renderPage() {
   render(
@@ -31,7 +31,17 @@ describe("SettingsSessionsPage", () => {
     renderPage();
 
     expect(await screen.findByText("Este dispositivo")).toBeInTheDocument();
-    expect(screen.getByText(/só é possível ver e encerrar a sessão deste dispositivo/)).toBeInTheDocument();
+    expect(screen.getByText(/A lista mostra apenas este dispositivo/)).toBeInTheDocument();
+  });
+
+  it("confirms before revoking all sessions", async () => {
+    vi.mocked(logoutAll).mockResolvedValue(undefined);
+    renderPage();
+    fireEvent.click(await screen.findByRole("button", { name: "Sair de todos os dispositivos" }));
+    expect(logoutAll).not.toHaveBeenCalled();
+    fireEvent.click(await screen.findByRole("button", { name: "confirmar" }));
+    expect(await screen.findByText("Tela de login")).toBeInTheDocument();
+    expect(logoutAll).toHaveBeenCalledOnce();
   });
 
   it("signs out of this device", async () => {

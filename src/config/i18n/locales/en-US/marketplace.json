@@ -1,0 +1,143 @@
+{
+  "products": "Products",
+  "services": "Services",
+  "companies": "Companies",
+  "marketplace": "Marketplace",
+  "productsTitle": "Energy for your next project.",
+  "productsDescription": "Find panels, mounting systems and what makes it all work.",
+  "servicesTitle": "Your next step could be a conversation.",
+  "servicesDescription": "Discover professionals and teams for your project.",
+  "companiesTitle": "Good companies. New connections.",
+  "companiesDescription": "Meet the people supplying, installing and turning projects into energy.",
+  "companyGallery": {
+    "backToTop": "Back to top"
+  },
+  "productSpotlight": "Power that fits your plans.",
+  "infrastructureSpotlight": "The foundation of a good project.",
+  "featured": "Featured choice",
+  "viewOffer": "Explore the offer",
+  "bannerFirst": "The sun is already here.",
+  "bannerSecond": "The next step is yours.",
+  "exploreOffers": "Explore the offers",
+  "start": "Find your starting point.",
+  "moreOffers": "More possibilities for your project.",
+  "allProducts": "All products",
+  "panels": "Solar panels",
+  "infrastructure": "Infrastructure",
+  "install": "I want to install",
+  "installDescription": "From the first visit to a working system.",
+  "maintain": "I want to maintain",
+  "maintainDescription": "Maintenance for your system.",
+  "inspect": "I want to understand",
+  "inspectDescription": "Inspection and diagnosis before the next step.",
+  "serviceSpotlight": "People who know energy.",
+  "professionalsHeading": "Get to know them before reaching out.",
+  "partnersHeading": "A catalog of good partnerships.",
+  "companyFeatured": "Meet the people behind the work",
+  "viewCompany": "Explore the company",
+  "explorePartners": "Explore new partnerships.",
+  "searchProducts": "Search products",
+  "searchServices": "Search services",
+  "searchCompanies": "Search companies",
+  "searchScopes": "Search category",
+  "productsSearchTitle": "Find products for your project.",
+  "servicesSearchTitle": "Find someone who can help.",
+  "companiesSearchTitle": "Find your next partner.",
+  "productsPlaceholder": "Enter the product, brand or supplier here",
+  "servicesPlaceholder": "Enter a name or specialty here",
+  "companiesPlaceholder": "Enter a company or city here",
+  "results": "{{count}} results",
+  "noResults": "No results match your search.",
+  "specialty": "Specialty",
+  "allSpecialties": "All specialties",
+  "contact": "Get in touch",
+  "viewProfile": "Explore the profile",
+  "contactDetails": "Contact",
+  "noContact": "This professional has not shared public contact details yet.",
+  "email": "Send an email",
+  "phone": "Call",
+  "retry": "Try again",
+  "feed": {
+    "previous": "See previous",
+    "next": "See next",
+    "shelves": {
+      "trending": "Trending now.",
+      "recent": "Just arrived.",
+      "efficiency": "More energy in less space.",
+      "power": "For those who want to generate more.",
+      "price": "Start light.",
+      "discount": "On sale now.",
+      "supplier": "Picks from {{name}}.",
+      "all": "Everything for your project."
+    },
+    "highlights": {
+      "sunTitle": "Start\nwith the sun.",
+      "sunAction": "Solar panels",
+      "baseTitle": "The base of\neverything.",
+      "projectTitle": "Think about\nthe whole project."
+    },
+    "mostWanted": "Most wanted",
+    "add": "Add {{title}} to cart",
+    "added": "{{title}} was added to your cart.",
+    "banners": {
+      "sunset": {
+        "title": "The sun is already here.\nThe next step is yours.",
+        "description": "Panels from suppliers across Brazil, gathered in one place.",
+        "action": "Explore offers"
+      },
+      "installer": {
+        "title": "Installers\nare here too.",
+        "description": "Find professionals to get your project off the ground.",
+        "action": "Find professionals"
+      },
+      "house": {
+        "title": "Every panel needs\na good base.",
+        "description": "Rails, clamps and kits for every type of roof.",
+        "action": "See mounting"
+      },
+      "garden": {
+        "title": "Energy that fits\nyour home.",
+        "description": "Meet the companies that make every project happen.",
+        "action": "Meet companies"
+      },
+      "cabins": {
+        "title": "Projects of\nevery size.",
+        "description": "Compare power, efficiency and price before choosing.",
+        "action": "Compare offers"
+      },
+      "field": {
+        "title": "Where energy\ngains scale.",
+        "description": "Suppliers ready for solar farms and larger projects.",
+        "action": "Meet suppliers"
+      }
+    }
+  },
+  "footer": {
+    "heading": "Let’s talk.",
+    "description": "Follow the development or get in touch with the team.",
+    "navigation": "Project, contact and terms of use",
+    "github": "View the code on GitHub",
+    "email": "Get in touch by email",
+    "contact": "Contact",
+    "terms": "Terms"
+  },
+  "serviceFeed": {
+    "featured": "Featured professional",
+    "spotlightTitle": "Your project starts with a good conversation.",
+    "contact": "Get in touch",
+    "installationTitle": "From the first panel to a working system.",
+    "installationDescription": "Find people to install, advise and support every step.",
+    "installationAction": "Find installers",
+    "maintenanceTitle": "More care. More energy for longer.",
+    "maintenanceAction": "Find maintenance",
+    "inspectionTitle": "Understand your system before the next step.",
+    "inspectionAction": "Find specialists",
+    "shelves": {
+      "all": "People who understand your project.",
+      "engineering": "Plan with confidence.",
+      "installation": "People who make installation happen.",
+      "maintenance": "Care that makes a difference.",
+      "inspection": "A technical perspective on your system."
+    }
+  }
+}

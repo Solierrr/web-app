@@ -1,67 +1,83 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import Surface from "@@/ui/surface/Surface";
-import Icon from "@@/ui/icon/Icon";
-import ValueField from "@@/ui/value-field/ValueField";
+import MarketplaceCard from "./MarketplaceCard";
+import { notify } from "@@/feedback/toast/Toast.utils";
+import { putCartItem } from "@/features/purchases/purchases.service";
+import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import type { SolarPanelAnnouncement } from "@/features/solar-panel/solarPanel.announcement";
 import type { SupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
-export default function OfferCard({ offer, lang }: { offer: SolarPanelAnnouncement; lang: SupportedLanguage }) {
+import MarketplaceImage from "./MarketplaceImage";
+
+export default function OfferCard({ offer, lang, label }: { offer: SolarPanelAnnouncement; lang: SupportedLanguage; label?: string }) {
   const { t } = useTranslation("feed", { keyPrefix: "catalog" });
-  const [failed, setFailed] = useState(false);
+  const { t: feed } = useTranslation("marketplace", { keyPrefix: "feed" });
+  const { t: announcement } = useTranslation("announcements", { keyPrefix: "solarPanel" });
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [adding, setAdding] = useState(false);
   const infrastructure = offer.panel.productType === "INFRASTRUCTURE";
-  const price = new Intl.NumberFormat(lang, { style: "currency", currency: "BRL" });
+  const discount = offer.discountPercentage != null && offer.discountPercentage > 0 ? t("discount", { value: offer.discountPercentage }) : undefined;
+  const badge = label ?? discount;
+  const name = offer.title.split(" - ")[0];
+
+  async function addToCart() {
+    if (adding || offer.availableUnits < 1) return;
+    if (!getAuthSession()) {
+      navigate(routePaths.login(lang), { state: { returnTo: location.pathname + location.search } });
+      return;
+    }
+    setAdding(true);
+    try {
+      await putCartItem(offer.id, 1);
+      notify(feed("added", { title: offer.title }));
+    } catch (cause) {
+      notify(cause instanceof Error ? cause.message : announcement("actions.addToCartError"));
+    } finally {
+      setAdding(false);
+    }
+  }
+
   return (
-    <Surface className="h-full [&>div]:h-full">
-      <Link
-        to={
-          infrastructure
-            ? routePaths.infrastructureDetail(lang, offer.companySlug, offer.slug)
-            : routePaths.productDetail(lang, offer.companySlug, offer.slug)
-        }
-        className="group flex h-full min-w-0 flex-col gap-4 p-5 focus-visible:outline-operational-ink">
-        <div className="flex aspect-[4/3] items-center justify-center overflow-hidden rounded-medium bg-white p-4">
-          {!failed && offer.photos.heroImage.url ? (
-            <img
-              src={offer.photos.heroImage.url}
-              alt={offer.photos.heroImage.description || offer.title}
-              loading="lazy"
-              className="h-full w-full object-contain transition-transform duration-250 group-hover:scale-105 motion-reduce:transform-none"
-              onError={() => setFailed(true)}
-            />
-          ) : (
-            <Icon name={infrastructure ? "settings" : "panels"} size={40} className="text-operational-muted" />
+    <MarketplaceCard
+      href={
+        infrastructure
+          ? routePaths.infrastructureDetail(lang, offer.companySlug, offer.slug)
+          : routePaths.productDetail(lang, offer.companySlug, offer.slug)
+      }
+      name={offer.title}
+      action={{
+        icon: "plus",
+        label: feed("add", { title: offer.title }),
+        disabled: adding || offer.availableUnits < 1,
+        onClick: () => void addToCart(),
+      }}
+      media={
+        <div className="relative">
+          <MarketplaceImage
+            src={offer.photos.heroImage.url}
+            alt={offer.photos.heroImage.description || offer.title}
+            contain
+            fallback={infrastructure ? "settings" : "panels"}
+            className="aspect-[6/5] rounded-surface [&_img]:p-8"
+          />
+          {badge && (
+            <span className="absolute left-4 top-4 max-w-[calc(100%-2rem)] truncate rounded-full bg-white/90 px-3 py-1.5 text-sidebar font-bold text-operational-ink backdrop-blur">
+              {badge}
+            </span>
           )}
         </div>
-        <div className="flex flex-col gap-2">
-          <p className="line-clamp-1 text-body text-operational-muted">{offer.company.tradeName}</p>
-          <h3 className="min-h-12 line-clamp-2 text-body font-semi-bold leading-6 text-operational-ink">{offer.title}</h3>
-        </div>
-        <div className="flex min-h-8 flex-wrap gap-2">
-          {infrastructure ? (
-            <>
-              {offer.panel.infrastructureType && <ValueField>{t(`types.${offer.panel.infrastructureType}`)}</ValueField>}
-              {offer.panel.material && <ValueField>{offer.panel.material}</ValueField>}
-            </>
-          ) : (
-            <>
-              {offer.panel.powerOutput != null && <ValueField>{offer.panel.powerOutput} W</ValueField>}
-              {offer.panel.efficiency != null && <ValueField>{offer.panel.efficiency}%</ValueField>}
-            </>
-          )}
-        </div>
-        <div className="mt-auto flex flex-col gap-2 pt-2">
-          <p className="text-label font-semi-bold text-operational-ink">
-            {price.format(offer.unitPrice)} <span className="text-body font-medium text-operational-muted">{t("perUnit")}</span>
-          </p>
-          <div className="flex min-h-10 items-center">
-            {offer.discountPercentage != null && offer.discountPercentage > 0 && (
-              <ValueField>{t("discount", { value: offer.discountPercentage })}</ValueField>
-            )}
-          </div>
-        </div>
-      </Link>
-    </Surface>
+      }>
+      <div className="flex min-w-0 flex-col gap-1">
+        <h3 title={offer.title} className="line-clamp-1 text-body font-semi-bold leading-6 text-operational-ink">
+          {name}
+        </h3>
+        <p className="text-body font-semi-bold leading-6 text-operational-ink">
+          {new Intl.NumberFormat(lang, { style: "currency", currency: "BRL" }).format(offer.unitPrice)}{" "}
+          <span className="text-sidebar font-medium text-operational-muted">{t("perUnit")}</span>
+        </p>
+      </div>
+    </MarketplaceCard>
   );
 }

@@ -11,6 +11,7 @@ export default function Dialog({
   message,
   compact = false,
   variant = "default",
+  quiet = false,
 }: {
   title: string;
   children: ReactNode | ((dismiss: () => void, closing: boolean) => ReactNode);
@@ -19,6 +20,8 @@ export default function Dialog({
   message?: string;
   compact?: boolean;
   variant?: "default" | "tonal";
+  /** Sem botão de fechar: clicar fora fecha, e o fundo fica levemente desfocado. */
+  quiet?: boolean;
 }) {
   const ref = useRef<HTMLDialogElement>(null),
     id = useId();
@@ -38,16 +41,23 @@ export default function Dialog({
         e.preventDefault();
         dismiss();
       }}
-      className={`dialog-surface fixed inset-0 m-auto w-[calc(100%_-_2rem)] ${compact ? "max-w-md" : variant === "tonal" ? "max-w-xl" : "max-w-operational-form"} max-h-[85dvh] overflow-y-auto overscroll-contain rounded-surface border-0 ${variant === "tonal" ? "bg-surface-container px-5 pb-5 pt-12 sm:px-8 sm:pb-8" : "bg-white px-6 pb-6 pt-12"} text-operational-ink shadow-overlay backdrop:bg-dialog-backdrop`}>
-      <ToolbarAction
-        icon="x"
-        label={t("actions.close", "Fechar")}
-        color="var(--color-operational-muted)"
-        backgroundColor="var(--color-operational-hover)"
-        className="absolute right-3 top-3 h-8! w-8! rounded-full! focus-visible:outline-operational-ink!"
-        onClick={dismiss}
-        disabled={busy || closing}
-      />
+      onClick={(event) => {
+        if (!quiet) return;
+        const bounds = event.currentTarget.getBoundingClientRect();
+        if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) dismiss();
+      }}
+      className={`dialog-surface fixed inset-0 m-auto w-[calc(100%_-_2rem)] ${compact ? "max-w-md" : variant === "tonal" ? "max-w-xl" : "max-w-operational-form"} max-h-[85dvh] overflow-y-auto overscroll-contain rounded-surface border-0 ${variant === "tonal" ? "bg-surface-container px-5 pb-5 pt-12 sm:px-8 sm:pb-8" : `bg-white px-6 pb-6 ${quiet ? "pt-8" : "pt-12"}`} text-operational-ink shadow-overlay backdrop:bg-dialog-backdrop ${quiet ? "backdrop:backdrop-blur-xs" : ""}`}>
+      {!quiet && (
+        <ToolbarAction
+          icon="x"
+          label={t("actions.close", "Fechar")}
+          color="var(--color-operational-muted)"
+          backgroundColor="var(--color-operational-hover)"
+          className="absolute right-3 top-3 h-8! w-8! rounded-full! focus-visible:outline-operational-ink!"
+          onClick={dismiss}
+          disabled={busy || closing}
+        />
+      )}
       <h2 id={id} className="mx-auto max-w-operational-copy text-center text-operational-title font-semi-bold leading-8">
         {title}
       </h2>

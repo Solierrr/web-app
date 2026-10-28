@@ -2,6 +2,7 @@ import FormError from "@@/feedback/toast/FormError";
 import OperationalForm from "@@/layout/operational-page/OperationalForm";
 import { useState, type FormEvent, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
+import Textarea from "@@/ui/textarea/Textarea";
 import Input from "@@/ui/input/Input";
 import { PrimaryButton, WhiteButton } from "@@/ui/button/Button.presets";
 
@@ -43,7 +44,8 @@ export interface ProfileEditField {
   name: string;
   label: string;
   value: string;
-  type?: "text" | "email" | "tel" | "url" | "date";
+  type?: "text" | "email" | "tel" | "url" | "date" | "textarea";
+  placeholder?: string;
   required?: boolean;
   minLength?: number;
   maxLength?: number;
@@ -83,19 +85,33 @@ export function ProfileEditForm({ title, fields, onCancel, onSave, saving = fals
           {fields.map((field) => (
             <label key={field.name} className="flex min-w-0 flex-col gap-2 text-body font-medium text-operational-muted">
               {field.label}
-              <Input
-                placeholder={field.label}
-                name={field.name}
-                type={field.type ?? "text"}
-                value={values[field.name] ?? ""}
-                required={field.required}
-                minLength={field.minLength}
-                maxLength={field.maxLength}
-                pattern={field.pattern}
-                onChange={(event) => setValues((current) => ({ ...current, [field.name]: event.target.value }))}
-                disabled={saving}
-                className="w-full"
-              />
+              {field.type === "textarea" ? (
+                <Textarea
+                  name={field.name}
+                  aria-label={field.label}
+                  placeholder={field.placeholder}
+                  value={values[field.name] ?? ""}
+                  maxLength={field.maxLength}
+                  rows={5}
+                  onChange={(event) => setValues((current) => ({ ...current, [field.name]: event.target.value }))}
+                  disabled={saving}
+                  className="w-full"
+                />
+              ) : (
+                <Input
+                  placeholder={field.label}
+                  name={field.name}
+                  type={field.type ?? "text"}
+                  value={values[field.name] ?? ""}
+                  required={field.required}
+                  minLength={field.minLength}
+                  maxLength={field.maxLength}
+                  pattern={field.pattern}
+                  onChange={(event) => setValues((current) => ({ ...current, [field.name]: event.target.value }))}
+                  disabled={saving}
+                  className="w-full"
+                />
+              )}
             </label>
           ))}
         </div>

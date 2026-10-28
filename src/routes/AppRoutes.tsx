@@ -25,7 +25,6 @@ import CompanyFeed from "@/features/companies/pages/feed/CompanyFeed";
 import SolarPanelSearch from "@/features/solar-panel/pages/search/SolarPanelSearch";
 import ProfessionalSearch from "@/features/professionals/pages/search/ProfessionalSearch";
 import CompanySearch from "@/features/companies/pages/search/CompanySearch";
-import ProfileOnboarding from "@/lib/components/layout/profile/ProfileOnboarding";
 import CompanyOnboarding from "@/features/companies/pages/onboarding/CompanyOnboarding";
 import ProfessionalOnboarding from "@/features/professionals/pages/onboarding/ProfessionalOnboarding";
 import CompanyAccessPage from "@/features/companies/pages/access/CompanyAccessPage";
@@ -38,6 +37,7 @@ import SolarPanelModelPage from "@/features/solar-panel/pages/crud/SolarPanelMod
 import Inbox from "@/features/messages/pages/Inbox";
 import ContactCompany from "@/features/messages/pages/ContactCompany";
 import ChatbotPage from "@/features/messages/pages/ChatbotPage";
+import AssistantEntry from "@/features/messages/pages/AssistantEntry";
 import { AccessShell } from "@@/layout/access/Access";
 import Mobile from "@/features/access/mobile/Mobile";
 import LoginPage from "@/features/access/pages/auth/login/LoginPage";
@@ -110,7 +110,11 @@ const APP: RouteDefinition[] = [
   { key: "companyProfile", path: (lang) => `${joinSegments(lang, "company")}/:companySlug`, element: <CompanyProfile /> },
   { key: "professionalProfile", path: (lang) => `${joinSegments(lang, "professional")}/:professionalSlug`, element: <ProfessionalProfile /> },
 
-  { key: "profileOnboardingUser", path: (lang) => joinSegments(lang, "profileSetup", "user"), element: <ProfileOnboarding kind="user" /> },
+  {
+    key: "profileOnboardingUser",
+    path: (lang) => joinSegments(lang, "profileSetup", "user"),
+    element: <LegacyAccessRedirect destination={routePaths.ownUserProfile} />,
+  },
 
   { key: "chatbot", path: (lang) => joinSegments(lang, "chatbot"), element: <ChatbotPage /> },
 ];
@@ -157,7 +161,7 @@ const SAAS: RouteDefinition[] = [
       </RequireCompany>
     ),
   },
-  { key: "operationalChatbot", path: (lang) => joinSegments(lang, "dashboard", "chatbot"), element: <ChatbotPage operational /> },
+  { key: "operationalChatbot", path: (lang) => joinSegments(lang, "dashboard", "chatbot"), element: <AssistantEntry /> },
   {
     key: "offerDetail",
     path: (lang) => `${joinSegments(lang, "admin", "offers")}/:offerId`,

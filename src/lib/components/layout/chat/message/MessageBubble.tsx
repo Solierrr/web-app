@@ -33,9 +33,9 @@ export default function MessageBubble({
   conversationKind = "direct",
 }: MessageBubbleProps) {
   const messageStyle = {
-    "--message-ink": own ? "var(--color-chat-on-sent)" : "var(--color-chat-on-received)",
-    "--message-muted": own ? "var(--color-chat-sent-muted)" : "var(--color-operational-muted)",
-    "--message-link": own ? "var(--color-chat-sent-link)" : "var(--color-chat-received-link)",
+    "--message-ink": own ? "var(--color-white)" : "var(--color-chat-on-received)",
+    "--message-muted": own ? "color-mix(in srgb, var(--color-white) 85%, transparent)" : "var(--color-operational-muted)",
+    "--message-link": own ? "var(--color-white)" : "var(--color-chat-received-link)",
   } as CSSProperties;
   const hour = new Intl.DateTimeFormat(locale, { hour: "2-digit", minute: "2-digit" }).format(new Date(timestamp));
   if (presentation === "timeline") {
@@ -65,7 +65,7 @@ export default function MessageBubble({
     <article aria-label={author} className={`flex min-w-0 max-w-full flex-col gap-1 ${own ? "items-end" : "items-start"}`}>
       <div
         style={messageStyle}
-        className={`flex min-w-0 flex-col gap-2 rounded-[1.25rem] px-4 py-2.5 ${tail} ${own ? "max-w-[85%] bg-chat-sent sm:max-w-[75%]" : assistant ? "w-full bg-chat-received" : "max-w-[85%] bg-chat-received sm:max-w-[75%]"}`}>
+        className={`flex min-w-0 flex-col gap-2 rounded-[1.25rem] px-4 py-2.5 ${tail} ${own ? "max-w-[85%] bg-orange sm:max-w-[75%]" : assistant ? "w-full bg-chat-received" : "max-w-[85%] bg-chat-received sm:max-w-[75%]"}`}>
         {conversationKind === "group" && showAuthor && !own && (
           <p className="break-words text-sidebar font-semi-bold text-operational-ink">{author}</p>
         )}

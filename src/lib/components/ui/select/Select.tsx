@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type SelectHTMLAttributes } from "react";
 import { useTranslation } from "react-i18next";
 import Colors from "@/lib/shared/styles/colors/colors.enum";
-import Icon from "@@/ui/icon/Icon";
+import Icon, { type IconName } from "@@/ui/icon/Icon";
 import { MenuList, MenuItem } from "@@/overlay/Menu";
 
 export type SelectOption<T = string> = string | readonly [label: string, value: T];
@@ -24,6 +24,10 @@ interface SelectProps<T> {
   rounded?: boolean;
   disabled?: boolean;
   clearable?: boolean;
+  /** `group`: sem fundo nem borda próprios, preenche a altura do contêiner (usado dentro de `SearchBar`). */
+  variant?: "field" | "group" | "plain";
+  /** Ícone à esquerda do valor (variante `plain`). */
+  icon?: IconName;
 
   className?: string;
 }
@@ -65,8 +69,12 @@ export default function Select<T = string>({
   rounded = false,
   disabled = false,
   clearable = true,
+  variant = "field",
+  icon,
   className,
 }: SelectProps<T>) {
+  const grouped = variant === "group";
+  const plain = variant === "plain";
   const { t } = useTranslation("commons", { keyPrefix: "select" });
   const resolvedPlaceholder = placeholder ?? t("placeholder");
 
@@ -112,9 +120,9 @@ export default function Select<T = string>({
   }
 
   return (
-    <div ref={containerRef} className={`relative w-fit ${className ?? ""}`}>
+    <div ref={containerRef} className={`relative flex ${plain ? "w-full" : "w-fit"} ${grouped ? "self-stretch" : ""} ${className ?? ""}`}>
       <div
-        className={`flex w-full items-center-safe justify-between gap-8 bg-input-bg ${selectedOption ? "pl-3 pr-4" : "px-4"} py-2 text-black font-medium cursor-pointer ${disabled ? "opacity-50 pointer-events-none" : ""} ${rounded ? "rounded-full" : "rounded-medium"}`}
+        className={`flex w-full items-center-safe justify-between ${plain ? "h-11 lg:h-9 gap-2 rounded-small bg-transparent px-3! text-sidebar leading-5 transition-colors duration-250 hover:bg-sidebar-hover focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-operational-ink motion-reduce:transition-none" : grouped ? "h-12 gap-3 rounded-[inherit] bg-transparent transition-colors duration-250 hover:bg-operational-hover focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-operational-ink motion-reduce:transition-none" : `gap-8 bg-input-bg py-2 ${rounded ? "rounded-full" : "rounded-medium"}`} ${selectedOption ? "pl-3 pr-4" : "px-4"} text-black font-medium cursor-pointer ${disabled ? "opacity-50 pointer-events-none" : ""}`}
         role="button"
         tabIndex={disabled ? -1 : 0}
         aria-label={name}
@@ -129,7 +137,8 @@ export default function Select<T = string>({
             setOpen((isOpen) => !isOpen);
           }
         }}>
-        <span className="flex items-center-safe gap-2">
+        <span className="flex min-w-0 items-center-safe gap-2">
+          {icon && <Icon name={icon} size={18} color="currentColor" className="shrink-0 text-operational-muted" />}
           {selectedOption && clearable && (
             <button
               type="button"
@@ -151,7 +160,10 @@ export default function Select<T = string>({
       </div>
 
       {open && (
-        <MenuList className="absolute z-10 mt-1 w-full" role="listbox" aria-label={name}>
+        <MenuList
+          className={`absolute z-10 ${plain ? "left-0 top-full mt-1 w-full" : grouped ? "right-0 top-full mt-3 w-max min-w-56" : "mt-1 w-full"}`}
+          role="listbox"
+          aria-label={name}>
           {options.map((option, index) => {
             const isSelected = getOptionValue(option) === selectedValue;
 

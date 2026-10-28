@@ -83,6 +83,8 @@
     "back": "Voltar ao início"
   },
   "navbar": {
+    "account": "Conta",
+    "cart": "Carrinho",
     "app": "Aplicativo",
     "login": "Entrar",
     "solarPanels": "Placas Solares",
@@ -430,6 +432,7 @@
     "default": "nenhum resultado encontrado."
   },
   "settingsPrivacy": {
+    "localNotice": "Estas preferências são salvas apenas neste navegador e ainda não alteram a visibilidade pública do perfil.",
     "title": "Privacidade",
     "description": "Escolha o que os outros usuários podem ver. As preferências ficam guardadas neste dispositivo e serão aplicadas ao perfil público quando o servidor suportar.",
     "showContact": "Mostrar meus dados de contato no perfil público",
@@ -439,6 +442,8 @@
     "saveError": "Não foi possível salvar as preferências neste dispositivo."
   },
   "settingsSessions": {
+    "signOutAll": "Sair de todos os dispositivos",
+    "allDevices": "todos os dispositivos",
     "title": "Sessões e dispositivos",
     "description": "Dispositivos com acesso à sua conta.",
     "current": "Este dispositivo",
@@ -446,7 +451,7 @@
     "revoke": "Encerrar sessão",
     "revoked": "Sessão encerrada.",
     "signOut": "Sair deste dispositivo",
-    "onlyCurrent": "Por enquanto só é possível ver e encerrar a sessão deste dispositivo.",
+    "onlyCurrent": "A lista mostra apenas este dispositivo. Você pode encerrar esta sessão ou sair de todos os dispositivos.",
     "error": "Não foi possível carregar as sessões.",
     "revokeError": "Não foi possível encerrar a sessão.",
     "device": "Dispositivo",

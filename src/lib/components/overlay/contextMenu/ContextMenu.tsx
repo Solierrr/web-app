@@ -117,7 +117,7 @@ export const ContextMenu = forwardRef<ContextMenuHandle, ContextMenuProps>(funct
       const aboveSpace = Math.max(0, above - top);
       const upwards = menu.scrollHeight > belowSpace && aboveSpace > belowSpace;
       menu.style.maxHeight = `${upwards ? aboveSpace : belowSpace}px`;
-      const { width, height } = menu.getBoundingClientRect();
+      const { offsetWidth: width, offsetHeight: height } = menu;
       const anchorX = anchor ? (align === "end" ? anchor.right : anchor.left) : position!.x;
       const x = align === "end" ? anchorX - width : anchorX;
       menu.style.left = `${Math.max(left, Math.min(x, right - width))}px`;
@@ -178,7 +178,7 @@ export const ContextMenu = forwardRef<ContextMenuHandle, ContextMenuProps>(funct
           entries[next]?.focus();
         }
       }}
-      className={`fixed z-50 min-w-40 py-1 animate-fade-in ${className ?? ""}`}
+      className={`fixed z-50 min-w-40 py-1 ${className ?? ""}`}
       style={{ left: position.x, top: position.y, overflowY: "auto", overflowWrap: "anywhere" }}>
       {header && (
         <li role="presentation" className="px-4 py-3">

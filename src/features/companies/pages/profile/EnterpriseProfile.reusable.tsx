@@ -24,6 +24,7 @@ export function EnterpriseProfileInformation({ company, labels }: { company: Com
       <CompanyInformationSection title={labels.companyDetails}>
         <dl className="flex flex-col gap-1">
           <ProfileInfoRow label={labels.tradeName} value={company.tradeName} />
+          <ProfileInfoRow label={labels.description} value={company.description} />
           <ProfileInfoRow label={labels.corporateName} value={company.corporateName} />
           <ProfileInfoRow label={labels.cnpj} value={company.cnpj || labels.notAvailable} />
           <ProfileInfoRow

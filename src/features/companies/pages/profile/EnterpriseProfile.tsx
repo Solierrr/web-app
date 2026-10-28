@@ -1,3 +1,5 @@
+import ProfilePhotoEditor from "@@/layout/profile/ProfilePhotoEditor";
+import { useActiveContext } from "@/lib/shared/context/ActiveContext";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { useEffect, useState } from "react";
@@ -29,8 +31,16 @@ function EnterpriseProfilePacked({ company }: EnterpriseProfilePackedProps) {
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState(false);
   const mockMode = isAlwaysMockMode();
+  const { can, isAdmin } = useActiveContext();
+  const canEdit = mockMode || isAdmin || can?.("PUT /api/companies/{id}");
+  const canEditAddress = mockMode || isAdmin || can?.(currentCompany.address?.id ? "PUT /api/addresses/{id}" : "POST /api/addresses");
+  const canUploadPhotos = Boolean(mockMode || isAdmin || can?.("PUT /api/company-photos/company/{companyId}/type/{type}"));
+  const canRemovePhotos = Boolean(mockMode || isAdmin || can?.("DELETE /api/company-photos/company/{companyId}/type/{type}"));
+  const addressFields = ["street", "number", "neighborhood", "city", "state", "zipCode", "country"];
   const labels = {
     tradeName: tProfile("tradeName"),
+    description: t("profile:public.companyDescription"),
+    descriptionPlaceholder: t("profile:public.descriptionPlaceholder"),
     corporateName: tProfile("corporateName"),
     cnpj: tProfile("cnpj"),
     email: tProfile("email"),
@@ -66,7 +76,7 @@ function EnterpriseProfilePacked({ company }: EnterpriseProfilePackedProps) {
     }
   }
 
-  const editingAction = mockMode ? (
+  const editingAction = canEdit ? (
     <ToolbarAction
       icon={editing ? "x" : "edit"}
       onClick={() => setEditing((value) => !value)}
@@ -82,12 +92,14 @@ function EnterpriseProfilePacked({ company }: EnterpriseProfilePackedProps) {
         <ProfileEditForm
           plain
           title={tProfile("companyTitle")}
-          fields={getEnterpriseProfileFields(currentCompany, labels)}
+          fields={getEnterpriseProfileFields(currentCompany, labels).filter(
+            (field) => (mockMode || field.name !== "country") && (canEditAddress || !addressFields.includes(field.name)),
+          )}
           onCancel={() => setEditing(false)}
           onSave={handleSave}
           saving={saving}
           error={saveError ? tProfile("saveError") : undefined}
-          notice={tProfile("mockNotice")}
+          notice={mockMode ? tProfile("mockNotice") : undefined}
         />
       </OperationalPage>
     );
@@ -111,8 +123,16 @@ function EnterpriseProfilePacked({ company }: EnterpriseProfilePackedProps) {
           )}
         </>
       }>
+      {(canUploadPhotos || canRemovePhotos) && (
+        <ProfilePhotoEditor
+          id={currentCompany.id}
+          entity="company"
+          canUpload={canUploadPhotos}
+          canRemove={canRemovePhotos}
+          onChange={(type, url) => setCurrentCompany((current) => ({ ...current, [type === "PROFILE" ? "logoUrl" : "bannerUrl"]: url ?? undefined }))}
+        />
+      )}
       <EnterpriseProfileInformation company={currentCompany} labels={labels} />
-      {!mockMode && <p className="text-body text-input-text">{tProfile("companyReadOnly")}</p>}
     </CompanyProfileView>
   );
 }

@@ -1,3 +1,4 @@
+import ProfilePhotoEditor from "@@/layout/profile/ProfilePhotoEditor";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { useEffect, useState } from "react";
@@ -135,6 +136,11 @@ export default function UserProfile() {
         />
       }>
       <>
+        <ProfilePhotoEditor
+          id={user.id}
+          entity="user"
+          onChange={(type, url) => setUser((current) => current && { ...current, [type === "PROFILE" ? "avatar" : "banner"]: url })}
+        />
         <ProfileInfoSection title={tProfile("personTitle")}>
           <dl className="divide-y divide-black/5">
             <ProfileInfoRow label={tProfile("username")} value={user.username} />

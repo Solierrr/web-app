@@ -34,7 +34,13 @@ describe("SaaSContextIndicator", () => {
   });
 
   it("marks an employee access as access", () => {
-    vi.mocked(useActiveContext).mockReturnValue({ ...base, kind: "company", company: { ...company, type: "DEMANDANT" } as never, isAdmin: false, isPlatformAdmin: false });
+    vi.mocked(useActiveContext).mockReturnValue({
+      ...base,
+      kind: "company",
+      company: { ...company, type: "DEMANDANT" } as never,
+      isAdmin: false,
+      isPlatformAdmin: false,
+    });
 
     render(<SaaSContextIndicator />);
 
@@ -42,7 +48,13 @@ describe("SaaSContextIndicator", () => {
   });
 
   it("omits the type when the company has none", () => {
-    vi.mocked(useActiveContext).mockReturnValue({ ...base, kind: "company", company: { id: "c1", tradeName: "Solar XPTO" } as never, isAdmin: true, isPlatformAdmin: false });
+    vi.mocked(useActiveContext).mockReturnValue({
+      ...base,
+      kind: "company",
+      company: { id: "c1", tradeName: "Solar XPTO" } as never,
+      isAdmin: true,
+      isPlatformAdmin: false,
+    });
 
     render(<SaaSContextIndicator />);
 

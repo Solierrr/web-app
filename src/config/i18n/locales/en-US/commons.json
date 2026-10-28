@@ -83,6 +83,8 @@
     "back": "Back to home"
   },
   "navbar": {
+    "account": "Account",
+    "cart": "Cart",
     "app": "App",
     "login": "Sign in",
     "solarPanels": "Solar Panels",
@@ -430,6 +432,7 @@
     "default": "no results found."
   },
   "settingsPrivacy": {
+    "localNotice": "These preferences are saved only in this browser and do not yet change the public visibility of your profile.",
     "title": "Privacy",
     "description": "Choose what other users can see. Preferences are kept on this device and will apply to your public profile once the server supports it.",
     "showContact": "Show my contact details on my public profile",
@@ -439,6 +442,8 @@
     "saveError": "We could not save the preferences on this device."
   },
   "settingsSessions": {
+    "signOutAll": "Sign out of all devices",
+    "allDevices": "all devices",
     "title": "Sessions and devices",
     "description": "Devices with access to your account.",
     "current": "This device",
@@ -446,7 +451,7 @@
     "revoke": "End session",
     "revoked": "Session ended.",
     "signOut": "Sign out of this device",
-    "onlyCurrent": "For now you can only see and end the session on this device.",
+    "onlyCurrent": "The list shows this device only. You can end this session or sign out of all devices.",
     "error": "We could not load the sessions.",
     "revokeError": "We could not end the session.",
     "device": "Device",

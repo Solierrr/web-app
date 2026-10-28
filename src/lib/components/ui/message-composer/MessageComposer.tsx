@@ -112,7 +112,7 @@ export default function MessageComposer({
   return (
     <form
       ref={form}
-      className={`relative shrink-0 rounded-3xl bg-input-bg ${assistant ? "grid min-h-10 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2 gap-y-0 pl-4 pr-1 py-0" : `gap-2 p-3 ${compact ? "flex flex-col" : "grid grid-cols-[minmax(0,1fr)_auto] items-end"}`}`}
+      className={`relative shrink-0 ${assistant ? "rounded-full bg-transparent" : "rounded-3xl bg-input-bg"} ${assistant ? "grid min-h-10 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2 gap-y-0 pl-4 pr-1 py-0" : `gap-2 p-3 ${compact ? "flex flex-col" : "grid grid-cols-[minmax(0,1fr)_auto] items-end"}`}`}
       onSubmit={(event) => {
         event.preventDefault();
         if (canSend) {
@@ -129,7 +129,7 @@ export default function MessageComposer({
         rows={1}
         maxLength={maxLength}
         aria-describedby={hint ? `${id}-hint` : undefined}
-        className={`w-full! bg-transparent! [&_textarea]:w-full [&_textarea]:min-w-0 [&_textarea]:px-0 [&_textarea]:py-0 [&_textarea]:leading-relaxed [&_textarea]:placeholder:text-operational-muted`}
+        className={`w-full! bg-transparent! [&_textarea]:w-full [&_textarea]:min-w-0 [&_textarea]:px-0 [&_textarea]:py-0 ${assistant ? "[&_textarea]:leading-6 [&_textarea]:placeholder:text-input-text" : "[&_textarea]:leading-relaxed [&_textarea]:placeholder:text-operational-muted"}`}
         onSelect={(event) => captureSelection(event.currentTarget)}
         onMouseUp={(event) => captureSelection(event.currentTarget)}
         onTouchEnd={(event) => captureSelection(event.currentTarget)}

@@ -1,4 +1,14 @@
 {
+  "photos": {
+    "title": "Profile images",
+    "PROFILE": "Profile picture",
+    "BANNER": "Banner",
+    "remove": "Remove image",
+    "save": "Save image",
+    "limits": "JPEG, PNG or WebP · up to 5 MB",
+    "invalid": "Select a valid image up to 5 MB.",
+    "error": "Could not update the image."
+  },
   "edit": {
     "description": "Review the profile details before saving.",
     "mockNotice": "These profile changes are stored only in this browser until the real editing flow is connected.",
@@ -68,5 +78,21 @@
     "loadingOffers": "Loading offers...",
     "noOffers": "This company has no available offers yet.",
     "publicProfile": "View marketplace profile"
+  },
+  "public": {
+    "viewDetails": "View details",
+    "infrastructure": "Structures and accessories",
+    "activities": "Areas of work",
+    "specialties": "Specialties",
+    "allOffers": "All offers",
+    "technicalTeam": "Technical team available",
+    "addConnection": "Add connection",
+    "connected": "Connected",
+    "connectionAdded": "Connection added.",
+    "aboutMe": "About me",
+    "technicalTeamLabel": "Technical team",
+    "technicalTeamAvailable": "Available",
+    "companyDescription": "Company introduction",
+    "descriptionPlaceholder": "Enter the company introduction here"
   }
 }

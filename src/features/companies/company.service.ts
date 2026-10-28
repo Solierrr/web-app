@@ -17,6 +17,7 @@ const SERVICE_NAME = "company";
 export interface CatalogCompany {
   id: string;
   tradeName: string;
+  description?: string | null;
   slug: string;
   city: string | null;
   state: string | null;
@@ -62,11 +63,12 @@ function mockCatalogCompany(company: Company): CatalogCompany {
   return {
     id: company.id,
     tradeName: company.tradeName,
+    description: company.description,
     slug: company.slug,
     city: company.address?.city ?? null,
     state: company.address?.state ?? null,
-    logoUrl: company.logoUrl,
-    bannerUrl: company.bannerUrl,
+    logoUrl: company.logoUrl ?? `/images/marketplace/company-logo-${(companyMocks.indexOf(company) % 3) + 1}.webp`,
+    bannerUrl: company.bannerUrl ?? "/images/marketplace/solar-roof.webp",
     activities: company.activities,
     hasTechnicalTeam: company.hasTechnicalTeam,
   };
@@ -161,6 +163,7 @@ export async function getMyCompany(): Promise<Company | null> {
       cnpj: profile?.cnpj ?? "",
       tradeName: membership.name,
       corporateName: profile?.corporateName ?? membership.name,
+      description: profile?.description,
       slug: membership.id,
       businessContact: profile
         ? { companyEmail: profile.companyEmail, phone: profile.phone || undefined, website: profile.website || undefined }
@@ -189,9 +192,45 @@ export async function getMyCompany(): Promise<Company | null> {
 
 export async function updateMyCompanyProfile(
   companyId: string,
-  profile: Pick<Company, "tradeName" | "corporateName" | "businessContact" | "address">,
+  profile: Pick<Company, "tradeName" | "corporateName" | "description" | "businessContact" | "address">,
 ): Promise<Company> {
-  if (!isAlwaysMockMode()) throw createServiceError(SERVICE_NAME, "updateMyCompanyProfile", i18n.t("services:company.profileEditingUnavailable"));
+  if (!isAlwaysMockMode()) {
+    const current = await getMyCompany();
+    if (!current || current.id !== companyId)
+      throw createServiceError(SERVICE_NAME, "updateMyCompanyProfile", i18n.t("services:company.activeCompanyNotFound"));
+    let addressId = current.address?.id;
+    if (
+      profile.address &&
+      ["street", "number", "neighborhood", "city", "state", "zipCode"].some(
+        (key) =>
+          String(profile.address?.[key as keyof typeof profile.address] ?? "") !==
+          String(current.address?.[key as keyof typeof current.address] ?? ""),
+      )
+    ) {
+      const { street, number, neighborhood, city, state, zipCode } = profile.address;
+      const address = await httpJson<{ id: string }>(`${API_CORE_URL}/addresses${addressId ? `/${encodeURIComponent(addressId)}` : ""}`, {
+        service: SERVICE_NAME,
+        operation: "updateAddress",
+        method: addressId ? "PUT" : "POST",
+        body: { street, number, neighborhood, city, state, zipCode },
+        errorMessage: i18n.t("services:company.getCompany", { id: companyId }),
+      });
+      addressId = address.id;
+    }
+    return httpJson<Company>(`${API_CORE_URL}/companies/${encodeURIComponent(companyId)}`, {
+      service: SERVICE_NAME,
+      operation: "updateMyCompanyProfile",
+      method: "PUT",
+      body: {
+        tradeName: profile.tradeName,
+        corporateName: profile.corporateName,
+        description: profile.description,
+        addressId,
+        businessContact: profile.businessContact,
+      },
+      errorMessage: i18n.t("services:company.getCompany", { id: companyId }),
+    });
+  }
   await waitForMockService();
   const company = await getMyCompany();
   if (!company || company.id !== companyId)
@@ -208,6 +247,7 @@ export async function updateMyCompanyProfile(
             companyProfile: {
               cnpj: updated.cnpj,
               corporateName: updated.corporateName,
+              description: updated.description ?? "",
               companyEmail: updated.businessContact?.companyEmail ?? "",
               phone: updated.businessContact?.phone ?? "",
               website: updated.businessContact?.website ?? "",

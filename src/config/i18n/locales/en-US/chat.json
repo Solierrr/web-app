@@ -7,6 +7,14 @@
   "newAssistant": "Chat with the assistant",
   "createError": "Could not start the conversation. Try again.",
   "contactsError": "Could not load your connections.",
+  "connectionError": "Could not add the connection.",
+  "collapseConversations": "Hide chat list",
+  "expandConversations": "Show chat list",
+  "openConversation": "Open chat",
+  "deleteConversation": "Delete chat",
+  "deleteConversationTitle": "Delete chat",
+  "deleteConversationMessage": "The chat leaves your list in this browser. Other people keep it.",
+  "conversationOptions": "Chat options",
   "conversations": "Your conversations",
   "searchConversations": "Search conversations",
   "searchContacts": "Search your connections",
@@ -40,6 +48,7 @@
   "loadError": "Could not load the conversation.",
   "sendError": "Could not send the message. Please try again.",
   "emptyInbox": "You do not have any conversations yet.",
+  "emptyConversationTitle": "No messages yet",
   "emptyConversation": "Send a message to start the conversation.",
   "openingConversation": "Opening conversation...",
   "contactError": "Could not start a conversation with this company.",
@@ -53,6 +62,7 @@
   "unreadCount_other": "{{count}} unread messages",
   "realtimeUnavailable": "The live connection was interrupted. Messages will refresh periodically while we reconnect.",
   "chatbot": {
+    "history": "Chats",
     "panelDescription": "What are we doing today?",
     "ask": "Ask",
     "needHelp": "Want to explore your options?",
@@ -70,6 +80,7 @@
       "help": "Discover the first steps"
     },
     "newConversation": "New conversation",
+    "welcomeSubtitle": "The chat continues on the messages screen, where it is saved.",
     "welcomeTitle": "Where shall we start?",
     "welcomeDescription": "Choose a suggestion or write your question about Solaria.",
     "composerHint": "Enter sends · Shift + Enter adds a line",
@@ -81,7 +92,7 @@
     "greeting": "Hi! How can I help you today?",
     "draftPlaceholder": "Ask the assistant",
     "sendDescription": "Send message to the assistant",
-    "assistantName": "Solaria Assistant"
+    "assistantName": "Assistant"
   },
   "attachments": {
     "remove": "Remove {{name}}",
