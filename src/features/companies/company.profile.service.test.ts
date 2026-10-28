@@ -47,4 +47,11 @@ describe("company profile integration", () => {
     await expect(updateMyCompanyProfile("another", profile)).rejects.toThrow();
     expect(vi.mocked(httpJson).mock.calls.some(([, options]) => options.method === "PUT")).toBe(false);
   });
+  it("includes the introduction in the authorized company update", async () => {
+    await updateMyCompanyProfile("company", { ...profile, description: "Planejamento e equipamentos." });
+    expect(httpJson).toHaveBeenCalledWith(
+      expect.stringContaining("/companies/company"),
+      expect.objectContaining({ method: "PUT", body: expect.objectContaining({ description: "Planejamento e equipamentos." }) }),
+    );
+  });
 });

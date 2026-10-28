@@ -1,6 +1,5 @@
 import Pagination from "@@/ui/pagination/Pagination";
-import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Select from "@@/ui/select/Select";
 import MarketplaceLayout from "@/features/marketplace/components/MarketplaceLayout";
@@ -20,7 +19,8 @@ export default function ProfessionalSearch() {
   const lang = isSupportedLanguage(value) ? value : DEFAULT;
   const { items, error, retry } = useMarketplaceCatalog(getCatalogTechnicians);
   const [query, setQuery] = useMarketplaceQuery();
-  const [specialty, setSpecialty] = useState("");
+  const [params, setParams] = useSearchParams();
+  const specialty = params.get("specialty") ?? "";
   const specialties = [...new Set((items ?? []).flatMap((item) => item.professions))];
   const filtered = (items ?? []).filter(
     (item) => (!specialty || item.professions.includes(specialty)) && matchesMarketplaceQuery(query, item.name, item.crea, ...item.professions),
@@ -35,7 +35,17 @@ export default function ProfessionalSearch() {
           name={t("specialty")}
           value={specialty}
           options={[[t("allSpecialties"), ""], ...specialties.map((value) => [value, value] as const)]}
-          onChange={(value) => setSpecialty(value ?? "")}
+          onChange={(value) =>
+            setParams(
+              (previous) => {
+                const next = new URLSearchParams(previous);
+                if (value) next.set("specialty", value);
+                else next.delete("specialty");
+                return next;
+              },
+              { replace: true },
+            )
+          }
         />
       </MarketplaceSearch>
       <section className="flex flex-col gap-8">

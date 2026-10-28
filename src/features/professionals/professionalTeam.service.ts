@@ -11,6 +11,10 @@ export interface CatalogTeam {
   companySlug: string;
   name: string;
   members: { id: string; name: string; slug: string }[];
+  city?: string | null;
+  state?: string | null;
+  logoUrl?: string;
+  bannerUrl?: string;
 }
 
 export async function getCatalogTeams(): Promise<CatalogTeam[]> {
@@ -24,6 +28,10 @@ export async function getCatalogTeams(): Promise<CatalogTeam[]> {
         companySlug: company.slug,
         name: company.tradeName,
         members: [],
+        city: company.city,
+        state: company.state,
+        logoUrl: company.logoUrl,
+        bannerUrl: company.bannerUrl,
       }));
   }
   return httpJson<CatalogTeam[]>(`${API_CORE_URL}/catalog/teams`, {
@@ -34,5 +42,14 @@ export async function getCatalogTeams(): Promise<CatalogTeam[]> {
 }
 
 export function teamCompany(team: CatalogTeam): CatalogCompany {
-  return { id: team.id, slug: team.companySlug, tradeName: team.name, city: null, state: null, activities: [] };
+  return {
+    id: team.id,
+    slug: team.companySlug,
+    tradeName: team.name,
+    city: team.city ?? null,
+    state: team.state ?? null,
+    logoUrl: team.logoUrl,
+    bannerUrl: team.bannerUrl,
+    activities: [],
+  };
 }

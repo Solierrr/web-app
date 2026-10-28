@@ -7,8 +7,11 @@
   "productsDescription": "Encontre placas, estruturas e o que faz tudo funcionar.",
   "servicesTitle": "O próximo passo pode ser uma conversa.",
   "servicesDescription": "Descubra profissionais e equipes pelo que o seu projeto precisa.",
-  "companiesTitle": "Conexões que geram novos projetos.",
-  "companiesDescription": "Encontre parceiros pelo que eles fazem de melhor.",
+  "companiesTitle": "Boas empresas. Novas conexões.",
+  "companiesDescription": "Conheça quem fornece, instala e transforma projetos em energia.",
+  "companyGallery": {
+    "backToTop": "Voltar ao topo"
+  },
   "productSpotlight": "Potência que cabe no seu plano.",
   "infrastructureSpotlight": "A base de um bom projeto.",
   "featured": "Escolha em destaque",
@@ -110,8 +113,31 @@
     }
   },
   "footer": {
-    "github": "Solaria no GitHub",
-    "email": "Enviar e-mail para a Solaria",
-    "copied": "E-mail copiado: {{email}}"
+    "heading": "Vamos conversar?",
+    "description": "Acompanhe o desenvolvimento ou entre em contato com a equipe.",
+    "navigation": "Projeto, contato e termos de uso",
+    "github": "Ver o código no GitHub",
+    "email": "Entrar em contato por e-mail",
+    "contact": "Contato",
+    "terms": "Termos"
+  },
+  "serviceFeed": {
+    "featured": "Profissional em destaque",
+    "spotlightTitle": "Seu projeto começa com uma boa conversa.",
+    "contact": "Entrar em contato",
+    "installationTitle": "Do primeiro painel ao sistema funcionando.",
+    "installationDescription": "Encontre quem instala, orienta e acompanha cada etapa.",
+    "installationAction": "Encontrar instaladores",
+    "maintenanceTitle": "Mais cuidado. Mais energia por mais tempo.",
+    "maintenanceAction": "Encontrar manutenção",
+    "inspectionTitle": "Entenda o seu sistema antes do próximo passo.",
+    "inspectionAction": "Encontrar especialistas",
+    "shelves": {
+      "all": "Gente que entende do seu projeto.",
+      "engineering": "Para planejar com segurança.",
+      "installation": "Quem faz a instalação acontecer.",
+      "maintenance": "Cuidado que faz a diferença.",
+      "inspection": "Um olhar técnico para o seu sistema."
+    }
   }
 }

@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { routePaths } from "@/config/i18n/paths";
 import type { SupportedLanguage } from "@/config/i18n/browser/languages";
 import type { SolarPanelAnnouncement } from "@/features/solar-panel/solarPanel.announcement";
+import panelMock from "@/assets/mocks/products/solar-panels-f2b8091a5514.webp";
+import infrastructureMock from "@/assets/mocks/editorial/infrastructure-d9a5baac44f0.webp";
 import MarketplaceImage from "./MarketplaceImage";
 
 export default function ProductSpotlight({ offer, lang }: { offer: SolarPanelAnnouncement; lang: SupportedLanguage }) {
@@ -23,7 +25,7 @@ export default function ProductSpotlight({ offer, lang }: { offer: SolarPanelAnn
             {t(offer.panel.productType === "INFRASTRUCTURE" ? "infrastructureSpotlight" : "productSpotlight")}
           </h2>
           <div className="flex flex-col gap-1">
-            <Link data-featured-offer to={target} className="line-clamp-2 text-sidebar text-operational-muted hover:text-orange">
+            <Link data-featured-offer to={target} className="line-clamp-2 text-sidebar text-operational-muted hover:underline">
               {offer.title}
             </Link>
             <p className="text-sidebar text-operational-muted">{offer.company.tradeName}</p>
@@ -41,8 +43,8 @@ export default function ProductSpotlight({ offer, lang }: { offer: SolarPanelAnn
           />
         </div>
         <MarketplaceImage
-          src={offer.photos.heroImage.url}
-          alt={offer.title}
+          src={offer.panel.productType === "INFRASTRUCTURE" ? infrastructureMock : panelMock}
+          alt=""
           contain
           fallback="panels"
           eager

@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import Icon from "@@/ui/icon/Icon";
+import MarketplaceCard from "./MarketplaceCard";
 import { notify } from "@@/feedback/toast/Toast.utils";
 import { putCartItem } from "@/features/purchases/purchases.service";
 import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
@@ -40,14 +40,20 @@ export default function OfferCard({ offer, lang, label }: { offer: SolarPanelAnn
   }
 
   return (
-    <article className="group relative flex min-w-0 flex-col">
-      <Link
-        to={
-          infrastructure
-            ? routePaths.infrastructureDetail(lang, offer.companySlug, offer.slug)
-            : routePaths.productDetail(lang, offer.companySlug, offer.slug)
-        }
-        className="flex min-w-0 flex-col rounded-surface focus-visible:outline-orange">
+    <MarketplaceCard
+      href={
+        infrastructure
+          ? routePaths.infrastructureDetail(lang, offer.companySlug, offer.slug)
+          : routePaths.productDetail(lang, offer.companySlug, offer.slug)
+      }
+      name={offer.title}
+      action={{
+        icon: "plus",
+        label: feed("add", { title: offer.title }),
+        disabled: adding || offer.availableUnits < 1,
+        onClick: () => void addToCart(),
+      }}
+      media={
         <div className="relative">
           <MarketplaceImage
             src={offer.photos.heroImage.url}
@@ -62,25 +68,16 @@ export default function OfferCard({ offer, lang, label }: { offer: SolarPanelAnn
             </span>
           )}
         </div>
-        <div className="flex min-h-10 flex-col gap-1 pr-14 pt-4">
-          <h3 title={offer.title} className="line-clamp-1 text-body font-semi-bold leading-6 text-operational-ink group-hover:text-dark-orange">
-            {name}
-          </h3>
-          <p className="text-body font-semi-bold leading-6 text-operational-ink">
-            {new Intl.NumberFormat(lang, { style: "currency", currency: "BRL" }).format(offer.unitPrice)}{" "}
-            <span className="text-sidebar font-medium text-operational-muted">{t("perUnit")}</span>
-          </p>
-        </div>
-      </Link>
-      <button
-        type="button"
-        aria-label={feed("add", { title: offer.title })}
-        title={feed("add", { title: offer.title })}
-        disabled={adding || offer.availableUnits < 1}
-        onClick={() => void addToCart()}
-        className="absolute bottom-0 right-0 flex size-10 cursor-pointer items-center justify-center rounded-full bg-operational-surface text-operational-ink transition-colors duration-200 hover:bg-orange/10 hover:text-orange focus-visible:outline-2 focus-visible:outline-orange disabled:cursor-not-allowed disabled:opacity-50">
-        <Icon name="plus" size={20} color="currentColor" />
-      </button>
-    </article>
+      }>
+      <div className="flex min-w-0 flex-col gap-1">
+        <h3 title={offer.title} className="line-clamp-1 text-body font-semi-bold leading-6 text-operational-ink">
+          {name}
+        </h3>
+        <p className="text-body font-semi-bold leading-6 text-operational-ink">
+          {new Intl.NumberFormat(lang, { style: "currency", currency: "BRL" }).format(offer.unitPrice)}{" "}
+          <span className="text-sidebar font-medium text-operational-muted">{t("perUnit")}</span>
+        </p>
+      </div>
+    </MarketplaceCard>
   );
 }

@@ -1,12 +1,11 @@
-import Pagination from "@@/ui/pagination/Pagination";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Marketplace from "@/features/marketplace/Marketplace";
 import { getFeedView } from "@/features/marketplace/marketplace.utils";
-import { useMarketplaceCatalog, useMarketplacePagination } from "@/features/marketplace/marketplace.hooks";
+import { useMarketplaceCatalog } from "@/features/marketplace/marketplace.hooks";
 import MarketplaceLayout from "@/features/marketplace/components/MarketplaceLayout";
-import MarketplaceHeading from "@/features/marketplace/components/MarketplaceHeading";
+import OfferShelf from "@/features/marketplace/components/OfferShelf";
 import MarketplaceResults from "@/features/marketplace/components/MarketplaceResults";
 import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { TechnicalAffiliationType } from "../../professional.enum";
@@ -14,7 +13,7 @@ import { getCatalogTechnicians } from "../../professional.service";
 import { getCatalogTeams, teamCompany, type CatalogTeam } from "../../professionalTeam.service";
 import CompanyFeaturedCard from "@/features/companies/pages/feed/CompanyFeaturedCard";
 import ProfessionalCard from "./ProfessionalCard";
-import ServiceCollections from "./ServiceCollections";
+import { serviceShelves, ServiceHighlight } from "./ProfessionalFeed.reusable";
 
 export default function ProfessionalFeed() {
   const { t } = useTranslation("marketplace");
@@ -46,36 +45,52 @@ export default function ProfessionalFeed() {
   }, [view, revision]);
   const filtered = (items ?? []).filter((item) => view !== "independent" || item.affiliationType === TechnicalAffiliationType.INDEPENDENT);
   const teamView = view === "teams";
-  const pagedProfessionals = useMarketplacePagination(filtered, `${view}:${lang}`);
-  const pagedTeams = useMarketplacePagination(teams ?? [], `${view}:${lang}`);
+  const shelves = serviceShelves(filtered);
   return (
     <MarketplaceLayout>
-      <MarketplaceHeading title={t("servicesTitle")} description={t("servicesDescription")} centered />
-      <ServiceCollections lang={lang} />
-      <section className="flex flex-col gap-8">
-        <h2 className="text-subtitle font-semi-bold">{t("professionalsHeading")}</h2>
+      <h1 className="sr-only">{t("services")}</h1>
+      <div className="flex justify-center">
         <Marketplace category="professionals" />
-        <MarketplaceResults
-          loading={teamView ? !teams && !teamError : !items && !error}
-          error={(teamView ? teamError : error) ? feed("professional.loadError") : undefined}
-          empty={(teamView ? teams && !teams.length : items && !filtered.length) ? feed("services.empty") : undefined}
-          onRetry={
-            teamView
-              ? () => {
-                  setTeamError(false);
-                  setTeams(null);
-                  setRevision((n) => n + 1);
-                }
-              : retry
-          }>
-          <div className="grid min-w-0 grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-            {teamView
-              ? pagedTeams.items.map((team) => <CompanyFeaturedCard key={team.id} company={teamCompany(team)} lang={lang} />)
-              : pagedProfessionals.items.map((professional) => <ProfessionalCard key={professional.id} professional={professional} lang={lang} />)}
+      </div>
+      <MarketplaceResults
+        loading={teamView ? !teams && !teamError : !items && !error}
+        error={(teamView ? teamError : error) ? feed("professional.loadError") : undefined}
+        empty={(teamView ? teams && !teams.length : items && !filtered.length) ? feed("services.empty") : undefined}
+        onRetry={
+          teamView
+            ? () => {
+                setTeamError(false);
+                setTeams(null);
+                setRevision((n) => n + 1);
+              }
+            : retry
+        }>
+        {teamView ? (
+          <div className="grid min-w-0 grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-2">
+            {(teams ?? []).map((team) => (
+              <CompanyFeaturedCard key={team.id} company={teamCompany(team)} lang={lang} />
+            ))}
           </div>
-          <Pagination {...(teamView ? pagedTeams.pagination : pagedProfessionals.pagination)} appearance="borderless" />
-        </MarketplaceResults>
-      </section>
+        ) : (
+          <>
+            <ServiceHighlight format="installation" professionals={filtered} lang={lang} />
+            {shelves.map((shelf, index) => (
+              <Fragment key={shelf.key}>
+                <OfferShelf title={t(`serviceFeed.shelves.${shelf.key}`)}>
+                  {shelf.items.map((professional) => (
+                    <div key={professional.id} className="w-72 shrink-0 snap-start sm:w-88">
+                      <ProfessionalCard professional={professional} lang={lang} />
+                    </div>
+                  ))}
+                </OfferShelf>
+                {(index + 1) % 2 === 0 && (
+                  <ServiceHighlight format={index % 4 === 1 ? "inspection" : "maintenance"} professionals={filtered} lang={lang} />
+                )}
+              </Fragment>
+            ))}
+          </>
+        )}
+      </MarketplaceResults>
     </MarketplaceLayout>
   );
 }

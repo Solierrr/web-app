@@ -4,6 +4,14 @@ import type { Company } from "@/features/companies/company";
 export function getEnterpriseProfileFields(company: Company, labels: Record<string, string>): ProfileEditField[] {
   return [
     { name: "tradeName", label: labels.tradeName, value: company.tradeName, required: true, maxLength: 100 },
+    {
+      name: "description",
+      label: labels.description,
+      value: company.description ?? "",
+      type: "textarea",
+      maxLength: 1500,
+      placeholder: labels.descriptionPlaceholder,
+    },
     { name: "corporateName", label: labels.corporateName, value: company.corporateName, required: true, maxLength: 120 },
     { name: "email", label: labels.email, value: company.businessContact?.companyEmail ?? "", type: "email", required: true },
     { name: "phone", label: labels.phone, value: company.businessContact?.phone ?? "", type: "tel" },
@@ -20,11 +28,12 @@ export function getEnterpriseProfileFields(company: Company, labels: Record<stri
 
 export function toEnterpriseProfileUpdate(
   values: Record<string, string>,
-): Pick<Company, "tradeName" | "corporateName" | "businessContact" | "address"> {
+): Pick<Company, "tradeName" | "corporateName" | "description" | "businessContact" | "address"> {
   const hasAddress = ["street", "number", "neighborhood", "city", "state", "zipCode", "country"].some((key) => values[key]?.trim());
   return {
     tradeName: values.tradeName.trim(),
     corporateName: values.corporateName.trim(),
+    description: values.description?.trim() || null,
     businessContact: {
       companyEmail: values.email.trim(),
       phone: values.phone.trim() || undefined,

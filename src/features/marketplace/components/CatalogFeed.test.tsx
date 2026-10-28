@@ -12,56 +12,29 @@ function view(kind: "PANEL" | "INFRASTRUCTURE", load = async () => [panelOffer, 
   );
 }
 describe("CatalogFeed", () => {
-  it("keeps twelve unique offers per page across spotlight, grid and rail", async () => {
-    const offers = Array.from({ length: 13 }, (_, i) => ({ ...panelOffer, id: `offer-${i}`, slug: `offer-${i}`, title: `Oferta ${i + 1}` }));
+  it("renders offer shelves without feed search or pagination", async () => {
+    const offers = Array.from({ length: 12 }, (_, i) => ({ ...panelOffer, id: `offer-${i}`, slug: `offer-${i}`, title: `Oferta ${i + 1}` }));
     view("PANEL", async () => offers);
-    await screen.findByRole("link", { name: "Oferta 1" });
-    expect(screen.getAllByRole("link", { name: /Oferta \d/ })).toHaveLength(12);
-    expect(screen.queryByText("Oferta 13")).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Próxima página" }));
-    expect(screen.getByRole("link", { name: /Oferta 13/ })).toBeInTheDocument();
-    expect(screen.queryByRole("link", { name: "Oferta 1" })).not.toBeInTheDocument();
+    expect((await screen.findAllByRole("link", { name: "Oferta 12" }))[0]).toHaveAttribute("href", "/pt-BR/placa-solar/aurora/offer-11");
+    expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Próxima página" })).not.toBeInTheDocument();
   });
   it("separates infrastructure from panels and links to its own detail route", async () => {
-    view("INFRASTRUCTURE");
-    const link = await screen.findByRole("link", { name: /Trilho de alumínio/ });
+    view("INFRASTRUCTURE", async () => Array.from({ length: 3 }, (_, i) => ({ ...infrastructureOffer, id: `infra-${i}` })));
+    const link = (await screen.findAllByRole("link", { name: /Trilho de alumínio/ }))[0];
     expect(link).toHaveAttribute("href", "/pt-BR/infraestrutura/aurora/trilho-aluminio");
     expect(screen.queryByRole("link", { name: /Painel solar 450/ })).not.toBeInTheDocument();
     expect(screen.queryByText("450 W")).not.toBeInTheDocument();
   });
-  it("searches suppliers and gives feedback when there are no results", async () => {
-    view("PANEL");
-    await screen.findByRole("link", { name: /Painel solar 450/ });
-    fireEvent.change(screen.getByRole("textbox", { name: "Buscar oferta, marca ou fornecedor" }), { target: { value: "não existe" } });
-    expect(screen.getByText("Nenhuma oferta corresponde à sua busca.")).toBeInTheDocument();
-    fireEvent.change(screen.getByRole("textbox", { name: "Buscar oferta, marca ou fornecedor" }), { target: { value: "Aurora" } });
-    expect(screen.getByRole("link", { name: /Painel solar 450/ })).toBeInTheDocument();
-  });
   it("retries a failed request without a page reload", async () => {
-    const load = vi.fn().mockRejectedValueOnce(new Error("Offline")).mockResolvedValueOnce([panelOffer]);
+    const load = vi
+      .fn()
+      .mockRejectedValueOnce(new Error("Offline"))
+      .mockResolvedValueOnce(Array.from({ length: 3 }, (_, i) => ({ ...panelOffer, id: `offer-${i}` })));
     view("PANEL", load);
     await screen.findByRole("alert");
     fireEvent.click(screen.getByRole("button", { name: "Tentar novamente" }));
-    expect(await screen.findByRole("link", { name: /Painel solar 450/ })).toBeInTheDocument();
+    expect((await screen.findAllByRole("link", { name: /Painel solar 450/ }))[0]).toBeInTheDocument();
     expect(load).toHaveBeenCalledTimes(2);
-  });
-  it("clears the selected infrastructure type in both results and the control", async () => {
-    const kit = {
-      ...infrastructureOffer,
-      id: "kit",
-      title: "Kit de instalação",
-      slug: "kit",
-      photos: { ...infrastructureOffer.photos, heroImage: { ...infrastructureOffer.photos.heroImage, description: "Kit de instalação" } },
-      panel: { ...infrastructureOffer.panel, infrastructureType: "KIT" as const },
-    };
-    view("INFRASTRUCTURE", async () => [infrastructureOffer, kit]);
-    await screen.findByRole("link", { name: /Kit de instalação/ });
-    fireEvent.click(screen.getByRole("button", { name: "Filtros" }));
-    fireEvent.click(screen.getByRole("button", { name: "Tipo de infraestrutura" }));
-    fireEvent.click(screen.getByRole("option", { name: "Kits" }));
-    expect(screen.queryByRole("link", { name: /Trilho de alumínio/ })).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Limpar filtros" }));
-    expect(screen.getByRole("link", { name: /Trilho de alumínio/ })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Tipo de infraestrutura" })).toHaveTextContent("Todos os tipos");
   });
 });

@@ -10,12 +10,21 @@ describe("ProfessionalCard", () => {
       <MemoryRouter>
         <ProfessionalCard
           lang={DEFAULT}
-          professional={{ id: "technician", name: "Ana Costa", slug: "ana-costa", crea: "SP123", professions: ["Instalação"] }}
+          professional={{
+            id: "technician",
+            name: "Ana Costa",
+            slug: "ana-costa",
+            crea: "SP123",
+            professions: ["Instalação"],
+            city: "Campinas",
+            state: "SP",
+          }}
         />
       </MemoryRouter>,
     );
     expect(screen.getByRole("link", { name: "Entrar em contato: Ana Costa" })).toHaveAttribute("href", "/pt-BR/profissional/ana-costa#contato");
     expect(screen.queryByRole("button", { name: /salvar|favorit/i })).not.toBeInTheDocument();
     expect(screen.queryByText(/R\$/)).not.toBeInTheDocument();
+    expect(screen.getByText("Instalação · Campinas, SP")).toBeInTheDocument();
   });
 });

@@ -17,6 +17,7 @@ const SERVICE_NAME = "company";
 export interface CatalogCompany {
   id: string;
   tradeName: string;
+  description?: string | null;
   slug: string;
   city: string | null;
   state: string | null;
@@ -62,6 +63,7 @@ function mockCatalogCompany(company: Company): CatalogCompany {
   return {
     id: company.id,
     tradeName: company.tradeName,
+    description: company.description,
     slug: company.slug,
     city: company.address?.city ?? null,
     state: company.address?.state ?? null,
@@ -161,6 +163,7 @@ export async function getMyCompany(): Promise<Company | null> {
       cnpj: profile?.cnpj ?? "",
       tradeName: membership.name,
       corporateName: profile?.corporateName ?? membership.name,
+      description: profile?.description,
       slug: membership.id,
       businessContact: profile
         ? { companyEmail: profile.companyEmail, phone: profile.phone || undefined, website: profile.website || undefined }
@@ -189,7 +192,7 @@ export async function getMyCompany(): Promise<Company | null> {
 
 export async function updateMyCompanyProfile(
   companyId: string,
-  profile: Pick<Company, "tradeName" | "corporateName" | "businessContact" | "address">,
+  profile: Pick<Company, "tradeName" | "corporateName" | "description" | "businessContact" | "address">,
 ): Promise<Company> {
   if (!isAlwaysMockMode()) {
     const current = await getMyCompany();
@@ -218,7 +221,13 @@ export async function updateMyCompanyProfile(
       service: SERVICE_NAME,
       operation: "updateMyCompanyProfile",
       method: "PUT",
-      body: { tradeName: profile.tradeName, corporateName: profile.corporateName, addressId, businessContact: profile.businessContact },
+      body: {
+        tradeName: profile.tradeName,
+        corporateName: profile.corporateName,
+        description: profile.description,
+        addressId,
+        businessContact: profile.businessContact,
+      },
       errorMessage: i18n.t("services:company.getCompany", { id: companyId }),
     });
   }
@@ -238,6 +247,7 @@ export async function updateMyCompanyProfile(
             companyProfile: {
               cnpj: updated.cnpj,
               corporateName: updated.corporateName,
+              description: updated.description ?? "",
               companyEmail: updated.businessContact?.companyEmail ?? "",
               phone: updated.businessContact?.phone ?? "",
               website: updated.businessContact?.website ?? "",

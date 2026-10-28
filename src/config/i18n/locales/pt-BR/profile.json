@@ -78,5 +78,21 @@
     "loadingOffers": "Carregando ofertas...",
     "noOffers": "Esta empresa ainda não possui ofertas disponíveis.",
     "publicProfile": "Ver perfil no marketplace"
+  },
+  "public": {
+    "viewDetails": "Ver detalhes",
+    "infrastructure": "Estruturas e acessórios",
+    "activities": "Áreas de atuação",
+    "specialties": "Especialidades",
+    "allOffers": "Todas as ofertas",
+    "technicalTeam": "Equipe técnica disponível",
+    "addConnection": "Adicionar conexão",
+    "connected": "Conectado",
+    "connectionAdded": "Conexão adicionada.",
+    "aboutMe": "Sobre mim",
+    "technicalTeamLabel": "Equipe técnica",
+    "technicalTeamAvailable": "Disponível",
+    "companyDescription": "Apresentação da empresa",
+    "descriptionPlaceholder": "Insira a apresentação da empresa aqui"
   }
 }

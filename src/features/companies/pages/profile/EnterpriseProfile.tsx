@@ -39,6 +39,8 @@ function EnterpriseProfilePacked({ company }: EnterpriseProfilePackedProps) {
   const addressFields = ["street", "number", "neighborhood", "city", "state", "zipCode", "country"];
   const labels = {
     tradeName: tProfile("tradeName"),
+    description: t("profile:public.companyDescription"),
+    descriptionPlaceholder: t("profile:public.descriptionPlaceholder"),
     corporateName: tProfile("corporateName"),
     cnpj: tProfile("cnpj"),
     email: tProfile("email"),

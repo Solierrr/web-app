@@ -7,8 +7,11 @@
   "productsDescription": "Encuentra paneles, estructuras y lo que hace que todo funcione.",
   "servicesTitle": "El próximo paso puede ser una conversación.",
   "servicesDescription": "Descubre profesionales y equipos para tu proyecto.",
-  "companiesTitle": "Conexiones que generan nuevos proyectos.",
-  "companiesDescription": "Encuentra socios por lo que mejor hacen.",
+  "companiesTitle": "Buenas empresas. Nuevas conexiones.",
+  "companiesDescription": "Conoce a quienes suministran, instalan y transforman proyectos en energía.",
+  "companyGallery": {
+    "backToTop": "Volver arriba"
+  },
   "productSpotlight": "Potencia que encaja en tu plan.",
   "infrastructureSpotlight": "La base de un buen proyecto.",
   "featured": "Opción destacada",
@@ -110,8 +113,31 @@
     }
   },
   "footer": {
-    "github": "Solaria en GitHub",
-    "email": "Enviar correo a Solaria",
-    "copied": "Correo copiado: {{email}}"
+    "heading": "¿Hablamos?",
+    "description": "Sigue el desarrollo o ponte en contacto con el equipo.",
+    "navigation": "Proyecto, contacto y términos de uso",
+    "github": "Ver el código en GitHub",
+    "email": "Contactar por correo electrónico",
+    "contact": "Contacto",
+    "terms": "Términos"
+  },
+  "serviceFeed": {
+    "featured": "Profesional destacado",
+    "spotlightTitle": "Tu proyecto empieza con una buena conversación.",
+    "contact": "Contactar",
+    "installationTitle": "Del primer panel al sistema funcionando.",
+    "installationDescription": "Encuentra a quienes instalan, orientan y acompañan cada etapa.",
+    "installationAction": "Encontrar instaladores",
+    "maintenanceTitle": "Más cuidado. Más energía por más tiempo.",
+    "maintenanceAction": "Encontrar mantenimiento",
+    "inspectionTitle": "Conoce tu sistema antes del siguiente paso.",
+    "inspectionAction": "Encontrar especialistas",
+    "shelves": {
+      "all": "Personas que entienden tu proyecto.",
+      "engineering": "Para planificar con seguridad.",
+      "installation": "Quienes hacen posible la instalación.",
+      "maintenance": "Cuidado que marca la diferencia.",
+      "inspection": "Una mirada técnica para tu sistema."
+    }
   }
 }

@@ -1,7 +1,6 @@
-import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import MarketplaceImage from "@/features/marketplace/components/MarketplaceImage";
-import ToolbarAction from "@@/ui/button/ToolbarAction";
+import MarketplaceCard from "@/features/marketplace/components/MarketplaceCard";
 import type { CatalogTechnician } from "../../professional.service";
 import type { SupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
@@ -9,28 +8,29 @@ import { routePaths } from "@/config/i18n/paths";
 export default function ProfessionalCard({ professional, lang }: { professional: CatalogTechnician; lang: SupportedLanguage }) {
   const { t } = useTranslation("marketplace");
   const profile = routePaths.professionalProfile(lang, professional.slug);
+  const location = [professional.city, professional.state].filter(Boolean).join(", ");
+  const details = [professional.professions[0], location].filter(Boolean).join(" · ");
   return (
-    <article className="flex min-w-0 flex-col gap-3">
-      <Link to={profile} className="group rounded-surface focus-visible:outline-orange" aria-label={professional.name}>
+    <MarketplaceCard
+      href={profile}
+      name={professional.name}
+      action={{ icon: "messages", label: `${t("contact")}: ${professional.name}`, to: `${profile}#contato` }}
+      media={
         <MarketplaceImage
           src={professional.avatarUrl}
           alt={professional.name}
           fallback="users"
-          className="aspect-square rounded-surface [&_img]:object-[center_25%]"
+          className="aspect-[6/5] rounded-surface [&_img]:object-[center_25%]"
         />
-      </Link>
-      <h3 className="text-body font-semi-bold">
-        <Link to={profile}>{professional.name}</Link>
-      </h3>
-      {professional.professions.length > 0 && <p className="text-body text-operational-muted">{professional.professions.join(" · ")}</p>}
-      <ToolbarAction
-        to={`${profile}#contato`}
-        label={`${t("contact")}: ${professional.name}`}
-        content={t("contact")}
-        icon="messages"
-        color="var(--color-orange)"
-        className="w-fit px-0!"
-      />
-    </article>
+      }>
+      <div className="flex min-w-0 flex-col">
+        <h3 className="truncate text-body font-semi-bold leading-6 text-operational-ink">{professional.name}</h3>
+        {details && (
+          <p title={details} className="truncate text-sidebar leading-6 text-operational-muted">
+            {details}
+          </p>
+        )}
+      </div>
+    </MarketplaceCard>
   );
 }

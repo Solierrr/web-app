@@ -9,6 +9,7 @@ export interface Company {
   status: CompanyStatus;
   cnpj: string;
   tradeName: string;
+  description?: string | null;
   corporateName: string;
   address?: Address;
   businessContact?: BusinessContact;

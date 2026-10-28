@@ -7,9 +7,7 @@ const company = { id: "company-1", tradeName: "Aurora Solar", slug: "aurora", ci
 function view(path: string, canViewProjects = false) {
   return render(
     <MemoryRouter initialEntries={[path]}>
-      <CompanyProfileView company={company} canViewProjects={canViewProjects} offers={<p>Ofertas da Aurora</p>}>
-        <p>Dados da Aurora</p>
-      </CompanyProfileView>
+      <CompanyProfileView company={company} canViewProjects={canViewProjects} summary={<p>Resumo da Aurora</p>} offers={<p>Ofertas da Aurora</p>} />
     </MemoryRouter>,
   );
 }
@@ -18,19 +16,21 @@ describe("CompanyProfileView", () => {
     view("/pt-BR/empresa/aurora?tab=projects");
     expect(screen.queryByRole("link", { name: "Projetos" })).not.toBeInTheDocument();
     expect(screen.queryByText(/private-projects/)).not.toBeInTheDocument();
-    expect(screen.getByText("Dados da Aurora")).toBeInTheDocument();
+    expect(screen.getByText("Ofertas da Aurora")).toBeInTheDocument();
   });
   it("opens the accessible company projects from the shared profile navigation", () => {
     view("/pt-BR/empresa/aurora", true);
     fireEvent.click(screen.getByRole("link", { name: "Projetos" }));
     expect(screen.getByText("private-projects:company-1")).toBeInTheDocument();
-    expect(screen.queryByText("Dados da Aurora")).not.toBeInTheDocument();
+    expect(screen.queryByText("Ofertas da Aurora")).not.toBeInTheDocument();
   });
-  it("uses a navigable URL for offers while retaining other query parameters", () => {
-    view("/pt-BR/empresa/aurora?source=catalog");
-    expect(screen.getByRole("link", { name: "Ofertas" })).toHaveAttribute("href", "/pt-BR/empresa/aurora?source=catalog&tab=offers");
-    fireEvent.click(screen.getByRole("link", { name: "Ofertas" }));
+  it("keeps the summary fixed above the tabs and opens on the products tab", () => {
+    view("/pt-BR/empresa/aurora", true);
+    expect(screen.getByText("Resumo da Aurora")).toBeInTheDocument();
+    expect(screen.getByRole("navigation", { name: "Conteúdo do perfil da empresa" })).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Sobre a empresa" })).not.toBeInTheDocument();
     expect(screen.getByText("Ofertas da Aurora")).toBeInTheDocument();
-    expect(screen.queryByText("Dados da Aurora")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("link", { name: "Projetos" }));
+    expect(screen.getByText("Resumo da Aurora")).toBeInTheDocument();
   });
 });

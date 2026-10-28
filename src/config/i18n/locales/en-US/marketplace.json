@@ -7,8 +7,11 @@
   "productsDescription": "Find panels, mounting systems and what makes it all work.",
   "servicesTitle": "Your next step could be a conversation.",
   "servicesDescription": "Discover professionals and teams for your project.",
-  "companiesTitle": "Connections that bring projects to life.",
-  "companiesDescription": "Find partners by what they do best.",
+  "companiesTitle": "Good companies. New connections.",
+  "companiesDescription": "Meet the people supplying, installing and turning projects into energy.",
+  "companyGallery": {
+    "backToTop": "Back to top"
+  },
   "productSpotlight": "Power that fits your plans.",
   "infrastructureSpotlight": "The foundation of a good project.",
   "featured": "Featured choice",
@@ -110,8 +113,31 @@
     }
   },
   "footer": {
-    "github": "Solaria on GitHub",
-    "email": "Email Solaria",
-    "copied": "Email copied: {{email}}"
+    "heading": "Let’s talk.",
+    "description": "Follow the development or get in touch with the team.",
+    "navigation": "Project, contact and terms of use",
+    "github": "View the code on GitHub",
+    "email": "Get in touch by email",
+    "contact": "Contact",
+    "terms": "Terms"
+  },
+  "serviceFeed": {
+    "featured": "Featured professional",
+    "spotlightTitle": "Your project starts with a good conversation.",
+    "contact": "Get in touch",
+    "installationTitle": "From the first panel to a working system.",
+    "installationDescription": "Find people to install, advise and support every step.",
+    "installationAction": "Find installers",
+    "maintenanceTitle": "More care. More energy for longer.",
+    "maintenanceAction": "Find maintenance",
+    "inspectionTitle": "Understand your system before the next step.",
+    "inspectionAction": "Find specialists",
+    "shelves": {
+      "all": "People who understand your project.",
+      "engineering": "Plan with confidence.",
+      "installation": "People who make installation happen.",
+      "maintenance": "Care that makes a difference.",
+      "inspection": "A technical perspective on your system."
+    }
   }
 }

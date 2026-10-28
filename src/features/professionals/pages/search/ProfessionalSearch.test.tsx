@@ -62,4 +62,18 @@ describe("ProfessionalSearch", () => {
 
     expect(await screen.findByText("Carlos Eduardo Lima")).toBeInTheDocument();
   });
+
+  it("applies an editorial specialty link using the catalog value", async () => {
+    mockedGetCatalogTechnicians.mockResolvedValue([
+      ...items,
+      { id: "inspection", slug: "ana-costa", name: "Ana Costa", crea: "SP123", professions: ["Inspeção técnica"] },
+    ]);
+    render(
+      <MemoryRouter initialEntries={["/pt-BR/buscar/profissionais?specialty=Inspe%C3%A7%C3%A3o%20t%C3%A9cnica"]}>
+        <ProfessionalSearch />
+      </MemoryRouter>,
+    );
+    expect(await screen.findByRole("link", { name: "Ana Costa" })).toBeInTheDocument();
+    expect(screen.queryByText("Carlos Eduardo Lima")).not.toBeInTheDocument();
+  });
 });

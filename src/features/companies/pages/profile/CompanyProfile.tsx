@@ -2,17 +2,17 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import CompanyProfileView from "./CompanyProfileView";
-import ToolbarAction from "@@/ui/button/ToolbarAction";
-import Surface from "@@/ui/surface/Surface";
+import ActionLink from "@@/ui/button/ActionLink";
 import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import ProfilePageSkeleton from "@/lib/components/layout/profile/ProfilePageSkeleton";
-import EntityCard from "@/lib/components/layout/announcement/entity-card/EntityCard";
+import OfferCard from "@/features/marketplace/components/OfferCard";
+import OfferShelf from "@/features/marketplace/components/OfferShelf";
 import { getCatalogCompanyBySlug, type CatalogCompany } from "@/features/companies/company.service";
 import { getCatalogSolarPanels } from "@/features/solar-panel/solarPanel.service";
 import type { SolarPanelAnnouncement } from "@/features/solar-panel/solarPanel.announcement";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
-import { ProfileInfoRow } from "@/lib/components/layout/profile/ProfilePage.reusable";
+import ProfileAbout from "@@/layout/profile/ProfileAbout";
 
 interface CompanyProfilePackedProps {
   company: CatalogCompany;
@@ -22,7 +22,8 @@ function CompanyProfilePacked({ company }: CompanyProfilePackedProps) {
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
   const { t } = useTranslation("commons");
-  const { t: tProfile } = useTranslation("profile", { keyPrefix: "edit" });
+  const { t: publicProfile } = useTranslation("profile", { keyPrefix: "public" });
+  const { t: marketplace } = useTranslation("marketplace");
   const { t: tCompany } = useTranslation("profile", { keyPrefix: "company" });
   const [offersFailed, setOffersFailed] = useState(false);
   const [offers, setOffers] = useState<SolarPanelAnnouncement[] | null>(null);
@@ -45,8 +46,7 @@ function CompanyProfilePacked({ company }: CompanyProfilePackedProps) {
   }, [company.slug, lang]);
 
   const offersContent = (
-    <section className="flex flex-col gap-4" aria-busy={offers === null}>
-      <h2 className="text-label font-semi-bold">{t("companyOffers.title")}</h2>
+    <section className="flex min-w-0 flex-col gap-6" aria-busy={offers === null}>
       {offersFailed ? (
         <p role="alert">{tCompany("offersFailed")}</p>
       ) : offers === null ? (
@@ -54,24 +54,14 @@ function CompanyProfilePacked({ company }: CompanyProfilePackedProps) {
       ) : offers.length === 0 ? (
         <p className="text-body text-operational-muted">{tCompany("noOffers")}</p>
       ) : (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <OfferShelf
+          title={offers.some((offer) => offer.panel.productType === "INFRASTRUCTURE") ? publicProfile("allOffers") : marketplace("products")}>
           {offers.map((offer) => (
-            <EntityCard
-              variant="product"
-              key={offer.id}
-              item={{
-                id: offer.id,
-                name: offer.title,
-                avatarUrl: offer.photos.heroImage.url,
-                subtitle: offer.panel.brand,
-                href:
-                  offer.panel.productType === "INFRASTRUCTURE"
-                    ? routePaths.infrastructureDetail(lang, offer.companySlug, offer.slug)
-                    : routePaths.productDetail(lang, offer.companySlug, offer.slug),
-              }}
-            />
+            <div key={offer.id} className="w-72 shrink-0 snap-start sm:w-88">
+              <OfferCard offer={offer} lang={lang} />
+            </div>
           ))}
-        </div>
+        </OfferShelf>
       )}
     </section>
   );
@@ -80,28 +70,16 @@ function CompanyProfilePacked({ company }: CompanyProfilePackedProps) {
       company={company}
       canViewProjects={!!getAuthSession()?.accessToken}
       offers={offersContent}
+      summary={<ProfileAbout title={tCompany("about")} text={company.description} />}
       actions={
-        <ToolbarAction
+        <ActionLink
           to={routePaths.contactCompany(lang, company.id)}
-          icon="messages"
-          label={t("actions.contact")}
           content={t("actions.contact")}
-          backgroundColor="var(--color-white)"
+          description={t("actions.contact")}
+          className="min-h-11"
         />
-      }>
-      <Surface>
-        <div className="p-5 sm:p-6">
-          <section>
-            <h2 className="mb-4 text-label font-semi-bold">{tProfile("companyDetails")}</h2>
-            <dl className="grid gap-x-8 sm:grid-cols-2">
-              <ProfileInfoRow label={tProfile("tradeName")} value={company.tradeName} />
-              <ProfileInfoRow label={tProfile("city")} value={company.city} />
-              <ProfileInfoRow label={tProfile("state")} value={company.state} />
-            </dl>
-          </section>
-        </div>
-      </Surface>
-    </CompanyProfileView>
+      }
+    />
   );
 }
 
@@ -132,7 +110,7 @@ function CompanyProfileResource({ companySlug }: { companySlug: string }) {
         {t("companyLoadError")}
       </p>
     );
-  if (!company) return <ProfilePageSkeleton />;
+  if (!company) return <ProfilePageSkeleton channel />;
 
   return <CompanyProfilePacked key={company.id} company={company} />;
 }
