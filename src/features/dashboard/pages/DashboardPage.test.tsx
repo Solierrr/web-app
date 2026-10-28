@@ -3,7 +3,6 @@ import { MemoryRouter } from "react-router-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import DashboardPage from "./DashboardPage";
-import { rememberPage } from "../dashboard.utils";
 import { useActiveContext } from "@/lib/shared/context/ActiveContext";
 
 vi.mock("@/lib/shared/context/ActiveContext", () => ({ useActiveContext: vi.fn() }));
@@ -75,7 +74,6 @@ describe("DashboardPage", () => {
     expect(screen.getByText("O que você deseja fazer?")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Mensagens" })).toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "Ofertas" })).not.toBeInTheDocument();
-    expect(screen.getByText("As telas visitadas aparecerão aqui.")).toBeInTheDocument();
   });
 
   it("shows the company shortcuts for a supplier company", () => {
@@ -123,24 +121,5 @@ describe("DashboardPage", () => {
     expect(search).toHaveValue("");
     expect(screen.getByRole("link", { name: "Mensagens" })).toBeInTheDocument();
     expect(screen.queryByText("Nenhuma tela encontrada.")).not.toBeInTheDocument();
-  });
-
-  it("lists the recently visited screens", () => {
-    rememberPage("c1", "offers");
-    vi.mocked(useActiveContext).mockReturnValue({
-      loading: false,
-      kind: "company",
-      setKind: vi.fn(),
-      company: supplier,
-      isAdmin: true,
-      hasCompany: true,
-      isPlatformAdmin: false,
-      can: () => true,
-    });
-
-    renderPage();
-
-    expect(screen.getAllByRole("link", { name: "Ofertas" })).toHaveLength(2);
-    expect(screen.queryByText("As telas visitadas aparecerão aqui.")).not.toBeInTheDocument();
   });
 });

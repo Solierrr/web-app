@@ -1,8 +1,6 @@
 import { useState, type ReactNode } from "react";
 import Surface from "@@/ui/surface/Surface";
-import SearchBar from "@@/ui/search-bar/SearchBar";
-import Select from "@@/ui/select/Select";
-import ToolbarAction from "@@/ui/button/ToolbarAction";
+import SearchBar, { SearchBarAction, SearchBarSelect } from "@@/ui/search-bar/SearchBar";
 import ValueField from "@@/ui/value-field/ValueField";
 import Pagination from "@@/ui/pagination/Pagination";
 import Skeleton from "@@/feedback/skeleton/Skeleton";
@@ -62,8 +60,8 @@ export default function ProjectAgendaView({
           setPage(1);
         }}
         actions={
-          <div className="flex items-center gap-2">
-            <Select
+          <>
+            <SearchBarSelect
               name={t("statusLabel")}
               placeholder={t("allActivities")}
               value={status}
@@ -73,7 +71,7 @@ export default function ProjectAgendaView({
                 setPage(1);
               }}
             />
-            <Select
+            <SearchBarSelect
               name={t("activityType")}
               placeholder={t("allTypes")}
               value={type}
@@ -83,8 +81,8 @@ export default function ProjectAgendaView({
                 setPage(1);
               }}
             />
-            <ToolbarAction icon="refresh" label={t("refresh")} disabled={busy} onClick={onRefresh} />
-          </div>
+            <SearchBarAction icon="refresh" label={t("refresh")} disabled={busy} onClick={onRefresh} />
+          </>
         }
       />
       {!items && !failed && (

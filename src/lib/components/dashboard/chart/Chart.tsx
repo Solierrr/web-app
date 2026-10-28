@@ -3,16 +3,17 @@ import type { EChartsType } from "echarts/core";
 import { useTranslation } from "react-i18next";
 import type { CartesianPayload, DistributionPayload, DashboardNumberFormat } from "../dashboard.d";
 import { formatDashboardValue, createDashboardColorOrder } from "../dashboard.utils";
-import { chartOptions, chartTheme } from "./chart.utils";
+import { chartOptions, chartTheme, type SparklinePattern } from "./chart.utils";
 
 interface ChartProps extends DashboardNumberFormat {
   payload: CartesianPayload | DistributionPayload;
   kind: "line" | "area" | "bar" | "donut" | "sparkline";
   title: string;
   stacked?: boolean;
+  pattern?: SparklinePattern;
 }
 
-export default function Chart({ payload, kind, title, stacked, locale, unit, maximumFractionDigits, monochromatic = false }: ChartProps) {
+export default function Chart({ payload, kind, title, stacked, pattern, locale, unit, maximumFractionDigits, monochromatic = false }: ChartProps) {
   const container = useRef<HTMLDivElement>(null);
   const [chart, setChart] = useState<EChartsType | null>(null);
   const [failed, setFailed] = useState(false);
@@ -47,10 +48,10 @@ export default function Chart({ payload, kind, title, stacked, locale, unit, max
     const theme = chartTheme(container.current, monochromatic);
     const count = "items" in payload ? payload.items.length : payload.series.length;
     if (!monochromatic && count > 1) theme.colors = colorOrder.map((index) => theme.colors[index]);
-    chart.setOption(chartOptions(payload, kind, theme, { locale, unit, maximumFractionDigits }, stacked), {
+    chart.setOption(chartOptions(payload, kind, theme, { locale, unit, maximumFractionDigits }, stacked, pattern), {
       notMerge: true,
     });
-  }, [chart, payload, kind, locale, unit, maximumFractionDigits, stacked, monochromatic, colorOrder]);
+  }, [chart, payload, kind, locale, unit, maximumFractionDigits, stacked, pattern, monochromatic, colorOrder]);
 
   return (
     <div className={`min-w-0 ${kind === "sparkline" ? "mt-auto" : ""}`}>

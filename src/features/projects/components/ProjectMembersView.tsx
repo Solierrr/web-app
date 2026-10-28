@@ -1,8 +1,6 @@
 import { useState, type ReactNode } from "react";
 import Surface from "@@/ui/surface/Surface";
-import SearchBar from "@@/ui/search-bar/SearchBar";
-import Select from "@@/ui/select/Select";
-import ToolbarAction from "@@/ui/button/ToolbarAction";
+import SearchBar, { SearchBarAction, SearchBarSelect } from "@@/ui/search-bar/SearchBar";
 import ValueField from "@@/ui/value-field/ValueField";
 import Skeleton from "@@/feedback/skeleton/Skeleton";
 import Pagination from "@@/ui/pagination/Pagination";
@@ -42,8 +40,8 @@ export default function ProjectMembersView({
           setPage(1);
         }}
         actions={
-          <div className="flex items-center gap-2">
-            <Select
+          <>
+            <SearchBarSelect
               name={t("role")}
               placeholder={t("allMembers")}
               value={role}
@@ -53,8 +51,8 @@ export default function ProjectMembersView({
                 setPage(1);
               }}
             />
-            <ToolbarAction icon="refresh" label={t("refresh")} disabled={busy} onClick={onRefresh} />
-          </div>
+            <SearchBarAction icon="refresh" label={t("refresh")} disabled={busy} onClick={onRefresh} />
+          </>
         }
       />
       <div className="grid gap-4 lg:grid-cols-2" aria-busy={!items && !failed}>
