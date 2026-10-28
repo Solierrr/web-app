@@ -29,8 +29,11 @@
   --color-dialog-backdrop: color-mix(in srgb, var(--color-operational-ink) 22%, transparent);
   --duration-dialog: 180;
   --animate-dialog-in: dialog-in calc(var(--duration-dialog) * 1ms) ease-out both;
+  --animate-panel-in: panel-in 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-panel-out: panel-out 200ms cubic-bezier(0.4, 0, 1, 1) both;
   --animate-dialog-out: dialog-out calc(var(--duration-dialog) * 1ms) ease-in both;
   --radius-surface: 1.5rem;
+  --radius-field: 2rem;
   --motion-icon-duration: 280ms;
   --motion-icon-sequence: 1400ms;
   --color-operational-hover: #f3f4f6;
@@ -144,6 +147,16 @@
   &[data-closing] { @apply animate-dialog-out motion-reduce:animate-none; }
   &::backdrop { transition: opacity calc(var(--duration-dialog) * 1ms) ease-out; }
   &[data-closing]::backdrop { opacity: 0; }
+}
+
+@keyframes panel-in {
+  from { opacity: 0; transform: translateX(-3rem) scale(0.94); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes panel-out {
+  from { opacity: 1; transform: none; }
+  to { opacity: 0; transform: translateX(-2rem) scale(0.96); }
 }
 
 @keyframes dialog-in {

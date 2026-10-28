@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import SideCanvas from "@@/layout/access/canvas/SideCanvas";
 import LogoLoader from "@@/feedback/logo-loader/LogoLoader";
+import OrganicLogo from "@@/brand/logo/OrganicLogo";
 
 interface OperationalPageProps {
   title: ReactNode;
@@ -57,6 +58,11 @@ export default function OperationalPage({
       {breadcrumbs && <div className="relative flex w-full justify-start px-4 pt-4 sm:px-8 lg:px-10">{breadcrumbs}</div>}
       <header
         className={`flex shrink-0 flex-col gap-4 px-4 pb-6 pt-8 sm:px-8 ${formBackground ? `mx-auto w-full ${formWidth === "comfortable" ? "max-w-operational-form" : "max-w-120"} text-center` : `lg:px-10 ${form ? "mx-auto w-full max-w-operational-form text-center" : ""}`}`}>
+        {centered && !chat && !profile && (
+          <div className="flex justify-center">
+            <OrganicLogo width={6} decorative motion="expressive" rotateSymbol rotateShape holdMs={1571} transitionMs={1000} />
+          </div>
+        )}
         <div className={`flex flex-wrap gap-4 ${centered ? "flex-col items-center text-center" : "items-start justify-between"}`}>
           <div className={`min-w-0 ${form ? "w-full" : ""}`}>
             <h1 className="text-operational-title font-semi-bold leading-8">{title}</h1>

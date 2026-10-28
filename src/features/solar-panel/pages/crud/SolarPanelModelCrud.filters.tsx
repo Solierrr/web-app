@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import Select from "@@/ui/select/Select";
 import Input from "@@/ui/input/Input";
 import Popover from "@@/overlay/popover/Popover";
-import SearchBar from "@@/ui/search-bar/SearchBar";
+import SearchBar, { SearchBarAction } from "@@/ui/search-bar/SearchBar";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
 import { SolarPanelType, SolarPanelModelStatus } from "@/features/solar-panel/solarPanel.enum";
 import { EMPTY_FILTERS, MODEL_NUMERIC_FIELDS } from "./SolarPanelModelCrud.table.utils";
@@ -38,30 +38,26 @@ export default function ModelFiltersPanel({
         disabled={disabled}
         onChange={(event) => onChange({ ...value, query: event.target.value })}
         actions={
-          <div className="flex items-center gap-2">
-            <ToolbarAction
+          <>
+            <SearchBarAction
               ref={trigger}
               icon="filter"
               label={t("filters.title")}
               content={t("filters.title")}
-              className="h-10!"
-              backgroundColor="var(--color-input-bg)"
               disabled={disabled}
               aria-haspopup="dialog"
               aria-expanded={popupOpen}
               onClick={() => setPopupOpen((current) => !current)}
             />
             {active && (
-              <ToolbarAction
+              <SearchBarAction
                 icon="filterRemove"
                 label={t("filters.clear")}
-                className="h-10! w-10!"
-                backgroundColor="var(--color-input-bg)"
                 disabled={disabled}
                 onClick={() => onChange({ ...EMPTY_FILTERS, query: value.query })}
               />
             )}
-          </div>
+          </>
         }
       />
       {popupOpen && (
