@@ -150,5 +150,14 @@
     "listSales": "Could not load the sales.",
     "getSubscription": "Could not load the plan.",
     "payCharge": "Could not pay the charge."
+  },
+  "aiFailures": {
+    "unauthorized": "Your session has expired. Sign in again and retry.",
+    "forbidden": "Your account is not allowed to use this feature.",
+    "rateLimited": "Too many requests in a short time. Wait a minute and try again.",
+    "unavailable": "The AI service is unavailable or starting up. Try again shortly.",
+    "timeout": "The service took too long to respond and may be starting up. Try again.",
+    "network": "Unable to reach the service. Check your connection and try again.",
+    "tooLarge": "The uploaded file is too large."
   }
 }

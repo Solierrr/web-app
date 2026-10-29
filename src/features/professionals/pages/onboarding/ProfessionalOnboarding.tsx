@@ -47,6 +47,7 @@ function LegacyProfessionalOnboarding() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [certificateResult, setCertificateResult] = useState<CertificateValidationResult | null>(null);
+  const [certificateError, setCertificateError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
 
   useEffect(() => {
@@ -135,6 +136,7 @@ function LegacyProfessionalOnboarding() {
           setCertificateResult(await validateCertificates(certNr10Url, certNr35Url));
         } catch (validationError) {
           logger.error("Falha ao validar certificados", validationError);
+          setCertificateError(validationError instanceof Error ? validationError.message : null);
         }
       }
 
@@ -170,6 +172,10 @@ function LegacyProfessionalOnboarding() {
             <p className="font-medium">{certificateResult.status === "ACCEPT" ? t("certificatesValid") : t("certificatesInvalid")}</p>
             <p className="text-body text-operational-muted">{certificateResult.reason}</p>
           </div>
+        ) : certificateError ? (
+          <p role="status" className="rounded-small border border-operational-border p-4 text-body text-operational-muted">
+            {t("validationUnavailable", { reason: certificateError })}
+          </p>
         ) : null}
         <ToolbarAction to={routePaths.ownUserProfile(lang)} content={t("continue")} label={t("continue")} className="min-h-12 w-full" />
       </OperationalPage>
