@@ -170,6 +170,23 @@ describe("CompanyOnboarding", () => {
     expect(screen.getByText("CNPJ compatível com o setor solar/elétrico.", { exact: false })).toBeInTheDocument();
   });
 
+  it("keeps the registration and explains a failed cnpj validation", async () => {
+    vi.mocked(companyService.createCompany).mockResolvedValue({ id: "company-1", status: "UNDER_ANALYSIS" } as never);
+    vi.mocked(validateCnpjCategory).mockRejectedValue(new Error("Muitas solicitações em pouco tempo."));
+
+    render(
+      <MemoryRouter>
+        <CompanyOnboarding />
+      </MemoryRouter>,
+    );
+
+    fillBaseFields();
+    fireEvent.click(screen.getByRole("button", { name: "Cadastrar empresa" }));
+
+    expect(await screen.findByText("Em análise", { exact: false })).toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent("revisado manualmente. (Muitas solicitações em pouco tempo.)");
+  });
+
   it("does not call the cnpj category validation for demandant companies", async () => {
     vi.mocked(companyService.createCompany).mockResolvedValue({ id: "company-1", status: "UNDER_ANALYSIS" } as never);
 

@@ -32,6 +32,7 @@ type CompanyType = "SUPPLIER" | "DEMANDANT";
 interface Result {
   status: RegistrationStatusKind;
   categoryCheck?: CnpjValidationResult;
+  categoryError?: string;
 }
 
 export default function CompanyOnboarding() {
@@ -174,12 +175,14 @@ export default function CompanyOnboarding() {
       save();
 
       let categoryCheck: CnpjValidationResult | undefined;
+      let categoryError: string | undefined;
       if (type === "SUPPLIER") {
         try {
           categoryCheck = await validateCnpjCategory(cnpj);
         } catch (validationError) {
           // Validação interpretativa indisponível não bloqueia o cadastro — vai para análise manual.
           logger.error("Falha ao validar categoria do CNPJ", validationError);
+          categoryError = validationError instanceof Error ? validationError.message : undefined;
         }
       }
 
@@ -188,6 +191,7 @@ export default function CompanyOnboarding() {
       setResult({
         status: company.status === "APPROVED" ? "APPROVED" : company.status === "REJECTED" ? "REJECTED" : "PENDING",
         categoryCheck,
+        categoryError,
       });
     } catch {
       setError(t("error"));
@@ -205,6 +209,10 @@ export default function CompanyOnboarding() {
             <p className="font-medium">{result.categoryCheck.status === "VALID" ? t("categoryValid") : t("categoryInvalid")}</p>
             <p className="text-body text-operational-muted">{result.categoryCheck.reason}</p>
           </div>
+        ) : result.categoryError ? (
+          <p role="status" className="rounded-small border border-operational-border p-4 text-body text-operational-muted">
+            {t("validationUnavailable", { reason: result.categoryError })}
+          </p>
         ) : null}
         <ToolbarAction to={routePaths.ownCompanyProfile(lang)} label={t("continue")} content={t("continue")} className="min-h-12 w-full" />
       </OperationalPage>

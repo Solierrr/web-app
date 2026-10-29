@@ -363,7 +363,8 @@
     "resultTitle": "Cadastro enviado",
     "categoryValid": "CNPJ compatível com o setor solar/elétrico.",
     "categoryInvalid": "CNPJ com ramo de atividade não relacionado ao setor solar/elétrico — seu cadastro será revisado manualmente.",
-    "continue": "Continuar"
+    "continue": "Continuar",
+    "validationUnavailable": "A validação automática do CNPJ não foi concluída e seu cadastro será revisado manualmente. ({{reason}})"
   },
   "corridor": {
     "viewAll": "acessar todas as peças"
@@ -421,7 +422,8 @@
     "resultTitle": "Cadastro enviado",
     "certificatesValid": "Certificados válidos.",
     "certificatesInvalid": "Certificados reprovados na validação automática — seu cadastro será revisado manualmente.",
-    "continue": "Continuar"
+    "continue": "Continuar",
+    "validationUnavailable": "A validação automática dos certificados não foi concluída e seu cadastro será revisado manualmente. ({{reason}})"
   },
   "time": {
     "today": "hoje",

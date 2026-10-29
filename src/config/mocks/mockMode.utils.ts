@@ -9,8 +9,14 @@ function isFixtureEnvironment(): boolean {
   return import.meta.env.MODE === "test" || import.meta.env.DEV;
 }
 
-export function isAlwaysMockMode(service?: "AUTH" | "MESSENGER"): boolean {
-  const override = service === "AUTH" ? import.meta.env.VITE_AUTH_MOCKS : service === "MESSENGER" ? import.meta.env.VITE_MESSENGER_MOCKS : undefined;
+const OVERRIDES = {
+  AUTH: () => import.meta.env.VITE_AUTH_MOCKS,
+  MESSENGER: () => import.meta.env.VITE_MESSENGER_MOCKS,
+  AI: () => import.meta.env.VITE_AI_MOCKS,
+};
+
+export function isAlwaysMockMode(service?: keyof typeof OVERRIDES): boolean {
+  const override = service ? OVERRIDES[service]() : undefined;
   const mode = override ?? import.meta.env.VITE_MOCKS;
   return isFixtureEnvironment() && mode === MocksMode.ALWAYS;
 }

@@ -46,20 +46,21 @@ As variáveis `VITE_*` são embutidas no bundle em build-time, então nunca guar
 | `VITE_MOCKS` | `ALWAYS`, `FALLBACK` ou `DEACTIVATED`. Mocks dos dados de domínio (catálogo, empresas, perfis). |
 | `VITE_AUTH_MOCKS` | `ALWAYS` ou `DEACTIVATED`. Mock do login e da sessão; sobrepõe `VITE_MOCKS` só para a autenticação. |
 | `VITE_MESSENGER_MOCKS` | `ALWAYS` ou `DEACTIVATED`. Mock de mensagens e tempo real (digitando, presença, assistente); sobrepõe `VITE_MOCKS` só para o messenger. |
+| `VITE_AI_MOCKS` | `ALWAYS` ou `DEACTIVATED`. Mock dos serviços de IA (validação de CNPJ e certificados, assistentes e texto alternativo de imagens); sobrepõe `VITE_MOCKS` só para a IA. O assistente do demandante grava as conversas simuladas no messenger local, então use-o junto com `VITE_MESSENGER_MOCKS="ALWAYS"`. |
 | `VITE_MOCKS_DELAY_SECONDS` | Atraso simulado, em segundos, das respostas mockadas. |
 | `VITE_LOGS` | `DEBUG`, `ACTIVATED` ou `DEACTIVATED`. Nível de logging. |
 | `VITE_API_CORE` | URL base do `api-core`; o front acrescenta o prefixo `/api` das rotas. |
 | `VITE_API_AUTH` | URL base do `api-auth` (login, cadastro e renovação de sessão). |
 | `VITE_API_MESSENGER` | URL base do `api-messenger` (REST); o front acrescenta `/messaging`. |
 | `VITE_WS_MESSENGER` | Endereço completo do WebSocket STOMP do `api-messenger`, por exemplo `wss://host/messaging/ws`. |
-| `VITE_API_VALIDATION` | URL base do `ai-validation` (validação de documentos de profissionais). |
+| `VITE_API_VALIDATION` | URL base do `ai-validation` (validação de CNPJ e certificados NR-10/NR-35). Todas as rotas exigem o `Authorization: Bearer` do `api-auth` (o front renova a sessão uma vez ao receber `401`) e a origem do web-app precisa constar em `CORS_ALLOWED_ORIGINS` do serviço. Limites: 10 certificados e 20 CNPJs por minuto; o cold start do Render leva de 40 a 100 s, então o front espera até 120 s. |
 | `VITE_EXCHANGE_API` | URL da API pública de câmbio consumida pela feature `exchange`. |
 | `VITE_GOOGLE_MAPS_API_KEY` | Opcional. Chave do widget de mapa em Unidades; sem ela o formulário usa latitude e longitude numéricas. |
 | `VITE_MOBILE_INSTALL_URL` | Opcional. Link de instalação do app mobile na página de acesso mobile. |
 | `VITE_LOCAL_API_CORE_TARGET` | Só desenvolvimento. Destino do proxy `/local-api/core` (padrão `http://localhost:8080`). |
 | `VITE_DEV_LOGIN_EMAIL`, `VITE_DEV_LOGIN_PASSWORD` | Só desenvolvimento. Pré-preenchem o login com uma conta do seed local. |
 
-Os mocks só existem em desenvolvimento (`npm run dev`) e nos testes, e apenas quando ligados de forma explícita. Um build de produção (`npm run build`) ignora `VITE_MOCKS`, `VITE_AUTH_MOCKS` e `VITE_MESSENGER_MOCKS`, então QA e produção sempre chamam as APIs reais. Para desenvolver sem backend do messenger, use `VITE_MESSENGER_MOCKS="ALWAYS"`: o tempo real (mensagens ao vivo, digitando, presença e respostas do assistente) é simulado pelo mesmo caminho de código da conexão real. O WebSocket é STOMP puro (sem SockJS): `wss://<host>/messaging/ws` atrás do gateway e `ws://localhost:8080/ws` com o `api-messenger` local.
+Os mocks só existem em desenvolvimento (`npm run dev`) e nos testes, e apenas quando ligados de forma explícita. Um build de produção (`npm run build`) ignora `VITE_MOCKS`, `VITE_AUTH_MOCKS`, `VITE_MESSENGER_MOCKS` e `VITE_AI_MOCKS`, então QA e produção sempre chamam as APIs reais. Para desenvolver sem backend do messenger, use `VITE_MESSENGER_MOCKS="ALWAYS"`: o tempo real (mensagens ao vivo, digitando, presença e respostas do assistente) é simulado pelo mesmo caminho de código da conexão real. O WebSocket é STOMP puro (sem SockJS): `wss://<host>/messaging/ws` atrás do gateway e `ws://localhost:8080/ws` com o `api-messenger` local.
 
 ### Instalando dependências necessárias para rodar o projeto localmente
 

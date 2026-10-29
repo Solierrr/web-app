@@ -22,6 +22,11 @@ export function getHttpErrorMessage(error: unknown, fallback: string): string {
   return fallback;
 }
 
+export function getHttpStatus(error: unknown): number | null {
+  const cause = error instanceof HttpResponseError ? error : error instanceof Error ? error.cause : null;
+  return cause instanceof HttpResponseError ? cause.status : null;
+}
+
 type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 interface HttpJsonOptions {
@@ -31,10 +36,11 @@ interface HttpJsonOptions {
   method?: HttpMethod;
   body?: unknown;
   authenticated?: boolean;
+  timeoutMs?: number;
 }
 
 export async function httpJson<T>(url: string, options: HttpJsonOptions): Promise<T> {
-  const { service, operation, errorMessage, method = "GET", body, authenticated = true } = options;
+  const { service, operation, errorMessage, method = "GET", body, authenticated = true, timeoutMs } = options;
 
   const accessToken = authenticated ? getAuthSession()?.accessToken : undefined;
   const headers: Record<string, string> = {};
@@ -57,6 +63,7 @@ export async function httpJson<T>(url: string, options: HttpJsonOptions): Promis
       method,
       headers,
       body: multipart ? (body as FormData) : body === undefined ? undefined : JSON.stringify(body),
+      signal: timeoutMs ? AbortSignal.timeout(timeoutMs) : undefined,
     });
   } catch (error) {
     logger.serviceError({ service, operation, error });

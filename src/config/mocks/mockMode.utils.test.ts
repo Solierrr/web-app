@@ -51,3 +51,13 @@ it("treats a missing or unknown mock flag as disabled", () => {
   vi.stubEnv("VITE_MOCKS", "SOMETIMES");
   expect(getMocksMode()).toBe(MocksMode.DEACTIVATED);
 });
+
+it("keeps the AI services independent from general mocks", () => {
+  vi.stubEnv("DEV", true);
+  vi.stubEnv("VITE_MOCKS", "DEACTIVATED");
+  vi.stubEnv("VITE_AI_MOCKS", "ALWAYS");
+  expect(isAlwaysMockMode("AI")).toBe(true);
+  expect(isAlwaysMockMode()).toBe(false);
+  vi.stubEnv("PROD", true);
+  expect(isAlwaysMockMode("AI")).toBe(false);
+});
