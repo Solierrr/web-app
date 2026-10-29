@@ -1,10 +1,12 @@
-import { act, render, screen, waitFor, within } from "@testing-library/react";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import Inbox from "./Inbox";
 import * as api from "@/features/messages/messages.messenger.api";
 import type { UserEvent } from "@/features/messages/messages.messenger.realtime";
 import { subscribeToUserEvents } from "@/features/messages/messages.messenger.socket";
+import { startAssistantConversation } from "@/features/messages/messages.assistant.service";
+import { AgentChatError } from "@/features/error/agent-chat/AgentChat.error";
 
 const connection = vi.hoisted(() => ({
   state: { status: "connected", attempts: 0 } as { status: string; attempts: number },
@@ -27,7 +29,9 @@ vi.mock("@/features/messages/messages.messenger.socket", () => ({
 }));
 vi.mock("@/lib/shared/auth/authToken.utils", () => ({ getAuthSession: () => ({ userId: "me" }) }));
 vi.mock("@@/layout/access/canvas/SideCanvas", () => ({ default: () => null }));
-vi.mock("@/lib/shared/context/ActiveContext", () => ({ useActiveContext: () => ({ kind: "personal", company: null }) }));
+const activeContext = vi.hoisted(() => ({ value: { kind: "personal", company: null } as { kind: string; company: { id: string } | null } }));
+vi.mock("@/lib/shared/context/ActiveContext", () => ({ useActiveContext: () => activeContext.value }));
+vi.mock("@/features/messages/messages.assistant.service", () => ({ startAssistantConversation: vi.fn() }));
 
 const conversation = (id: string, extra: Partial<api.ConversationDto> = {}): api.ConversationDto => ({
   id,
@@ -50,11 +54,18 @@ function setConnection(status: string, attempts = 0) {
   });
 }
 
+function OperationalDestination() {
+  const { state } = useLocation();
+  return <p>assistente operacional: {(state as { initialMessage?: string } | null)?.initialMessage ?? "sem mensagem"}</p>;
+}
+
 function renderInbox() {
   return render(
     <MemoryRouter initialEntries={["/pt-BR/mensagens"]}>
       <Routes>
         <Route path="/:lang/mensagens" element={<Inbox />} />
+        <Route path="/:lang/painel/assistente" element={<OperationalDestination />} />
+        <Route path="/:lang/mensagens/:conversationId" element={<p>conversa aberta</p>} />
       </Routes>
     </MemoryRouter>,
   );
@@ -63,6 +74,7 @@ function renderInbox() {
 describe("Inbox", () => {
   beforeEach(() => {
     vi.resetAllMocks();
+    activeContext.value = { kind: "personal", company: null };
     listeners.clear();
     connection.state = { status: "connected", attempts: 0 };
     connection.listeners.clear();
@@ -126,6 +138,49 @@ describe("Inbox", () => {
     setConnection("connected");
     expect(await screen.findByLabelText("7 mensagens não lidas")).toBeInTheDocument();
     expect(screen.queryByText("Reconectando ao chat em tempo real...")).not.toBeInTheDocument();
+  });
+
+  describe("starting the assistant from an empty inbox", () => {
+    beforeEach(() => {
+      vi.mocked(api.getConversations).mockResolvedValue([]);
+    });
+
+    function sendFirstMessage(text: string) {
+      fireEvent.change(screen.getByRole("textbox"), { target: { value: text } });
+      fireEvent.click(screen.getByRole("button", { name: "Enviar mensagem ao assistente" }));
+    }
+
+    it("opens the conversation that the agent created for a personal context", async () => {
+      vi.mocked(startAssistantConversation).mockResolvedValue(conversation("bot", { conversationType: "CHAT_BOT", participantIds: ["me"] }));
+      renderInbox();
+      await screen.findByRole("textbox");
+      sendFirstMessage("Quero uma placa");
+
+      await waitFor(() => expect(startAssistantConversation).toHaveBeenCalledWith("Quero uma placa"));
+      expect(await screen.findByText("conversa aberta")).toBeInTheDocument();
+    });
+
+    it("explains why the agent failed and keeps the text", async () => {
+      vi.mocked(startAssistantConversation).mockRejectedValue(
+        new AgentChatError("rateLimited", "Muitas mensagens em pouco tempo. Aguarde um instante e tente novamente."),
+      );
+      renderInbox();
+      await screen.findByRole("textbox");
+      sendFirstMessage("Quero uma placa");
+
+      expect(await screen.findByText("Muitas mensagens em pouco tempo. Aguarde um instante e tente novamente.")).toBeInTheDocument();
+      expect(screen.getByRole("textbox")).toHaveValue("Quero uma placa");
+    });
+
+    it("hands the question of a company to the operational assistant instead of the demandant agent", async () => {
+      activeContext.value = { kind: "company", company: { id: "company-1" } };
+      renderInbox();
+      await screen.findByRole("textbox");
+      sendFirstMessage("Onde ficam as ofertas?");
+
+      expect(await screen.findByText("assistente operacional: Onde ficam as ofertas?")).toBeInTheDocument();
+      expect(startAssistantConversation).not.toHaveBeenCalled();
+    });
   });
 
   it("polls only while the live connection is down", async () => {

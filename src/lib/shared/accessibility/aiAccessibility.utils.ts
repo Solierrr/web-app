@@ -4,10 +4,6 @@ const TECHNICAL_CODES = new Set(["PROVIDER_UNAVAILABLE", "ANALYSIS_INCOMPLETE", 
 const PURPOSE_CODES = new Set(["PURPOSE_MISMATCH", "PURPOSE_UNCERTAIN"]);
 const FILE_CODES = new Set(["INVALID_IMAGE", "IMAGE_TOO_LARGE", "IMAGE_DIMENSIONS_EXCEEDED"]);
 
-/**
- * Traduz a decisão do serviço no que o upload pode fazer. Só `approved` libera o texto sugerido;
- * rejeição e revisão por risco impedem o envio, e falha técnica do serviço nunca bloqueia.
- */
 export function toImageVerdict(analysis: ImageAnalysis, strictPurpose = true): ImageVerdict {
   const codes = analysis.reason_codes;
   if (analysis.decision === "approved") {

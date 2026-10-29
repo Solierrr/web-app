@@ -18,7 +18,6 @@ export function classifyHttpFailure(error: unknown): HttpFailureKind {
   return "unknown";
 }
 
-/** Mensagem localizada do serviço de IA para a falha; `fallback` cobre o que não tem texto próprio. */
 export function describeAiFailure(error: unknown, fallback: string): string {
   const kind = classifyHttpFailure(error);
   return kind === "unknown" || kind === "invalid" ? fallback : i18n.t(`services:aiFailures.${kind}`);
