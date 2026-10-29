@@ -21,12 +21,10 @@ function ProfessionalProfilePacked({ professional }: { professional: CatalogTech
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
   const { hash, pathname, search } = useLocation();
   const navigate = useNavigate();
-  const [contactOpen, setContactOpen] = useState(hash === "#contato");
+  const [contactRequested, setContactRequested] = useState(false);
+  const contactOpen = contactRequested || hash === "#contato";
   const [connected, setConnected] = useState(false);
   const [connecting, setConnecting] = useState(false);
-  useEffect(() => {
-    if (hash === "#contato") setContactOpen(true);
-  }, [hash]);
   useEffect(() => {
     if (!professional.userId || !getAuthSession()) return;
     let active = true;
@@ -40,7 +38,7 @@ function ProfessionalProfilePacked({ professional }: { professional: CatalogTech
     };
   }, [professional.userId]);
   function closeContact() {
-    setContactOpen(false);
+    setContactRequested(false);
     if (hash === "#contato") navigate({ pathname, search, hash: "" }, { replace: true, preventScrollReset: true });
   }
   async function connect() {
@@ -86,7 +84,7 @@ function ProfessionalProfilePacked({ professional }: { professional: CatalogTech
             variant="soft"
             content={market("contact")}
             description={market("contact")}
-            onClick={() => setContactOpen(true)}
+            onClick={() => setContactRequested(true)}
             className="min-h-11"
           />
         </>
