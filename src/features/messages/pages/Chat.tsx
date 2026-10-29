@@ -185,10 +185,10 @@ export function Conversation({
 
   useEffect(() => {
     const markVisibleRead = () => {
-      if (document.hidden) return;
+      if (document.hidden || !conversation) return;
       const sequence = messages.reduce((highest, message) => Math.max(highest, message.sequence), 0);
       if (sequence <= lastMarkedRead.current) return;
-      void markConversationRead(conversationId, sequence)
+      void markConversationRead(conversationId, sequence, conversation.conversationType)
         .then(() => {
           if (activeConversationId.current === conversationId) {
             lastMarkedRead.current = Math.max(lastMarkedRead.current, sequence);
@@ -200,7 +200,7 @@ export function Conversation({
     markVisibleRead();
     document.addEventListener("visibilitychange", markVisibleRead);
     return () => document.removeEventListener("visibilitychange", markVisibleRead);
-  }, [conversationId, messages]);
+  }, [conversationId, conversation, messages]);
 
   async function loadOlder() {
     if (loadingOlder || messages.length === 0) return;

@@ -50,7 +50,7 @@ describe("Chat", () => {
     vi.mocked(api.getConversationMessages).mockResolvedValue([]);
     vi.mocked(api.getConversationMessagesSince).mockResolvedValue([]);
     vi.mocked(api.getUserSummary).mockResolvedValue({ username: "Fornecedor", avatar: null });
-    vi.mocked(api.markConversationRead).mockResolvedValue(conversation);
+    vi.mocked(api.markConversationRead).mockResolvedValue(undefined);
     vi.mocked(subscribeToConversation).mockReturnValue(() => undefined);
   });
 
@@ -70,7 +70,7 @@ describe("Chat", () => {
     });
     expect(await screen.findByText("Mensagem anterior")).toBeInTheDocument();
     expect(screen.getByText("Mensagem ao vivo")).toBeInTheDocument();
-    await waitFor(() => expect(api.markConversationRead).toHaveBeenCalledWith("conv-1", 2));
+    await waitFor(() => expect(api.markConversationRead).toHaveBeenCalledWith("conv-1", 2, "DIRECT"));
   });
 
   it("deduplicates the REST response and live event for a sent message", async () => {
