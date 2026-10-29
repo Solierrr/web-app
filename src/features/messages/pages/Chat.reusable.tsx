@@ -3,24 +3,6 @@ import { useTranslation } from "react-i18next";
 import MessageBubble from "@@/layout/chat/message/MessageBubble";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
 import type { PendingMessage } from "@/features/messages/messages.hooks";
-import type { ConnectionState } from "@/features/messages/messages.messenger.realtime";
-
-export function ConnectionNotice({ connection }: { connection: ConnectionState }) {
-  const { t } = useTranslation("chat");
-  if (connection.status === "unavailable") {
-    return (
-      <p role="status" className="text-body text-operational-muted">
-        {t("realtimeUnavailable")}
-      </p>
-    );
-  }
-  if (connection.status !== "connecting" && connection.status !== "reconnecting") return null;
-  return (
-    <p role="status" className="text-body text-operational-muted">
-      {connection.attempts >= 2 ? t("realtimeWaking") : t("realtimeReconnecting")}
-    </p>
-  );
-}
 
 export function PendingBubble({
   item,
