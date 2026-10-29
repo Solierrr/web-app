@@ -40,4 +40,5 @@ export interface DeviceRegistration {
 export interface PushNavigationTarget {
   type: string;
   data: Record<string, string>;
+  notificationId?: string;
 }
