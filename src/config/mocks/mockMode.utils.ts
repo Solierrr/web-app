@@ -13,6 +13,7 @@ const OVERRIDES = {
   AUTH: () => import.meta.env.VITE_AUTH_MOCKS,
   MESSENGER: () => import.meta.env.VITE_MESSENGER_MOCKS,
   AI: () => import.meta.env.VITE_AI_MOCKS,
+  NOTIFY: () => import.meta.env.VITE_NOTIFY_MOCKS,
 };
 
 export function isAlwaysMockMode(service?: keyof typeof OVERRIDES): boolean {
