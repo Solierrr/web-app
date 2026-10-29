@@ -30,7 +30,8 @@ import {
   useOutbox,
   useTypingPublisher,
 } from "@/features/messages/messages.hooks";
-import { AssistantNotice, ConnectionNotice, PendingBubble } from "./Chat.reusable";
+import ConnectionNotice from "./ConnectionNotice";
+import { AssistantNotice, PendingBubble } from "./Chat.reusable";
 
 export default function Chat() {
   const { conversationId = "" } = useParams<{ conversationId: string }>();
