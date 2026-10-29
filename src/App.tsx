@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { AppRoutes } from "./routes/AppRoutes";
 import ErrorBoundary from "@/features/error/pages/boundary/ErrorBoundary";
+import PushNavigation from "@/features/notifications/components/PushNavigation";
 
 const SCROLL_IDLE_DELAY_MS = 800;
 
@@ -28,6 +29,7 @@ export default function App() {
 
   return (
     <ErrorBoundary>
+      <PushNavigation />
       <AppRoutes />
     </ErrorBoundary>
   );

@@ -3,6 +3,7 @@ import { useId } from "react";
 import {
   IconPlus,
   IconArchive,
+  IconBell,
   IconDownload as Download,
   IconZoomIn as ZoomIn,
   IconZoomOut as ZoomOut,
@@ -78,6 +79,7 @@ import { InvalidIconError } from "@/features/error/invalid-icon/InvalidIcon.erro
 
 const icons = {
   archive: IconArchive,
+  bell: IconBell,
   plus: IconPlus,
   companySettings: IconBuildingCog,
   registrations: IconClipboardCheck,

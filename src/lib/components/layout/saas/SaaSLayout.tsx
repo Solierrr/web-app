@@ -27,6 +27,7 @@ import OperationalAssistant from "@/features/assistant/pages/OperationalAssistan
 import SaaSContext from "@@/layout/saas-context/SaaSContext";
 import { rememberPage } from "@/features/dashboard/dashboard.utils";
 import PageSearch from "@@/layout/page-search/PageSearch";
+import NotificationCenter from "@/features/notifications/components/NotificationCenter";
 
 function subscribeDesktop(listener: () => void) {
   const query = window.matchMedia("(min-width: 1024px)");
@@ -230,6 +231,7 @@ function SaaSLayoutContent() {
               content={t("shell.exploreCatalog")}
               hideContentOnMobile
             />
+            <NotificationCenter />
             <ToolbarAction
               ref={assistantButton}
               icon="sparkles"

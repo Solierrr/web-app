@@ -5,6 +5,7 @@ import { NotificationType } from "./notification.enum";
 
 export const NOTIFICATIONS_CHANGED_EVENT = "solaria:notifications";
 export const NOTIFICATION_RECEIVED_EVENT = "solaria:notifications:received";
+export const PUSH_STATUS_EVENT = "solaria:push:status";
 export const PUSH_LAUNCH_PARAMETER = "push";
 
 const INSTALLATION_ID = /^[A-Za-z0-9_-]{1,64}$/;
@@ -21,6 +22,10 @@ export function emitNotificationsChanged(): void {
 
 export function emitNotificationReceived(): void {
   window.dispatchEvent(new Event(NOTIFICATION_RECEIVED_EVENT));
+}
+
+export function emitPushStatusChanged(): void {
+  window.dispatchEvent(new Event(PUSH_STATUS_EVENT));
 }
 
 export function browserVersionLabel(userAgent: string): string {
