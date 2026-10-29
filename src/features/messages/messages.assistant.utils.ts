@@ -15,7 +15,6 @@ function read(): Record<string, string> {
   }
 }
 
-/** O `ai-assistant` identifica a conversa por um `thread_id` e cria a conversa do messenger sozinho; o vínculo entre os dois fica neste navegador. */
 export function rememberAssistantThread(conversationId: string, threadId: string): void {
   try {
     const entries = Object.entries(read()).filter(([id]) => id !== conversationId);

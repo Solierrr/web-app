@@ -53,7 +53,6 @@ export function requestImageAnalysis(file: File, options: ImageAnalysisOptions):
   });
 }
 
-/** Nunca rejeita: falha do serviço vira `unavailable` e o upload segue com o texto alternativo manual. */
 export async function analyzeImage(file: File, options: ImageAnalysisOptions): Promise<ImageVerdict> {
   try {
     return toImageVerdict(await requestImageAnalysis(file, options), options.strictPurpose ?? true);

@@ -37,7 +37,6 @@ async function chat(base: string | undefined, service: string, threadId: string,
   };
 }
 
-/** Um turno com o `ai-assistant`; o próprio agente grava a pergunta e a resposta na conversa do messenger devolvida. */
 export async function sendAssistantTurn(threadId: string, message: string): Promise<AssistantTurn> {
   if (isAlwaysMockMode("AI")) return mockAssistantTurn(threadId, message);
   const reply = await chat(import.meta.env.VITE_API_ASSISTANT, "aiAssistant", threadId, message);
@@ -45,7 +44,6 @@ export async function sendAssistantTurn(threadId: string, message: string): Prom
   return { response: reply.response, messengerConversationId: reply.messengerConversationId };
 }
 
-/** Um turno com o `ai-operational`, que não grava nada no messenger. */
 export async function sendOperationalTurn(threadId: string, message: string): Promise<AgentReply> {
   if (isAlwaysMockMode("AI")) return mockOperationalReply(message);
   return chat(import.meta.env.VITE_API_OPERATIONAL, "aiOperational", threadId, message);

@@ -30,6 +30,7 @@ import Confirmation from "@@/overlay/confirmation/Confirmation";
 import { getHiddenConversations, hideConversation } from "@/features/messages/conversations.utils";
 import { startAssistantConversation } from "@/features/messages/messages.assistant.service";
 import { AgentChatError } from "@/features/error/agent-chat/AgentChat.error";
+import { useActiveContext } from "@/lib/shared/context/ActiveContext";
 import MessageComposer from "@@/ui/message-composer/MessageComposer";
 import Surface from "@@/ui/surface/Surface";
 import ConversationIntro from "@@/layout/chat/conversation-intro/ConversationIntro";
@@ -40,6 +41,7 @@ export default function Inbox() {
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT;
   const { t } = useTranslation("chat");
   const navigate = useNavigate();
+  const context = useActiveContext();
   const [conversations, setConversations] = useState<ConversationDto[]>([]);
   const [names, setNames] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
@@ -198,9 +200,9 @@ export default function Inbox() {
     if (creating) return;
     const text = withMessage ? draft.trim() : "";
     if (withMessage && !text) return;
-    if (!text) {
+    if (!text || (context.kind === "company" && context.company !== null)) {
       setContactsOpen(false);
-      navigate(routePaths.operationalChatbot(lang));
+      navigate(routePaths.operationalChatbot(lang), text ? { state: { initialMessage: text } } : undefined);
       return;
     }
     setCreating(true);

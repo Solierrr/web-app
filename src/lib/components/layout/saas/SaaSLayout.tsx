@@ -23,6 +23,7 @@ import { CompanyStatus } from "@/features/companies/company.enum";
 import { SaaSNavigation } from "./SaaSLayout.reusable";
 import { getOperationalNavigation } from "./SaaSLayout.presets";
 import ChatbotPage from "@/features/messages/pages/ChatbotPage";
+import OperationalAssistant from "@/features/assistant/pages/OperationalAssistant";
 import SaaSContext from "@@/layout/saas-context/SaaSContext";
 import { rememberPage } from "@/features/dashboard/dashboard.utils";
 import PageSearch from "@@/layout/page-search/PageSearch";
@@ -289,7 +290,11 @@ function SaaSLayoutContent() {
           else setAssistantOpen(false);
         }}>
         <div className={panel ? "hidden" : "flex min-h-0 flex-1 flex-col px-3 pb-3"}>
-          <ChatbotPage embedded active={assistantOpen && !panel} />
+          {companyContext ? (
+            <OperationalAssistant embedded active={assistantOpen && !panel} />
+          ) : (
+            <ChatbotPage embedded active={assistantOpen && !panel} />
+          )}
         </div>
         {panel?.content}
       </SidePanel>
