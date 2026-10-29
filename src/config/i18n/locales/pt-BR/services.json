@@ -162,5 +162,15 @@
   },
   "aiAccessibility": {
     "analyzeImage": "Não foi possível analisar a imagem"
+  },
+  "notifications": {
+    "list": "Não foi possível carregar as notificações",
+    "unreadCount": "Não foi possível consultar as notificações não lidas",
+    "markRead": "Não foi possível marcar a notificação como lida",
+    "markAllRead": "Não foi possível marcar as notificações como lidas",
+    "registerDevice": "Não foi possível registrar este dispositivo para receber notificações",
+    "removeDevice": "Não foi possível remover este dispositivo das notificações",
+    "enablePush": "Não foi possível ativar as notificações neste dispositivo",
+    "disablePush": "Não foi possível desativar as notificações neste dispositivo"
   }
 }

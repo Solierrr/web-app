@@ -1,0 +1,35 @@
+{
+  "center": {
+    "title": "Notifications",
+    "bell": "Notifications",
+    "bellUnread_one": "Notifications, {{count}} unread",
+    "bellUnread_other": "Notifications, {{count}} unread",
+    "announce_one": "New notification. You have {{count}} unread.",
+    "announce_other": "New notification. You have {{count}} unread.",
+    "list": "Notification list",
+    "markAllRead": "Mark all as read",
+    "markRead": "Mark as read",
+    "unread": "Unread",
+    "empty": "You have no notifications.",
+    "loading": "Loading notifications...",
+    "error": "Could not load notifications.",
+    "retry": "Try again",
+    "loadMore": "Load more",
+    "loadingMore": "Loading...",
+    "actionError": "Could not update the notification. Try again.",
+    "allRead": "All notifications were marked as read.",
+    "enablePrompt": "Get alerts on this device even when Solaria is closed.",
+    "enable": "Turn on notifications"
+  },
+  "push": {
+    "title": "Notifications on this device",
+    "description": "Get alerts about new messages and services even when Solaria is closed. The permission applies only to this browser.",
+    "enable": "Turn on notifications",
+    "disable": "Turn off notifications",
+    "on": "Notifications are on for this device.",
+    "off": "Notifications are off for this device.",
+    "blocked": "Notifications are blocked in the browser. Allow them in the site settings to turn them on.",
+    "unsupported": "This browser does not support push notifications.",
+    "error": "Could not change the notifications for this device. Try again."
+  }
+}

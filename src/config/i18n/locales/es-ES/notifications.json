@@ -1,0 +1,37 @@
+{
+  "center": {
+    "title": "Notificaciones",
+    "bell": "Notificaciones",
+    "bellUnread_one": "Notificaciones, {{count}} sin leer",
+    "bellUnread_many": "Notificaciones, {{count}} sin leer",
+    "bellUnread_other": "Notificaciones, {{count}} sin leer",
+    "announce_one": "Nueva notificación. Tienes {{count}} sin leer.",
+    "announce_many": "Nueva notificación. Tienes {{count}} sin leer.",
+    "announce_other": "Nueva notificación. Tienes {{count}} sin leer.",
+    "list": "Lista de notificaciones",
+    "markAllRead": "Marcar todas como leídas",
+    "markRead": "Marcar como leída",
+    "unread": "Sin leer",
+    "empty": "No tienes notificaciones.",
+    "loading": "Cargando notificaciones...",
+    "error": "No se pudieron cargar las notificaciones.",
+    "retry": "Intentar de nuevo",
+    "loadMore": "Cargar más",
+    "loadingMore": "Cargando...",
+    "actionError": "No se pudo actualizar la notificación. Inténtalo de nuevo.",
+    "allRead": "Todas las notificaciones se marcaron como leídas.",
+    "enablePrompt": "Recibe avisos en este dispositivo incluso con Solaria cerrada.",
+    "enable": "Activar notificaciones"
+  },
+  "push": {
+    "title": "Notificaciones en este dispositivo",
+    "description": "Recibe avisos de nuevos mensajes y servicios incluso con Solaria cerrada. El permiso vale solo para este navegador.",
+    "enable": "Activar notificaciones",
+    "disable": "Desactivar notificaciones",
+    "on": "Las notificaciones están activadas en este dispositivo.",
+    "off": "Las notificaciones están desactivadas en este dispositivo.",
+    "blocked": "Las notificaciones están bloqueadas en el navegador. Permítelas en la configuración del sitio para activarlas.",
+    "unsupported": "Este navegador no ofrece notificaciones push.",
+    "error": "No se pudieron cambiar las notificaciones de este dispositivo. Inténtalo de nuevo."
+  }
+}

@@ -6,9 +6,16 @@ import { clearAuthSession, getAuthSession, setAuthSession } from "@/lib/shared/a
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
 import { createMockSession, createMockTestAccount, MOCK_TEST_EMAIL, MOCK_TEST_USER_ID } from "./access.d.mocks";
 import { getOperationalAccount, saveOperationalAccount, selectContext } from "./access.onboarding.service";
+import { removePushRegistration } from "@/features/notifications/notification.push.service";
+import sleep from "@/lib/utils/sleep.utils";
 
 const API = `${import.meta.env.VITE_API_AUTH}/auth`;
 const SERVICE_NAME = "access";
+const PUSH_RELEASE_TIMEOUT_MS = 3_000;
+
+function releasePushDevice(): Promise<unknown> {
+  return Promise.race([removePushRegistration().catch(() => undefined), sleep(PUSH_RELEASE_TIMEOUT_MS)]);
+}
 
 export async function loginWithMockMicrosoft(): Promise<AuthSession> {
   if (!isAlwaysMockMode("AUTH")) throw new Error("Mock login is unavailable");
@@ -131,6 +138,7 @@ export function refresh(): Promise<AuthSession | null> {
 }
 
 export async function logout(): Promise<void> {
+  await releasePushDevice();
   if (isAlwaysMockMode("AUTH") && getAuthSession()?.isMock) {
     clearAuthSession();
     return;
@@ -148,6 +156,7 @@ export async function logout(): Promise<void> {
 }
 
 export async function logoutAll(): Promise<void> {
+  await releasePushDevice();
   if (!(isAlwaysMockMode("AUTH") && getAuthSession()?.isMock)) {
     await httpJson<void>(`${API}/sessions/logout-all`, {
       service: SERVICE_NAME,
