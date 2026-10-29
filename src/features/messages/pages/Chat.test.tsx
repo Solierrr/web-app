@@ -3,7 +3,7 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import Chat from "./Chat";
 import * as api from "@/features/messages/messages.messenger.api";
-import { subscribeToConversation } from "@/features/messages/messages.messenger.socket";
+import { subscribeToConversation, subscribeToConnection } from "@/features/messages/messages.messenger.socket";
 
 vi.mock("@/features/messages/messages.messenger.api", () => ({
   getConversation: vi.fn(),
@@ -13,7 +13,12 @@ vi.mock("@/features/messages/messages.messenger.api", () => ({
   markConversationRead: vi.fn(),
   sendConversationMessage: vi.fn(),
 }));
-vi.mock("@/features/messages/messages.messenger.socket", () => ({ subscribeToConversation: vi.fn() }));
+vi.mock("@/features/messages/messages.messenger.socket", () => ({
+  subscribeToConversation: vi.fn(),
+  subscribeToConnection: vi.fn(),
+  getConnectionState: () => ({ status: "connected", attempts: 0 }),
+}));
+const live = (item: api.MessageDto) => ({ kind: "message" as const, change: "created" as const, message: item });
 vi.mock("@/lib/shared/auth/authToken.utils", () => ({ getAuthSession: () => ({ userId: "me" }) }));
 
 const conversation: api.ConversationDto = {
@@ -52,6 +57,7 @@ describe("Chat", () => {
     vi.mocked(api.getUserSummary).mockResolvedValue({ username: "Fornecedor", avatar: null });
     vi.mocked(api.markConversationRead).mockResolvedValue(undefined);
     vi.mocked(subscribeToConversation).mockReturnValue(() => undefined);
+    vi.mocked(subscribeToConnection).mockReturnValue(() => undefined);
   });
 
   it("preserves live messages that arrive while history is still loading", async () => {
@@ -63,7 +69,7 @@ describe("Chat", () => {
     );
     renderChat();
     act(() => {
-      vi.mocked(subscribeToConversation).mock.calls[0][1](message(2, "Mensagem ao vivo"));
+      vi.mocked(subscribeToConversation).mock.calls[0][1](live(message(2, "Mensagem ao vivo")));
     });
     await act(async () => {
       finishHistory([message(1, "Mensagem anterior")]);
@@ -76,7 +82,7 @@ describe("Chat", () => {
   it("deduplicates the REST response and live event for a sent message", async () => {
     const sent = { ...message(1, "Tenho interesse"), senderId: "me" };
     vi.mocked(api.sendConversationMessage).mockImplementation(async () => {
-      vi.mocked(subscribeToConversation).mock.calls[0][1](sent);
+      vi.mocked(subscribeToConversation).mock.calls[0][1](live(sent));
       return sent;
     });
     renderChat();

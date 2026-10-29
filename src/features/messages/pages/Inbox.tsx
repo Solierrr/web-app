@@ -13,7 +13,7 @@ import {
   type MessengerContact,
 } from "@/features/messages/messages.messenger.api";
 import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
-import { subscribeToConversations } from "@/features/messages/messages.messenger.socket";
+import { subscribeToConversation } from "@/features/messages/messages.messenger.socket";
 import { useActiveContext } from "@/lib/shared/context/ActiveContext";
 import { Conversation } from "./Chat";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
@@ -82,7 +82,12 @@ export default function Inbox() {
         if (nextKey !== subscriptionKey) {
           subscriptionKey = nextKey;
           unsubscribe();
-          unsubscribe = ids.length ? subscribeToConversations(ids, () => void reload()) : () => {};
+          const stops = ids.map((id) =>
+            subscribeToConversation(id, (event) => {
+              if (event.kind === "message") void reload();
+            }),
+          );
+          unsubscribe = () => stops.forEach((stop) => stop());
         }
         const others = [
           ...new Set(

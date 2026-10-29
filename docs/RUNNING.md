@@ -59,7 +59,7 @@ As variáveis `VITE_*` são embutidas no bundle em build-time, então nunca guar
 | `VITE_LOCAL_API_CORE_TARGET` | Só desenvolvimento. Destino do proxy `/local-api/core` (padrão `http://localhost:8080`). |
 | `VITE_DEV_LOGIN_EMAIL`, `VITE_DEV_LOGIN_PASSWORD` | Só desenvolvimento. Pré-preenchem o login com uma conta do seed local. |
 
-Os mocks só existem em desenvolvimento (`npm run dev`) e nos testes, e apenas quando ligados de forma explícita. Um build de produção (`npm run build`) ignora `VITE_MOCKS`, `VITE_AUTH_MOCKS` e `VITE_MESSENGER_MOCKS`, então QA e produção sempre chamam as APIs reais. Para desenvolver sem backend do messenger, use `VITE_MESSENGER_MOCKS="ALWAYS"`.
+Os mocks só existem em desenvolvimento (`npm run dev`) e nos testes, e apenas quando ligados de forma explícita. Um build de produção (`npm run build`) ignora `VITE_MOCKS`, `VITE_AUTH_MOCKS` e `VITE_MESSENGER_MOCKS`, então QA e produção sempre chamam as APIs reais. Para desenvolver sem backend do messenger, use `VITE_MESSENGER_MOCKS="ALWAYS"`: o tempo real (mensagens ao vivo, digitando, presença e respostas do assistente) é simulado pelo mesmo caminho de código da conexão real. O WebSocket é STOMP puro (sem SockJS): `wss://<host>/messaging/ws` atrás do gateway e `ws://localhost:8080/ws` com o `api-messenger` local.
 
 ### Instalando dependências necessárias para rodar o projeto localmente
 

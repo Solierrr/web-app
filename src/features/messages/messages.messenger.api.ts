@@ -11,6 +11,7 @@ import {
   getMockConnections,
   addMockConnection,
 } from "./messages.messenger.d.mocks";
+import { announceMockPresence } from "./messages.messenger.realtime.d.mocks";
 import { userMocks } from "@/config/mocks/registry";
 
 const API = `${import.meta.env.VITE_API_MESSENGER?.replace(/\/$/, "")}/messaging`;
@@ -60,7 +61,9 @@ export async function getConversations(): Promise<ConversationDto[]> {
 export async function getConversation(id: string): Promise<ConversationDto> {
   if (isAlwaysMockMode("MESSENGER")) {
     await waitForMockService();
-    return getMockConversation(id);
+    const conversation = getMockConversation(id);
+    announceMockPresence(conversation);
+    return conversation;
   }
   return httpJson<ConversationDto>(`${API}/conversations/${encodeURIComponent(id)}`, {
     service: "messenger",

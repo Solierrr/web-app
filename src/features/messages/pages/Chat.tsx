@@ -22,7 +22,7 @@ import {
   type ConversationDto,
   type MessageDto,
 } from "@/features/messages/messages.messenger.api";
-import { subscribeToConversation } from "@/features/messages/messages.messenger.socket";
+import { getConnectionState, subscribeToConnection, subscribeToConversation } from "@/features/messages/messages.messenger.socket";
 
 function mergeMessages(current: MessageDto[], incoming: MessageDto[]): MessageDto[] {
   return [...new Map([...current, ...incoming].map((message) => [message.id, message])).values()].sort(
@@ -158,18 +158,15 @@ export function Conversation({
         if (active) setLoading(false);
       });
 
-    const unsubscribe = subscribeToConversation(
-      conversationId,
-      (message) => {
-        receive([message]);
-      },
-      (connected) => {
-        if (active) {
-          setRealtimeConnected(connected);
-          if (connected) void synchronize();
-        }
-      },
-    );
+    const unsubscribe = subscribeToConversation(conversationId, (event) => {
+      if (event.kind === "message") receive([event.message]);
+    });
+    const unsubscribeConnection = subscribeToConnection(() => {
+      if (!active) return;
+      const connected = getConnectionState().status === "connected";
+      setRealtimeConnected(connected);
+      if (connected) void synchronize();
+    });
     const onVisible = () => {
       if (!document.hidden) void synchronize();
     };
@@ -178,6 +175,7 @@ export function Conversation({
     return () => {
       active = false;
       unsubscribe();
+      unsubscribeConnection();
       clearInterval(interval);
       document.removeEventListener("visibilitychange", onVisible);
     };
