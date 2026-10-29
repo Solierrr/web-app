@@ -2,9 +2,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { refresh, logout, logoutAll } from "./access.service";
 import type { AuthSession } from "./access";
 import { httpJson } from "@/lib/shared/http/http.service";
+import { removePushRegistration } from "@/features/notifications/notification.push.service";
 import { clearAuthSession, getAuthSession, setAuthSession } from "@/lib/shared/auth/authToken.utils";
 
 vi.mock("@/lib/shared/http/http.service", () => ({ httpJson: vi.fn() }));
+vi.mock("@/features/notifications/notification.push.service", () => ({ removePushRegistration: vi.fn().mockResolvedValue(undefined) }));
 
 const stored: AuthSession = {
   accessToken: "old-access",
@@ -38,6 +40,31 @@ describe("session renewal", () => {
   it("clears local authentication even when current-session logout fails", async () => {
     vi.mocked(httpJson).mockRejectedValueOnce(new Error("offline"));
     await expect(logout()).rejects.toThrow("offline");
+    expect(getAuthSession()).toBeNull();
+  });
+  it("removes the push device before ending the session while the token is still valid", async () => {
+    const order: string[] = [];
+    vi.mocked(removePushRegistration).mockImplementationOnce(async () => {
+      order.push(`device:${getAuthSession()?.accessToken}`);
+    });
+    vi.mocked(httpJson).mockImplementationOnce(async () => {
+      order.push("logout");
+    });
+    await logout();
+    expect(order).toEqual(["device:old-access", "logout"]);
+    expect(getAuthSession()).toBeNull();
+  });
+  it("still ends every session when the push device cannot be removed", async () => {
+    vi.mocked(removePushRegistration).mockRejectedValueOnce(new Error("offline"));
+    vi.mocked(httpJson).mockResolvedValueOnce(undefined);
+    await logout();
+    expect(httpJson).toHaveBeenCalledWith(expect.stringContaining("/auth/sessions/current/logout"), expect.objectContaining({ method: "POST" }));
+    vi.mocked(removePushRegistration).mockRejectedValueOnce(new Error("offline"));
+    setAuthSession(stored);
+    vi.mocked(httpJson).mockResolvedValueOnce(undefined);
+    await logoutAll();
+    expect(removePushRegistration).toHaveBeenCalledTimes(2);
+    expect(httpJson).toHaveBeenCalledWith(expect.stringContaining("/auth/sessions/logout-all"), expect.objectContaining({ method: "POST" }));
     expect(getAuthSession()).toBeNull();
   });
   it("revokes all sessions using the public authenticated endpoint", async () => {

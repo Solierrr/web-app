@@ -3,7 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyCFJVRTqTZOyLQfBnfebC7aV-B1c2gQ0AU",
   authDomain: "solaria-authenticator.firebaseapp.com",
   projectId: "solaria-authenticator",
