@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import CatalogFeed from "./CatalogFeed";
 import { panelOffer, infrastructureOffer } from "./CatalogFeed.stories.fixtures";
 import { DEFAULT } from "@/config/i18n/browser/languages";
-import { expect, userEvent } from "storybook/test";
+import { expect } from "storybook/test";
 const meta = {
   title: "Marketplace/CatalogFeed",
   component: CatalogFeed,
@@ -12,11 +12,14 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 export const Panels: Story = {};
 export const Infrastructure: Story = {
-  args: { kind: "INFRASTRUCTURE" },
+  args: {
+    kind: "INFRASTRUCTURE",
+    load: async () => [panelOffer, ...Array.from({ length: 3 }, (_, i) => ({ ...infrastructureOffer, id: `${infrastructureOffer.id}-${i}` }))],
+  },
   play: async ({ canvas }) => {
-    await expect(await canvas.findByText("Trilho de alumínio")).toBeVisible();
-    await userEvent.type(canvas.getByRole("textbox", { name: "Buscar oferta, marca ou fornecedor" }), "não existe");
-    await expect(canvas.getByText("Nenhuma oferta corresponde à sua busca.")).toBeVisible();
+    await expect((await canvas.findAllByText("Trilho de alumínio"))[0]).toBeVisible();
+    await expect(canvas.queryByRole("textbox")).not.toBeInTheDocument();
+    await expect(canvas.queryByText("Painel solar 450 W")).not.toBeInTheDocument();
   },
 };
 export const Empty: Story = { args: { load: async () => [] } };
