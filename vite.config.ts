@@ -11,10 +11,14 @@ import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
 import { playwright } from '@vitest/browser-playwright';
 const dirname = import.meta.dirname;
 
+const MOCK_FLAGS = ["VITE_MOCKS", "VITE_AUTH_MOCKS", "VITE_MESSENGER_MOCKS"];
+
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode, command }) => {
   const env = loadEnv(mode, process.cwd(), "VITE_");
+  const productionBuild = command === "build";
   return {
+  define: productionBuild ? Object.fromEntries(MOCK_FLAGS.map((flag) => [`import.meta.env.${flag}`, JSON.stringify("DEACTIVATED")])) : {},
   plugins: [react(), tailwindcss(), babel({
     presets: [reactCompilerPreset()]
   })],

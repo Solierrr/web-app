@@ -5,16 +5,14 @@ import MocksMode from "./mocksMode.enum";
 const DEFAULT_DELAY_SECONDS = 2;
 
 function isFixtureEnvironment(): boolean {
+  if (import.meta.env.PROD) return false;
   return import.meta.env.MODE === "test" || import.meta.env.DEV;
 }
 
 export function isAlwaysMockMode(service?: "AUTH" | "MESSENGER"): boolean {
   const override = service === "AUTH" ? import.meta.env.VITE_AUTH_MOCKS : service === "MESSENGER" ? import.meta.env.VITE_MESSENGER_MOCKS : undefined;
   const mode = override ?? import.meta.env.VITE_MOCKS;
-  // Messenger is not part of the local seeded stack yet. Domain data and auth
-  // must come from the APIs, even when an old .env still enables legacy mocks.
-  const allowed = isFixtureEnvironment() || (service === "MESSENGER" && import.meta.env.DEV);
-  return allowed && mode === MocksMode.ALWAYS;
+  return isFixtureEnvironment() && mode === MocksMode.ALWAYS;
 }
 
 export function getMocksMode(): MocksMode {

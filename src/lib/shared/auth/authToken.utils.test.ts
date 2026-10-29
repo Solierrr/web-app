@@ -4,9 +4,9 @@ afterEach(() => {
   vi.unstubAllGlobals();
   vi.unstubAllEnvs();
 });
-it("rejects old mock sessions in development without clearing stored data", () => {
+it("rejects old mock sessions when auth mocks are disabled without clearing stored data", () => {
   vi.stubEnv("MODE", "development");
-  vi.stubEnv("VITE_AUTH_MOCKS", "ALWAYS");
+  vi.stubEnv("VITE_AUTH_MOCKS", "DEACTIVATED");
   const removeItem = vi.fn();
   vi.stubGlobal("localStorage", { getItem: () => JSON.stringify({ isMock: true, userId: "mock" }), removeItem });
   expect(getAuthSession()).toBeNull();
