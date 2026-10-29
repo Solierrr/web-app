@@ -8,6 +8,7 @@ export default function ChatHeader({
   assistant = false,
   group = false,
   column = false,
+  status,
   children,
 }: {
   title: string;
@@ -16,6 +17,8 @@ export default function ChatHeader({
   group?: boolean;
   /** Alinha o título à coluna central das mensagens e do campo de texto; as ações ficam no canto direito. */
   column?: boolean;
+  /** Linha curta sob o título, como presença ou "digitando". */
+  status?: string;
   children?: ReactNode;
 }) {
   const [failedAvatar, setFailedAvatar] = useState<string | null>(null);
@@ -36,7 +39,14 @@ export default function ChatHeader({
             )}
           </span>
         )}
-        <h2 className={assistant ? "sr-only" : "truncate text-body font-semi-bold text-operational-ink"}>{title}</h2>
+        <div className="flex min-w-0 flex-col">
+          <h2 className={assistant ? "sr-only" : "truncate text-body font-semi-bold text-operational-ink"}>{title}</h2>
+          {status && (
+            <p role="status" className="truncate text-sidebar text-operational-muted">
+              {status}
+            </p>
+          )}
+        </div>
       </div>
       {column ? <div className="absolute right-0 top-0">{children}</div> : children}
     </header>

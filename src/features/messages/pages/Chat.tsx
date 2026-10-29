@@ -18,17 +18,19 @@ import {
   getConversationMessagesSince,
   getUserSummary,
   markConversationRead,
-  sendConversationMessage,
   type ConversationDto,
   type MessageDto,
 } from "@/features/messages/messages.messenger.api";
-import { getConnectionState, subscribeToConnection, subscribeToConversation } from "@/features/messages/messages.messenger.socket";
-
-function mergeMessages(current: MessageDto[], incoming: MessageDto[]): MessageDto[] {
-  return [...new Map([...current, ...incoming].map((message) => [message.id, message])).values()].sort(
-    (left, right) => left.sequence - right.sequence,
-  );
-}
+import { getConnectionState, subscribeToConversation } from "@/features/messages/messages.messenger.socket";
+import { highestSequence, mergeMessages } from "@/features/messages/messages.messenger.realtime.utils";
+import {
+  useAssistantStatus,
+  useConversationPresence,
+  useMessengerConnection,
+  useOutbox,
+  useTypingPublisher,
+} from "@/features/messages/messages.hooks";
+import { AssistantNotice, ConnectionNotice, PendingBubble } from "./Chat.reusable";
 
 export default function Chat() {
   const { conversationId = "" } = useParams<{ conversationId: string }>();
@@ -62,9 +64,7 @@ export function Conversation({
   const [messages, setMessages] = useState<MessageDto[]>([]);
   const [draft, setDraft] = useState(navigationState?.initialDraft ?? (product ? t("contactAbout", { title: product }) : ""));
   const [loading, setLoading] = useState(true);
-  const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(navigationState?.initialSendError ? t("sendError") : null);
-  const [realtimeConnected, setRealtimeConnected] = useState<boolean | null>(null);
   const [hasOlder, setHasOlder] = useState(false);
   const [loadingOlder, setLoadingOlder] = useState(false);
   const lastSequence = useRef(0);
@@ -73,6 +73,22 @@ export function Conversation({
   const viewport = useRef<HTMLDivElement>(null);
   const followLatest = useRef(true);
   const olderScrollHeight = useRef<number | null>(null);
+  const synchronizeRef = useRef<() => Promise<void>>(() => Promise.resolve());
+  const connection = useMessengerConnection();
+  const { typing, presence } = useConversationPresence(conversationId);
+  const conversable = !readOnly && (conversation?.conversationType === "DIRECT" || conversation?.conversationType === "GROUP");
+  const typingPublisher = useTypingPublisher(conversationId, conversable);
+
+  function deliver(sent: MessageDto) {
+    if (activeConversationId.current !== conversationId) return;
+    lastSequence.current = Math.max(lastSequence.current, sent.sequence);
+    followLatest.current = true;
+    setMessages((current) => mergeMessages(current, [sent]));
+    if (getConnectionState().status !== "connected") window.dispatchEvent(new Event("solaria:messenger"));
+  }
+  const outbox = useOutbox(conversationId, conversation?.conversationType, deliver);
+  const { acknowledge } = outbox;
+  const assistantStatus = useAssistantStatus(conversation?.conversationType === "CHAT_BOT", messages, userId, () => synchronizeRef.current());
 
   useLayoutEffect(() => {
     const node = viewport.current;
@@ -97,8 +113,11 @@ export function Conversation({
 
     function receive(incoming: MessageDto[]) {
       if (!active) return;
-      lastSequence.current = incoming.reduce((highest, message) => Math.max(highest, message.sequence), lastSequence.current);
+      lastSequence.current = highestSequence(incoming, lastSequence.current);
       setMessages((current) => mergeMessages(current, incoming));
+      incoming.forEach((message) => {
+        if (message.clientMessageId) acknowledge(message.clientMessageId);
+      });
     }
 
     async function synchronize() {
@@ -115,11 +134,12 @@ export function Conversation({
           cursor = nextCursor;
         }
       } catch {
-        if (active) setRealtimeConnected(false);
+        return;
       } finally {
         synchronizing = false;
       }
     }
+    synchronizeRef.current = synchronize;
 
     Promise.all([getConversation(conversationId), getConversationMessages(conversationId)])
       .then(([loadedConversation, loadedMessages]) => {
@@ -159,27 +179,31 @@ export function Conversation({
       });
 
     const unsubscribe = subscribeToConversation(conversationId, (event) => {
-      if (event.kind === "message") receive([event.message]);
-    });
-    const unsubscribeConnection = subscribeToConnection(() => {
-      if (!active) return;
-      const connected = getConnectionState().status === "connected";
-      setRealtimeConnected(connected);
-      if (connected) void synchronize();
+      if (event.kind !== "message") return;
+      if (initialized && lastSequence.current > 0 && event.message.sequence > lastSequence.current + 1) void synchronize();
+      receive([event.message]);
     });
     const onVisible = () => {
+      if (!document.hidden && getConnectionState().status !== "connected") void synchronize();
+    };
+    const onForeground = () => {
       if (!document.hidden) void synchronize();
     };
     const interval = setInterval(onVisible, 20_000);
-    document.addEventListener("visibilitychange", onVisible);
+    document.addEventListener("visibilitychange", onForeground);
     return () => {
       active = false;
+      synchronizeRef.current = () => Promise.resolve();
       unsubscribe();
-      unsubscribeConnection();
       clearInterval(interval);
-      document.removeEventListener("visibilitychange", onVisible);
+      document.removeEventListener("visibilitychange", onForeground);
     };
-  }, [conversationId, product, t, userId]);
+  }, [acknowledge, conversationId, product, t, userId]);
+
+  const connectionStatus = connection.status;
+  useEffect(() => {
+    if (connectionStatus === "connected") void synchronizeRef.current();
+  }, [connectionStatus]);
 
   useEffect(() => {
     const markVisibleRead = () => {
@@ -190,7 +214,7 @@ export function Conversation({
         .then(() => {
           if (activeConversationId.current === conversationId) {
             lastMarkedRead.current = Math.max(lastMarkedRead.current, sequence);
-            window.dispatchEvent(new Event("solaria:messenger"));
+            if (getConnectionState().status !== "connected") window.dispatchEvent(new Event("solaria:messenger"));
           }
         })
         .catch(() => undefined);
@@ -216,25 +240,46 @@ export function Conversation({
     }
   }
 
-  async function handleSend() {
+  function handleSend() {
     const content = draft.trim();
-    if (!content || sending || readOnly) return;
-    setSending(true);
+    if (!content || readOnly || !conversation) return;
+    typingPublisher.stop();
     setError(null);
-    try {
-      const sent = await sendConversationMessage(conversationId, content, conversation?.conversationType);
-      if (activeConversationId.current !== conversationId) return;
-      lastSequence.current = Math.max(lastSequence.current, sent.sequence);
-      followLatest.current = true;
-      setMessages((current) => mergeMessages(current, [sent]));
-      setDraft("");
-      window.dispatchEvent(new Event("solaria:messenger"));
-    } catch {
-      setError(t("sendError"));
-    } finally {
-      setSending(false);
-    }
+    followLatest.current = true;
+    setDraft("");
+    outbox.send(content);
   }
+
+  function handleDraft(value: string) {
+    setDraft(value);
+    typingPublisher.notify(value);
+  }
+
+  function discardPending(clientMessageId: string) {
+    const content = outbox.discard(clientMessageId);
+    if (content) setDraft((current) => current || content);
+  }
+
+  function retryAssistant() {
+    const own = [...messages].reverse().find((message) => message.senderId === userId);
+    if (own) outbox.send(own.content);
+  }
+
+  const kind = conversation?.conversationType === "GROUP" ? "group" : conversation?.conversationType === "CHAT_BOT" ? "assistant" : "direct";
+  const others = typing.filter((id) => id !== userId?.toLowerCase());
+  const peerId = conversation?.conversationType === "DIRECT" ? conversation.participantIds.find((id) => id !== userId) : undefined;
+  const peerPresence = peerId ? presence.users[peerId.toLowerCase()] : undefined;
+  const status =
+    others.length > 0
+      ? kind === "group"
+        ? t("typingNamed", {
+            count: others.length,
+            names: others.map((id) => participantNames[id] ?? t("participant")).join(", "),
+          })
+        : t("typing")
+      : peerPresence === undefined
+        ? undefined
+        : t(peerPresence ? "online" : "offline");
 
   const title =
     displayTitle ||
@@ -248,6 +293,7 @@ export function Conversation({
         avatar={conversation?.conversationType === "GROUP" || conversation?.conversationType === "CHAT_BOT" ? null : participantAvatar}
         assistant={conversation?.conversationType === "CHAT_BOT"}
         group={conversation?.conversationType === "GROUP"}
+        status={status}
         column>
         <div className="flex items-center gap-2">
           <ToolbarAction
@@ -271,11 +317,7 @@ export function Conversation({
           {error}
         </p>
       )}
-      {realtimeConnected === false && (
-        <p role="status" className="text-body text-operational-muted">
-          {t("realtimeUnavailable")}
-        </p>
-      )}
+      <ConnectionNotice connection={connection} />
       <div
         ref={viewport}
         onScroll={(event) => {
@@ -329,10 +371,8 @@ export function Conversation({
                 </div>
               )}
               <MessageBubble
-                conversationKind={
-                  conversation?.conversationType === "GROUP" ? "group" : conversation?.conversationType === "CHAT_BOT" ? "assistant" : "direct"
-                }
-                content={message.content}
+                conversationKind={kind}
+                content={message.deleted ? t("messageDeleted") : message.content}
                 timestamp={message.timestamp}
                 locale={lang}
                 author={author}
@@ -344,19 +384,25 @@ export function Conversation({
             </div>
           );
         })}
+        {outbox.pending.map((item) => (
+          <div key={item.clientMessageId} className="mx-auto mt-4 flex w-full max-w-3xl flex-col">
+            <PendingBubble item={item} author={t("you")} locale={lang} conversationKind={kind} onRetry={outbox.retry} onDiscard={discardPending} />
+          </div>
+        ))}
+        {assistantStatus !== "idle" && outbox.pending.length === 0 && <AssistantNotice status={assistantStatus} onRetry={retryAssistant} />}
       </div>
       <Surface field className="mx-auto w-full max-w-3xl shrink-0" contentClassName="overflow-visible! px-2 py-1">
         <MessageComposer
           assistant
           value={draft}
-          onChange={setDraft}
-          onSend={() => void handleSend()}
+          onChange={handleDraft}
+          onSend={handleSend}
           placeholder={t("draftPlaceholder")}
           label={t("draftPlaceholder")}
           sendLabel={t("sendDescription")}
           hint={t("chatbot.composerHint")}
           maxLength={8000}
-          disabled={readOnly || sending || loading || !conversation}
+          disabled={readOnly || loading || !conversation}
         />
       </Surface>
     </section>
