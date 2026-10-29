@@ -5,13 +5,15 @@ import ConversationIntro from "@@/layout/chat/conversation-intro/ConversationInt
 import MessageComposer from "@@/ui/message-composer/MessageComposer";
 import Surface from "@@/ui/surface/Surface";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
-import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
 import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
+import { sendAssistantTurn } from "@/features/assistant/assistant.service";
+import { getAssistantThread, rememberAssistantThread } from "@/features/messages/messages.assistant.utils";
 import {
   getConversation,
   getConversationMessages,
@@ -44,20 +46,21 @@ export function Conversation({
   readOnly = false,
   displayTitle,
   actions,
-  initialMessage,
+  onConversationChange,
 }: {
   conversationId: string;
   embedded?: boolean;
   readOnly?: boolean;
   displayTitle?: string;
   actions?: ReactNode;
-  initialMessage?: string;
+  onConversationChange?: (conversationId: string) => void;
 }) {
+  const navigate = useNavigate();
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
   const { t } = useTranslation("chat");
   const location = useLocation();
-  const navigationState = location.state as { product?: string | null; initialDraft?: string; initialSendError?: boolean } | null;
+  const navigationState = location.state as { product?: string | null } | null;
   const product = navigationState?.product;
   const userId = getAuthSession()?.userId;
   const [conversation, setConversation] = useState<ConversationDto | null>(null);
@@ -65,9 +68,9 @@ export function Conversation({
   const [participantName, setParticipantName] = useState<string | null>(null);
   const [participantNames, setParticipantNames] = useState<Record<string, string>>({});
   const [messages, setMessages] = useState<MessageDto[]>([]);
-  const [draft, setDraft] = useState(navigationState?.initialDraft ?? (product ? t("contactAbout", { title: product }) : ""));
+  const [draft, setDraft] = useState(product ? t("contactAbout", { title: product }) : "");
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(navigationState?.initialSendError ? t("sendError") : null);
+  const [error, setError] = useState<string | null>(null);
   const [hasOlder, setHasOlder] = useState(false);
   const [loadingOlder, setLoadingOlder] = useState(false);
   const lastSequence = useRef(0);
@@ -89,14 +92,28 @@ export function Conversation({
     setMessages((current) => mergeMessages(current, [sent]));
     if (getConnectionState().status !== "connected") window.dispatchEvent(new Event("solaria:messenger"));
   }
-  const outbox = useOutbox(conversationId, conversation?.conversationType, deliver);
-  const { acknowledge, send: sendPending } = outbox;
-  const initialSent = useRef(false);
-  useEffect(() => {
-    if (!initialMessage || !conversation || initialSent.current) return;
-    initialSent.current = true;
-    sendPending(initialMessage);
-  }, [conversation, initialMessage, sendPending]);
+  const askAssistant = useCallback(
+    async (content: string) => {
+      const threadId = getAssistantThread(conversationId);
+      const { messengerConversationId } = await sendAssistantTurn(threadId, content);
+      rememberAssistantThread(messengerConversationId, threadId);
+      if (messengerConversationId !== conversationId) {
+        if (onConversationChange) onConversationChange(messengerConversationId);
+        else navigate(routePaths.chat(lang, messengerConversationId), { replace: true });
+        return null;
+      }
+      await synchronizeRef.current();
+      return null;
+    },
+    [conversationId, lang, navigate, onConversationChange],
+  );
+  const outbox = useOutbox(
+    conversationId,
+    conversation?.conversationType,
+    deliver,
+    conversation?.conversationType === "CHAT_BOT" ? askAssistant : undefined,
+  );
+  const { acknowledge } = outbox;
   const assistantStatus = useAssistantStatus(conversation?.conversationType === "CHAT_BOT", messages, userId, () => synchronizeRef.current());
 
   useLayoutEffect(() => {

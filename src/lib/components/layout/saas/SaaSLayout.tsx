@@ -289,7 +289,7 @@ function SaaSLayoutContent() {
           else setAssistantOpen(false);
         }}>
         <div className={panel ? "hidden" : "flex min-h-0 flex-1 flex-col px-3 pb-3"}>
-          <ChatbotPage embedded active={assistantOpen && !panel} userType={context.kind === "company" ? (context.company?.type ?? "COMPANY") : "PERSONAL"} />
+          <ChatbotPage embedded active={assistantOpen && !panel} />
         </div>
         {panel?.content}
       </SidePanel>

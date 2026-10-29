@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 
+import { AgentChatError } from "@/features/error/agent-chat/AgentChat.error";
 import { sendConversationMessage, type ConversationDto, type MessageDto } from "./messages.messenger.api";
 import type { ConnectionState } from "./messages.messenger.realtime";
 import { applyPresence, EMPTY_PRESENCE, type PresenceState } from "./messages.messenger.realtime.utils";
@@ -15,7 +16,10 @@ export interface PendingMessage {
   content: string;
   status: "sending" | "failed";
   createdAt: string;
+  reason?: string;
 }
+
+export type OutboxTransport = (content: string) => Promise<MessageDto | null>;
 
 export function useMessengerConnection(): ConnectionState {
   return useSyncExternalStore(subscribeToConnection, getConnectionState, getConnectionState);
@@ -93,6 +97,7 @@ export function useOutbox(
   conversationId: string,
   conversationType: ConversationDto["conversationType"] | undefined,
   onDelivered: (message: MessageDto) => void,
+  transport?: OutboxTransport,
 ): {
   pending: PendingMessage[];
   send: (content: string) => void;
@@ -105,9 +110,11 @@ export function useOutbox(
   const queue = useRef<Promise<void>>(Promise.resolve());
   const alive = useRef(false);
   const delivered = useRef(onDelivered);
+  const customTransport = useRef(transport);
 
   useEffect(() => {
     delivered.current = onDelivered;
+    customTransport.current = transport;
   });
 
   const update = useCallback((next: PendingMessage[]) => {
@@ -121,13 +128,16 @@ export function useOutbox(
         if (!alive.current || !items.current.some((entry) => entry.clientMessageId === item.clientMessageId)) return;
         update(items.current.map((entry) => (entry.clientMessageId === item.clientMessageId ? { ...entry, status: "sending" } : entry)));
         try {
-          const sent = await sendConversationMessage(conversationId, item.content, conversationType, item.clientMessageId);
+          const sent = customTransport.current
+            ? await customTransport.current(item.content)
+            : await sendConversationMessage(conversationId, item.content, conversationType, item.clientMessageId);
           if (!alive.current) return;
           update(items.current.filter((entry) => entry.clientMessageId !== item.clientMessageId));
-          delivered.current(sent);
-        } catch {
+          if (sent) delivered.current(sent);
+        } catch (error) {
+          const reason = error instanceof AgentChatError ? error.message : undefined;
           if (alive.current)
-            update(items.current.map((entry) => (entry.clientMessageId === item.clientMessageId ? { ...entry, status: "failed" } : entry)));
+            update(items.current.map((entry) => (entry.clientMessageId === item.clientMessageId ? { ...entry, status: "failed", reason } : entry)));
         }
       });
     },
