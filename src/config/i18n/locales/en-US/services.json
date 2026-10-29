@@ -162,5 +162,15 @@
   },
   "aiAccessibility": {
     "analyzeImage": "Unable to analyze the image"
+  },
+  "notifications": {
+    "list": "Could not load notifications",
+    "unreadCount": "Could not check unread notifications",
+    "markRead": "Could not mark the notification as read",
+    "markAllRead": "Could not mark the notifications as read",
+    "registerDevice": "Could not register this device for notifications",
+    "removeDevice": "Could not remove this device from notifications",
+    "enablePush": "Could not turn on notifications on this device",
+    "disablePush": "Could not turn off notifications on this device"
   }
 }

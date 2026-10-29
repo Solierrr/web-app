@@ -61,3 +61,15 @@ it("keeps the AI services independent from general mocks", () => {
   vi.stubEnv("PROD", true);
   expect(isAlwaysMockMode("AI")).toBe(false);
 });
+
+it("keeps the notifications mock independent and overridable from the general flag", () => {
+  vi.stubEnv("DEV", true);
+  vi.stubEnv("VITE_MOCKS", "ALWAYS");
+  vi.stubEnv("VITE_NOTIFY_MOCKS", "DEACTIVATED");
+  expect(isAlwaysMockMode("NOTIFY")).toBe(false);
+  vi.stubEnv("VITE_MOCKS", "DEACTIVATED");
+  vi.stubEnv("VITE_NOTIFY_MOCKS", "ALWAYS");
+  expect(isAlwaysMockMode("NOTIFY")).toBe(true);
+  vi.stubEnv("PROD", true);
+  expect(isAlwaysMockMode("NOTIFY")).toBe(false);
+});
