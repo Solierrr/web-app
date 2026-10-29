@@ -159,5 +159,8 @@
     "timeout": "The service took too long to respond and may be starting up. Try again.",
     "network": "Unable to reach the service. Check your connection and try again.",
     "tooLarge": "The uploaded file is too large."
+  },
+  "aiAccessibility": {
+    "analyzeImage": "Unable to analyze the image"
   }
 }

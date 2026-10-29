@@ -110,6 +110,11 @@ export default function ProfilePhotoEditor({
                   invalidMessage={t("invalid")}
                   summary={t("limits")}
                   multiple={false}
+                  analysis={
+                    entity === "company"
+                      ? { purpose: "company_profile" }
+                      : { purpose: "professional_profile", strictPurpose: type === "PROFILE" }
+                  }
                   maxBytes={5 * 1024 * 1024}
                   disabled={busy}
                 />

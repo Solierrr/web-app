@@ -1,0 +1,14 @@
+{
+  "image": {
+    "analyzing": "Analizando la imagen…",
+    "altLabel": "Texto alternativo",
+    "altSuggested": "Sugerencia automática para quien usa lector de pantalla. Revísala y edítala si hace falta.",
+    "altManual": "Describe la imagen para quien usa lector de pantalla. {{reason}}",
+    "blocked": {
+      "inappropriate": "La imagen {{name}} fue rechazada por contenido inapropiado. Elige otra imagen.",
+      "purpose": "La imagen {{name}} no parece adecuada para este uso. Elige otra imagen.",
+      "invalid": "La imagen {{name}} no es válida o supera los límites de tamaño. Usa JPEG, PNG o WebP.",
+      "review": "No se pudo confirmar que la imagen {{name}} sea adecuada. Elige otra imagen."
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "image": {
+    "analyzing": "Analyzing the image…",
+    "altLabel": "Alternative text",
+    "altSuggested": "Automatic suggestion for screen reader users. Review and edit it if needed.",
+    "altManual": "Describe the image for screen reader users. {{reason}}",
+    "blocked": {
+      "inappropriate": "The image {{name}} was rejected for inappropriate content. Choose another image.",
+      "purpose": "The image {{name}} does not look suitable for this use. Choose another image.",
+      "invalid": "The image {{name}} is invalid or exceeds the size limits. Use JPEG, PNG or WebP.",
+      "review": "We could not confirm that the image {{name}} is suitable. Choose another image."
+    }
+  }
+}

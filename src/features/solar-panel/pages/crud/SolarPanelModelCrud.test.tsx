@@ -3,6 +3,9 @@ import { beforeEach as beforeToastTest } from "vitest";
 beforeToastTest(() => {
   render(<Toast />);
 });
+vi.mock("@/lib/shared/accessibility/aiAccessibility.service", () => ({
+  analyzeImage: vi.fn().mockResolvedValue({ status: "suggested", altText: "Painel solar sobre telhado" }),
+}));
 vi.mock("@/features/brands/brand.service", () => ({
   listBrands: vi.fn().mockResolvedValue(
     ["SolTech", "PreviewBrand", "Nova marca", "Brand"].map((name) => ({
@@ -228,7 +231,9 @@ describe("SolarPanelModelCrud", () => {
     expect(main).not.toHaveAttribute("multiple");
     expect(gallery).toHaveAttribute("multiple");
     fireEvent.change(main, { target: { files: [new File(["image"], "main.png", { type: "image/png" })] } });
+    await screen.findByLabelText("Texto alternativo: main.png");
     fireEvent.change(gallery, { target: { files: [new File(["image"], "gallery.png", { type: "image/png" })] } });
+    await screen.findByLabelText("Texto alternativo: gallery.png");
     expect(createSolarPanel).not.toHaveBeenCalled();
     expect(uploadModelPhoto).not.toHaveBeenCalled();
     vi.mocked(createSolarPanel).mockResolvedValue({ ...items[0], id: "preview-model", brand: "PreviewBrand", model: "PreviewModel" });
@@ -541,6 +546,7 @@ describe("SolarPanelModelCrud", () => {
     fireEvent.change(screen.getByLabelText("Modelo"), { target: { value: "Model" } });
     fireEvent.click(screen.getByRole("button", { name: "Fotos da placa" }));
     fireEvent.change(screen.getByLabelText("Selecionar fotos", { selector: "input" }), { target: { files: [first, second] } });
+    await screen.findByLabelText("Texto alternativo: second.png");
     fillTechnicalFields();
     fireEvent.click(screen.getByRole("button", { name: "Salvar modelo" }));
     await waitFor(() => expect(screen.getAllByRole("status").some((item) => item.textContent?.includes("fotos"))).toBe(true));
