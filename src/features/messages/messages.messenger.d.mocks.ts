@@ -1,5 +1,6 @@
 import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import type { ConversationDto, MessageDto } from "./messages.messenger.api";
+import { publishMockConversation, publishMockMessage, simulateMockReplies, type MockReply } from "./messages.messenger.realtime.d.mocks";
 
 interface MockMessenger {
   conversations: ConversationDto[];
@@ -91,7 +92,7 @@ export function createMockConversation(recipientId: string): ConversationDto {
   return conversation;
 }
 
-export function sendMockMessage(conversationId: string, content: string): MessageDto {
+export function sendMockMessage(conversationId: string, content: string, clientMessageId?: string): MessageDto {
   const state = getMockMessenger();
   const sequence = Math.max(0, ...state.messages.filter((item) => item.conversationId === conversationId).map((item) => item.sequence)) + 1;
   const message: MessageDto = {
@@ -101,6 +102,7 @@ export function sendMockMessage(conversationId: string, content: string): Messag
     content,
     timestamp: new Date().toISOString(),
     sequence,
+    clientMessageId: clientMessageId ?? null,
     role: "user",
     messageType:
       getMockConversation(conversationId).conversationType === "GROUP"
@@ -118,6 +120,32 @@ export function sendMockMessage(conversationId: string, content: string): Messag
     }),
   );
   window.dispatchEvent(new Event("solaria:messenger"));
+  publishMockMessage(message);
+  publishMockConversation({ ...conversation, unreadCount: 0 });
+  simulateMockReplies(conversation, receiveMockMessage);
+  return message;
+}
+
+/** Stores a message written by someone else and announces it through the same realtime path as the real broker. */
+export function receiveMockMessage(conversationId: string, reply: MockReply): MessageDto {
+  const state = getMockMessenger();
+  const sequence = Math.max(0, ...state.messages.filter((item) => item.conversationId === conversationId).map((item) => item.sequence)) + 1;
+  const message: MessageDto = { id: crypto.randomUUID(), conversationId, timestamp: new Date().toISOString(), sequence, ...reply };
+  const conversation = {
+    ...getMockConversation(conversationId),
+    lastInteractionAt: message.timestamp,
+    unreadCount: (getMockConversation(conversationId).unreadCount ?? 0) + 1,
+  };
+  localStorage.setItem(
+    key(),
+    JSON.stringify({
+      conversations: [...state.conversations.filter((item) => item.id !== conversationId), conversation],
+      messages: [...state.messages, message],
+    }),
+  );
+  window.dispatchEvent(new Event("solaria:messenger"));
+  publishMockMessage(message);
+  publishMockConversation(conversation);
   return message;
 }
 
@@ -145,6 +173,7 @@ export function markMockConversationRead(id: string): ConversationDto {
       JSON.stringify({ ...state, conversations: state.conversations.map((item) => (item.id === id ? conversation : item)) }),
     );
     window.dispatchEvent(new Event("solaria:messenger"));
+    publishMockConversation(conversation);
   }
   return conversation;
 }

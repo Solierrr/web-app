@@ -92,7 +92,12 @@
     "greeting": "¡Hola! ¿Cómo puedo ayudarte hoy?",
     "draftPlaceholder": "Pídele al asistente",
     "sendDescription": "Enviar mensaje al asistente",
-    "assistantName": "Asistente"
+    "assistantName": "Asistente",
+    "thinking": "El asistente está pensando...",
+    "timeout": "El asistente está tardando más de lo normal. Puedes intentarlo de nuevo.",
+    "retry": "Intentar de nuevo",
+    "signInRequired": "Inicia sesión para hablar con el asistente.",
+    "signIn": "Iniciar sesión"
   },
   "attachments": {
     "remove": "Eliminar {{name}}",
@@ -120,5 +125,18 @@
     "h2": "Título 2",
     "h3": "Título 3",
     "tooLong": "El formato supera el límite del mensaje."
+  },
+  "online": "En línea",
+  "offline": "Desconectado",
+  "typingNamed_one": "{{names}} está escribiendo...",
+  "typingNamed_other": "{{names}} están escribiendo...",
+  "messageDeleted": "Mensaje eliminado",
+  "realtimeReconnecting": "Reconectando al chat en tiempo real...",
+  "realtimeWaking": "El servicio de mensajes puede estar iniciándose, lo que tarda hasta 1 minuto. Puedes seguir usando la conversación.",
+  "outbox": {
+    "sending": "Enviando...",
+    "failed": "No se pudo enviar este mensaje.",
+    "retry": "Reenviar",
+    "discard": "Descartar"
   }
 }

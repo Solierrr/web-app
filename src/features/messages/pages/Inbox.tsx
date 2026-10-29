@@ -13,7 +13,10 @@ import {
   type MessengerContact,
 } from "@/features/messages/messages.messenger.api";
 import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
-import { subscribeToConversations } from "@/features/messages/messages.messenger.socket";
+import { getConnectionState, subscribeToUserEvents } from "@/features/messages/messages.messenger.socket";
+import { mergeConversation, removeConversation } from "@/features/messages/messages.messenger.realtime.utils";
+import { useMessengerConnection } from "@/features/messages/messages.hooks";
+import ConnectionNotice from "./ConnectionNotice";
 import { useActiveContext } from "@/lib/shared/context/ActiveContext";
 import { Conversation } from "./Chat";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
@@ -55,12 +58,13 @@ export default function Inbox() {
   const [createError, setCreateError] = useState(false);
   const [draft, setDraft] = useState("");
   const mounted = useRef(false);
+  const reloadRef = useRef<() => Promise<void>>(() => Promise.resolve());
+  const connection = useMessengerConnection();
 
   useEffect(() => {
     mounted.current = true;
     let active = true;
-    let unsubscribe = () => {};
-    let subscriptionKey = "";
+    const knownIds = new Set<string>();
     let refreshing = false;
     let refreshAgain = false;
     const knownNames: Record<string, string> = {};
@@ -77,13 +81,8 @@ export default function Inbox() {
         if (!active) return;
         setConversations(result);
         setError(false);
-        const ids = result.map((item) => item.id).sort();
-        const nextKey = ids.join(",");
-        if (nextKey !== subscriptionKey) {
-          subscriptionKey = nextKey;
-          unsubscribe();
-          unsubscribe = ids.length ? subscribeToConversations(ids, () => void reload()) : () => {};
-        }
+        knownIds.clear();
+        result.forEach((item) => knownIds.add(item.id));
         const others = [
           ...new Set(
             result
@@ -107,11 +106,27 @@ export default function Inbox() {
         }
       }
     }
+    reloadRef.current = reload;
+    const unsubscribe = subscribeToUserEvents((event) => {
+      if (!active) return;
+      if (event.kind === "conversationRemoved") {
+        setConversations((current) => removeConversation(current, event.id));
+        return;
+      }
+      if (!knownIds.has(event.conversation.id)) {
+        void reload();
+        return;
+      }
+      setConversations((current) => mergeConversation(current, event.conversation));
+    });
     const onVisible = () => {
       if (!document.hidden) void reload();
     };
+    const onPoll = () => {
+      if (getConnectionState().status !== "connected") onVisible();
+    };
     void reload();
-    const interval = window.setInterval(onVisible, 20000);
+    const interval = window.setInterval(onPoll, 20000);
     document.addEventListener("visibilitychange", onVisible);
     window.addEventListener("solaria:messenger", onVisible);
     return () => {
@@ -123,6 +138,13 @@ export default function Inbox() {
       window.removeEventListener("solaria:messenger", onVisible);
     };
   }, []);
+
+  const connectionStatus = connection.status;
+  const previousStatus = useRef(connectionStatus);
+  useEffect(() => {
+    if (previousStatus.current !== "connected" && connectionStatus === "connected") void reloadRef.current();
+    previousStatus.current = connectionStatus;
+  }, [connectionStatus]);
 
   useEffect(() => {
     if (!contactsOpen) return;
@@ -231,6 +253,7 @@ export default function Inbox() {
           {t("loadError")}
         </p>
       )}
+      <ConnectionNotice connection={connection} />
       {createError && (
         <p role="alert" className="mb-3 text-body">
           {t("createError")}

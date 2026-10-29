@@ -11,6 +11,7 @@ import {
   getMockConnections,
   addMockConnection,
 } from "./messages.messenger.d.mocks";
+import { announceMockPresence } from "./messages.messenger.realtime.d.mocks";
 import { userMocks } from "@/config/mocks/registry";
 
 const API = `${import.meta.env.VITE_API_MESSENGER?.replace(/\/$/, "")}/messaging`;
@@ -22,6 +23,9 @@ export interface ConversationDto {
   title: string | null;
   lastInteractionAt: string | null;
   unreadCount?: number;
+  lastReadSequence?: number | null;
+  syncEpoch?: string;
+  syncVersion?: number;
   communityId?: string | null;
   projectGeneral?: boolean;
 }
@@ -33,9 +37,14 @@ export interface MessageDto {
   content: string;
   timestamp: string;
   sequence: number;
+  clientMessageId?: string | null;
   role?: string;
   messageType?: "USER_TO_USER" | "USER_TO_GROUP" | "USER_TO_CHATBOT" | "CHATBOT_TO_USER";
+  edited?: boolean;
+  deleted?: boolean;
 }
+
+export const MESSAGE_PAGE_SIZE = 100;
 
 export async function getConversations(): Promise<ConversationDto[]> {
   if (isAlwaysMockMode("MESSENGER")) {
@@ -52,7 +61,9 @@ export async function getConversations(): Promise<ConversationDto[]> {
 export async function getConversation(id: string): Promise<ConversationDto> {
   if (isAlwaysMockMode("MESSENGER")) {
     await waitForMockService();
-    return getMockConversation(id);
+    const conversation = getMockConversation(id);
+    announceMockPresence(conversation);
+    return conversation;
   }
   return httpJson<ConversationDto>(`${API}/conversations/${encodeURIComponent(id)}`, {
     service: "messenger",
@@ -80,18 +91,14 @@ export async function getConversationMessages(id: string, beforeSequence?: numbe
     await waitForMockService();
     return getMockMessenger()
       .messages.filter((item) => item.conversationId === id && (beforeSequence === undefined || item.sequence < beforeSequence))
-      .slice(-100);
+      .slice(-MESSAGE_PAGE_SIZE);
   }
-  const messages: MessageDto[] = [];
-  let cursor = 0;
-  while (true) {
-    const page = await getConversationMessagesSince(id, cursor);
-    messages.push(...page);
-    const next = page.reduce((highest, message) => Math.max(highest, message.sequence), cursor);
-    if (page.length < 100 || next <= cursor || (beforeSequence !== undefined && next >= beforeSequence)) break;
-    cursor = next;
-  }
-  return messages.filter((message) => beforeSequence === undefined || message.sequence < beforeSequence).slice(-100);
+  const cursor = beforeSequence === undefined ? "" : `&beforeSequence=${beforeSequence}`;
+  return httpJson<MessageDto[]>(`${API}/messages/conversation/${encodeURIComponent(id)}?limit=${MESSAGE_PAGE_SIZE}${cursor}`, {
+    service: "messenger",
+    operation: "getConversationMessages",
+    errorMessage: i18n.t("services:messenger.getConversationMessages"),
+  });
 }
 
 export async function getConversationMessagesSince(id: string, sequence: number): Promise<MessageDto[]> {
@@ -99,27 +106,38 @@ export async function getConversationMessagesSince(id: string, sequence: number)
     await waitForMockService();
     return getMockMessenger().messages.filter((item) => item.conversationId === id && item.sequence > sequence);
   }
-  return httpJson<MessageDto[]>(`${API}/messages/conversation/${encodeURIComponent(id)}?sinceSequence=${sequence}&limit=100`, {
+  return httpJson<MessageDto[]>(`${API}/messages/conversation/${encodeURIComponent(id)}?sinceSequence=${sequence}&limit=${MESSAGE_PAGE_SIZE}`, {
     service: "messenger",
     operation: "syncConversationMessages",
     errorMessage: i18n.t("services:messenger.syncConversationMessages"),
   });
 }
 
-export async function markConversationRead(id: string, sequence: number): Promise<ConversationDto | undefined> {
-  if (!isAlwaysMockMode("MESSENGER")) return;
-  await waitForMockService();
-  if (sequence > 0) return markMockConversationRead(id);
+export async function markConversationRead(id: string, sequence: number, conversationType?: ConversationDto["conversationType"]): Promise<void> {
+  if (conversationType === "CHAT_BOT" || sequence < 1) return;
+  if (isAlwaysMockMode("MESSENGER")) {
+    await waitForMockService();
+    markMockConversationRead(id);
+    return;
+  }
+  await httpJson<unknown>(`${API}/conversations/${encodeURIComponent(id)}/state`, {
+    service: "messenger",
+    operation: "markConversationRead",
+    method: "PATCH",
+    body: { lastReadSequence: sequence },
+    errorMessage: i18n.t("services:messenger.markConversationRead"),
+  });
 }
 
 export async function sendConversationMessage(
   conversationId: string,
   content: string,
   conversationType: ConversationDto["conversationType"] = "DIRECT",
+  clientMessageId?: string,
 ): Promise<MessageDto> {
   if (isAlwaysMockMode("MESSENGER")) {
     await waitForMockService();
-    return sendMockMessage(conversationId, content);
+    return sendMockMessage(conversationId, content, clientMessageId);
   }
   return httpJson<MessageDto>(`${API}/messages`, {
     service: "messenger",
@@ -127,6 +145,7 @@ export async function sendConversationMessage(
     method: "POST",
     body: {
       conversationId,
+      ...(clientMessageId ? { clientMessageId } : {}),
       messageType: conversationType === "GROUP" ? "USER_TO_GROUP" : conversationType === "CHAT_BOT" ? "USER_TO_CHATBOT" : "USER_TO_USER",
       content,
     },

@@ -7,30 +7,7 @@ import rooftop from "@/assets/mocks/editorial/solar-panels-0b1863beca2c.webp";
 import { routePaths } from "@/config/i18n/paths";
 import type { SupportedLanguage } from "@/config/i18n/browser/languages";
 import type { CatalogTechnician } from "../../professional.service";
-
-const groups = [
-  ["engineering", /engenh|engineer|ingenier/],
-  ["installation", /instala|install|eletrot|electrot/],
-  ["maintenance", /manuten|mainten|mantenim/],
-  ["inspection", /inspe|vistoria|diagn/],
-] as const;
-
-function normalize(value: string) {
-  return value
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase();
-}
-
-export function serviceShelves(items: CatalogTechnician[]) {
-  return [
-    { key: "all", items },
-    ...groups.map(([key, pattern]) => ({
-      key,
-      items: items.filter((person) => person.professions.some((profession) => pattern.test(normalize(profession)))),
-    })),
-  ].filter((shelf) => shelf.items.length > 0);
-}
+import { groups, normalize } from "./ProfessionalFeed.utils";
 
 export function ServiceHighlight({
   format,

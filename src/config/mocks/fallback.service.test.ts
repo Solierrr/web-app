@@ -75,10 +75,20 @@ describe("resolveWithMocks", () => {
   });
 });
 
-it("does not replace seeded API data with legacy mocks in development", async () => {
+it("does not replace API data with mocks in development unless they are enabled", async () => {
   vi.stubEnv("MODE", "development");
   vi.stubEnv("DEV", true);
-  vi.stubEnv("VITE_MOCKS", MocksMode.ALWAYS);
+  vi.stubEnv("VITE_MOCKS", MocksMode.DEACTIVATED);
+  const mockCall = vi.fn();
+  await expect(resolveWithMocks(vi.fn().mockRejectedValue(new Error("offline")), mockCall)).rejects.toThrow("offline");
+  expect(mockCall).not.toHaveBeenCalled();
+});
+
+it("never falls back to mocks in a production build", async () => {
+  vi.stubEnv("PROD", true);
+  vi.stubEnv("DEV", false);
+  vi.stubEnv("MODE", "production");
+  vi.stubEnv("VITE_MOCKS", MocksMode.FALLBACK);
   const mockCall = vi.fn();
   await expect(resolveWithMocks(vi.fn().mockRejectedValue(new Error("offline")), mockCall)).rejects.toThrow("offline");
   expect(mockCall).not.toHaveBeenCalled();
