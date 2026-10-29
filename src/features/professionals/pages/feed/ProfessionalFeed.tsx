@@ -13,7 +13,8 @@ import { getCatalogTechnicians } from "../../professional.service";
 import { getCatalogTeams, teamCompany, type CatalogTeam } from "../../professionalTeam.service";
 import CompanyFeaturedCard from "@/features/companies/pages/feed/CompanyFeaturedCard";
 import ProfessionalCard from "./ProfessionalCard";
-import { serviceShelves, ServiceHighlight } from "./ProfessionalFeed.reusable";
+import { ServiceHighlight } from "./ProfessionalFeed.reusable";
+import { serviceShelves } from "./ProfessionalFeed.utils";
 
 export default function ProfessionalFeed() {
   const { t } = useTranslation("marketplace");
