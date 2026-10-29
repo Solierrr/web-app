@@ -91,7 +91,7 @@ export function createMockConversation(recipientId: string): ConversationDto {
   return conversation;
 }
 
-export function sendMockMessage(conversationId: string, content: string): MessageDto {
+export function sendMockMessage(conversationId: string, content: string, clientMessageId?: string): MessageDto {
   const state = getMockMessenger();
   const sequence = Math.max(0, ...state.messages.filter((item) => item.conversationId === conversationId).map((item) => item.sequence)) + 1;
   const message: MessageDto = {
@@ -101,6 +101,7 @@ export function sendMockMessage(conversationId: string, content: string): Messag
     content,
     timestamp: new Date().toISOString(),
     sequence,
+    clientMessageId: clientMessageId ?? null,
     role: "user",
     messageType:
       getMockConversation(conversationId).conversationType === "GROUP"
