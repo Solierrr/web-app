@@ -44,12 +44,14 @@ export function Conversation({
   readOnly = false,
   displayTitle,
   actions,
+  initialMessage,
 }: {
   conversationId: string;
   embedded?: boolean;
   readOnly?: boolean;
   displayTitle?: string;
   actions?: ReactNode;
+  initialMessage?: string;
 }) {
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
@@ -88,7 +90,13 @@ export function Conversation({
     if (getConnectionState().status !== "connected") window.dispatchEvent(new Event("solaria:messenger"));
   }
   const outbox = useOutbox(conversationId, conversation?.conversationType, deliver);
-  const { acknowledge } = outbox;
+  const { acknowledge, send: sendPending } = outbox;
+  const initialSent = useRef(false);
+  useEffect(() => {
+    if (!initialMessage || !conversation || initialSent.current) return;
+    initialSent.current = true;
+    sendPending(initialMessage);
+  }, [conversation, initialMessage, sendPending]);
   const assistantStatus = useAssistantStatus(conversation?.conversationType === "CHAT_BOT", messages, userId, () => synchronizeRef.current());
 
   useLayoutEffect(() => {
