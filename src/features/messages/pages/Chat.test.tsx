@@ -5,6 +5,8 @@ import Chat from "./Chat";
 import * as api from "@/features/messages/messages.messenger.api";
 import type { ConversationEvent } from "@/features/messages/messages.messenger.realtime";
 import { publishTyping, subscribeToConversation } from "@/features/messages/messages.messenger.socket";
+import { sendAssistantTurn } from "@/features/assistant/assistant.service";
+import { AgentChatError } from "@/features/error/agent-chat/AgentChat.error";
 
 const connection = vi.hoisted(() => ({
   state: { status: "connected", attempts: 0 } as { status: string; attempts: number },
@@ -29,6 +31,7 @@ vi.mock("@/features/messages/messages.messenger.socket", () => ({
   getConnectionState: () => connection.state,
 }));
 vi.mock("@/lib/shared/auth/authToken.utils", () => ({ getAuthSession: () => ({ userId: "me" }) }));
+vi.mock("@/features/assistant/assistant.service", () => ({ sendAssistantTurn: vi.fn() }));
 
 const conversation: api.ConversationDto = {
   id: "conv-1",
@@ -324,8 +327,53 @@ describe("Chat with the assistant", () => {
     });
     expect(await screen.findByText(/demorando mais que o normal/)).toBeInTheDocument();
     expect(api.getConversationMessagesSince).toHaveBeenCalled();
+    vi.mocked(sendAssistantTurn).mockResolvedValue({ response: "É simples.", messengerConversationId: "conv-1" });
     fireEvent.click(screen.getByRole("button", { name: "Tentar novamente" }));
-    await waitFor(() => expect(api.sendConversationMessage).toHaveBeenCalledWith("conv-1", "Como funciona?", "CHAT_BOT", expect.any(String)));
+    await waitFor(() => expect(sendAssistantTurn).toHaveBeenCalledWith("conv-1", "Como funciona?"));
+    expect(api.sendConversationMessage).not.toHaveBeenCalled();
+  });
+
+  it("sends follow-ups to the agent, never to the messenger, and refreshes the conversation", async () => {
+    vi.mocked(api.getConversationMessages).mockResolvedValue([ask(1, "Como funciona?"), answer(2, "É simples.")]);
+    vi.mocked(sendAssistantTurn).mockImplementation(async () => {
+      vi.mocked(api.getConversationMessagesSince).mockResolvedValue([ask(3, "E o preço?"), answer(4, "Depende da potência.")]);
+      return { response: "Depende da potência.", messengerConversationId: "conv-1" };
+    });
+    renderChat();
+    await screen.findByText("É simples.");
+    type("E o preço?");
+    fireEvent.click(screen.getByRole("button", { name: "Enviar mensagem" }));
+
+    expect(await screen.findByText("Depende da potência.")).toBeInTheDocument();
+    expect(sendAssistantTurn).toHaveBeenCalledWith("conv-1", "E o preço?");
+    expect(api.sendConversationMessage).not.toHaveBeenCalled();
+    expect(screen.queryByText("Aguardando o assistente...")).not.toBeInTheDocument();
+  });
+
+  it("explains why the assistant failed and lets the user resend", async () => {
+    vi.mocked(api.getConversationMessages).mockResolvedValue([answer(1, "Olá!")]);
+    vi.mocked(sendAssistantTurn)
+      .mockRejectedValueOnce(new AgentChatError("rateLimited", "Muitas mensagens em pouco tempo. Aguarde um instante e tente novamente."))
+      .mockResolvedValueOnce({ response: "Pronto.", messengerConversationId: "conv-1" });
+    renderChat();
+    await screen.findByText("Olá!");
+    type("Quero ajuda");
+    fireEvent.click(screen.getByRole("button", { name: "Enviar mensagem" }));
+
+    expect(await screen.findByText("Muitas mensagens em pouco tempo. Aguarde um instante e tente novamente.")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Reenviar" }));
+    await waitFor(() => expect(sendAssistantTurn).toHaveBeenCalledTimes(2));
+  });
+
+  it("follows the conversation the agent opens when the service restarted and lost the thread", async () => {
+    vi.mocked(api.getConversationMessages).mockResolvedValue([answer(1, "Olá!")]);
+    vi.mocked(sendAssistantTurn).mockResolvedValue({ response: "Oi", messengerConversationId: "conv-2" });
+    renderChat();
+    await screen.findByText("Olá!");
+    type("Voltei");
+    fireEvent.click(screen.getByRole("button", { name: "Enviar mensagem" }));
+
+    await waitFor(() => expect(api.getConversation).toHaveBeenCalledWith("conv-2"));
   });
 
   it("does not publish typing or save a read cursor for assistant conversations", async () => {

@@ -1,14 +1,15 @@
-import { createChatbotConversation, sendConversationMessage, type ConversationDto } from "./messages.messenger.api";
+import { sendAssistantTurn } from "@/features/assistant/assistant.service";
+import { getConversation, type ConversationDto } from "./messages.messenger.api";
+import { rememberAssistantThread } from "./messages.assistant.utils";
 
-/** Abre uma sessão do assistente e, se houver texto, já envia a primeira mensagem. `sendFailed` indica que a conversa existe, mas o texto não foi enviado. */
-export async function startAssistantConversation(userType: string, text?: string): Promise<{ conversation: ConversationDto; sendFailed: boolean }> {
-  const conversation = await createChatbotConversation(userType);
-  if (!text) return { conversation, sendFailed: false };
-  try {
-    await sendConversationMessage(conversation.id, text, "CHAT_BOT");
-  } catch {
-    return { conversation, sendFailed: true };
-  }
+export async function startAssistantConversation(text: string): Promise<ConversationDto> {
+  const threadId = crypto.randomUUID();
+  const { messengerConversationId } = await sendAssistantTurn(threadId, text);
+  rememberAssistantThread(messengerConversationId, threadId);
   window.dispatchEvent(new Event("solaria:messenger"));
-  return { conversation, sendFailed: false };
+  try {
+    return await getConversation(messengerConversationId);
+  } catch {
+    return { id: messengerConversationId, conversationType: "CHAT_BOT", participantIds: [], title: null, lastInteractionAt: null };
+  }
 }

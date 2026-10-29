@@ -17,7 +17,6 @@ import { getConnectionState, subscribeToUserEvents } from "@/features/messages/m
 import { mergeConversation, removeConversation } from "@/features/messages/messages.messenger.realtime.utils";
 import { useMessengerConnection } from "@/features/messages/messages.hooks";
 import ConnectionNotice from "./ConnectionNotice";
-import { useActiveContext } from "@/lib/shared/context/ActiveContext";
 import { Conversation } from "./Chat";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
 import ConversationList from "./ConversationList";
@@ -30,6 +29,8 @@ import SurfaceGroup from "@@/ui/surface/SurfaceGroup";
 import Confirmation from "@@/overlay/confirmation/Confirmation";
 import { getHiddenConversations, hideConversation } from "@/features/messages/conversations.utils";
 import { startAssistantConversation } from "@/features/messages/messages.assistant.service";
+import { AgentChatError } from "@/features/error/agent-chat/AgentChat.error";
+import { useActiveContext } from "@/lib/shared/context/ActiveContext";
 import MessageComposer from "@@/ui/message-composer/MessageComposer";
 import Surface from "@@/ui/surface/Surface";
 import ConversationIntro from "@@/layout/chat/conversation-intro/ConversationIntro";
@@ -55,7 +56,7 @@ export default function Inbox() {
   const [contactsLoading, setContactsLoading] = useState(false);
   const [contactsError, setContactsError] = useState(false);
   const [creating, setCreating] = useState(false);
-  const [createError, setCreateError] = useState(false);
+  const [createError, setCreateError] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
   const mounted = useRef(false);
   const reloadRef = useRef<() => Promise<void>>(() => Promise.resolve());
@@ -171,7 +172,7 @@ export default function Inbox() {
     if (contactsOpen) return;
     setContactsLoading(true);
     setContactsError(false);
-    setCreateError(false);
+    setCreateError(null);
     setContactsOpen(true);
   }
   function selectConversation(item: ConversationDto) {
@@ -182,7 +183,7 @@ export default function Inbox() {
   async function startPerson(contact: MessengerContact) {
     if (creating) return;
     setCreating(true);
-    setCreateError(false);
+    setCreateError(null);
     try {
       const item = await createDirectConversation(contact.authId);
       if (mounted.current) {
@@ -190,7 +191,7 @@ export default function Inbox() {
         selectConversation(item);
       }
     } catch {
-      if (mounted.current) setCreateError(true);
+      if (mounted.current) setCreateError(t("createError"));
     } finally {
       if (mounted.current) setCreating(false);
     }
@@ -199,23 +200,20 @@ export default function Inbox() {
     if (creating) return;
     const text = withMessage ? draft.trim() : "";
     if (withMessage && !text) return;
+    if (!text || (context.kind === "company" && context.company !== null)) {
+      setContactsOpen(false);
+      navigate(routePaths.operationalChatbot(lang), text ? { state: { initialMessage: text } } : undefined);
+      return;
+    }
     setCreating(true);
-    setCreateError(false);
+    setCreateError(null);
     try {
-      const { conversation, sendFailed } = await startAssistantConversation(
-        context.kind === "company" ? (context.company?.type ?? "COMPANY") : "PERSONAL",
-        text,
-      );
+      const conversation = await startAssistantConversation(text);
       if (!mounted.current) return;
-      if (sendFailed) {
-        setContactsOpen(false);
-        navigate(routePaths.chat(lang, conversation.id), { state: { initialDraft: text, initialSendError: true } });
-        return;
-      }
-      if (text) setDraft("");
+      setDraft("");
       selectConversation(conversation);
-    } catch {
-      if (mounted.current) setCreateError(true);
+    } catch (error) {
+      if (mounted.current) setCreateError(error instanceof AgentChatError ? error.message : t("createError"));
     } finally {
       if (mounted.current) setCreating(false);
     }
@@ -256,7 +254,7 @@ export default function Inbox() {
       <ConnectionNotice connection={connection} />
       {createError && (
         <p role="alert" className="mb-3 text-body">
-          {t("createError")}
+          {createError}
         </p>
       )}
       {hasList && !conversationId && (

@@ -150,5 +150,17 @@
     "listSales": "No se pudieron cargar las ventas.",
     "getSubscription": "No se pudo cargar el plan.",
     "payCharge": "No se pudo pagar el cobro."
+  },
+  "aiFailures": {
+    "unauthorized": "Tu sesión ha expirado. Vuelve a iniciar sesión e inténtalo de nuevo.",
+    "forbidden": "Tu cuenta no tiene permiso para usar este recurso.",
+    "rateLimited": "Demasiadas solicitudes en poco tiempo. Espera un minuto e inténtalo de nuevo.",
+    "unavailable": "El servicio de IA no está disponible o se está iniciando. Inténtalo de nuevo en unos instantes.",
+    "timeout": "El servicio tardó en responder y puede estar iniciándose. Inténtalo de nuevo.",
+    "network": "No hay conexión con el servicio. Revisa tu internet e inténtalo de nuevo.",
+    "tooLarge": "El archivo enviado es demasiado grande."
+  },
+  "aiAccessibility": {
+    "analyzeImage": "No se pudo analizar la imagen"
   }
 }

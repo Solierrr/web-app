@@ -11,7 +11,7 @@ import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
 import { playwright } from '@vitest/browser-playwright';
 const dirname = import.meta.dirname;
 
-const MOCK_FLAGS = ["VITE_MOCKS", "VITE_AUTH_MOCKS", "VITE_MESSENGER_MOCKS"];
+const MOCK_FLAGS = ["VITE_MOCKS", "VITE_AUTH_MOCKS", "VITE_MESSENGER_MOCKS", "VITE_AI_MOCKS"];
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig(({ mode, command }) => {
