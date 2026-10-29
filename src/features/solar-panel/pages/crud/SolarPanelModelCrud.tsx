@@ -636,6 +636,7 @@ export default function SolarPanelModelCrud() {
                 <ImageInput
                   name="primaryPhoto"
                   multiple={false}
+                  analysis={{ purpose: "product", contextTitle: `${form.brand} ${form.model}`.trim() }}
                   files={primaryFiles}
                   onChange={setPrimaryFiles}
                   onError={setPhotoError}
@@ -667,6 +668,7 @@ export default function SolarPanelModelCrud() {
               {can("POST /api/model-photos") && (
                 <ImageInput
                   name="photos"
+                  analysis={{ purpose: "product", contextTitle: `${form.brand} ${form.model}`.trim() }}
                   files={files}
                   onChange={setFiles}
                   onError={setPhotoError}

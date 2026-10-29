@@ -196,6 +196,7 @@ export default function BrandManager({ brands, onSaved, onClose, initialBrandId,
           </div>
           <ImageInput
             name="brandLogo"
+            analysis={{ purpose: "company_profile", contextTitle: name }}
             files={files}
             onChange={setFiles}
             onError={setError}

@@ -159,5 +159,8 @@
     "timeout": "El servicio tardó en responder y puede estar iniciándose. Inténtalo de nuevo.",
     "network": "No hay conexión con el servicio. Revisa tu internet e inténtalo de nuevo.",
     "tooLarge": "El archivo enviado es demasiado grande."
+  },
+  "aiAccessibility": {
+    "analyzeImage": "No se pudo analizar la imagen"
   }
 }

@@ -72,6 +72,7 @@ export default function ProjectGallery({ project: p, onChange }: { project: Proj
           <p className="text-operational-muted">{t("photoHelp")}</p>
           <ImageInput
             name="projectPhotos"
+            analysis={{ purpose: "product", strictPurpose: false, contextTitle: p.name }}
             files={files}
             onChange={setFiles}
             onError={setError}
