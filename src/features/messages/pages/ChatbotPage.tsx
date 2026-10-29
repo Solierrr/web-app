@@ -13,21 +13,20 @@ import SideCanvas from "@@/layout/access/canvas/SideCanvas";
 import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
 import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
-import { createChatbotConversation } from "@/features/messages/messages.messenger.api";
+import { startAssistantConversation } from "@/features/messages/messages.assistant.service";
+import { AgentChatError } from "@/features/error/agent-chat/AgentChat.error";
 import { Conversation } from "./Chat";
 
-type Failure = "signIn" | "create" | null;
+type Failure = { kind: "signIn" } | { kind: "create"; message: string } | null;
 
 export default function ChatbotPage({
   operational = false,
   embedded = false,
   active = true,
-  userType = "PERSONAL",
 }: {
   operational?: boolean;
   embedded?: boolean;
   active?: boolean;
-  userType?: string;
 }) {
   const { t } = useTranslation("chat", { keyPrefix: "chatbot" });
   const { t: tChat } = useTranslation("chat");
@@ -35,7 +34,6 @@ export default function ChatbotPage({
   const lang = isSupportedLanguage(parameter) ? parameter : DEFAULT;
   const panelStyle = embedded || operational;
   const [conversationId, setConversationId] = useState<string | null>(null);
-  const [firstMessage, setFirstMessage] = useState<string | undefined>();
   const [draft, setDraft] = useState("");
   const [starting, setStarting] = useState(false);
   const [failure, setFailure] = useState<Failure>(null);
@@ -43,7 +41,6 @@ export default function ChatbotPage({
 
   function startNewConversation() {
     setConversationId(null);
-    setFirstMessage(undefined);
     setDraft("");
     setFailure(null);
   }
@@ -52,18 +49,17 @@ export default function ChatbotPage({
     const text = draft.trim();
     if (!text || starting) return;
     if (!getAuthSession()) {
-      setFailure("signIn");
+      setFailure({ kind: "signIn" });
       return;
     }
     setStarting(true);
     setFailure(null);
     try {
-      const conversation = await createChatbotConversation(userType);
-      setFirstMessage(text);
+      const conversation = await startAssistantConversation(text);
       setConversationId(conversation.id);
       setDraft("");
-    } catch {
-      setFailure("create");
+    } catch (error) {
+      setFailure({ kind: "create", message: error instanceof AgentChatError ? error.message : tChat("createError") });
     } finally {
       setStarting(false);
     }
@@ -71,12 +67,17 @@ export default function ChatbotPage({
 
   const composerContent = (
     <div ref={composer} className={`shrink-0 ${operational ? "px-2 py-1" : ""}`}>
-      {failure === "create" && (
-        <p role="alert" className="mb-2 text-body text-operational-muted">
-          {tChat("createError")}
+      {starting && (
+        <p role="status" className="mb-2 animate-pulse text-body text-operational-muted motion-reduce:animate-none">
+          {t("thinking")}
         </p>
       )}
-      {failure === "signIn" && (
+      {failure?.kind === "create" && (
+        <p role="alert" className="mb-2 text-body text-operational-muted">
+          {failure.message}
+        </p>
+      )}
+      {failure?.kind === "signIn" && (
         <p role="alert" className="mb-2 text-body text-operational-muted">
           {t("signInRequired")}{" "}
           <Link to={routePaths.login(lang)} className="font-medium text-operational-ink underline">
@@ -121,7 +122,7 @@ export default function ChatbotPage({
         key={conversationId}
         conversationId={conversationId}
         embedded
-        initialMessage={firstMessage}
+        onConversationChange={setConversationId}
         actions={
           <ToolbarAction
             icon="newConversation"

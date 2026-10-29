@@ -137,6 +137,20 @@
     "sending": "Sending...",
     "failed": "This message could not be sent.",
     "retry": "Resend",
-    "discard": "Discard"
+    "discard": "Discard",
+    "waitingAssistant": "Waiting for the assistant..."
+  },
+  "agent": {
+    "errors": {
+      "unauthorized": "Your session has expired. Sign in again to continue the conversation.",
+      "forbidden": "Your account is not allowed to use the assistant.",
+      "rateLimited": "Too many messages in a short time. Wait a moment and try again.",
+      "unavailable": "The assistant is unavailable or starting up, which can take up to 1 minute. Try again.",
+      "timeout": "The assistant took too long to answer. Try again.",
+      "network": "Unable to reach the assistant. Check your connection and try again.",
+      "tooLarge": "The message is too long. Shorten it and try again.",
+      "invalid": "The assistant did not accept this message. Rewrite it and try again.",
+      "unknown": "Unable to talk to the assistant. Try again."
+    }
   }
 }

@@ -137,6 +137,20 @@
     "sending": "Enviando...",
     "failed": "Não foi possível enviar esta mensagem.",
     "retry": "Reenviar",
-    "discard": "Descartar"
+    "discard": "Descartar",
+    "waitingAssistant": "Aguardando o assistente..."
+  },
+  "agent": {
+    "errors": {
+      "unauthorized": "Sua sessão expirou. Entre novamente para continuar a conversa.",
+      "forbidden": "Sua conta não tem permissão para usar o assistente.",
+      "rateLimited": "Muitas mensagens em pouco tempo. Aguarde um instante e tente novamente.",
+      "unavailable": "O assistente está indisponível ou iniciando, o que pode levar até 1 minuto. Tente novamente.",
+      "timeout": "O assistente demorou demais para responder. Tente novamente.",
+      "network": "Sem conexão com o assistente. Verifique sua internet e tente novamente.",
+      "tooLarge": "A mensagem é grande demais. Encurte o texto e tente novamente.",
+      "invalid": "O assistente não aceitou esta mensagem. Reescreva e tente novamente.",
+      "unknown": "Não foi possível falar com o assistente. Tente novamente."
+    }
   }
 }

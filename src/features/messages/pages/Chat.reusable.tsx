@@ -32,7 +32,7 @@ export function PendingBubble({
       endOfGroup={false}>
       <div className="flex flex-wrap items-center gap-2" aria-live="polite">
         <span role={failed ? "alert" : "status"} className="text-sidebar-group text-(--message-muted)">
-          {failed ? t("outbox.failed") : t("outbox.sending")}
+          {failed ? (item.reason ?? t("outbox.failed")) : t(conversationKind === "assistant" ? "outbox.waitingAssistant" : "outbox.sending")}
         </span>
         {failed && (
           <>

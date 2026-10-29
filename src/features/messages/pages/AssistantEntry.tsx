@@ -9,8 +9,8 @@ import Surface from "@@/ui/surface/Surface";
 import SurfaceGroup from "@@/ui/surface/SurfaceGroup";
 import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
-import { useActiveContext } from "@/lib/shared/context/ActiveContext";
 import { startAssistantConversation } from "@/features/messages/messages.assistant.service";
+import { AgentChatError } from "@/features/error/agent-chat/AgentChat.error";
 
 /** Porta de entrada do assistente: a primeira mensagem abre uma conversa e leva para a tela de conversas, onde ela continua. */
 export default function AssistantEntry() {
@@ -18,24 +18,20 @@ export default function AssistantEntry() {
   const lang = isSupportedLanguage(parameter) ? parameter : DEFAULT;
   const { t } = useTranslation("chat");
   const navigate = useNavigate();
-  const context = useActiveContext();
   const [draft, setDraft] = useState("");
   const [creating, setCreating] = useState(false);
-  const [failed, setFailed] = useState(false);
+  const [failure, setFailure] = useState<string | null>(null);
 
   async function send() {
     const text = draft.trim();
     if (!text || creating) return;
     setCreating(true);
-    setFailed(false);
+    setFailure(null);
     try {
-      const { conversation, sendFailed } = await startAssistantConversation(
-        context.kind === "company" ? (context.company?.type ?? "COMPANY") : "PERSONAL",
-        text,
-      );
-      navigate(routePaths.chat(lang, conversation.id), sendFailed ? { state: { initialDraft: text, initialSendError: true } } : undefined);
-    } catch {
-      setFailed(true);
+      const conversation = await startAssistantConversation(text);
+      navigate(routePaths.chat(lang, conversation.id));
+    } catch (error) {
+      setFailure(error instanceof AgentChatError ? error.message : t("createError"));
       setCreating(false);
     }
   }
@@ -48,9 +44,14 @@ export default function AssistantEntry() {
       </SurfaceGroup>
       <div className="mx-auto flex h-full min-h-0 w-full max-w-operational-copy flex-col items-center justify-center gap-6 p-4 py-8 text-center sm:p-6">
         <ConversationIntro as="h1" title={t("chatbot.welcomeTitle")} subtitle={t("chatbot.welcomeSubtitle")} />
-        {failed && (
+        {creating && (
+          <p role="status" className="animate-pulse text-body text-operational-muted motion-reduce:animate-none">
+            {t("chatbot.thinking")}
+          </p>
+        )}
+        {failure && (
           <p role="alert" className="text-body text-operational-muted">
-            {t("createError")}
+            {failure}
           </p>
         )}
         <Surface field className="w-full text-left" contentClassName="overflow-visible!">
