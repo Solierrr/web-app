@@ -95,7 +95,9 @@
     "assistantName": "Assistant",
     "thinking": "The assistant is thinking...",
     "timeout": "The assistant is taking longer than usual. You can try again.",
-    "retry": "Try again"
+    "retry": "Try again",
+    "signInRequired": "Sign in to talk to the assistant.",
+    "signIn": "Sign in"
   },
   "attachments": {
     "remove": "Remove {{name}}",

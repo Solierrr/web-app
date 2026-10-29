@@ -95,7 +95,9 @@
     "assistantName": "Asistente",
     "thinking": "El asistente está pensando...",
     "timeout": "El asistente está tardando más de lo normal. Puedes intentarlo de nuevo.",
-    "retry": "Intentar de nuevo"
+    "retry": "Intentar de nuevo",
+    "signInRequired": "Inicia sesión para hablar con el asistente.",
+    "signIn": "Iniciar sesión"
   },
   "attachments": {
     "remove": "Eliminar {{name}}",
