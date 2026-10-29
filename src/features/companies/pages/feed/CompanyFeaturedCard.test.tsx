@@ -19,7 +19,7 @@ const company: CatalogCompany = {
 };
 
 describe("CompanyFeaturedCard", () => {
-  it("shows the company and activities and opens its public profile", () => {
+  it("shows the company and location and opens its public profile", () => {
     render(
       <MemoryRouter>
         <Routes>
@@ -28,8 +28,8 @@ describe("CompanyFeaturedCard", () => {
         </Routes>
       </MemoryRouter>,
     );
-    expect(screen.getByText("Equipe de técnicos · Revisão e inspeção")).toBeInTheDocument();
-    expect(screen.getByText("São Paulo / SP")).toBeInTheDocument();
+    expect(screen.getByText("São Paulo, SP")).toBeInTheDocument();
+    expect(screen.queryByText(/Equipe de técnicos/)).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("link", { name: "Equipe Solar" }));
     expect(screen.getByRole("heading", { name: "Perfil da empresa" })).toBeInTheDocument();
   });
@@ -46,7 +46,7 @@ describe("CompanyFeaturedCard", () => {
     expect(screen.getByRole("link", { name: company.tradeName })).toHaveAttribute("href", routePaths.companyProfile(DEFAULT, company.slug));
   });
 
-  it("does not invent activities or location when the catalog omits them", () => {
+  it("does not invent a location when the catalog omits it", () => {
     render(
       <MemoryRouter>
         <CompanyFeaturedCard
@@ -55,7 +55,6 @@ describe("CompanyFeaturedCard", () => {
         />
       </MemoryRouter>,
     );
-    expect(screen.queryByText(/Equipe de técnicos/)).not.toBeInTheDocument();
     expect(screen.queryByText(/São Paulo/)).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: company.tradeName })).toBeInTheDocument();
   });
