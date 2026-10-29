@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import SolarPanelFeed from "@/features/solar-panel/pages/feed/SolarPanelFeed";
@@ -47,16 +47,27 @@ function renderFeed(element: React.ReactNode, path: string) {
   );
 }
 
+function offerSlugs(shelf: HTMLElement) {
+  const hrefs = within(shelf)
+    .getAllByRole("link")
+    .map((link) => link.getAttribute("href")?.split("/").pop());
+  return [...new Set(hrefs)];
+}
+
 describe("Marketplace page views", () => {
-  it("sorts offers on the same page by recent publication or trending score", async () => {
-    const { container } = renderFeed(<SolarPanelFeed />, "/pt-BR/placas-solares");
-    await screen.findByText(solarPanelAnnouncementMocks[1].title);
-    const firstOffer = () => container.querySelector("[data-featured-offer]")?.textContent;
-    expect(firstOffer()).toContain(solarPanelAnnouncementMocks[1].title);
-    fireEvent.click(screen.getByRole("link", { name: "Em alta" }));
-    await waitFor(() => expect(firstOffer()).toContain(solarPanelAnnouncementMocks[2].title));
-    expect(screen.getByRole("link", { name: "Em alta" })).toHaveAttribute("aria-current", "page");
-    expect(screen.getByRole("link", { name: "Recentes" })).toHaveAttribute("href", "/pt-BR/placas-solares?view=recent");
+  it("leads the solar panel feed with the trending shelf ordered by trending score", async () => {
+    renderFeed(<SolarPanelFeed />, "/pt-BR/placas-solares");
+    const shelf = (await screen.findByRole("heading", { name: "Em alta agora." })).closest("section")!;
+    expect(offerSlugs(shelf)).toEqual([2, 0, 1].map((index) => solarPanelAnnouncementMocks[index].slug));
+  });
+
+  it("leads the solar panel feed with the recent shelf ordered by publication when no offer is trending", async () => {
+    vi.mocked(getCatalogSolarPanels).mockResolvedValue(
+      solarPanelAnnouncementMocks.slice(0, 3).map((offer) => ({ ...offer, trendingScore: undefined })),
+    );
+    renderFeed(<SolarPanelFeed />, "/pt-BR/placas-solares");
+    const shelf = (await screen.findByRole("heading", { name: "Acabaram de chegar." })).closest("section")!;
+    expect(offerSlugs(shelf)).toEqual([1, 2, 0].map((index) => solarPanelAnnouncementMocks[index].slug));
   });
 
   it("filters independent technicians and shows teams linked to company profiles", async () => {
