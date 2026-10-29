@@ -40,6 +40,12 @@ describe("notification utils", () => {
   it("accepts only known types and short string data from a push launch", () => {
     expect(normalizePushTarget({ type: "OTHER", data: {} })).toBeNull();
     expect(normalizePushTarget(null)).toBeNull();
+    expect(normalizePushTarget({ type: "NEW_MESSAGE", data: {}, notificationId: "../n" })).toEqual({ type: "NEW_MESSAGE", data: {} });
+    expect(normalizePushTarget({ type: "NEW_MESSAGE", data: {}, notificationId: "n-1" })).toEqual({
+      type: "NEW_MESSAGE",
+      data: {},
+      notificationId: "n-1",
+    });
     expect(normalizePushTarget({ type: "NEW_MESSAGE", data: { conversationId: "c-1", n: 4, long: "x".repeat(201) } })).toEqual({
       type: "NEW_MESSAGE",
       data: { conversationId: "c-1" },

@@ -4,6 +4,7 @@ import type { PushNavigationTarget } from "./notification";
 import { NotificationType } from "./notification.enum";
 
 export const NOTIFICATIONS_CHANGED_EVENT = "solaria:notifications";
+export const NOTIFICATION_RECEIVED_EVENT = "solaria:notifications:received";
 export const PUSH_LAUNCH_PARAMETER = "push";
 
 const INSTALLATION_ID = /^[A-Za-z0-9_-]{1,64}$/;
@@ -16,6 +17,10 @@ export function isInstallationId(value: unknown): value is string {
 
 export function emitNotificationsChanged(): void {
   window.dispatchEvent(new Event(NOTIFICATIONS_CHANGED_EVENT));
+}
+
+export function emitNotificationReceived(): void {
+  window.dispatchEvent(new Event(NOTIFICATION_RECEIVED_EVENT));
 }
 
 export function browserVersionLabel(userAgent: string): string {
@@ -53,13 +58,15 @@ export function parsePushLaunch(search: string): PushNavigationTarget | null {
 
 export function normalizePushTarget(value: unknown): PushNavigationTarget | null {
   if (typeof value !== "object" || value === null) return null;
-  const { type, data } = value as { type?: unknown; data?: unknown };
+  const { type, data, notificationId } = value as { type?: unknown; data?: unknown; notificationId?: unknown };
   if (typeof type !== "string" || !Object.values<string>(NotificationType).includes(type)) return null;
   const safe: Record<string, string> = {};
   if (typeof data === "object" && data !== null) {
     for (const [key, item] of Object.entries(data)) if (typeof item === "string" && item.length <= 200) safe[key] = item;
   }
-  return { type, data: safe };
+  return IDENTIFIER.test(typeof notificationId === "string" ? notificationId : "")
+    ? { type, data: safe, notificationId: notificationId as string }
+    : { type, data: safe };
 }
 
 export function stripPushLaunch(search: string): string {
