@@ -1,5 +1,44 @@
 # Changelog
 
+## [3.6.0](https://github.com/Solierrr/web-app/compare/v3.5.0...v3.6.0) (2026-10-31)
+
+
+### Features
+
+* add a persistent access shell with a stable logo ([7792eba](https://github.com/Solierrr/web-app/commit/7792ebaf8d10e4b9b3be6373eb2761be4f8506e1))
+* add the status page and action link components ([c55239d](https://github.com/Solierrr/web-app/commit/c55239db1d8302fe48a77f6361d280d696a5ef8a))
+* add the surface group and group action components ([7ba5a21](https://github.com/Solierrr/web-app/commit/7ba5a219af997e0da328d37ce8e7a877e2b2373c))
+* add web push notifications and a notification center ([#99](https://github.com/Solierrr/web-app/issues/99)) ([57c6336](https://github.com/Solierrr/web-app/commit/57c6336873e37a3d76f59e5bf9eccaf78c093479))
+* center the conversation and refresh its header and composer ([573c01a](https://github.com/Solierrr/web-app/commit/573c01a0c293f2a582cf6fc4bd483edf11ef0d4b))
+* expand marketplace mock catalog ([0a50567](https://github.com/Solierrr/web-app/commit/0a50567cd0a4a8273a8fbcb001690836ac45d493))
+* group chat bubbles and show the hour once per sequence ([317f3b3](https://github.com/Solierrr/web-app/commit/317f3b3244885187c31fe20f9d6fbb2b8cb81d3a))
+* improve marketplace feeds and profiles ([7f01b96](https://github.com/Solierrr/web-app/commit/7f01b96ec7d46f4ddda0f9cb1b5445a732666e3f))
+* improve messaging and assistant conversations ([d438485](https://github.com/Solierrr/web-app/commit/d438485a368bbf65aec17f8748bd7d49c4124ee4))
+* improve shared interface components ([fa051cb](https://github.com/Solierrr/web-app/commit/fa051cb0353636f986fc4afb0a99882254547f4d))
+* integrate the ai services in the web app ([#98](https://github.com/Solierrr/web-app/issues/98)) ([ffbec30](https://github.com/Solierrr/web-app/commit/ffbec3070bbfffb40cb31923c247824a732461fb))
+* integrate the chat with the messenger in real time ([#96](https://github.com/Solierrr/web-app/issues/96)) ([3ac3cd7](https://github.com/Solierrr/web-app/commit/3ac3cd7240420f311230483a16ad5c7481c58178))
+* promote access, deeplink and chat interface improvements ([00d92ae](https://github.com/Solierrr/web-app/commit/00d92aee8ca6687c42e43f07a32a6a1d67dbc688))
+* redesign marketplace feeds and complete frontend account flows ([#95](https://github.com/Solierrr/web-app/issues/95)) ([dae72d9](https://github.com/Solierrr/web-app/commit/dae72d95d8806a2b815f85391d9a7a7432641ff2))
+* redesign the deeplink screens for mobile ([b075ea5](https://github.com/Solierrr/web-app/commit/b075ea5e3e3a67b1c0214a69469660ce989a9f9c))
+* redesign the remembered account and entry choices on login ([ebed78a](https://github.com/Solierrr/web-app/commit/ebed78a2c0bd0ed42256bad5b09d580d3123c976))
+* refine dashboard and project views ([19a7736](https://github.com/Solierrr/web-app/commit/19a7736a97b3fe3cf85337c47c2a32135ab96b22))
+* refine marketplace footer ([fb58f0a](https://github.com/Solierrr/web-app/commit/fb58f0ac4d342dd72f49f266388749b85492da9e))
+* show time and unread badge on the conversation list ([49cf49b](https://github.com/Solierrr/web-app/commit/49cf49be71fe9f642686baf7e9bf91e215acd34b))
+* **storybook:** apply solaria interface theme ([f41de69](https://github.com/Solierrr/web-app/commit/f41de6960d93eb1caa4e37ba9c33538363a25e41))
+* **storybook:** simplify gallery layout and top toolbar ([19c6aab](https://github.com/Solierrr/web-app/commit/19c6aab79742bcc6f34d33abd29e152308be6ce1))
+* truncate long toast messages with an expand control ([14bddeb](https://github.com/Solierrr/web-app/commit/14bddeb20528f84424d7b326e3f92b3bc0be4c07))
+
+
+### Bug Fixes
+
+* align access page logo and favicon ([dd89f1d](https://github.com/Solierrr/web-app/commit/dd89f1d3e5542a1bb6497b319c53d1a5a24a343f))
+* align access page logo and favicon ([#91](https://github.com/Solierrr/web-app/issues/91)) ([b3b7a9c](https://github.com/Solierrr/web-app/commit/b3b7a9cb6f0e8c401f7b4fe21ff6b303ba63151d))
+* remove the duplicated access shell from the form body ([504374d](https://github.com/Solierrr/web-app/commit/504374d4607025e9cb51919c3af3a64134516b35))
+* remove the name next to the sidebar logo ([5706991](https://github.com/Solierrr/web-app/commit/570699184600b64cdc32856f730496a39c01a83e))
+* serve the spa index for client side routes ([#100](https://github.com/Solierrr/web-app/issues/100)) ([#101](https://github.com/Solierrr/web-app/issues/101)) ([11900ed](https://github.com/Solierrr/web-app/commit/11900ed59e23e32f4850a8b595e73f3d95703e34))
+* **storybook:** frame controls and allow preview resizing ([3b95c56](https://github.com/Solierrr/web-app/commit/3b95c56505a2c7f9b3575d65a6c9c754cd925b29))
+* use the shared favicon ([0310302](https://github.com/Solierrr/web-app/commit/031030295f28e5af6640a58deef54ba5dc62d09d))
+
 ## [3.5.0](https://github.com/Solierrr/web-app/compare/v3.4.0...v3.5.0) (2026-10-20)
 
 
