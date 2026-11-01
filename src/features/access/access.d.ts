@@ -6,6 +6,7 @@ export interface LoginCredentials {
 export interface RegisterCredentials {
   email: string;
   password: string;
+  locale?: string;
 }
 
 export interface AuthSession {

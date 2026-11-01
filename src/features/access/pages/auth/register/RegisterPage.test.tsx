@@ -94,7 +94,7 @@ describe("RegisterPage", () => {
     fillForm({ password: "supersecret123", confirmPassword: "supersecret123" });
 
     await waitFor(() => {
-      expect(mockedRegister).toHaveBeenCalledWith({ email: "user@solaria.com", password: "supersecret123" });
+      expect(mockedRegister).toHaveBeenCalledWith({ email: "user@solaria.com", password: "supersecret123", locale: "pt-BR" });
       expect(mockedLogin).toHaveBeenCalledWith({ email: "user@solaria.com", password: "supersecret123" });
     });
   });
