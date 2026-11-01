@@ -1,16 +1,16 @@
 /* Scope the presentation to Storybook's manager, outside the story iframe. */
 body {
-  --solaria-header-height: 4rem;
-  --solaria-workspace-width: 96rem;
-  background: var(--solaria-shell);
-  color: var(--solaria-ink);
-  font-family: var(--solaria-font);
+  --chrome-header-height: 4rem;
+  --chrome-workspace-width: 96rem;
+  background: var(--chrome-shell);
+  color: var(--chrome-ink);
+  font-family: var(--chrome-font);
 }
 
 body:has([data-testid="sb-preview-toolbar"]) #root > div:first-child {
-  width: min(100%, var(--solaria-workspace-width));
-  height: calc(100dvh - var(--solaria-header-height));
-  margin: var(--solaria-header-height) auto 0;
+  width: min(100%, var(--chrome-workspace-width));
+  height: calc(100dvh - var(--chrome-header-height));
+  margin: var(--chrome-header-height) auto 0;
 }
 
 body [data-testid="sb-preview-toolbar"] {
@@ -18,12 +18,12 @@ body [data-testid="sb-preview-toolbar"] {
   z-index: 20;
   top: 0;
   left: 50%;
-  width: min(100%, var(--solaria-workspace-width));
-  height: var(--solaria-header-height);
+  width: min(100%, var(--chrome-workspace-width));
+  height: var(--chrome-header-height);
   transform: translateX(-50%);
   padding: 0 4.25rem 0 1rem;
   border: 0;
-  background: var(--solaria-shell);
+  background: var(--chrome-shell);
   box-shadow: none;
 }
 
@@ -39,7 +39,7 @@ body [data-testid="sb-preview-toolbar"] {
 }
 
 [data-testid="sb-preview-toolbar"] button,
-.solaria-toolbar-link,
+.chrome-toolbar-link,
 .sidebar-header button[aria-label="Settings"] {
   box-sizing: border-box;
   display: inline-flex;
@@ -51,19 +51,19 @@ body [data-testid="sb-preview-toolbar"] {
   border: 0;
   border-radius: 0.5rem;
   background: transparent;
-  color: var(--solaria-ink);
+  color: var(--chrome-ink);
   cursor: pointer;
   box-shadow: none;
 }
 
 [data-testid="sb-preview-toolbar"] button:hover,
-.solaria-toolbar-link:hover,
+.chrome-toolbar-link:hover,
 .sidebar-header button[aria-label="Settings"]:hover {
-  background: var(--solaria-hover);
+  background: var(--chrome-hover);
 }
 
-.solaria-toolbar-link:focus-visible {
-  outline: 2px solid var(--solaria-ink);
+.chrome-toolbar-link:focus-visible {
+  outline: 2px solid var(--chrome-ink);
   outline-offset: 2px;
 }
 
@@ -75,7 +75,7 @@ body [data-testid="sb-preview-toolbar"] {
 
 [data-testid="sb-preview-toolbar"] button[aria-checked="true"],
 [data-testid="sb-preview-toolbar"] button[aria-expanded="true"] {
-  background: var(--solaria-hover);
+  background: var(--chrome-hover);
 }
 
 [data-testid="sb-preview-toolbar"] button[aria-label^="Idioma da prévia"] {
@@ -99,10 +99,10 @@ body [data-testid="sb-preview-toolbar"] {
   width: calc(100% - 1.5rem);
   height: calc(100% - 2rem);
   margin: 1rem 0.5rem 1rem 1rem;
-  border: 0.5rem solid var(--solaria-shell);
-  border-radius: var(--solaria-radius);
-  background: var(--solaria-surface);
-  box-shadow: var(--solaria-shadow);
+  border: 0.5rem solid var(--chrome-shell);
+  border-radius: var(--chrome-radius);
+  background: var(--chrome-surface);
+  box-shadow: var(--chrome-shadow);
 }
 
 #storybook-sidebar-region .sidebar-header {
@@ -113,7 +113,7 @@ body [data-testid="sb-preview-toolbar"] {
   border: 0;
 }
 
-.sidebar-header a[title="Solaria · Web App"] {
+.sidebar-header a[title="Web App"] {
   display: none;
 }
 
@@ -127,11 +127,11 @@ body:has([data-testid="sb-preview-toolbar"]) .sidebar-header button[aria-label="
   position: fixed;
   z-index: 21;
   top: 0.875rem;
-  right: max(1rem, calc((100vw - var(--solaria-workspace-width)) / 2 + 1rem));
+  right: max(1rem, calc((100vw - var(--chrome-workspace-width)) / 2 + 1rem));
 }
 
 .sidebar-subheading {
-  color: var(--solaria-muted);
+  color: var(--chrome-muted);
   letter-spacing: 0.04em;
 }
 
@@ -142,22 +142,22 @@ body:has([data-testid="sb-preview-toolbar"]) .sidebar-header button[aria-label="
 }
 
 .sidebar-item:hover {
-  background: var(--solaria-hover);
+  background: var(--chrome-hover);
 }
 
 #storybook-sidebar-region .sidebar-item[data-selected="true"] {
   overflow: hidden;
-  background: var(--solaria-shell);
-  color: var(--solaria-accent);
-  box-shadow: var(--solaria-shadow);
+  background: var(--chrome-shell);
+  color: var(--chrome-accent);
+  box-shadow: var(--chrome-shadow);
 }
 
 #storybook-sidebar-region .sidebar-item[data-selected="true"] a[rel="canonical"] {
   flex: 1;
   min-width: 0;
   border-radius: inherit;
-  background: var(--solaria-shell);
-  color: var(--solaria-accent);
+  background: var(--chrome-shell);
+  color: var(--chrome-accent);
 }
 
 /* Keep the native skip link accessible without drawing it alongside the row. */
@@ -171,11 +171,11 @@ body:has([data-testid="sb-preview-toolbar"]) .sidebar-header button[aria-label="
 }
 
 #storybook-sidebar-region .sidebar-item[data-selected="true"] svg {
-  color: var(--solaria-accent);
+  color: var(--chrome-accent);
 }
 
 .sidebar-item:not([data-selected="true"]) svg {
-  color: var(--solaria-muted);
+  color: var(--chrome-muted);
 }
 
 #storybook-preview-wrapper {
@@ -189,10 +189,10 @@ body:has([data-testid="sb-preview-toolbar"]) .sidebar-header button[aria-label="
   margin: 1rem auto;
   overflow: hidden;
   resize: both;
-  border: 0.5rem solid var(--solaria-shell);
-  border-radius: var(--solaria-radius);
-  background: var(--solaria-surface);
-  box-shadow: var(--solaria-shadow);
+  border: 0.5rem solid var(--chrome-shell);
+  border-radius: var(--chrome-radius);
+  background: var(--chrome-surface);
+  box-shadow: var(--chrome-shadow);
 }
 
 #storybook-preview-wrapper::after {
@@ -203,7 +203,7 @@ body:has([data-testid="sb-preview-toolbar"]) .sidebar-header button[aria-label="
   width: 1rem;
   height: 1rem;
   pointer-events: none;
-  background: repeating-linear-gradient(135deg, transparent 0 3px, var(--solaria-accent) 3px 4px);
+  background: repeating-linear-gradient(135deg, transparent 0 3px, var(--chrome-accent) 3px 4px);
   clip-path: polygon(100% 0, 100% 100%, 0 100%);
 }
 
@@ -215,10 +215,10 @@ body:has([data-testid="sb-preview-toolbar"]) .sidebar-header button[aria-label="
   height: calc(100% - 2rem);
   margin: 1rem 1rem 1rem 0.5rem;
   overflow: hidden;
-  border: 0.5rem solid var(--solaria-shell);
-  border-radius: var(--solaria-radius);
-  background: var(--solaria-surface);
-  box-shadow: var(--solaria-shadow);
+  border: 0.5rem solid var(--chrome-shell);
+  border-radius: var(--chrome-radius);
+  background: var(--chrome-surface);
+  box-shadow: var(--chrome-shadow);
 }
 
 #storybook-panel-root {
@@ -240,7 +240,7 @@ div:has(> div > #storybook-panel-region),
 }
 
 #storybook-panel-root > div:first-child {
-  background: var(--solaria-shell);
+  background: var(--chrome-shell);
 }
 
 #storybook-panel-root [role="tab"] {
@@ -248,18 +248,18 @@ div:has(> div > #storybook-panel-region),
 }
 
 #storybook-panel-root [role="tab"][aria-selected="true"] {
-  background: var(--solaria-hover);
+  background: var(--chrome-hover);
   box-shadow: none;
 }
 
 body,
 body * {
   scrollbar-width: thin;
-  scrollbar-color: var(--solaria-accent) transparent;
+  scrollbar-color: var(--chrome-accent) transparent;
 }
 
 #storybook-preview-iframe {
-  border-radius: calc(var(--solaria-radius) - 0.5rem);
+  border-radius: calc(var(--chrome-radius) - 0.5rem);
 }
 
 @media (max-width: 600px) {
