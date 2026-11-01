@@ -6,7 +6,8 @@
     "linkFirebase": "No se pudo vincular tu cuenta con Firebase",
     "refresh": "No se pudo renovar la sesión",
     "logout": "No se pudo cerrar la sesión",
-    "registrationSuccess": "Registro completado"
+    "registrationSuccess": "Registro completado",
+    "updateLocale": "No se pudo cambiar el idioma de la cuenta"
   },
   "companyManagement": {
     "listPositions": "No se pudo cargar los cargos",

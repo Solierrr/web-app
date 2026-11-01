@@ -193,7 +193,10 @@
     "profile": "Profile",
     "security": "Security",
     "privacy": "Privacy",
-    "sessions": "Sessions and devices"
+    "sessions": "Sessions and devices",
+    "language": "Account language",
+    "languageHelp": "Sets the language of the site and of the emails you receive.",
+    "languageError": "Could not change the language."
   },
   "settingsSecurity": {
     "title": "Security",
