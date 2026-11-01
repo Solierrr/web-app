@@ -13,7 +13,7 @@ export const chromeTokens = {
   font: '"Plus Jakarta Sans", sans-serif',
 };
 
-export const solariaTheme = create({
+export const previewTheme = create({
   base: "light",
   brandTitle: "Web App",
   brandImage: "./favicon.svg",

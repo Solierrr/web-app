@@ -29,4 +29,5 @@ jobs:
     uses: Solierrr/.github/.github/workflows/preview-storybook.yml@main
     with:
       node-version: "22"
+      test: ${{ github.event_name == 'pull_request' }}
       publish: ${{ github.event_name != 'pull_request' }}
