@@ -38,7 +38,7 @@ export default function RegisterPage() {
     setBusy(true);
     try {
       if (createdEmail !== email) {
-        await register({ email, password });
+        await register({ email, password, locale: lang });
         setCreatedEmail(email);
       }
       await login({ email, password });
