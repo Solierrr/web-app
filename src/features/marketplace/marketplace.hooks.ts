@@ -1,25 +1,25 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { retryWithBackoff } from "@/lib/shared/http/retry.utils";
 
+// Carrega o catálogo repetindo as falhas transitórias (rede, 5xx, tempo esgotado) com backoff: `items` fica nulo e
+// `error` falso, ou seja, a interface segue no skeleton, até dar certo ou as tentativas acabarem.
 export function useMarketplaceCatalog<T>(load: () => Promise<T[]>) {
   const [items, setItems] = useState<T[] | null>(null);
   const [error, setError] = useState(false);
   const [revision, setRevision] = useState(0);
   useEffect(() => {
-    let active = true;
-    load()
+    const controller = new AbortController();
+    retryWithBackoff(load, { signal: controller.signal })
       .then((data) => {
-        if (active) {
-          setItems(data);
-          setError(false);
-        }
+        if (controller.signal.aborted) return;
+        setItems(data);
+        setError(false);
       })
       .catch(() => {
-        if (active) setError(true);
+        if (!controller.signal.aborted) setError(true);
       });
-    return () => {
-      active = false;
-    };
+    return () => controller.abort();
   }, [load, revision]);
   function retry() {
     setItems(null);

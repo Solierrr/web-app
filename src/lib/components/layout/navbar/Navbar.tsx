@@ -1,5 +1,5 @@
 import { ContextMenu, type ContextMenuHandle } from "@@/overlay/contextMenu/ContextMenu";
-import { Link, useLocation, useParams, useNavigate } from "react-router-dom";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
 import LanguageSwitcher from "@@/layout/navbar/LanguageSwitcher";
@@ -61,11 +61,10 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 w-full">
-      <div className="navbar-frame h-auto! min-h-16 w-full flex-wrap justify-between gap-x-4 gap-y-1 px-4 py-2 sm:px-8">
-        <Link to={routePaths.home(lang)} aria-label={tCommons("navigation.home")} className="flex shrink-0 items-center rounded-full focus-visible:outline-orange">
-          <img src="/favicon.svg" alt="" className="size-8" />
-        </Link>
-        <nav aria-label={tCommons("navigation.home")} className="order-last flex w-full items-center justify-center gap-1 sm:order-none sm:w-auto">
+      {/* Mesma altura (navbar-frame) e mesma disposição dos cabeçalhos das galerias e do portal: abas à esquerda, ações à direita, sem logo.
+          No celular as abas descem para uma segunda linha. */}
+      <div className="navbar-frame w-full justify-between gap-x-4 max-sm:h-auto! max-sm:flex-wrap max-sm:gap-y-1">
+        <nav aria-label={tCommons("navigation.home")} className="order-last flex w-full items-center justify-center gap-1 sm:order-none sm:mr-auto sm:w-auto sm:justify-start">
           {links.map((link) => {
             const active = section === link.key;
             return (
@@ -84,7 +83,7 @@ export default function Navbar() {
             );
           })}
         </nav>
-        <div className="flex items-center">
+        <div className="ml-auto flex items-center">
           <ToolbarAction to={searchTarget} icon="search" label={tCommons("actions.search")} />
           <ToolbarAction to={routePaths.cart(lang)} icon="shoppingCart" label={t("cart")} />
           <ToolbarAction
