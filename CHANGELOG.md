@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.6.1](https://github.com/Solierrr/web-app/compare/v3.6.0...v3.6.1) (2026-11-01)
+
+
+### Bug Fixes
+
+* build the production image with the api addresses ([8987b6e](https://github.com/Solierrr/web-app/commit/8987b6e3d256100e5eb8fe7359e694281a653016))
+
 ## [3.6.0](https://github.com/Solierrr/web-app/compare/v3.5.0...v3.6.0) (2026-11-01)
 
 
