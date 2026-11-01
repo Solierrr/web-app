@@ -55,7 +55,8 @@ async function freshModule() {
   return import("./notification.push.service");
 }
 
-describe("push registration", () => {
+// Cada teste recarrega o módulo (vi.resetModules) e o grafo do Firebase é pesado: na CI ele passava dos 5 s padrão.
+describe("push registration", { timeout: 30_000 }, () => {
   beforeEach(() => {
     vi.clearAllMocks();
     localStorage.clear();
