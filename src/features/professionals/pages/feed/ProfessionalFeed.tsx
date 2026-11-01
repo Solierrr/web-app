@@ -1,10 +1,10 @@
 import { Fragment, useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import Marketplace from "@/features/marketplace/Marketplace";
 import { getFeedView } from "@/features/marketplace/marketplace.utils";
 import { useMarketplaceCatalog } from "@/features/marketplace/marketplace.hooks";
 import MarketplaceLayout from "@/features/marketplace/components/MarketplaceLayout";
+import MarketplacePageHeader from "@/features/marketplace/components/MarketplacePageHeader";
 import OfferShelf from "@/features/marketplace/components/OfferShelf";
 import MarketplaceResults from "@/features/marketplace/components/MarketplaceResults";
 import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
@@ -15,6 +15,8 @@ import CompanyFeaturedCard from "@/features/companies/pages/feed/CompanyFeatured
 import ProfessionalCard from "./ProfessionalCard";
 import { ServiceHighlight } from "./ProfessionalFeed.reusable";
 import { serviceShelves } from "./ProfessionalFeed.utils";
+
+const serviceHighlightFormats = ["installation", "maintenance", "inspection", "engineering", "team"] as const;
 
 export default function ProfessionalFeed() {
   const { t } = useTranslation("marketplace");
@@ -49,10 +51,7 @@ export default function ProfessionalFeed() {
   const shelves = serviceShelves(filtered);
   return (
     <MarketplaceLayout>
-      <h1 className="sr-only">{t("services")}</h1>
-      <div className="flex justify-center">
-        <Marketplace category="professionals" />
-      </div>
+      <MarketplacePageHeader title={t("servicesTitle")} description={t("servicesDescription")} category="professionals" />
       <MarketplaceResults
         loading={teamView ? !teams && !teamError : !items && !error}
         error={(teamView ? teamError : error) ? feed("professional.loadError") : undefined}
@@ -74,7 +73,6 @@ export default function ProfessionalFeed() {
           </div>
         ) : (
           <>
-            <ServiceHighlight format="installation" professionals={filtered} lang={lang} />
             {shelves.map((shelf, index) => (
               <Fragment key={shelf.key}>
                 <OfferShelf title={t(`serviceFeed.shelves.${shelf.key}`)}>
@@ -85,7 +83,11 @@ export default function ProfessionalFeed() {
                   ))}
                 </OfferShelf>
                 {(index + 1) % 2 === 0 && (
-                  <ServiceHighlight format={index % 4 === 1 ? "inspection" : "maintenance"} professionals={filtered} lang={lang} />
+                  <ServiceHighlight
+                    format={serviceHighlightFormats[Math.floor(index / 2) % serviceHighlightFormats.length]}
+                    professionals={filtered}
+                    lang={lang}
+                  />
                 )}
               </Fragment>
             ))}

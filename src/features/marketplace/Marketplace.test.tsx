@@ -110,9 +110,9 @@ describe("Marketplace page views", () => {
 
   it("keeps language, search parameters and hashes and defaults invalid views", () => {
     renderFeed(<Marketplace category="solarPanels" search />, "/en-US/search/solar-panels?q=test&view=invalid#results");
-    const recent = screen.getByRole("link", { name: "Recentes" });
-    expect(recent).toHaveAttribute("aria-current", "page");
-    expect(recent).toHaveAttribute("href", "/en-US/search/solar-panels?q=test&view=recent#results");
-    expect(screen.getByRole("link", { name: "Em alta" })).toHaveAttribute("href", "/en-US/search/solar-panels?q=test&view=trending#results");
+    const trending = screen.getByRole("link", { name: "Em alta" });
+    expect(trending).toHaveAttribute("aria-current", "page");
+    expect(trending).toHaveAttribute("href", "/en-US/search/solar-panels?q=test&view=trending#results");
+    expect(screen.getByRole("link", { name: "Recentes" })).toHaveAttribute("href", "/en-US/search/solar-panels?q=test&view=recent#results");
   });
 });
