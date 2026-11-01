@@ -16,7 +16,7 @@ import ProfessionalCard from "./ProfessionalCard";
 import { ServiceHighlight } from "./ProfessionalFeed.reusable";
 import { serviceShelves } from "./ProfessionalFeed.utils";
 
-const serviceHighlightFormats = ["installation", "maintenance", "inspection"] as const;
+const serviceHighlightFormats = ["installation", "maintenance", "inspection", "engineering", "team"] as const;
 
 export default function ProfessionalFeed() {
   const { t } = useTranslation("marketplace");

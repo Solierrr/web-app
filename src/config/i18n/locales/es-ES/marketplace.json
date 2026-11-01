@@ -74,7 +74,9 @@
       "sunTitle": "Empieza\npor el sol.",
       "sunAction": "Paneles solares",
       "baseTitle": "La base de\ntodo.",
-      "projectTitle": "Piensa en\nel proyecto entero."
+      "projectTitle": "Piensa en\nel proyecto entero.",
+      "baseAction": "Estructuras y accesorios",
+      "projectAction": "Encontrar profesionales"
     },
     "mostWanted": "Más buscado",
     "add": "Añadir {{title}} al carrito",
@@ -109,6 +111,16 @@
         "title": "Donde la energía\ngana escala.",
         "description": "Proveedores preparados para plantas y proyectos mayores.",
         "action": "Conocer proveedores"
+      },
+      "aerial": {
+        "title": "Desde arriba,\ntodo cobra sentido.",
+        "description": "Empresas que diseñan y entregan plantas completas.",
+        "action": "Conocer empresas"
+      },
+      "rows": {
+        "title": "Filas de\nbuenas opciones.",
+        "description": "Compara paneles de alta potencia lado a lado.",
+        "action": "Ver paneles"
       }
     }
   },
@@ -123,7 +135,6 @@
   },
   "serviceFeed": {
     "featured": "Profesional destacado",
-    "spotlightTitle": "Tu proyecto empieza con una buena conversación.",
     "contact": "Contactar",
     "installationTitle": "Del primer panel al sistema funcionando.",
     "installationDescription": "Encuentra a quienes instalan, orientan y acompañan cada etapa.",
@@ -140,6 +151,12 @@
       "inspection": "Una mirada técnica para tu sistema."
     },
     "maintenanceDescription": "Revisión, limpieza y reparación para que el sistema rinda lo prometido.",
-    "inspectionDescription": "Informes y diagnósticos para decidir con seguridad."
+    "inspectionDescription": "Informes y diagnósticos para decidir con seguridad.",
+    "engineeringTitle": "Todo buen proyecto empieza en el papel.",
+    "engineeringDescription": "Ingenieros para dimensionar y aprobar tu sistema.",
+    "engineeringAction": "Encontrar ingenieros",
+    "teamTitle": "Cuando el proyecto necesita más de un par de manos.",
+    "teamDescription": "Equipos completos para obras de cualquier tamaño.",
+    "teamAction": "Ver equipos"
   }
 }

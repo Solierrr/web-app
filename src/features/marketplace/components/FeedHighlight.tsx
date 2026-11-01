@@ -1,26 +1,22 @@
 import editorialRoof from "@/assets/mocks/editorial/solar-panels-ad6d474c9b41.webp";
-import editorialBase from "@/assets/mocks/editorial/infrastructure-d9a5baac44f0.webp";
 import editorialSunset from "@/assets/mocks/editorial/solar-panels-dc8178a8e3a2.webp";
 import editorialInstaller from "@/assets/mocks/editorial/solar-panels-f6b647281b36.webp";
 import editorialHouse from "@/assets/mocks/editorial/solar-panels-0b1863beca2c.webp";
 import editorialGarden from "@/assets/mocks/editorial/solar-panels-09f4cb6ca1ac.webp";
 import editorialCabins from "@/assets/mocks/editorial/solar-panels-fb77b2f1d456.webp";
-import panelCutout from "@/assets/mocks/products/solar-panels-f2b8091a5514.webp";
+import scaffold from "@/assets/mocks/banners/banners-838aa6f4c6fb.webp";
 import solarField from "@/assets/mocks/banners/enterprises-banners-solar-cf7b97846545.webp";
-import { Link } from "react-router-dom";
+import solarAerial from "@/assets/mocks/banners/enterprises-banners-solar-8c89bcc2ee0c.webp";
+import solarRows from "@/assets/mocks/banners/enterprises-banners-solar-ad95d2c56434.webp";
 import { useTranslation } from "react-i18next";
-import Icon from "@@/ui/icon/Icon";
 import { routePaths } from "@/config/i18n/paths";
 import type { SupportedLanguage } from "@/config/i18n/browser/languages";
 import type { FeedBanner, FeedHighlightFormat } from "../marketplace.utils";
-import HighlightBanner from "./HighlightBanner";
+import Highlight from "./Highlight";
 
 type TileProps = { lang: SupportedLanguage };
 
-const tile = "group relative flex min-h-80 flex-col overflow-hidden rounded-surface p-8 focus-visible:outline-orange sm:min-h-96";
-const arrow = "absolute bottom-8 right-8 flex size-11 items-center justify-center rounded-full bg-white text-operational-ink";
-const zoom = "transition-transform duration-500 group-hover:scale-103 motion-reduce:transform-none";
-
+// Só imagens fixas e de exemplo: o destaque não mostra produto nenhum.
 const banners: Record<FeedBanner, { image: string; to: (lang: SupportedLanguage) => string }> = {
   sunset: { image: editorialSunset, to: routePaths.searchSolarPanels },
   installer: { image: editorialInstaller, to: routePaths.professionalsFeed },
@@ -28,52 +24,29 @@ const banners: Record<FeedBanner, { image: string; to: (lang: SupportedLanguage)
   garden: { image: editorialGarden, to: routePaths.companiesFeed },
   cabins: { image: editorialCabins, to: routePaths.searchSolarPanels },
   field: { image: solarField, to: routePaths.companiesFeed },
+  aerial: { image: solarAerial, to: routePaths.companiesFeed },
+  rows: { image: solarRows, to: routePaths.searchSolarPanels },
 };
 
 function SunTile({ lang }: TileProps) {
   const { t } = useTranslation("marketplace", { keyPrefix: "feed.highlights" });
-  return (
-    <Link to={routePaths.searchSolarPanels(lang)} className={`${tile} bg-orange/8`}>
-      <h2 className="relative z-10 whitespace-pre-line text-title font-bold leading-tight tracking-tight text-orange-copper">{t("sunTitle")}</h2>
-      <img src={panelCutout} alt="" className={`absolute -right-2 bottom-14 h-3/5 w-3/5 rotate-12 object-contain mix-blend-multiply ${zoom}`} />
-      <span className="absolute inset-x-8 bottom-8 flex items-center justify-between text-sidebar font-bold text-orange-copper">
-        {t("sunAction")} <Icon name="chevronRight" size={18} color="currentColor" />
-      </span>
-    </Link>
-  );
+  return <Highlight image={editorialSunset} title={t("sunTitle")} action={t("sunAction")} to={routePaths.searchSolarPanels(lang)} />;
 }
 
 function BaseTile({ lang }: TileProps) {
   const { t } = useTranslation("marketplace", { keyPrefix: "feed.highlights" });
-  return (
-    <Link to={routePaths.infrastructureFeed(lang)} className={`${tile} bg-operational-surface`}>
-      <img src={editorialBase} alt="" className={`absolute inset-0 h-full w-full object-contain px-5 pb-3 pt-16 mix-blend-multiply ${zoom}`} />
-      <h2 className="relative whitespace-pre-line text-title font-bold leading-tight tracking-tight text-operational-ink">{t("baseTitle")}</h2>
-      <span className={`${arrow} bg-operational-ink! text-white`}>
-        <Icon name="chevronRight" size={18} color="currentColor" />
-      </span>
-    </Link>
-  );
+  return <Highlight image={scaffold} title={t("baseTitle")} action={t("baseAction")} to={routePaths.infrastructureFeed(lang)} />;
 }
 
 function ProjectTile({ lang }: TileProps) {
   const { t } = useTranslation("marketplace", { keyPrefix: "feed.highlights" });
-  return (
-    <Link to={routePaths.professionalsFeed(lang)} className={`${tile} bg-operational-ink text-white`}>
-      <img src={editorialRoof} alt="" className={`absolute inset-0 h-full w-full object-cover ${zoom}`} />
-      <span className="absolute inset-0 bg-gradient-to-b from-operational-ink/40 to-transparent" />
-      <h2 className="relative whitespace-pre-line text-title font-bold leading-tight tracking-tight text-white">{t("projectTitle")}</h2>
-      <span className={arrow}>
-        <Icon name="chevronRight" size={18} color="currentColor" />
-      </span>
-    </Link>
-  );
+  return <Highlight image={editorialRoof} title={t("projectTitle")} action={t("projectAction")} to={routePaths.professionalsFeed(lang)} />;
 }
 
 function Banner({ variant, lang }: TileProps & { variant: FeedBanner }) {
   const { t } = useTranslation("marketplace", { keyPrefix: `feed.banners.${variant}` });
   const { image, to } = banners[variant];
-  return <HighlightBanner image={image} title={t("title")} description={t("description")} action={t("action")} to={to(lang)} />;
+  return <Highlight image={image} title={t("title")} description={t("description")} action={t("action")} to={to(lang)} size="wide" align="bottom" />;
 }
 
 export default function FeedHighlight({ format, lang }: { format: FeedHighlightFormat; lang: SupportedLanguage }) {
