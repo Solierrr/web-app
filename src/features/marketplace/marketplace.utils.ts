@@ -14,8 +14,8 @@ export function matchesMarketplaceQuery(query: string, ...values: (string | null
 }
 
 export const feedViews: Record<FeedCategory, string[]> = {
-  solarPanels: ["recent", "trending"],
-  infrastructure: ["recent", "trending"],
+  solarPanels: ["trending", "recent"],
+  infrastructure: ["trending", "recent"],
   professionals: ["professionals", "independent", "teams"],
   companies: ["all", "suppliers", "providers", "other"],
 };
@@ -63,28 +63,45 @@ export interface OfferShelf<T> {
 const SHELF_MIN = 3;
 const SHELF_MAX = 12;
 
-export function buildOfferShelves<T extends SolarPanelFeedSummary & { panel: { efficiency?: number | null; powerOutput?: number | null }; company: { id: string; tradeName: string } }>(
-  items: T[],
-): OfferShelf<T>[] {
+export function buildOfferShelves<
+  T extends SolarPanelFeedSummary & {
+    panel: { efficiency?: number | null; powerOutput?: number | null };
+    company: { id: string; tradeName: string };
+  },
+>(items: T[], view?: string): OfferShelf<T>[] {
   const by = (score: (item: T) => number | null | undefined, direction = -1) =>
     items
       .filter((item) => typeof score(item) === "number")
       .sort((a, b) => direction * ((score(a) as number) - (score(b) as number)))
       .slice(0, SHELF_MAX);
-  const trending = items.some((item) => typeof item.trendingScore === "number");
+  // A visão do seletor abre a lista; sem ela (ou sem pontuação de alta), vale a mais útil: em alta quando há pontuação.
+  const scored = items.some((item) => typeof item.trendingScore === "number");
+  const trending = view === "recent" ? false : scored;
   const groups = new Map<string, T[]>();
   for (const item of items) groups.set(item.company.id, [...(groups.get(item.company.id) ?? []), item]);
-  const suppliers = [...groups.values()]
-    .filter((group) => group.length >= SHELF_MIN)
-    .sort((a, b) => b.length - a.length);
+  const suppliers = [...groups.values()].filter((group) => group.length >= SHELF_MIN).sort((a, b) => b.length - a.length);
   const shelves: OfferShelf<T>[] = [
     { key: "lead", kind: trending ? "trending" : "recent", items: sortOffers(items, trending ? "trending" : "recent").slice(0, SHELF_MAX) },
     { key: "efficiency", kind: "efficiency", items: by((item) => item.panel.efficiency) },
     { key: "price", kind: "price", items: by((item) => item.unitPrice, 1) },
-    ...suppliers.slice(0, 1).map((group) => ({ key: `supplier-${group[0].company.id}`, kind: "supplier" as const, name: group[0].company.tradeName, items: group.slice(0, SHELF_MAX) })),
+    ...suppliers
+      .slice(0, 1)
+      .map((group) => ({
+        key: `supplier-${group[0].company.id}`,
+        kind: "supplier" as const,
+        name: group[0].company.tradeName,
+        items: group.slice(0, SHELF_MAX),
+      })),
     { key: "power", kind: "power", items: by((item) => item.panel.powerOutput) },
     { key: "discount", kind: "discount", items: by((item) => item.discountPercentage || null) },
-    ...suppliers.slice(1).map((group) => ({ key: `supplier-${group[0].company.id}`, kind: "supplier" as const, name: group[0].company.tradeName, items: group.slice(0, SHELF_MAX) })),
+    ...suppliers
+      .slice(1)
+      .map((group) => ({
+        key: `supplier-${group[0].company.id}`,
+        kind: "supplier" as const,
+        name: group[0].company.tradeName,
+        items: group.slice(0, SHELF_MAX),
+      })),
   ];
   return shelves.filter((shelf) => shelf.items.length >= SHELF_MIN);
 }

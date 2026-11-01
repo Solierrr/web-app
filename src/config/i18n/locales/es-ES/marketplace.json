@@ -138,6 +138,8 @@
       "installation": "Quienes hacen posible la instalación.",
       "maintenance": "Cuidado que marca la diferencia.",
       "inspection": "Una mirada técnica para tu sistema."
-    }
+    },
+    "maintenanceDescription": "Revisión, limpieza y reparación para que el sistema rinda lo prometido.",
+    "inspectionDescription": "Informes y diagnósticos para decidir con seguridad."
   }
 }
