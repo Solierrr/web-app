@@ -2,7 +2,7 @@ import type { AuthSession } from "./access";
 import type { OperationalAccount } from "./access.onboarding";
 
 export const MOCK_TEST_USER_ID = "mock:solaria-test";
-export const MOCK_TEST_EMAIL = "teste@solaria.example";
+export const MOCK_TEST_EMAIL = "teste@example.test";
 
 export function createMockTestAccount(): OperationalAccount {
   return {
