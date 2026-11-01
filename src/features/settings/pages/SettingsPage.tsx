@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
 import PushToggle from "@/features/notifications/components/PushToggle";
+import AccountLanguage from "../components/AccountLanguage";
 
 export default function SettingsPage() {
   const { t } = useTranslation("commons", { keyPrefix: "settings" });
@@ -27,6 +28,7 @@ export default function SettingsPage() {
           {t("sessions")}
         </Link>
       </nav>
+      <AccountLanguage />
       <PushToggle />
     </OperationalPage>
   );

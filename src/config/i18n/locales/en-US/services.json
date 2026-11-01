@@ -6,7 +6,8 @@
     "linkFirebase": "Unable to link your account to Firebase",
     "refresh": "Unable to refresh the session",
     "logout": "Unable to end the session",
-    "registrationSuccess": "Registration completed"
+    "registrationSuccess": "Registration completed",
+    "updateLocale": "Could not change the account language"
   },
   "companyManagement": {
     "listPositions": "Unable to load the roles",
