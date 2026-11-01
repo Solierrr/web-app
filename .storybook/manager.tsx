@@ -1,12 +1,12 @@
 import { addons, types } from "storybook/manager-api";
 import * as React from "react";
 import { IconBrandGithub, IconMaximize } from "@tabler/icons-react";
-import { solariaTheme } from "./theme.ts";
+import { previewTheme } from "./theme.ts";
 
-addons.setConfig({ theme: solariaTheme });
+addons.setConfig({ theme: previewTheme });
 
-addons.register("solaria/repository", () => {
-  addons.add("solaria/repository/link", {
+addons.register("preview/repository", () => {
+  addons.add("preview/repository/link", {
     type: types.TOOLEXTRA,
     title: "Prévia e GitHub",
     render: (): React.ReactElement => (
@@ -23,7 +23,7 @@ addons.register("solaria/repository", () => {
           <IconMaximize size={20} stroke={1.8} aria-hidden="true" />
         </button>
         <a
-          className="solaria-toolbar-link"
+          className="chrome-toolbar-link"
           href="https://github.com/Solierrr/web-app"
           target="_blank"
           rel="noopener noreferrer"

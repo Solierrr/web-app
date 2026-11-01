@@ -2,7 +2,7 @@ import type { Preview } from "@storybook/react-vite";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import "../src/index.css";
 import "../src/config/i18n/internationalization";
-import { solariaTheme } from "./theme.ts";
+import { previewTheme } from "./theme.ts";
 import "./docs.css";
 import StorybookLocale from "./StorybookLocale";
 
@@ -24,7 +24,7 @@ const preview: Preview = {
     },
   },
   parameters: {
-    docs: { theme: solariaTheme, story: { inline: false, height: "480px" } },
+    docs: { theme: previewTheme, story: { inline: false, height: "480px" } },
     controls: {
       matchers: {
         color: /(backgroundColor|color)$/i,
