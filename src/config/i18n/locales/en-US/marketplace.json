@@ -74,7 +74,9 @@
       "sunTitle": "Start\nwith the sun.",
       "sunAction": "Solar panels",
       "baseTitle": "The base of\neverything.",
-      "projectTitle": "Think about\nthe whole project."
+      "projectTitle": "Think about\nthe whole project.",
+      "baseAction": "Structures and accessories",
+      "projectAction": "Find professionals"
     },
     "mostWanted": "Most wanted",
     "add": "Add {{title}} to cart",
@@ -109,6 +111,16 @@
         "title": "Where energy\ngains scale.",
         "description": "Suppliers ready for solar farms and larger projects.",
         "action": "Meet suppliers"
+      },
+      "aerial": {
+        "title": "From above,\nit all makes sense.",
+        "description": "Companies that design and deliver complete solar plants.",
+        "action": "Meet companies"
+      },
+      "rows": {
+        "title": "Rows of\ngood choices.",
+        "description": "Compare high-power panels side by side.",
+        "action": "See panels"
       }
     }
   },
@@ -123,7 +135,6 @@
   },
   "serviceFeed": {
     "featured": "Featured professional",
-    "spotlightTitle": "Your project starts with a good conversation.",
     "contact": "Get in touch",
     "installationTitle": "From the first panel to a working system.",
     "installationDescription": "Find people to install, advise and support every step.",
@@ -138,6 +149,14 @@
       "installation": "People who make installation happen.",
       "maintenance": "Care that makes a difference.",
       "inspection": "A technical perspective on your system."
-    }
+    },
+    "maintenanceDescription": "Review, cleaning and repair so the system delivers what it promised.",
+    "inspectionDescription": "Reports and diagnostics to decide with confidence.",
+    "engineeringTitle": "Every good project starts on paper.",
+    "engineeringDescription": "Engineers to size and approve your system.",
+    "engineeringAction": "Find engineers",
+    "teamTitle": "When the project needs more than one pair of hands.",
+    "teamDescription": "Full crews for jobs of any size.",
+    "teamAction": "See teams"
   }
 }

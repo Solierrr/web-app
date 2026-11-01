@@ -1,7 +1,9 @@
-import { render, screen } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import ProfessionalFeed from "./ProfessionalFeed";
+import { ServiceHighlight } from "./ProfessionalFeed.reusable";
+import { DEFAULT } from "@/config/i18n/browser/languages";
 
 vi.mock("@/features/professionals/professional.service", () => ({
   getCatalogTechnicians: vi.fn(),
@@ -10,6 +12,11 @@ vi.mock("@/features/professionals/professional.service", () => ({
 import { getCatalogTechnicians, type CatalogTechnician } from "@/features/professionals/professional.service";
 
 const mockedGetCatalogTechnicians = vi.mocked(getCatalogTechnicians);
+
+function Where() {
+  const { pathname, search } = useLocation();
+  return <p data-testid="where">{pathname + search}</p>;
+}
 
 const items: CatalogTechnician[] = [
   { id: "professional-1", name: "Carlos Eduardo Lima", slug: "carlos-eduardo-lima", crea: "MG-123456", professions: ["Engenheiro Eletricista"] },
@@ -79,16 +86,37 @@ describe("ProfessionalFeed", () => {
     expect(screen.queryByText("Quero instalar")).not.toBeInTheDocument();
   });
 
-  it("links editorial inspection to an existing specialty instead of translated copy", async () => {
-    mockedGetCatalogTechnicians.mockResolvedValue([{ ...items[0], professions: ["Engenheiro Eletricista", "Inspeção técnica"] }]);
+  it("links editorial inspection to an existing specialty instead of translated copy", () => {
+    const professionals = [{ ...items[0], professions: ["Engenheiro Eletricista", "Inspeção técnica"] }];
+    render(
+      <MemoryRouter>
+        <Routes>
+          <Route
+            path="*"
+            element={
+              <>
+                <ServiceHighlight format="inspection" professionals={professionals} lang={DEFAULT} />
+                <Where />
+              </>
+            }
+          />
+        </Routes>
+      </MemoryRouter>,
+    );
+    fireEvent.click(screen.getByRole("link", { name: /Encontrar especialistas/ }));
+    expect(screen.getByTestId("where")).toHaveTextContent("/pt-BR/buscar/profissionais?specialty=Inspe%C3%A7%C3%A3o%20t%C3%A9cnica");
+  });
+
+  it("starts with the page header and no highlight before the first shelf", async () => {
+    mockedGetCatalogTechnicians.mockResolvedValue(items);
     render(
       <MemoryRouter>
         <ProfessionalFeed />
       </MemoryRouter>,
     );
-    expect(await screen.findByRole("link", { name: /Encontrar especialistas/ })).toHaveAttribute(
-      "href",
-      "/pt-BR/buscar/profissionais?specialty=Inspe%C3%A7%C3%A3o%20t%C3%A9cnica",
-    );
+    expect(await screen.findByRole("heading", { level: 1, name: "O próximo passo pode ser uma conversa." })).toBeInTheDocument();
+    expect(screen.getByRole("navigation", { name: "Tipos de serviços" })).toBeInTheDocument();
+    // o primeiro bloco depois do cabeçalho é uma prateleira; os destaques só entram entre as prateleiras
+    expect(screen.getAllByRole("heading", { level: 2 })[0]).toHaveTextContent("Gente que entende do seu projeto.");
   });
 });
