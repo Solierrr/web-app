@@ -15,9 +15,9 @@ export const chromeTokens = {
 
 export const solariaTheme = create({
   base: "light",
-  brandTitle: "Solaria · Web App",
+  brandTitle: "Web App",
   brandImage: "./favicon.svg",
-  brandUrl: "./",
+  brandUrl: "https://docs.solarianetwork.site/pt-BR/previews",
   brandTarget: "_self",
   fontBase: chromeTokens.font,
   fontCode: "ui-monospace, monospace",
