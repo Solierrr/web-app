@@ -525,5 +525,10 @@
   },
   "logo": {
     "changeShape": "Change the logo shape"
+  },
+  "loadFailure": {
+    "title": "Could not load",
+    "message": "Check your connection and try again in a moment.",
+    "retry": "Try again"
   }
 }

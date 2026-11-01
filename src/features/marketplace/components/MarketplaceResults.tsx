@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
-import { useTranslation } from "react-i18next";
 import Skeleton from "@@/feedback/skeleton/Skeleton";
-import ToolbarAction from "@@/ui/button/ToolbarAction";
+import LoadFailure from "@@/feedback/load-failure/LoadFailure";
 
 export default function MarketplaceResults({
   loading,
@@ -16,14 +15,7 @@ export default function MarketplaceResults({
   onRetry: () => void;
   children: ReactNode;
 }) {
-  const { t } = useTranslation("marketplace");
-  if (error)
-    return (
-      <div className="flex items-center gap-4">
-        <p role="alert">{error}</p>
-        <ToolbarAction icon="refresh" label={t("retry")} onClick={onRetry} />
-      </div>
-    );
+  if (error) return <LoadFailure title={error} onRetry={onRetry} />;
   if (loading)
     return (
       <div aria-busy="true" className="grid grid-cols-1 gap-8 sm:grid-cols-2">
