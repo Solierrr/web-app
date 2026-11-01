@@ -229,7 +229,7 @@ describe("LoginPage", () => {
       refreshToken: "refresh",
       accessTokenExpiresAt: "2026-01-01T00:00:00Z",
       userId: "user-1",
-      email: "user@solaria.com",
+      email: "user@example.test",
     });
 
     render(
@@ -238,12 +238,12 @@ describe("LoginPage", () => {
       </MemoryRouter>,
     );
 
-    fireEvent.change(screen.getByPlaceholderText("Insira seu e-mail aqui"), { target: { value: "user@solaria.com" } });
+    fireEvent.change(screen.getByPlaceholderText("Insira seu e-mail aqui"), { target: { value: "user@example.test" } });
     fireEvent.change(screen.getByPlaceholderText("Insira sua senha"), { target: { value: "supersecret123" } });
     fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
 
     await waitFor(() => {
-      expect(mockedLogin).toHaveBeenCalledWith({ email: "user@solaria.com", password: "supersecret123" });
+      expect(mockedLogin).toHaveBeenCalledWith({ email: "user@example.test", password: "supersecret123" });
     });
   });
 
@@ -256,7 +256,7 @@ describe("LoginPage", () => {
       </MemoryRouter>,
     );
 
-    fireEvent.change(screen.getByPlaceholderText("Insira seu e-mail aqui"), { target: { value: "user@solaria.com" } });
+    fireEvent.change(screen.getByPlaceholderText("Insira seu e-mail aqui"), { target: { value: "user@example.test" } });
     fireEvent.change(screen.getByPlaceholderText("Insira sua senha"), { target: { value: "wrong" } });
     fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
 
@@ -274,7 +274,7 @@ describe("LoginPage", () => {
         <LoginPage />
       </MemoryRouter>,
     );
-    fireEvent.change(screen.getByLabelText("E-mail"), { target: { value: "user@solaria.com" } });
+    fireEvent.change(screen.getByLabelText("E-mail"), { target: { value: "user@example.test" } });
     fireEvent.change(screen.getByLabelText("Senha"), { target: { value: "wrong" } });
     fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
     expect(await screen.findByRole("status")).toHaveTextContent(message);

@@ -21,7 +21,7 @@ const mockedRegister = vi.mocked(register);
 const mockedLogin = vi.mocked(login);
 
 function fillForm({ password, confirmPassword }: { password: string; confirmPassword: string }) {
-  fireEvent.change(screen.getByPlaceholderText("Insira seu e-mail aqui"), { target: { value: "user@solaria.com" } });
+  fireEvent.change(screen.getByPlaceholderText("Insira seu e-mail aqui"), { target: { value: "user@example.test" } });
   fireEvent.change(screen.getByPlaceholderText("Crie uma senha"), { target: { value: password } });
   fireEvent.change(screen.getByPlaceholderText("Repita sua senha novamente"), { target: { value: confirmPassword } });
   fireEvent.click(screen.getByRole("button", { name: "Cadastrar" }));
@@ -29,7 +29,7 @@ function fillForm({ password, confirmPassword }: { password: string; confirmPass
 
 describe("RegisterPage", () => {
   it("retries sign-in without registering again after partial success", async () => {
-    mockedRegister.mockResolvedValue({ id: "user-1", email: "user@solaria.com", message: "Created" });
+    mockedRegister.mockResolvedValue({ id: "user-1", email: "user@example.test", message: "Created" });
     mockedLogin.mockRejectedValue(new Error("unavailable", { cause: new HttpResponseError(503, "HTTP_ERROR") }));
     render(
       <MemoryRouter>
@@ -76,13 +76,13 @@ describe("RegisterPage", () => {
   });
 
   it("registers and logs in with the entered credentials when passwords match", async () => {
-    mockedRegister.mockResolvedValue({ id: "user-1", email: "user@solaria.com", message: "User registered" });
+    mockedRegister.mockResolvedValue({ id: "user-1", email: "user@example.test", message: "User registered" });
     mockedLogin.mockResolvedValue({
       accessToken: "token",
       refreshToken: "refresh",
       accessTokenExpiresAt: "2026-01-01T00:00:00Z",
       userId: "user-1",
-      email: "user@solaria.com",
+      email: "user@example.test",
     });
 
     render(
@@ -94,8 +94,8 @@ describe("RegisterPage", () => {
     fillForm({ password: "supersecret123", confirmPassword: "supersecret123" });
 
     await waitFor(() => {
-      expect(mockedRegister).toHaveBeenCalledWith({ email: "user@solaria.com", password: "supersecret123", locale: "pt-BR" });
-      expect(mockedLogin).toHaveBeenCalledWith({ email: "user@solaria.com", password: "supersecret123" });
+      expect(mockedRegister).toHaveBeenCalledWith({ email: "user@example.test", password: "supersecret123", locale: "pt-BR" });
+      expect(mockedLogin).toHaveBeenCalledWith({ email: "user@example.test", password: "supersecret123" });
     });
   });
 
