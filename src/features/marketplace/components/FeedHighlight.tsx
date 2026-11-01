@@ -7,18 +7,18 @@ import editorialGarden from "@/assets/mocks/editorial/solar-panels-09f4cb6ca1ac.
 import editorialCabins from "@/assets/mocks/editorial/solar-panels-fb77b2f1d456.webp";
 import panelCutout from "@/assets/mocks/products/solar-panels-f2b8091a5514.webp";
 import solarField from "@/assets/mocks/banners/enterprises-banners-solar-cf7b97846545.webp";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { PrimaryButton } from "@@/ui/button/Button.presets";
 import Icon from "@@/ui/icon/Icon";
 import { routePaths } from "@/config/i18n/paths";
 import type { SupportedLanguage } from "@/config/i18n/browser/languages";
 import type { FeedBanner, FeedHighlightFormat } from "../marketplace.utils";
+import HighlightBanner from "./HighlightBanner";
 
 type TileProps = { lang: SupportedLanguage };
 
-const tile = "group relative flex min-h-80 flex-col overflow-hidden rounded-surface p-7 focus-visible:outline-orange sm:min-h-96";
-const arrow = "absolute bottom-6 right-6 flex size-11 items-center justify-center rounded-full bg-white text-operational-ink";
+const tile = "group relative flex min-h-80 flex-col overflow-hidden rounded-surface p-8 focus-visible:outline-orange sm:min-h-96";
+const arrow = "absolute bottom-8 right-8 flex size-11 items-center justify-center rounded-full bg-white text-operational-ink";
 const zoom = "transition-transform duration-500 group-hover:scale-103 motion-reduce:transform-none";
 
 const banners: Record<FeedBanner, { image: string; to: (lang: SupportedLanguage) => string }> = {
@@ -34,9 +34,9 @@ function SunTile({ lang }: TileProps) {
   const { t } = useTranslation("marketplace", { keyPrefix: "feed.highlights" });
   return (
     <Link to={routePaths.searchSolarPanels(lang)} className={`${tile} bg-orange/8`}>
-      <h2 className="relative z-10 whitespace-pre-line text-title font-bold leading-none tracking-tight text-orange-copper">{t("sunTitle")}</h2>
+      <h2 className="relative z-10 whitespace-pre-line text-title font-bold leading-tight tracking-tight text-orange-copper">{t("sunTitle")}</h2>
       <img src={panelCutout} alt="" className={`absolute -right-2 bottom-14 h-3/5 w-3/5 rotate-12 object-contain mix-blend-multiply ${zoom}`} />
-      <span className="absolute inset-x-7 bottom-6 flex items-center justify-between text-sidebar font-bold text-orange-copper">
+      <span className="absolute inset-x-8 bottom-8 flex items-center justify-between text-sidebar font-bold text-orange-copper">
         {t("sunAction")} <Icon name="chevronRight" size={18} color="currentColor" />
       </span>
     </Link>
@@ -48,7 +48,7 @@ function BaseTile({ lang }: TileProps) {
   return (
     <Link to={routePaths.infrastructureFeed(lang)} className={`${tile} bg-operational-surface`}>
       <img src={editorialBase} alt="" className={`absolute inset-0 h-full w-full object-contain px-5 pb-3 pt-16 mix-blend-multiply ${zoom}`} />
-      <h2 className="relative whitespace-pre-line text-title font-bold leading-none tracking-tight text-operational-ink">{t("baseTitle")}</h2>
+      <h2 className="relative whitespace-pre-line text-title font-bold leading-tight tracking-tight text-operational-ink">{t("baseTitle")}</h2>
       <span className={`${arrow} bg-operational-ink! text-white`}>
         <Icon name="chevronRight" size={18} color="currentColor" />
       </span>
@@ -62,7 +62,7 @@ function ProjectTile({ lang }: TileProps) {
     <Link to={routePaths.professionalsFeed(lang)} className={`${tile} bg-operational-ink text-white`}>
       <img src={editorialRoof} alt="" className={`absolute inset-0 h-full w-full object-cover ${zoom}`} />
       <span className="absolute inset-0 bg-gradient-to-b from-operational-ink/40 to-transparent" />
-      <h2 className="relative whitespace-pre-line text-title font-bold leading-none tracking-tight text-white">{t("projectTitle")}</h2>
+      <h2 className="relative whitespace-pre-line text-title font-bold leading-tight tracking-tight text-white">{t("projectTitle")}</h2>
       <span className={arrow}>
         <Icon name="chevronRight" size={18} color="currentColor" />
       </span>
@@ -72,25 +72,8 @@ function ProjectTile({ lang }: TileProps) {
 
 function Banner({ variant, lang }: TileProps & { variant: FeedBanner }) {
   const { t } = useTranslation("marketplace", { keyPrefix: `feed.banners.${variant}` });
-  const navigate = useNavigate();
   const { image, to } = banners[variant];
-  return (
-    <section className="relative flex min-h-112 flex-col justify-end overflow-hidden rounded-surface bg-operational-ink p-8 sm:min-h-128 sm:p-12">
-      <img src={image} alt="" className="absolute inset-0 h-full w-full object-cover" />
-      <span className="absolute inset-0 bg-gradient-to-t from-operational-ink/85 via-operational-ink/30 to-transparent" />
-      <div className="relative flex max-w-xl flex-col items-start">
-        <h2 className="whitespace-pre-line text-title font-bold leading-tight tracking-tight text-white">{t("title")}</h2>
-        <p className="mt-3 text-label leading-snug text-white/85">{t("description")}</p>
-        <PrimaryButton
-          variant="soft"
-          onClick={() => navigate(to(lang))}
-          content={t("action")}
-          description={t("action")}
-          className="mt-6"
-        />
-      </div>
-    </section>
-  );
+  return <HighlightBanner image={image} title={t("title")} description={t("description")} action={t("action")} to={to(lang)} />;
 }
 
 export default function FeedHighlight({ format, lang }: { format: FeedHighlightFormat; lang: SupportedLanguage }) {

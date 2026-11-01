@@ -138,6 +138,8 @@
       "installation": "People who make installation happen.",
       "maintenance": "Care that makes a difference.",
       "inspection": "A technical perspective on your system."
-    }
+    },
+    "maintenanceDescription": "Review, cleaning and repair so the system delivers what it promised.",
+    "inspectionDescription": "Reports and diagnostics to decide with confidence."
   }
 }

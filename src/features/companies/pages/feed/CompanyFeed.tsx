@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import Marketplace from "@/features/marketplace/Marketplace";
 import { filterCompanies, getFeedView } from "@/features/marketplace/marketplace.utils";
 import { useMarketplaceCatalog } from "@/features/marketplace/marketplace.hooks";
-import MarketplaceHeading from "@/features/marketplace/components/MarketplaceHeading";
+import MarketplaceLayout from "@/features/marketplace/components/MarketplaceLayout";
+import MarketplacePageHeader from "@/features/marketplace/components/MarketplacePageHeader";
 import MarketplaceResults from "@/features/marketplace/components/MarketplaceResults";
 import SurfaceGroup from "@@/ui/surface/SurfaceGroup";
 import GroupAction from "@@/ui/button/GroupAction";
@@ -29,11 +29,8 @@ export default function CompanyFeed() {
     return () => window.removeEventListener("scroll", update);
   }, []);
   return (
-    <main ref={start} tabIndex={-1} className="mx-auto flex w-full max-w-marketplace-page min-w-0 flex-col gap-8 px-5 pb-4 pt-10 outline-none sm:px-10 sm:pt-12 lg:gap-10 lg:px-16 xl:px-20">
-      <div className="flex flex-col items-center gap-6 sm:gap-8">
-        <MarketplaceHeading title={t("companiesTitle")} description={t("companiesDescription")} centered />
-        <Marketplace category="companies" />
-      </div>
+    <MarketplaceLayout ref={start}>
+      <MarketplacePageHeader title={t("companiesTitle")} description={t("companiesDescription")} category="companies" />
       <MarketplaceResults
         loading={!items && !error}
         error={error ? feed("company.loadError") : undefined}
@@ -47,12 +44,17 @@ export default function CompanyFeed() {
       </MarketplaceResults>
       {showTop && (
         <SurfaceGroup direction="horizontal" className="fixed bottom-28 right-4 z-30 sm:bottom-6 sm:right-6">
-          <GroupAction layout="icon" icon="arrowUp" label={t("companyGallery.backToTop")} onClick={() => {
-            window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
-            start.current?.focus({ preventScroll: true });
-          }} />
+          <GroupAction
+            layout="icon"
+            icon="arrowUp"
+            label={t("companyGallery.backToTop")}
+            onClick={() => {
+              window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
+              start.current?.focus({ preventScroll: true });
+            }}
+          />
         </SurfaceGroup>
       )}
-    </main>
+    </MarketplaceLayout>
   );
 }
