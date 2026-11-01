@@ -75,6 +75,20 @@ export async function register(credentials: RegisterCredentials): Promise<Regist
   });
 }
 
+export async function updateAccountLocale(locale: string): Promise<void> {
+  if (isAlwaysMockMode("AUTH")) {
+    await waitForMockService();
+    return;
+  }
+  await httpJson<{ locale: string }>(`${API}/me/locale`, {
+    service: SERVICE_NAME,
+    operation: "updateAccountLocale",
+    method: "PATCH",
+    body: { locale },
+    errorMessage: i18n.t("services:access.updateLocale"),
+  });
+}
+
 export async function loginWithFirebase(idToken: string): Promise<AuthSession> {
   const session = await httpJson<AuthSession>(`${API}/firebase`, {
     service: SERVICE_NAME,
