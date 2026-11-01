@@ -11,7 +11,7 @@ const meta = {
     children: (
       <dl>
         <ProfileInfoRow label="Nome" value="Ana Silva" />
-        <ProfileInfoRow label="E-mail" value="ana@solaria.test" />
+        <ProfileInfoRow label="E-mail" value="ana@example.test" />
         <ProfileInfoRow label="Não preenchido" value={null} />
       </dl>
     ),
@@ -29,7 +29,7 @@ type Story = StoryObj<typeof meta>;
 export const Information: Story = {};
 const fields = [
   { name: "name", label: "Nome", value: "Ana Silva", required: true },
-  { name: "email", label: "E-mail", value: "ana@solaria.test", type: "email" as const },
+  { name: "email", label: "E-mail", value: "ana@example.test", type: "email" as const },
 ];
 export const Edit: Story = { render: () => <ProfileEditForm title="Editar contato" fields={fields} onCancel={fn()} onSave={fn()} /> };
 export const Saving: Story = { render: () => <ProfileEditForm title="Editar contato" fields={fields} onCancel={fn()} onSave={fn()} saving /> };
