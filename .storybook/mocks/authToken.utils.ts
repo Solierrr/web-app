@@ -4,7 +4,7 @@ const fixture: AuthSession = {
   refreshToken: "storybook-local",
   accessTokenExpiresAt: "2099-01-01T00:00:00Z",
   userId: "storybook-auth",
-  email: "ana@solaria.test",
+  email: "ana@example.test",
   isMock: true,
 };
 export function getAuthSession() {

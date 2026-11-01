@@ -23,7 +23,7 @@ interface State {
   scopes: string[];
 }
 const uid = () => getAuthSession()?.userId ?? "local-user";
-const email = () => getAuthSession()?.email.toLowerCase() ?? "local@solaria.test";
+const email = () => getAuthSession()?.email.toLowerCase() ?? "local@example.test";
 const key = () => `solaria.mock.projects.v1.${uid()}`;
 const stamp = () => new Date().toISOString();
 function seed(): State {
@@ -265,7 +265,7 @@ export async function mockProjectRequest(path: string, method: string, body?: un
         result = s.invites.filter((i) => i.projectId === id);
       } else {
         const d = body as InvitationDraft;
-        const targets = d.teamId ? ["tecnico@solaria.test", "auxiliar@solaria.test"] : [d.email?.trim().toLowerCase()];
+        const targets = d.teamId ? ["tecnico@example.test", "auxiliar@example.test"] : [d.email?.trim().toLowerCase()];
         if (d.role === "OWNER") throw new Error("Propriedade imutável.");
         result = targets.map((target) => {
           if (

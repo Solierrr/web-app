@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { Project, ProjectInvitation, ProjectActivity } from "./projects.d";
-const current = vi.hoisted(() => ({ userId: "owner-auth", email: "owner@solaria.test" }));
+const current = vi.hoisted(() => ({ userId: "owner-auth", email: "owner@example.test" }));
 vi.mock("@/lib/shared/auth/authToken.utils", () => ({ getAuthSession: () => current }));
 import { mockProjectRequest as request } from "./projects.d.mocks";
 const call = <T>(path: string, method = "GET", body?: unknown) => request(path, method, body) as Promise<T>;
@@ -21,7 +21,7 @@ describe("private project workflow", () => {
       clear: () => store.clear(),
     });
     current.userId = "owner-auth";
-    current.email = "owner@solaria.test";
+    current.email = "owner@example.test";
   });
   it("preserves ownership on edit", async () => {
     const p = await project();
@@ -82,7 +82,7 @@ describe("private project workflow", () => {
   });
   it("refuses duplicate invitations and permits revocation", async () => {
     const p = await project();
-    const draft = { email: "guest@solaria.test", role: "MEMBER", locale: "pt-BR" };
+    const draft = { email: "guest@example.test", role: "MEMBER", locale: "pt-BR" };
     const [i] = await call<ProjectInvitation[]>(`/${p.id}/invitations`, "POST", draft);
     await expect(call(`/${p.id}/invitations`, "POST", draft)).rejects.toThrow("pendente");
     await call(`/invitations/${i.id}`, "DELETE");
@@ -91,7 +91,7 @@ describe("private project workflow", () => {
   it("does not expose another account's local project data", async () => {
     const p = await project();
     current.userId = "other-auth";
-    current.email = "other@solaria.test";
+    current.email = "other@example.test";
     await expect(call(`/${p.id}`)).rejects.toThrow("indisponível");
   });
 });
