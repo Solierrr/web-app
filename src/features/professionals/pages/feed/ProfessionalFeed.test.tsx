@@ -103,7 +103,7 @@ describe("ProfessionalFeed", () => {
         </Routes>
       </MemoryRouter>,
     );
-    fireEvent.click(screen.getByRole("button", { name: /Encontrar especialistas/ }));
+    fireEvent.click(screen.getByRole("link", { name: /Encontrar especialistas/ }));
     expect(screen.getByTestId("where")).toHaveTextContent("/pt-BR/buscar/profissionais?specialty=Inspe%C3%A7%C3%A3o%20t%C3%A9cnica");
   });
 

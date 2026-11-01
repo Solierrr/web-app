@@ -43,9 +43,9 @@ export function sortOffers<T extends SolarPanelFeedSummary>(items: T[], view: st
   });
 }
 
-export type FeedBanner = "sunset" | "installer" | "house" | "garden" | "cabins" | "field";
+export type FeedBanner = "sunset" | "installer" | "house" | "garden" | "cabins" | "field" | "aerial" | "rows";
 
-export const feedBanners: FeedBanner[] = ["sunset", "installer", "house", "garden", "cabins", "field"];
+export const feedBanners: FeedBanner[] = ["sunset", "installer", "house", "garden", "cabins", "field", "aerial", "rows"];
 
 export type FeedHighlightFormat = "collections" | "pair" | FeedBanner;
 

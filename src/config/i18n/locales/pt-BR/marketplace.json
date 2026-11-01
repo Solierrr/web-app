@@ -74,7 +74,9 @@
       "sunTitle": "Comece\npelo sol.",
       "sunAction": "Placas solares",
       "baseTitle": "A base de\ntudo.",
-      "projectTitle": "Pense no\nprojeto inteiro."
+      "projectTitle": "Pense no\nprojeto inteiro.",
+      "baseAction": "Estruturas e acessórios",
+      "projectAction": "Encontrar profissionais"
     },
     "mostWanted": "Mais procurado",
     "add": "Adicionar {{title}} ao carrinho",
@@ -109,6 +111,16 @@
         "title": "Onde a energia\nganha escala.",
         "description": "Fornecedores preparados para usinas e projetos maiores.",
         "action": "Conhecer fornecedores"
+      },
+      "aerial": {
+        "title": "Vista de cima,\ntudo faz sentido.",
+        "description": "Empresas que projetam e entregam usinas completas.",
+        "action": "Conhecer empresas"
+      },
+      "rows": {
+        "title": "Fileiras de\nboas escolhas.",
+        "description": "Compare placas de alta potência lado a lado.",
+        "action": "Ver placas"
       }
     }
   },
@@ -123,7 +135,6 @@
   },
   "serviceFeed": {
     "featured": "Profissional em destaque",
-    "spotlightTitle": "Seu projeto começa com uma boa conversa.",
     "contact": "Entrar em contato",
     "installationTitle": "Do primeiro painel ao sistema funcionando.",
     "installationDescription": "Encontre quem instala, orienta e acompanha cada etapa.",
@@ -140,6 +151,12 @@
       "inspection": "Um olhar técnico para o seu sistema."
     },
     "maintenanceDescription": "Revisão, limpeza e reparo para o sistema render o que prometeu.",
-    "inspectionDescription": "Laudos e diagnósticos para decidir com segurança."
+    "inspectionDescription": "Laudos e diagnósticos para decidir com segurança.",
+    "engineeringTitle": "Todo bom projeto começa no papel.",
+    "engineeringDescription": "Engenheiros para dimensionar e aprovar o seu sistema.",
+    "engineeringAction": "Encontrar engenheiros",
+    "teamTitle": "Quando o projeto pede mais de um par de mãos.",
+    "teamDescription": "Equipes completas para obras de qualquer tamanho.",
+    "teamAction": "Ver equipes"
   }
 }

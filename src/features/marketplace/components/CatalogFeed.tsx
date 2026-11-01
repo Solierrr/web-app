@@ -15,12 +15,9 @@ import OfferShelf from "./OfferShelf";
 import MarketplaceLayout from "./MarketplaceLayout";
 import MarketplacePageHeader from "./MarketplacePageHeader";
 import MarketplaceResults from "./MarketplaceResults";
-import ProductSpotlight from "./ProductSpotlight";
 import FeedHighlight from "./FeedHighlight";
 import type { SolarPanelAnnouncement } from "@/features/solar-panel/solarPanel.announcement";
 import type { SupportedLanguage } from "@/config/i18n/browser/languages";
-
-type Slot = FeedHighlightFormat | "spotlight";
 
 const SHELVES_BETWEEN_HIGHLIGHTS = 2;
 
@@ -51,13 +48,12 @@ export default function CatalogFeed({
   const loadForLanguage = useCallback(() => load(lang), [load, lang]);
   const { items: loaded, error, retry } = useMarketplaceCatalog(loadForLanguage);
   const items = useMemo(() => loaded?.filter((item) => !kind || (item.panel.productType ?? "PANEL") === kind) ?? null, [loaded, kind]);
-  const [slots] = useState<Slot[]>(() => shuffle<Slot>(["spotlight", ...feedHighlightFormats]));
+  const [slots] = useState<FeedHighlightFormat[]>(() => shuffle(feedHighlightFormats));
   const all = sortOffers(items ?? [], view);
   const shelves = buildOfferShelves(items ?? [], view);
   let slotIndex = 0;
   function nextHighlight() {
     const slot = slots[slotIndex++ % slots.length];
-    if (slot === "spotlight") return all[0] ? <ProductSpotlight offer={sortOffers(all, "trending")[0]} lang={lang} /> : null;
     return <FeedHighlight format={slot} lang={lang} />;
   }
   const shelfTitle = (shelf: Shelf<SolarPanelAnnouncement>) => feed(`shelves.${shelf.kind}`, { name: shelf.name });
