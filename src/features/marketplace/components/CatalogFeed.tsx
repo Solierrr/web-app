@@ -1,6 +1,7 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { buildOfferShelves, feedHighlightFormats, sortOffers, type FeedHighlightFormat, type OfferShelf as Shelf } from "../marketplace.utils";
+import { useMarketplaceCatalog } from "../marketplace.hooks";
 import OfferCard from "./OfferCard";
 import OfferShelf from "./OfferShelf";
 import MarketplaceLayout from "./MarketplaceLayout";
@@ -35,33 +36,12 @@ export default function CatalogFeed({
 }) {
   const { t } = useTranslation("feed", { keyPrefix: "catalog" });
   const { t: feed } = useTranslation("marketplace", { keyPrefix: "feed" });
-  const [items, setItems] = useState<SolarPanelAnnouncement[] | null>(null);
-  const [error, setError] = useState(false);
-  const [revision, setRevision] = useState(0);
+  const loadForLanguage = useCallback(() => load(lang), [load, lang]);
+  const { items: loaded, error, retry } = useMarketplaceCatalog(loadForLanguage);
+  const items = useMemo(() => loaded?.filter((item) => !kind || (item.panel.productType ?? "PANEL") === kind) ?? null, [loaded, kind]);
   const [slots] = useState<Slot[]>(() => shuffle<Slot>(["spotlight", ...feedHighlightFormats]));
-  useEffect(() => {
-    let active = true;
-    load(lang)
-      .then((data) => {
-        if (active) {
-          setItems(data.filter((item) => !kind || (item.panel.productType ?? "PANEL") === kind));
-          setError(false);
-        }
-      })
-      .catch(() => {
-        if (active) setError(true);
-      });
-    return () => {
-      active = false;
-    };
-  }, [lang, load, kind, revision]);
   const all = sortOffers(items ?? [], "recent");
   const shelves = buildOfferShelves(items ?? []);
-  function refresh() {
-    setItems(null);
-    setError(false);
-    setRevision((value) => value + 1);
-  }
   let slotIndex = 0;
   function nextHighlight() {
     const slot = slots[slotIndex++ % slots.length];
@@ -78,7 +58,7 @@ export default function CatalogFeed({
         loading={!items && !error}
         error={error ? t("failed") : undefined}
         empty={items && !all.length ? t("empty") : undefined}
-        onRetry={refresh}>
+        onRetry={retry}>
         {nextHighlight()}
         {shelves.map((shelf, index) => (
           <Fragment key={shelf.key}>

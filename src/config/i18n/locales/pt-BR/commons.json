@@ -525,5 +525,10 @@
   },
   "logo": {
     "changeShape": "Mudar a forma da logo"
+  },
+  "loadFailure": {
+    "title": "Não foi possível carregar",
+    "message": "Verifique sua conexão e tente novamente em instantes.",
+    "retry": "Tentar novamente"
   }
 }
