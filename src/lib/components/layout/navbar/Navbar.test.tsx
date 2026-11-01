@@ -34,6 +34,17 @@ describe("Navbar", () => {
     expect(screen.getByRole("menuitem", { name: "Suporte" })).toBeInTheDocument();
   });
 
+  it("has no logo and keeps the standard navbar height", () => {
+    const { container } = render(
+      <MemoryRouter>
+        <Navbar />
+      </MemoryRouter>,
+    );
+    expect(container.querySelector("header img")).toBeNull();
+    expect(container.querySelector("header .navbar-frame")).not.toBeNull();
+    expect(container.querySelector("header .navbar-frame")?.className).not.toContain("min-h-16");
+  });
+
   it("renders the language switcher", () => {
     render(
       <MemoryRouter>
