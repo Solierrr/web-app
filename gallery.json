@@ -1,0 +1,14 @@
+{
+  "name": "web-app",
+  "kind": "storybook",
+  "title": {
+    "pt-BR": "Storybook do aplicativo web",
+    "en-US": "Web app Storybook",
+    "es-ES": "Storybook de la aplicación web"
+  },
+  "description": {
+    "pt-BR": "Componentes, páginas e fluxos do aplicativo web, com controles e testes de acessibilidade.",
+    "en-US": "Components, pages and flows of the web app, with controls and accessibility checks.",
+    "es-ES": "Componentes, páginas y flujos de la aplicación web, con controles y pruebas de accesibilidad."
+  }
+}
