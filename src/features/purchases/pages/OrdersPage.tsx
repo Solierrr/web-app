@@ -29,10 +29,10 @@ export default function OrdersPage() {
   }, []);
 
   return (
-    <OperationalPage title={t("title")} description={t("description")} loading={!orders && !error}>
-      {error && <p className="px-4 sm:px-8 lg:px-10">{t("error")}</p>}
+    <OperationalPage title={t("title")} description={t("description")} loading={!orders && !error} centered sideBackground>
+      {error && <p>{t("error")}</p>}
       {orders && (
-        <div className="px-4 pb-10 sm:px-8 lg:px-10">
+        <div>
           <OperationalTable
             label={t("list")}
             items={orders}

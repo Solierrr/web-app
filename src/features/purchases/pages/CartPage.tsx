@@ -9,7 +9,8 @@ import OperationalTable from "@@/layout/operational-page/OperationalTable";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
 import { PrimaryButton } from "@@/ui/button/Button.presets";
 import Input from "@@/ui/input/Input";
-import { NativeSelect as Select } from "@@/ui/select/Select";
+import Select from "@@/ui/select/Select";
+import SurfaceGroup from "@@/ui/surface/SurfaceGroup";
 import { notify } from "@@/feedback/toast/Toast.utils";
 
 import { checkout, formatMoney, getCart, putCartItem, removeCartItem } from "../purchases.service";
@@ -68,10 +69,10 @@ export default function CartPage() {
   const blocked = !cart || cart.items.length === 0 || cart.items.some((line) => !line.purchasable);
 
   return (
-    <OperationalPage title={t("title")} description={t("description")} loading={!cart && !error}>
-      {error && <p className="px-4 sm:px-8 lg:px-10">{t("error")}</p>}
+    <OperationalPage title={t("title")} description={t("description")} loading={!cart && !error} centered sideBackground>
+      {error && <p>{t("error")}</p>}
       {cart && (
-        <div className="flex flex-col gap-6 px-4 pb-10 sm:px-8 lg:px-10">
+        <div className="flex flex-col gap-6">
           <OperationalTable
             label={t("items")}
             items={cart.items}
@@ -149,38 +150,36 @@ export default function CartPage() {
               },
             ]}
           />
-          <section aria-label={t("summary")} className="flex max-w-md flex-col gap-3 self-end">
-            <dl className="flex flex-col gap-1">
-              <div className="flex justify-between gap-8">
-                <dt>{t("subtotal")}</dt>
-                <dd>{formatMoney(cart.subtotal, lang)}</dd>
+          <section aria-label={t("summary")} className="mx-auto flex w-full min-w-0 flex-col gap-4 lg:w-[85%]">
+            <SurfaceGroup contentClassName="[&>div]:flex [&>div]:items-center [&>div]:justify-between [&>div]:gap-8 [&>div]:px-4 [&>div]:py-3">
+              <div>
+                <span>{t("subtotal")}</span>
+                <span>{formatMoney(cart.subtotal, lang)}</span>
               </div>
-              <div className="flex justify-between gap-8">
-                <dt>{t("fee", { percentage: (cart.feePercentage * 100).toLocaleString(lang) })}</dt>
-                <dd>{formatMoney(cart.feeAmount, lang)}</dd>
+              <div>
+                <span>{t("fee", { percentage: (cart.feePercentage * 100).toLocaleString(lang) })}</span>
+                <span>{formatMoney(cart.feeAmount, lang)}</span>
               </div>
-              <div className="flex justify-between gap-8 font-semi-bold">
-                <dt>{t("total")}</dt>
-                <dd>{formatMoney(cart.total, lang)}</dd>
+              <div className="font-semi-bold">
+                <span>{t("total")}</span>
+                <span>{formatMoney(cart.total, lang)}</span>
               </div>
-            </dl>
-            <label className="flex flex-col gap-1 text-body">
-              {t("paymentMethod")}
-              <Select
-                name="paymentMethod"
-                value={method}
-                onChange={(event) => setMethod(event.target.value as PaymentMethod)}
-                aria-label={t("paymentMethod")}>
-                {METHODS.map((item) => (
-                  <option key={item} value={item}>
-                    {tMethods(item)}
-                  </option>
-                ))}
-              </Select>
-            </label>
-            <p className="text-operational-muted">{t("fictitious")}</p>
+              <div>
+                <span>{t("paymentMethod")}</span>
+                <Select<PaymentMethod>
+                  name={t("paymentMethod")}
+                  value={method}
+                  clearable={false}
+                  rounded
+                  options={METHODS.map((item) => [tMethods(item), item] as const)}
+                  onChange={(value) => value && setMethod(value)}
+                />
+              </div>
+            </SurfaceGroup>
+            <p className="text-center text-operational-muted">{t("fictitious")}</p>
             <PrimaryButton
               type="button"
+              variant="soft"
               disabled={busy || blocked}
               onClick={() => void handleCheckout()}
               className="min-h-12 w-full"

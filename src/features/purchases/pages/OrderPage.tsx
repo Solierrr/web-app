@@ -39,13 +39,15 @@ export default function OrderPage() {
 
   return (
     <OperationalPage
+      centered
+      sideBackground
       title={t("title")}
       description={order ? formatDate(order.createdAt, lang) : undefined}
       loading={!order && !error}
       actions={<ToolbarAction to={routePaths.orders(lang)} icon="chevronLeft" label={t("back")} content={t("back")} />}>
-      {error && <p className="px-4 sm:px-8 lg:px-10">{t("error")}</p>}
+      {error && <p>{t("error")}</p>}
       {order && (
-        <div className="flex flex-col gap-6 px-4 pb-10 sm:px-8 lg:px-10">
+        <div className="flex flex-col gap-6">
           <div className="flex flex-wrap items-center gap-4">
             <StatusField state={order.status === "PAID" ? "approved" : "cancelled"} label={t(`statuses.${order.status}`)} />
             {order.payment && (
