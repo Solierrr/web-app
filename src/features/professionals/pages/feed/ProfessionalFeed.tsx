@@ -64,7 +64,8 @@ export default function ProfessionalFeed() {
                 setRevision((n) => n + 1);
               }
             : retry
-        }>
+        }
+        skeleton={teamView ? "pairs" : "shelves"}>
         {teamView ? (
           <div className="grid min-w-0 grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-2">
             {(teams ?? []).map((team) => (

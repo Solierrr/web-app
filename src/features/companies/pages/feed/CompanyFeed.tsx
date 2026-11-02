@@ -35,7 +35,8 @@ export default function CompanyFeed() {
         loading={!items && !error}
         error={error ? feed("company.loadError") : undefined}
         empty={items && !filtered.length ? feed("company.empty") : undefined}
-        onRetry={retry}>
+        onRetry={retry}
+        skeleton="pairs">
         <section aria-label={t("partnersHeading")} className="grid min-w-0 grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-2 lg:gap-y-10">
           {filtered.map((company) => (
             <CompanyFeaturedCard key={company.id} company={company} lang={lang} />
