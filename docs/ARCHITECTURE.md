@@ -24,6 +24,8 @@ flowchart LR
 | `src/routes/`   | Rotas e requisitos de navegação                       |
 | `.storybook/`   | Catálogo e configuração de componentes                |
 
+A organização por domínio, a justificativa e o mapa entre essas pastas e as convenções `src/components`, `src/pages`, `src/services` e `src/types` estão em [Arquitetura por funcionalidade](https://github.com/Solierrr/web-app/blob/main/docs/FEATURE_BASED_ARCHITECTURE.md).
+
 As integrações autenticadas usam JWT, com o cliente HTTP e os utilitários de refresh coordenando a renovação e a sessão armazenada em `localStorage`. O serviço de mensagens recupera o histórico por REST e recebe os eventos por STOMP, incluindo digitação e presença.
 
 O assistente chama o `ai-assistant` ou o `ai-operational`, conforme o fluxo, e a análise de imagens chama o `ai-accessibility`, enquanto os documentos podem usar o `ai-validation` e o cadastro profissional no `api-core`. O catálogo de ofertas chama `/api/catalog/offers` no `api-core`, sem pressupor o uso do `api-recommendation`.
