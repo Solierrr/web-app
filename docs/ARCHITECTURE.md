@@ -16,13 +16,13 @@ flowchart LR
  R --> F[Firebase Auth e Messaging]
 ```
 
-| Pasta | Papel |
-|---|---|
-| `src/features/` | Páginas, serviços e modelos por domínio |
-| `src/lib/` | Componentes locais, HTTP e utilitários compartilhados |
-| `src/config/` | Internacionalização, Firebase, logs e modos de dados |
-| `src/routes/` | Rotas e requisitos de navegação |
-| `.storybook/` | Catálogo e configuração de componentes |
+| Pasta           | Papel                                                 |
+| --------------- | ----------------------------------------------------- |
+| `src/features/` | Páginas, serviços e modelos por domínio               |
+| `src/lib/`      | Componentes locais, HTTP e utilitários compartilhados |
+| `src/config/`   | Internacionalização, Firebase, logs e modos de dados  |
+| `src/routes/`   | Rotas e requisitos de navegação                       |
+| `.storybook/`   | Catálogo e configuração de componentes                |
 
 As integrações autenticadas usam JWT, com o cliente HTTP e os utilitários de refresh coordenando a renovação e a sessão armazenada em `localStorage`. O serviço de mensagens recupera o histórico por REST e recebe os eventos por STOMP, incluindo digitação e presença.
 
