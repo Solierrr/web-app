@@ -164,12 +164,12 @@ export default function Select<T = string>({
           className={`absolute z-10 ${plain ? "left-0 top-full mt-1 w-full" : grouped ? "right-0 top-full mt-3 w-max min-w-56" : "mt-1 w-full"}`}
           role="listbox"
           aria-label={name}>
-          {options.map((option, index) => {
+          {options.map((option) => {
             const isSelected = getOptionValue(option) === selectedValue;
 
             return (
               <MenuItem
-                key={index}
+                key={String(getOptionValue(option))}
                 role="option"
                 selected={isSelected}
                 onSelect={() => handleSelect(option)}

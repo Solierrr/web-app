@@ -131,7 +131,7 @@ export function RankingCard({ payload, locale, unit, maximumFractionDigits, mono
     <DashboardCard {...card} empty={!items.length}>
       <ol className="flex flex-col gap-4">
         {items.map((item, index) => (
-          <li key={index} className="min-w-0">
+          <li key={item.label} className="min-w-0">
             <div className="mb-2 flex justify-between gap-3">
               <span className="min-w-0 break-words">{item.label}</span>
               <span className="shrink-0 tabular-nums">{formatDashboardValue(item.value, { locale, unit, maximumFractionDigits })}</span>
