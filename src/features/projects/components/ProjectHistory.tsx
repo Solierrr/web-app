@@ -10,7 +10,6 @@ export default function ProjectHistory({ project }: { project: Project }) {
   const a = useProjectActions();
   return (
     <div className="flex flex-col gap-5">
-      <h2 className="text-label font-semi-bold">{t("history")}</h2>
       {r.error && <Alert>{r.error}</Alert>}
       <ProjectHistoryView
         items={r.data}
