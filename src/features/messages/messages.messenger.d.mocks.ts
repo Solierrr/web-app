@@ -1,7 +1,7 @@
 import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import { HttpResponseError } from "@/lib/shared/http/http.service";
 import { MESSAGE_MUTATION_WINDOW_MS } from "./messages.messenger.realtime.utils";
-import type { ConversationDto, ConversationStateDto, MessageDto } from "./messages.messenger.api";
+import type { ConversationDto, ConversationStateDto, MessageDto, MessageUpdatesDto } from "./messages.messenger.api";
 import { publishMockConversation, publishMockMessage, simulateMockReplies, type MockReply } from "./messages.messenger.realtime.d.mocks";
 
 interface MockMessenger {
@@ -171,6 +171,19 @@ export function mutateMockMessage(id: string, change: "edited" | "deleted", cont
   window.dispatchEvent(new Event("solaria:messenger"));
   publishMockMessage(message, change);
   return message;
+}
+
+/** Catch-up simulado: o relógio é o maior `changeVersion` guardado; sem `since` só devolve o ponto de partida. */
+export function getMockMessageUpdates(since?: number): MessageUpdatesDto {
+  const messages = getMockMessenger().messages;
+  const cursor = Math.max(0, ...messages.map((item) => item.changeVersion ?? 0));
+  if (since === undefined) return { syncEpoch: "mock", cursor, hasMore: false, messages: [] };
+  return {
+    syncEpoch: "mock",
+    cursor: Math.max(cursor, since),
+    hasMore: false,
+    messages: messages.filter((item) => (item.changeVersion ?? 0) > since),
+  };
 }
 
 /** Silencia/arquiva só para o usuário; a conversa com o assistente não aceita (422, como no servidor). */

@@ -6,6 +6,7 @@ import {
   editMessage,
   getConversation,
   getConversations,
+  getMessageUpdates,
   updateConversationState,
   markConversationRead,
   sendConversationMessage,
@@ -111,5 +112,17 @@ describe("simulated realtime events", () => {
     expect(updates.at(-1)).toMatchObject({ kind: "conversationUpdated", conversation: { id: conversation.id, archived: true } });
     expect((await getConversations()).some((item) => item.id === conversation.id)).toBe(false);
     expect((await getConversations(true)).map((item) => item.id)).toContain(conversation.id);
+  });
+
+  it("answers the catch-up with the messages changed after the cursor", async () => {
+    const conversation = await createDirectConversation(PEER_ID);
+    const sent = await sendConversationMessage(conversation.id, "Oi", "DIRECT");
+    const start = await getMessageUpdates();
+    expect(start.messages).toEqual([]);
+    const edited = await editMessage(sent.id, "Oi!");
+    const changes = await getMessageUpdates(start.cursor);
+    expect(changes.messages.map((item) => item.id)).toEqual([sent.id]);
+    expect(changes.cursor).toBe(edited.changeVersion);
+    expect((await getMessageUpdates(changes.cursor)).messages).toEqual([]);
   });
 });

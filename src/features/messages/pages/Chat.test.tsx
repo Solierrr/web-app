@@ -471,4 +471,12 @@ describe("Chat editing and deleting messages", () => {
     emit({ kind: "message", change: "deleted", message: message(2, "", { deleted: true, changeVersion: 6 }) });
     expect(screen.getByText("Mensagem apagada")).toBeInTheDocument();
   });
+
+  it("reloads the open conversation when the server says the sync clock was recreated", async () => {
+    renderChat();
+    await screen.findByText("Resposta do fornecedor");
+    vi.mocked(api.getConversationMessages).mockResolvedValue([mine(), message(2, "Resposta já corrigida", { changeVersion: 9, edited: true })]);
+    emit({ kind: "resync" });
+    expect(await screen.findByText("Resposta já corrigida")).toBeInTheDocument();
+  });
 });

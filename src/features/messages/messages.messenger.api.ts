@@ -8,6 +8,7 @@ import {
   createMockChatbotConversation,
   sendMockMessage,
   markMockConversationRead,
+  getMockMessageUpdates,
   mutateMockMessage,
   updateMockConversationState,
   getMockConnections,
@@ -62,6 +63,13 @@ export interface MessageDto {
   deleted?: boolean;
   /** Versão da última mudança da mensagem: entre duas cópias do mesmo id vale a de maior valor. */
   changeVersion?: number;
+}
+
+export interface MessageUpdatesDto {
+  syncEpoch: string;
+  cursor: number;
+  hasMore: boolean;
+  messages: MessageDto[];
 }
 
 export const MESSAGE_PAGE_SIZE = 100;
@@ -185,6 +193,19 @@ export async function updateConversationState(id: string, patch: { muted?: boole
     method: "PATCH",
     body: patch,
     errorMessage: i18n.t("services:messenger.updateConversationState"),
+  });
+}
+
+/** Catch-up: sem `since` devolve só o ponto de partida; com `since`, o estado atual das mensagens que mudaram depois dele. */
+export async function getMessageUpdates(since?: number): Promise<MessageUpdatesDto> {
+  if (isAlwaysMockMode("MESSENGER")) {
+    await waitForMockService();
+    return getMockMessageUpdates(since);
+  }
+  return httpJson<MessageUpdatesDto>(`${API}/updates${since === undefined ? "" : `?since=${since}&limit=${MESSAGE_PAGE_SIZE}`}`, {
+    service: "messenger",
+    operation: "getMessageUpdates",
+    errorMessage: i18n.t("services:messenger.getMessageUpdates"),
   });
 }
 

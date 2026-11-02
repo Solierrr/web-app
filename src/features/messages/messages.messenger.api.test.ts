@@ -3,6 +3,7 @@ import {
   deleteMessage,
   editMessage,
   getConversations,
+  getMessageUpdates,
   getConversationMessages,
   getConversationMessagesSince,
   markConversationRead,
@@ -145,5 +146,13 @@ describe("Messenger API contract", () => {
       expect.objectContaining({ method: "PATCH", body: JSON.stringify({ muted: true }) }),
     );
     expect(state.effectiveMuted).toBe(true);
+  });
+  it("asks for the starting point without since and for the changes with since and limit", async () => {
+    respond({ syncEpoch: "e1", cursor: 40, hasMore: false, messages: [] });
+    await expect(getMessageUpdates()).resolves.toMatchObject({ cursor: 40 });
+    expect(fetchMock.mock.calls[0][0]).toMatch(/\/messaging\/updates$/);
+    respond({ syncEpoch: "e1", cursor: 44, hasMore: true, messages: [message(3)] });
+    await getMessageUpdates(40);
+    expect(fetchMock.mock.calls[1][0]).toContain("/messaging/updates?since=40&limit=100");
   });
 });

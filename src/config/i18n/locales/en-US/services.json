@@ -54,7 +54,8 @@
     "editMessage": "Unable to edit the message",
     "deleteMessage": "Unable to delete the message",
     "sessionUnavailable": "Session unavailable",
-    "updateConversationState": "Unable to update the conversation"
+    "updateConversationState": "Unable to update the conversation",
+    "getMessageUpdates": "Unable to fetch the messages that changed"
   },
   "user": {
     "getUserSummary": "Unable to load the participant",

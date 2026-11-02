@@ -48,7 +48,7 @@ export function useConversationPresence(conversationId: string): { typing: strin
         setTyping((current) => (current.includes(event.userId) ? current : [...current, event.userId]));
       } else if (event.kind === "presence" || event.kind === "presenceSnapshot") {
         setPresence((current) => applyPresence(current, event));
-      } else if (event.change === "created") {
+      } else if (event.kind === "message" && event.change === "created") {
         stopTyping(event.message.senderId.toLowerCase());
       }
     });

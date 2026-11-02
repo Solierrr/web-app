@@ -54,7 +54,8 @@
     "editMessage": "No se pudo editar el mensaje",
     "deleteMessage": "No se pudo eliminar el mensaje",
     "sessionUnavailable": "Sesión no disponible",
-    "updateConversationState": "No se pudo actualizar la conversación"
+    "updateConversationState": "No se pudo actualizar la conversación",
+    "getMessageUpdates": "No se pudieron obtener los mensajes que cambiaron"
   },
   "user": {
     "getUserSummary": "No se pudo cargar el participante",

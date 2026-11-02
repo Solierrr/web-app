@@ -5,6 +5,7 @@ import { refresh } from "@/features/access/access.service";
 import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
 import logger from "@/config/logging/logger";
+import { getMessageUpdates, type MessageDto } from "./messages.messenger.api";
 import type { ConnectionState, ConversationListener, UserListener } from "./messages.messenger.realtime";
 import {
   applyPresence,
@@ -30,6 +31,9 @@ const conversationListeners = new Map<string, Set<ConversationListener>>();
 const userListeners = new Set<UserListener>();
 const connectionListeners = new Set<() => void>();
 const stompSubscriptions = new Map<string, StompSubscription>();
+
+// Ponto do catch-up (`GET /updates`): fica na memória da aba e só some quando a sessão acaba ou muda de pessoa.
+let catchUpState: { userId: string; epoch: string; cursor: number } | null = null;
 
 // Presença é por pessoa e o snapshot só chega ao assinar: guardamos o que já chegou para quem começa a ouvir depois.
 let presence = EMPTY_PRESENCE;
@@ -95,6 +99,48 @@ function dispatchFrame(destination: string, body: unknown) {
   }
   const listeners = conversationListeners.get(frameConversationId(body) ?? "");
   if (listeners) notify(listeners, event);
+}
+
+/** Entrega ao ouvinte da conversa uma mensagem trazida pelo catch-up, como se tivesse chegado ao vivo. */
+function deliverUpdate(message: MessageDto) {
+  const listeners = conversationListeners.get(message.conversationId);
+  if (listeners) notify(listeners, { kind: "message", change: message.deleted ? "deleted" : message.edited ? "edited" : "created", message });
+}
+
+/** Depois de assinar `.events`: busca o que mudou desde o último cursor, página a página; época nova = recarregar tudo. */
+async function catchUp(current: Client) {
+  const userId = clientUserId;
+  if (!userId) return;
+  if (catchUpState?.userId !== userId) catchUpState = null;
+  const startingPoint = async () => {
+    const start = await getMessageUpdates();
+    catchUpState = { userId, epoch: start.syncEpoch, cursor: start.cursor };
+  };
+  try {
+    if (!catchUpState) {
+      await startingPoint();
+      return;
+    }
+    for (let more = true; more;) {
+      const since = catchUpState.cursor;
+      const page = await getMessageUpdates(since);
+      if (current !== client) return;
+      if (page.syncEpoch !== catchUpState.epoch) {
+        await startingPoint();
+        notify(
+          [...conversationListeners.values()].flatMap((listeners) => [...listeners]),
+          { kind: "resync" },
+        );
+        window.dispatchEvent(new Event("solaria:messenger"));
+        return;
+      }
+      page.messages.forEach(deliverUpdate);
+      catchUpState.cursor = page.cursor;
+      more = page.hasMore && page.cursor > since;
+    }
+  } catch (error) {
+    logger.serviceError({ service: "messenger", operation: "catchUp", error });
+  }
 }
 
 function receive(destination: string, frame: IFrame) {
@@ -188,6 +234,7 @@ function handleConnected(current: Client) {
   if (current !== client) return;
   setState({ status: "connected", attempts: 0 });
   syncSubscriptions();
+  void catchUp(current);
   clearConnectionTimers();
   pingTimer = setInterval(() => {
     if (current.connected) current.publish({ destination: "/app/presence.ping" });
@@ -297,6 +344,7 @@ export function publishTyping(conversationId: string, typing: boolean): void {
 }
 
 export function disconnectMessenger(): void {
+  catchUpState = null;
   teardown(hasListeners() ? "unavailable" : "idle");
 }
 

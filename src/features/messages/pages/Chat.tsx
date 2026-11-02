@@ -214,6 +214,13 @@ export function Conversation({
       });
 
     const unsubscribe = subscribeToConversation(conversationId, (event) => {
+      if (event.kind === "resync") {
+        if (initialized)
+          void getConversationMessages(conversationId)
+            .then(receive)
+            .catch(() => undefined);
+        return;
+      }
       if (event.kind !== "message") return;
       if (initialized && lastSequence.current > 0 && event.message.sequence > lastSequence.current + 1) void synchronize();
       receive([event.message]);
