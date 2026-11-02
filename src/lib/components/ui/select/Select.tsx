@@ -125,7 +125,7 @@ export default function Select<T = string>({
   }
 
   return (
-    <div ref={containerRef} className={`relative flex ${plain ? "w-full" : "w-fit"} ${grouped ? "self-stretch" : ""} ${className ?? ""}`}>
+    <div ref={containerRef} className={`relative flex min-w-0 ${plain ? "w-full" : "w-fit"} ${grouped ? "self-stretch" : ""} ${className ?? ""}`}>
       <div
         ref={triggerRef}
         className={`flex w-full items-center-safe justify-between ${plain ? "h-11 lg:h-9 gap-2 rounded-small bg-transparent px-3! text-sidebar leading-5 transition-colors duration-250 hover:bg-sidebar-hover focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-operational-ink motion-reduce:transition-none" : grouped ? "h-12 gap-3 rounded-[inherit] bg-transparent transition-colors duration-250 hover:bg-operational-hover focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-operational-ink motion-reduce:transition-none" : `gap-8 bg-input-bg py-2 ${rounded ? "rounded-full" : "rounded-medium"}`} ${selectedOption ? "pl-3 pr-4" : "px-4"} text-black font-medium cursor-pointer ${disabled ? "opacity-50 pointer-events-none" : ""}`}
@@ -145,7 +145,7 @@ export default function Select<T = string>({
         }}>
         <span className="flex min-w-0 items-center-safe gap-2">
           {icon && <Icon name={icon} size={18} color="currentColor" className="shrink-0 text-operational-muted" />}
-          {selectedOption && clearable && (
+          {selectedOption && clearable && !grouped && (
             <button
               type="button"
               aria-label={t("clearSelection")}
@@ -158,7 +158,7 @@ export default function Select<T = string>({
             </button>
           )}
 
-          <span className={`font-medium ${selectedOption ? "" : "text-input-text"} select-none`}>
+          <span className={`truncate font-medium ${selectedOption ? "" : "text-input-text"} select-none`}>
             {selectedOption ? getOptionLabel(selectedOption) : resolvedPlaceholder}
           </span>
         </span>
