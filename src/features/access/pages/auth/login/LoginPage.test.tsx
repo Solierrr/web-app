@@ -277,7 +277,7 @@ describe("LoginPage", () => {
     fireEvent.change(screen.getByLabelText("E-mail"), { target: { value: "user@example.test" } });
     fireEvent.change(screen.getByLabelText("Senha"), { target: { value: "wrong" } });
     fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
-    expect(await screen.findByRole("status")).toHaveTextContent(message);
+    expect(await screen.findByRole("alert")).toHaveTextContent(message);
     expect(loginFirebase).not.toHaveBeenCalled();
     expect(getRememberedLogin()).toBeNull();
   });

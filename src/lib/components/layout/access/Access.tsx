@@ -90,7 +90,8 @@ function AccessBody({
     }
     setFieldErrors(errors);
     if (Object.keys(errors).length) {
-      for (const message of new Set(Object.values(errors))) notify(message === t("feedback.required") ? t("feedback.requiredHelp") : message);
+      for (const message of new Set(Object.values(errors)))
+        notify(message === t("feedback.required") ? t("feedback.requiredHelp") : message, undefined, true);
       const input = event.currentTarget.elements.namedItem(Object.keys(errors)[0]);
       if (input instanceof HTMLInputElement) input.focus();
       return;

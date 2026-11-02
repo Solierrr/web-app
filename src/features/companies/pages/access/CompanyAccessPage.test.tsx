@@ -26,6 +26,6 @@ describe("CompanyAccessPage", () => {
     fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
 
     await waitFor(() => expect(redeemAccessCode).toHaveBeenCalledWith("ABC12345"));
-    expect(await screen.findByRole("status")).toBeInTheDocument();
+    expect(await screen.findByRole("alert")).toBeInTheDocument();
   });
 });

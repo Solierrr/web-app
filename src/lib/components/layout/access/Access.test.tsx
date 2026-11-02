@@ -65,8 +65,8 @@ describe("Access", () => {
       </>,
     );
 
-    expect(screen.getByRole("status")).toHaveTextContent("Credenciais inválidas");
-    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    expect(screen.getByRole("alert")).toHaveTextContent("Credenciais inválidas");
+    expect(screen.getAllByRole("alert")).toHaveLength(1);
   });
 
   it("keeps invalid fields out of submission and reports them only as a stacked toast", () => {
@@ -86,13 +86,13 @@ describe("Access", () => {
     fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
     expect(onSubmit).not.toHaveBeenCalled();
     expect(input).toHaveAttribute("aria-invalid", "true");
-    expect(screen.getByRole("status")).toHaveTextContent("Preencha todos os campos obrigatórios para continuar.");
+    expect(screen.getByRole("alert")).toHaveTextContent("Preencha todos os campos obrigatórios para continuar.");
     expect(screen.queryByText("Preencha este campo.")).not.toBeInTheDocument();
     expect(screen.getByText("E-mail", { selector: "label" })).toHaveTextContent("E-mail *");
     expect(input).toHaveFocus();
     fireEvent.change(input, { target: { value: "invalid" } });
     fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
-    expect(screen.getAllByRole("status").some((item) => item.textContent?.includes("Informe um e-mail válido."))).toBe(true);
+    expect(screen.getAllByRole("alert").some((item) => item.textContent?.includes("Informe um e-mail válido."))).toBe(true);
     expect(input).not.toHaveAccessibleDescription();
     fireEvent.change(input, { target: { value: "user@example.com" } });
     expect(screen.getByText("E-mail", { selector: "label" })).not.toHaveTextContent("*");

@@ -100,7 +100,7 @@ export default function Toast() {
             className={`${index === 0 ? "relative" : "absolute inset-x-0 bottom-0"} transition-[transform,opacity] duration-250 motion-reduce:transition-none`}
             style={{ zIndex: 3 - index, transform: `translateY(-${index * 12}px) scale(${1 - index * 0.04})`, opacity: 1 - index * 0.15 }}>
             <Surface
-              role="status"
+              role={notification.urgent ? "alert" : "status"}
               className="toast-enter pointer-events-auto"
               contentClassName="flex items-center gap-3 px-4 py-3 text-body text-operational-ink">
               <ToastText
