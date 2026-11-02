@@ -20,17 +20,17 @@ interface SearchBarProps extends Omit<ComponentProps<typeof Input>, "icon" | "cl
  */
 export default function SearchBar({ leading, actions, className = "", ...props }: SearchBarProps) {
   return (
-    <Surface field className={`w-full ${className}`} contentClassName="flex items-stretch overflow-visible!">
+    <Surface field className={`w-full ${className}`} contentClassName="flex flex-wrap items-stretch overflow-visible! sm:flex-nowrap">
       {leading && (
         <div className="flex shrink-0 items-stretch divide-x divide-operational-border/60 border-r-(length:--border-width-ui) border-solid border-border/60 [&>*:first-child]:rounded-l-full">
           {leading}
         </div>
       )}
-      <div className="min-w-0 flex-1 px-2 py-1">
+      <div className="flex min-w-0 flex-1 basis-full items-center px-2 py-1 sm:basis-0">
         <Input {...props} rounded icon={{ name: "search" }} className="w-full! bg-transparent!" />
       </div>
       {actions && (
-        <div className="flex shrink-0 items-stretch divide-x divide-operational-border/60 border-l-(length:--border-width-ui) border-solid border-border/60 [&>*:last-child]:rounded-r-full">
+        <div className="flex w-full shrink-0 items-stretch divide-x divide-operational-border/60 border-t-(length:--border-width-ui) border-solid border-border/60 sm:w-auto sm:border-t-0 sm:border-l-(length:--border-width-ui) [&>*:first-child]:flex-1 sm:[&>*:first-child]:flex-none [&>*:last-child]:rounded-r-full">
           {actions}
         </div>
       )}
