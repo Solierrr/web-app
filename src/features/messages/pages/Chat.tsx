@@ -37,6 +37,7 @@ import {
   useTypingPublisher,
 } from "@/features/messages/messages.hooks";
 import ConnectionNotice from "./ConnectionNotice";
+import GroupDetails from "./GroupDetails";
 import { AssistantNotice, EditBanner, MessageMeta, PendingBubble } from "./Chat.reusable";
 import Confirmation from "@@/overlay/confirmation/Confirmation";
 import { getHttpStatus } from "@/lib/shared/http/http.service";
@@ -53,6 +54,7 @@ export function Conversation({
   displayTitle,
   actions,
   onConversationChange,
+  onLeft,
 }: {
   conversationId: string;
   embedded?: boolean;
@@ -60,6 +62,8 @@ export function Conversation({
   displayTitle?: string;
   actions?: ReactNode;
   onConversationChange?: (conversationId: string) => void;
+  /** Chamado depois que a pessoa sai do grupo; sem ele, volta para a caixa de entrada. */
+  onLeft?: () => void;
 }) {
   const navigate = useNavigate();
   const { lang: langParam } = useParams<{ lang: string }>();
@@ -81,6 +85,7 @@ export function Conversation({
   const [loadingOlder, setLoadingOlder] = useState(false);
   const [editing, setEditing] = useState<MessageDto | null>(null);
   const [toDelete, setToDelete] = useState<MessageDto | null>(null);
+  const [detailsOpen, setDetailsOpen] = useState(false);
   const draftBeforeEdit = useRef("");
   const lastSequence = useRef(0);
   const lastMarkedRead = useRef(0);
@@ -282,6 +287,15 @@ export function Conversation({
     }
   }
 
+  function loadParticipantNames(ids: string[]) {
+    const missing = ids.filter((id) => id !== userId && !participantNames[id]);
+    void Promise.allSettled(missing.map(getUserSummary)).then((results) =>
+      setParticipantNames((current) => ({
+        ...current,
+        ...Object.fromEntries(results.flatMap((result, index) => (result.status === "fulfilled" ? [[missing[index], result.value.username]] : []))),
+      })),
+    );
+  }
   const mutationFailed = (failure: unknown) => setError(t(getHttpStatus(failure) === 422 ? "mutationExpired" : "mutationError"));
   function startEdit(message: MessageDto) {
     draftBeforeEdit.current = draft;
@@ -380,6 +394,9 @@ export function Conversation({
             label={t("inbox")}
             className={embedded ? "@xl/messages:hidden" : undefined}
           />
+          {conversation?.conversationType === "GROUP" && (
+            <ToolbarAction icon="users" label={t("groupDetails")} onClick={() => setDetailsOpen(true)} />
+          )}
           {actions}
         </div>
       </ChatHeader>
@@ -491,6 +508,23 @@ export function Conversation({
           disabled={readOnly || loading || !conversation}
         />
       </Surface>
+      {detailsOpen && conversation && userId && (
+        <GroupDetails
+          conversation={conversation}
+          userId={userId}
+          names={participantNames}
+          onChanged={(next) => {
+            setConversation(next);
+            loadParticipantNames(next.participantIds);
+          }}
+          onLeft={() => {
+            setDetailsOpen(false);
+            if (onLeft) onLeft();
+            else navigate(routePaths.inbox(lang));
+          }}
+          onClose={() => setDetailsOpen(false)}
+        />
+      )}
       {toDelete && (
         <Confirmation
           title={t("deleteMessageTitle")}

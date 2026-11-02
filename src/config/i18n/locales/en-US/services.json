@@ -55,7 +55,11 @@
     "deleteMessage": "Unable to delete the message",
     "sessionUnavailable": "Session unavailable",
     "updateConversationState": "Unable to update the conversation",
-    "getMessageUpdates": "Unable to fetch the messages that changed"
+    "getMessageUpdates": "Unable to fetch the messages that changed",
+    "createGroupConversation": "Unable to create the group",
+    "addGroupParticipants": "Unable to add the participants",
+    "removeGroupParticipant": "Unable to remove the participant",
+    "transferGroupManager": "Unable to transfer the group management"
   },
   "user": {
     "getUserSummary": "Unable to load the participant",

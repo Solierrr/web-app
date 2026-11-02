@@ -173,6 +173,30 @@ export function mutateMockMessage(id: string, change: "edited" | "deleted", cont
   return message;
 }
 
+/** Grava (cria ou troca) uma conversa no armazenamento simulado e avisa a lista. */
+export function putMockConversation(conversation: ConversationDto): ConversationDto {
+  const state = getMockMessenger();
+  localStorage.setItem(
+    key(),
+    JSON.stringify({ ...state, conversations: [...state.conversations.filter((item) => item.id !== conversation.id), conversation] }),
+  );
+  window.dispatchEvent(new Event("solaria:messenger"));
+  publishMockConversation(conversation);
+  return conversation;
+}
+
+export function deleteMockConversation(id: string): void {
+  const state = getMockMessenger();
+  localStorage.setItem(
+    key(),
+    JSON.stringify({
+      conversations: state.conversations.filter((item) => item.id !== id),
+      messages: state.messages.filter((item) => item.conversationId !== id),
+    }),
+  );
+  window.dispatchEvent(new Event("solaria:messenger"));
+}
+
 /** Catch-up simulado: o relógio é o maior `changeVersion` guardado; sem `since` só devolve o ponto de partida. */
 export function getMockMessageUpdates(since?: number): MessageUpdatesDto {
   const messages = getMockMessenger().messages;

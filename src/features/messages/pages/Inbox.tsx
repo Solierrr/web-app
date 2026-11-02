@@ -23,6 +23,9 @@ import ToolbarAction from "@@/ui/button/ToolbarAction";
 import ConversationList from "./ConversationList";
 import ConversationActions from "./ConversationActions";
 import NewConversationDialog from "./NewConversationDialog";
+import NewGroupDialog from "./NewGroupDialog";
+import { createGroupConversation } from "@/features/messages/messages.messenger.groups";
+import { notify } from "@@/feedback/toast/Toast.utils";
 import SearchBar, { SearchBarAction } from "@@/ui/search-bar/SearchBar";
 import ConversationFilter from "./ConversationFilter";
 import GroupAction from "@@/ui/button/GroupAction";
@@ -57,6 +60,7 @@ export default function Inbox() {
   const [listCollapsed, setListCollapsed] = useState(false);
   const [toDelete, setToDelete] = useState<ConversationDto | null>(null);
   const [contactsOpen, setContactsOpen] = useState(false);
+  const [groupOpen, setGroupOpen] = useState(false);
   const [contacts, setContacts] = useState<MessengerContact[]>([]);
   const [contactsLoading, setContactsLoading] = useState(false);
   const [contactsError, setContactsError] = useState(false);
@@ -197,6 +201,22 @@ export default function Inbox() {
       }
     } catch {
       if (mounted.current) setCreateError(t("createError"));
+    } finally {
+      if (mounted.current) setCreating(false);
+    }
+  }
+  async function createGroup(title: string, participantIds: string[]) {
+    if (creating) return;
+    setCreating(true);
+    setCreateError(null);
+    try {
+      const { conversation, rejectedParticipants } = await createGroupConversation(title, participantIds);
+      if (!mounted.current) return;
+      setGroupOpen(false);
+      if (rejectedParticipants.length > 0) notify(t("groupCreatedRejected", { count: rejectedParticipants.length }));
+      selectConversation(conversation);
+    } catch (failure) {
+      if (mounted.current) setCreateError(failure instanceof Error ? failure.message : t("groupError"));
     } finally {
       if (mounted.current) setCreating(false);
     }
@@ -414,7 +434,20 @@ export default function Inbox() {
           </div>
         </div>
       )}
-      {contactsOpen && (
+      {contactsOpen && groupOpen && (
+        <NewGroupDialog
+          contacts={contacts}
+          loading={contactsLoading}
+          error={contactsError}
+          creating={creating}
+          onCreate={(title, ids) => void createGroup(title, ids)}
+          onClose={() => {
+            setGroupOpen(false);
+            setContactsOpen(false);
+          }}
+        />
+      )}
+      {contactsOpen && !groupOpen && (
         <NewConversationDialog
           contacts={contacts}
           loading={contactsLoading}
@@ -422,6 +455,7 @@ export default function Inbox() {
           creating={creating}
           onPerson={(contact) => void startPerson(contact)}
           onAssistant={() => void startAssistant()}
+          onGroup={() => setGroupOpen(true)}
           onClose={() => setContactsOpen(false)}
         />
       )}

@@ -55,7 +55,11 @@
     "deleteMessage": "Não foi possível excluir a mensagem",
     "sessionUnavailable": "Sessão indisponível",
     "updateConversationState": "Não foi possível atualizar a conversa",
-    "getMessageUpdates": "Não foi possível buscar as mensagens que mudaram"
+    "getMessageUpdates": "Não foi possível buscar as mensagens que mudaram",
+    "createGroupConversation": "Não foi possível criar o grupo",
+    "addGroupParticipants": "Não foi possível adicionar os participantes",
+    "removeGroupParticipant": "Não foi possível remover o participante",
+    "transferGroupManager": "Não foi possível passar a gestão do grupo"
   },
   "user": {
     "getUserSummary": "Não foi possível carregar o participante",

@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import Inbox from "./Inbox";
 import * as api from "@/features/messages/messages.messenger.api";
 import type { UserEvent } from "@/features/messages/messages.messenger.realtime";
+import { createGroupConversation } from "@/features/messages/messages.messenger.groups";
 import { subscribeToUserEvents } from "@/features/messages/messages.messenger.socket";
 import { startAssistantConversation } from "@/features/messages/messages.assistant.service";
 import { AgentChatError } from "@/features/error/agent-chat/AgentChat.error";
@@ -20,6 +21,7 @@ vi.mock("@/features/messages/messages.messenger.api", () => ({
   createDirectConversation: vi.fn(),
   getMessengerContacts: vi.fn(),
 }));
+vi.mock("@/features/messages/messages.messenger.groups", () => ({ createGroupConversation: vi.fn() }));
 vi.mock("@/features/messages/messages.messenger.socket", () => ({
   subscribeToUserEvents: vi.fn(),
   subscribeToConnection: (listener: () => void) => {
@@ -280,6 +282,39 @@ describe("Inbox", () => {
       await chooseOption("Ana", "Arquivar");
       expect(await screen.findByText("Não foi possível atualizar a conversa. Tente novamente.")).toBeInTheDocument();
       expect(screen.getByText("Ana")).toBeInTheDocument();
+    });
+  });
+
+  describe("creating a standalone group", () => {
+    it("creates a group with a name and people from the connections, then opens it", async () => {
+      vi.mocked(api.getMessengerContacts).mockResolvedValue([{ authId: "person-a", username: "Ana", avatar: null }]);
+      vi.mocked(createGroupConversation).mockResolvedValue({
+        conversation: conversation("g1", { conversationType: "GROUP", title: "Equipe", managerUserId: "me" }),
+        rejectedParticipants: [],
+      });
+      renderInbox();
+      await screen.findByText("Bruno");
+      fireEvent.click(screen.getByRole("button", { name: "Nova conversa" }));
+      fireEvent.click(await screen.findByRole("button", { name: "Novo grupo" }));
+      fireEvent.change(await screen.findByLabelText("Nome do grupo"), { target: { value: "Equipe" } });
+      fireEvent.click(await screen.findByLabelText("Ana"));
+      fireEvent.click(screen.getByRole("button", { name: "Criar grupo" }));
+      await waitFor(() => expect(createGroupConversation).toHaveBeenCalledWith("Equipe", ["person-a"]));
+      expect(await screen.findByText("conversa aberta")).toBeInTheDocument();
+    });
+
+    it("keeps the dialog and shows the reason when the group cannot be created", async () => {
+      vi.mocked(api.getMessengerContacts).mockResolvedValue([{ authId: "person-a", username: "Ana", avatar: null }]);
+      vi.mocked(createGroupConversation).mockRejectedValue(new Error("Nenhum convidado pôde ser aceito."));
+      renderInbox();
+      await screen.findByText("Bruno");
+      fireEvent.click(screen.getByRole("button", { name: "Nova conversa" }));
+      fireEvent.click(await screen.findByRole("button", { name: "Novo grupo" }));
+      fireEvent.change(await screen.findByLabelText("Nome do grupo"), { target: { value: "Equipe" } });
+      fireEvent.click(await screen.findByLabelText("Ana"));
+      fireEvent.click(screen.getByRole("button", { name: "Criar grupo" }));
+      expect(await screen.findByText("Nenhum convidado pôde ser aceito.")).toBeInTheDocument();
+      expect(screen.getByLabelText("Nome do grupo")).toHaveValue("Equipe");
     });
   });
 });

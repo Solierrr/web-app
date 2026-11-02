@@ -38,6 +38,11 @@ export interface ConversationDto {
   effectiveMuted?: boolean;
 }
 
+export interface RejectedParticipant {
+  userId: string;
+  reasonCode: string;
+}
+
 export interface ConversationStateDto {
   conversationId: string;
   syncEpoch: string;

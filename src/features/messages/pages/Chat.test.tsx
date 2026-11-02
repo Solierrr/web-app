@@ -34,6 +34,9 @@ vi.mock("@/features/messages/messages.messenger.socket", () => ({
   getConnectionState: () => connection.state,
 }));
 vi.mock("@/lib/shared/auth/authToken.utils", () => ({ getAuthSession: () => ({ userId: "me" }) }));
+vi.mock("@/features/messages/pages/GroupDetails", () => ({
+  default: ({ conversation }: { conversation: { title: string | null } }) => <p>detalhes de {conversation.title}</p>,
+}));
 vi.mock("@/features/assistant/assistant.service", () => ({ sendAssistantTurn: vi.fn() }));
 
 const conversation: api.ConversationDto = {
@@ -478,5 +481,12 @@ describe("Chat editing and deleting messages", () => {
     vi.mocked(api.getConversationMessages).mockResolvedValue([mine(), message(2, "Resposta já corrigida", { changeVersion: 9, edited: true })]);
     emit({ kind: "resync" });
     expect(await screen.findByText("Resposta já corrigida")).toBeInTheDocument();
+  });
+
+  it("opens the group details only for groups", async () => {
+    vi.mocked(api.getConversation).mockResolvedValue({ ...conversation, conversationType: "GROUP", title: "Equipe", managerUserId: "me" });
+    renderChat();
+    fireEvent.click(await screen.findByRole("button", { name: "Detalhes do grupo" }));
+    expect(screen.getByText("detalhes de Equipe")).toBeInTheDocument();
   });
 });
