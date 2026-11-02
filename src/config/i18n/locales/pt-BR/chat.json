@@ -209,5 +209,14 @@
       "demandantDashboard": "o painel do demandante",
       "chatbot": "o assistente"
     }
-  }
+  },
+  "editMessage": "Editar mensagem",
+  "deleteMessage": "Excluir mensagem",
+  "deleteMessageTitle": "Excluir mensagem",
+  "deleteMessageMessage": "A mensagem será apagada para todos os participantes. Isso não pode ser desfeito.",
+  "editing": "Editando mensagem",
+  "cancelEdit": "Cancelar edição",
+  "edited": "editada",
+  "mutationExpired": "O prazo de 30 minutos para alterar esta mensagem acabou.",
+  "mutationError": "Não foi possível alterar a mensagem. Confira se ela foi alterada e tente de novo."
 }

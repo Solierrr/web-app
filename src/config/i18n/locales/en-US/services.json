@@ -51,6 +51,8 @@
     "syncConversationMessages": "Unable to sync the messages",
     "markConversationRead": "Unable to update the conversation read status",
     "sendConversationMessage": "Unable to send the message",
+    "editMessage": "Unable to edit the message",
+    "deleteMessage": "Unable to delete the message",
     "sessionUnavailable": "Session unavailable"
   },
   "user": {

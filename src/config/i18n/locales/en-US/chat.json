@@ -209,5 +209,14 @@
       "demandantDashboard": "the demandant dashboard",
       "chatbot": "the assistant"
     }
-  }
+  },
+  "editMessage": "Edit message",
+  "deleteMessage": "Delete message",
+  "deleteMessageTitle": "Delete message",
+  "deleteMessageMessage": "The message will be erased for every participant. This cannot be undone.",
+  "editing": "Editing message",
+  "cancelEdit": "Cancel edit",
+  "edited": "edited",
+  "mutationExpired": "The 30 minute window to change this message is over.",
+  "mutationError": "Unable to change the message. Check whether it changed and try again."
 }

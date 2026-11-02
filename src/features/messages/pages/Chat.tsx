@@ -17,6 +17,8 @@ import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import { sendAssistantTurn } from "@/features/assistant/assistant.service";
 import { getAssistantThread, rememberAssistantThread } from "@/features/messages/messages.assistant.utils";
 import {
+  deleteMessage,
+  editMessage,
   getConversation,
   getConversationMessages,
   getConversationMessagesSince,
@@ -26,7 +28,7 @@ import {
   type MessageDto,
 } from "@/features/messages/messages.messenger.api";
 import { getConnectionState, subscribeToConversation } from "@/features/messages/messages.messenger.socket";
-import { highestSequence, mergeMessages } from "@/features/messages/messages.messenger.realtime.utils";
+import { canMutateMessage, highestSequence, mergeMessages } from "@/features/messages/messages.messenger.realtime.utils";
 import {
   useAssistantStatus,
   useConversationPresence,
@@ -35,7 +37,9 @@ import {
   useTypingPublisher,
 } from "@/features/messages/messages.hooks";
 import ConnectionNotice from "./ConnectionNotice";
-import { AssistantNotice, PendingBubble } from "./Chat.reusable";
+import { AssistantNotice, EditBanner, MessageMeta, PendingBubble } from "./Chat.reusable";
+import Confirmation from "@@/overlay/confirmation/Confirmation";
+import { getHttpStatus } from "@/lib/shared/http/http.service";
 
 export default function Chat() {
   const conversationId = useRequiredParam("conversationId");
@@ -75,6 +79,9 @@ export function Conversation({
   const [error, setError] = useState<string | null>(null);
   const [hasOlder, setHasOlder] = useState(false);
   const [loadingOlder, setLoadingOlder] = useState(false);
+  const [editing, setEditing] = useState<MessageDto | null>(null);
+  const [toDelete, setToDelete] = useState<MessageDto | null>(null);
+  const draftBeforeEdit = useRef("");
   const lastSequence = useRef(0);
   const lastMarkedRead = useRef(0);
   const activeConversationId = useRef(conversationId);
@@ -268,9 +275,45 @@ export function Conversation({
     }
   }
 
+  const mutationFailed = (failure: unknown) => setError(t(getHttpStatus(failure) === 422 ? "mutationExpired" : "mutationError"));
+  function startEdit(message: MessageDto) {
+    draftBeforeEdit.current = draft;
+    setError(null);
+    setEditing(message);
+    setDraft(message.content);
+  }
+  function cancelEdit() {
+    setEditing(null);
+    setDraft(draftBeforeEdit.current);
+  }
+  async function saveEdit(target: MessageDto, content: string) {
+    setError(null);
+    try {
+      const updated = content === target.content ? target : await editMessage(target.id, content);
+      setMessages((current) => mergeMessages(current, [updated]));
+      cancelEdit();
+    } catch (failure) {
+      mutationFailed(failure);
+    }
+  }
+  async function confirmDelete(target: MessageDto) {
+    setToDelete(null);
+    setError(null);
+    try {
+      const updated = await deleteMessage(target.id);
+      setMessages((current) => mergeMessages(current, [updated]));
+    } catch (failure) {
+      mutationFailed(failure);
+    }
+  }
+
   function handleSend() {
     const content = draft.trim();
     if (!content || readOnly || !conversation) return;
+    if (editing) {
+      void saveEdit(editing, content);
+      return;
+    }
     typingPublisher.stop();
     setError(null);
     followLatest.current = true;
@@ -407,8 +450,15 @@ export function Conversation({
                 own={own}
                 assistant={assistant}
                 endOfGroup={endOfGroup}
-                showAuthor={conversation?.conversationType === "GROUP" && !own && !grouped}
-              />
+                showAuthor={conversation?.conversationType === "GROUP" && !own && !grouped}>
+                {own && !message.deleted && (
+                  <MessageMeta
+                    edited={!!message.edited}
+                    onEdit={!readOnly && canMutateMessage(message, userId, conversation?.conversationType) ? () => startEdit(message) : undefined}
+                    onDelete={!readOnly && canMutateMessage(message, userId, conversation?.conversationType) ? () => setToDelete(message) : undefined}
+                  />
+                )}
+              </MessageBubble>
             </div>
           );
         })}
@@ -419,6 +469,7 @@ export function Conversation({
         ))}
         {assistantStatus !== "idle" && outbox.pending.length === 0 && <AssistantNotice status={assistantStatus} onRetry={retryAssistant} />}
       </div>
+      {editing && <EditBanner onCancel={cancelEdit} />}
       <Surface field className="mx-auto w-full max-w-3xl shrink-0" contentClassName="overflow-visible! px-2 py-1">
         <MessageComposer
           assistant
@@ -433,6 +484,15 @@ export function Conversation({
           disabled={readOnly || loading || !conversation}
         />
       </Surface>
+      {toDelete && (
+        <Confirmation
+          title={t("deleteMessageTitle")}
+          message={t("deleteMessageMessage")}
+          busy={false}
+          onConfirm={() => void confirmDelete(toDelete)}
+          onCancel={() => setToDelete(null)}
+        />
+      )}
     </section>
   );
   return embedded ? content : <main className="mx-auto flex h-full min-h-0 w-full max-w-operational-page flex-col p-4 sm:px-8">{content}</main>;

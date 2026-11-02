@@ -8,6 +8,7 @@ import {
   createMockChatbotConversation,
   sendMockMessage,
   markMockConversationRead,
+  mutateMockMessage,
   getMockConnections,
   addMockConnection,
 } from "./messages.messenger.d.mocks";
@@ -41,6 +42,8 @@ export interface MessageDto {
   messageType?: "USER_TO_USER" | "USER_TO_GROUP" | "USER_TO_CHATBOT" | "CHATBOT_TO_USER";
   edited?: boolean;
   deleted?: boolean;
+  /** Versão da última mudança da mensagem: entre duas cópias do mesmo id vale a de maior valor. */
+  changeVersion?: number;
 }
 
 export const MESSAGE_PAGE_SIZE = 100;
@@ -149,6 +152,33 @@ export async function sendConversationMessage(
       content,
     },
     errorMessage: i18n.t("services:messenger.sendConversationMessage"),
+  });
+}
+
+export async function editMessage(id: string, content: string): Promise<MessageDto> {
+  if (isAlwaysMockMode("MESSENGER")) {
+    await waitForMockService();
+    return mutateMockMessage(id, "edited", content);
+  }
+  return httpJson<MessageDto>(`${API}/messages/${encodeURIComponent(id)}`, {
+    service: "messenger",
+    operation: "editMessage",
+    method: "PATCH",
+    body: { content },
+    errorMessage: i18n.t("services:messenger.editMessage"),
+  });
+}
+
+export async function deleteMessage(id: string): Promise<MessageDto> {
+  if (isAlwaysMockMode("MESSENGER")) {
+    await waitForMockService();
+    return mutateMockMessage(id, "deleted");
+  }
+  return httpJson<MessageDto>(`${API}/messages/${encodeURIComponent(id)}`, {
+    service: "messenger",
+    operation: "deleteMessage",
+    method: "DELETE",
+    errorMessage: i18n.t("services:messenger.deleteMessage"),
   });
 }
 

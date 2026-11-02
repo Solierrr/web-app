@@ -1,4 +1,6 @@
 import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
+import { HttpResponseError } from "@/lib/shared/http/http.service";
+import { MESSAGE_MUTATION_WINDOW_MS } from "./messages.messenger.realtime.utils";
 import type { ConversationDto, MessageDto } from "./messages.messenger.api";
 import { publishMockConversation, publishMockMessage, simulateMockReplies, type MockReply } from "./messages.messenger.realtime.d.mocks";
 
@@ -59,6 +61,11 @@ function demoMessenger(): MockMessenger {
     );
   });
   return { conversations, messages };
+}
+
+/** Erro no mesmo formato do `httpJson`, para a interface tratar o modo demonstração como o servidor real. */
+export function mockHttpError(status: number, code: string): Error {
+  return new Error(`mock returned HTTP ${status}`, { cause: new HttpResponseError(status, code) });
 }
 
 export function getMockMessenger(): MockMessenger {
@@ -146,6 +153,23 @@ export function receiveMockMessage(conversationId: string, reply: MockReply): Me
   window.dispatchEvent(new Event("solaria:messenger"));
   publishMockMessage(message);
   publishMockConversation(conversation);
+  return message;
+}
+
+/** Edita ou apaga a própria mensagem dentro da janela de 30 min, como o servidor, e avisa pelo mesmo caminho ao vivo. */
+export function mutateMockMessage(id: string, change: "edited" | "deleted", content = ""): MessageDto {
+  const state = getMockMessenger();
+  const current = state.messages.find((item) => item.id === id);
+  if (!current) throw mockHttpError(404, "RESOURCE_NOT_FOUND");
+  if (current.senderId !== (getAuthSession()?.userId ?? "mock-user")) throw mockHttpError(403, "UNAUTHORIZED_ACCESS");
+  if (current.deleted && change === "deleted") return current;
+  if (current.deleted || Date.now() - Date.parse(current.timestamp) >= MESSAGE_MUTATION_WINDOW_MS)
+    throw mockHttpError(422, "BUSINESS_RULE_VIOLATION");
+  const changeVersion = Math.max(0, ...state.messages.map((item) => item.changeVersion ?? 0)) + 1;
+  const message: MessageDto = { ...current, ...(change === "edited" ? { content, edited: true } : { content: "", deleted: true }), changeVersion };
+  localStorage.setItem(key(), JSON.stringify({ ...state, messages: state.messages.map((item) => (item.id === id ? message : item)) }));
+  window.dispatchEvent(new Event("solaria:messenger"));
+  publishMockMessage(message, change);
   return message;
 }
 

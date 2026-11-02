@@ -2,6 +2,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   createChatbotConversation,
   createDirectConversation,
+  deleteMessage,
+  editMessage,
   getConversation,
   markConversationRead,
   sendConversationMessage,
@@ -71,5 +73,30 @@ describe("simulated realtime events", () => {
     expect(events.map((event) => event.kind)).toEqual(["presenceSnapshot", "message", "typing", "typing", "message"]);
     expect(events[2]).toMatchObject({ typing: true, userId: PEER_ID });
     expect(events[3]).toMatchObject({ typing: false });
+  });
+
+  it("edits and deletes an own message inside the window and announces both live", async () => {
+    const conversation = await createDirectConversation(PEER_ID);
+    const events: ConversationEvent[] = [];
+    subscribeToConversation(conversation.id, (event) => events.push(event));
+    const sent = await sendConversationMessage(conversation.id, "Oi", "DIRECT");
+    const edited = await editMessage(sent.id, "Oi, tudo bem?");
+    expect(edited).toMatchObject({ content: "Oi, tudo bem?", edited: true });
+    expect(edited.changeVersion).toBeGreaterThan(sent.changeVersion ?? 0);
+    const deleted = await deleteMessage(sent.id);
+    expect(deleted).toMatchObject({ deleted: true, content: "" });
+    expect(events.filter((event) => event.kind === "message").map((event) => event.kind === "message" && event.change)).toEqual([
+      "created",
+      "edited",
+      "deleted",
+    ]);
+  });
+
+  it("refuses to change a message after the 30 minute window", async () => {
+    const conversation = await createDirectConversation(PEER_ID);
+    const sent = await sendConversationMessage(conversation.id, "Oi", "DIRECT");
+    await vi.advanceTimersByTimeAsync(31 * 60_000);
+    await expect(editMessage(sent.id, "tarde")).rejects.toMatchObject({ cause: { status: 422 } });
+    await expect(deleteMessage(sent.id)).rejects.toMatchObject({ cause: { status: 422 } });
   });
 });

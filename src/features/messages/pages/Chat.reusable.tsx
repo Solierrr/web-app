@@ -76,3 +76,44 @@ export function AssistantNotice({ status, onRetry }: { status: "thinking" | "tim
     </div>
   );
 }
+
+/** Rodapé da bolha própria: marca "editada" e oferece editar ou excluir enquanto a mensagem está na janela. */
+export function MessageMeta({ edited, onEdit, onDelete }: { edited: boolean; onEdit?: () => void; onDelete?: () => void }) {
+  const { t } = useTranslation("chat");
+  if (!edited && !onEdit) return null;
+  return (
+    <div className="flex flex-wrap items-center gap-1">
+      {edited && <span className="text-sidebar-group text-(--message-muted)">{t("edited")}</span>}
+      {onEdit && (
+        <ToolbarAction
+          icon="edit"
+          label={t("editMessage")}
+          color="var(--color-white)"
+          hoverColor="var(--color-white)"
+          onClick={onEdit}
+          className="size-7!"
+        />
+      )}
+      {onDelete && (
+        <ToolbarAction
+          icon="trash"
+          label={t("deleteMessage")}
+          color="var(--color-white)"
+          hoverColor="var(--color-white)"
+          onClick={onDelete}
+          className="size-7!"
+        />
+      )}
+    </div>
+  );
+}
+
+export function EditBanner({ onCancel }: { onCancel: () => void }) {
+  const { t } = useTranslation("chat");
+  return (
+    <div className="mx-auto flex w-full max-w-3xl items-center justify-between gap-2 px-2 text-body text-operational-muted">
+      <span role="status">{t("editing")}</span>
+      <ToolbarAction label={t("cancelEdit")} content={t("cancelEdit")} onClick={onCancel} />
+    </div>
+  );
+}

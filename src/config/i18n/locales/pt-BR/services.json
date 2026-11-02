@@ -51,6 +51,8 @@
     "syncConversationMessages": "Não foi possível sincronizar as mensagens",
     "markConversationRead": "Não foi possível atualizar a leitura da conversa",
     "sendConversationMessage": "Não foi possível enviar a mensagem",
+    "editMessage": "Não foi possível editar a mensagem",
+    "deleteMessage": "Não foi possível excluir a mensagem",
     "sessionUnavailable": "Sessão indisponível"
   },
   "user": {

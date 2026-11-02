@@ -1,5 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
+  deleteMessage,
+  editMessage,
   getConversations,
   getConversationMessages,
   getConversationMessagesSince,
@@ -109,5 +111,24 @@ describe("Messenger API contract", () => {
       expect.stringContaining("/messaging/messages"),
       expect.objectContaining({ method: "POST", body: JSON.stringify({ conversationId: "conv-1", messageType, content: "Hello" }) }),
     );
+  });
+  it("edits a message with PATCH and returns the stored copy", async () => {
+    respond({ ...message(3), content: "Novo texto", edited: true, changeVersion: 12 });
+    const edited = await editMessage("msg-3", "Novo texto");
+    expect(fetchMock).toHaveBeenCalledWith(
+      expect.stringContaining("/messaging/messages/msg-3"),
+      expect.objectContaining({ method: "PATCH", body: JSON.stringify({ content: "Novo texto" }) }),
+    );
+    expect(edited).toMatchObject({ edited: true, changeVersion: 12 });
+  });
+  it("deletes a message with DELETE and returns it without text", async () => {
+    respond({ ...message(3), content: "", deleted: true, changeVersion: 13 });
+    const deleted = await deleteMessage("msg-3");
+    expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining("/messaging/messages/msg-3"), expect.objectContaining({ method: "DELETE" }));
+    expect(deleted).toMatchObject({ deleted: true, content: "" });
+  });
+  it("rejects with the 422 status when the edit window is over", async () => {
+    respond({ errorCode: "BUSINESS_RULE_VIOLATION" }, 422);
+    await expect(editMessage("msg-3", "tarde")).rejects.toMatchObject({ cause: { status: 422 } });
   });
 });
