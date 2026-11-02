@@ -3,13 +3,14 @@ import type { ConversationDto, MessageDto } from "./messages.messenger.api";
 import {
   applyPresence,
   classifyDestination,
-  conversationTopic,
   EMPTY_PRESENCE,
+  frameConversationId,
   highestSequence,
   mergeConversation,
   mergeMessages,
   parseConversationFrame,
   parseUserFrame,
+  presenceEvents,
   removeConversation,
   toConversationDto,
   userTopic,
@@ -36,19 +37,22 @@ const conversation = (id: string, extra: Partial<ConversationDto> = {}): Convers
 });
 
 describe("topics", () => {
-  it("uses the dot separator expected by the broker", () => {
-    expect(conversationTopic("conv-1")).toBe("/topic/conversations.conv-1");
-    expect(userTopic("0B9C7A4E-6D1F-4C5E-9A43-2F7D8E1B6A10", "conversations")).toBe(
-      "/topic/users.0b9c7a4e-6d1f-4c5e-9a43-2f7d8e1b6a10.conversations",
-    );
+  it("uses the private user topic with a lowercase id, the only one the broker accepts", () => {
+    expect(userTopic("0B9C7A4E-6D1F-4C5E-9A43-2F7D8E1B6A10", "events")).toBe("/topic/users.0b9c7a4e-6d1f-4c5e-9a43-2f7d8e1b6a10.events");
   });
   it("classifies only the destinations of the contract", () => {
-    expect(classifyDestination("/topic/conversations.abc_1-2")).toEqual({ scope: "conversation", id: "abc_1-2" });
-    expect(classifyDestination("/topic/users.0b9c7a4e-6d1f-4c5e-9a43-2f7d8e1b6a10.errors")).toEqual({ scope: "user", kind: "errors" });
-    expect(classifyDestination("/topic/conversations.*")).toBeNull();
-    expect(classifyDestination("/topic/conversations/abc")).toBeNull();
+    expect(classifyDestination("/topic/users.0b9c7a4e-6d1f-4c5e-9a43-2f7d8e1b6a10.events")).toBe("events");
+    expect(classifyDestination("/topic/users.0b9c7a4e-6d1f-4c5e-9a43-2f7d8e1b6a10.errors")).toBe("errors");
+    expect(classifyDestination("/topic/conversations.abc_1-2")).toBeNull();
+    expect(classifyDestination("/topic/users.0b9c7a4e-6d1f-4c5e-9a43-2f7d8e1b6a10.conversations")).toBeNull();
     expect(classifyDestination("/topic/users.*.acks")).toBeNull();
     expect(classifyDestination("/topic/users.other.unknown")).toBeNull();
+  });
+  it("reads the conversation of a frame from the envelope, falling back to the message payload", () => {
+    expect(frameConversationId({ type: "TYPING_STARTED", conversationId: "conv-1", payload: { userId: "a" } })).toBe("conv-1");
+    expect(frameConversationId({ type: "MESSAGE_CREATED", payload: message(1) })).toBe("conv-1");
+    expect(frameConversationId({ type: "USER_ONLINE", conversationId: null, payload: { userId: "a" } })).toBeUndefined();
+    expect(frameConversationId("text")).toBeUndefined();
   });
 });
 
@@ -144,10 +148,36 @@ describe("presence", () => {
     const next = applyPresence(state, { kind: "presence", userId: "a", online: false, epoch: "e1", version: 6 });
     expect(next.users.a).toBe(false);
   });
+  it("adds a partial snapshot to the people already known instead of replacing them", () => {
+    const first = applyPresence(EMPTY_PRESENCE, { kind: "presenceSnapshot", users: { a: true, b: false }, epoch: "e1", version: 5 });
+    const second = applyPresence(first, { kind: "presenceSnapshot", users: { c: true }, epoch: "e1", version: 7 });
+    expect(second.users).toEqual({ a: true, b: false, c: true });
+    expect(second.markers.a).toEqual({ epoch: "e1", version: 5 });
+    expect(second.markers.c).toEqual({ epoch: "e1", version: 7 });
+  });
+  it("keeps the newer state of a person when an older snapshot mentions them again", () => {
+    const state = applyPresence(EMPTY_PRESENCE, online("a", 8));
+    const next = applyPresence(state, { kind: "presenceSnapshot", users: { a: false, b: true }, epoch: "e1", version: 6 });
+    expect(next.users).toEqual({ a: true, b: true });
+    expect(next.markers.a).toEqual({ epoch: "e1", version: 8 });
+  });
   it("drops a change that is older than the last one seen for the same user and epoch", () => {
     const state = applyPresence(EMPTY_PRESENCE, online("a", 8));
     const stale = applyPresence(state, { kind: "presence", userId: "a", online: false, epoch: "e1", version: 7 });
     expect(stale).toBe(state);
     expect(applyPresence(state, { kind: "presence", userId: "a", online: false, epoch: "e2", version: 1 }).users.a).toBe(false);
+  });
+  it("replays the known presence as one event per person, with each version", () => {
+    const state = applyPresence(applyPresence(EMPTY_PRESENCE, online("a", 3)), {
+      kind: "presenceSnapshot",
+      users: { b: false },
+      epoch: "e1",
+      version: 9,
+    });
+    expect(presenceEvents(state)).toEqual([
+      { kind: "presence", userId: "a", online: true, epoch: "e1", version: 3 },
+      { kind: "presence", userId: "b", online: false, epoch: "e1", version: 9 },
+    ]);
+    expect(presenceEvents(EMPTY_PRESENCE)).toEqual([]);
   });
 });

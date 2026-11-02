@@ -8,6 +8,7 @@ import Dialog from "@@/overlay/dialog/Dialog";
 import OperationalForm from "@@/layout/operational-page/OperationalForm";
 import Input from "@@/ui/input/Input";
 import Checkbox from "@@/ui/checkbox/Checkbox";
+import { notify } from "@@/feedback/toast/Toast.utils";
 import Alert from "@@/feedback/alert/Alert";
 import LogoLoader from "@@/feedback/logo-loader/LogoLoader";
 import type { Project } from "../projects.d";
@@ -19,7 +20,7 @@ export default function ProjectConversations({ project: p }: { project: Project 
   const r = useProjectResource(
     useCallback(async () => {
       const members = await projectApi.members(p.id);
-      const groups = await projectConversations(p, members);
+      const groups = await projectConversations(p);
       return { ...groups, members };
     }, [p]),
   );
@@ -27,16 +28,17 @@ export default function ProjectConversations({ project: p }: { project: Project 
   const [selected, setSelected] = useState<string | null>(null),
     [creating, setCreating] = useState(false),
     [participants, setParticipants] = useState<string[]>([getAuthSession()?.userId ?? ""]);
-  const current =
-    r.data?.conversations.find((c) => c.id === selected) ?? r.data?.conversations.find((c) => c.projectGeneral) ?? r.data?.conversations[0];
+  const current = r.data?.conversations.find((c) => c.id === selected) ?? r.data?.conversations[0];
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
-    if (!r.data) return;
+    if (!r.data?.communityId) return;
+    const communityId = r.data.communityId;
     const ok = await a.execute(async () => {
-      const group = await createProjectConversation(p, r.data!.communityId, String(form.get("title")).trim(), participants);
+      const { conversation, rejectedParticipants } = await createProjectConversation(p, communityId, String(form.get("title")).trim(), participants);
       await r.reload();
-      setSelected(group.id);
+      setSelected(conversation.id);
+      if (rejectedParticipants.length > 0) notify(t("feedback.conversationRejected", { count: rejectedParticipants.length }));
     }, t("feedback.conversation"));
     if (ok) setCreating(false);
   }
@@ -49,23 +51,24 @@ export default function ProjectConversations({ project: p }: { project: Project 
         </div>
         <div className="flex items-center gap-2">
           <ToolbarAction icon="refresh" label={t("refresh")} disabled={a.busy} onClick={() => void a.execute(r.reload, t("feedback.refreshed"))} />
-          {p.canContribute && r.data && (
+          {p.canContribute && r.data?.communityId && (
             <PrimaryButton variant="soft" content={t("newConversation")} description={t("newConversation")} onClick={() => setCreating(true)} />
           )}
         </div>
       </header>
       {r.error && <Alert>{t("chatUnavailable")}</Alert>}
       {!r.data && !r.error && <LogoLoader label={t("conversations")} />}
-      {r.data && (
+      {r.data && !r.data.communityId && <Alert>{t("noCommunity")}</Alert>}
+      {r.data?.communityId && (
         <Surface>
           <div className="grid min-w-0 lg:grid-cols-[minmax(12rem,1fr)_minmax(0,3fr)]">
             <nav aria-label={t("chatSelection")} className="flex flex-col items-stretch gap-2 p-4 lg:border-r lg:border-operational-border">
               {r.data.conversations.map((c) => (
                 <ToolbarAction
                   key={c.id}
-                  content={c.projectGeneral ? t("general") : (c.title ?? "")}
+                  content={c.title ?? ""}
                   aria-pressed={c.id === current?.id}
-                  label={c.projectGeneral ? t("general") : (c.title ?? "")}
+                  label={c.title ?? ""}
                   icon="messages"
                   className={`w-full! justify-start! rounded-medium! px-3! py-3! text-operational-ink! ${c.id === current?.id ? "bg-white!" : "bg-transparent!"}`}
                   onClick={() => setSelected(c.id)}
@@ -77,16 +80,17 @@ export default function ProjectConversations({ project: p }: { project: Project 
                 <Conversation
                   key={current.id}
                   conversationId={current.id}
-                  displayTitle={current.projectGeneral ? t("general") : (current.title ?? undefined)}
+                  displayTitle={current.title ?? undefined}
                   embedded
                   readOnly={!p.canContribute}
                 />
               )}
+              {!current && <p className="text-operational-muted">{t("noConversations")}</p>}
             </div>
           </div>
         </Surface>
       )}
-      {creating && r.data && (
+      {creating && r.data?.communityId && (
         <Dialog title={t("newConversation")} busy={a.busy} onClose={() => setCreating(false)}>
           <OperationalForm plain onSubmit={submit}>
             <label className="flex flex-col gap-2">

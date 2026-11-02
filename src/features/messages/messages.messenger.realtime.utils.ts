@@ -1,22 +1,16 @@
 import type { ConversationDto, MessageDto } from "./messages.messenger.api";
 import type { ConversationEvent, PresenceMarker, RealtimeEnvelope, UserEvent } from "./messages.messenger.realtime";
 
-export type UserTopicKind = "acks" | "errors" | "conversations";
+export type UserTopicKind = "acks" | "errors" | "events";
 
-export function conversationTopic(conversationId: string): string {
-  return `/topic/conversations.${conversationId}`;
-}
-
+/** O servidor só aceita assinar os tópicos privados do próprio usuário; tudo (mensagens, lista, digitação, presença) chega em `.events`. */
 export function userTopic(userId: string, kind: UserTopicKind): string {
   return `/topic/users.${userId.toLowerCase()}.${kind}`;
 }
 
-export function classifyDestination(destination: string): { scope: "conversation"; id: string } | { scope: "user"; kind: UserTopicKind } | null {
-  const conversation = /^\/topic\/conversations\.([A-Za-z0-9_-]+)$/.exec(destination);
-  if (conversation) return { scope: "conversation", id: conversation[1] };
-  const user = /^\/topic\/users\.[A-Za-z0-9_-]{1,64}\.(acks|errors|conversations)$/.exec(destination);
-  if (user) return { scope: "user", kind: user[1] as UserTopicKind };
-  return null;
+export function classifyDestination(destination: string): UserTopicKind | null {
+  const user = /^\/topic\/users\.[A-Za-z0-9_-]{1,64}\.(acks|errors|events)$/.exec(destination);
+  return user ? (user[1] as UserTopicKind) : null;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -25,6 +19,14 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function toEnvelope(body: unknown): RealtimeEnvelope | null {
   return isRecord(body) && typeof body.type === "string" ? (body as RealtimeEnvelope) : null;
+}
+
+/** Conversa a que o evento pertence: o envelope traz o id; nas mensagens, o próprio payload serve de reserva. */
+export function frameConversationId(body: unknown): string | undefined {
+  const envelope = toEnvelope(body);
+  if (!envelope) return undefined;
+  if (typeof envelope.conversationId === "string") return envelope.conversationId;
+  return isRecord(envelope.payload) && typeof envelope.payload.conversationId === "string" ? envelope.payload.conversationId : undefined;
 }
 
 export function toMessageDto(value: unknown): MessageDto | null {
@@ -155,15 +157,26 @@ export interface PresenceState {
 
 export const EMPTY_PRESENCE: PresenceState = { users: {}, markers: {} };
 
-/** Aplica presença ao vivo ou o snapshot inicial, descartando eventos mais velhos que o último visto do mesmo usuário e época. */
+function isStalePresence(known: PresenceMarker | undefined, marker: PresenceMarker): boolean {
+  return !!known && known.epoch === marker.epoch && known.version !== undefined && marker.version !== undefined && marker.version <= known.version;
+}
+
+/**
+ * Soma uma presença ao vivo ou um snapshot ao mapa que já existe: a presença é por pessoa, então um snapshot parcial
+ * (contato novo) não apaga os demais. Descarta o que for mais velho que o último visto da mesma pessoa e época.
+ */
 export function applyPresence(state: PresenceState, event: Extract<ConversationEvent, { kind: "presence" | "presenceSnapshot" }>): PresenceState {
   const marker: PresenceMarker = { epoch: event.epoch, version: event.version };
-  if (event.kind === "presenceSnapshot") {
-    return { users: { ...event.users }, markers: Object.fromEntries(Object.keys(event.users).map((userId) => [userId, marker])) };
+  const entries = event.kind === "presenceSnapshot" ? Object.entries(event.users) : [[event.userId, event.online] as const];
+  let next = state;
+  for (const [userId, online] of entries) {
+    if (isStalePresence(next.markers[userId], marker)) continue;
+    next = { users: { ...next.users, [userId]: online }, markers: { ...next.markers, [userId]: marker } };
   }
-  const known = state.markers[event.userId];
-  if (known && known.epoch === marker.epoch && known.version !== undefined && marker.version !== undefined && marker.version <= known.version) {
-    return state;
-  }
-  return { users: { ...state.users, [event.userId]: event.online }, markers: { ...state.markers, [event.userId]: marker } };
+  return next;
+}
+
+/** Presença conhecida como eventos individuais, para quem passa a ouvir depois que o snapshot já chegou. */
+export function presenceEvents(state: PresenceState): ConversationEvent[] {
+  return Object.entries(state.users).map(([userId, online]) => ({ kind: "presence", userId, online, ...state.markers[userId] }));
 }
