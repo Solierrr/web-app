@@ -34,7 +34,9 @@ export default function ChatLayout({ owner, messages, assistantId, presentation 
         const grouped = index > 0 && continues(messages[index - 1], message);
         const endOfGroup = !(index < messages.length - 1 && continues(message, messages[index + 1]));
         return (
-          <div key={index} className={presentation === "bubbles" && !grouped && index > 0 ? "mt-4" : undefined}>
+          <div
+            key={`${message.user.id}-${message.time.getTime()}`}
+            className={presentation === "bubbles" && !grouped && index > 0 ? "mt-4" : undefined}>
             <Message
               conversationKind={conversationKind}
               presentation={presentation}

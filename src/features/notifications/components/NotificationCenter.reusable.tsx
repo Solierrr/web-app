@@ -3,6 +3,7 @@ import ToolbarAction from "@@/ui/button/ToolbarAction";
 import { SurfaceButton } from "@@/ui/button/Button.presets";
 import Skeleton from "@@/feedback/skeleton/Skeleton";
 import type { NotificationItem } from "../notification";
+import { skeletonKeys } from "@/lib/utils/skeleton.utils";
 
 const SKELETON_ROWS = 3;
 
@@ -44,8 +45,8 @@ export function NotificationSkeleton() {
   return (
     <div role="status" className="flex flex-col gap-3">
       <span className="sr-only">{t("loading")}</span>
-      {Array.from({ length: SKELETON_ROWS }, (_, index) => (
-        <Skeleton key={index} height="4.5rem" className="rounded-medium" />
+      {skeletonKeys(SKELETON_ROWS).map((key) => (
+        <Skeleton key={key} height="4.5rem" className="rounded-medium" />
       ))}
     </div>
   );

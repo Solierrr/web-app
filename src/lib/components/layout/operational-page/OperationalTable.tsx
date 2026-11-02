@@ -13,6 +13,7 @@ import TableHeading from "@@/ui/table-heading/TableHeading";
 import Popover from "@@/overlay/popover/Popover";
 import TableRowOptions from "./OperationalTable.actions";
 import { notify } from "@@/feedback/toast/Toast.utils";
+import { skeletonKeys } from "@/lib/utils/skeleton.utils";
 
 export default function OperationalTable<T>({
   label,
@@ -182,8 +183,8 @@ export default function OperationalTable<T>({
                 </tr>
               ))}
               {items === null &&
-                Array.from({ length: 3 }, (_, index) => (
-                  <tr key={index}>
+                skeletonKeys(3).map((key) => (
+                  <tr key={key}>
                     <td colSpan={dataColumns.length} className="h-20 border-b border-operational-border px-4">
                       <Skeleton height="1.25rem" width="100%" className="rounded-small" />
                     </td>

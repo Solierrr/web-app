@@ -18,6 +18,7 @@ import { useTranslation } from "react-i18next";
 import WrapperLayout from "@/config/WrapperLayout";
 import { regionsService } from "./SolarPanelAnnouncement.utils";
 import { Wrapper, ProductImages, Characteristics } from "./SolarPanelAnnouncement.reusable";
+import { skeletonKeys } from "@/lib/utils/skeleton.utils";
 
 interface SolarPanelAnnouncementProps {
   product: SolarPanelAnnouncement;
@@ -178,8 +179,8 @@ function SolarPanelAnnouncementSkeleton() {
               </div>
               <div className="flex flex-col gap-4">
                 <Skeleton height="1.65rem" width="12rem" />
-                {Array.from({ length: 4 }, (_, index) => (
-                  <Skeleton key={index} height="3.5rem" className="rounded-soft" />
+                {skeletonKeys(4).map((key) => (
+                  <Skeleton key={key} height="3.5rem" className="rounded-soft" />
                 ))}
               </div>
               <div className="flex flex-col gap-2">
@@ -194,8 +195,8 @@ function SolarPanelAnnouncementSkeleton() {
       <div className="flex flex-col gap-2">
         <Skeleton height="1.65rem" width="11rem" />
         <div className="flex gap-8 overflow-hidden">
-          {Array.from({ length: 3 }, (_, index) => (
-            <ImageSkeleton key={index} width="10rem" className="shrink-0" />
+          {skeletonKeys(3).map((key) => (
+            <ImageSkeleton key={key} width="10rem" className="shrink-0" />
           ))}
         </div>
       </div>

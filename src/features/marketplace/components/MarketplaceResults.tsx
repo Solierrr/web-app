@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Skeleton from "@@/feedback/skeleton/Skeleton";
 import LoadFailure from "@@/feedback/load-failure/LoadFailure";
+import { skeletonKeys } from "@/lib/utils/skeleton.utils";
 
 export default function MarketplaceResults({
   loading,
@@ -19,8 +20,8 @@ export default function MarketplaceResults({
   if (loading)
     return (
       <div aria-busy="true" className="grid grid-cols-1 gap-8 sm:grid-cols-2">
-        {Array.from({ length: 4 }, (_, i) => (
-          <div key={i} className="flex flex-col gap-5">
+        {skeletonKeys(4).map((key) => (
+          <div key={key} className="flex flex-col gap-5">
             <Skeleton height="16rem" className="rounded-surface" />
             <Skeleton height="1.5rem" width="75%" />
             <Skeleton height="1rem" width="55%" />

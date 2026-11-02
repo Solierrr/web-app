@@ -185,8 +185,8 @@ export const ContextMenu = forwardRef<ContextMenuHandle, ContextMenuProps>(funct
           {header}
         </li>
       )}
-      {items.map((item, index) => (
-        <MenuItem key={index} role="menuitem" disabled={item.disabled} onSelect={() => handleSelect(item)}>
+      {items.map((item) => (
+        <MenuItem key={item.label} role="menuitem" disabled={item.disabled} onSelect={() => handleSelect(item)}>
           {item.icon && <Icon name={item.icon} size={18} color={item.disabled ? Colors.INPUTICON : Colors.BLACK} />}
           {item.label}
         </MenuItem>
