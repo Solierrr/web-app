@@ -1,5 +1,7 @@
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
-import { Link, useParams } from "react-router-dom";
+import GroupAction from "@@/ui/button/GroupAction";
+import SurfaceGroup from "@@/ui/surface/SurfaceGroup";
+import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
@@ -13,21 +15,13 @@ export default function SettingsPage() {
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
 
   return (
-    <OperationalPage title={t("title")} compact centered sideBackground>
-      <nav className="flex flex-col divide-y divide-operational-border overflow-hidden rounded-surface border-ui bg-white shadow-surface">
-        <Link to={routePaths.ownUserProfile(lang)} className="block p-4 hover:bg-operational-hover">
-          {t("profile")}
-        </Link>
-        <Link to={routePaths.settingsSecurity(lang)} className="block p-4 hover:bg-operational-hover">
-          {t("security")}
-        </Link>
-        <Link to={routePaths.settingsPrivacy(lang)} className="block p-4 hover:bg-operational-hover">
-          {t("privacy")}
-        </Link>
-        <Link to={routePaths.settingsSessions(lang)} className="block p-4 hover:bg-operational-hover">
-          {t("sessions")}
-        </Link>
-      </nav>
+    <OperationalPage title={t("title")} description={t("description")} compact centered sideBackground>
+      <SurfaceGroup role="navigation" aria-label={t("title")}>
+        <GroupAction to={routePaths.ownUserProfile(lang)} icon="user" label={t("profile")} content={t("profile")} />
+        <GroupAction to={routePaths.settingsSecurity(lang)} icon="shieldCheck" label={t("security")} content={t("security")} />
+        <GroupAction to={routePaths.settingsPrivacy(lang)} icon="eye" label={t("privacy")} content={t("privacy")} />
+        <GroupAction to={routePaths.settingsSessions(lang)} icon="history" label={t("sessions")} content={t("sessions")} />
+      </SurfaceGroup>
       <AccountLanguage />
       <PushToggle />
     </OperationalPage>

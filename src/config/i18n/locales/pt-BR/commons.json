@@ -190,6 +190,7 @@
   },
   "settings": {
     "title": "Configurações",
+    "description": "Gerencie seu perfil, segurança, privacidade e dispositivos.",
     "profile": "Perfil",
     "security": "Segurança",
     "privacy": "Privacidade",
@@ -200,6 +201,7 @@
   },
   "settingsSecurity": {
     "title": "Segurança",
+    "description": "Altere a senha usada para acessar sua conta.",
     "currentPassword": "Senha atual",
     "newPassword": "Nova senha",
     "submit": "Salvar",

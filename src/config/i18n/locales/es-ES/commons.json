@@ -190,6 +190,7 @@
   },
   "settings": {
     "title": "Configuración",
+    "description": "Gestiona tu perfil, seguridad, privacidad y dispositivos.",
     "profile": "Perfil",
     "security": "Seguridad",
     "privacy": "Privacidad",
@@ -200,6 +201,7 @@
   },
   "settingsSecurity": {
     "title": "Seguridad",
+    "description": "Cambia la contraseña que usas para acceder a tu cuenta.",
     "currentPassword": "Contraseña actual",
     "newPassword": "Nueva contraseña",
     "submit": "Guardar",
