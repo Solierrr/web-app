@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import ErrorBoundary from "./ErrorBoundary";
 
 vi.mock("@@/layout/access/canvas/SideCanvas", () => ({ default: () => <div data-testid="error-canvas" /> }));
-vi.mock("@@/brand/logo/OrganicLogo", () => ({ default: () => <span role="img" aria-label="Solaria" /> }));
+vi.mock("@@/brand/logo/OrganicLogo", () => ({ default: () => <span role="img" aria-label="Elos" /> }));
 
 function Bomb(): never {
   throw new Error("Falha simulada");

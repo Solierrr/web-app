@@ -21,7 +21,7 @@ describe("AnalyticsPage", () => {
     vi.mocked(listAllCompanies).mockResolvedValue([]);
   });
 
-  it("shows the platform dashboard for a Solaria admin", async () => {
+  it("shows the platform dashboard for a Elos admin", async () => {
     vi.mocked(useActiveContext).mockReturnValue({ ...base, kind: "personal", company: null, isPlatformAdmin: true });
     vi.mocked(getPlatformDashboard).mockResolvedValue(getAnalyticsDashboardMock("PLATFORM"));
 

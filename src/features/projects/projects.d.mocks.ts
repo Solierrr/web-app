@@ -45,7 +45,7 @@ function seed(): State {
     location: { city: "Campinas", state: "SP", street: "Avenida Brasil", number: "120" },
   });
   state.members[id] = [
-    { id: "external-owner", userId: "external-owner", authId: "external-owner", name: "Equipe Solaria", role: "OWNER", functionName: "Responsável" },
+    { id: "external-owner", userId: "external-owner", authId: "external-owner", name: "Equipe Elos", role: "OWNER", functionName: "Responsável" },
   ];
   state.invites.push({
     id: "demo-received-invitation",

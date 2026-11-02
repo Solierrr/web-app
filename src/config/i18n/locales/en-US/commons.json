@@ -247,7 +247,7 @@
     "adminsTitle": "Administrators",
     "guestEmail": "Guest e-mail (optional)",
     "sendByEmail": "Send by e-mail",
-    "emailSubject": "Invitation to {{company}} on Solaria",
+    "emailSubject": "Invitation to {{company}} on Elos",
     "emailBody": "Use the code {{code}} to join {{company}}: {{url}}",
     "description": "Manage your team, positions and invitations."
   },
@@ -388,7 +388,7 @@
     "rejected": "Rejected"
   },
   "accountSetup": {
-    "title": "How do you want to use Solaria?",
+    "title": "How do you want to use Elos?",
     "description": "Choose the account type that best describes you.",
     "company": {
       "title": "Company",

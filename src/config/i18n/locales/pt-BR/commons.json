@@ -124,7 +124,7 @@
     "loading": "Carregando...",
     "greetingCompany": "Olá, {{name}}",
     "greetingPersonal": "Olá!",
-    "greetingPlatformAdmin": "Painel do Admin Solaria",
+    "greetingPlatformAdmin": "Painel do Admin Elos",
     "offers": "Ofertas ativas",
     "moreMetricsSoon": "Mais métricas chegam nas próximas fases.",
     "personalHint": "Use o menu para acessar seu perfil, mensagens ou cadastrar uma empresa.",
@@ -247,7 +247,7 @@
     "adminsTitle": "Administradores",
     "guestEmail": "E-mail do convidado (opcional)",
     "sendByEmail": "Enviar por e-mail",
-    "emailSubject": "Convite para {{company}} na Solaria",
+    "emailSubject": "Convite para {{company}} no Elos",
     "emailBody": "Use o código {{code}} para entrar na {{company}}: {{url}}",
     "description": "Gerencie sua equipe, cargos e convites."
   },
@@ -388,7 +388,7 @@
     "rejected": "Reprovado"
   },
   "accountSetup": {
-    "title": "Como você quer usar a Solaria?",
+    "title": "Como você quer usar o Elos?",
     "description": "Escolha o tipo de conta que melhor descreve você.",
     "company": {
       "title": "Empresa",
