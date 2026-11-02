@@ -11,6 +11,7 @@ import { getSolarPanelBySlug } from "@/features/solar-panel/solarPanel.service";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
 import { SoftIconButton } from "@@/ui/button/Button.presets";
+import ActionLink from "@@/ui/button/ActionLink";
 import { notify } from "@@/feedback/toast/Toast.utils";
 import { putCartItem } from "@/features/purchases/purchases.service";
 
@@ -83,11 +84,11 @@ export function SolarPanelAnnouncementPacked({ product }: SolarPanelAnnouncement
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <Link
+            <ActionLink
               to={routePaths.contactCompany(lang, product.company.id, product.title)}
-              className="rounded-full bg-orange px-8 py-3 font-medium text-white transition-colors hover:opacity-90">
-              {t("actions.contactSupplier")}
-            </Link>
+              content={t("actions.contactSupplier")}
+              description={t("actions.contactSupplier")}
+            />
             <SoftIconButton
               description={t("actions.addToCart")}
               disabled={adding || product.availableUnits < 1}
