@@ -1,6 +1,6 @@
 import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import type { ConversationDto, MessageDto } from "./messages.messenger.api";
-import { conversationTopic, userTopic } from "./messages.messenger.realtime.utils";
+import { userTopic } from "./messages.messenger.realtime.utils";
 import { emitMockFrame } from "./messages.messenger.socket";
 
 const ASSISTANT_REPLY_DELAY_MS = 1_800;
@@ -16,7 +16,7 @@ function currentUserId(): string {
 }
 
 export function publishMockMessage(message: MessageDto): void {
-  emitMockFrame(conversationTopic(message.conversationId), {
+  emitMockFrame(userTopic(currentUserId(), "events"), {
     type: "MESSAGE_CREATED",
     conversationId: message.conversationId,
     eventId: message.id,
@@ -26,7 +26,7 @@ export function publishMockMessage(message: MessageDto): void {
 
 export function publishMockConversation(conversation: ConversationDto): void {
   syncVersion += 1;
-  emitMockFrame(userTopic(currentUserId(), "conversations"), {
+  emitMockFrame(userTopic(currentUserId(), "events"), {
     type: "CONVERSATION_UPDATED",
     conversationId: conversation.id,
     payload: { ...conversation, syncEpoch: "mock", syncVersion },
@@ -37,14 +37,13 @@ function peerOf(conversation: ConversationDto): string | undefined {
   return conversation.participantIds.find((id) => id !== currentUserId());
 }
 
-/** Presence snapshot of a direct conversation, sent right after the screen subscribes, like the real broker does. */
+/** Presence snapshot of the contacts, sent right after the screen subscribes, like the real broker does (one channel for the whole user). */
 export function announceMockPresence(conversation: ConversationDto): void {
   const peer = peerOf(conversation);
   if (conversation.conversationType !== "DIRECT" || !peer) return;
   setTimeout(() => {
-    emitMockFrame(conversationTopic(conversation.id), {
+    emitMockFrame(userTopic(currentUserId(), "events"), {
       type: "PRESENCE_SNAPSHOT",
-      conversationId: conversation.id,
       payload: { users: { [currentUserId().toLowerCase()]: true, [peer.toLowerCase()]: true }, presenceEpoch: "mock", presenceVersion: 1 },
     });
   }, 0);
@@ -68,7 +67,7 @@ export function simulateMockReplies(conversation: ConversationDto, receive: (con
   const peer = peerOf(conversation);
   if (conversation.conversationType !== "DIRECT" || !peer) return;
   const typing = (started: boolean) =>
-    emitMockFrame(conversationTopic(conversation.id), {
+    emitMockFrame(userTopic(currentUserId(), "events"), {
       type: started ? "TYPING_STARTED" : "TYPING_STOPPED",
       conversationId: conversation.id,
       payload: { userId: peer.toLowerCase() },

@@ -4,6 +4,8 @@ import type { ConversationEvent, UserEvent } from "./messages.messenger.realtime
 
 const USER_ID = "0b9c7a4e-6d1f-4c5e-9a43-2f7d8e1b6a10";
 const OTHER_USER_ID = "7e2a1d90-3b44-4a8e-b3c1-5d6f9a0c2e88";
+const EVENTS = `/topic/users.${USER_ID}.events`;
+const ERRORS = `/topic/users.${USER_ID}.errors`;
 
 interface FakeSubscription {
   callback: (frame: { body: string }) => void;
@@ -147,36 +149,58 @@ describe("messenger socket", () => {
     expect(socket.getConnectionState()).toEqual({ status: "connected", attempts: 0 });
   });
 
-  it("subscribes to the conversation topic and delivers live messages", async () => {
+  it("subscribes once to the private events channel and delivers live messages to the conversation in the envelope", async () => {
     const { events, client } = await connect();
-    expect([...client.subscriptions.keys()]).toEqual(["/topic/conversations.conv-1"]);
-    client.emit("/topic/conversations.conv-1", { type: "MESSAGE_CREATED", conversationId: "conv-1", payload: message(4) });
-    client.emit("/topic/conversations.conv-1", {
+    const other: ConversationEvent[] = [];
+    socket.subscribeToConversation("conv-2", (event) => other.push(event));
+    expect([...client.subscriptions.keys()].sort()).toEqual([ERRORS, EVENTS]);
+    expect(client.subscribe).toHaveBeenCalledTimes(2);
+    client.emit(EVENTS, { type: "MESSAGE_CREATED", conversationId: "conv-1", payload: message(4) });
+    client.emit(EVENTS, {
       type: "MESSAGE_DELETED",
       conversationId: "conv-1",
       payload: message(4, { deleted: true, content: "" }),
     });
+    client.emit(EVENTS, { type: "MESSAGE_CREATED", conversationId: "conv-3", payload: message(1, { conversationId: "conv-3" }) });
     expect(events).toEqual([
       expect.objectContaining({ kind: "message", change: "created", message: expect.objectContaining({ id: "msg-4", sequence: 4 }) }),
       expect.objectContaining({ kind: "message", change: "deleted", message: expect.objectContaining({ deleted: true }) }),
     ]);
+    expect(other).toEqual([]);
   });
 
-  it("delivers typing and presence events with normalized user ids", async () => {
+  it("delivers typing to its conversation and presence to every conversation listener, with normalized user ids", async () => {
     const { events, client } = await connect();
-    const topic = "/topic/conversations.conv-1";
-    client.emit(topic, { type: "TYPING_STARTED", conversationId: "conv-1", payload: { userId: OTHER_USER_ID.toUpperCase() } });
-    client.emit(topic, { type: "TYPING_STOPPED", conversationId: "conv-1", payload: { userId: OTHER_USER_ID } });
-    client.emit(topic, { type: "USER_ONLINE", payload: { userId: OTHER_USER_ID, presenceEpoch: "e1", presenceVersion: 3 } });
-    client.emit(topic, {
+    const other: ConversationEvent[] = [];
+    socket.subscribeToConversation("conv-2", (event) => other.push(event));
+    client.emit(EVENTS, { type: "TYPING_STARTED", conversationId: "conv-1", payload: { userId: OTHER_USER_ID.toUpperCase() } });
+    client.emit(EVENTS, { type: "TYPING_STOPPED", conversationId: "conv-1", payload: { userId: OTHER_USER_ID } });
+    client.emit(EVENTS, { type: "USER_ONLINE", conversationId: null, payload: { userId: OTHER_USER_ID, presenceEpoch: "e1", presenceVersion: 3 } });
+    client.emit(EVENTS, {
       type: "PRESENCE_SNAPSHOT",
       payload: { users: { [OTHER_USER_ID]: true, [USER_ID]: false }, presenceEpoch: "e1", presenceVersion: 2 },
     });
+    const presence = [
+      { kind: "presence", userId: OTHER_USER_ID, online: true, epoch: "e1", version: 3 },
+      { kind: "presenceSnapshot", users: { [OTHER_USER_ID]: true, [USER_ID]: false }, epoch: "e1", version: 2 },
+    ];
     expect(events).toEqual([
       { kind: "typing", userId: OTHER_USER_ID, typing: true },
       { kind: "typing", userId: OTHER_USER_ID, typing: false },
-      { kind: "presence", userId: OTHER_USER_ID, online: true, epoch: "e1", version: 3 },
-      { kind: "presenceSnapshot", users: { [OTHER_USER_ID]: true, [USER_ID]: false }, epoch: "e1", version: 2 },
+      ...presence,
+    ]);
+    expect(other).toEqual(presence);
+  });
+
+  it("replays the presence already received to a conversation that starts listening later", async () => {
+    const { client } = await connect();
+    client.emit(EVENTS, { type: "PRESENCE_SNAPSHOT", payload: { users: { [OTHER_USER_ID]: true }, presenceEpoch: "e1", presenceVersion: 4 } });
+    client.emit(EVENTS, { type: "PRESENCE_SNAPSHOT", payload: { users: { [USER_ID]: true }, presenceEpoch: "e1", presenceVersion: 6 } });
+    const late: ConversationEvent[] = [];
+    socket.subscribeToConversation("conv-2", (event) => late.push(event));
+    expect(late).toEqual([
+      { kind: "presence", userId: OTHER_USER_ID, online: true, epoch: "e1", version: 4 },
+      { kind: "presence", userId: USER_ID, online: true, epoch: "e1", version: 6 },
     ]);
   });
 
@@ -185,23 +209,25 @@ describe("messenger socket", () => {
     const failing = socket.subscribeToConversation("conv-1", () => {
       throw new Error("listener failure");
     });
-    client.subscriptions.get("/topic/conversations.conv-1")?.callback({ body: "not json" });
-    client.emit("/topic/conversations.conv-1", { type: "MESSAGE_CREATED", payload: { nope: true } });
-    client.emit("/topic/conversations.conv-1", { type: "MESSAGE_CREATED", payload: message(1) });
+    client.subscriptions.get(EVENTS)?.callback({ body: "not json" });
+    client.emit(EVENTS, { type: "MESSAGE_CREATED", conversationId: "conv-1", payload: { nope: true } });
+    client.emit(EVENTS, { type: "MESSAGE_CREATED", conversationId: "conv-1", payload: message(1) });
     expect(events).toHaveLength(1);
     failing();
   });
 
-  it("shares one STOMP subscription per conversation and releases it with the last listener", async () => {
+  it("shares one STOMP subscription per connection and releases it with the last listener", async () => {
     const { client, unsubscribe } = await connect();
-    const second = socket.subscribeToConversation("conv-1", () => undefined);
-    expect(client.subscribe).toHaveBeenCalledTimes(1);
+    const second = socket.subscribeToConversation("conv-2", () => undefined);
+    const user = socket.subscribeToUserEvents(() => undefined);
+    expect(client.subscribe).toHaveBeenCalledTimes(2);
     unsubscribe();
-    expect(client.subscriptions.has("/topic/conversations.conv-1")).toBe(true);
     second();
-    expect(client.subscriptions.has("/topic/conversations.conv-1")).toBe(false);
-    second();
-    expect(client.subscribe).toHaveBeenCalledTimes(1);
+    expect(client.subscriptions.has(EVENTS)).toBe(true);
+    user();
+    expect(client.subscriptions.size).toBe(0);
+    user();
+    expect(client.subscribe).toHaveBeenCalledTimes(2);
   });
 
   it("closes the connection after the last listener leaves and reopens on demand", async () => {
@@ -220,13 +246,15 @@ describe("messenger socket", () => {
     expect(fake.FakeClient.instances).toHaveLength(2);
   });
 
-  it("subscribes to the private user topics for conversation updates", async () => {
+  it("sends conversation updates to the user listeners only, and logs the errors channel", async () => {
     const events: UserEvent[] = [];
+    const inConversation: ConversationEvent[] = [];
     socket.subscribeToUserEvents((event) => events.push(event));
+    socket.subscribeToConversation("conv-1", (event) => inConversation.push(event));
     const client = lastClient();
     await client.open();
-    expect([...client.subscriptions.keys()].sort()).toEqual([`/topic/users.${USER_ID}.conversations`, `/topic/users.${USER_ID}.errors`]);
-    client.emit(`/topic/users.${USER_ID}.conversations`, {
+    expect([...client.subscriptions.keys()].sort()).toEqual([ERRORS, EVENTS]);
+    client.emit(EVENTS, {
       type: "CONVERSATION_UPDATED",
       conversationId: "conv-1",
       payload: {
@@ -241,11 +269,11 @@ describe("messenger socket", () => {
         lastReadSequence: 4,
       },
     });
-    client.emit(`/topic/users.${USER_ID}.conversations`, {
+    client.emit(EVENTS, {
       type: "CONVERSATION_REMOVED",
       payload: { id: "conv-9", syncEpoch: "epoch-1", syncVersion: 9 },
     });
-    client.emit(`/topic/users.${USER_ID}.errors`, { code: "SUBSCRIBE_NOT_ALLOWED", message: "denied" });
+    client.emit(ERRORS, { code: "SUBSCRIBE_NOT_ALLOWED", message: "denied" });
     expect(events).toEqual([
       {
         kind: "conversationUpdated",
@@ -259,6 +287,7 @@ describe("messenger socket", () => {
       },
       { kind: "conversationRemoved", id: "conv-9" },
     ]);
+    expect(inConversation).toEqual([]);
   });
 
   it("refreshes a token that is about to expire before connecting", async () => {
@@ -307,8 +336,8 @@ describe("messenger socket", () => {
     expect(socket.getConnectionState()).toEqual({ status: "reconnecting", attempts: 2 });
     await client.open();
     expect(socket.getConnectionState()).toEqual({ status: "connected", attempts: 0 });
-    expect([...client.subscriptions.keys()].sort()).toEqual(["/topic/conversations.conv-1", "/topic/conversations.conv-2"]);
-    client.emit("/topic/conversations.conv-1", { type: "MESSAGE_CREATED", payload: message(7) });
+    expect([...client.subscriptions.keys()].sort()).toEqual([ERRORS, EVENTS]);
+    client.emit(EVENTS, { type: "MESSAGE_CREATED", conversationId: "conv-1", payload: message(7) });
     expect(events).toHaveLength(1);
   });
 
@@ -389,7 +418,7 @@ describe("messenger socket", () => {
     socket.subscribeToConversation("conv-1", (event) => events.push(event));
     expect(fake.FakeClient.instances).toHaveLength(0);
     expect(socket.getConnectionState()).toEqual({ status: "connected", attempts: 0 });
-    socket.emitMockFrame("/topic/conversations.conv-1", { type: "TYPING_STARTED", payload: { userId: OTHER_USER_ID } });
+    socket.emitMockFrame(EVENTS, { type: "TYPING_STARTED", conversationId: "conv-1", payload: { userId: OTHER_USER_ID } });
     expect(events).toEqual([{ kind: "typing", userId: OTHER_USER_ID, typing: true }]);
   });
 });

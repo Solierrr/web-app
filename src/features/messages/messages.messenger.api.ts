@@ -27,7 +27,6 @@ export interface ConversationDto {
   syncEpoch?: string;
   syncVersion?: number;
   communityId?: string | null;
-  projectGeneral?: boolean;
 }
 
 export interface MessageDto {
