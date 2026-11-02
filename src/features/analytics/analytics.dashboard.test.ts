@@ -110,3 +110,28 @@ describe("supplier extras", () => {
     expect(view.tables[0].columns.map((column) => column.key)).toContain("unit_price");
   });
 });
+
+describe("orders and subscriptions", () => {
+  it("adds sales metrics, the orders chart and the subscription table to the supplier", () => {
+    const view = buildSupplierView(getAnalyticsDashboardMock("SUPPLIER", "c1"));
+    const byId = Object.fromEntries(view.metrics.map((metric) => [metric.id, metric]));
+    expect(byId.paidOrders.value).toBe(3);
+    expect(byId.salesValue).toMatchObject({ value: 36000, unit: "R$" });
+    expect(view.distributions.find((item) => item.id === "ordersByStatus")?.items).toHaveLength(2);
+    expect(view.series.find((item) => item.id === "salesByMonth")?.values).toEqual([36000]);
+    expect(view.tables.find((table) => table.id === "subscription")?.rows).toHaveLength(1);
+  });
+
+  it("sums the platform sales and counts the fees of paid orders only", () => {
+    const view = buildPlatformView(getAnalyticsDashboardMock("PLATFORM"));
+    const byId = Object.fromEntries(view.metrics.map((metric) => [metric.id, metric.value]));
+    expect(byId.paidOrders).toBe(4);
+    expect(byId.salesValue).toBe(45000);
+    expect(byId.platformFees).toBe(2250);
+    expect(view.distributions.find((item) => item.id === "subscriptionsByStatus")?.items).toEqual([
+      { key: "PAID", value: 3 },
+      { key: "IN_DEBT", value: 1 },
+    ]);
+    expect(view.rankings.find((item) => item.id === "topSuppliersBySales")?.items[0].label).toBe("Solar XPTO");
+  });
+});

@@ -10,7 +10,7 @@ export interface KpiResult {
   failed: boolean;
 }
 
-export type KpiRow = Record<string, string | number | null>;
+export type KpiRow = Record<string, string | number | boolean | null>;
 
 /** Resposta de GET /api/analytics/*: linhas das tabelas Gold já filtradas pelo banco. */
 export interface AnalyticsDashboard {
@@ -40,7 +40,7 @@ export interface DashboardSeries {
   unit?: string;
 }
 
-export type TableColumnFormat = "text" | "number" | "money" | "date" | "status";
+export type TableColumnFormat = "text" | "number" | "money" | "date" | "status" | "flag";
 
 export interface DashboardTable {
   id: string;

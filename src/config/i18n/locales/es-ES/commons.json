@@ -514,7 +514,12 @@
       "avgListedPrice": "Precio medio de las ofertas",
       "avgActiveListedPrice": "Precio medio de las ofertas activas",
       "listedAvailability": "Unidades ofertadas",
-      "closedProposals": "Propuestas cerradas"
+      "closedProposals": "Propuestas cerradas",
+      "paidOrders": "Pedidos pagados",
+      "canceledOrders": "Pedidos cancelados",
+      "unitsSold": "Unidades vendidas",
+      "salesValue": "Valor vendido",
+      "platformFees": "Tasa de la plataforma"
     },
     "chart": {
       "offersByStatus": "Ofertas por estado",
@@ -527,11 +532,18 @@
       "acceptedOffersByDate": "Propuestas aceptadas por día",
       "topSuppliersByAcceptedValue": "Proveedores por valor aceptado",
       "topSuppliersByActiveOffers": "Proveedores por ofertas activas",
-      "topSuppliersByStock": "Proveedores por stock"
+      "topSuppliersByStock": "Proveedores por stock",
+      "ordersByStatus": "Pedidos por estado",
+      "salesByMonth": "Ventas por mes",
+      "salesByModel": "Ventas por modelo",
+      "subscriptionsByPlan": "Suscripciones por plan",
+      "subscriptionsByStatus": "Suscripciones por estado",
+      "topSuppliersBySales": "Proveedores por ventas"
     },
     "chartDescription": {
       "acceptedValueByMonth": "El mes considera la creación de la propuesta.",
-      "acceptedOffersByDate": "El día considera la creación de la propuesta."
+      "acceptedOffersByDate": "El día considera la creación de la propuesta.",
+      "salesByMonth": "Solo cuenta los pedidos pagados."
     },
     "status": {
       "ACTIVE": "Activa",
@@ -549,10 +561,16 @@
       "IN_PROGRESS": "En curso",
       "COMPLETED": "Completado",
       "DRAFT": "Borrador",
-      "DONE": "Completado"
+      "DONE": "Completado",
+      "MONTHLY": "Mensual",
+      "QUARTERLY": "Trimestral",
+      "YEARLY": "Anual",
+      "IN_DEBT": "En mora",
+      "SUSPENDED": "Suspendida"
     },
     "table": {
-      "offerDetails": "Detalle de las ofertas"
+      "offerDetails": "Detalle de las ofertas",
+      "subscription": "Suscripción"
     },
     "column": {
       "brand_name": "Marca",
@@ -560,7 +578,18 @@
       "unit_price": "Precio unitario",
       "availability": "Disponibilidad",
       "expires_at": "Validez",
-      "commercial_status": "Estado"
+      "commercial_status": "Estado",
+      "plan_name": "Plan",
+      "plan_price": "Precio del plan",
+      "billing_cycle": "Ciclo",
+      "subscription_status": "Estado",
+      "has_auto_renewal": "Renovación automática",
+      "starts_at": "Inicio",
+      "ends_at": "Fin"
+    },
+    "flag": {
+      "yes": "Sí",
+      "no": "No"
     }
   },
   "pagination": {
