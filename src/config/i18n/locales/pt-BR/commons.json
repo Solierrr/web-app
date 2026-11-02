@@ -514,7 +514,12 @@
       "avgListedPrice": "Preço médio das ofertas",
       "avgActiveListedPrice": "Preço médio das ofertas ativas",
       "listedAvailability": "Unidades ofertadas",
-      "closedProposals": "Propostas encerradas"
+      "closedProposals": "Propostas encerradas",
+      "paidOrders": "Pedidos pagos",
+      "canceledOrders": "Pedidos cancelados",
+      "unitsSold": "Unidades vendidas",
+      "salesValue": "Valor vendido",
+      "platformFees": "Taxa da plataforma"
     },
     "chart": {
       "offersByStatus": "Ofertas por situação",
@@ -527,11 +532,18 @@
       "acceptedOffersByDate": "Propostas aceitas por dia",
       "topSuppliersByAcceptedValue": "Fornecedores por valor aceito",
       "topSuppliersByActiveOffers": "Fornecedores por ofertas ativas",
-      "topSuppliersByStock": "Fornecedores por estoque"
+      "topSuppliersByStock": "Fornecedores por estoque",
+      "ordersByStatus": "Pedidos por situação",
+      "salesByMonth": "Vendas por mês",
+      "salesByModel": "Vendas por modelo",
+      "subscriptionsByPlan": "Assinaturas por plano",
+      "subscriptionsByStatus": "Assinaturas por situação",
+      "topSuppliersBySales": "Fornecedores por vendas"
     },
     "chartDescription": {
       "acceptedValueByMonth": "O mês considera a criação da proposta.",
-      "acceptedOffersByDate": "O dia considera a criação da proposta."
+      "acceptedOffersByDate": "O dia considera a criação da proposta.",
+      "salesByMonth": "Considera só os pedidos pagos."
     },
     "status": {
       "ACTIVE": "Ativa",
@@ -549,10 +561,16 @@
       "IN_PROGRESS": "Em andamento",
       "COMPLETED": "Concluído",
       "DRAFT": "Rascunho",
-      "DONE": "Concluído"
+      "DONE": "Concluído",
+      "MONTHLY": "Mensal",
+      "QUARTERLY": "Trimestral",
+      "YEARLY": "Anual",
+      "IN_DEBT": "Em atraso",
+      "SUSPENDED": "Suspensa"
     },
     "table": {
-      "offerDetails": "Detalhamento das ofertas"
+      "offerDetails": "Detalhamento das ofertas",
+      "subscription": "Assinatura"
     },
     "column": {
       "brand_name": "Marca",
@@ -560,7 +578,18 @@
       "unit_price": "Preço unitário",
       "availability": "Disponibilidade",
       "expires_at": "Validade",
-      "commercial_status": "Situação"
+      "commercial_status": "Situação",
+      "plan_name": "Plano",
+      "plan_price": "Preço do plano",
+      "billing_cycle": "Ciclo",
+      "subscription_status": "Situação",
+      "has_auto_renewal": "Renovação automática",
+      "starts_at": "Início",
+      "ends_at": "Fim"
+    },
+    "flag": {
+      "yes": "Sim",
+      "no": "Não"
     }
   },
   "pagination": {

@@ -14,24 +14,26 @@ function chunk<T>(items: T[], size: number): T[][] {
 }
 
 function formatCell(
-  value: string | number | null | undefined,
+  value: string | number | boolean | null | undefined,
   format: TableColumnFormat,
   locale: string | undefined,
   status: (key: string) => string,
+  flag: (value: boolean) => string,
 ): string {
-  if (value === null || value === undefined || value === "") return "—";
+  if (value === null || value === undefined || value === "") return "-";
   if (format === "money") {
     const amount = toNumber(value);
-    return amount === null ? "—" : new Intl.NumberFormat(locale, { style: "currency", currency: "BRL" }).format(amount);
+    return amount === null ? "-" : new Intl.NumberFormat(locale, { style: "currency", currency: "BRL" }).format(amount);
   }
   if (format === "number") {
     const amount = toNumber(value);
-    return amount === null ? "—" : new Intl.NumberFormat(locale).format(amount);
+    return amount === null ? "-" : new Intl.NumberFormat(locale).format(amount);
   }
   if (format === "date") {
     const date = new Date(String(value));
     return Number.isNaN(date.getTime()) ? String(value) : new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(date);
   }
+  if (format === "flag") return flag(value === true || value === "true");
   return format === "status" ? status(String(value)) : String(value);
 }
 
@@ -56,7 +58,7 @@ function TableCard({ table, locale }: { table: DashboardTable; locale?: string }
               <tr key={index} className="border-t border-border">
                 {table.columns.map((column) => (
                   <td key={column.key} className={`px-3 py-2 ${column.format === "money" || column.format === "number" ? "tabular-nums" : ""}`}>
-                    {formatCell(row[column.key], column.format, locale, status)}
+                    {formatCell(row[column.key], column.format, locale, status, (value) => t(value ? "flag.yes" : "flag.no"))}
                   </td>
                 ))}
               </tr>

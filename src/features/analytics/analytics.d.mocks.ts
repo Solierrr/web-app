@@ -43,6 +43,24 @@ export function getAnalyticsDashboardMock(scope: AnalyticsDashboard["scope"], co
           { proposal_created_date_proxy: "2026-10-10", accepted_proposals: 3 },
         ],
         kpi_supplier_stock_summary: [{ stock_units: 340, models_in_stock: 8 }],
+        kpi_supplier_orders_summary: [{ paid_orders: 3, canceled_orders: 1, units_sold: 24, sales_value: 36000 }],
+        kpi_supplier_orders_by_status: [
+          { order_status: "PAID", order_count: 3 },
+          { order_status: "CANCELED", order_count: 1 },
+        ],
+        kpi_supplier_sales_by_month: [{ order_month: "2026-10-01", units_sold: 24, sales_value: 36000 }],
+        kpi_supplier_sales_by_model: [{ model_name: "Modelo 550W", units_sold: 24, sales_value: 36000 }],
+        kpi_supplier_subscription: [
+          {
+            plan_name: "Pro",
+            plan_price: 199,
+            billing_cycle: "MONTHLY",
+            subscription_status: "PAID",
+            has_auto_renewal: true,
+            starts_at: "2026-10-01",
+            ends_at: "2026-11-01",
+          },
+        ],
         kpi_supplier_proposals_summary: [
           {
             open_received_proposals: 3,
@@ -110,6 +128,18 @@ export function getAnalyticsDashboardMock(scope: AnalyticsDashboard["scope"], co
         { supplier_id: "s2", accepted_proposals: 2, accepted_negotiated_value: 52000 },
       ],
       kpi_requester_summary: [{ requester_id: "r1", registered_local_units: 3, registered_projects: 2 }],
+      kpi_supplier_orders_summary: [
+        { supplier_id: "s1", paid_orders: 3, sales_value: 36000 },
+        { supplier_id: "s2", paid_orders: 1, sales_value: 9000 },
+      ],
+      kpi_admin_orders_by_status: [
+        { order_status: "PAID", order_count: 4, total_amount: 45000, fee_amount: 2250 },
+        { order_status: "CANCELED", order_count: 1, total_amount: 3000, fee_amount: 150 },
+      ],
+      kpi_admin_subscriptions_by_plan: [
+        { plan_name: "Pro", billing_cycle: "MONTHLY", subscription_status: "PAID", subscription_count: 3 },
+        { plan_name: "Basic", billing_cycle: "YEARLY", subscription_status: "IN_DEBT", subscription_count: 1 },
+      ],
       kpi_admin_models_by_status: [
         { model_status: "APPROVED", model_count: 20 },
         { model_status: "UNDER_ANALYSIS", model_count: 4 },

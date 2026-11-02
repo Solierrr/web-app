@@ -514,7 +514,12 @@
       "avgListedPrice": "Average offer price",
       "avgActiveListedPrice": "Average active offer price",
       "listedAvailability": "Units offered",
-      "closedProposals": "Closed proposals"
+      "closedProposals": "Closed proposals",
+      "paidOrders": "Paid orders",
+      "canceledOrders": "Canceled orders",
+      "unitsSold": "Units sold",
+      "salesValue": "Sales value",
+      "platformFees": "Platform fees"
     },
     "chart": {
       "offersByStatus": "Offers by status",
@@ -527,11 +532,18 @@
       "acceptedOffersByDate": "Accepted proposals per day",
       "topSuppliersByAcceptedValue": "Suppliers by accepted value",
       "topSuppliersByActiveOffers": "Suppliers by active offers",
-      "topSuppliersByStock": "Suppliers by stock"
+      "topSuppliersByStock": "Suppliers by stock",
+      "ordersByStatus": "Orders by status",
+      "salesByMonth": "Sales per month",
+      "salesByModel": "Sales by model",
+      "subscriptionsByPlan": "Subscriptions by plan",
+      "subscriptionsByStatus": "Subscriptions by status",
+      "topSuppliersBySales": "Suppliers by sales"
     },
     "chartDescription": {
       "acceptedValueByMonth": "The month is based on when the proposal was created.",
-      "acceptedOffersByDate": "The day is based on when the proposal was created."
+      "acceptedOffersByDate": "The day is based on when the proposal was created.",
+      "salesByMonth": "Only paid orders are counted."
     },
     "status": {
       "ACTIVE": "Active",
@@ -549,10 +561,16 @@
       "IN_PROGRESS": "In progress",
       "COMPLETED": "Completed",
       "DRAFT": "Draft",
-      "DONE": "Completed"
+      "DONE": "Completed",
+      "MONTHLY": "Monthly",
+      "QUARTERLY": "Quarterly",
+      "YEARLY": "Yearly",
+      "IN_DEBT": "Overdue",
+      "SUSPENDED": "Suspended"
     },
     "table": {
-      "offerDetails": "Offer details"
+      "offerDetails": "Offer details",
+      "subscription": "Subscription"
     },
     "column": {
       "brand_name": "Brand",
@@ -560,7 +578,18 @@
       "unit_price": "Unit price",
       "availability": "Availability",
       "expires_at": "Valid until",
-      "commercial_status": "Status"
+      "commercial_status": "Status",
+      "plan_name": "Plan",
+      "plan_price": "Plan price",
+      "billing_cycle": "Cycle",
+      "subscription_status": "Status",
+      "has_auto_renewal": "Auto renewal",
+      "starts_at": "Start",
+      "ends_at": "End"
+    },
+    "flag": {
+      "yes": "Yes",
+      "no": "No"
     }
   },
   "pagination": {

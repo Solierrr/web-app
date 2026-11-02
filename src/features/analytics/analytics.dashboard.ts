@@ -76,6 +76,13 @@ function timeSeries(
   return { id, labels: ordered.map(([label]) => label), values: ordered.map(([, value]) => value), unit };
 }
 
+/** Taxa da plataforma cobrada nos pedidos pagos. */
+function paidFees(dashboard: AnalyticsDashboard): number | null {
+  const paid = rows(dashboard, "kpi_admin_orders_by_status").filter((row) => row.order_status === "PAID");
+  const values = paid.map((row) => toNumber(row.fee_amount)).filter((value): value is number => value !== null);
+  return values.length ? values.reduce((total, value) => total + value, 0) : null;
+}
+
 function supplierName(dashboard: AnalyticsDashboard): (id: string) => string {
   return (id) => dashboard.names?.[id] ?? id.slice(0, 8);
 }
@@ -84,6 +91,7 @@ export function buildSupplierView(dashboard: AnalyticsDashboard): DashboardView 
   const offers = rows(dashboard, "kpi_supplier_offers_summary")[0];
   const stock = rows(dashboard, "kpi_supplier_stock_summary")[0];
   const proposals = rows(dashboard, "kpi_supplier_proposals_summary")[0];
+  const orders = rows(dashboard, "kpi_supplier_orders_summary")[0];
   const metrics: DashboardMetric[] = [
     { id: "registeredOffers", value: field(offers, "registered_offers") },
     { id: "activeOffers", value: field(offers, "active_offers") },
@@ -99,12 +107,17 @@ export function buildSupplierView(dashboard: AnalyticsDashboard): DashboardView 
     { id: "closedProposals", value: field(proposals, "closed_proposals") },
     { id: "acceptanceRate", value: field(proposals, "closed_acceptance_rate_pct"), unit: "%" },
     { id: "acceptedValue", value: field(proposals, "accepted_negotiated_value"), unit: "R$" },
+    { id: "paidOrders", value: field(orders, "paid_orders") },
+    { id: "canceledOrders", value: field(orders, "canceled_orders") },
+    { id: "unitsSold", value: field(orders, "units_sold") },
+    { id: "salesValue", value: field(orders, "sales_value"), unit: "R$" },
   ];
   return {
     metrics,
     distributions: [
       distribution(dashboard, "offersByStatus", "kpi_supplier_offers_by_status", "commercial_status", "offer_count"),
       distribution(dashboard, "proposalsByStatus", "kpi_supplier_proposals_by_status", "proposal_status", "received_proposals"),
+      distribution(dashboard, "ordersByStatus", "kpi_supplier_orders_by_status", "order_status", "order_count"),
     ],
     series: [
       timeSeries(
@@ -117,10 +130,12 @@ export function buildSupplierView(dashboard: AnalyticsDashboard): DashboardView 
         "R$",
       ),
       timeSeries(dashboard, "acceptedOffersByDate", "kpi_supplier_accepted_offers_by_date", "proposal_created_date_proxy", "accepted_proposals", 10),
+      timeSeries(dashboard, "salesByMonth", "kpi_supplier_sales_by_month", "order_month", "sales_value", 7, "R$"),
     ],
     rankings: [
       ranking(dashboard, "acceptedValueByModel", "kpi_supplier_accepted_value_by_model", "model_name", "accepted_negotiated_value"),
       ranking(dashboard, "stockByModel", "kpi_supplier_stock_by_model", "model_name", "stock_units"),
+      ranking(dashboard, "salesByModel", "kpi_supplier_sales_by_model", "model_name", "sales_value"),
     ],
     tables: [
       {
@@ -134,6 +149,19 @@ export function buildSupplierView(dashboard: AnalyticsDashboard): DashboardView 
           { key: "commercial_status", format: "status" },
         ],
         rows: rows(dashboard, "kpi_supplier_offer_details").slice(0, TABLE_LIMIT),
+      },
+      {
+        id: "subscription",
+        columns: [
+          { key: "plan_name", format: "text" },
+          { key: "plan_price", format: "money" },
+          { key: "billing_cycle", format: "status" },
+          { key: "subscription_status", format: "status" },
+          { key: "has_auto_renewal", format: "flag" },
+          { key: "starts_at", format: "date" },
+          { key: "ends_at", format: "date" },
+        ],
+        rows: rows(dashboard, "kpi_supplier_subscription"),
       },
     ],
   };
@@ -171,16 +199,23 @@ export function buildPlatformView(dashboard: AnalyticsDashboard): DashboardView 
       { id: "acceptedValue", value: sum(dashboard, "kpi_supplier_proposals_summary", "accepted_negotiated_value"), unit: "R$" },
       { id: "localUnits", value: sum(dashboard, "kpi_requester_summary", "registered_local_units") },
       { id: "projects", value: sum(dashboard, "kpi_requester_summary", "registered_projects") },
+      { id: "paidOrders", value: sum(dashboard, "kpi_supplier_orders_summary", "paid_orders") },
+      { id: "salesValue", value: sum(dashboard, "kpi_supplier_orders_summary", "sales_value"), unit: "R$" },
+      { id: "platformFees", value: paidFees(dashboard), unit: "R$" },
     ],
     distributions: [
       distribution(dashboard, "modelsByStatus", "kpi_admin_models_by_status", "model_status", "model_count"),
       distribution(dashboard, "proposalsByStatus", "kpi_admin_proposals_by_status", "proposal_status", "proposal_count"),
+      distribution(dashboard, "ordersByStatus", "kpi_admin_orders_by_status", "order_status", "order_count"),
+      distribution(dashboard, "subscriptionsByPlan", "kpi_admin_subscriptions_by_plan", "plan_name", "subscription_count"),
+      distribution(dashboard, "subscriptionsByStatus", "kpi_admin_subscriptions_by_plan", "subscription_status", "subscription_count"),
     ],
     series: [],
     rankings: [
       ranking(dashboard, "topSuppliersByAcceptedValue", "kpi_supplier_proposals_summary", "supplier_id", "accepted_negotiated_value", name),
       ranking(dashboard, "topSuppliersByActiveOffers", "kpi_supplier_offers_summary", "supplier_id", "active_offers", name),
       ranking(dashboard, "topSuppliersByStock", "kpi_supplier_stock_summary", "supplier_id", "stock_units", name),
+      ranking(dashboard, "topSuppliersBySales", "kpi_supplier_orders_summary", "supplier_id", "sales_value", name),
     ],
     tables: [],
   };
