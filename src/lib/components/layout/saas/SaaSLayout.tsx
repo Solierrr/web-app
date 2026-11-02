@@ -11,7 +11,7 @@ import ToolbarAction from "@@/ui/button/ToolbarAction";
 import Loading from "@@/helpers/accessibility/loading/Loading";
 import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
 import { ContextMenuProvider } from "@@/overlay/contextMenu/provider/ContextMenuProvider";
-import { useContextMenu } from "@@/overlay/contextMenu/useContextMenu";
+import { useGeneralContextMenu } from "@@/overlay/contextMenu/useGeneralContextMenu";
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
@@ -39,10 +39,10 @@ function SaaSLayoutContent() {
   const { t } = useTranslation("saas");
   const { t: tCommons } = useTranslation("commons");
   const { panel, closePanel, busy: panelBusy } = useSidePanel();
-  const contextMenu = useContextMenu();
   const { t: tAccess } = useTranslation("onboarding");
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT;
+  const handleContextMenu = useGeneralContextMenu(routePaths.dashboard(lang));
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const context = useActiveContext();
@@ -145,11 +145,7 @@ function SaaSLayoutContent() {
   return (
     <div
       className="operational-shell flex flex-col lg:flex-row h-dvh overflow-hidden bg-operational-shell"
-      onContextMenu={(event) => {
-        if (event.defaultPrevented) return;
-        event.preventDefault();
-        contextMenu.open([{ label: tCommons("actions.back"), onClick: () => navigate(-1) }], event.clientX, event.clientY);
-      }}>
+      onContextMenu={handleContextMenu}>
       <a href="#operational-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-white focus:p-4">
         {t("shell.skipContent")}
       </a>
