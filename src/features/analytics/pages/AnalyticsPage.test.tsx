@@ -2,6 +2,7 @@ vi.mock("@@/layout/access/canvas/SideCanvas", () => ({ default: () => null }));
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import AnalyticsPage from "./AnalyticsPage";
+import { expectNoA11yViolations } from "@/lib/shared/accessibility/accessibility.matchers";
 import { useActiveContext } from "@/lib/shared/context/ActiveContext";
 import { getCompanyDashboard, getPlatformDashboard } from "../analytics.service";
 import { getAnalyticsDashboardMock } from "../analytics.d.mocks";
@@ -30,6 +31,15 @@ describe("AnalyticsPage", () => {
     expect(screen.getByText("Visão de toda a plataforma")).toBeInTheDocument();
     expect(getCompanyDashboard).not.toHaveBeenCalled();
   });
+
+  it("has no accessibility violations", async () => {
+    vi.mocked(useActiveContext).mockReturnValue({ ...base, kind: "personal", company: null, isPlatformAdmin: true });
+    vi.mocked(getPlatformDashboard).mockResolvedValue(getAnalyticsDashboardMock("PLATFORM"));
+    const { container } = render(<AnalyticsPage />);
+    await screen.findByText("Fornecedores ativos");
+
+    await expectNoA11yViolations(container);
+  }, 30000);
 
   it("shows only the active company dashboard for a company admin", async () => {
     vi.mocked(useActiveContext).mockReturnValue({ ...base, kind: "company", company: supplier, isPlatformAdmin: false, can: () => true });

@@ -6,6 +6,7 @@ import LoginPage from "./LoginPage";
 import { HttpResponseError } from "@/lib/shared/http/http.service";
 import { login as loginFirebase, loginWithGoogle, loginWithMicrosoft } from "@/config/firebase/auth/auth.service";
 import ForgotPasswordPage from "../../help/forgot-password/ForgotPasswordPage";
+import { expectNoA11yViolations } from "@/lib/shared/accessibility/accessibility.matchers";
 
 vi.mock("@@/layout/access/canvas/SideCanvas", () => ({ default: () => null }));
 
@@ -26,6 +27,17 @@ import { login, loginWithFirebase, linkFirebase } from "@/features/access/access
 const mockedLogin = vi.mocked(login);
 
 describe("LoginPage", () => {
+  it("has no accessibility violations", async () => {
+    const { container } = render(
+      <MemoryRouter initialEntries={["/pt-BR/login?step=signin"]}>
+        <LoginPage />
+      </MemoryRouter>,
+    );
+    await screen.findByLabelText("E-mail");
+
+    await expectNoA11yViolations(container);
+  });
+
   it("clears pending account linking when returning to a saved password account", async () => {
     saveRememberedLogin({ email: "saved@example.com", method: "password" });
     vi.mocked(loginWithFirebase).mockRejectedValue(new Error("link required", { cause: new HttpResponseError(409, "ACCOUNT_LINK_REQUIRED") }));

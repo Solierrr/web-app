@@ -3,6 +3,7 @@ import { act, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import SettingsPage from "./SettingsPage";
+import { expectNoA11yViolations } from "@/lib/shared/accessibility/accessibility.matchers";
 
 const getPushStatus = vi.hoisted(() => vi.fn());
 vi.mock("@/features/notifications/notification.push.service", () => ({ getPushStatus, enablePush: vi.fn(), disablePush: vi.fn() }));
@@ -21,6 +22,18 @@ describe("SettingsPage", () => {
     expect(screen.getByRole("link", { name: "Segurança" })).toHaveAttribute("href", "/pt-BR/configuracoes/seguranca");
     expect(screen.getByRole("link", { name: "Privacidade" })).toHaveAttribute("href", "/pt-BR/configuracoes/privacidade");
     expect(screen.getByRole("link", { name: "Sessões e dispositivos" })).toHaveAttribute("href", "/pt-BR/configuracoes/sessoes");
+  });
+
+  it("has no accessibility violations", async () => {
+    getPushStatus.mockResolvedValue("OFF");
+    const { container } = render(
+      <MemoryRouter>
+        <SettingsPage />
+      </MemoryRouter>,
+    );
+    await screen.findByRole("heading", { name: "Notificações neste dispositivo" });
+
+    await expectNoA11yViolations(container);
   });
 
   it("offers the push switch for this device only when push is available", async () => {
