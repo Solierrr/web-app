@@ -81,42 +81,44 @@ export default function ProjectHistoryView({
           {query || category ? t("noResults") : t("historyEmpty")}
         </p>
       )}
-      {groups.map((group) => (
-        <section key={group.timestamp} className="flex flex-col gap-3">
-          <h3 className="text-body! font-semi-bold">{day.format(new Date(group.timestamp))}</h3>
-          <Surface>
-            <ol className="px-5 py-2">
-              {group.items.map((h, index) => {
-                const kind = historyCategory(h.action);
-                const title = t(`historyKinds.${kind.key}`);
-                const detail = h.detail.replace(/\b(OPEN|IN_PROGRESS|COMPLETED|CANCELED)\b/g, (state) => t(`status.${state}`));
-                return (
-                  <li key={h.id} className="relative flex gap-4 py-4">
-                    {index < group.items.length - 1 && (
-                      <span aria-hidden="true" className="absolute -bottom-4 left-5 top-14 w-px bg-operational-border" />
-                    )}
-                    <span
-                      aria-hidden="true"
-                      className="relative flex size-10 shrink-0 items-center justify-center rounded-medium bg-white text-operational-muted">
-                      <Icon name={kind.icon} color="currentColor" size={20} />
-                    </span>
-                    <div className="flex min-w-0 flex-1 flex-col gap-2">
-                      <div className="flex flex-wrap items-baseline justify-between gap-2">
-                        <h4 className="text-body font-semi-bold">{title}</h4>
-                        <time dateTime={h.createdAt} className="text-body text-operational-muted">
-                          {time.format(new Date(h.createdAt))}
-                        </time>
+      {groups.length > 0 && (
+        <Surface>
+          {groups.map((group) => (
+            <section key={group.timestamp} className="border-b-(length:--border-width-ui) border-solid border-border/60 last:border-b-0">
+              <h3 className="px-5 pt-5 text-body! font-semi-bold first-letter:uppercase">{day.format(new Date(group.timestamp))}</h3>
+              <ol className="px-5 py-2">
+                {group.items.map((h, index) => {
+                  const kind = historyCategory(h.action);
+                  const title = t(`historyKinds.${kind.key}`);
+                  const detail = h.detail.replace(/\b(OPEN|IN_PROGRESS|COMPLETED|CANCELED)\b/g, (state) => t(`status.${state}`));
+                  return (
+                    <li key={h.id} className="relative flex gap-4 py-4">
+                      {index < group.items.length - 1 && (
+                        <span aria-hidden="true" className="absolute -bottom-4 left-5 top-14 w-px bg-operational-border" />
+                      )}
+                      <span
+                        aria-hidden="true"
+                        className="relative flex size-10 shrink-0 items-center justify-center rounded-medium bg-white text-operational-muted">
+                        <Icon name={kind.icon} color="currentColor" size={20} />
+                      </span>
+                      <div className="flex min-w-0 flex-1 flex-col gap-2">
+                        <div className="flex flex-wrap items-baseline justify-between gap-2">
+                          <h4 className="text-body font-semi-bold">{title}</h4>
+                          <time dateTime={h.createdAt} className="text-body text-operational-muted">
+                            {time.format(new Date(h.createdAt))}
+                          </time>
+                        </div>
+                        {detail && detail !== title && <p className="whitespace-pre-wrap break-words text-body">{detail}</p>}
+                        {h.actor && <p className="text-body text-operational-muted">{h.actor}</p>}
                       </div>
-                      {detail && detail !== title && <p className="whitespace-pre-wrap break-words text-body">{detail}</p>}
-                      {h.actor && <p className="text-body text-operational-muted">{h.actor}</p>}
-                    </div>
-                  </li>
-                );
-              })}
-            </ol>
-          </Surface>
-        </section>
-      ))}
+                    </li>
+                  );
+                })}
+              </ol>
+            </section>
+          ))}
+        </Surface>
+      )}
       {items && filtered.length > 20 && (
         <Pagination page={current} total={filtered.length} pageSize={20} onPageChange={setPage} appearance="borderless" summaryMode="pages" />
       )}
