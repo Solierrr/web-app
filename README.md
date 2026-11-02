@@ -1,36 +1,38 @@
-# Finalidade do repositório
+<p align="center">
+  <img src="./assets/readme/banners/react.png" alt="React" width="100%">
+</p>
 
-Este repositório contém o **Solaria**, a aplicação web (SPA) que serve como frontend do marketplace de energia solar da organização. É por aqui que usuários finais, profissionais instaladores e empresas do setor se cadastram, buscam painéis solares, publicam e consultam anúncios, montam perfis públicos e trocam mensagens em um chat integrado. O app é construído em React com TypeScript e Vite, consome APIs REST próprias e usa o Firebase Authentication para autenticação, e é internacionalizado para os idiomas `en-US`, `es-ES` e `pt-BR`. O build final é uma imagem Docker com Nginx servindo os arquivos estáticos gerados.
+<p align="center">
+  <img src="./assets/readme/stacks/typescript.png" width="100" hspace="8" alt="TypeScript" title="TypeScript">
+  <img src="./assets/readme/stacks/zod.png" width="100" hspace="8" alt="Zod" title="Zod">
+  <img src="./assets/readme/stacks/vite.png" width="100" hspace="8" alt="Vite" title="Vite">
+  <img src="./assets/readme/stacks/firebase.png" width="100" hspace="8" alt="Firebase" title="Firebase">
+  <img src="./assets/readme/stacks/storybook.png" width="100" hspace="8" alt="Storybook" title="Storybook">
+</p>
 
-<p>
+# Portal e operação web
 
 [![License](https://img.shields.io/github/license/Solierrr/web-app)](https://github.com/Solierrr/web-app/blob/main/LICENSE)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/Solierrr/web-app)](https://github.com/Solierrr/web-app/commits)
-[![GitHub Issues](https://img.shields.io/github/issues/Solierrr/web-app)](https://github.com/Solierrr/web-app/issues)
 [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/Solierrr/web-app)](https://github.com/Solierrr/web-app/pulls)
-[![GitHub Contributors](https://img.shields.io/github/contributors/Solierrr/web-app)](https://github.com/Solierrr/web-app/graphs/contributors)
 [![Release](https://img.shields.io/github/v/release/Solierrr/web-app)](https://github.com/Solierrr/web-app/releases)
 
-</p>
+O portal reúne a descoberta de produtos e profissionais e a operação das empresas da plataforma. A pessoa consulta o catálogo, administra seu perfil e acompanha conversas, projetos e compras. Empresas encontram áreas para ofertas, unidades, equipe e vendas, com acesso condicionado ao contexto e às permissões da conta.
 
-<div align="center">
-
-<p>
-  <a href="https://github.com/syvixor/skills-icons">
-    <img src="https://skills.syvixor.com/api/icons?i=react,typescript,vite,tailwind,firebase,storybook" height="48" alt="Stack Principal">
-  </a>
-</p>
-
-</div>
+A aplicação React usa serviços de identidade, cadastro, mensagens, assistentes e notificações. A sessão fornece o JWT das chamadas autenticadas e a comunicação em tempo real usa WebSocket. O Firebase participa da identidade federada e dos avisos no navegador. As integrações e os modos locais de dados são configurados durante a construção do aplicativo.
 
 ## Aprofunde-se no Projeto!
 
-- [ARCHITECTURE.md](./ARCHITECTURE.md), estrutura de pastas e decisões de arquitetura do frontend.
-- [RUNNING.md](./RUNNING.md), como rodar o projeto localmente.
-- [DEPLOYMENT.md](https://github.com/Solierrr/.github/blob/main/.github/DEPLOYMENT.md), como o deploy funciona na organização.
+- [OVERVIEW.md](./docs/OVERVIEW.md), finalidade e regras de produto.
+- [ARCHITECTURE.md](./docs/ARCHITECTURE.md), componentes, dados e integrações.
+- [RUNNING.md](./docs/RUNNING.md), preparação e execução local.
+- [DEPLOY.md](./docs/DEPLOY.md), ambientes e publicação.
+- [STATUS.md](./docs/STATUS.md), limites observados.
+- [Fluxos](./flows/), etapas e casos de erro do repositório.
+- [PENDENCIAS.md](./PENDENCIAS.md), questões para revisão.
 
 ## Contribuindo
 
-- [CONTRIBUTING.md](https://github.com/Solierrr/.github/blob/main/.github/CONTRIBUTING.md), convenções de commit, branch e Pull Request.
-- [CODE_OF_CONDUCT.md](https://github.com/Solierrr/.github/blob/main/.github/CODE_OF_CONDUCT.md), código de conduta do projeto.
-- [SECURITY.md](https://github.com/Solierrr/.github/blob/main/.github/SECURITY.md), como reportar vulnerabilidades de segurança.
+- [CONTRIBUTING.md](https://github.com/Solierrr/.github/blob/main/.github/CONTRIBUTING.md), convenções de contribuição.
+- [CODE_OF_CONDUCT.md](https://github.com/Solierrr/.github/blob/main/CODE_OF_CONDUCT.md), código de conduta.
+- [SECURITY.md](https://github.com/Solierrr/.github/blob/main/SECURITY.md), relato de vulnerabilidades.
