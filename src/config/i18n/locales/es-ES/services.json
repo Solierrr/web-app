@@ -173,5 +173,9 @@
     "removeDevice": "No se pudo quitar este dispositivo de las notificaciones",
     "enablePush": "No se pudieron activar las notificaciones en este dispositivo",
     "disablePush": "No se pudieron desactivar las notificaciones en este dispositivo"
+  },
+  "analytics": {
+    "getPlatformDashboard": "No se pudieron cargar los indicadores de la plataforma",
+    "getCompanyDashboard": "No se pudieron cargar los indicadores de la empresa {{id}}"
   }
 }

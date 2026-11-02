@@ -1,0 +1,153 @@
+import type { AnalyticsDashboard } from "./analytics";
+
+const LOADED_AT = "2026-11-02T12:00:00Z";
+
+export function getAnalyticsDashboardMock(scope: AnalyticsDashboard["scope"], companyId: string | null = null): AnalyticsDashboard {
+  if (scope === "SUPPLIER") {
+    return {
+      scope,
+      companyId,
+      loadedAt: LOADED_AT,
+      kpis: {
+        kpi_supplier_offers_summary: [
+          {
+            registered_offers: 12,
+            active_offers: 9,
+            expired_offers: 1,
+            offers_expiring_in_30_days: 2,
+            avg_listed_price: 910.5,
+            avg_active_listed_price: 925,
+            listed_availability: 410,
+          },
+        ],
+        kpi_supplier_offer_details: [
+          {
+            brand_name: "Marca A",
+            model_name: "Modelo 550W",
+            unit_price: 950,
+            availability: 200,
+            expires_at: "2026-12-30",
+            commercial_status: "ACTIVE",
+          },
+          {
+            brand_name: "Marca B",
+            model_name: "Modelo 450W",
+            unit_price: 780,
+            availability: 140,
+            expires_at: "2026-10-15",
+            commercial_status: "EXPIRED",
+          },
+        ],
+        kpi_supplier_accepted_offers_by_date: [
+          { proposal_created_date_proxy: "2026-10-03", accepted_proposals: 2 },
+          { proposal_created_date_proxy: "2026-10-10", accepted_proposals: 3 },
+        ],
+        kpi_supplier_stock_summary: [{ stock_units: 340, models_in_stock: 8 }],
+        kpi_supplier_orders_summary: [{ paid_orders: 3, canceled_orders: 1, units_sold: 24, sales_value: 36000 }],
+        kpi_supplier_orders_by_status: [
+          { order_status: "PAID", order_count: 3 },
+          { order_status: "CANCELED", order_count: 1 },
+        ],
+        kpi_supplier_sales_by_month: [{ order_month: "2026-10-01", units_sold: 24, sales_value: 36000 }],
+        kpi_supplier_sales_by_model: [{ model_name: "Modelo 550W", units_sold: 24, sales_value: 36000 }],
+        kpi_supplier_subscription: [
+          {
+            plan_name: "Pro",
+            plan_price: 199,
+            billing_cycle: "MONTHLY",
+            subscription_status: "PAID",
+            has_auto_renewal: true,
+            starts_at: "2026-10-01",
+            ends_at: "2026-11-01",
+          },
+        ],
+        kpi_supplier_proposals_summary: [
+          {
+            open_received_proposals: 3,
+            accepted_proposals: 5,
+            closed_proposals: 8,
+            closed_acceptance_rate_pct: 62.5,
+            accepted_negotiated_value: 184000,
+          },
+        ],
+        kpi_supplier_offers_by_status: [
+          { commercial_status: "ACTIVE", offer_count: 9 },
+          { commercial_status: "EXPIRED", offer_count: 1 },
+        ],
+        kpi_supplier_proposals_by_status: [
+          { proposal_status: "ACCEPTED", received_proposals: 5 },
+          { proposal_status: "PENDING", received_proposals: 3 },
+        ],
+        kpi_supplier_accepted_value_by_month: [
+          { proposal_created_month_proxy: "2026-09-01", accepted_negotiated_value: 64000 },
+          { proposal_created_month_proxy: "2026-10-01", accepted_negotiated_value: 120000 },
+        ],
+        kpi_supplier_accepted_value_by_model: [
+          { model_name: "Modelo 550W", accepted_negotiated_value: 120000 },
+          { model_name: "Modelo 450W", accepted_negotiated_value: 64000 },
+        ],
+        kpi_supplier_stock_by_model: [
+          { model_name: "Modelo 550W", stock_units: 200 },
+          { model_name: "Modelo 450W", stock_units: 140 },
+        ],
+      },
+    };
+  }
+  if (scope === "REQUESTER") {
+    return {
+      scope,
+      companyId,
+      loadedAt: LOADED_AT,
+      kpis: {
+        kpi_requester_summary: [{ registered_local_units: 3, registered_proposals: 4, registered_projects: 2 }],
+        kpi_requester_proposals_by_status: [
+          { proposal_status: "ACCEPTED", proposal_count: 3 },
+          { proposal_status: "PENDING", proposal_count: 1 },
+        ],
+        kpi_requester_projects_by_status: [{ project_status: "IN_PROGRESS", project_count: 2 }],
+      },
+    };
+  }
+  return {
+    scope: "PLATFORM",
+    companyId: null,
+    loadedAt: LOADED_AT,
+    names: { s1: "Solar XPTO", s2: "Energia Norte" },
+    kpis: {
+      kpi_admin_registrations: [{ active_suppliers: 11, registered_requesters: 15 }],
+      kpi_supplier_offers_summary: [
+        { supplier_id: "s1", registered_offers: 12, active_offers: 9 },
+        { supplier_id: "s2", registered_offers: 8, active_offers: 5 },
+      ],
+      kpi_supplier_stock_summary: [
+        { supplier_id: "s1", stock_units: 340 },
+        { supplier_id: "s2", stock_units: 120 },
+      ],
+      kpi_supplier_proposals_summary: [
+        { supplier_id: "s1", accepted_proposals: 5, accepted_negotiated_value: 184000 },
+        { supplier_id: "s2", accepted_proposals: 2, accepted_negotiated_value: 52000 },
+      ],
+      kpi_requester_summary: [{ requester_id: "r1", registered_local_units: 3, registered_projects: 2 }],
+      kpi_supplier_orders_summary: [
+        { supplier_id: "s1", paid_orders: 3, sales_value: 36000 },
+        { supplier_id: "s2", paid_orders: 1, sales_value: 9000 },
+      ],
+      kpi_admin_orders_by_status: [
+        { order_status: "PAID", order_count: 4, total_amount: 45000, fee_amount: 2250 },
+        { order_status: "CANCELED", order_count: 1, total_amount: 3000, fee_amount: 150 },
+      ],
+      kpi_admin_subscriptions_by_plan: [
+        { plan_name: "Pro", billing_cycle: "MONTHLY", subscription_status: "PAID", subscription_count: 3 },
+        { plan_name: "Basic", billing_cycle: "YEARLY", subscription_status: "IN_DEBT", subscription_count: 1 },
+      ],
+      kpi_admin_models_by_status: [
+        { model_status: "APPROVED", model_count: 20 },
+        { model_status: "UNDER_ANALYSIS", model_count: 4 },
+      ],
+      kpi_admin_proposals_by_status: [
+        { proposal_status: "ACCEPTED", proposal_count: 12 },
+        { proposal_status: "PENDING", proposal_count: 6 },
+      ],
+    },
+  };
+}
