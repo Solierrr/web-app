@@ -97,8 +97,21 @@ export default function MessageComposer({
   useLayoutEffect(() => {
     const input = form.current?.querySelector("textarea");
     if (!input) return;
-    input.style.height = "auto";
-    input.style.height = `${Math.min(input.scrollHeight, 160)}px`;
+    let width = 0;
+    function fit() {
+      if (!input) return;
+      input.style.height = "auto";
+      input.style.height = `${Math.min(input.scrollHeight, 160)}px`;
+    }
+    fit();
+    if (typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(() => {
+      if (!input || input.clientWidth === width) return;
+      width = input.clientWidth;
+      fit();
+    });
+    observer.observe(input);
+    return () => observer.disconnect();
   }, [value]);
   useEffect(() => {
     if (!compact || !active) return;
