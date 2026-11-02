@@ -73,8 +73,8 @@ export default function Chart({ payload, kind, title, stacked, pattern, locale, 
                     {t("category")}
                   </th>
                   {"series" in payload ? (
-                    payload.series.map((series, index) => (
-                      <th scope="col" className="px-3 py-2 font-semi-bold" key={index}>
+                    payload.series.map((series) => (
+                      <th scope="col" className="px-3 py-2 font-semi-bold" key={series.name}>
                         {series.name}
                       </th>
                     ))
@@ -88,12 +88,12 @@ export default function Chart({ payload, kind, title, stacked, pattern, locale, 
               <tbody>
                 {"series" in payload
                   ? payload.labels.map((label, index) => (
-                      <tr key={index}>
+                      <tr key={label}>
                         <th scope="row" className="py-2 font-medium">
                           {label}
                         </th>
-                        {payload.series.map((series, seriesIndex) => (
-                          <td className="px-3 py-2" key={seriesIndex}>
+                        {payload.series.map((series) => (
+                          <td className="px-3 py-2" key={series.name}>
                             {series.values[index] !== null && Number.isFinite(series.values[index])
                               ? formatDashboardValue(series.values[index] as number, format)
                               : ""}
@@ -101,8 +101,8 @@ export default function Chart({ payload, kind, title, stacked, pattern, locale, 
                         ))}
                       </tr>
                     ))
-                  : payload.items.map((item, index) => (
-                      <tr key={index}>
+                  : payload.items.map((item) => (
+                      <tr key={item.label}>
                         <th scope="row" className="py-2 font-medium">
                           {item.label}
                         </th>

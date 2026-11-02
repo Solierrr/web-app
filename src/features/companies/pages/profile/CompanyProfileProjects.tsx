@@ -7,6 +7,7 @@ import ProjectCard from "@/features/projects/components/ProjectCard";
 import { useProjectResource, useProjects } from "@/features/projects/projects.hooks";
 import { projectApi } from "@/features/projects/projects.service";
 import type { Project } from "@/features/projects/projects.d";
+import { skeletonKeys } from "@/lib/utils/skeleton.utils";
 
 const PLACEHOLDERS = 3;
 
@@ -17,8 +18,8 @@ function ProjectShelf({ projects }: { projects: Project[] | null }) {
   return (
     <OfferShelf title={t("projects")}>
       {!sorted ? (
-        Array.from({ length: PLACEHOLDERS }, (_, i) => (
-          <div key={i} className="flex w-72 shrink-0 flex-col gap-4 sm:w-88" aria-hidden="true">
+        skeletonKeys(PLACEHOLDERS).map((key) => (
+          <div key={key} className="flex w-72 shrink-0 flex-col gap-4 sm:w-88" aria-hidden="true">
             <div className="aspect-[6/5] overflow-hidden rounded-surface">
               <Skeleton />
             </div>
