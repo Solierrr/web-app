@@ -5,6 +5,7 @@ export const ANALYTICS_PERMISSIONS = [
   "GET /api/models",
   "GET /api/local-units/company/{companyId}",
   "GET /api/user-companies/company/{companyId}",
+  "GET /api/analytics/companies/{companyId}",
 ];
 
 function escapeCell(value: string): string {

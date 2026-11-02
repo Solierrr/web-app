@@ -1,37 +1,24 @@
 import ToolbarAction from "@@/ui/button/ToolbarAction";
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
-import { useEffect, useState } from "react";
+import Select from "@@/ui/select/Select";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import type { Company } from "@/features/companies/company";
+import { listAllCompanies } from "@/features/companies/company.service";
 import { useActiveContext } from "@/lib/shared/context/ActiveContext";
-import type { AnalyticsScope, KpiResult } from "../analytics";
-import { getCompanyKpis, getPlatformKpis } from "../analytics.service";
-import { ANALYTICS_PERMISSIONS, kpisToCsv } from "../analytics.utils";
-import Dashboard from "@@/dashboard/Dashboard";
-import { MetricCard } from "@@/dashboard/dashboard.presets";
+import type { AnalyticsDashboard } from "../analytics";
+import { buildView, metricsWithValue } from "../analytics.dashboard";
+import { getCompanyDashboard, getPlatformDashboard } from "../analytics.service";
+import { kpisToCsv } from "../analytics.utils";
+import AnalyticsDashboards from "./AnalyticsDashboards";
 
-interface ContentProps {
-  scope: AnalyticsScope | null;
-  company: Company | null;
-  can: (permission: string) => boolean;
-}
+type Mode = "platform" | "company";
 
 export default function AnalyticsPage() {
-  const { loading, kind, company, isPlatformAdmin, can = () => false } = useActiveContext();
-  const scope: AnalyticsScope | null =
-    kind === "company" && company
-      ? company.type === "SUPPLIER"
-        ? "supplier"
-        : company.type === "DEMANDANT"
-          ? "demandant"
-          : null
-      : isPlatformAdmin
-        ? "platform"
-        : null;
-  const key = `${scope}:${company?.id}:${ANALYTICS_PERMISSIONS.filter(can).join("|")}`;
-
-  return loading ? <OperationalLoading /> : <AnalyticsContent key={key} scope={scope} company={company} can={can} />;
+  const { loading, kind, company, isPlatformAdmin } = useActiveContext();
+  const mode: Mode | null = kind === "company" && company ? "company" : isPlatformAdmin ? "platform" : null;
+  return loading ? <OperationalLoading /> : <AnalyticsContent key={`${mode}:${company?.id}`} mode={mode} company={company} />;
 }
 
 function OperationalLoading() {
@@ -39,18 +26,46 @@ function OperationalLoading() {
   return <OperationalPage title={t("title")} loading />;
 }
 
-function AnalyticsContent({ scope, company, can }: ContentProps) {
+function scopeKey(dashboard: AnalyticsDashboard | null, mode: Mode | null, company: Company | null): string | null {
+  if (dashboard?.scope === "SUPPLIER") return "supplier";
+  if (dashboard?.scope === "REQUESTER") return "demandant";
+  if (dashboard?.scope === "PLATFORM") return "platform";
+  if (mode === "company") return company?.type === "SUPPLIER" ? "supplier" : "demandant";
+  return mode;
+}
+
+function AnalyticsContent({ mode, company }: { mode: Mode | null; company: Company | null }) {
   const { t, i18n } = useTranslation("commons", { keyPrefix: "analytics" });
-  const [result, setResult] = useState<KpiResult | null>(null);
+  const [dashboard, setDashboard] = useState<AnalyticsDashboard | null>(null);
   const [error, setError] = useState(false);
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [selected, setSelected] = useState<Company | null>(null);
+  const locale = i18n.resolvedLanguage;
 
   useEffect(() => {
-    if (!scope) return;
+    if (mode !== "platform") return;
     let active = true;
-    const request = scope === "platform" || !company ? getPlatformKpis() : getCompanyKpis(company, can);
+    listAllCompanies()
+      .then((items) => {
+        if (active) setCompanies(items.filter((item) => item.type === "SUPPLIER" || item.type === "DEMANDANT"));
+      })
+      .catch(() => undefined);
+    return () => {
+      active = false;
+    };
+  }, [mode]);
+
+  useEffect(() => {
+    if (!mode) return;
+    let active = true;
+    const target = mode === "company" ? company : selected;
+    const request = target ? getCompanyDashboard(target.id, target.type) : getPlatformDashboard();
     request
       .then((value) => {
-        if (active) setResult(value);
+        if (active) {
+          setDashboard(value);
+          setError(false);
+        }
       })
       .catch(() => {
         if (active) setError(true);
@@ -58,11 +73,15 @@ function AnalyticsContent({ scope, company, can }: ContentProps) {
     return () => {
       active = false;
     };
-  }, []);
+  }, [mode, company, selected]);
+
+  const view = useMemo(() => (dashboard ? buildView(dashboard) : null), [dashboard]);
+  const scope = scopeKey(dashboard, mode, company);
+  const loadedAt = dashboard?.loadedAt ? new Date(dashboard.loadedAt) : null;
+  const metrics = view ? metricsWithValue(view.metrics) : [];
 
   function exportCsv() {
-    if (!result) return;
-    const rows = result.kpis.map((kpi) => ({ label: t(`kpi.${kpi.key}`), value: kpi.value }));
+    const rows = metrics.map((metric) => ({ label: t(`metric.${metric.id}`), value: metric.value ?? 0 }));
     const url = URL.createObjectURL(new Blob([kpisToCsv(rows, [t("csv.indicator"), t("csv.value")])], { type: "text/csv;charset=utf-8" }));
     const link = document.createElement("a");
     link.href = url;
@@ -73,17 +92,15 @@ function AnalyticsContent({ scope, company, can }: ContentProps) {
     setTimeout(() => URL.revokeObjectURL(url), 0);
   }
 
-  const allFailed = Boolean(result?.failed) && !result?.kpis.length;
-
   return (
     <OperationalPage
       centered
       sideBackground
       title={t("title")}
       description={scope ? t(`scope.${scope}`) : undefined}
-      loading={scope !== null && !result && !error}
+      loading={mode !== null && !dashboard && !error}
       actions={
-        result?.kpis.length ? (
+        metrics.length ? (
           <ToolbarAction
             icon="document"
             label={t("exportCsv")}
@@ -93,23 +110,31 @@ function AnalyticsContent({ scope, company, can }: ContentProps) {
           />
         ) : undefined
       }>
-      {scope === null ? <p>{t("personal")}</p> : null}
-      {error || allFailed ? <p role="alert">{t("loadError")}</p> : null}
-      {result && !allFailed ? (
+      {mode === null ? <p>{t("personal")}</p> : null}
+      {mode === "platform" ? (
+        <Select
+          name={t("company")}
+          value={selected?.id}
+          onChange={(value) => {
+            setDashboard(null);
+            setSelected(companies.find((item) => item.id === value) ?? null);
+          }}
+          clearable
+          placeholder={t("platformOption")}
+          options={companies.map((item) => [item.tradeName ?? item.id, item.id] as [string, string])}
+          className="w-full max-w-md"
+        />
+      ) : null}
+      {error ? <p role="alert">{t("loadError")}</p> : null}
+      {view && !error ? (
         <>
-          {result.failed ? <p role="alert">{t("partial")}</p> : null}
-          {result.kpis.length ? (
-            <Dashboard className="mx-auto w-full lg:w-[85%]">
-              {result.kpis.map((kpi) => (
-                <MetricCard
-                  key={kpi.key}
-                  title={t(`kpi.${kpi.key}`)}
-                  locale={i18n.resolvedLanguage}
-                  payload={{ value: kpi.value }}
-                  className="md:col-span-3 xl:col-span-4"
-                />
-              ))}
-            </Dashboard>
+          {loadedAt ? (
+            <p className="text-operational-muted">
+              {t("loadedAt", { date: new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "short" }).format(loadedAt) })}
+            </p>
+          ) : null}
+          {metrics.length || view.distributions.some((item) => item.items.length) ? (
+            <AnalyticsDashboards view={view} locale={locale} />
           ) : (
             <p>{t("empty")}</p>
           )}

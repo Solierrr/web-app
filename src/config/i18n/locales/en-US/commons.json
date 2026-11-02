@@ -484,26 +484,63 @@
     "partial": "Some indicators could not be loaded.",
     "empty": "No data for this scope.",
     "scope": {
-      "platform": "Whole platform view",
-      "supplier": "Supplier company view",
-      "demandant": "Demandant company view"
-    },
-    "kpi": {
-      "approvedCompanies": "Approved companies",
-      "pendingCompanies": "Companies under review",
-      "approvedModels": "Approved models",
-      "pendingModels": "Models under review",
-      "pendingProfessionals": "Professionals under review",
-      "activeOffers": "Active offers",
-      "pausedOffers": "Paused offers",
-      "closedOffers": "Closed offers",
-      "models": "Registered models",
-      "employees": "Employees",
-      "units": "Units"
+      "platform": "Whole platform overview",
+      "supplier": "Supplier company overview",
+      "demandant": "Requester company overview"
     },
     "csv": {
       "indicator": "indicator",
       "value": "value"
+    },
+    "loadedAt": "Data loaded on {{date}}",
+    "company": "Company",
+    "platformOption": "Platform overview",
+    "metric": {
+      "registeredOffers": "Registered offers",
+      "activeOffers": "Active offers",
+      "expiredOffers": "Expired offers",
+      "expiringOffers": "Expiring in 30 days",
+      "stockUnits": "Units in stock",
+      "modelsInStock": "Models in stock",
+      "openProposals": "Open proposals",
+      "acceptedProposals": "Accepted proposals",
+      "acceptanceRate": "Acceptance rate",
+      "acceptedValue": "Accepted value",
+      "activeSuppliers": "Active suppliers",
+      "registeredRequesters": "Registered requesters",
+      "localUnits": "Registered units",
+      "proposals": "Proposals",
+      "projects": "Projects"
+    },
+    "chart": {
+      "offersByStatus": "Offers by status",
+      "proposalsByStatus": "Proposals by status",
+      "projectsByStatus": "Projects by status",
+      "modelsByStatus": "Models by status",
+      "acceptedValueByMonth": "Accepted value by month",
+      "acceptedValueByModel": "Accepted value by model",
+      "stockByModel": "Stock by model"
+    },
+    "chartDescription": {
+      "acceptedValueByMonth": "The month is based on when the proposal was created."
+    },
+    "status": {
+      "ACTIVE": "Active",
+      "PAUSED": "Paused",
+      "CLOSED": "Closed",
+      "EXPIRED": "Expired",
+      "PENDING": "Pending",
+      "ACCEPTED": "Accepted",
+      "REJECTED": "Rejected",
+      "CANCELED": "Canceled",
+      "CANCELLED": "Canceled",
+      "APPROVED": "Approved",
+      "UNDER_ANALYSIS": "Under review",
+      "UNDERANALYSIS": "Under review",
+      "IN_PROGRESS": "In progress",
+      "COMPLETED": "Completed",
+      "DRAFT": "Draft",
+      "DONE": "Completed"
     }
   },
   "pagination": {
