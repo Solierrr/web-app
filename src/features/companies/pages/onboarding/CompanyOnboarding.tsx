@@ -26,6 +26,7 @@ import {
   saveRegistrationDraft,
   selectContext,
 } from "@/features/access/access.onboarding.service";
+import { lookupPostalCode } from "@/features/companies/company.postal.service";
 
 type CompanyType = "SUPPLIER" | "DEMANDANT";
 
@@ -81,16 +82,14 @@ export default function CompanyOnboarding() {
     lookup.current = controller;
     setPostalStatus("loading");
     try {
-      const response = await fetch(`https://viacep.com.br/ws/${zipCode}/json/`, { signal: controller.signal });
-      if (!response.ok) throw new Error("Postal lookup failed");
-      const data = await response.json();
+      const result = await lookupPostalCode(zipCode, controller.signal);
       if (controller.signal.aborted) return;
-      if (data.erro) {
+      if (!result.found) {
         setPostalStatus("notFound");
         return;
       }
       const next = { ...addressRef.current };
-      const fields = { state: data.uf, city: data.localidade, neighborhood: data.bairro, street: data.logradouro };
+      const fields = result.address;
       for (const key of Object.keys(fields) as (keyof typeof fields)[]) {
         if (typeof fields[key] === "string" && fields[key] && next[key] === initial[key]) next[key] = fields[key];
       }
