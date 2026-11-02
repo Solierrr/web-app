@@ -15,10 +15,8 @@ import { notify } from "@@/feedback/toast/Toast.utils";
 import { putCartItem } from "@/features/purchases/purchases.service";
 
 import { useTranslation } from "react-i18next";
-import WrapperLayout from "@/config/WrapperLayout";
 import { regionsService } from "./SolarPanelAnnouncement.utils";
-import { Wrapper, ProductImages, Characteristics } from "./SolarPanelAnnouncement.reusable";
-import { skeletonKeys } from "@/lib/utils/skeleton.utils";
+import { Wrapper, ProductImages, Characteristics, ExpandableText } from "./SolarPanelAnnouncement.reusable";
 
 interface SolarPanelAnnouncementProps {
   product: SolarPanelAnnouncement;
@@ -50,157 +48,88 @@ export function SolarPanelAnnouncementPacked({ product }: SolarPanelAnnouncement
     }
   }
 
+  const images = [product.photos.heroImage, ...product.photos.otherImages].filter((image) => image.url);
+  const discounted = product.discountPercentage != null && product.discountPercentage > 0;
   return (
-    <div>
-      <WrapperLayout ptop>
-        <div className="flex flex-col">
-          <div className="flex flex-col lg:flex-row relative gap-8 lg:gap-12">
-            <div className="w-full lg:w-[40%] flex justify-center">
-              {product.photos.heroImage.url ? (
-                <img
-                  className="w-[80%] h-fit sticky top-10 pb-10 object-cover"
-                  src={product.photos.heroImage.url}
-                  alt={product.photos.heroImage.description}
-                />
-              ) : (
-                <ImageSkeleton className="w-[80%]! h-80!" />
-              )}
-            </div>
-
-            <section className="w-full min-w-0 lg:w-[60%] flex flex-col gap-announcement">
-              <section title={t("general.information")}>
-                <div className="flex flex-col gap-6">
-                  <div className="flex flex-col gap-2">
-                    <h1>{product.title}</h1>
-                    <Link to={routePaths.companyProfile(lang, product.companySlug)} className="flex w-fit flex-row items-center gap-2">
-                      {product.company.logoUrl && (
-                        <img src={product.company.logoUrl} alt={product.company.tradeName} className="size-6 rounded-full object-cover" />
-                      )}
-                      <span className="text-hyperlink">{t("general.announcedBy", { company: product.company.tradeName })}</span>
-                    </Link>
-                    {product.serviceRegions.length > 0 && (
-                      <h3 className="text-black/90">
-                        {regionsService(product.serviceRegions, {
-                          and: c("and"),
-                          message: t("general.service"),
-                        })}
-                      </h3>
-                    )}
-                  </div>
-                  <div className="flex flex-col gap-8">
-                    <div className="flex flex-row gap-6 items-baseline justify-between">
-                      <div className="flex flex-row gap-4 items-baseline">
-                        {product.discountPercentage != null && product.discountPercentage > 0 && (
-                          <span className="flex flex-row items-baseline gap-1">
-                            <h2>{product.discountPercentage}</h2>
-                            <span className="font-bold">%</span>
-                          </span>
-                        )}
-                        <div className="flex flex-row gap-1 h-min items-baseline">
-                          <h5 className="font-semi-bold no-leading">R$</h5>
-                          <h3 className="no-leading leading-none text-nowrap">
-                            {product.unitPrice} {t("general.perUnit")}
-                          </h3>
-                        </div>
-                      </div>
-                      <h3 className="text-nowrap">
-                        {product.availableUnits} {t("general.units")}
-                      </h3>
-                    </div>
-                    <div className="flex flex-row gap-2">
-                      <Link
-                        to={routePaths.contactCompany(lang, product.company.id, product.title)}
-                        className="rounded-full bg-orange px-8 py-2 text-white">
-                        {t("actions.contactSupplier")}
-                      </Link>
-                      <SoftIconButton
-                        description={t("actions.addToCart")}
-                        disabled={adding || product.availableUnits < 1}
-                        icon="shoppingCart"
-                        onClick={() => void addToCart()}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </section>
-              <Wrapper title={t("sections.description")} aria-labelledby={t("sections.description")}>
-                <p className="flex max-h-60 text-black/90 overflow-auto">{product.description}</p>
-              </Wrapper>
-              <Wrapper title={t("sections.characteristics")} aria-labelledby={t("sections.characteristics")} className="gap-4">
-                <Characteristics panel={product.panel} />
-              </Wrapper>
-              <Wrapper title={t("sections.details")} aria-labelledby={t("sections.details")}>
-                <p className="flex max-h-60 text-black/90 overflow-auto">{product.details}</p>
-              </Wrapper>
-            </section>
+    <main className="mx-auto grid w-full max-w-marketplace-page min-w-0 grid-cols-1 gap-10 px-5 pb-20 pt-10 sm:px-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16 lg:px-18">
+      <div className="min-w-0 lg:sticky lg:top-10 lg:self-start">
+        {images.length ? <ProductImages images={images} label={t("sections.productImages")} /> : <ImageSkeleton className="aspect-square! w-full! rounded-surface!" />}
+      </div>
+      <div className="flex min-w-0 flex-col gap-10">
+        <section title={t("general.information")} className="flex flex-col gap-8">
+          <div className="flex flex-col gap-3">
+            <h1 className="text-title font-bold leading-tight tracking-tight">{product.title}</h1>
+            <Link to={routePaths.companyProfile(lang, product.companySlug)} className="flex w-fit items-center gap-2">
+              {product.company.logoUrl && <img src={product.company.logoUrl} alt={product.company.tradeName} className="size-6 rounded-full object-cover" />}
+              <span className="font-medium text-operational-ink underline-offset-4 hover:underline">{t("general.announcedBy", { company: product.company.tradeName })}</span>
+            </Link>
+            {product.serviceRegions.length > 0 && (
+              <p className="text-body text-operational-muted">
+                {regionsService(product.serviceRegions, {
+                  and: c("and"),
+                  message: t("general.service"),
+                })}
+              </p>
+            )}
           </div>
-        </div>
-      </WrapperLayout>
-      <Wrapper title={t("sections.productImages")} aria-labelledby={t("sections.productImages")} className="flex">
-        <ProductImages images={product.photos.otherImages} />
-      </Wrapper>
-    </div>
+          <div className="flex flex-col gap-2">
+            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              <span className="text-title font-bold leading-none tracking-tight">{new Intl.NumberFormat(lang, { style: "currency", currency: "BRL" }).format(product.unitPrice)}</span>
+              <span className="text-body text-operational-muted">{t("general.perUnit")}</span>
+              {discounted && <span className="rounded-full bg-orange/10 px-3 py-1 text-body font-medium text-orange">-{product.discountPercentage}%</span>}
+            </div>
+            <p className="text-body text-operational-muted">
+              {product.availableUnits} {t("general.units")}
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <Link
+              to={routePaths.contactCompany(lang, product.company.id, product.title)}
+              className="rounded-full bg-orange px-8 py-3 font-medium text-white transition-colors hover:opacity-90">
+              {t("actions.contactSupplier")}
+            </Link>
+            <SoftIconButton
+              description={t("actions.addToCart")}
+              disabled={adding || product.availableUnits < 1}
+              icon="shoppingCart"
+              onClick={() => void addToCart()}
+            />
+          </div>
+        </section>
+        {product.description && (
+          <Wrapper title={t("sections.description")}>
+            <ExpandableText text={product.description} />
+          </Wrapper>
+        )}
+        <Wrapper title={t("sections.characteristics")}>
+          <Characteristics panel={product.panel} />
+        </Wrapper>
+        {product.details?.length ? (
+          <Wrapper title={t("sections.details")}>
+            <ExpandableText text={product.details.join("\n\n")} />
+          </Wrapper>
+        ) : null}
+      </div>
+    </main>
   );
 }
 
 function SolarPanelAnnouncementSkeleton() {
   return (
-    <div>
-      <WrapperLayout ptop>
-        <div className="flex flex-col" aria-busy="true">
-          <div className="flex flex-col lg:flex-row relative gap-8 lg:gap-12">
-            <div className="w-full lg:w-[40%] flex justify-center">
-              <ImageSkeleton className="w-[80%]! max-h-[80vh]! sticky top-10 pb-10" />
-            </div>
-            <section className="w-full min-w-0 lg:w-[60%] flex flex-col gap-announcement">
-              <div className="flex flex-col gap-6">
-                <div className="flex flex-col gap-2">
-                  <Skeleton height="6.25rem" width="100%" />
-                  <Skeleton height="1.5rem" width="65%" />
-                </div>
-                <div className="flex flex-col gap-8">
-                  <div className="flex justify-between items-baseline">
-                    <Skeleton height="1.5rem" width="100%" />
-                  </div>
-                  <div className="flex gap-2">
-                    <Skeleton height="2.5rem" width="12rem" className="rounded-full" />
-                    <Skeleton height="2.5rem" width="2.5rem" className="rounded-full" />
-                    <Skeleton height="2.5rem" width="2.5rem" className="rounded-full" />
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-col gap-2">
-                <Skeleton height="1.65rem" width="10rem" />
-                <Skeleton height="1.5rem" />
-                <Skeleton height="1.5rem" width="85%" />
-                <Skeleton height="1.5rem" width="70%" />
-                <Skeleton height="1.5rem" width="85%" />
-                <Skeleton height="1.5rem" width="70%" />
-              </div>
-              <div className="flex flex-col gap-4">
-                <Skeleton height="1.65rem" width="12rem" />
-                {skeletonKeys(4).map((key) => (
-                  <Skeleton key={key} height="3.5rem" className="rounded-soft" />
-                ))}
-              </div>
-              <div className="flex flex-col gap-2">
-                <Skeleton height="1.65rem" width="8rem" />
-                <Skeleton height="1.5rem" />
-                <Skeleton height="1.5rem" width="78%" />
-              </div>
-            </section>
-          </div>
-        </div>
-      </WrapperLayout>
-      <div className="flex flex-col gap-2">
-        <Skeleton height="1.65rem" width="11rem" />
-        <div className="flex gap-8 overflow-hidden">
-          {skeletonKeys(3).map((key) => (
-            <ImageSkeleton key={key} width="10rem" className="shrink-0" />
-          ))}
-        </div>
+    <main
+      aria-busy="true"
+      className="mx-auto grid w-full max-w-marketplace-page min-w-0 grid-cols-1 gap-10 px-5 pb-20 pt-10 sm:px-10 lg:grid-cols-2 lg:gap-16 lg:px-18">
+      <ImageSkeleton className="aspect-square! w-full! rounded-surface!" />
+      <div className="flex flex-col gap-8">
+        <Skeleton height="2.5rem" width="80%" />
+        <Skeleton height="1.25rem" width="45%" />
+        <Skeleton height="2.5rem" width="50%" />
+        <Skeleton height="3rem" width="14rem" className="rounded-full" />
+        <Skeleton height="1.5rem" />
+        <Skeleton height="1.5rem" width="85%" />
+        <Skeleton height="12rem" />
       </div>
-    </div>
+    </main>
   );
 }
 

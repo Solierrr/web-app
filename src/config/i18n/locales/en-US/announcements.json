@@ -11,7 +11,9 @@
       "contactSupplier": "Contact",
       "contactSupplierDescription": "Contact the supplier",
       "addToCart": "Add to cart",
-      "addToCartError": "Could not add to the cart."
+      "addToCartError": "Could not add to the cart.",
+      "showMore": "Show more",
+      "showLess": "Show less"
     },
     "sections": {
       "description": "Description",
