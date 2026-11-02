@@ -53,7 +53,8 @@
     "sendConversationMessage": "Unable to send the message",
     "editMessage": "Unable to edit the message",
     "deleteMessage": "Unable to delete the message",
-    "sessionUnavailable": "Session unavailable"
+    "sessionUnavailable": "Session unavailable",
+    "updateConversationState": "Unable to update the conversation"
   },
   "user": {
     "getUserSummary": "Unable to load the participant",

@@ -5,6 +5,8 @@ import {
   deleteMessage,
   editMessage,
   getConversation,
+  getConversations,
+  updateConversationState,
   markConversationRead,
   sendConversationMessage,
 } from "./messages.messenger.api";
@@ -98,5 +100,16 @@ describe("simulated realtime events", () => {
     await vi.advanceTimersByTimeAsync(31 * 60_000);
     await expect(editMessage(sent.id, "tarde")).rejects.toMatchObject({ cause: { status: 422 } });
     await expect(deleteMessage(sent.id)).rejects.toMatchObject({ cause: { status: 422 } });
+  });
+
+  it("archives and mutes a conversation for the user and announces the new state", async () => {
+    const conversation = await createDirectConversation(PEER_ID);
+    const updates: UserEvent[] = [];
+    subscribeToUserEvents((event) => updates.push(event));
+    expect(await updateConversationState(conversation.id, { muted: true })).toMatchObject({ muted: true, archived: false, effectiveMuted: true });
+    expect(await updateConversationState(conversation.id, { archived: true })).toMatchObject({ muted: true, archived: true });
+    expect(updates.at(-1)).toMatchObject({ kind: "conversationUpdated", conversation: { id: conversation.id, archived: true } });
+    expect((await getConversations()).some((item) => item.id === conversation.id)).toBe(false);
+    expect((await getConversations(true)).map((item) => item.id)).toContain(conversation.id);
   });
 });

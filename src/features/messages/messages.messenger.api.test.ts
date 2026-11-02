@@ -7,6 +7,7 @@ import {
   getConversationMessagesSince,
   markConversationRead,
   sendConversationMessage,
+  updateConversationState,
   type MessageDto,
 } from "./messages.messenger.api";
 
@@ -130,5 +131,19 @@ describe("Messenger API contract", () => {
   it("rejects with the 422 status when the edit window is over", async () => {
     respond({ errorCode: "BUSINESS_RULE_VIOLATION" }, 422);
     await expect(editMessage("msg-3", "tarde")).rejects.toMatchObject({ cause: { status: 422 } });
+  });
+  it("lists the archived conversations with the archived flag", async () => {
+    respond([]);
+    await getConversations(true);
+    expect(fetchMock.mock.calls[0][0]).toContain("/messaging/conversations/me?archived=true");
+  });
+  it("changes the personal state with a partial PATCH", async () => {
+    respond({ conversationId: "conv-1", muted: true, archived: false, effectiveMuted: true });
+    const state = await updateConversationState("conv-1", { muted: true });
+    expect(fetchMock).toHaveBeenCalledWith(
+      expect.stringContaining("/messaging/conversations/conv-1/state"),
+      expect.objectContaining({ method: "PATCH", body: JSON.stringify({ muted: true }) }),
+    );
+    expect(state.effectiveMuted).toBe(true);
   });
 });

@@ -9,6 +9,7 @@ import {
   sendMockMessage,
   markMockConversationRead,
   mutateMockMessage,
+  updateMockConversationState,
   getMockConnections,
   addMockConnection,
 } from "./messages.messenger.d.mocks";
@@ -28,6 +29,23 @@ export interface ConversationDto {
   syncEpoch?: string;
   syncVersion?: number;
   communityId?: string | null;
+  communityStatus?: "ACTIVE" | "ARCHIVED" | null;
+  managerUserId?: string | null;
+  /** Estado pessoal: vale só para quem pediu e vem no item da lista. */
+  muted?: boolean;
+  archived?: boolean;
+  effectiveMuted?: boolean;
+}
+
+export interface ConversationStateDto {
+  conversationId: string;
+  syncEpoch: string;
+  syncVersion: number;
+  lastReadSequence: number;
+  unreadCount: number;
+  muted: boolean;
+  archived: boolean;
+  effectiveMuted: boolean;
 }
 
 export interface MessageDto {
@@ -48,12 +66,12 @@ export interface MessageDto {
 
 export const MESSAGE_PAGE_SIZE = 100;
 
-export async function getConversations(): Promise<ConversationDto[]> {
+export async function getConversations(archived = false): Promise<ConversationDto[]> {
   if (isAlwaysMockMode("MESSENGER")) {
     await waitForMockService();
-    return getMockMessenger().conversations;
+    return getMockMessenger().conversations.filter((item) => !!item.archived === archived);
   }
-  return httpJson<ConversationDto[]>(`${API}/conversations/me`, {
+  return httpJson<ConversationDto[]>(`${API}/conversations/me${archived ? "?archived=true" : ""}`, {
     service: "messenger",
     operation: "getConversations",
     errorMessage: i18n.t("services:messenger.getConversations"),
@@ -152,6 +170,21 @@ export async function sendConversationMessage(
       content,
     },
     errorMessage: i18n.t("services:messenger.sendConversationMessage"),
+  });
+}
+
+/** Silencia ou arquiva a conversa só para o próprio usuário (`PATCH /state`, campo ausente = inalterado). */
+export async function updateConversationState(id: string, patch: { muted?: boolean; archived?: boolean }): Promise<ConversationStateDto> {
+  if (isAlwaysMockMode("MESSENGER")) {
+    await waitForMockService();
+    return updateMockConversationState(id, patch);
+  }
+  return httpJson<ConversationStateDto>(`${API}/conversations/${encodeURIComponent(id)}/state`, {
+    service: "messenger",
+    operation: "updateConversationState",
+    method: "PATCH",
+    body: patch,
+    errorMessage: i18n.t("services:messenger.updateConversationState"),
   });
 }
 

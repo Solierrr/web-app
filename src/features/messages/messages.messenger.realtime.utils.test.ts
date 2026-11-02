@@ -129,7 +129,14 @@ describe("payload parsing", () => {
       syncEpoch: "e1",
       syncVersion: 12,
       communityId: "c1",
+      communityStatus: null,
+      managerUserId: null,
     });
+  });
+  it("keeps the manager and the personal state of the list item", () => {
+    expect(
+      toConversationDto({ id: "c", managerUserId: "m1", muted: true, archived: false, effectiveMuted: true, communityStatus: "ARCHIVED" }),
+    ).toMatchObject({ managerUserId: "m1", muted: true, archived: false, effectiveMuted: true, communityStatus: "ARCHIVED" });
   });
   it("rejects payloads without the required fields", () => {
     expect(toConversationDto({ title: "x" })).toBeNull();

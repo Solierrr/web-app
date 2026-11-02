@@ -218,5 +218,13 @@
   "cancelEdit": "Cancelar edição",
   "edited": "editada",
   "mutationExpired": "O prazo de 30 minutos para alterar esta mensagem acabou.",
-  "mutationError": "Não foi possível alterar a mensagem. Confira se ela foi alterada e tente de novo."
+  "mutationError": "Não foi possível alterar a mensagem. Confira se ela foi alterada e tente de novo.",
+  "muteConversation": "Silenciar",
+  "unmuteConversation": "Reativar som",
+  "archiveConversation": "Arquivar",
+  "unarchiveConversation": "Desarquivar",
+  "archivedConversations": "Arquivadas",
+  "backToConversations": "Voltar às conversas",
+  "muted": "Silenciada",
+  "stateError": "Não foi possível atualizar a conversa. Tente novamente."
 }

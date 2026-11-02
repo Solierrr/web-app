@@ -218,5 +218,13 @@
   "cancelEdit": "Cancel edit",
   "edited": "edited",
   "mutationExpired": "The 30 minute window to change this message is over.",
-  "mutationError": "Unable to change the message. Check whether it changed and try again."
+  "mutationError": "Unable to change the message. Check whether it changed and try again.",
+  "muteConversation": "Mute",
+  "unmuteConversation": "Unmute",
+  "archiveConversation": "Archive",
+  "unarchiveConversation": "Unarchive",
+  "archivedConversations": "Archived",
+  "backToConversations": "Back to conversations",
+  "muted": "Muted",
+  "stateError": "Unable to update the conversation. Try again."
 }

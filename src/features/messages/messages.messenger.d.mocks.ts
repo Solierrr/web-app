@@ -1,7 +1,7 @@
 import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import { HttpResponseError } from "@/lib/shared/http/http.service";
 import { MESSAGE_MUTATION_WINDOW_MS } from "./messages.messenger.realtime.utils";
-import type { ConversationDto, MessageDto } from "./messages.messenger.api";
+import type { ConversationDto, ConversationStateDto, MessageDto } from "./messages.messenger.api";
 import { publishMockConversation, publishMockMessage, simulateMockReplies, type MockReply } from "./messages.messenger.realtime.d.mocks";
 
 interface MockMessenger {
@@ -171,6 +171,29 @@ export function mutateMockMessage(id: string, change: "edited" | "deleted", cont
   window.dispatchEvent(new Event("solaria:messenger"));
   publishMockMessage(message, change);
   return message;
+}
+
+/** Silencia/arquiva só para o usuário; a conversa com o assistente não aceita (422, como no servidor). */
+export function updateMockConversationState(id: string, patch: { muted?: boolean; archived?: boolean }): ConversationStateDto {
+  const state = getMockMessenger();
+  const current = getMockConversation(id);
+  if (current.conversationType === "CHAT_BOT") throw mockHttpError(422, "BUSINESS_RULE_VIOLATION");
+  const muted = patch.muted ?? current.muted ?? false;
+  const archived = patch.archived ?? current.archived ?? false;
+  const next: ConversationDto = { ...current, muted, archived, effectiveMuted: muted || archived };
+  localStorage.setItem(key(), JSON.stringify({ ...state, conversations: [...state.conversations.filter((item) => item.id !== id), next] }));
+  window.dispatchEvent(new Event("solaria:messenger"));
+  publishMockConversation(next);
+  return {
+    conversationId: id,
+    syncEpoch: "mock",
+    syncVersion: 0,
+    lastReadSequence: next.lastReadSequence ?? 0,
+    unreadCount: next.unreadCount ?? 0,
+    muted,
+    archived,
+    effectiveMuted: muted || archived,
+  };
 }
 
 export function createMockChatbotConversation(): ConversationDto {

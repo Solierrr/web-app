@@ -59,6 +59,11 @@ export function toConversationDto(value: unknown): ConversationDto | null {
     syncEpoch: typeof value.syncEpoch === "string" ? value.syncEpoch : undefined,
     syncVersion: typeof value.syncVersion === "number" ? value.syncVersion : undefined,
     communityId: typeof value.communityId === "string" ? value.communityId : null,
+    communityStatus: value.communityStatus === "ACTIVE" || value.communityStatus === "ARCHIVED" ? value.communityStatus : null,
+    managerUserId: typeof value.managerUserId === "string" ? value.managerUserId : null,
+    muted: typeof value.muted === "boolean" ? value.muted : undefined,
+    archived: typeof value.archived === "boolean" ? value.archived : undefined,
+    effectiveMuted: typeof value.effectiveMuted === "boolean" ? value.effectiveMuted : undefined,
   };
 }
 

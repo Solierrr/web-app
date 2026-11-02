@@ -9,6 +9,7 @@ import {
   getUserSummary,
   createDirectConversation,
   getMessengerContacts,
+  updateConversationState,
   type ConversationDto,
   type MessengerContact,
 } from "@/features/messages/messages.messenger.api";
@@ -27,6 +28,7 @@ import ConversationFilter from "./ConversationFilter";
 import GroupAction from "@@/ui/button/GroupAction";
 import SurfaceGroup from "@@/ui/surface/SurfaceGroup";
 import Confirmation from "@@/overlay/confirmation/Confirmation";
+import type { ContextMenuItem } from "@@/overlay/contextMenu/ContextMenu";
 import { getHiddenConversations, hideConversation } from "@/features/messages/conversations.utils";
 import { startAssistantConversation } from "@/features/messages/messages.assistant.service";
 import { AgentChatError } from "@/features/error/agent-chat/AgentChat.error";
@@ -49,6 +51,9 @@ export default function Inbox() {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<"ALL" | ConversationDto["conversationType"]>("ALL");
   const [hidden, setHidden] = useState(getHiddenConversations);
+  const [archivedView, setArchivedView] = useState(false);
+  const [stateError, setStateError] = useState(false);
+  const archivedViewRef = useRef(false);
   const [listCollapsed, setListCollapsed] = useState(false);
   const [toDelete, setToDelete] = useState<ConversationDto | null>(null);
   const [contactsOpen, setContactsOpen] = useState(false);
@@ -78,7 +83,7 @@ export default function Inbox() {
       }
       refreshing = true;
       try {
-        const result = await getConversations();
+        const result = await getConversations(archivedViewRef.current);
         if (!active) return;
         setConversations(result);
         setError(false);
@@ -115,7 +120,7 @@ export default function Inbox() {
         return;
       }
       if (!knownIds.has(event.conversation.id)) {
-        void reload();
+        if (!!event.conversation.archived === archivedViewRef.current) void reload();
         return;
       }
       setConversations((current) => mergeConversation(current, event.conversation));
@@ -218,6 +223,43 @@ export default function Inbox() {
       if (mounted.current) setCreating(false);
     }
   }
+  function showArchived(value: boolean) {
+    archivedViewRef.current = value;
+    setArchivedView(value);
+    setQuery("");
+    void reloadRef.current();
+  }
+  async function changeState(item: ConversationDto, patch: { muted?: boolean; archived?: boolean }) {
+    setStateError(false);
+    try {
+      const state = await updateConversationState(item.id, patch);
+      if (!mounted.current) return;
+      setConversations((current) =>
+        current.map((entry) =>
+          entry.id === item.id ? { ...entry, muted: state.muted, archived: state.archived, effectiveMuted: state.effectiveMuted } : entry,
+        ),
+      );
+      if (patch.archived !== undefined && conversationId === item.id) navigate(routePaths.inbox(lang));
+    } catch {
+      if (mounted.current) setStateError(true);
+    }
+  }
+  /** O assistente não tem silêncio nem arquivo no servidor: "excluir" só o esconde neste navegador. */
+  function menuItems(item: ConversationDto): ContextMenuItem[] {
+    if (item.conversationType === "CHAT_BOT") return [{ label: t("deleteConversation"), icon: "trash", onClick: () => setToDelete(item) }];
+    return [
+      {
+        label: t(item.muted ? "unmuteConversation" : "muteConversation"),
+        icon: "bell",
+        onClick: () => void changeState(item, { muted: !item.muted }),
+      },
+      {
+        label: t(item.archived ? "unarchiveConversation" : "archiveConversation"),
+        icon: "archive",
+        onClick: () => void changeState(item, { archived: !item.archived }),
+      },
+    ];
+  }
   function deleteConversation(item: ConversationDto) {
     hideConversation(item.id);
     setHidden(getHiddenConversations());
@@ -235,11 +277,11 @@ export default function Inbox() {
             .map((id) => names[id])
             .find(Boolean)) ||
     t("conversation");
-  const available = conversations.filter((item) => !hidden.includes(item.id));
+  const available = conversations.filter((item) => !hidden.includes(item.id) && !!item.archived === archivedView);
   const visible = available
     .filter((item) => (filter === "ALL" || item.conversationType === filter) && title(item).toLocaleLowerCase().includes(query.toLocaleLowerCase()))
     .sort((a, b) => (b.lastInteractionAt ?? "").localeCompare(a.lastInteractionAt ?? ""));
-  const hasList = available.length > 0;
+  const hasList = available.length > 0 || archivedView;
   const collapsed = listCollapsed && !!conversationId;
   const current = conversationId ? conversations.find((item) => item.id === conversationId) : undefined;
 
@@ -255,6 +297,11 @@ export default function Inbox() {
       {createError && (
         <p role="alert" className="mb-3 text-body">
           {createError}
+        </p>
+      )}
+      {stateError && (
+        <p role="alert" className="mb-3 text-body">
+          {t("stateError")}
         </p>
       )}
       {hasList && !conversationId && (
@@ -286,6 +333,13 @@ export default function Inbox() {
                 }
                 actions={<ConversationFilter value={filter} onChange={setFilter} />}
               />
+              <ToolbarAction
+                icon={archivedView ? "chevronLeft" : "archive"}
+                content={t(archivedView ? "backToConversations" : "archivedConversations")}
+                label={t(archivedView ? "backToConversations" : "archivedConversations")}
+                onClick={() => showArchived(!archivedView)}
+                className="self-start"
+              />
               <Surface className="flex min-h-0 flex-col" contentClassName="flex min-h-0 flex-col overflow-hidden!">
                 {visible.length === 0 ? (
                   <p className="p-4 text-center text-body text-operational-muted">{t("noMatches")}</p>
@@ -299,7 +353,7 @@ export default function Inbox() {
                       setContactsOpen(false);
                       navigate(routePaths.chat(lang, item.id));
                     }}
-                    onDelete={setToDelete}
+                    menuItems={menuItems}
                   />
                 )}
               </Surface>
@@ -312,7 +366,7 @@ export default function Inbox() {
                 key={conversationId}
                 conversationId={conversationId}
                 embedded
-                actions={<ConversationActions onNew={openContacts} onDelete={() => current && setToDelete(current)} />}
+                actions={<ConversationActions onNew={openContacts} getItems={current ? () => menuItems(current) : undefined} />}
               />
             ) : (
               <div className="relative flex min-h-0 flex-1 flex-col">
@@ -322,6 +376,13 @@ export default function Inbox() {
                     <>
                       <div className="flex flex-wrap justify-center gap-2">
                         <ToolbarAction icon="user" content={t("addPerson")} label={t("addPerson")} onClick={openContacts} disabled={creating} />
+                        <ToolbarAction
+                          icon="archive"
+                          content={t("archivedConversations")}
+                          label={t("archivedConversations")}
+                          onClick={() => showArchived(true)}
+                          disabled={creating}
+                        />
                         <ToolbarAction
                           icon="sparkles"
                           iconGradient="orange"
