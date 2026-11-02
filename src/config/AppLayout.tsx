@@ -18,6 +18,7 @@ function AppLayoutContent() {
   const navigate = useNavigate();
   const contextMenu = useContextMenu();
   const { t } = useTranslation("commons");
+  const { t: tShell } = useTranslation("saas", { keyPrefix: "shell" });
 
   function handleContextMenu(event: React.MouseEvent) {
     event.preventDefault();
@@ -26,8 +27,20 @@ function AppLayoutContent() {
 
   return (
     <div className="flex min-h-screen w-full min-w-0 flex-col" onContextMenu={handleContextMenu}>
+      <a
+        href="#main-content"
+        onClick={(event) => {
+          const main = document.querySelector<HTMLElement>("main");
+          if (!main) return;
+          event.preventDefault();
+          main.tabIndex = -1;
+          main.focus();
+        }}
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-medium focus:bg-white focus:p-4">
+        {tShell("skipContent")}
+      </a>
       <Navbar />
-      <div className="w-full flex-1">
+      <div id="main-content" className="w-full flex-1">
         <Outlet />
       </div>
       <Footer />

@@ -58,7 +58,7 @@ export default function ProjectCard({ project, rowAction }: { project: Project; 
           </div>
         }>
         <div className="flex min-w-0 flex-col gap-1">
-          <h3 title={project.name} className="line-clamp-1 text-body font-semi-bold leading-6 text-operational-ink">
+          <h2 title={project.name} className="line-clamp-1 text-body font-semi-bold leading-6 text-operational-ink">
             {project.name}
           </h2>
           <p className="line-clamp-1 text-sidebar font-medium leading-6 text-operational-muted">{location || t(`roles.${project.role}`)}</p>

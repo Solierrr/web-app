@@ -167,10 +167,11 @@ function SaaSLayoutContent() {
         ref={drawer}
         role={!desktop && open ? "dialog" : undefined}
         aria-modal={!desktop && open ? true : undefined}
-        aria-label={t("navigation.label")}
+        aria-label={!desktop && open ? t("navigation.label") : undefined}
         inert={!desktop && !open ? true : undefined}
         className={`fixed inset-y-0 left-0 z-40 transition-transform duration-250 ease-in-out motion-reduce:transition-none lg:static ${!desktop && !open ? "-translate-x-full pointer-events-none" : "translate-x-0"}`}>
         <Sidebar
+          label={t("navigation.label")}
           hideToggle
           collapsed={effectiveCollapsed}
           onCollapsedChange={setCollapsed}

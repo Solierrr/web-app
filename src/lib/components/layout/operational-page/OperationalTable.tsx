@@ -85,7 +85,7 @@ export default function OperationalTable<T>({
     }
   }
   return (
-    <section aria-label={label} aria-busy={items === null || refreshing} className="mx-auto flex w-full min-w-0 flex-col gap-3 lg:w-[85%]">
+    <section aria-busy={items === null || refreshing} className="mx-auto flex w-full min-w-0 flex-col gap-3 lg:w-[85%]">
       {bar && (
         <SearchBar
           name="tableSearch"

@@ -245,6 +245,7 @@ export default function Inbox() {
 
   return (
     <main className="relative isolate @container/messages flex h-full min-h-0 min-w-0 flex-col p-4 sm:p-6" aria-label={t("inbox")}>
+      <h1 className="sr-only">{t("inbox")}</h1>
       {!loading && !conversationId && <SideCanvas centerWidth="var(--spacing-operational-copy)" />}
       {error && (
         <p role="alert" className="mb-3 text-body">
