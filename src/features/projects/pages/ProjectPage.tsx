@@ -17,7 +17,6 @@ import ProjectMembers from "../components/ProjectMembers";
 import ProjectAgenda from "../components/ProjectAgenda";
 import ProjectGallery, { ProjectImage } from "../components/ProjectGallery";
 import ProjectHistory from "../components/ProjectHistory";
-import ProjectConversations from "../components/ProjectConversations";
 import type { ProjectStatus as Status } from "../projects.d";
 export default function ProjectPage() {
   const { projectId = "" } = useParams();
@@ -31,7 +30,7 @@ function ProjectDetail({ id }: { id: string }) {
   const photos = useProjectResource(useCallback(() => projectApi.photos(id), [id]));
   const actions = useProjectActions();
   const p = resource.data;
-  const tabs = ["overview", "agenda", "members", "gallery", "conversations", "history"] as const;
+  const tabs = ["overview", "agenda", "members", "gallery", "history"] as const;
   const requested = params.get("tab");
   const tab = tabs.find((x) => x === requested) ?? "overview";
   const base = routePaths.projectDetail(lang, id);
@@ -165,7 +164,6 @@ function ProjectDetail({ id }: { id: string }) {
             />
           )}
           {tab === "history" && <ProjectHistory key={id} project={p} />}
-          {tab === "conversations" && <ProjectConversations key={`${id}:${p.status}`} project={p} />}
         </>
       )}
       {actions.confirmation}
