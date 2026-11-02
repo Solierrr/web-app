@@ -18,7 +18,7 @@ export function NotificationRow({ item, onOpen, onMarkRead }: NotificationRowPro
   const unread = item.readAt === null;
 
   return (
-    <li className={`flex items-start gap-2 rounded-medium p-1 ${unread ? "bg-operational-hover" : ""}`}>
+    <li className="flex items-start gap-2 p-1">
       <button
         type="button"
         onClick={onOpen}
