@@ -401,7 +401,7 @@ export default function EmployeesPage() {
                 <>
                   {" "}
                   <a
-                    className="text-orange underline"
+                    className="text-orange-text underline"
                     href={`mailto:${invitedEmail}?subject=${encodeURIComponent(t("emailSubject", { company: company?.tradeName ?? "" }))}&body=${encodeURIComponent(
                       t("emailBody", {
                         code: generatedCode,

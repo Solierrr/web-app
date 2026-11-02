@@ -24,7 +24,7 @@ export default function Hyperlink({ content, url, type = HyperlinkUrlType.COMPLE
 
   return (
     <div className="flex w-fit px-1 rounded-small bg-black/0 hover:bg-black/2 transition-colors duration-800">
-      <Link className={`font-medium hover:text-orange transition-colors duration-200 ${className}`} to={redirect} state={state}>
+      <Link className={`font-medium hover:text-orange-text transition-colors duration-200 ${className}`} to={redirect} state={state}>
         {content}
       </Link>
     </div>

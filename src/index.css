@@ -84,9 +84,10 @@
   --color-hyperlink: #306EEE;
 
   --color-input-bg:      #4444440D;
-  --color-input-text:    #44444466;
+  --color-input-text:    #62676F;
   --color-input-icon:    #AFAFAF;
-  --color-input-outline: #44444426;
+  --color-input-outline: #444444;
+  --color-orange-text:   #B84414;
 
   --color-skeleton:           #4444441A;
   --color-skeleton-highlight: #44444433;

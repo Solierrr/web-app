@@ -77,7 +77,7 @@ export function SolarPanelAnnouncementPacked({ product }: SolarPanelAnnouncement
             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
               <span className="text-title font-bold leading-none tracking-tight">{new Intl.NumberFormat(lang, { style: "currency", currency: "BRL" }).format(product.unitPrice)}</span>
               <span className="text-body text-operational-muted">{t("general.perUnit")}</span>
-              {discounted && <span className="rounded-full bg-orange/10 px-3 py-1 text-body font-medium text-orange">-{product.discountPercentage}%</span>}
+              {discounted && <span className="rounded-full bg-orange/10 px-3 py-1 text-body font-medium text-orange-text">-{product.discountPercentage}%</span>}
             </div>
             <p className="text-body text-operational-muted">
               {product.availableUnits} {t("general.units")}

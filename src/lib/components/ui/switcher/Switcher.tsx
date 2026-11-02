@@ -36,7 +36,7 @@ export default function Switcher({ options, activeUrl, label }: SwitcherProps) {
               flushSync(() => navigate(option.url));
             });
           }}
-          className={`relative isolate rounded-full px-4 py-2 font-medium transition-colors duration-250 motion-reduce:transition-none ${option.url === activeUrl ? "text-orange" : "text-input-text hover:text-black"}`}>
+          className={`relative isolate rounded-full px-4 py-2 font-medium transition-colors duration-250 motion-reduce:transition-none ${option.url === activeUrl ? "text-orange-text" : "text-input-text hover:text-black"}`}>
           {option.url === activeUrl && (
             <span
               aria-hidden="true"

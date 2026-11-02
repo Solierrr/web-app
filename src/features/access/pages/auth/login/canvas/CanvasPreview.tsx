@@ -27,7 +27,7 @@ export default function CanvasPreview({ variant = "dots" }: { variant?: CanvasVa
             key={option}
             content={t(`canvas.${option}.title`)}
             url={`/${lang}/test/login/canvas/${option}`}
-            className={variant === option ? "text-orange font-semi-bold" : "text-operational-muted"}
+            className={variant === option ? "text-orange-text font-semi-bold" : "text-operational-muted"}
           />
         ))}
       </nav>

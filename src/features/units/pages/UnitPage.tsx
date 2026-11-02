@@ -73,7 +73,7 @@ export default function UnitPage() {
             {unit.address && (
               <div>
                 <a
-                  className="text-orange underline"
+                  className="text-orange-text underline"
                   target="_blank"
                   rel="noreferrer"
                   href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
