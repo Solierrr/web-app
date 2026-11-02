@@ -170,6 +170,11 @@
 }
 
 @layer base {
+  /* O app só tem tema claro: sem isso, o sistema em modo escuro pinta o fundo de preto e os textos escuros somem. */
+  html {
+    color-scheme: light;
+  }
+
   * {
     margin: 0;
     padding: 0;
@@ -182,7 +187,7 @@
     @apply text-body text-black;
   }
 
-  body { @apply overflow-x-hidden }
+  body { @apply overflow-x-hidden bg-operational-shell }
 
   h1     { @apply text-title    font-bold       leading-9; }
   h2     { @apply text-subtitle font-semi-bold  leading-7; }

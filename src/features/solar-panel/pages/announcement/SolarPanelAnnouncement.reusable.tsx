@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import type { SolarPanel } from "@/features/solar-panel/solarPanel";
@@ -12,10 +13,10 @@ interface WrapperProps extends React.ComponentPropsWithoutRef<"section"> {
   className?: string;
 }
 
-export function Wrapper({ title, children, className }: WrapperProps) {
+export function Wrapper({ title, children, className = "" }: WrapperProps) {
   return (
-    <section className={`flex flex-col gap-2 ${className}`}>
-      <h2 className="text-black/90">{title}</h2>
+    <section className={`flex flex-col gap-4 ${className}`}>
+      <h2 className="text-subtitle font-semi-bold leading-tight tracking-tight">{title}</h2>
       {children}
     </section>
   );
@@ -25,11 +26,13 @@ interface ImagesProps {
   images: Image[];
 }
 
-export function ProductImages({ images }: ImagesProps) {
+export function ProductImages({ images, label }: ImagesProps & { label: string }) {
   const contextMenu = useContextMenu();
   const { t } = useTranslation("announcements", {
     keyPrefix: "solarPanel.images",
   });
+  const [selected, setSelected] = useState(0);
+  const current = images[Math.min(selected, images.length - 1)];
 
   function handleContextMenu(event: React.MouseEvent, image: Image) {
     event.preventDefault();
@@ -51,11 +54,35 @@ export function ProductImages({ images }: ImagesProps) {
     );
   }
 
+  if (!current) return null;
   return (
-    <div className="flex flex-row gap-8 overflow-auto scrollbar-none">
-      {images.map((image) => (
-        <img key={image.url} src={image.url} alt={image.description} onContextMenu={(event) => handleContextMenu(event, image)} />
-      ))}
+    <div className="flex min-w-0 flex-col gap-4" aria-label={label} role="group">
+      <div className="flex aspect-4/3 w-full items-center lg:aspect-square justify-center overflow-hidden rounded-surface bg-operational-surface">
+        <img
+          src={current.url}
+          alt={current.description}
+          onContextMenu={(event) => handleContextMenu(event, current)}
+          className="size-full object-contain p-6 mix-blend-multiply"
+        />
+      </div>
+      {images.length > 1 && (
+        <ul className="flex gap-3 overflow-x-auto scrollbar-none snap-x">
+          {images.map((image, index) => (
+            <li key={image.url} className="shrink-0 snap-start">
+              <button
+                type="button"
+                aria-label={image.description || String(index + 1)}
+                aria-current={index === selected}
+                onClick={() => setSelected(index)}
+                className={`size-20 cursor-pointer overflow-hidden rounded-soft bg-operational-surface outline-2 outline-offset-2 transition-colors ${
+                  index === selected ? "outline-operational-ink" : "outline-transparent hover:outline-operational-border"
+                }`}>
+                <img src={image.url} alt="" className="size-full object-contain p-2 mix-blend-multiply" />
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
@@ -88,13 +115,29 @@ export function Characteristics({ panel }: { panel: SolarPanel }) {
   }
 
   return (
-    <ul className="flex flex-col gap-2">
+    <dl className="flex flex-col divide-y divide-operational-border border-y border-operational-border">
       {characteristics.map(({ label, value }) => (
-        <li key={label} className="flex justify-between py-4 px-6 rounded-soft bg-input-bg">
-          <p className="font-medium">{label}</p>
-          <p className="font-medium">{value}</p>
-        </li>
+        <div key={label} className="flex justify-between gap-6 py-4">
+          <dt className="text-operational-muted">{label}</dt>
+          <dd className="text-right font-medium text-operational-ink">{value}</dd>
+        </div>
       ))}
-    </ul>
+    </dl>
+  );
+}
+
+export function ExpandableText({ text }: { text: string }) {
+  const { t } = useTranslation("announcements", { keyPrefix: "solarPanel.actions" });
+  const [open, setOpen] = useState(false);
+  const long = text.length > 420;
+  return (
+    <div className="flex flex-col items-start gap-3">
+      <p className={`whitespace-pre-line text-operational-ink/90 ${long && !open ? "line-clamp-6" : ""}`}>{text}</p>
+      {long && (
+        <button type="button" aria-expanded={open} onClick={() => setOpen((value) => !value)} className="cursor-pointer font-medium underline underline-offset-4">
+          {open ? t("showLess") : t("showMore")}
+        </button>
+      )}
+    </div>
   );
 }
