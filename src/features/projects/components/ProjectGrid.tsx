@@ -6,6 +6,7 @@ import ProjectCard from "./ProjectCard";
 import { useProjects } from "../projects.hooks";
 import { notify } from "@@/feedback/toast/Toast.utils";
 import type { Project } from "../projects.d";
+import { skeletonKeys } from "@/lib/utils/skeleton.utils";
 
 export default function ProjectGrid({
   projects,
@@ -74,8 +75,8 @@ export default function ProjectGrid({
       />
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3" aria-busy={!projects}>
         {!projects
-          ? Array.from({ length: 6 }, (_, i) => (
-              <div key={i} className="flex flex-col gap-4">
+          ? skeletonKeys(6).map((key) => (
+              <div key={key} className="flex flex-col gap-4">
                 <div className="aspect-[6/5] overflow-hidden rounded-surface">
                   <Skeleton />
                 </div>
