@@ -1,8 +1,9 @@
 import { useTranslation } from "react-i18next";
 import Dashboard from "@@/dashboard/Dashboard";
+import DashboardCard from "@@/dashboard/card/Card";
 import { BarChart, DonutChart, MetricStrip, RankingCard } from "@@/dashboard/dashboard.presets";
-import type { DashboardView } from "../analytics";
-import { metricsWithValue } from "../analytics.dashboard";
+import type { DashboardTable, DashboardView, TableColumnFormat } from "../analytics";
+import { metricsWithValue, toNumber } from "../analytics.dashboard";
 
 const STRIP_SIZE = 4;
 
@@ -10,6 +11,61 @@ function chunk<T>(items: T[], size: number): T[][] {
   const groups: T[][] = [];
   for (let index = 0; index < items.length; index += size) groups.push(items.slice(index, index + size));
   return groups;
+}
+
+function formatCell(
+  value: string | number | null | undefined,
+  format: TableColumnFormat,
+  locale: string | undefined,
+  status: (key: string) => string,
+): string {
+  if (value === null || value === undefined || value === "") return "—";
+  if (format === "money") {
+    const amount = toNumber(value);
+    return amount === null ? "—" : new Intl.NumberFormat(locale, { style: "currency", currency: "BRL" }).format(amount);
+  }
+  if (format === "number") {
+    const amount = toNumber(value);
+    return amount === null ? "—" : new Intl.NumberFormat(locale).format(amount);
+  }
+  if (format === "date") {
+    const date = new Date(String(value));
+    return Number.isNaN(date.getTime()) ? String(value) : new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(date);
+  }
+  return format === "status" ? status(String(value)) : String(value);
+}
+
+function TableCard({ table, locale }: { table: DashboardTable; locale?: string }) {
+  const { t } = useTranslation("commons", { keyPrefix: "analytics" });
+  const status = (key: string) => t(`status.${key}`, { defaultValue: key });
+  return (
+    <DashboardCard title={t(`table.${table.id}`)} empty={!table.rows.length} className="col-span-full">
+      <div className="max-h-96 overflow-auto">
+        <table className="w-full min-w-max border-collapse text-left text-body">
+          <thead>
+            <tr>
+              {table.columns.map((column) => (
+                <th key={column.key} scope="col" className="sticky top-0 bg-surface px-3 py-2 font-medium text-operational-muted">
+                  {t(`column.${column.key}`)}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {table.rows.map((row, index) => (
+              <tr key={index} className="border-t border-border">
+                {table.columns.map((column) => (
+                  <td key={column.key} className={`px-3 py-2 ${column.format === "money" || column.format === "number" ? "tabular-nums" : ""}`}>
+                    {formatCell(row[column.key], column.format, locale, status)}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </DashboardCard>
+  );
 }
 
 export default function AnalyticsDashboards({ view, locale }: { view: DashboardView; locale?: string }) {
@@ -47,7 +103,7 @@ export default function AnalyticsDashboards({ view, locale }: { view: DashboardV
           title={t(`chart.${series.id}`)}
           description={t(`chartDescription.${series.id}`, { defaultValue: "" }) || undefined}
           locale={locale}
-          unit="R$"
+          unit={series.unit}
           className="md:col-span-6"
           payload={{ labels: series.labels, series: [{ name: t(`chart.${series.id}`), values: series.values }] }}
         />
@@ -57,10 +113,13 @@ export default function AnalyticsDashboards({ view, locale }: { view: DashboardV
           key={ranking.id}
           title={t(`chart.${ranking.id}`)}
           locale={locale}
-          unit={ranking.id.startsWith("accepted") ? "R$" : undefined}
+          unit={/acceptedvalue/i.test(ranking.id) ? "R$" : undefined}
           className="md:col-span-6"
           payload={{ items: ranking.items }}
         />
+      ))}
+      {view.tables.map((table) => (
+        <TableCard key={table.id} table={table} locale={locale} />
       ))}
     </Dashboard>
   );

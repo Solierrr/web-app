@@ -510,7 +510,11 @@
       "registeredRequesters": "Registered requesters",
       "localUnits": "Registered units",
       "proposals": "Proposals",
-      "projects": "Projects"
+      "projects": "Projects",
+      "avgListedPrice": "Average offer price",
+      "avgActiveListedPrice": "Average active offer price",
+      "listedAvailability": "Units offered",
+      "closedProposals": "Closed proposals"
     },
     "chart": {
       "offersByStatus": "Offers by status",
@@ -519,10 +523,15 @@
       "modelsByStatus": "Models by status",
       "acceptedValueByMonth": "Accepted value by month",
       "acceptedValueByModel": "Accepted value by model",
-      "stockByModel": "Stock by model"
+      "stockByModel": "Stock by model",
+      "acceptedOffersByDate": "Accepted proposals per day",
+      "topSuppliersByAcceptedValue": "Suppliers by accepted value",
+      "topSuppliersByActiveOffers": "Suppliers by active offers",
+      "topSuppliersByStock": "Suppliers by stock"
     },
     "chartDescription": {
-      "acceptedValueByMonth": "The month is based on when the proposal was created."
+      "acceptedValueByMonth": "The month is based on when the proposal was created.",
+      "acceptedOffersByDate": "The day is based on when the proposal was created."
     },
     "status": {
       "ACTIVE": "Active",
@@ -541,6 +550,17 @@
       "COMPLETED": "Completed",
       "DRAFT": "Draft",
       "DONE": "Completed"
+    },
+    "table": {
+      "offerDetails": "Offer details"
+    },
+    "column": {
+      "brand_name": "Brand",
+      "model_name": "Model",
+      "unit_price": "Unit price",
+      "availability": "Availability",
+      "expires_at": "Valid until",
+      "commercial_status": "Status"
     }
   },
   "pagination": {

@@ -510,7 +510,11 @@
       "registeredRequesters": "Demandantes registrados",
       "localUnits": "Unidades registradas",
       "proposals": "Propuestas",
-      "projects": "Proyectos"
+      "projects": "Proyectos",
+      "avgListedPrice": "Precio medio de las ofertas",
+      "avgActiveListedPrice": "Precio medio de las ofertas activas",
+      "listedAvailability": "Unidades ofertadas",
+      "closedProposals": "Propuestas cerradas"
     },
     "chart": {
       "offersByStatus": "Ofertas por estado",
@@ -519,10 +523,15 @@
       "modelsByStatus": "Modelos por estado",
       "acceptedValueByMonth": "Valor aceptado por mes",
       "acceptedValueByModel": "Valor aceptado por modelo",
-      "stockByModel": "Stock por modelo"
+      "stockByModel": "Stock por modelo",
+      "acceptedOffersByDate": "Propuestas aceptadas por día",
+      "topSuppliersByAcceptedValue": "Proveedores por valor aceptado",
+      "topSuppliersByActiveOffers": "Proveedores por ofertas activas",
+      "topSuppliersByStock": "Proveedores por stock"
     },
     "chartDescription": {
-      "acceptedValueByMonth": "El mes considera la creación de la propuesta."
+      "acceptedValueByMonth": "El mes considera la creación de la propuesta.",
+      "acceptedOffersByDate": "El día considera la creación de la propuesta."
     },
     "status": {
       "ACTIVE": "Activa",
@@ -541,6 +550,17 @@
       "COMPLETED": "Completado",
       "DRAFT": "Borrador",
       "DONE": "Completado"
+    },
+    "table": {
+      "offerDetails": "Detalle de las ofertas"
+    },
+    "column": {
+      "brand_name": "Marca",
+      "model_name": "Modelo",
+      "unit_price": "Precio unitario",
+      "availability": "Disponibilidad",
+      "expires_at": "Validez",
+      "commercial_status": "Estado"
     }
   },
   "pagination": {
