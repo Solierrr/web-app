@@ -22,8 +22,6 @@ import { ActiveContextProvider, useActiveContext } from "@/lib/shared/context/Ac
 import { CompanyStatus } from "@/features/companies/company.enum";
 import { SaaSNavigation } from "./SaaSLayout.reusable";
 import { getOperationalNavigation } from "./SaaSLayout.presets";
-import ChatbotPage from "@/features/messages/pages/ChatbotPage";
-import OperationalAssistant from "@/features/assistant/pages/OperationalAssistant";
 import SaaSContext from "@@/layout/saas-context/SaaSContext";
 import { rememberPage } from "@/features/dashboard/dashboard.utils";
 import PageSearch from "@@/layout/page-search/PageSearch";
@@ -71,8 +69,6 @@ function SaaSLayoutContent() {
   const open = openKey === viewKey;
   const setOpen = (value: boolean) => setOpenKey(value ? viewKey : null);
   const [signingOut, setSigningOut] = useState(false);
-  const [assistantOpen, setAssistantOpen] = useState(false);
-  const assistantButton = useRef<HTMLButtonElement>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
   const drawer = useRef<HTMLDivElement>(null);
   const effectiveCollapsed = desktop && collapsed;
@@ -230,17 +226,14 @@ function SaaSLayoutContent() {
             />
             <NotificationCenter />
             <ToolbarAction
-              ref={assistantButton}
               icon="sparkles"
               iconSize={SIDEBAR_ICON_SIZE}
               iconGradient="orange"
               label={t("navigation.items.chatbot")}
-              aria-controls="operational-assistant"
-              aria-expanded={assistantOpen}
               onClick={() => {
                 setOpen(false);
                 closePanel();
-                setAssistantOpen(true);
+                navigate(routePaths.operationalChatbot(lang));
               }}
             />
             <SaaSAccount signingOut={signingOut} onLogout={handleLogout} email={session?.email ?? ""} managedCompanyName={session?.managedByCompany?.name} />
@@ -278,23 +271,13 @@ function SaaSLayoutContent() {
         </div>
       </div>
       <SidePanel
-        open={!!panel || assistantOpen}
-        wide={!!panel}
+        open={!!panel}
+        wide
         closeDisabled={panelBusy}
-        title={panel?.title ?? t("navigation.items.chatbot")}
-        closeLabel={panel ? tCommons("actions.close") : t("shell.closeAssistant")}
+        title={panel?.title ?? ""}
+        closeLabel={tCommons("actions.close")}
         trigger={panel?.trigger}
-        onClose={() => {
-          if (panel) closePanel();
-          else setAssistantOpen(false);
-        }}>
-        <div className={panel ? "hidden" : "flex min-h-0 flex-1 flex-col px-3 pb-3"}>
-          {companyContext ? (
-            <OperationalAssistant embedded active={assistantOpen && !panel} />
-          ) : (
-            <ChatbotPage embedded active={assistantOpen && !panel} />
-          )}
-        </div>
+        onClose={closePanel}>
         {panel?.content}
       </SidePanel>
     </div>
