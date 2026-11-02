@@ -90,3 +90,27 @@ describe("MenuItem", () => {
     expect(selected).toHaveAttribute("aria-selected", "true");
   });
 });
+
+describe("MenuList keyboard", () => {
+  it("moves focus with the arrow keys, wrapping around, and with Home and End", () => {
+    render(
+      <MenuList role="menu">
+        <MenuItem role="menuitem">One</MenuItem>
+        <MenuItem role="menuitem" disabled>
+          Two
+        </MenuItem>
+        <MenuItem role="menuitem">Three</MenuItem>
+      </MenuList>,
+    );
+    const [one, , three] = screen.getAllByRole("menuitem");
+    one.focus();
+    fireEvent.keyDown(one, { key: "ArrowDown" });
+    expect(three).toHaveFocus();
+    fireEvent.keyDown(three, { key: "ArrowDown" });
+    expect(one).toHaveFocus();
+    fireEvent.keyDown(one, { key: "End" });
+    expect(three).toHaveFocus();
+    fireEvent.keyDown(three, { key: "Home" });
+    expect(one).toHaveFocus();
+  });
+});
