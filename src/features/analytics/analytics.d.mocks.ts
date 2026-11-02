@@ -9,10 +9,48 @@ export function getAnalyticsDashboardMock(scope: AnalyticsDashboard["scope"], co
       companyId,
       loadedAt: LOADED_AT,
       kpis: {
-        kpi_supplier_offers_summary: [{ registered_offers: 12, active_offers: 9, expired_offers: 1, offers_expiring_in_30_days: 2 }],
+        kpi_supplier_offers_summary: [
+          {
+            registered_offers: 12,
+            active_offers: 9,
+            expired_offers: 1,
+            offers_expiring_in_30_days: 2,
+            avg_listed_price: 910.5,
+            avg_active_listed_price: 925,
+            listed_availability: 410,
+          },
+        ],
+        kpi_supplier_offer_details: [
+          {
+            brand_name: "Marca A",
+            model_name: "Modelo 550W",
+            unit_price: 950,
+            availability: 200,
+            expires_at: "2026-12-30",
+            commercial_status: "ACTIVE",
+          },
+          {
+            brand_name: "Marca B",
+            model_name: "Modelo 450W",
+            unit_price: 780,
+            availability: 140,
+            expires_at: "2026-10-15",
+            commercial_status: "EXPIRED",
+          },
+        ],
+        kpi_supplier_accepted_offers_by_date: [
+          { proposal_created_date_proxy: "2026-10-03", accepted_proposals: 2 },
+          { proposal_created_date_proxy: "2026-10-10", accepted_proposals: 3 },
+        ],
         kpi_supplier_stock_summary: [{ stock_units: 340, models_in_stock: 8 }],
         kpi_supplier_proposals_summary: [
-          { open_received_proposals: 3, accepted_proposals: 5, closed_acceptance_rate_pct: 62.5, accepted_negotiated_value: 184000 },
+          {
+            open_received_proposals: 3,
+            accepted_proposals: 5,
+            closed_proposals: 8,
+            closed_acceptance_rate_pct: 62.5,
+            accepted_negotiated_value: 184000,
+          },
         ],
         kpi_supplier_offers_by_status: [
           { commercial_status: "ACTIVE", offer_count: 9 },
@@ -56,8 +94,22 @@ export function getAnalyticsDashboardMock(scope: AnalyticsDashboard["scope"], co
     scope: "PLATFORM",
     companyId: null,
     loadedAt: LOADED_AT,
+    names: { s1: "Solar XPTO", s2: "Energia Norte" },
     kpis: {
       kpi_admin_registrations: [{ active_suppliers: 11, registered_requesters: 15 }],
+      kpi_supplier_offers_summary: [
+        { supplier_id: "s1", registered_offers: 12, active_offers: 9 },
+        { supplier_id: "s2", registered_offers: 8, active_offers: 5 },
+      ],
+      kpi_supplier_stock_summary: [
+        { supplier_id: "s1", stock_units: 340 },
+        { supplier_id: "s2", stock_units: 120 },
+      ],
+      kpi_supplier_proposals_summary: [
+        { supplier_id: "s1", accepted_proposals: 5, accepted_negotiated_value: 184000 },
+        { supplier_id: "s2", accepted_proposals: 2, accepted_negotiated_value: 52000 },
+      ],
+      kpi_requester_summary: [{ requester_id: "r1", registered_local_units: 3, registered_projects: 2 }],
       kpi_admin_models_by_status: [
         { model_status: "APPROVED", model_count: 20 },
         { model_status: "UNDER_ANALYSIS", model_count: 4 },

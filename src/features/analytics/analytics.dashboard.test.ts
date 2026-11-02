@@ -29,7 +29,7 @@ describe("buildSupplierView", () => {
       { key: "ACTIVE", value: 9 },
       { key: "EXPIRED", value: 1 },
     ]);
-    expect(view.series[0]).toEqual({ id: "acceptedValueByMonth", labels: ["2026-09", "2026-10"], values: [64000, 120000] });
+    expect(view.series[0]).toEqual({ id: "acceptedValueByMonth", labels: ["2026-09", "2026-10"], values: [64000, 120000], unit: "R$" });
   });
 
   it("ranks models from the highest value", () => {
@@ -68,12 +68,45 @@ describe("empty and partial data", () => {
 
 describe("buildView", () => {
   it("picks the builder by scope", () => {
-    expect(buildView(getAnalyticsDashboardMock("PLATFORM")).metrics.map((metric) => metric.id)).toEqual(["activeSuppliers", "registeredRequesters"]);
     expect(buildView(getAnalyticsDashboardMock("REQUESTER", "c2")).metrics.map((metric) => metric.id)).toEqual([
       "localUnits",
       "proposals",
       "projects",
     ]);
-    expect(buildPlatformView(getAnalyticsDashboardMock("PLATFORM")).metrics[0].value).toBe(11);
+    expect(buildView(getAnalyticsDashboardMock("PLATFORM")).metrics[0].id).toBe("activeSuppliers");
+  });
+});
+
+describe("buildPlatformView", () => {
+  const view = buildPlatformView(getAnalyticsDashboardMock("PLATFORM"));
+  const byId = Object.fromEntries(view.metrics.map((metric) => [metric.id, metric.value]));
+
+  it("totals the supplier tables across every supplier", () => {
+    expect(byId.activeSuppliers).toBe(11);
+    expect(byId.registeredOffers).toBe(20);
+    expect(byId.stockUnits).toBe(460);
+    expect(byId.acceptedValue).toBe(236000);
+  });
+
+  it("ranks suppliers by name and falls back to a short id", () => {
+    expect(view.rankings[0].items.map((item) => item.label)).toEqual(["Solar XPTO", "Energia Norte"]);
+    const unnamed = buildPlatformView({ ...getAnalyticsDashboardMock("PLATFORM"), names: {} });
+    expect(unnamed.rankings[0].items[0].label).toBe("s1");
+  });
+});
+
+describe("supplier extras", () => {
+  const view = buildSupplierView(getAnalyticsDashboardMock("SUPPLIER", "c1"));
+
+  it("adds price metrics and the accepted proposals per day", () => {
+    const byId = Object.fromEntries(view.metrics.map((metric) => [metric.id, metric]));
+    expect(byId.avgListedPrice).toMatchObject({ value: 910.5, unit: "R$" });
+    expect(view.series[1]).toEqual({ id: "acceptedOffersByDate", labels: ["2026-10-03", "2026-10-10"], values: [2, 3], unit: undefined });
+  });
+
+  it("lists the offer details as a table", () => {
+    expect(view.tables[0].id).toBe("offerDetails");
+    expect(view.tables[0].rows).toHaveLength(2);
+    expect(view.tables[0].columns.map((column) => column.key)).toContain("unit_price");
   });
 });

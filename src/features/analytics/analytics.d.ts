@@ -18,6 +18,8 @@ export interface AnalyticsDashboard {
   companyId: string | null;
   loadedAt: string | null;
   kpis: Record<string, KpiRow[]>;
+  /** Só no dashboard da plataforma: id do fornecedor para o nome fantasia. */
+  names?: Record<string, string>;
 }
 
 export interface DashboardMetric {
@@ -35,6 +37,15 @@ export interface DashboardSeries {
   id: string;
   labels: string[];
   values: number[];
+  unit?: string;
+}
+
+export type TableColumnFormat = "text" | "number" | "money" | "date" | "status";
+
+export interface DashboardTable {
+  id: string;
+  columns: { key: string; format: TableColumnFormat }[];
+  rows: KpiRow[];
 }
 
 export interface DashboardRanking {
@@ -48,4 +59,5 @@ export interface DashboardView {
   distributions: DashboardDistribution[];
   series: DashboardSeries[];
   rankings: DashboardRanking[];
+  tables: DashboardTable[];
 }
