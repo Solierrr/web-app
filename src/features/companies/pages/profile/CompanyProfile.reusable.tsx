@@ -8,9 +8,9 @@ export function CompanyBadges({ company }: { company: Pick<CatalogCompany, "acti
   return (
     <>
       {company.activities?.map((activity) => (
-        <StatusField key={activity} state="highlight" pill icon="panels" label={tFeed(`company.activities.${activity}`)} />
+        <StatusField key={activity} state="highlight" icon="panels" label={tFeed(`company.activities.${activity}`)} />
       ))}
-      {company.hasTechnicalTeam && <StatusField state="approved" pill icon="users" label={t("technicalTeam")} />}
+      {company.hasTechnicalTeam && <StatusField state="approved" icon="users" label={t("technicalTeam")} />}
     </>
   );
 }

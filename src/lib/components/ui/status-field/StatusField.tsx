@@ -14,19 +14,17 @@ export default function StatusField({
   state,
   label,
   icon: customIcon,
-  pill = false,
   className = "",
 }: {
   state: StatusFieldState;
   label: string;
   icon?: IconName;
-  pill?: boolean;
   className?: string;
 }) {
   const { icon, color, classes } = STATES[state];
   return (
     <span
-      className={`inline-flex items-center gap-2 whitespace-nowrap ${pill ? "rounded-full" : "rounded-small"} px-2.5 py-1 text-body font-medium leading-5 ${classes} ${className}`}>
+      className={`inline-flex items-center gap-2 whitespace-nowrap rounded-full px-3 py-1 text-body font-medium leading-5 ${classes} ${className}`}>
       <span aria-hidden="true" className="flex shrink-0">
         <Icon name={customIcon ?? icon} size={14} color={color} />
       </span>
