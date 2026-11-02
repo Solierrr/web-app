@@ -89,15 +89,19 @@ export default function Navbar() {
           <ToolbarAction
             ref={trigger}
             icon="user"
-            label={t("account")}
-            aria-haspopup="menu"
+            label={authenticated ? t("account") : t("login")}
+            aria-haspopup={authenticated ? "menu" : undefined}
             onClick={() => {
+              if (!authenticated) {
+                navigate(routePaths.login(lang));
+                return;
+              }
               const anchor = trigger.current?.getBoundingClientRect();
               menu.current?.open(
                 [
                   {
-                    label: authenticated ? tAccess("operational") : t("login"),
-                    onClick: () => navigate(authenticated ? routePaths.dashboard(lang) : routePaths.login(lang)),
+                    label: tAccess("operational"),
+                    onClick: () => navigate(routePaths.dashboard(lang)),
                   },
                   { label: tAccess("haveCode"), onClick: () => navigate(routePaths.activateAccess(lang)) },
                   { label: tAccess("company"), onClick: () => navigate(routePaths.registerCompany(lang)) },
