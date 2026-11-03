@@ -85,7 +85,7 @@ export default function OperationalTable<T>({
     }
   }
   return (
-    <section aria-label={label} aria-busy={items === null || refreshing} className="mx-auto flex w-full min-w-0 flex-col gap-3 lg:w-[85%]">
+    <section aria-busy={items === null || refreshing} className="mx-auto flex w-full min-w-0 flex-col gap-3 lg:w-[85%]">
       {bar && (
         <SearchBar
           name="tableSearch"
@@ -126,7 +126,7 @@ export default function OperationalTable<T>({
         />
       )}
       <Surface>
-        <div role="region" aria-label={label} tabIndex={0} className="scrollbar-none overflow-x-auto">
+        <div role="region" aria-label={label} tabIndex={0} className="scrollbar-none @container overflow-x-auto">
           <table
             className="table-auto w-max min-w-full border-separate border-spacing-0 text-left text-body"
             aria-label={label}
@@ -198,8 +198,8 @@ export default function OperationalTable<T>({
                 ))}
               {filtered?.length === 0 && (
                 <tr>
-                  <td colSpan={dataColumns.length + 1} className="h-20 px-4 text-center text-operational-muted">
-                    {query || activeFilters ? t("noResults") : empty}
+                  <td colSpan={dataColumns.length + 1} className="h-20 text-center text-operational-muted">
+                    <div className="sticky left-0 w-[100cqw] px-4">{query || activeFilters ? t("noResults") : empty}</div>
                   </td>
                 </tr>
               )}

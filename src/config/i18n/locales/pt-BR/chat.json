@@ -72,7 +72,7 @@
     "suggestionTitles": {
       "catalog": "Placas solares",
       "compare": "Compare suas opções",
-      "help": "Comece pelo Solaria"
+      "help": "Comece pelo Elos"
     },
     "suggestionDescriptions": {
       "catalog": "Encontre uma placa para seu projeto",
@@ -82,12 +82,12 @@
     "newConversation": "Nova conversa",
     "welcomeSubtitle": "A conversa continua na tela de mensagens, onde fica salva.",
     "welcomeTitle": "Por onde começamos?",
-    "welcomeDescription": "Escolha uma sugestão ou escreva sua pergunta sobre o Solaria.",
+    "welcomeDescription": "Escolha uma sugestão ou escreva sua pergunta sobre o Elos.",
     "composerHint": "Enter envia · Shift + Enter quebra a linha",
     "suggestions": {
       "catalog": "Como encontrar uma placa solar?",
       "compare": "Como comparar as opções do catálogo?",
-      "help": "Como começar a usar o Solaria?"
+      "help": "Como começar a usar o Elos?"
     },
     "greeting": "Olá! Como posso te ajudar hoje?",
     "draftPlaceholder": "Peça ao assistente",

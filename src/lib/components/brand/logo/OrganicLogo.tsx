@@ -19,7 +19,7 @@ interface OrganicLogoProps {
 export default function OrganicLogo({
   width = 3,
   className = "",
-  label = "Solaria",
+  label = "Elos",
   decorative = false,
   paused = false,
   motion = "subtle",

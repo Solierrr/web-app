@@ -11,7 +11,7 @@ import ToolbarAction from "@@/ui/button/ToolbarAction";
 import Loading from "@@/helpers/accessibility/loading/Loading";
 import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
 import { ContextMenuProvider } from "@@/overlay/contextMenu/provider/ContextMenuProvider";
-import { useContextMenu } from "@@/overlay/contextMenu/useContextMenu";
+import { useGeneralContextMenu } from "@@/overlay/contextMenu/useGeneralContextMenu";
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
@@ -22,8 +22,6 @@ import { ActiveContextProvider, useActiveContext } from "@/lib/shared/context/Ac
 import { CompanyStatus } from "@/features/companies/company.enum";
 import { SaaSNavigation } from "./SaaSLayout.reusable";
 import { getOperationalNavigation } from "./SaaSLayout.presets";
-import ChatbotPage from "@/features/messages/pages/ChatbotPage";
-import OperationalAssistant from "@/features/assistant/pages/OperationalAssistant";
 import SaaSContext from "@@/layout/saas-context/SaaSContext";
 import { rememberPage } from "@/features/dashboard/dashboard.utils";
 import PageSearch from "@@/layout/page-search/PageSearch";
@@ -39,10 +37,10 @@ function SaaSLayoutContent() {
   const { t } = useTranslation("saas");
   const { t: tCommons } = useTranslation("commons");
   const { panel, closePanel, busy: panelBusy } = useSidePanel();
-  const contextMenu = useContextMenu();
   const { t: tAccess } = useTranslation("onboarding");
   const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT;
+  const handleContextMenu = useGeneralContextMenu(routePaths.dashboard(lang));
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const context = useActiveContext();
@@ -71,8 +69,6 @@ function SaaSLayoutContent() {
   const open = openKey === viewKey;
   const setOpen = (value: boolean) => setOpenKey(value ? viewKey : null);
   const [signingOut, setSigningOut] = useState(false);
-  const [assistantOpen, setAssistantOpen] = useState(false);
-  const assistantButton = useRef<HTMLButtonElement>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
   const drawer = useRef<HTMLDivElement>(null);
   const effectiveCollapsed = desktop && collapsed;
@@ -145,11 +141,7 @@ function SaaSLayoutContent() {
   return (
     <div
       className="operational-shell flex flex-col lg:flex-row h-dvh overflow-hidden bg-operational-shell"
-      onContextMenu={(event) => {
-        if (event.defaultPrevented) return;
-        event.preventDefault();
-        contextMenu.open([{ label: tCommons("actions.back"), onClick: () => navigate(-1) }], event.clientX, event.clientY);
-      }}>
+      onContextMenu={handleContextMenu}>
       <a href="#operational-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-white focus:p-4">
         {t("shell.skipContent")}
       </a>
@@ -167,10 +159,11 @@ function SaaSLayoutContent() {
         ref={drawer}
         role={!desktop && open ? "dialog" : undefined}
         aria-modal={!desktop && open ? true : undefined}
-        aria-label={t("navigation.label")}
+        aria-label={!desktop && open ? t("navigation.label") : undefined}
         inert={!desktop && !open ? true : undefined}
         className={`fixed inset-y-0 left-0 z-40 transition-transform duration-250 ease-in-out motion-reduce:transition-none lg:static ${!desktop && !open ? "-translate-x-full pointer-events-none" : "translate-x-0"}`}>
         <Sidebar
+          label={t("navigation.label")}
           hideToggle
           collapsed={effectiveCollapsed}
           onCollapsedChange={setCollapsed}
@@ -233,17 +226,14 @@ function SaaSLayoutContent() {
             />
             <NotificationCenter />
             <ToolbarAction
-              ref={assistantButton}
               icon="sparkles"
               iconSize={SIDEBAR_ICON_SIZE}
               iconGradient="orange"
               label={t("navigation.items.chatbot")}
-              aria-controls="operational-assistant"
-              aria-expanded={assistantOpen}
               onClick={() => {
                 setOpen(false);
                 closePanel();
-                setAssistantOpen(true);
+                navigate(routePaths.operationalChatbot(lang));
               }}
             />
             <SaaSAccount signingOut={signingOut} onLogout={handleLogout} email={session?.email ?? ""} managedCompanyName={session?.managedByCompany?.name} />
@@ -281,23 +271,13 @@ function SaaSLayoutContent() {
         </div>
       </div>
       <SidePanel
-        open={!!panel || assistantOpen}
-        wide={!!panel}
+        open={!!panel}
+        wide
         closeDisabled={panelBusy}
-        title={panel?.title ?? t("navigation.items.chatbot")}
-        closeLabel={panel ? tCommons("actions.close") : t("shell.closeAssistant")}
+        title={panel?.title ?? ""}
+        closeLabel={tCommons("actions.close")}
         trigger={panel?.trigger}
-        onClose={() => {
-          if (panel) closePanel();
-          else setAssistantOpen(false);
-        }}>
-        <div className={panel ? "hidden" : "flex min-h-0 flex-1 flex-col px-3 pb-3"}>
-          {companyContext ? (
-            <OperationalAssistant embedded active={assistantOpen && !panel} />
-          ) : (
-            <ChatbotPage embedded active={assistantOpen && !panel} />
-          )}
-        </div>
+        onClose={closePanel}>
         {panel?.content}
       </SidePanel>
     </div>

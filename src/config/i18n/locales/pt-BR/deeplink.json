@@ -1,7 +1,7 @@
 {
   "loading": "Carregando…",
   "mobile": {
-    "title": "Entrar no Solaria Mobile",
+    "title": "Entrar no Elos Mobile",
     "professionalOnly": "O aplicativo é exclusivo para profissionais com cadastro completo e aprovado.",
     "continueAs": "Continuar como {{email}}",
     "ineligible": "Esta conta ainda não está habilitada para acessar o aplicativo. Conclua o cadastro e aguarde a aprovação aqui no web.",
@@ -40,7 +40,7 @@
   "professional": {
     "title": "Cadastro profissional",
     "preserved": "Seus dados aprovados e seu acesso são preservados enquanto a proposta de alteração é analisada.",
-    "suspended": "O acesso profissional está suspenso. Entre em contato com o Solaria.",
+    "suspended": "O acesso profissional está suspenso. Entre em contato com o Elos.",
     "refresh": "Atualizar análise",
     "choose": "Escolha sua profissão",
     "manualPolicy": "Os requisitos desta profissão ainda precisam ser confirmados pelo administrador. O cadastro será encaminhado para análise manual.",

@@ -74,8 +74,8 @@ export default function Navbar() {
                 content={link.label}
                 label={link.label}
                 aria-current={active ? "page" : undefined}
-                color={active ? "var(--color-orange)" : "var(--color-operational-muted)"}
-                hoverColor={active ? "var(--color-orange)" : "var(--color-operational-ink)"}
+                color={active ? "var(--color-orange-text)" : "var(--color-operational-muted)"}
+                hoverColor={active ? "var(--color-orange-text)" : "var(--color-operational-ink)"}
                 backgroundColor={active ? "color-mix(in srgb, var(--color-orange) 8%, transparent)" : "transparent"}
                 hoverBackgroundColor={active ? "color-mix(in srgb, var(--color-orange) 12%, transparent)" : "var(--color-operational-hover)"}
                 className={`rounded-full! ${active ? "[&_span]:font-semi-bold" : ""}`}

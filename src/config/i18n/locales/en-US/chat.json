@@ -72,7 +72,7 @@
     "suggestionTitles": {
       "catalog": "Solar panels",
       "compare": "Compare your options",
-      "help": "Get started with Solaria"
+      "help": "Get started with Elos"
     },
     "suggestionDescriptions": {
       "catalog": "Find a panel for your project",
@@ -82,12 +82,12 @@
     "newConversation": "New conversation",
     "welcomeSubtitle": "The chat continues on the messages screen, where it is saved.",
     "welcomeTitle": "Where shall we start?",
-    "welcomeDescription": "Choose a suggestion or write your question about Solaria.",
+    "welcomeDescription": "Choose a suggestion or write your question about Elos.",
     "composerHint": "Enter sends · Shift + Enter adds a line",
     "suggestions": {
       "catalog": "How can I find a solar panel?",
       "compare": "How can I compare catalog options?",
-      "help": "How can I get started with Solaria?"
+      "help": "How can I get started with Elos?"
     },
     "greeting": "Hi! How can I help you today?",
     "draftPlaceholder": "Ask the assistant",

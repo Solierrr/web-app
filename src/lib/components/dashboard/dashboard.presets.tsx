@@ -177,7 +177,7 @@ function StripMetric({
   const hasValue = payload.value !== null && Number.isFinite(payload.value);
   return (
     <div className="flex min-w-0 flex-col gap-2 border-solid border-border p-5">
-      <h3 className="text-sidebar font-medium text-operational-muted">{title}</h3>
+      <p className="text-sidebar font-medium text-operational-muted">{title}</p>
       <div className="flex min-w-0 items-center justify-between gap-3">
         <p className="text-subtitle font-extra-bold tabular-nums leading-tight tracking-tight">
           {hasValue ? formatDashboardValue(payload.value as number, { locale, unit, maximumFractionDigits }) : "—"}

@@ -187,7 +187,7 @@ export default function EnterpriseProfile() {
     return (
       <OperationalPage centered sideBackground title={t("saasSidebar.companyProfile")}>
         <p>{t("myCompany.empty")}</p>
-        <Link className="text-orange" to={routePaths.profileOnboardingCompany(lang)}>
+        <Link className="text-orange-text" to={routePaths.profileOnboardingCompany(lang)}>
           {t("myCompany.register")}
         </Link>
       </OperationalPage>

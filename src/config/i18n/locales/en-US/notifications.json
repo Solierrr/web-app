@@ -18,12 +18,12 @@
     "loadingMore": "Loading...",
     "actionError": "Could not update the notification. Try again.",
     "allRead": "All notifications were marked as read.",
-    "enablePrompt": "Get alerts on this device even when Solaria is closed.",
+    "enablePrompt": "Get alerts on this device even when Elos is closed.",
     "enable": "Turn on notifications"
   },
   "push": {
     "title": "Notifications on this device",
-    "description": "Get alerts about new messages and services even when Solaria is closed. The permission applies only to this browser.",
+    "description": "Get alerts about new messages and services even when Elos is closed. The permission applies only to this browser.",
     "enable": "Turn on notifications",
     "disable": "Turn off notifications",
     "on": "Notifications are on for this device.",

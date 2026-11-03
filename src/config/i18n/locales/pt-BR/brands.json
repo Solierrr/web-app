@@ -74,7 +74,7 @@
     "PUBLIC": "Pública",
     "PRIVATE": "Privada"
   },
-  "publicationHelp": "A marca ficará privada até a aprovação do administrador Solaria.",
+  "publicationHelp": "A marca ficará privada até a aprovação do administrador Elos.",
   "sessionExpired": "Sua sessão expirou. Entre novamente.",
   "permissionDenied": "Você não tem permissão para esta operação.",
   "conflict": "Há um cadastro duplicado ou uma alteração simultânea. Atualize os dados antes de tentar novamente.",

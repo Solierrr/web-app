@@ -1,7 +1,7 @@
 {
   "loading": "Loading…",
   "mobile": {
-    "title": "Sign in to Solaria Mobile",
+    "title": "Sign in to Elos Mobile",
     "professionalOnly": "The app is exclusively for professionals with complete, approved registration.",
     "continueAs": "Continue as {{email}}",
     "ineligible": "This account cannot access the app yet. Complete registration and wait for approval on the web.",
@@ -40,7 +40,7 @@
   "professional": {
     "title": "Professional registration",
     "preserved": "Your approved information and access remain available while proposed changes are reviewed.",
-    "suspended": "Professional access is suspended. Contact Solaria.",
+    "suspended": "Professional access is suspended. Contact Elos.",
     "refresh": "Refresh review",
     "choose": "Choose your profession",
     "manualPolicy": "The administrator must confirm the requirements for this profession. Registration will receive manual review.",

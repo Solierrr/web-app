@@ -23,6 +23,14 @@
   "actions": {
     "add": "añadir",
     "back": "volver",
+    "forward": "avanzar",
+    "reload": "recargar",
+    "copyPageLink": "copiar enlace de la página",
+    "copyLinkAddress": "copiar dirección del enlace",
+    "copySelection": "copiar selección",
+    "copied": "copiado",
+    "copyFailed": "no se pudo copiar",
+    "goHome": "ir al inicio",
     "cancel": "cancelar",
     "close": "cerrar",
     "showMore": "ver todo",
@@ -116,7 +124,7 @@
     "loading": "Cargando...",
     "greetingCompany": "Hola, {{name}}",
     "greetingPersonal": "¡Hola!",
-    "greetingPlatformAdmin": "Panel del Admin Solaria",
+    "greetingPlatformAdmin": "Panel del Admin Elos",
     "offers": "Ofertas activas",
     "moreMetricsSoon": "Más métricas llegarán en las próximas fases.",
     "personalHint": "Usa el menú para acceder a tu perfil, mensajes o registrar una empresa.",
@@ -239,7 +247,7 @@
     "adminsTitle": "Administradores",
     "guestEmail": "Correo del invitado (opcional)",
     "sendByEmail": "Enviar por correo",
-    "emailSubject": "Invitación a {{company}} en Solaria",
+    "emailSubject": "Invitación a {{company}} en Elos",
     "emailBody": "Usa el código {{code}} para unirte a {{company}}: {{url}}",
     "description": "Gestiona tu equipo, cargos e invitaciones."
   },
@@ -380,7 +388,7 @@
     "rejected": "Rechazado"
   },
   "accountSetup": {
-    "title": "¿Cómo quieres usar Solaria?",
+    "title": "¿Cómo quieres usar Elos?",
     "description": "Elige el tipo de cuenta que mejor te describe.",
     "company": {
       "title": "Empresa",
