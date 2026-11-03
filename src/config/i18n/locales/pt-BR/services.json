@@ -70,8 +70,7 @@
     "downloadAttachment": "Não foi possível baixar o anexo",
     "listRatings": "Não foi possível carregar as avaliações",
     "saveRating": "Não foi possível salvar a avaliação",
-    "deleteRating": "Não foi possível excluir a avaliação",
-    "sendNps": "Não foi possível enviar a sua nota"
+    "deleteRating": "Não foi possível excluir a avaliação"
   },
   "user": {
     "getUserSummary": "Não foi possível carregar o participante",

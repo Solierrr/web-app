@@ -261,10 +261,5 @@
     "loading": "Loading media…",
     "locationLink": "View location on the map",
     "file": "File"
-  },
-  "nps": {
-    "question": "From 0 to 10, how likely are you to recommend the assistant?",
-    "score": "Score {{score}}",
-    "thanks": "Thanks for your score!"
   }
 }

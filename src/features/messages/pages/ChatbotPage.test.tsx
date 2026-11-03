@@ -13,8 +13,6 @@ const connected = vi.hoisted(() => ({ status: "connected", attempts: 0 }));
 
 vi.mock("@/features/messages/messages.messenger.api", () => ({
   createChatbotConversation: vi.fn(),
-  hasAnsweredNps: vi.fn(),
-  sendNps: vi.fn(),
   getConversation: vi.fn(),
   getConversationMessages: vi.fn(),
   getConversationMessagesSince: vi.fn(),

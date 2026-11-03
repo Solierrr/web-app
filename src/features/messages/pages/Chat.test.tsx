@@ -22,9 +22,7 @@ vi.mock("@/features/messages/messages.messenger.api", () => ({
   getConversationMessages: vi.fn(),
   getConversationMessagesSince: vi.fn(),
   getUserSummary: vi.fn(),
-  hasAnsweredNps: vi.fn(),
   markConversationRead: vi.fn(),
-  sendNps: vi.fn(),
   sendConversationMessage: vi.fn(),
 }));
 vi.mock("@/features/messages/messages.messenger.socket", () => ({
@@ -526,26 +524,5 @@ describe("Chat editing and deleting messages", () => {
     ]);
     renderChat();
     expect(await screen.findByText("Mídia indisponível")).toBeInTheDocument();
-  });
-  it("asks the assistant score once the assistant answered and sends it", async () => {
-    vi.mocked(api.getConversation).mockResolvedValue({ ...conversation, conversationType: "CHAT_BOT" });
-    vi.mocked(api.getConversationMessages).mockResolvedValue([
-      message(1, "Oi", { senderId: "me", messageType: "USER_TO_CHATBOT" }),
-      message(2, "Olá!", { senderId: "assistant", role: "assistant", messageType: "CHATBOT_TO_USER" }),
-    ]);
-    vi.mocked(api.sendNps).mockResolvedValue(undefined);
-    renderChat();
-    fireEvent.click(await screen.findByRole("button", { name: "Nota 9" }));
-    expect(api.sendNps).toHaveBeenCalledWith("conv-1", 9);
-    expect(screen.queryByRole("group", { name: /recomendaria/ })).not.toBeInTheDocument();
-  });
-
-  it("does not ask the score again for an answered assistant conversation", async () => {
-    vi.mocked(api.hasAnsweredNps).mockReturnValue(true);
-    vi.mocked(api.getConversation).mockResolvedValue({ ...conversation, conversationType: "CHAT_BOT" });
-    vi.mocked(api.getConversationMessages).mockResolvedValue([message(2, "Olá!", { role: "assistant", messageType: "CHATBOT_TO_USER" })]);
-    renderChat();
-    expect(await screen.findByText("Olá!")).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Nota 9" })).not.toBeInTheDocument();
   });
 });

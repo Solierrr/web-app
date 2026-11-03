@@ -138,21 +138,6 @@ export function PendingBubble({
   );
 }
 
-/** Pergunta de 0 a 10 depois que o assistente respondeu; some ao responder e não volta para a mesma conversa. */
-export function NpsPrompt({ onScore }: { onScore: (score: number) => void }) {
-  const { t } = useTranslation("chat", { keyPrefix: "nps" });
-  return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-2 px-1 pt-4" role="group" aria-label={t("question")}>
-      <span className="text-body text-operational-muted">{t("question")}</span>
-      <div className="flex flex-wrap gap-1">
-        {Array.from({ length: 11 }, (_, score) => (
-          <ToolbarAction key={score} label={t("score", { score })} content={String(score)} onClick={() => onScore(score)} className="size-8!" />
-        ))}
-      </div>
-    </div>
-  );
-}
-
 export function AssistantNotice({ status, onRetry }: { status: "thinking" | "timeout"; onRetry: () => void }) {
   const { t } = useTranslation("chat", { keyPrefix: "chatbot" });
   if (status === "thinking") {

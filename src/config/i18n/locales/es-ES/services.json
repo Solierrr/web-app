@@ -70,8 +70,7 @@
     "downloadAttachment": "No se pudo descargar el adjunto",
     "listRatings": "No se pudieron cargar las valoraciones",
     "saveRating": "No se pudo guardar la valoración",
-    "deleteRating": "No se pudo eliminar la valoración",
-    "sendNps": "No se pudo enviar tu nota"
+    "deleteRating": "No se pudo eliminar la valoración"
   },
   "user": {
     "getUserSummary": "No se pudo cargar el participante",

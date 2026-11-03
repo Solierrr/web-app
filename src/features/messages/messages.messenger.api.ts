@@ -1,5 +1,5 @@
 import i18n from "@/config/i18n/internationalization";
-import { getHttpStatus, httpJson } from "@/lib/shared/http/http.service";
+import { httpJson } from "@/lib/shared/http/http.service";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
 import {
   getMockMessenger,
@@ -242,44 +242,6 @@ export async function deleteMessage(id: string): Promise<MessageDto> {
     method: "DELETE",
     errorMessage: i18n.t("services:messenger.deleteMessage"),
   });
-}
-
-const NPS_KEY = "solaria.nps.answered";
-
-/** Conversas com o assistente que já receberam nota neste navegador; o servidor também recusa a segunda (409). */
-export function hasAnsweredNps(conversationId: string): boolean {
-  try {
-    return (JSON.parse(localStorage.getItem(NPS_KEY) ?? "[]") as string[]).includes(conversationId);
-  } catch {
-    return false;
-  }
-}
-
-function rememberNps(conversationId: string) {
-  try {
-    const answered = JSON.parse(localStorage.getItem(NPS_KEY) ?? "[]") as string[];
-    localStorage.setItem(NPS_KEY, JSON.stringify([...new Set([...answered, conversationId])].slice(-200)));
-  } catch {
-    // Sem armazenamento local, o 409 do servidor ainda evita a nota duplicada.
-  }
-}
-
-/** Nota de 0 a 10 para uma conversa com o assistente; `409 DUPLICATE_RESOURCE` quer dizer que ela já foi dada. */
-export async function sendNps(conversationId: string, score: number): Promise<void> {
-  if (!isAlwaysMockMode("MESSENGER")) {
-    try {
-      await httpJson<unknown>(`${API}/nps`, {
-        service: "messenger",
-        operation: "sendNps",
-        method: "POST",
-        body: { conversationId, score },
-        errorMessage: i18n.t("services:messenger.sendNps"),
-      });
-    } catch (error) {
-      if (getHttpStatus(error) !== 409) throw error;
-    }
-  }
-  rememberNps(conversationId);
 }
 
 export async function createChatbotConversation(userType: string): Promise<ConversationDto> {
