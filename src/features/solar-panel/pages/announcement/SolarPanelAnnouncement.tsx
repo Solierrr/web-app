@@ -11,6 +11,7 @@ import { getSolarPanelBySlug } from "@/features/solar-panel/solarPanel.service";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
 import { SoftIconButton } from "@@/ui/button/Button.presets";
+import ActionLink from "@@/ui/button/ActionLink";
 import { notify } from "@@/feedback/toast/Toast.utils";
 import { putCartItem } from "@/features/purchases/purchases.service";
 
@@ -76,18 +77,18 @@ export function SolarPanelAnnouncementPacked({ product }: SolarPanelAnnouncement
             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
               <span className="text-title font-bold leading-none tracking-tight">{new Intl.NumberFormat(lang, { style: "currency", currency: "BRL" }).format(product.unitPrice)}</span>
               <span className="text-body text-operational-muted">{t("general.perUnit")}</span>
-              {discounted && <span className="rounded-full bg-orange/10 px-3 py-1 text-body font-medium text-orange">-{product.discountPercentage}%</span>}
+              {discounted && <span className="rounded-full bg-orange/10 px-3 py-1 text-body font-medium text-orange-text">-{product.discountPercentage}%</span>}
             </div>
             <p className="text-body text-operational-muted">
               {product.availableUnits} {t("general.units")}
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <Link
+            <ActionLink
               to={routePaths.contactCompany(lang, product.company.id, product.title)}
-              className="rounded-full bg-orange px-8 py-3 font-medium text-white transition-colors hover:opacity-90">
-              {t("actions.contactSupplier")}
-            </Link>
+              content={t("actions.contactSupplier")}
+              description={t("actions.contactSupplier")}
+            />
             <SoftIconButton
               description={t("actions.addToCart")}
               disabled={adding || product.availableUnits < 1}

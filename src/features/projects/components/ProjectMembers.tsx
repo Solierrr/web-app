@@ -63,8 +63,7 @@ export default function ProjectMembers({ project: p }: { project: Project }) {
   }
   return (
     <div className="flex flex-col gap-6">
-      <div className="mx-auto flex w-full items-center justify-between max-w-operational-page">
-        <h2 className="font-semi-bold">{t("members")}</h2>
+      <div className="mx-auto flex w-full items-center justify-end max-w-operational-page">
         {writable && (
           <PrimaryButton
             variant="soft"

@@ -69,7 +69,7 @@ export default function Input({ name, placeholder, icon, suffix, rounded = false
   const inputElement = (
     <input
       ref={ref}
-      className={`${suffix ? "absolute inset-0 px-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none" : inverse === undefined ? "px-4" : inverse ? "pr-4 pl-2" : "pr-2 pl-4"} min-w-0 bg-transparent py-2 text-black font-medium placeholder:text-input-text w-full placeholder:select-none caret-orange caret focus:outline-0 cursor-text read-only:cursor-default disabled:cursor-not-allowed medium`}
+      className={`${suffix ? "absolute inset-0 pl-4 pr-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none" : inverse === undefined ? "px-4" : inverse ? "pr-4 pl-2" : "pr-2 pl-4"} min-w-0 bg-transparent py-2 text-black font-medium placeholder:text-input-text w-full placeholder:select-none caret-orange caret focus:outline-0 cursor-text read-only:cursor-default disabled:cursor-not-allowed medium`}
       {...props}
       value={value}
       defaultValue={defaultValue}
@@ -84,14 +84,14 @@ export default function Input({ name, placeholder, icon, suffix, rounded = false
   );
 
   const field = suffix ? (
-    <div className={`flex min-w-0 flex-1 items-center gap-1 px-4 ${props.disabled ? "cursor-not-allowed" : props.readOnly ? "cursor-default" : "cursor-text"}`} onClick={() => ref.current?.focus()}>
-      <span className="relative min-w-0">
+    <div className="relative flex min-w-0 flex-1 items-center gap-1 px-4">
+      <span className="min-w-0">
         <span aria-hidden="true" className="invisible block overflow-hidden whitespace-pre py-2 text-body font-medium">
           {visibleValue || placeholder || " "}
         </span>
         {inputElement}
       </span>
-      <span aria-hidden="true" className={`shrink-0 text-body ${visibleValue ? "text-black" : "text-input-text"}`}>
+      <span aria-hidden="true" className={`pointer-events-none shrink-0 text-body ${visibleValue ? "text-black" : "text-input-text"}`}>
         {suffix}
       </span>
     </div>

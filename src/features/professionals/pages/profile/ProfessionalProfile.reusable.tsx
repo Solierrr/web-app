@@ -15,10 +15,10 @@ export function ProfessionalBadges({ professional }: { professional: Pick<Catalo
   return (
     <>
       {professional.professions.map((profession) => (
-        <StatusField key={profession} state="highlight" pill icon="registrations" label={profession} />
+        <StatusField key={profession} state="highlight" icon="registrations" label={profession} />
       ))}
       {registrations.map((registration) => (
-        <StatusField key={registration} state="approved" pill icon="shieldCheck" label={registration} />
+        <StatusField key={registration} state="approved" icon="shieldCheck" label={registration} />
       ))}
     </>
   );

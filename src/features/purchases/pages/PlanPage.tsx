@@ -49,10 +49,10 @@ export default function PlanPage() {
   }
 
   return (
-    <OperationalPage title={t("title")} description={t("description")} loading={!subscription && !error}>
-      {error && <p className="px-4 sm:px-8 lg:px-10">{t("error")}</p>}
+    <OperationalPage title={t("title")} description={t("description")} loading={!subscription && !error} centered sideBackground>
+      {error && <p>{t("error")}</p>}
       {subscription && (
-        <div className="flex flex-col gap-6 px-4 pb-10 sm:px-8 lg:px-10">
+        <div className="flex flex-col gap-6">
           <section aria-label={t("current")} className="flex flex-col gap-1">
             <h2>{subscription.planName}</h2>
             <p>

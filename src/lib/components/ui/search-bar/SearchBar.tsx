@@ -20,17 +20,17 @@ interface SearchBarProps extends Omit<ComponentProps<typeof Input>, "icon" | "cl
  */
 export default function SearchBar({ leading, actions, className = "", ...props }: SearchBarProps) {
   return (
-    <Surface field className={`w-full ${className}`} contentClassName="flex items-stretch overflow-visible!">
+    <Surface field className={`w-full ${className}`} contentClassName="flex flex-wrap items-stretch overflow-visible! sm:flex-nowrap">
       {leading && (
         <div className="flex shrink-0 items-stretch divide-x divide-operational-border/60 border-r-(length:--border-width-ui) border-solid border-border/60 [&>*:first-child]:rounded-l-full">
           {leading}
         </div>
       )}
-      <div className="min-w-0 flex-1 px-2 py-1">
+      <div className="flex min-w-48 flex-1 basis-0 items-center px-2 py-1">
         <Input {...props} rounded icon={{ name: "search" }} className="w-full! bg-transparent!" />
       </div>
       {actions && (
-        <div className="flex shrink-0 items-stretch divide-x divide-operational-border/60 border-l-(length:--border-width-ui) border-solid border-border/60 [&>*:last-child]:rounded-r-full">
+        <div className="flex shrink-0 items-stretch divide-x divide-operational-border/60 border-l-(length:--border-width-ui) border-solid border-border/60 [&:has(>:nth-child(2))]:w-full [&:has(>:nth-child(2))]:border-l-0 [&:has(>:nth-child(2))]:border-t-(length:--border-width-ui) sm:[&:has(>:nth-child(2))]:w-auto sm:[&:has(>:nth-child(2))]:border-l-(length:--border-width-ui) sm:[&:has(>:nth-child(2))]:border-t-0 [&>*]:min-w-0 [&>*]:flex-1 sm:[&>*]:flex-none [&>*:last-child]:rounded-r-full [&>button:last-child]:flex-none">
           {actions}
         </div>
       )}

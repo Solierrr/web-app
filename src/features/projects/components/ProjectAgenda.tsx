@@ -73,8 +73,7 @@ export default function ProjectAgenda({ project: p }: { project: Project }) {
   const current = editor && editor !== "new" ? editor : null;
   return (
     <div className="flex flex-col gap-6">
-      <header className="mx-auto flex w-full items-center justify-between max-w-operational-page">
-        <h2 className="font-semi-bold">{t("agenda")}</h2>
+      <header className="mx-auto flex w-full items-center justify-end max-w-operational-page">
         {writable && (
           <PrimaryButton
             variant="soft"

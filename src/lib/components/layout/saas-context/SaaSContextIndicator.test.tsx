@@ -17,12 +17,12 @@ describe("SaaSContextIndicator", () => {
     expect(screen.getByText("Perfil pessoal")).toBeInTheDocument();
   });
 
-  it("shows the platform scope for a Solaria admin without a company", () => {
+  it("shows the platform scope for a Elos admin without a company", () => {
     vi.mocked(useActiveContext).mockReturnValue({ ...base, kind: "personal", company: null, isAdmin: false, isPlatformAdmin: true });
 
     render(<SaaSContextIndicator />);
 
-    expect(screen.getByText("Admin Solaria")).toBeInTheDocument();
+    expect(screen.getByText("Admin Elos")).toBeInTheDocument();
   });
 
   it("shows the company type, name and role for a company admin", () => {
@@ -66,7 +66,7 @@ describe("SaaSContextIndicator", () => {
 
     render(<SaaSContextIndicator />);
 
-    expect(screen.getByText("Admin Solaria")).toBeInTheDocument();
+    expect(screen.getByText("Admin Elos")).toBeInTheDocument();
     expect(screen.queryByText("Solar XPTO")).not.toBeInTheDocument();
   });
 });

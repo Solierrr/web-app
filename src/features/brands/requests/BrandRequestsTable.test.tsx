@@ -72,6 +72,6 @@ describe("BrandRequestsTable", () => {
     const dialog = await open(true);
     fireEvent.click(within(dialog).getByRole("button", { name: "Aprovar" }));
     fireEvent.click(within(screen.getByRole("dialog", { name: "Aprovar" })).getByRole("button", { name: /confirmar/i }));
-    await waitFor(() => expect(notify).toHaveBeenCalledWith(expect.stringContaining("desatualizada")));
+    await waitFor(() => expect(notify).toHaveBeenCalledWith(expect.stringContaining("desatualizada"), undefined, true));
   });
 });

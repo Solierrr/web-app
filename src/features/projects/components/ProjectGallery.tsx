@@ -10,7 +10,7 @@ import type { Project, ProjectPhoto } from "../projects.d";
 import { projectApi, projectPhotoBlob } from "../projects.service";
 import { useProjects, useProjectResource, useProjectActions } from "../projects.hooks";
 import { isProjectReadOnly } from "../projects.utils";
-export function ProjectImage({ projectId, photo }: { projectId: string; photo: ProjectPhoto }) {
+export function ProjectImage({ projectId, photo, fill = false }: { projectId: string; photo: ProjectPhoto; fill?: boolean }) {
   const ref = useRef<HTMLImageElement>(null);
   const { t } = useProjects();
   const [failed, setFailed] = useState(false);
@@ -36,7 +36,7 @@ export function ProjectImage({ projectId, photo }: { projectId: string; photo: P
   return failed ? (
     <Alert>{t("photoFailed")}</Alert>
   ) : (
-    <img ref={ref} alt={photo.name} className="aspect-video w-full rounded-medium bg-input-bg object-contain" />
+    <img ref={ref} alt={photo.name} className={`w-full rounded-medium bg-input-bg ${fill ? "aspect-[4/3] object-cover" : "aspect-video object-contain"}`} />
   );
 }
 export default function ProjectGallery({ project: p, onChange }: { project: Project; onChange: () => Promise<void> }) {
@@ -62,13 +62,12 @@ export default function ProjectGallery({ project: p, onChange }: { project: Proj
     }
   }
   return (
-    <Surface className="mx-auto w-full lg:w-[85%] p-6">
-      <header className="mb-5 flex items-center justify-between">
-        <h2 className="font-semi-bold">{t("gallery")}</h2>
+    <Surface className="mx-auto w-full lg:w-[85%]" contentClassName="flex flex-col gap-6 p-5 sm:p-6">
+      <header className="flex items-center justify-end">
         <ToolbarAction icon="refresh" label={t("refresh")} disabled={a.busy} onClick={() => void a.execute(r.reload, t("feedback.refreshed"))} />
       </header>
       {p.canContribute && (
-        <div className="mb-6 flex flex-col gap-4">
+        <div className="flex flex-col gap-4">
           <p className="text-operational-muted">{t("photoHelp")}</p>
           <ImageInput
             name="projectPhotos"
@@ -101,10 +100,10 @@ export default function ProjectGallery({ project: p, onChange }: { project: Proj
       {r.data?.length === 0 && <p className="text-operational-muted">{t("photosEmpty")}</p>}
       <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {r.data?.map((photo) => (
-          <li key={photo.id} className="min-w-0 rounded-medium bg-input-bg p-3">
-            <ProjectImage projectId={p.id} photo={photo} />
-            <div className="mt-3 flex items-center justify-between gap-2">
-              <p className="min-w-0 truncate">{photo.cover ? t("cover") : photo.name}</p>
+          <li key={photo.id} className="min-w-0 rounded-surface bg-white p-2 shadow-surface">
+            <ProjectImage projectId={p.id} photo={photo} fill />
+            <div className="mt-2 flex items-center justify-between gap-2 px-2 pb-1">
+              <p className="min-w-0 truncate text-body font-medium">{photo.cover ? t("cover") : photo.name}</p>
               {manager && (
                 <TableRowOptions name={photo.name} disabled={a.busy}>
                   {!photo.cover && (

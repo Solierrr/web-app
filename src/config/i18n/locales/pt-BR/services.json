@@ -71,7 +71,7 @@
     "deleteOffer": "Não foi possível remover a oferta {{id}}"
   },
   "platformAdmin": {
-    "getMyPlatformAdmin": "Não foi possível verificar o status de Admin Solaria"
+    "getMyPlatformAdmin": "Não foi possível verificar o status de Admin Elos"
   },
   "professionalOnboarding": {
     "getProfessions": "Não foi possível carregar as profissões",

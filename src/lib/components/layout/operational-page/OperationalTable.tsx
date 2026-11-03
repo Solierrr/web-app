@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import Pagination from "@@/ui/pagination/Pagination";
 import Skeleton from "@@/feedback/skeleton/Skeleton";
 import Surface from "@@/ui/surface/Surface";
-import Input from "@@/ui/input/Input";
+import SearchBar, { SearchBarAction } from "@@/ui/search-bar/SearchBar";
 import Select from "@@/ui/select/Select";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
 import TableHeading from "@@/ui/table-heading/TableHeading";
@@ -71,6 +71,7 @@ export default function OperationalTable<T>({
   const current = Math.min(page, Math.max(1, Math.ceil((filtered?.length ?? 0) / 5)));
   const visible = filtered?.slice((current - 1) * 5, current * 5);
   const activeFilters = Object.values(filters).some(Boolean);
+  const hasFilters = dataColumns.some((column) => column.filterable);
   async function refresh() {
     if (!onRefresh || refreshing) return;
     setRefreshing(true);
@@ -84,46 +85,48 @@ export default function OperationalTable<T>({
     }
   }
   return (
-    <section aria-label={label} aria-busy={items === null || refreshing} className="mx-auto flex w-full min-w-0 flex-col gap-3 lg:w-[85%]">
+    <section aria-busy={items === null || refreshing} className="mx-auto flex w-full min-w-0 flex-col gap-3 lg:w-[85%]">
       {bar && (
-        <div className="flex min-w-0 items-center gap-2">
-          <Input
-            name="tableSearch"
-            aria-label={t("search")}
-            placeholder={t("search")}
-            value={query}
-            disabled={items === null}
-            icon={{ name: "search" }}
-            className="min-w-0 flex-1"
-            onChange={(event) => {
-              setQuery(event.target.value);
-              setPage(1);
-            }}
-          />
-          {dataColumns.some((column) => column.filterable) && (
-            <ToolbarAction
-              ref={filterButton}
-              icon="filter"
-              label={t("filters")}
-              content={t("filters")}
-              disabled={items === null}
-              onClick={() => setPopup((value) => (value === "filters" ? null : "filters"))}
-            />
-          )}
-          {activeFilters && (
-            <ToolbarAction
-              icon="x"
-              label={t("clearFilters")}
-              onClick={() => {
-                setFilters({});
-                setPage(1);
-              }}
-            />
-          )}
-        </div>
+        <SearchBar
+          name="tableSearch"
+          aria-label={t("search")}
+          placeholder={t("search")}
+          value={query}
+          disabled={items === null}
+          onChange={(event) => {
+            setQuery(event.target.value);
+            setPage(1);
+          }}
+          actions={
+            (hasFilters || activeFilters) && (
+              <>
+                {hasFilters && (
+                  <SearchBarAction
+                    ref={filterButton}
+                    icon="filter"
+                    label={t("filters")}
+                    content={t("filters")}
+                    disabled={items === null}
+                    onClick={() => setPopup((value) => (value === "filters" ? null : "filters"))}
+                  />
+                )}
+                {activeFilters && (
+                  <SearchBarAction
+                    icon="x"
+                    label={t("clearFilters")}
+                    onClick={() => {
+                      setFilters({});
+                      setPage(1);
+                    }}
+                  />
+                )}
+              </>
+            )
+          }
+        />
       )}
       <Surface>
-        <div role="region" aria-label={label} tabIndex={0} className="scrollbar-none overflow-x-auto">
+        <div role="region" aria-label={label} tabIndex={0} className="scrollbar-none @container overflow-x-auto">
           <table
             className="table-auto w-max min-w-full border-separate border-spacing-0 text-left text-body"
             aria-label={label}
@@ -195,8 +198,8 @@ export default function OperationalTable<T>({
                 ))}
               {filtered?.length === 0 && (
                 <tr>
-                  <td colSpan={dataColumns.length + 1} className="h-20 px-4 text-center text-operational-muted">
-                    {query || activeFilters ? t("noResults") : empty}
+                  <td colSpan={dataColumns.length + 1} className="h-20 text-center text-operational-muted">
+                    <div className="sticky left-0 w-[100cqw] px-4">{query || activeFilters ? t("noResults") : empty}</div>
                   </td>
                 </tr>
               )}

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { NativeSelect } from "@@/ui/select/Select";
+import Surface from "@@/ui/surface/Surface";
 import { SUPPORTED as SUPPORTED_LANGUAGES, isSupportedLanguage, rememberLanguage } from "@/config/i18n/browser/languages";
 import { translatePathToLanguage } from "@/config/i18n/paths";
 import { updateAccountLocale } from "@/features/access/access.service";
@@ -36,7 +37,7 @@ export default function AccountLanguage() {
   }
 
   return (
-    <section aria-labelledby="account-language-title" className="flex flex-col gap-3 rounded-surface border-ui bg-white p-4 shadow-surface">
+    <Surface role="region" aria-labelledby="account-language-title" contentClassName="flex flex-col gap-3 p-4">
       <h2 id="account-language-title" className="text-label font-medium">
         {t("language")}
       </h2>
@@ -55,6 +56,6 @@ export default function AccountLanguage() {
         ))}
       </NativeSelect>
       {failed && <p role="alert">{t("languageError")}</p>}
-    </section>
+    </Surface>
   );
 }

@@ -3,7 +3,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Popover from "@@/overlay/popover/Popover";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
-import { PrimaryButton, SurfaceButton } from "@@/ui/button/Button.presets";
+import { SurfaceButton } from "@@/ui/button/Button.presets";
+import GroupAction from "@@/ui/button/GroupAction";
+import SurfaceGroup from "@@/ui/surface/SurfaceGroup";
 import { SIDEBAR_ICON_SIZE } from "@@/layout/sidebar/Sidebar.styles";
 import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import type { NotificationItem } from "../notification";
@@ -38,31 +40,23 @@ function NotificationPanel({ onClose }: { onClose: () => void }) {
   }
 
   return (
-    <div className="flex max-h-[min(36rem,calc(100dvh-8rem))] flex-col gap-3">
+    <div className="flex max-h-[min(36rem,calc(100dvh-8rem))] flex-col gap-3 rounded-[calc(var(--radius-surface)-var(--spacing)*2)] bg-operational-surface p-4">
       <div className="flex items-center justify-between gap-3">
         <h2 className="text-label font-medium">{t("title")}</h2>
-        <SurfaceButton
-          type="button"
-          disabled={!hasUnread}
-          content={t("markAllRead")}
-          description={t("markAllRead")}
-          onClick={() => void markAll()}
-          className="min-h-10"
-        />
+        <ToolbarAction icon="check" label={t("markAllRead")} disabled={!hasUnread} onClick={() => void markAll()} />
       </div>
       {push.status === PushStatus.OFF && (
-        <div className="flex flex-col items-start gap-2 rounded-medium bg-operational-hover p-3">
-          <p>{t("enablePrompt")}</p>
-          <PrimaryButton type="button" disabled={push.busy} content={t("enable")} description={t("enable")} onClick={() => void push.enable()} />
-          {push.failed && <p role="alert">{tPush("error")}</p>}
-        </div>
+        <SurfaceGroup>
+          <GroupAction icon="bell" label={t("enable")} content={t("enable")} disabled={push.busy} onClick={() => void push.enable()} />
+        </SurfaceGroup>
       )}
+      {push.status === PushStatus.OFF && push.failed && <p role="alert">{tPush("error")}</p>}
       <div className="min-h-0 flex-1 overflow-y-auto scrollbar-none">
         {list.status === "loading" && <NotificationSkeleton />}
         {list.status === "error" && <NotificationRetry message={t("error")} onRetry={list.retry} />}
         {list.status === "ready" && list.items.length === 0 && <p className="p-2 text-operational-muted">{t("empty")}</p>}
         {list.status === "ready" && list.items.length > 0 && (
-          <ul aria-label={t("list")} className="flex flex-col gap-1">
+          <ul aria-label={t("list")} className="flex flex-col divide-y divide-operational-border/60 overflow-hidden rounded-medium bg-white shadow-surface">
             {list.items.map((item) => (
               <NotificationRow key={item.id} item={item} onOpen={() => open(item)} onMarkRead={() => void list.markRead(item.id)} />
             ))}
@@ -124,7 +118,7 @@ export default function NotificationCenter() {
         {announced === null ? "" : t("announce", { count: announced })}
       </p>
       {open && (
-        <Popover anchorRef={trigger} label={t("title")} onClose={close} className="max-w-md!">
+        <Popover anchorRef={trigger} label={t("title")} onClose={close} className="max-w-md! rounded-surface! border-(length:--border-width-ui) border-solid border-border/50 p-2!">
           <NotificationPanel onClose={close} />
         </Popover>
       )}

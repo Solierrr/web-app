@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { PrimaryButton, SurfaceButton } from "@@/ui/button/Button.presets";
+import Surface from "@@/ui/surface/Surface";
 import { PushStatus } from "../notification.enum";
 import { usePushStatus } from "../notification.hooks";
 
@@ -14,7 +15,7 @@ export default function PushToggle() {
   const Button = on ? SurfaceButton : PrimaryButton;
 
   return (
-    <section aria-labelledby="push-toggle-title" className="flex flex-col gap-3 rounded-surface border-ui bg-white p-4 shadow-surface">
+    <Surface role="region" aria-labelledby="push-toggle-title" contentClassName="flex flex-col gap-3 p-4">
       <h2 id="push-toggle-title" className="text-label font-medium">
         {t("title")}
       </h2>
@@ -31,6 +32,6 @@ export default function PushToggle() {
         />
       )}
       {failed && <p role="alert">{t("error")}</p>}
-    </section>
+    </Surface>
   );
 }

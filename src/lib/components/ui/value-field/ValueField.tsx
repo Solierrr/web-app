@@ -7,7 +7,7 @@ export default function ValueField({ children, meter, comparison }: ValueFieldPr
     ? "text-feedback-success"
     : comparison?.direction === "near"
       ? "text-operational-muted"
-      : "text-orange";
+      : "text-orange-text";
   return (
     <span
       aria-label={comparison?.label}

@@ -23,6 +23,14 @@
   "actions": {
     "add": "adicionar",
     "back": "voltar",
+    "forward": "avançar",
+    "reload": "recarregar",
+    "copyPageLink": "copiar link da página",
+    "copyLinkAddress": "copiar endereço do link",
+    "copySelection": "copiar seleção",
+    "copied": "copiado",
+    "copyFailed": "não foi possível copiar",
+    "goHome": "ir para o início",
     "cancel": "cancelar",
     "close": "fechar",
     "showMore": "ver tudo",
@@ -116,7 +124,7 @@
     "loading": "Carregando...",
     "greetingCompany": "Olá, {{name}}",
     "greetingPersonal": "Olá!",
-    "greetingPlatformAdmin": "Painel do Admin Solaria",
+    "greetingPlatformAdmin": "Painel do Admin Elos",
     "offers": "Ofertas ativas",
     "moreMetricsSoon": "Mais métricas chegam nas próximas fases.",
     "personalHint": "Use o menu para acessar seu perfil, mensagens ou cadastrar uma empresa.",
@@ -190,6 +198,7 @@
   },
   "settings": {
     "title": "Configurações",
+    "description": "Gerencie seu perfil, segurança, privacidade e dispositivos.",
     "profile": "Perfil",
     "security": "Segurança",
     "privacy": "Privacidade",
@@ -200,6 +209,7 @@
   },
   "settingsSecurity": {
     "title": "Segurança",
+    "description": "Altere a senha usada para acessar sua conta.",
     "currentPassword": "Senha atual",
     "newPassword": "Nova senha",
     "submit": "Salvar",
@@ -237,7 +247,7 @@
     "adminsTitle": "Administradores",
     "guestEmail": "E-mail do convidado (opcional)",
     "sendByEmail": "Enviar por e-mail",
-    "emailSubject": "Convite para {{company}} na Solaria",
+    "emailSubject": "Convite para {{company}} no Elos",
     "emailBody": "Use o código {{code}} para entrar na {{company}}: {{url}}",
     "description": "Gerencie sua equipe, cargos e convites."
   },
@@ -378,7 +388,7 @@
     "rejected": "Reprovado"
   },
   "accountSetup": {
-    "title": "Como você quer usar a Solaria?",
+    "title": "Como você quer usar o Elos?",
     "description": "Escolha o tipo de conta que melhor descreve você.",
     "company": {
       "title": "Empresa",

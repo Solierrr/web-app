@@ -13,6 +13,7 @@ import type {
   ProjectOptions,
 } from "./projects.d";
 import { isProjectReadOnly } from "./projects.utils";
+const coverImages = Object.values(import.meta.glob<string>("/src/assets/mocks/editorial/solar-panels-*.webp", { eager: true, query: "?url", import: "default" }));
 interface State {
   projects: Project[];
   members: Record<string, ProjectMember[]>;
@@ -24,7 +25,7 @@ interface State {
 }
 const uid = () => getAuthSession()?.userId ?? "local-user";
 const email = () => getAuthSession()?.email.toLowerCase() ?? "local@example.test";
-const key = () => `solaria.mock.projects.v1.${uid()}`;
+const key = () => `solaria.mock.projects.v2.${uid()}`;
 const stamp = () => new Date().toISOString();
 function seed(): State {
   const state: State = { projects: [], members: {}, invites: [], activities: {}, history: {}, photos: {}, scopes: [] };
@@ -44,7 +45,7 @@ function seed(): State {
     location: { city: "Campinas", state: "SP", street: "Avenida Brasil", number: "120" },
   });
   state.members[id] = [
-    { id: "external-owner", userId: "external-owner", authId: "external-owner", name: "Equipe Solaria", role: "OWNER", functionName: "Responsável" },
+    { id: "external-owner", userId: "external-owner", authId: "external-owner", name: "Equipe Elos", role: "OWNER", functionName: "Responsável" },
   ];
   state.invites.push({
     id: "demo-received-invitation",
@@ -108,6 +109,7 @@ function addScope(s: State, companyId: string | null) {
       location: { city: "São Paulo", state: "SP", street: "Rua das Acácias", number: "240", zipCode: "01311000" },
     };
     s.projects.push(p);
+    s.photos[id] = [{ id: `seed-${index}`, name: "capa.webp", mime: "image/webp", cover: true, size: 1, createdAt: p.createdAt }];
     s.members[id] = [
       { id: crypto.randomUUID(), userId: uid(), authId: uid(), name: email(), role: "OWNER", functionName: "Responsável" },
       {
@@ -407,6 +409,7 @@ async function photoStore(key: string, blob: Blob | null) {
 }
 export async function mockPhotoBlob(projectId: string, photoId: string): Promise<Blob> {
   access(load(), projectId);
+  if (photoId.startsWith("seed-")) return (await fetch(coverImages[Number(photoId.slice(5)) % coverImages.length])).blob();
   const db = await photoDatabase();
   try {
     return await new Promise<Blob>((resolve, reject) => {

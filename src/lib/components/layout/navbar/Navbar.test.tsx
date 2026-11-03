@@ -1,8 +1,10 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 
 import "@/config/i18n/internationalization";
+import { DEFAULT as DEFAULT_LANGUAGE } from "@/config/i18n/browser/languages";
+import { routePaths } from "@/config/i18n/paths";
 import Navbar from "./Navbar";
 
 vi.mock("@/lib/shared/auth/authToken.utils", () => ({ getAuthSession: () => null }));
@@ -29,9 +31,20 @@ describe("Navbar", () => {
     expect(screen.queryByRole("link", { name: "Credenciar-se" })).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Carrinho" })).toHaveAttribute("href", "/pt-BR/carrinho");
     expect(screen.queryByRole("link", { name: "Suporte" })).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Conta" }));
-    expect(screen.getByRole("menuitem", { name: "Entrar" })).toBeInTheDocument();
-    expect(screen.getByRole("menuitem", { name: "Suporte" })).toBeInTheDocument();
+  });
+
+  it("sends visitors straight to the login page without opening a menu", () => {
+    render(
+      <MemoryRouter initialEntries={["/pt-BR/empresas"]}>
+        <Routes>
+          <Route path="/pt-BR/empresas" element={<Navbar />} />
+          <Route path={routePaths.login(DEFAULT_LANGUAGE)} element={<p>login page</p>} />
+        </Routes>
+      </MemoryRouter>,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
+    expect(screen.queryByRole("menuitem")).not.toBeInTheDocument();
+    expect(screen.getByText("login page")).toBeInTheDocument();
   });
 
   it("has no logo and keeps the standard navbar height", () => {

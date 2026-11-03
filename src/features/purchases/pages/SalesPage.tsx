@@ -28,10 +28,10 @@ export default function SalesPage() {
   }, []);
 
   return (
-    <OperationalPage title={t("title")} description={t("description")} loading={!sales && !error}>
-      {error && <p className="px-4 sm:px-8 lg:px-10">{t("error")}</p>}
+    <OperationalPage title={t("title")} description={t("description")} loading={!sales && !error} centered sideBackground>
+      {error && <p>{t("error")}</p>}
       {sales && (
-        <div className="px-4 pb-10 sm:px-8 lg:px-10">
+        <div>
           <OperationalTable
             label={t("list")}
             items={sales}

@@ -15,9 +15,29 @@ interface MenuListProps extends React.HTMLAttributes<HTMLUListElement> {
  *
  * @returns O elemento `<ul>` estilizado.
  */
-export const MenuList = forwardRef<HTMLUListElement, MenuListProps>(function MenuList({ className, children, ...props }, ref) {
+export const MenuList = forwardRef<HTMLUListElement, MenuListProps>(function MenuList({ className, children, onKeyDown, ...props }, ref) {
   return (
-    <ul ref={ref} {...props} className={`overflow-hidden rounded-medium bg-white shadow-lg animate-fade-in motion-reduce:animate-none ${className ?? ""}`}>
+    <ul
+      ref={ref}
+      {...props}
+      onKeyDown={(event) => {
+        onKeyDown?.(event);
+        if (event.defaultPrevented || !["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) return;
+        const items = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('[role="option"],[role="menuitem"]')).filter(
+          (item) => item.getAttribute("aria-disabled") !== "true",
+        );
+        if (!items.length) return;
+        event.preventDefault();
+        const current = items.indexOf(document.activeElement as HTMLElement);
+        const next =
+          event.key === "Home"
+            ? 0
+            : event.key === "End"
+              ? items.length - 1
+              : (current + (event.key === "ArrowDown" ? 1 : -1) + items.length) % items.length;
+        items[next].focus();
+      }}
+      className={`overflow-hidden rounded-medium bg-white shadow-lg animate-fade-in motion-reduce:animate-none ${className ?? ""}`}>
       {children}
     </ul>
   );
@@ -55,7 +75,7 @@ export function MenuItem({ onSelect, disabled = false, selected, className, onKe
       tabIndex={disabled ? -1 : 0}
       aria-disabled={disabled}
       aria-selected={selected}
-      className={`flex items-center-safe gap-2 px-4 py-2 font-medium select-none focus:outline-none ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:bg-input-bg focus-visible:bg-input-bg"} ${selected ? "bg-input-bg" : ""} ${className ?? ""}`}
+      className={`flex items-center-safe gap-2 px-4 py-2 font-medium select-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-operational-ink ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:bg-input-bg focus-visible:bg-input-bg"} ${selected ? "bg-input-bg" : ""} ${className ?? ""}`}
       onClick={handleActivate}
       onKeyDown={(event) => {
         onKeyDown?.(event);

@@ -36,7 +36,7 @@ export async function loginWithMockMicrosoft(): Promise<AuthSession> {
   });
   if (!account.selectedContext) selectContext(defaults.selectedContext!);
   const usernameKey = `solaria.mock.username.${session.userId}`;
-  if (!localStorage.getItem(usernameKey)) localStorage.setItem(usernameKey, "Teste Solaria");
+  if (!localStorage.getItem(usernameKey)) localStorage.setItem(usernameKey, "Teste Elos");
   return session;
 }
 

@@ -36,7 +36,7 @@ function ProjectCover({ project }: { project: Project }) {
       if (url) URL.revokeObjectURL(url);
     };
   }, [project]);
-  return <MarketplaceImage src={src} alt={project.name} fallback="folder" className="aspect-[6/5] rounded-surface" />;
+  return <MarketplaceImage src={src} alt={project.name} fallback="folder" className="aspect-[6/5] rounded-surface bg-white! shadow-surface" />;
 }
 
 export default function ProjectCard({ project, rowAction }: { project: Project; rowAction?: ReactNode }) {
@@ -58,9 +58,9 @@ export default function ProjectCard({ project, rowAction }: { project: Project; 
           </div>
         }>
         <div className="flex min-w-0 flex-col gap-1">
-          <h3 title={project.name} className="line-clamp-1 text-body font-semi-bold leading-6 text-operational-ink">
+          <h2 title={project.name} className="line-clamp-1 text-body font-semi-bold leading-6 text-operational-ink">
             {project.name}
-          </h3>
+          </h2>
           <p className="line-clamp-1 text-sidebar font-medium leading-6 text-operational-muted">{location || t(`roles.${project.role}`)}</p>
         </div>
       </MarketplaceCard>

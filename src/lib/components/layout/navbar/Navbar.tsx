@@ -74,8 +74,8 @@ export default function Navbar() {
                 content={link.label}
                 label={link.label}
                 aria-current={active ? "page" : undefined}
-                color={active ? "var(--color-orange)" : "var(--color-operational-muted)"}
-                hoverColor={active ? "var(--color-orange)" : "var(--color-operational-ink)"}
+                color={active ? "var(--color-orange-text)" : "var(--color-operational-muted)"}
+                hoverColor={active ? "var(--color-orange-text)" : "var(--color-operational-ink)"}
                 backgroundColor={active ? "color-mix(in srgb, var(--color-orange) 8%, transparent)" : "transparent"}
                 hoverBackgroundColor={active ? "color-mix(in srgb, var(--color-orange) 12%, transparent)" : "var(--color-operational-hover)"}
                 className={`rounded-full! ${active ? "[&_span]:font-semi-bold" : ""}`}
@@ -89,15 +89,19 @@ export default function Navbar() {
           <ToolbarAction
             ref={trigger}
             icon="user"
-            label={t("account")}
-            aria-haspopup="menu"
+            label={authenticated ? t("account") : t("login")}
+            aria-haspopup={authenticated ? "menu" : undefined}
             onClick={() => {
+              if (!authenticated) {
+                navigate(routePaths.login(lang));
+                return;
+              }
               const anchor = trigger.current?.getBoundingClientRect();
               menu.current?.open(
                 [
                   {
-                    label: authenticated ? tAccess("operational") : t("login"),
-                    onClick: () => navigate(authenticated ? routePaths.dashboard(lang) : routePaths.login(lang)),
+                    label: tAccess("operational"),
+                    onClick: () => navigate(routePaths.dashboard(lang)),
                   },
                   { label: tAccess("haveCode"), onClick: () => navigate(routePaths.activateAccess(lang)) },
                   { label: tAccess("company"), onClick: () => navigate(routePaths.registerCompany(lang)) },

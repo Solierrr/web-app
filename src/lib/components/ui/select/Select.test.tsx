@@ -139,3 +139,22 @@ describe("Select", () => {
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
   });
 });
+
+describe("Select keyboard", () => {
+  it("opens with the arrow key, focuses the first option and returns focus to the trigger on Escape", () => {
+    render(<Select name="select-teclado" options={["A", "B"]} />);
+    const trigger = screen.getByRole("button", { name: "select-teclado" });
+    trigger.focus();
+
+    fireEvent.keyDown(trigger, { key: "ArrowDown" });
+
+    expect(screen.getByRole("option", { name: "A" })).toHaveFocus();
+    fireEvent.keyDown(screen.getByRole("listbox"), { key: "ArrowDown" });
+    expect(screen.getByRole("option", { name: "B" })).toHaveFocus();
+
+    fireEvent.keyDown(document, { key: "Escape" });
+
+    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
+  });
+});

@@ -23,6 +23,14 @@
   "actions": {
     "add": "add",
     "back": "back",
+    "forward": "forward",
+    "reload": "reload",
+    "copyPageLink": "copy page link",
+    "copyLinkAddress": "copy link address",
+    "copySelection": "copy selection",
+    "copied": "copied",
+    "copyFailed": "could not copy",
+    "goHome": "go to home",
     "cancel": "cancel",
     "close": "close",
     "showMore": "show all",
@@ -190,6 +198,7 @@
   },
   "settings": {
     "title": "Settings",
+    "description": "Manage your profile, security, privacy and devices.",
     "profile": "Profile",
     "security": "Security",
     "privacy": "Privacy",
@@ -200,6 +209,7 @@
   },
   "settingsSecurity": {
     "title": "Security",
+    "description": "Change the password you use to access your account.",
     "currentPassword": "Current password",
     "newPassword": "New password",
     "submit": "Save",
@@ -237,7 +247,7 @@
     "adminsTitle": "Administrators",
     "guestEmail": "Guest e-mail (optional)",
     "sendByEmail": "Send by e-mail",
-    "emailSubject": "Invitation to {{company}} on Solaria",
+    "emailSubject": "Invitation to {{company}} on Elos",
     "emailBody": "Use the code {{code}} to join {{company}}: {{url}}",
     "description": "Manage your team, positions and invitations."
   },
@@ -378,7 +388,7 @@
     "rejected": "Rejected"
   },
   "accountSetup": {
-    "title": "How do you want to use Solaria?",
+    "title": "How do you want to use Elos?",
     "description": "Choose the account type that best describes you.",
     "company": {
       "title": "Company",

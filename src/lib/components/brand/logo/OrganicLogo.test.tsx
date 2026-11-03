@@ -29,7 +29,7 @@ describe("OrganicLogo", () => {
 
   it("keeps the standard logo non-interactive", () => {
     render(<OrganicLogo />);
-    expect(screen.getByRole("img", { name: "Solaria" })).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: "Elos" })).toBeInTheDocument();
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 });

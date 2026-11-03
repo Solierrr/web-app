@@ -47,6 +47,7 @@ export default function ProjectAgendaView({
       .slice((current - 1) * 12, current * 12)
       .map((item) => item.id),
   );
+  const shownGroups = groups.filter((group) => group.items.some((item) => visible.has(item.id)));
   const day = new Intl.DateTimeFormat(lang, { weekday: "long", day: "numeric", month: "long", year: "numeric" });
   const time = new Intl.DateTimeFormat(lang, { hour: "2-digit", minute: "2-digit" });
   return (
@@ -102,15 +103,14 @@ export default function ProjectAgendaView({
           {query || status || type ? t("noResults") : t("agendaEmpty")}
         </p>
       )}
-      {groups
-        .filter((group) => group.items.some((item) => visible.has(item.id)))
-        .map((group) => (
-          <section key={group.timestamp} className="flex flex-col gap-3">
-            <h3 className="text-body! font-semi-bold">
-              <time dateTime={group.timestamp}>{day.format(new Date(group.timestamp))}</time>
-            </h3>
-            <Surface>
-              <ol className="divide-y divide-operational-border">
+      {shownGroups.length > 0 && (
+        <Surface>
+          {shownGroups.map((group) => (
+            <section key={group.timestamp} className="border-b-(length:--border-width-ui) border-solid border-border/60 last:border-b-0">
+              <h3 className="px-5 pt-5 text-body! font-semi-bold first-letter:uppercase">
+                <time dateTime={group.timestamp}>{day.format(new Date(group.timestamp))}</time>
+              </h3>
+              <ol className="divide-y divide-operational-border/60">
                 {group.items
                   .filter((item) => visible.has(item.id))
                   .map((item) => {
@@ -157,9 +157,10 @@ export default function ProjectAgendaView({
                     );
                   })}
               </ol>
-            </Surface>
-          </section>
-        ))}
+            </section>
+          ))}
+        </Surface>
+      )}
       {items && filtered.length > 12 && (
         <Pagination page={current} total={filtered.length} pageSize={12} onPageChange={setPage} summaryMode="pages" appearance="borderless" />
       )}

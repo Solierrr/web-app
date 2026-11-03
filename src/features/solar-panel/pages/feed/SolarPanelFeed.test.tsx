@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import SolarPanelFeed from "./SolarPanelFeed";
+import { expectNoA11yViolations } from "@/lib/shared/accessibility/accessibility.matchers";
 
 vi.mock("@/features/solar-panel/solarPanel.service", () => ({
   getCatalogSolarPanels: vi.fn(),
@@ -44,6 +45,18 @@ const items: SolarPanelAnnouncement[] = Array.from({ length: 3 }, (_, index) => 
 describe("SolarPanelFeed", () => {
   beforeEach(() => {
     mockedGetSolarPanels.mockReset();
+  });
+
+  it("has no accessibility violations", async () => {
+    mockedGetSolarPanels.mockResolvedValue(items);
+    const { container } = render(
+      <MemoryRouter>
+        <SolarPanelFeed />
+      </MemoryRouter>,
+    );
+    await screen.findAllByRole("link");
+
+    await expectNoA11yViolations(container);
   });
 
   it("shows the empty state when there are no offers", async () => {

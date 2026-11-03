@@ -4,7 +4,7 @@ beforeToastTest(() => {
   render(<Toast />);
 });
 import { useState } from "react";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import ImageInput from "./ImageInput";
 import { analyzeImage } from "@/lib/shared/accessibility/aiAccessibility.service";
@@ -77,7 +77,7 @@ describe("image selection", () => {
     expect(screen.getByAltText("panel.png")).toBeVisible();
     fireEvent.click(screen.getByRole("button", { name: "Remover: panel.png" }));
     expect(screen.queryByAltText("panel.png")).not.toBeInTheDocument();
-    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    expect(within(container).queryByRole("alert")).not.toBeInTheDocument();
     expect(revoke).toHaveBeenCalledWith("blob:preview");
   });
 

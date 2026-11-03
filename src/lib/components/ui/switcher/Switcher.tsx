@@ -12,7 +12,7 @@ export default function Switcher({ options, activeUrl, label }: SwitcherProps) {
   const navigate = useNavigate();
 
   return (
-    <nav aria-label={label} className="flex w-fit max-w-full flex-wrap gap-2 rounded-full bg-input-bg p-1">
+    <nav aria-label={label} className="scrollbar-none flex w-fit max-w-full gap-2 overflow-x-auto rounded-full bg-input-bg p-1">
       {options.map((option) => (
         <Link
           key={option.url}
@@ -36,7 +36,7 @@ export default function Switcher({ options, activeUrl, label }: SwitcherProps) {
               flushSync(() => navigate(option.url));
             });
           }}
-          className={`relative isolate rounded-full px-4 py-2 font-medium transition-colors duration-250 motion-reduce:transition-none ${option.url === activeUrl ? "text-orange" : "text-input-text hover:text-black"}`}>
+          className={`relative isolate shrink-0 whitespace-nowrap rounded-full px-4 py-2 font-medium transition-colors duration-250 motion-reduce:transition-none ${option.url === activeUrl ? "text-orange-text" : "text-input-text hover:text-black"}`}>
           {option.url === activeUrl && (
             <span
               aria-hidden="true"

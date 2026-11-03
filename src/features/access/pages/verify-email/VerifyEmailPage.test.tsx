@@ -73,4 +73,4 @@ describe("VerifyEmailPage", () => {
   });
 });
 
-vi.mock("@@/brand/logo/OrganicLogo", () => ({ default: () => <span role="img" aria-label="Solaria" /> }));
+vi.mock("@@/brand/logo/OrganicLogo", () => ({ default: () => <span role="img" aria-label="Elos" /> }));

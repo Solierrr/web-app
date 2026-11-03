@@ -8,7 +8,7 @@ export function createMockTestAccount(): OperationalAccount {
   return {
     professional: true,
     professionalProfile: {
-      name: "Teste Solaria",
+      name: "Teste Elos",
       email: MOCK_TEST_EMAIL,
       phone: "31999990000",
       crea: "TESTE-001",

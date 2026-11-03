@@ -67,7 +67,7 @@ describe("firebase messaging service worker", () => {
   it("falls back to a default title when the message has none", async () => {
     const worker = loadWorker();
     await worker.background()({});
-    expect(worker.showNotification).toHaveBeenCalledWith("Solaria", expect.objectContaining({ body: "" }));
+    expect(worker.showNotification).toHaveBeenCalledWith("Elos", expect.objectContaining({ body: "" }));
   });
 
   it("focuses an open window and hands it the target instead of opening another", async () => {

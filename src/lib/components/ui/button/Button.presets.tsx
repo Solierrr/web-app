@@ -15,8 +15,8 @@ type IconButtonProps = Omit<ButtonPresetProps, "content" | "icon"> & {
  *
  * @param props - description, content/icon, rounded, disabled e demais propriedades do Button (exceto `bgColor`/`txtColor`).
  */
-export function PrimaryButton(props: ButtonPresetProps) {
-  return <Button {...props} bgColor={Colors.ORANGE} txtColor={Colors.WHITE} />;
+export function PrimaryButton({ variant = "soft", ...props }: ButtonPresetProps) {
+  return <Button {...props} variant={variant} bgColor={Colors.ORANGE} txtColor={Colors.WHITE} />;
 }
 
 export function WhiteButton({ className = "", variant = "flat", ...props }: ButtonPresetProps) {
