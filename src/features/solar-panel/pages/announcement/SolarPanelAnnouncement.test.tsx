@@ -56,11 +56,11 @@ describe("SolarPanelAnnouncement", () => {
     vi.unstubAllGlobals();
   });
 
-  it("shows the error message when there is no company/product slug in the route", () => {
+  it("renders the not found page when there is no company/product slug in the route", () => {
     renderAt("/placa-solar");
 
     expect(mockedGetSolarPanelBySlug).not.toHaveBeenCalled();
-    expect(screen.getByText("Não foi possível carregar o produto.")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Voltar ao início" })).toBeInTheDocument();
   });
 
   it("shows the error message when the service call fails", async () => {

@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 vi.mock("@/lib/shared/auth/authToken.utils", () => ({ getAuthSession: () => null }));
 import CompanyProfile from "./CompanyProfile";
@@ -64,8 +64,10 @@ describe("CompanyProfile", () => {
     mockedGetCompanyBySlug.mockReturnValue(new Promise(() => {}));
 
     render(
-      <MemoryRouter>
-        <CompanyProfile />
+      <MemoryRouter initialEntries={["/solaria-energia"]}>
+        <Routes>
+          <Route path="/:companySlug" element={<CompanyProfile />} />
+        </Routes>
       </MemoryRouter>,
     );
 
@@ -77,8 +79,10 @@ describe("CompanyProfile", () => {
     mockedGetCatalogSolarPanels.mockResolvedValue([]);
 
     render(
-      <MemoryRouter>
-        <CompanyProfile />
+      <MemoryRouter initialEntries={["/solaria-energia"]}>
+        <Routes>
+          <Route path="/:companySlug" element={<CompanyProfile />} />
+        </Routes>
       </MemoryRouter>,
     );
 
@@ -92,8 +96,10 @@ describe("CompanyProfile", () => {
     mockedGetCatalogSolarPanels.mockResolvedValue([makeOffer("solaria-energia"), makeOffer("other-company")]);
 
     render(
-      <MemoryRouter>
-        <CompanyProfile />
+      <MemoryRouter initialEntries={["/solaria-energia"]}>
+        <Routes>
+          <Route path="/:companySlug" element={<CompanyProfile />} />
+        </Routes>
       </MemoryRouter>,
     );
 
@@ -110,8 +116,10 @@ describe("CompanyProfile", () => {
     infrastructure.panel.productType = "INFRASTRUCTURE";
     mockedGetCatalogSolarPanels.mockResolvedValue([makeOffer("solaria-energia"), infrastructure]);
     render(
-      <MemoryRouter>
-        <CompanyProfile />
+      <MemoryRouter initialEntries={["/solaria-energia"]}>
+        <Routes>
+          <Route path="/:companySlug" element={<CompanyProfile />} />
+        </Routes>
       </MemoryRouter>,
     );
     expect(await screen.findByText("Equipamentos e orientação para projetos residenciais.")).toBeInTheDocument();
