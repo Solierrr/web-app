@@ -21,6 +21,10 @@ O portal reúne a descoberta de produtos e profissionais e a operação das empr
 
 A aplicação React usa serviços de identidade, cadastro, mensagens, assistentes e notificações. A sessão fornece o JWT das chamadas autenticadas e a comunicação em tempo real usa WebSocket. O Firebase participa da identidade federada e dos avisos no navegador. As integrações e os modos locais de dados são configurados durante a construção do aplicativo.
 
+## Acesso
+
+A aplicação está publicada no cluster Kubernetes do GKE e responde em [solarianetwork.site](https://solarianetwork.site). O cluster pode estar desligado fora dos períodos de uso e, nesse caso, o acesso passa pelo `worker-failover`, que mostra uma página de indisponibilidade.
+
 ## Aprofunde-se no Projeto!
 
 - [OVERVIEW.md](./docs/OVERVIEW.md), finalidade e regras de produto.
