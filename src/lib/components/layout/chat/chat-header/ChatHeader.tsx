@@ -40,7 +40,9 @@ export default function ChatHeader({
           </span>
         )}
         <div className="flex min-w-0 flex-col">
-          <h2 className={assistant ? "sr-only" : "truncate text-body font-semi-bold text-operational-ink"}>{title}</h2>
+          <h2 className={assistant ? "sr-only" : "line-clamp-2 break-words text-body font-semi-bold text-operational-ink lg:line-clamp-1"}>
+            {title}
+          </h2>
           {status && (
             <p role="status" className="truncate text-sidebar text-operational-muted">
               {status}
@@ -48,7 +50,8 @@ export default function ChatHeader({
           )}
         </div>
       </div>
-      {column ? <div className="absolute right-0 top-0">{children}</div> : children}
+      {/* Na tela larga as ações ficam no canto, fora da coluna; na estreita ocupam espaço próprio e o título quebra em até duas linhas. */}
+      {column ? <div className="shrink-0 lg:absolute lg:right-0 lg:top-0">{children}</div> : children}
     </header>
   );
 }
