@@ -1,5 +1,7 @@
 import { useCallback } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useRequiredParam } from "@/lib/shared/routing/useRequiredParam";
+import { NotFoundPage } from "@/features/error/pages/not-found/NotFound";
 import { routePaths } from "@/config/i18n/paths";
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import OperationalDetails, { DetailField, DetailSection } from "@@/layout/operational-page/OperationalDetails";
@@ -16,11 +18,12 @@ import ProjectStatus from "../components/ProjectStatus";
 import ProjectMembers from "../components/ProjectMembers";
 import ProjectAgenda from "../components/ProjectAgenda";
 import ProjectGallery, { ProjectImage } from "../components/ProjectGallery";
+import ProjectConversations from "../components/ProjectConversations";
 import ProjectHistory from "../components/ProjectHistory";
 import type { ProjectStatus as Status } from "../projects.d";
 export default function ProjectPage() {
-  const { projectId = "" } = useParams();
-  return <ProjectDetail key={projectId} id={projectId} />;
+  const projectId = useRequiredParam("projectId");
+  return projectId ? <ProjectDetail key={projectId} id={projectId} /> : <NotFoundPage />;
 }
 function ProjectDetail({ id }: { id: string }) {
   const { lang, t, date } = useProjects(),
@@ -30,7 +33,7 @@ function ProjectDetail({ id }: { id: string }) {
   const photos = useProjectResource(useCallback(() => projectApi.photos(id), [id]));
   const actions = useProjectActions();
   const p = resource.data;
-  const tabs = ["overview", "agenda", "members", "gallery", "history"] as const;
+  const tabs = ["overview", "agenda", "members", "gallery", "conversations", "history"] as const;
   const requested = params.get("tab");
   const tab = tabs.find((x) => x === requested) ?? "overview";
   const base = routePaths.projectDetail(lang, id);
@@ -164,6 +167,7 @@ function ProjectDetail({ id }: { id: string }) {
             />
           )}
           {tab === "history" && <ProjectHistory key={id} project={p} />}
+          {tab === "conversations" && <ProjectConversations key={`${id}:${p.status}`} project={p} />}
         </>
       )}
       {actions.confirmation}

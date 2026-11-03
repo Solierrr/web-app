@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Icon from "@@/ui/icon/Icon";
-import { ContextMenu, type ContextMenuHandle } from "@@/overlay/contextMenu/ContextMenu";
+import { ContextMenu, type ContextMenuHandle, type ContextMenuItem } from "@@/overlay/contextMenu/ContextMenu";
 import { routePaths } from "@/config/i18n/paths";
 import type { SupportedLanguage } from "@/config/i18n/browser/languages";
 import type { ConversationDto } from "@/features/messages/messages.messenger.api";
@@ -16,21 +16,21 @@ function formatInteraction(iso: string, lang: string) {
   ).format(date);
 }
 
-/** Lista de conversas separadas por divisórias finas, como as listas do gallery. Cada item tem um menu de opções (abrir, excluir). */
+/** Lista de conversas separadas por divisórias finas, como as listas do gallery. Cada item tem um menu de opções (abrir e as ações de estado). */
 export default function ConversationList({
   conversations,
   title,
   lang,
   activeId,
   onOpen,
-  onDelete,
+  menuItems,
 }: {
   conversations: ConversationDto[];
   title: (item: ConversationDto) => string;
   lang: SupportedLanguage;
   activeId?: string;
   onOpen: (item: ConversationDto) => void;
-  onDelete: (item: ConversationDto) => void;
+  menuItems: (item: ConversationDto) => ContextMenuItem[];
 }) {
   const { t } = useTranslation("chat");
   const menu = useRef<ContextMenuHandle>(null);
@@ -40,10 +40,7 @@ export default function ConversationList({
     trigger.current = button;
     const bounds = button.getBoundingClientRect();
     menu.current?.open(
-      [
-        { label: t("openConversation"), icon: "messages", onClick: () => onOpen(item) },
-        { label: t("deleteConversation"), icon: "trash", onClick: () => onDelete(item) },
-      ],
+      [{ label: t("openConversation"), icon: "messages", onClick: () => onOpen(item) }, ...menuItems(item)],
       bounds.right,
       bounds.bottom + 4,
     );
@@ -72,6 +69,7 @@ export default function ConversationList({
                     {formatInteraction(item.lastInteractionAt, lang)}
                   </time>
                 )}
+                {item.muted && <span className="block truncate text-sidebar text-operational-muted">{t("muted")}</span>}
               </span>
               {(item.unreadCount ?? 0) > 0 && (
                 <span

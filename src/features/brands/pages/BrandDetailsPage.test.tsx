@@ -55,3 +55,15 @@ it("does not offer editing for another company’s private record", async () => 
   await screen.findByRole("heading", { name: "Solar" });
   expect(screen.queryByRole("link", { name: "Editar marca" })).not.toBeInTheDocument();
 });
+it("renders the not found page with a return button when the brand parameter is missing", () => {
+  vi.mocked(listBrands).mockClear();
+  render(
+    <MemoryRouter initialEntries={["/pt-BR/marcas"]}>
+      <Routes>
+        <Route path="/:lang/marcas" element={<BrandDetailsPage />} />
+      </Routes>
+    </MemoryRouter>,
+  );
+  expect(screen.getByRole("button", { name: "Voltar ao início" })).toBeInTheDocument();
+  expect(listBrands).not.toHaveBeenCalled();
+});

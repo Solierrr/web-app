@@ -75,7 +75,14 @@ describe("API error codes", () => {
   ])("translates core errorCode in %s and logs the stable code without the remote detail", async (language, message) => {
     await i18n.changeLanguage(language);
     serviceErrorMock.mockClear();
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify({ errorCode: "MODEL_NOT_EDITABLE", code: "INTERNAL_ERROR", detail: "remote diagnostic" }), { status: 422 })));
+    vi.stubGlobal(
+      "fetch",
+      vi
+        .fn()
+        .mockResolvedValue(
+          new Response(JSON.stringify({ errorCode: "MODEL_NOT_EDITABLE", code: "INTERNAL_ERROR", detail: "remote diagnostic" }), { status: 422 }),
+        ),
+    );
 
     const failure = await httpJson("/api/models/1", { service: "solarPanel", operation: "update", errorMessage: "Fallback" }).catch((error) => error);
 
@@ -91,13 +98,18 @@ describe("API error codes", () => {
   it.each([{ code: "ACCESS_DENIED" }, { status: "ACCESS_DENIED" }])("preserves legacy responses: %j", async (body) => {
     await i18n.changeLanguage("en-US");
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify(body), { status: 403 })));
-    await expect(httpJson("/api/models", { service: "test", operation: "list", errorMessage: "Fallback" })).rejects.toThrow("You do not have permission to perform this action.");
+    await expect(httpJson("/api/models", { service: "test", operation: "list", errorMessage: "Fallback" })).rejects.toThrow(
+      "You do not have permission to perform this action.",
+    );
   });
 
-  it.each([null, { errorCode: "NEW_ERROR", detail: "internal diagnostic" }, { errorCode: "__proto__" }])("keeps the operation fallback for unknown or malformed responses: %j", async (body) => {
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify(body), { status: 400 })));
-    await expect(httpJson("/api/models", { service: "test", operation: "list", errorMessage: "Local fallback" })).rejects.toThrow("Local fallback");
-  });
+  it.each([null, { errorCode: "NEW_ERROR", detail: "internal diagnostic" }, { errorCode: "__proto__" }])(
+    "keeps the operation fallback for unknown or malformed responses: %j",
+    async (body) => {
+      vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify(body), { status: 400 })));
+      await expect(httpJson("/api/models", { service: "test", operation: "list", errorMessage: "Local fallback" })).rejects.toThrow("Local fallback");
+    },
+  );
 
   it("uses the current language when displaying an existing error", async () => {
     const error = new Error("Old message", { cause: new HttpResponseError(403, "ACCESS_DENIED") });
@@ -106,8 +118,29 @@ describe("API error codes", () => {
     expect(getHttpErrorMessage(new Error("remote diagnostic"), "Fallback")).toBe("Fallback");
   });
 
+  it("explains the codes that only the messenger returns", () => {
+    const codes = [
+      "SUCCESSOR_REQUIRED",
+      "SUCCESSOR_INELIGIBLE",
+      "MEMBERSHIP_CLEANUP_REQUIRED",
+      "GROUP_MANAGER_UNAVAILABLE",
+      "REMOVAL_INCOMPLETE",
+      "MESSAGE_MUTATION_UNCERTAIN",
+      "MEDIA_EXPIRED",
+      "MEDIA_NOT_UPLOADED",
+      "MEDIA_MISMATCH",
+      "DEPENDENCY_UNAVAILABLE",
+    ];
+    for (const code of codes) {
+      expect(getHttpErrorMessage(new Error("x", { cause: new HttpResponseError(409, code) }), "Fallback"), code).not.toBe("Fallback");
+    }
+  });
+
   it("provides the same error codes in all three languages", () => {
-    const catalogs = Object.values(import.meta.glob("../../../config/i18n/locales/*/errors.json", { eager: true, import: "default" })) as Record<string, string>[];
+    const catalogs = Object.values(import.meta.glob("../../../config/i18n/locales/*/errors.json", { eager: true, import: "default" })) as Record<
+      string,
+      string
+    >[];
     expect(catalogs).toHaveLength(3);
     for (const catalog of catalogs) {
       expect(Object.keys(catalog).sort()).toEqual(Object.keys(catalogs[0]).sort());

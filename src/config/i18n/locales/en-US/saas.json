@@ -246,8 +246,9 @@
     "newConversation": "New conversation",
     "conversationTitle": "Conversation name",
     "conversationPlaceholder": "E.g. Installation team",
-    "general": "General conversation",
-    "chatHint": "All participants can access the general conversation. Groups include only selected participants.",
+    "chatHint": "Groups include only the selected participants.",
+    "noCommunity": "This project's community has not been created yet. It will be created when the project requester opens the conversations.",
+    "noConversations": "No conversations available to you in this project.",
     "chatUnavailable": "Unable to connect to Messenger. Refresh to try again.",
     "chatSelection": "Select a conversation",
     "chatMembers": "Select at least two participants, including yourself.",
@@ -295,6 +296,8 @@
       "photoRemoved": "Photo removed.",
       "activity": "Activity saved.",
       "conversation": "Conversation created.",
+      "conversationRejected_one": "The conversation was created, but 1 participant could not be added.",
+      "conversationRejected_other": "The conversation was created, but {{count}} participants could not be added.",
       "invalidDates": "The end must be after the start.",
       "required": "Fill in the required fields to continue.",
       "refreshed": "Data refreshed."
@@ -333,6 +336,40 @@
       "archived": "Project archived"
     },
     "assigneesUnavailable": "Assignee information unavailable",
-    "allTypes": "All types"
+    "allTypes": "All types",
+    "community": {
+      "open": "Community",
+      "title": "Project community",
+      "members": "Community members",
+      "unknown": "Participant",
+      "you": "You",
+      "status": {
+        "ACTIVE": "Active",
+        "ARCHIVED": "Archived"
+      },
+      "roles": {
+        "OWNER": "Owner",
+        "ADMIN": "Admin",
+        "MEMBER": "Member"
+      },
+      "archivedHint": "The community is archived: subgroups are read-only until it is reactivated.",
+      "makeAdmin": "Make {{name}} an admin",
+      "removeAdmin": "Remove {{name}} as admin",
+      "remove": "Remove {{name}}",
+      "removeTitle": "Remove from the community",
+      "removeMessage": "{{name}} loses access to every subgroup of the community.",
+      "leave": "Leave the community",
+      "leaveMessage": "You lose access to every subgroup of the community.",
+      "chooseSuccessor": "Who takes over “{{group}}”?",
+      "add": "Add members",
+      "addConfirm": "Add",
+      "nobodyToAdd": "Everyone on the project is already in the community.",
+      "rejected_one": "1 person could not join the community.",
+      "rejected_other": "{{count}} people could not join the community.",
+      "archive": "Archive community",
+      "archiveMessage": "Subgroups become read-only until the community is reactivated.",
+      "reactivate": "Reactivate community",
+      "reactivateMessage": "Subgroups accept messages again."
+    }
   }
 }

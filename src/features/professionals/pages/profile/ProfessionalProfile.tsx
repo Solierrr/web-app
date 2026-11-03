@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useRequiredParam } from "@/lib/shared/routing/useRequiredParam";
+import { NotFoundPage } from "@/features/error/pages/not-found/NotFound";
 import { useTranslation } from "react-i18next";
 import ProfileChannel from "@@/layout/profile/ProfileChannel";
 import ProfileAbout from "@@/layout/profile/ProfileAbout";
@@ -12,6 +14,7 @@ import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
 import { ProfessionalBadges, ProfessionalContactDialog } from "./ProfessionalProfile.reusable";
+import ProfessionalRatings from "@/features/ratings/components/ProfessionalRatings";
 
 function ProfessionalProfilePacked({ professional }: { professional: CatalogTechnician }) {
   const { t: market } = useTranslation("marketplace");
@@ -90,6 +93,7 @@ function ProfessionalProfilePacked({ professional }: { professional: CatalogTech
         </>
       }>
       <ProfileAbout title={tProfile("aboutMe")} text={professional.about} />
+      {professional.userId && <ProfessionalRatings evaluatedId={professional.userId} />}
       {contactOpen && <ProfessionalContactDialog professional={professional} onClose={closeContact} />}
     </ProfileChannel>
   );
@@ -128,6 +132,6 @@ function ProfessionalProfileResource({ professionalSlug }: { professionalSlug: s
 }
 
 export default function ProfessionalProfile() {
-  const { professionalSlug = "" } = useParams<{ professionalSlug: string }>();
-  return <ProfessionalProfileResource key={professionalSlug} professionalSlug={professionalSlug} />;
+  const professionalSlug = useRequiredParam("professionalSlug");
+  return professionalSlug ? <ProfessionalProfileResource key={professionalSlug} professionalSlug={professionalSlug} /> : <NotFoundPage />;
 }

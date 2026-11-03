@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 
 import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
+import { useRequiredParam } from "@/lib/shared/routing/useRequiredParam";
+import { NotFoundPage } from "@/features/error/pages/not-found/NotFound";
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import OperationalTable from "@@/layout/operational-page/OperationalTable";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
@@ -14,15 +16,19 @@ import { cancelOrder, formatDate, formatMoney, getOrder } from "../purchases.ser
 import type { Order } from "../purchases";
 
 export default function OrderPage() {
+  const orderId = useRequiredParam("orderId");
+  return orderId ? <OrderDetails orderId={orderId} /> : <NotFoundPage />;
+}
+
+function OrderDetails({ orderId }: { orderId: string }) {
   const { t } = useTranslation("purchases", { keyPrefix: "order" });
   const { t: tMethods } = useTranslation("purchases", { keyPrefix: "methods" });
-  const { lang: parameter, orderId } = useParams<{ lang: string; orderId: string }>();
+  const { lang: parameter } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(parameter) ? parameter : DEFAULT;
   const [order, setOrder] = useState<Order | null>(null);
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    if (!orderId) return;
     let active = true;
     getOrder(orderId)
       .then((data) => active && setOrder(data))

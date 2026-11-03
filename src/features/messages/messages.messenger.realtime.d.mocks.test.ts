@@ -2,7 +2,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   createChatbotConversation,
   createDirectConversation,
+  deleteMessage,
+  editMessage,
   getConversation,
+  getConversations,
+  getMessageUpdates,
+  updateConversationState,
   markConversationRead,
   sendConversationMessage,
 } from "./messages.messenger.api";
@@ -71,5 +76,53 @@ describe("simulated realtime events", () => {
     expect(events.map((event) => event.kind)).toEqual(["presenceSnapshot", "message", "typing", "typing", "message"]);
     expect(events[2]).toMatchObject({ typing: true, userId: PEER_ID });
     expect(events[3]).toMatchObject({ typing: false });
+  });
+
+  it("edits and deletes an own message inside the window and announces both live", async () => {
+    const conversation = await createDirectConversation(PEER_ID);
+    const events: ConversationEvent[] = [];
+    subscribeToConversation(conversation.id, (event) => events.push(event));
+    const sent = await sendConversationMessage(conversation.id, "Oi", "DIRECT");
+    const edited = await editMessage(sent.id, "Oi, tudo bem?");
+    expect(edited).toMatchObject({ content: "Oi, tudo bem?", edited: true });
+    expect(edited.changeVersion).toBeGreaterThan(sent.changeVersion ?? 0);
+    const deleted = await deleteMessage(sent.id);
+    expect(deleted).toMatchObject({ deleted: true, content: "" });
+    expect(events.filter((event) => event.kind === "message").map((event) => event.kind === "message" && event.change)).toEqual([
+      "created",
+      "edited",
+      "deleted",
+    ]);
+  });
+
+  it("refuses to change a message after the 30 minute window", async () => {
+    const conversation = await createDirectConversation(PEER_ID);
+    const sent = await sendConversationMessage(conversation.id, "Oi", "DIRECT");
+    await vi.advanceTimersByTimeAsync(31 * 60_000);
+    await expect(editMessage(sent.id, "tarde")).rejects.toMatchObject({ cause: { status: 422 } });
+    await expect(deleteMessage(sent.id)).rejects.toMatchObject({ cause: { status: 422 } });
+  });
+
+  it("archives and mutes a conversation for the user and announces the new state", async () => {
+    const conversation = await createDirectConversation(PEER_ID);
+    const updates: UserEvent[] = [];
+    subscribeToUserEvents((event) => updates.push(event));
+    expect(await updateConversationState(conversation.id, { muted: true })).toMatchObject({ muted: true, archived: false, effectiveMuted: true });
+    expect(await updateConversationState(conversation.id, { archived: true })).toMatchObject({ muted: true, archived: true });
+    expect(updates.at(-1)).toMatchObject({ kind: "conversationUpdated", conversation: { id: conversation.id, archived: true } });
+    expect((await getConversations()).some((item) => item.id === conversation.id)).toBe(false);
+    expect((await getConversations(true)).map((item) => item.id)).toContain(conversation.id);
+  });
+
+  it("answers the catch-up with the messages changed after the cursor", async () => {
+    const conversation = await createDirectConversation(PEER_ID);
+    const sent = await sendConversationMessage(conversation.id, "Oi", "DIRECT");
+    const start = await getMessageUpdates();
+    expect(start.messages).toEqual([]);
+    const edited = await editMessage(sent.id, "Oi!");
+    const changes = await getMessageUpdates(start.cursor);
+    expect(changes.messages.map((item) => item.id)).toEqual([sent.id]);
+    expect(changes.cursor).toBe(edited.changeVersion);
+    expect((await getMessageUpdates(changes.cursor)).messages).toEqual([]);
   });
 });

@@ -14,6 +14,7 @@ export default function NewConversationDialog({
   creating,
   onPerson,
   onAssistant,
+  onGroup,
   onClose,
 }: {
   contacts: MessengerContact[];
@@ -22,6 +23,7 @@ export default function NewConversationDialog({
   creating: boolean;
   onPerson: (contact: MessengerContact) => void;
   onAssistant: () => void;
+  onGroup: () => void;
   onClose: () => void;
 }) {
   const { t } = useTranslation("chat");
@@ -40,6 +42,16 @@ export default function NewConversationDialog({
                 label={t("newAssistant")}
                 content={t("newAssistant")}
                 onClick={onAssistant}
+                disabled={creating}
+                className="min-h-14 w-full px-5 py-2"
+              />
+            </li>
+            <li>
+              <GroupAction
+                icon="users"
+                label={t("newGroup")}
+                content={t("newGroup")}
+                onClick={onGroup}
                 disabled={creating}
                 className="min-h-14 w-full px-5 py-2"
               />
