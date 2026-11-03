@@ -143,7 +143,14 @@ export default function ProjectCommunity({
           </p>
         )}
         {canAdmin && !archived && !adding && (
-          <ToolbarAction icon="userPlus" content={t("add")} label={t("add")} disabled={busy} onClick={() => (setInvited([]), setAdding(true))} className="self-start" />
+          <ToolbarAction
+            icon="userPlus"
+            content={t("add")}
+            label={t("add")}
+            disabled={busy}
+            onClick={() => (setInvited([]), setAdding(true))}
+            className="self-start"
+          />
         )}
         {canAdmin && !archived && adding && (
           <div className="flex flex-col gap-3">

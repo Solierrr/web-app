@@ -91,13 +91,19 @@ describe("GroupDetails", () => {
   });
 
   it("offers only the given candidates, without asking for the connections, in a community subgroup", async () => {
-    vi.mocked(groups.addGroupParticipants).mockResolvedValue({ conversation: group({ participantIds: ["me", "ana", "bruno", "dora"] }), rejectedParticipants: [] });
+    vi.mocked(groups.addGroupParticipants).mockResolvedValue({
+      conversation: group({ participantIds: ["me", "ana", "bruno", "dora"] }),
+      rejectedParticipants: [],
+    });
     render(
       <GroupDetails
         conversation={group({ communityId: "c1" })}
         userId="me"
         names={names}
-        candidates={[{ id: "ana", name: "Ana" }, { id: "dora", name: "Dora" }]}
+        candidates={[
+          { id: "ana", name: "Ana" },
+          { id: "dora", name: "Dora" },
+        ]}
         onChanged={vi.fn()}
         onLeft={vi.fn()}
         onClose={vi.fn()}

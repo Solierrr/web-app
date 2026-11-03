@@ -65,7 +65,9 @@
     "listCommunitySubgroups": "Unable to load the community subgroups",
     "setCommunityStatus": "Unable to change the community status",
     "addCommunityMembers": "Unable to add the members to the community",
-    "removeCommunityMember": "Unable to remove the community member"
+    "removeCommunityMember": "Unable to remove the community member",
+    "sendAttachment": "Could not send the attachment",
+    "downloadAttachment": "Could not download the attachment"
   },
   "user": {
     "getUserSummary": "Unable to load the participant",

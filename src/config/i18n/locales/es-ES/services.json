@@ -65,7 +65,9 @@
     "listCommunitySubgroups": "No se pudieron cargar los subgrupos de la comunidad",
     "setCommunityStatus": "No se pudo cambiar el estado de la comunidad",
     "addCommunityMembers": "No se pudieron añadir los miembros a la comunidad",
-    "removeCommunityMember": "No se pudo eliminar al miembro de la comunidad"
+    "removeCommunityMember": "No se pudo eliminar al miembro de la comunidad",
+    "sendAttachment": "No se pudo enviar el adjunto",
+    "downloadAttachment": "No se pudo descargar el adjunto"
   },
   "user": {
     "getUserSummary": "No se pudo cargar el participante",

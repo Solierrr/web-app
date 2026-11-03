@@ -8,6 +8,7 @@ import type { ConversationEvent } from "@/features/messages/messages.messenger.r
 import { publishTyping, subscribeToConversation } from "@/features/messages/messages.messenger.socket";
 import { sendAssistantTurn } from "@/features/assistant/assistant.service";
 import { AgentChatError } from "@/features/error/agent-chat/AgentChat.error";
+import { MediaTooLargeError, sendFileAttachment } from "@/features/messages/messages.messenger.media";
 
 const connection = vi.hoisted(() => ({
   state: { status: "connected", attempts: 0 } as { status: string; attempts: number },
@@ -38,6 +39,12 @@ vi.mock("@/features/messages/pages/GroupDetails", () => ({
   default: ({ conversation }: { conversation: { title: string | null } }) => <p>detalhes de {conversation.title}</p>,
 }));
 vi.mock("@/features/assistant/assistant.service", () => ({ sendAssistantTurn: vi.fn() }));
+vi.mock("@/features/messages/messages.messenger.media", async (original) => ({
+  ...(await original<typeof import("@/features/messages/messages.messenger.media")>()),
+  sendFileAttachment: vi.fn(),
+  sendLocationAttachment: vi.fn(),
+  downloadAttachment: vi.fn(),
+}));
 
 const conversation: api.ConversationDto = {
   id: "conv-1",
@@ -488,5 +495,34 @@ describe("Chat editing and deleting messages", () => {
     renderChat();
     fireEvent.click(await screen.findByRole("button", { name: "Detalhes do grupo" }));
     expect(screen.getByText("detalhes de Equipe")).toBeInTheDocument();
+  });
+  it("sends an attached file and shows it once the server confirms", async () => {
+    const file = new File(["%PDF"], "laudo.pdf", { type: "application/pdf" });
+    vi.mocked(sendFileAttachment).mockResolvedValue(
+      message(4, "", { senderId: "me", attachment: { type: "FILE", mediaId: "m1", name: "laudo.pdf", mimeType: "application/pdf" } }),
+    );
+    renderChat();
+    const input = await screen.findByTestId("attachment-input");
+    await waitFor(() => expect(screen.getByRole("button", { name: "Anexar arquivo" })).toBeEnabled());
+    fireEvent.change(input, { target: { files: [file] } });
+    expect(await screen.findByRole("button", { name: "Baixar laudo.pdf" })).toBeInTheDocument();
+    expect(vi.mocked(sendFileAttachment).mock.calls[0][1]).toBe(file);
+  });
+
+  it("explains the size limit when the file is too large", async () => {
+    vi.mocked(sendFileAttachment).mockRejectedValue(new MediaTooLargeError(10 * 1024 * 1024));
+    renderChat();
+    const input = await screen.findByTestId("attachment-input");
+    await waitFor(() => expect(screen.getByRole("button", { name: "Anexar arquivo" })).toBeEnabled());
+    fireEvent.change(input, { target: { files: [new File(["x"], "foto.png", { type: "image/png" })] } });
+    expect(await screen.findByRole("alert")).toHaveTextContent("o limite é 10 MB");
+  });
+
+  it("marks expired media as unavailable", async () => {
+    vi.mocked(api.getConversationMessages).mockResolvedValue([
+      message(1, "", { attachment: { type: "IMAGE", mediaId: "m1", expiresAt: "2020-01-01T00:00:00Z" } }),
+    ]);
+    renderChat();
+    expect(await screen.findByText("Mídia indisponível")).toBeInTheDocument();
   });
 });

@@ -1,8 +1,86 @@
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import MessageBubble from "@@/layout/chat/message/MessageBubble";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
 import type { PendingMessage } from "@/features/messages/messages.hooks";
+import { downloadAttachment, isExpired, type AttachmentDto } from "@/features/messages/messages.messenger.media";
+
+/**
+ * Anexo dentro da bolha. Foto baixa sozinha ao aparecer; áudio, vídeo e arquivo esperam o toque. O arquivo baixado vira um
+ * endereço local do navegador, liberado quando a bolha sai da tela.
+ */
+export function AttachmentView({ attachment }: { attachment: AttachmentDto }) {
+  const { t } = useTranslation("chat", { keyPrefix: "media" });
+  const automatic = attachment.type === "IMAGE" && !isExpired(attachment);
+  const [url, setUrl] = useState<string | null>(null);
+  const [state, setState] = useState<"idle" | "loading" | "unavailable">(isExpired(attachment) ? "unavailable" : automatic ? "loading" : "idle");
+  const name = attachment.name || t("file");
+
+  function fetchFile() {
+    downloadAttachment(attachment).then(
+      (blob) => {
+        setUrl(URL.createObjectURL(blob));
+        setState("idle");
+      },
+      () => setState("unavailable"),
+    );
+  }
+  function load() {
+    setState("loading");
+    fetchFile();
+  }
+
+  useEffect(() => {
+    if (automatic) fetchFile();
+    // Só a primeira montagem dispara o download automático da foto.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(
+    () => () => {
+      if (url) URL.revokeObjectURL(url);
+    },
+    [url],
+  );
+
+  if (attachment.type === "LOCATION") {
+    const href = `https://www.openstreetmap.org/?mlat=${attachment.latitude}&mlon=${attachment.longitude}#map=17/${attachment.latitude}/${attachment.longitude}`;
+    return (
+      <a href={href} target="_blank" rel="noreferrer" className="text-body underline">
+        {attachment.label || t("locationLink")}
+      </a>
+    );
+  }
+  if (state === "unavailable") return <span className="text-sidebar-group text-(--message-muted)">{t("unavailable")}</span>;
+  if (state === "loading")
+    return (
+      <span role="status" className="text-sidebar-group text-(--message-muted)">
+        {t("loading")}
+      </span>
+    );
+  if (url && attachment.type === "IMAGE")
+    return <img src={url} alt={name} width={attachment.width} height={attachment.height} className="max-h-80 max-w-full rounded-medium" />;
+  if (url && attachment.type === "AUDIO") return <audio controls src={url} aria-label={name} />;
+  if (url && attachment.type === "VIDEO") return <video controls src={url} aria-label={name} className="max-h-80 max-w-full rounded-medium" />;
+  if (url) {
+    return (
+      <a href={url} download={name} className="text-body underline">
+        {name}
+      </a>
+    );
+  }
+  return (
+    <ToolbarAction
+      icon="download"
+      label={t("download", { name })}
+      content={name}
+      color="var(--color-white)"
+      hoverColor="var(--color-white)"
+      onClick={() => void load()}
+      className="h-7!"
+    />
+  );
+}
 
 export function PendingBubble({
   item,

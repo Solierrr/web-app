@@ -67,7 +67,9 @@ export default function GroupDetails({
       return;
     }
     getMessengerContacts()
-      .then((items) => setContacts(items.filter((item) => !current.participantIds.includes(item.authId)).map((item) => ({ id: item.authId, name: item.username }))))
+      .then((items) =>
+        setContacts(items.filter((item) => !current.participantIds.includes(item.authId)).map((item) => ({ id: item.authId, name: item.username }))),
+      )
       .catch(() => setError(t("contactsError")));
   }
 
@@ -128,13 +130,7 @@ export default function GroupDetails({
         )}
         {isManager && adding && (
           <div className="flex flex-col gap-3">
-            <PersonChecklist
-              people={contacts}
-              selected={invited}
-              onChange={setInvited}
-              disabled={busy}
-              empty={t("noInvitable")}
-            />
+            <PersonChecklist people={contacts} selected={invited} onChange={setInvited} disabled={busy} empty={t("noInvitable")} />
             <PrimaryButton
               variant="soft"
               content={t("add")}

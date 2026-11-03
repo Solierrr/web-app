@@ -248,5 +248,18 @@
   "rejectedParticipants_other": "{{count}} personas no pudieron ser agregadas.",
   "groupError": "No se pudo completar la operación en el grupo.",
   "groupCreatedRejected_one": "Grupo creado, pero {{count}} persona no pudo ser agregada.",
-  "groupCreatedRejected_other": "Grupo creado, pero {{count}} personas no pudieron ser agregadas."
+  "groupCreatedRejected_other": "Grupo creado, pero {{count}} personas no pudieron ser agregadas.",
+  "media": {
+    "attach": "Adjuntar archivo",
+    "location": "Enviar ubicación",
+    "sending": "Enviando adjunto…",
+    "tooLarge": "Archivo demasiado grande: el límite es {{size}} MB para este tipo.",
+    "locationUnavailable": "No se pudo obtener tu ubicación.",
+    "download": "Descargar {{name}}",
+    "open": "Abrir",
+    "unavailable": "Contenido no disponible",
+    "loading": "Cargando contenido…",
+    "locationLink": "Ver ubicación en el mapa",
+    "file": "Archivo"
+  }
 }

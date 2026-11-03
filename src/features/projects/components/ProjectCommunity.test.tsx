@@ -74,7 +74,16 @@ describe("ProjectCommunity", () => {
   });
 
   it("lets an admin remove a member but not another admin, and never the owner", () => {
-    renderDialog(community({ members: [{ userId: "me", role: "ADMIN", joinedAt: "x" }, { userId: "ana", role: "ADMIN", joinedAt: "x" }, { userId: "bruno", role: "MEMBER", joinedAt: "x" }, { userId: "carla", role: "OWNER", joinedAt: "x" }] }));
+    renderDialog(
+      community({
+        members: [
+          { userId: "me", role: "ADMIN", joinedAt: "x" },
+          { userId: "ana", role: "ADMIN", joinedAt: "x" },
+          { userId: "bruno", role: "MEMBER", joinedAt: "x" },
+          { userId: "carla", role: "OWNER", joinedAt: "x" },
+        ],
+      }),
+    );
     expect(screen.getByRole("button", { name: "Remover Bruno" })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Remover Ana" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Remover Carla" })).not.toBeInTheDocument();
@@ -92,7 +101,10 @@ describe("ProjectCommunity", () => {
   });
 
   it("adds project people who are not in the community yet and reports who the server refused", async () => {
-    vi.mocked(service.addCommunityMembers).mockResolvedValue({ ...community(), rejectedParticipants: [{ userId: "carla", reasonCode: "USER_INACTIVE" }] });
+    vi.mocked(service.addCommunityMembers).mockResolvedValue({
+      ...community(),
+      rejectedParticipants: [{ userId: "carla", reasonCode: "USER_INACTIVE" }],
+    });
     renderDialog();
     fireEvent.click(screen.getByRole("button", { name: "Adicionar membros" }));
     const picker = await screen.findByRole("list", { name: "Selecione as pessoas" });
@@ -114,7 +126,14 @@ describe("ProjectCommunity", () => {
 
   it("asks for a successor in every subgroup the removed person manages, and only offers its participants", async () => {
     vi.mocked(service.listCommunitySubgroups).mockResolvedValue([
-      { id: "s1", conversationType: "GROUP", title: "Obra", participantIds: ["bruno", "ana", "carla"], managerUserId: "bruno", lastInteractionAt: null },
+      {
+        id: "s1",
+        conversationType: "GROUP",
+        title: "Obra",
+        participantIds: ["bruno", "ana", "carla"],
+        managerUserId: "bruno",
+        lastInteractionAt: null,
+      },
       { id: "s2", conversationType: "GROUP", title: "Compras", participantIds: ["bruno"], managerUserId: "bruno", lastInteractionAt: null },
       { id: "s3", conversationType: "GROUP", title: "Outro", participantIds: ["bruno", "ana"], managerUserId: "ana", lastInteractionAt: null },
     ]);
@@ -129,11 +148,15 @@ describe("ProjectCommunity", () => {
     expect(confirm).toBeDisabled();
     fireEvent.click(within(group).getByLabelText("Carla"));
     fireEvent.click(confirm);
-    await waitFor(() => expect(service.removeCommunityMember).toHaveBeenCalledWith("c1", "bruno", [{ conversationId: "s1", successorUserId: "carla" }]));
+    await waitFor(() =>
+      expect(service.removeCommunityMember).toHaveBeenCalledWith("c1", "bruno", [{ conversationId: "s1", successorUserId: "carla" }]),
+    );
   });
 
   it("keeps the confirmation open with the message when the removal stops halfway, so it can be repeated", async () => {
-    vi.mocked(service.removeCommunityMember).mockRejectedValueOnce(new Error("A remoção parou no meio. Tente de novo para continuar de onde parou.")).mockResolvedValueOnce(undefined);
+    vi.mocked(service.removeCommunityMember)
+      .mockRejectedValueOnce(new Error("A remoção parou no meio. Tente de novo para continuar de onde parou."))
+      .mockResolvedValueOnce(undefined);
     renderDialog();
     fireEvent.click(screen.getByRole("button", { name: "Remover Bruno" }));
     fireEvent.click(await screen.findByRole("button", { name: /confirmar/i }));

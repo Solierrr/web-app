@@ -34,7 +34,10 @@ export default function ProjectConversations({ project: p }: { project: Project 
   const community = r.data?.community;
   const archived = community?.status === "ARCHIVED";
   // Quem entra num subgrupo precisa ser da comunidade: o gestor escolhe entre os membros dela.
-  const candidates = community?.members.map((member) => ({ id: member.userId, name: r.data?.members.find((m) => m.authId === member.userId)?.name ?? "" }));
+  const candidates = community?.members.map((member) => ({
+    id: member.userId,
+    name: r.data?.members.find((m) => m.authId === member.userId)?.name ?? "",
+  }));
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
@@ -57,7 +60,15 @@ export default function ProjectConversations({ project: p }: { project: Project 
         </div>
         <div className="flex items-center gap-2">
           <ToolbarAction icon="refresh" label={t("refresh")} disabled={a.busy} onClick={() => void a.execute(r.reload, t("feedback.refreshed"))} />
-          {community && <ToolbarAction icon="users" content={t("community.open")} label={t("community.open")} disabled={a.busy} onClick={() => setManaging(true)} />}
+          {community && (
+            <ToolbarAction
+              icon="users"
+              content={t("community.open")}
+              label={t("community.open")}
+              disabled={a.busy}
+              onClick={() => setManaging(true)}
+            />
+          )}
           {p.canContribute && community && !archived && (
             <PrimaryButton variant="soft" content={t("newConversation")} description={t("newConversation")} onClick={() => setCreating(true)} />
           )}

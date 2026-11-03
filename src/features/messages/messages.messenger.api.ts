@@ -16,6 +16,7 @@ import {
 } from "./messages.messenger.d.mocks";
 import { announceMockPresence } from "./messages.messenger.realtime.d.mocks";
 import { userMocks } from "@/config/mocks/registry";
+import type { AttachmentDto } from "./messages.messenger.media";
 
 const API = `${import.meta.env.VITE_API_MESSENGER?.replace(/\/$/, "")}/messaging`;
 
@@ -68,6 +69,8 @@ export interface MessageDto {
   deleted?: boolean;
   /** Versão da última mudança da mensagem: entre duas cópias do mesmo id vale a de maior valor. */
   changeVersion?: number;
+  /** Foto, áudio, vídeo, arquivo ou localização; o arquivo em si é baixado à parte. */
+  attachment?: AttachmentDto | null;
 }
 
 export interface MessageUpdatesDto {

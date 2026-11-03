@@ -83,7 +83,11 @@ export async function addCommunityMembers(id: string, userIds: string[], role: E
     await waitForMockService();
     return addMockCommunityMembers(id, userIds, role);
   }
-  return httpJson<Community>(`${base}/${encodeURIComponent(id)}/members`, { ...options("addCommunityMembers"), method: "POST", body: { userIds, role } });
+  return httpJson<Community>(`${base}/${encodeURIComponent(id)}/members`, {
+    ...options("addCommunityMembers"),
+    method: "POST",
+    body: { userIds, role },
+  });
 }
 
 /** Repetir o pedido depois de um 503 `REMOVAL_INCOMPLETE` continua de onde a remoção parou. */

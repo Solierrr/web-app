@@ -248,5 +248,18 @@
   "rejectedParticipants_other": "{{count}} people could not be added.",
   "groupError": "Unable to complete the group operation.",
   "groupCreatedRejected_one": "Group created, but {{count}} person could not be added.",
-  "groupCreatedRejected_other": "Group created, but {{count}} people could not be added."
+  "groupCreatedRejected_other": "Group created, but {{count}} people could not be added.",
+  "media": {
+    "attach": "Attach file",
+    "location": "Send location",
+    "sending": "Sending attachment…",
+    "tooLarge": "File too large: the limit is {{size}} MB for this type.",
+    "locationUnavailable": "Could not get your location.",
+    "download": "Download {{name}}",
+    "open": "Open",
+    "unavailable": "Media unavailable",
+    "loading": "Loading media…",
+    "locationLink": "View location on the map",
+    "file": "File"
+  }
 }

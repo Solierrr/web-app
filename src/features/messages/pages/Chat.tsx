@@ -38,7 +38,8 @@ import {
 } from "@/features/messages/messages.hooks";
 import ConnectionNotice from "./ConnectionNotice";
 import GroupDetails from "./GroupDetails";
-import { AssistantNotice, EditBanner, MessageMeta, PendingBubble } from "./Chat.reusable";
+import { AssistantNotice, AttachmentView, EditBanner, MessageMeta, PendingBubble } from "./Chat.reusable";
+import { MediaTooLargeError, sendFileAttachment, sendLocationAttachment } from "@/features/messages/messages.messenger.media";
 import Confirmation from "@@/overlay/confirmation/Confirmation";
 import { getHttpStatus } from "@/lib/shared/http/http.service";
 
@@ -345,6 +346,39 @@ export function Conversation({
     outbox.send(content);
   }
 
+  const fileInput = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  /** Envia um anexo direto, fora da fila de texto: a mensagem só aparece depois que o servidor confirma. */
+  async function sendAttachment(send: (current: ConversationDto, clientMessageId: string) => Promise<MessageDto>) {
+    if (readOnly || !conversation || uploading) return;
+    setError(null);
+    setUploading(true);
+    followLatest.current = true;
+    try {
+      const sent = await send(conversation, crypto.randomUUID());
+      setMessages((current) => mergeMessages(current, [sent]));
+    } catch (failure) {
+      setError(
+        failure instanceof MediaTooLargeError ? t("media.tooLarge", { size: failure.limitBytes / (1024 * 1024) }) : (failure as Error).message,
+      );
+    } finally {
+      setUploading(false);
+    }
+  }
+  function attachFile(file: File | undefined) {
+    if (file) void sendAttachment((current, id) => sendFileAttachment(current, file, "", id));
+  }
+  function shareLocation() {
+    if (!navigator.geolocation) return setError(t("media.locationUnavailable"));
+    navigator.geolocation.getCurrentPosition(
+      (position) =>
+        void sendAttachment((current, id) =>
+          sendLocationAttachment(current, { latitude: position.coords.latitude, longitude: position.coords.longitude }, id),
+        ),
+      () => setError(t("media.locationUnavailable")),
+    );
+  }
+
   function handleDraft(value: string) {
     setDraft(value);
     typingPublisher.notify(value);
@@ -478,6 +512,7 @@ export function Conversation({
                 assistant={assistant}
                 endOfGroup={endOfGroup}
                 showAuthor={conversation?.conversationType === "GROUP" && !own && !grouped}>
+                {message.attachment && !message.deleted && <AttachmentView attachment={message.attachment} />}
                 {own && !message.deleted && (
                   <MessageMeta
                     edited={!!message.edited}
@@ -497,6 +532,27 @@ export function Conversation({
         {assistantStatus !== "idle" && outbox.pending.length === 0 && <AssistantNotice status={assistantStatus} onRetry={retryAssistant} />}
       </div>
       {editing && <EditBanner onCancel={cancelEdit} />}
+      {conversable && (
+        <div className="mx-auto flex w-full max-w-3xl items-center gap-1 px-1">
+          <ToolbarAction icon="paperclip" label={t("media.attach")} disabled={uploading || loading} onClick={() => fileInput.current?.click()} />
+          <ToolbarAction icon="globe" label={t("media.location")} disabled={uploading || loading} onClick={shareLocation} />
+          {uploading && (
+            <span role="status" className="text-sidebar-group text-operational-muted">
+              {t("media.sending")}
+            </span>
+          )}
+          <input
+            ref={fileInput}
+            type="file"
+            hidden
+            data-testid="attachment-input"
+            onChange={(event) => {
+              attachFile(event.currentTarget.files?.[0]);
+              event.currentTarget.value = "";
+            }}
+          />
+        </div>
+      )}
       <Surface field className="mx-auto w-full max-w-3xl shrink-0" contentClassName="overflow-visible! px-2 py-1">
         <MessageComposer
           assistant
