@@ -21,7 +21,6 @@
     "fee": "Taxa da plataforma ({{percentage}}%)",
     "total": "Total",
     "paymentMethod": "Forma de pagamento",
-    "fictitious": "Pagamento fictício: nenhum valor real é cobrado.",
     "pay": "Pagar",
     "paid": "Compra realizada.",
     "error": "Não foi possível concluir a operação."
