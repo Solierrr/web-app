@@ -106,6 +106,24 @@ describe("API error codes", () => {
     expect(getHttpErrorMessage(new Error("remote diagnostic"), "Fallback")).toBe("Fallback");
   });
 
+  it("explains the codes that only the messenger returns", () => {
+    const codes = [
+      "SUCCESSOR_REQUIRED",
+      "SUCCESSOR_INELIGIBLE",
+      "MEMBERSHIP_CLEANUP_REQUIRED",
+      "GROUP_MANAGER_UNAVAILABLE",
+      "REMOVAL_INCOMPLETE",
+      "MESSAGE_MUTATION_UNCERTAIN",
+      "MEDIA_EXPIRED",
+      "MEDIA_NOT_UPLOADED",
+      "MEDIA_MISMATCH",
+      "DEPENDENCY_UNAVAILABLE",
+    ];
+    for (const code of codes) {
+      expect(getHttpErrorMessage(new Error("x", { cause: new HttpResponseError(409, code) }), "Fallback"), code).not.toBe("Fallback");
+    }
+  });
+
   it("provides the same error codes in all three languages", () => {
     const catalogs = Object.values(import.meta.glob("../../../config/i18n/locales/*/errors.json", { eager: true, import: "default" })) as Record<string, string>[];
     expect(catalogs).toHaveLength(3);
