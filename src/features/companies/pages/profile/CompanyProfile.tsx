@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useRequiredParam } from "@/lib/shared/routing/useRequiredParam";
+import { NotFoundPage } from "@/features/error/pages/not-found/NotFound";
 import { useTranslation } from "react-i18next";
 import CompanyProfileView from "./CompanyProfileView";
 import ActionLink from "@@/ui/button/ActionLink";
@@ -116,6 +118,6 @@ function CompanyProfileResource({ companySlug }: { companySlug: string }) {
 }
 
 export default function CompanyProfile() {
-  const { companySlug = "" } = useParams<{ companySlug: string }>();
-  return <CompanyProfileResource key={companySlug} companySlug={companySlug} />;
+  const companySlug = useRequiredParam("companySlug");
+  return companySlug ? <CompanyProfileResource key={companySlug} companySlug={companySlug} /> : <NotFoundPage />;
 }

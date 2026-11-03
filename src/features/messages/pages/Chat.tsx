@@ -7,6 +7,8 @@ import Surface from "@@/ui/surface/Surface";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useRequiredParam } from "@/lib/shared/routing/useRequiredParam";
+import { NotFoundPage } from "@/features/error/pages/not-found/NotFound";
 import { useTranslation } from "react-i18next";
 
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
@@ -36,8 +38,8 @@ import ConnectionNotice from "./ConnectionNotice";
 import { AssistantNotice, PendingBubble } from "./Chat.reusable";
 
 export default function Chat() {
-  const { conversationId = "" } = useParams<{ conversationId: string }>();
-  return <Conversation key={conversationId} conversationId={conversationId} />;
+  const conversationId = useRequiredParam("conversationId");
+  return conversationId ? <Conversation key={conversationId} conversationId={conversationId} /> : <NotFoundPage />;
 }
 
 export function Conversation({

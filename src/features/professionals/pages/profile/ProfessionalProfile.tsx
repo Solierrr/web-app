@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useRequiredParam } from "@/lib/shared/routing/useRequiredParam";
+import { NotFoundPage } from "@/features/error/pages/not-found/NotFound";
 import { useTranslation } from "react-i18next";
 import ProfileChannel from "@@/layout/profile/ProfileChannel";
 import ProfileAbout from "@@/layout/profile/ProfileAbout";
@@ -128,6 +130,6 @@ function ProfessionalProfileResource({ professionalSlug }: { professionalSlug: s
 }
 
 export default function ProfessionalProfile() {
-  const { professionalSlug = "" } = useParams<{ professionalSlug: string }>();
-  return <ProfessionalProfileResource key={professionalSlug} professionalSlug={professionalSlug} />;
+  const professionalSlug = useRequiredParam("professionalSlug");
+  return professionalSlug ? <ProfessionalProfileResource key={professionalSlug} professionalSlug={professionalSlug} /> : <NotFoundPage />;
 }
