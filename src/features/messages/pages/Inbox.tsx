@@ -386,6 +386,8 @@ export default function Inbox() {
                 key={conversationId}
                 conversationId={conversationId}
                 embedded
+                // Subgrupo de comunidade arquivada: o servidor recusa escrita, então o chat abre só para leitura.
+                readOnly={current?.communityStatus === "ARCHIVED"}
                 actions={<ConversationActions onNew={openContacts} getItems={current ? () => menuItems(current) : undefined} />}
               />
             ) : (

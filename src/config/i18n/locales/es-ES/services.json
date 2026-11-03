@@ -59,7 +59,13 @@
     "createGroupConversation": "No se pudo crear el grupo",
     "addGroupParticipants": "No se pudieron agregar los participantes",
     "removeGroupParticipant": "No se pudo quitar al participante",
-    "transferGroupManager": "No se pudo transferir la gestión del grupo"
+    "transferGroupManager": "No se pudo transferir la gestión del grupo",
+    "getProjectCommunity": "No se pudo cargar la comunidad del proyecto",
+    "createProjectCommunity": "No se pudo crear la comunidad del proyecto",
+    "listCommunitySubgroups": "No se pudieron cargar los subgrupos de la comunidad",
+    "setCommunityStatus": "No se pudo cambiar el estado de la comunidad",
+    "addCommunityMembers": "No se pudieron añadir los miembros a la comunidad",
+    "removeCommunityMember": "No se pudo eliminar al miembro de la comunidad"
   },
   "user": {
     "getUserSummary": "No se pudo cargar el participante",

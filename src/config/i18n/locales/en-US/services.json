@@ -59,7 +59,13 @@
     "createGroupConversation": "Unable to create the group",
     "addGroupParticipants": "Unable to add the participants",
     "removeGroupParticipant": "Unable to remove the participant",
-    "transferGroupManager": "Unable to transfer the group management"
+    "transferGroupManager": "Unable to transfer the group management",
+    "getProjectCommunity": "Unable to load the project community",
+    "createProjectCommunity": "Unable to create the project community",
+    "listCommunitySubgroups": "Unable to load the community subgroups",
+    "setCommunityStatus": "Unable to change the community status",
+    "addCommunityMembers": "Unable to add the members to the community",
+    "removeCommunityMember": "Unable to remove the community member"
   },
   "user": {
     "getUserSummary": "Unable to load the participant",

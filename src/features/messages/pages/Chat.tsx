@@ -55,6 +55,7 @@ export function Conversation({
   actions,
   onConversationChange,
   onLeft,
+  groupCandidates,
 }: {
   conversationId: string;
   embedded?: boolean;
@@ -64,6 +65,8 @@ export function Conversation({
   onConversationChange?: (conversationId: string) => void;
   /** Chamado depois que a pessoa sai do grupo; sem ele, volta para a caixa de entrada. */
   onLeft?: () => void;
+  /** Quem o gestor pode convidar ao grupo; sem ele valem as conexões (num subgrupo de comunidade, são os membros dela). */
+  groupCandidates?: { id: string; name: string }[];
 }) {
   const navigate = useNavigate();
   const { lang: langParam } = useParams<{ lang: string }>();
@@ -513,6 +516,7 @@ export function Conversation({
           conversation={conversation}
           userId={userId}
           names={participantNames}
+          candidates={groupCandidates}
           onChanged={(next) => {
             setConversation(next);
             loadParticipantNames(next.participantIds);

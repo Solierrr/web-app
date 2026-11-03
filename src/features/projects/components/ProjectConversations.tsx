@@ -15,6 +15,7 @@ import type { Project } from "../projects.d";
 import { projectApi } from "../projects.service";
 import { projectConversations, createProjectConversation } from "../projects.messenger.service";
 import { useProjects, useProjectResource, useProjectActions } from "../projects.hooks";
+import ProjectCommunity from "./ProjectCommunity";
 export default function ProjectConversations({ project: p }: { project: Project }) {
   const { t } = useProjects();
   const r = useProjectResource(
@@ -27,13 +28,18 @@ export default function ProjectConversations({ project: p }: { project: Project 
   const a = useProjectActions();
   const [selected, setSelected] = useState<string | null>(null),
     [creating, setCreating] = useState(false),
+    [managing, setManaging] = useState(false),
     [participants, setParticipants] = useState<string[]>([getAuthSession()?.userId ?? ""]);
   const current = r.data?.conversations.find((c) => c.id === selected) ?? r.data?.conversations[0];
+  const community = r.data?.community;
+  const archived = community?.status === "ARCHIVED";
+  // Quem entra num subgrupo precisa ser da comunidade: o gestor escolhe entre os membros dela.
+  const candidates = community?.members.map((member) => ({ id: member.userId, name: r.data?.members.find((m) => m.authId === member.userId)?.name ?? "" }));
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
-    if (!r.data?.communityId) return;
-    const communityId = r.data.communityId;
+    if (!community) return;
+    const communityId = community.id;
     const ok = await a.execute(async () => {
       const { conversation, rejectedParticipants } = await createProjectConversation(p, communityId, String(form.get("title")).trim(), participants);
       await r.reload();
@@ -51,15 +57,16 @@ export default function ProjectConversations({ project: p }: { project: Project 
         </div>
         <div className="flex items-center gap-2">
           <ToolbarAction icon="refresh" label={t("refresh")} disabled={a.busy} onClick={() => void a.execute(r.reload, t("feedback.refreshed"))} />
-          {p.canContribute && r.data?.communityId && (
+          {community && <ToolbarAction icon="users" content={t("community.open")} label={t("community.open")} disabled={a.busy} onClick={() => setManaging(true)} />}
+          {p.canContribute && community && !archived && (
             <PrimaryButton variant="soft" content={t("newConversation")} description={t("newConversation")} onClick={() => setCreating(true)} />
           )}
         </div>
       </header>
       {r.error && <Alert>{t("chatUnavailable")}</Alert>}
       {!r.data && !r.error && <LogoLoader label={t("conversations")} />}
-      {r.data && !r.data.communityId && <Alert>{t("noCommunity")}</Alert>}
-      {r.data?.communityId && (
+      {r.data && !community && <Alert>{t("noCommunity")}</Alert>}
+      {community && r.data && (
         <Surface>
           <div className="grid min-w-0 lg:grid-cols-[minmax(12rem,1fr)_minmax(0,3fr)]">
             <nav aria-label={t("chatSelection")} className="flex flex-col items-stretch gap-2 p-4 lg:border-r lg:border-operational-border">
@@ -82,7 +89,8 @@ export default function ProjectConversations({ project: p }: { project: Project 
                   conversationId={current.id}
                   displayTitle={current.title ?? undefined}
                   embedded
-                  readOnly={!p.canContribute}
+                  readOnly={!p.canContribute || archived}
+                  groupCandidates={candidates}
                 />
               )}
               {!current && <p className="text-operational-muted">{t("noConversations")}</p>}
@@ -90,7 +98,10 @@ export default function ProjectConversations({ project: p }: { project: Project 
           </div>
         </Surface>
       )}
-      {creating && r.data?.communityId && (
+      {managing && community && r.data && (
+        <ProjectCommunity community={community} people={r.data.members} onChanged={r.reload} onClose={() => setManaging(false)} />
+      )}
+      {creating && community && r.data && (
         <Dialog title={t("newConversation")} busy={a.busy} onClose={() => setCreating(false)}>
           <OperationalForm plain onSubmit={submit}>
             <label className="flex flex-col gap-2">

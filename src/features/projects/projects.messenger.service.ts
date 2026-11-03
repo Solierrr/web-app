@@ -1,50 +1,41 @@
 import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
-import { getHttpStatus, httpJson } from "@/lib/shared/http/http.service";
+import { httpJson } from "@/lib/shared/http/http.service";
 import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import { getMockMessenger, saveMockProjectConversation } from "@/features/messages/messages.messenger.d.mocks";
 import type { ConversationDto } from "@/features/messages/messages.messenger.api";
 import type { Project } from "./projects.d";
 import { projectApi } from "./projects.service";
+import { createProjectCommunity, getProjectCommunity, type Community } from "./projects.community.service";
 const base = `${import.meta.env.VITE_API_MESSENGER?.replace(/\/$/, "")}/messaging/communities`;
 const options = { service: "messenger", operation: "projectConversations", errorMessage: "Unable to connect to Messenger" };
 export interface RejectedParticipant {
   userId: string;
   reasonCode: string;
 }
-/** `communityId` nulo: o projeto ainda não tem comunidade e o usuário não é o demandante para criá-la. */
+/** `community` nulo: o projeto ainda não tem comunidade e o usuário não é o demandante para criá-la. */
 export interface ProjectConversationsResult {
-  communityId: string | null;
+  community: Community | null;
   conversations: ConversationDto[];
 }
 export interface CreatedProjectConversation {
   conversation: ConversationDto;
   rejectedParticipants: RejectedParticipant[];
 }
-async function findCommunity(projectId: string): Promise<{ id: string } | null> {
-  try {
-    return await httpJson<{ id: string }>(`${base}/project/${projectId}`, options);
-  } catch (error) {
-    if (getHttpStatus(error) === 404) return null;
-    throw error;
-  }
-}
 export async function projectConversations(project: Project): Promise<ProjectConversationsResult> {
   if (isAlwaysMockMode("MESSENGER")) {
     await projectApi.detail(project.id);
     const userId = getAuthSession()?.userId;
     return {
-      communityId: project.id,
+      community: await getProjectCommunity(project.id),
       conversations: getMockMessenger().conversations.filter((c) => c.communityId === project.id && c.participantIds.includes(userId ?? "")),
     };
   }
   if (isAlwaysMockMode()) throw new Error("Use consistent CORE and MESSENGER mock configuration.");
   // Só o demandante (dono) cria a comunidade; quem não é dono e chega antes dela existir vê o estado vazio.
-  const community =
-    (await findCommunity(project.id)) ??
-    (project.role === "OWNER" ? await httpJson<{ id: string }>(base, { ...options, method: "POST", body: { projectId: project.id } }) : null);
-  if (!community) return { communityId: null, conversations: [] };
+  const community = (await getProjectCommunity(project.id)) ?? (project.role === "OWNER" ? await createProjectCommunity(project.id) : null);
+  if (!community) return { community: null, conversations: [] };
   const conversations = await httpJson<ConversationDto[]>(`${base}/${community.id}/conversations`, options);
-  return { communityId: community.id, conversations };
+  return { community, conversations };
 }
 export async function createProjectConversation(
   project: Project,

@@ -90,6 +90,28 @@ describe("GroupDetails", () => {
     expect(onChanged).toHaveBeenCalledWith(expect.objectContaining({ participantIds: ["me", "ana", "bruno", "carla"] }));
   });
 
+  it("offers only the given candidates, without asking for the connections, in a community subgroup", async () => {
+    vi.mocked(groups.addGroupParticipants).mockResolvedValue({ conversation: group({ participantIds: ["me", "ana", "bruno", "dora"] }), rejectedParticipants: [] });
+    render(
+      <GroupDetails
+        conversation={group({ communityId: "c1" })}
+        userId="me"
+        names={names}
+        candidates={[{ id: "ana", name: "Ana" }, { id: "dora", name: "Dora" }]}
+        onChanged={vi.fn()}
+        onLeft={vi.fn()}
+        onClose={vi.fn()}
+      />,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Adicionar participantes" }));
+    expect(await screen.findByLabelText("Dora")).toBeInTheDocument();
+    expect(screen.queryByLabelText("Ana")).not.toBeInTheDocument();
+    expect(api.getMessengerContacts).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByLabelText("Dora"));
+    fireEvent.click(screen.getByRole("button", { name: "Adicionar" }));
+    await waitFor(() => expect(groups.addGroupParticipants).toHaveBeenCalledWith("g1", ["dora"]));
+  });
+
   it("makes the leaving manager choose a successor first", async () => {
     vi.mocked(groups.removeGroupParticipant).mockResolvedValue(undefined);
     const { onLeft } = renderDetails();

@@ -4,7 +4,7 @@ import Dialog from "@@/overlay/dialog/Dialog";
 import Confirmation from "@@/overlay/confirmation/Confirmation";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
 import { PrimaryButton } from "@@/ui/button/Button.presets";
-import { getConversation, getMessengerContacts, type ConversationDto, type MessengerContact } from "@/features/messages/messages.messenger.api";
+import { getConversation, getMessengerContacts, type ConversationDto } from "@/features/messages/messages.messenger.api";
 import { addGroupParticipants, removeGroupParticipant, transferGroupManager } from "@/features/messages/messages.messenger.groups";
 import PersonChecklist from "./PersonChecklist";
 
@@ -15,6 +15,7 @@ export default function GroupDetails({
   conversation,
   userId,
   names,
+  candidates,
   onChanged,
   onLeft,
   onClose,
@@ -22,6 +23,8 @@ export default function GroupDetails({
   conversation: ConversationDto;
   userId: string;
   names: Record<string, string>;
+  /** Quem pode ser convidado; sem ele valem as conexões. Num subgrupo de comunidade, são os membros dela. */
+  candidates?: { id: string; name: string }[];
   onChanged: (conversation: ConversationDto) => void;
   onLeft: () => void;
   onClose: () => void;
@@ -34,7 +37,7 @@ export default function GroupDetails({
   const [pending, setPending] = useState<Pending | null>(null);
   const [successor, setSuccessor] = useState("");
   const [adding, setAdding] = useState(false);
-  const [contacts, setContacts] = useState<MessengerContact[]>([]);
+  const [contacts, setContacts] = useState<{ id: string; name: string }[]>([]);
   const [invited, setInvited] = useState<string[]>([]);
   const isManager = current.managerUserId === userId;
   const others = current.participantIds.filter((id) => id !== userId);
@@ -59,8 +62,12 @@ export default function GroupDetails({
   function openAdding() {
     setAdding(true);
     setInvited([]);
+    if (candidates) {
+      setContacts(candidates.filter((item) => !current.participantIds.includes(item.id)));
+      return;
+    }
     getMessengerContacts()
-      .then((items) => setContacts(items.filter((item) => !current.participantIds.includes(item.authId))))
+      .then((items) => setContacts(items.filter((item) => !current.participantIds.includes(item.authId)).map((item) => ({ id: item.authId, name: item.username }))))
       .catch(() => setError(t("contactsError")));
   }
 
@@ -122,7 +129,7 @@ export default function GroupDetails({
         {isManager && adding && (
           <div className="flex flex-col gap-3">
             <PersonChecklist
-              people={contacts.map((contact) => ({ id: contact.authId, name: contact.username }))}
+              people={contacts}
               selected={invited}
               onChange={setInvited}
               disabled={busy}
