@@ -1,10 +1,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
+  deleteMessage,
+  editMessage,
   getConversations,
+  getMessageUpdates,
   getConversationMessages,
   getConversationMessagesSince,
   markConversationRead,
   sendConversationMessage,
+  updateConversationState,
   type MessageDto,
 } from "./messages.messenger.api";
 
@@ -109,5 +113,46 @@ describe("Messenger API contract", () => {
       expect.stringContaining("/messaging/messages"),
       expect.objectContaining({ method: "POST", body: JSON.stringify({ conversationId: "conv-1", messageType, content: "Hello" }) }),
     );
+  });
+  it("edits a message with PATCH and returns the stored copy", async () => {
+    respond({ ...message(3), content: "Novo texto", edited: true, changeVersion: 12 });
+    const edited = await editMessage("msg-3", "Novo texto");
+    expect(fetchMock).toHaveBeenCalledWith(
+      expect.stringContaining("/messaging/messages/msg-3"),
+      expect.objectContaining({ method: "PATCH", body: JSON.stringify({ content: "Novo texto" }) }),
+    );
+    expect(edited).toMatchObject({ edited: true, changeVersion: 12 });
+  });
+  it("deletes a message with DELETE and returns it without text", async () => {
+    respond({ ...message(3), content: "", deleted: true, changeVersion: 13 });
+    const deleted = await deleteMessage("msg-3");
+    expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining("/messaging/messages/msg-3"), expect.objectContaining({ method: "DELETE" }));
+    expect(deleted).toMatchObject({ deleted: true, content: "" });
+  });
+  it("rejects with the 422 status when the edit window is over", async () => {
+    respond({ errorCode: "BUSINESS_RULE_VIOLATION" }, 422);
+    await expect(editMessage("msg-3", "tarde")).rejects.toMatchObject({ cause: { status: 422 } });
+  });
+  it("lists the archived conversations with the archived flag", async () => {
+    respond([]);
+    await getConversations(true);
+    expect(fetchMock.mock.calls[0][0]).toContain("/messaging/conversations/me?archived=true");
+  });
+  it("changes the personal state with a partial PATCH", async () => {
+    respond({ conversationId: "conv-1", muted: true, archived: false, effectiveMuted: true });
+    const state = await updateConversationState("conv-1", { muted: true });
+    expect(fetchMock).toHaveBeenCalledWith(
+      expect.stringContaining("/messaging/conversations/conv-1/state"),
+      expect.objectContaining({ method: "PATCH", body: JSON.stringify({ muted: true }) }),
+    );
+    expect(state.effectiveMuted).toBe(true);
+  });
+  it("asks for the starting point without since and for the changes with since and limit", async () => {
+    respond({ syncEpoch: "e1", cursor: 40, hasMore: false, messages: [] });
+    await expect(getMessageUpdates()).resolves.toMatchObject({ cursor: 40 });
+    expect(fetchMock.mock.calls[0][0]).toMatch(/\/messaging\/updates$/);
+    respond({ syncEpoch: "e1", cursor: 44, hasMore: true, messages: [message(3)] });
+    await getMessageUpdates(40);
+    expect(fetchMock.mock.calls[1][0]).toContain("/messaging/updates?since=40&limit=100");
   });
 });

@@ -336,6 +336,40 @@
       "archived": "Proyecto archivado"
     },
     "assigneesUnavailable": "Identificación de responsables no disponible",
-    "allTypes": "Todos los tipos"
+    "allTypes": "Todos los tipos",
+    "community": {
+      "open": "Comunidad",
+      "title": "Comunidad del proyecto",
+      "members": "Miembros de la comunidad",
+      "unknown": "Participante",
+      "you": "Tú",
+      "status": {
+        "ACTIVE": "Activa",
+        "ARCHIVED": "Archivada"
+      },
+      "roles": {
+        "OWNER": "Propietario",
+        "ADMIN": "Administrador",
+        "MEMBER": "Miembro"
+      },
+      "archivedHint": "La comunidad está archivada: los subgrupos quedan solo de lectura hasta que se reactive.",
+      "makeAdmin": "Hacer administrador a {{name}}",
+      "removeAdmin": "Quitar a {{name}} como administrador",
+      "remove": "Eliminar a {{name}}",
+      "removeTitle": "Eliminar de la comunidad",
+      "removeMessage": "{{name}} pierde el acceso a todos los subgrupos de la comunidad.",
+      "leave": "Salir de la comunidad",
+      "leaveMessage": "Pierdes el acceso a todos los subgrupos de la comunidad.",
+      "chooseSuccessor": "¿Quién asume la gestión de “{{group}}”?",
+      "add": "Añadir miembros",
+      "addConfirm": "Añadir",
+      "nobodyToAdd": "Todos los involucrados del proyecto ya están en la comunidad.",
+      "rejected_one": "1 persona no pudo entrar en la comunidad.",
+      "rejected_other": "{{count}} personas no pudieron entrar en la comunidad.",
+      "archive": "Archivar comunidad",
+      "archiveMessage": "Los subgrupos quedan solo de lectura hasta que se reactive la comunidad.",
+      "reactivate": "Reactivar comunidad",
+      "reactivateMessage": "Los subgrupos vuelven a aceptar mensajes."
+    }
   }
 }

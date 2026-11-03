@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import Inbox from "./Inbox";
 import * as api from "@/features/messages/messages.messenger.api";
 import type { UserEvent } from "@/features/messages/messages.messenger.realtime";
+import { createGroupConversation } from "@/features/messages/messages.messenger.groups";
 import { subscribeToUserEvents } from "@/features/messages/messages.messenger.socket";
 import { startAssistantConversation } from "@/features/messages/messages.assistant.service";
 import { AgentChatError } from "@/features/error/agent-chat/AgentChat.error";
@@ -16,9 +17,11 @@ const connection = vi.hoisted(() => ({
 vi.mock("@/features/messages/messages.messenger.api", () => ({
   getConversations: vi.fn(),
   getUserSummary: vi.fn(),
+  updateConversationState: vi.fn(),
   createDirectConversation: vi.fn(),
   getMessengerContacts: vi.fn(),
 }));
+vi.mock("@/features/messages/messages.messenger.groups", () => ({ createGroupConversation: vi.fn() }));
 vi.mock("@/features/messages/messages.messenger.socket", () => ({
   subscribeToUserEvents: vi.fn(),
   subscribeToConnection: (listener: () => void) => {
@@ -196,5 +199,122 @@ describe("Inbox", () => {
       await vi.advanceTimersByTimeAsync(21_000);
     });
     expect(vi.mocked(api.getConversations).mock.calls.length).toBeGreaterThan(1);
+  });
+
+  describe("personal state of a conversation", () => {
+    const state = (extra: Partial<api.ConversationStateDto> = {}): api.ConversationStateDto => ({
+      conversationId: "a",
+      syncEpoch: "e",
+      syncVersion: 2,
+      lastReadSequence: 0,
+      unreadCount: 0,
+      muted: false,
+      archived: false,
+      effectiveMuted: false,
+      ...extra,
+    });
+    async function chooseOption(person: string, option: string) {
+      fireEvent.click(await screen.findByRole("button", { name: `Opções da conversa: ${person}` }));
+      fireEvent.click(await screen.findByRole("menuitem", { name: option }));
+    }
+
+    it("archives a conversation on the server and takes it off the list", async () => {
+      vi.mocked(api.updateConversationState).mockResolvedValue(state({ archived: true }));
+      renderInbox();
+      await screen.findByText("Ana");
+      await chooseOption("Ana", "Arquivar");
+      await waitFor(() => expect(screen.queryByText("Ana")).not.toBeInTheDocument());
+      expect(api.updateConversationState).toHaveBeenCalledWith("a", { archived: true });
+      expect(screen.getByText("Bruno")).toBeInTheDocument();
+    });
+
+    it("mutes and unmutes a conversation", async () => {
+      vi.mocked(api.updateConversationState).mockResolvedValue(state({ muted: true, effectiveMuted: true }));
+      renderInbox();
+      await screen.findByText("Ana");
+      await chooseOption("Ana", "Silenciar");
+      expect(await screen.findByText("Silenciada")).toBeInTheDocument();
+      expect(api.updateConversationState).toHaveBeenCalledWith("a", { muted: true });
+      vi.mocked(api.updateConversationState).mockResolvedValue(state({ muted: false }));
+      await chooseOption("Ana", "Reativar som");
+      await waitFor(() => expect(screen.queryByText("Silenciada")).not.toBeInTheDocument());
+      expect(api.updateConversationState).toHaveBeenLastCalledWith("a", { muted: false });
+    });
+
+    it("lists the archived conversations and brings one back", async () => {
+      renderInbox();
+      await screen.findByText("Ana");
+      vi.mocked(api.getConversations).mockResolvedValue([conversation("z", { archived: true, participantIds: ["me", "person-z"] })]);
+      vi.mocked(api.getUserSummary).mockResolvedValue({ username: "Zélia", avatar: null });
+      fireEvent.click(screen.getByRole("button", { name: "Arquivadas" }));
+      expect(await screen.findByText("Zélia")).toBeInTheDocument();
+      expect(api.getConversations).toHaveBeenLastCalledWith(true);
+      expect(screen.queryByText("Ana")).not.toBeInTheDocument();
+      vi.mocked(api.updateConversationState).mockResolvedValue(state({ conversationId: "z", archived: false }));
+      await chooseOption("Zélia", "Desarquivar");
+      await waitFor(() => expect(screen.queryByText("Zélia")).not.toBeInTheDocument());
+      expect(api.updateConversationState).toHaveBeenCalledWith("z", { archived: false });
+    });
+
+    it("follows an archive made on another device", async () => {
+      renderInbox();
+      await screen.findByText("Ana");
+      emit({ kind: "conversationUpdated", conversation: conversation("a", { archived: true }) });
+      expect(screen.queryByText("Ana")).not.toBeInTheDocument();
+      expect(api.getConversations).toHaveBeenCalledTimes(1);
+    });
+
+    it("keeps the assistant conversations out of the server state and hides them only in this browser", async () => {
+      vi.mocked(api.getConversations).mockResolvedValue([
+        conversation("bot", { conversationType: "CHAT_BOT", participantIds: ["me"], title: "Dúvida" }),
+      ]);
+      renderInbox();
+      await screen.findByText("Dúvida");
+      fireEvent.click(await screen.findByRole("button", { name: "Opções da conversa: Dúvida" }));
+      expect(screen.queryByRole("menuitem", { name: "Arquivar" })).not.toBeInTheDocument();
+      expect(screen.getByRole("menuitem", { name: "Excluir conversa" })).toBeInTheDocument();
+    });
+
+    it("tells the user when the state could not be saved", async () => {
+      vi.mocked(api.updateConversationState).mockRejectedValue(new Error("offline"));
+      renderInbox();
+      await screen.findByText("Ana");
+      await chooseOption("Ana", "Arquivar");
+      expect(await screen.findByText("Não foi possível atualizar a conversa. Tente novamente.")).toBeInTheDocument();
+      expect(screen.getByText("Ana")).toBeInTheDocument();
+    });
+  });
+
+  describe("creating a standalone group", () => {
+    it("creates a group with a name and people from the connections, then opens it", async () => {
+      vi.mocked(api.getMessengerContacts).mockResolvedValue([{ authId: "person-a", username: "Ana", avatar: null }]);
+      vi.mocked(createGroupConversation).mockResolvedValue({
+        conversation: conversation("g1", { conversationType: "GROUP", title: "Equipe", managerUserId: "me" }),
+        rejectedParticipants: [],
+      });
+      renderInbox();
+      await screen.findByText("Bruno");
+      fireEvent.click(screen.getByRole("button", { name: "Nova conversa" }));
+      fireEvent.click(await screen.findByRole("button", { name: "Novo grupo" }));
+      fireEvent.change(await screen.findByLabelText("Nome do grupo"), { target: { value: "Equipe" } });
+      fireEvent.click(await screen.findByLabelText("Ana"));
+      fireEvent.click(screen.getByRole("button", { name: "Criar grupo" }));
+      await waitFor(() => expect(createGroupConversation).toHaveBeenCalledWith("Equipe", ["person-a"]));
+      expect(await screen.findByText("conversa aberta")).toBeInTheDocument();
+    });
+
+    it("keeps the dialog and shows the reason when the group cannot be created", async () => {
+      vi.mocked(api.getMessengerContacts).mockResolvedValue([{ authId: "person-a", username: "Ana", avatar: null }]);
+      vi.mocked(createGroupConversation).mockRejectedValue(new Error("Nenhum convidado pôde ser aceito."));
+      renderInbox();
+      await screen.findByText("Bruno");
+      fireEvent.click(screen.getByRole("button", { name: "Nova conversa" }));
+      fireEvent.click(await screen.findByRole("button", { name: "Novo grupo" }));
+      fireEvent.change(await screen.findByLabelText("Nome do grupo"), { target: { value: "Equipe" } });
+      fireEvent.click(await screen.findByLabelText("Ana"));
+      fireEvent.click(screen.getByRole("button", { name: "Criar grupo" }));
+      expect(await screen.findByText("Nenhum convidado pôde ser aceito.")).toBeInTheDocument();
+      expect(screen.getByLabelText("Nome do grupo")).toHaveValue("Equipe");
+    });
   });
 });

@@ -7,7 +7,10 @@ const mocks = vi.hoisted(() => ({
   mock: true,
   conversations: [] as { id: string; communityId: string; participantIds: string[] }[],
 }));
-vi.mock("@/config/mocks/mockMode.utils", () => ({ isAlwaysMockMode: (service?: string) => mocks.mock && service === "MESSENGER" }));
+vi.mock("@/config/mocks/mockMode.utils", () => ({
+  isAlwaysMockMode: (service?: string) => mocks.mock && service === "MESSENGER",
+  waitForMockService: async () => undefined,
+}));
 vi.mock("@/lib/shared/auth/authToken.utils", () => ({ getAuthSession: () => ({ userId: "auth-1" }) }));
 vi.mock("@/lib/shared/http/http.service", () => ({
   httpJson: mocks.http,
@@ -45,13 +48,14 @@ beforeEach(() => {
 describe("project conversations with a local Messenger", () => {
   it("validates the real project and lists only the conversations of the user, without a general conversation", async () => {
     mocks.detail.mockResolvedValue(project);
+    mocks.members.mockResolvedValue([{ authId: "auth-1", role: "OWNER" }]);
     mocks.conversations.push(
       { id: "mine", communityId: "real-project", participantIds: ["auth-1", "auth-2"] },
       { id: "others", communityId: "real-project", participantIds: ["auth-2"] },
     );
     const result = await projectConversations(project);
     expect(mocks.detail).toHaveBeenCalledWith("real-project");
-    expect(result.communityId).toBe("real-project");
+    expect(result.community).toMatchObject({ id: "real-project", status: "ACTIVE" });
     expect(result.conversations.map((c) => c.id)).toEqual(["mine"]);
     expect(mocks.save).not.toHaveBeenCalled();
   });
@@ -80,20 +84,20 @@ describe("project conversations with the real Messenger", () => {
     expect(mocks.http.mock.calls[0][0]).toMatch(/\/communities\/project\/real-project$/);
     expect(mocks.http.mock.calls[0][1].method).toBeUndefined();
     expect(mocks.http.mock.calls[1][0]).toMatch(/\/communities\/community-1\/conversations$/);
-    expect(result).toEqual({ communityId: "community-1", conversations: [{ id: "conv-1" }] });
+    expect(result).toEqual({ community: { id: "community-1" }, conversations: [{ id: "conv-1" }] });
   });
   it("creates the community only when it does not exist and the user is the project owner", async () => {
     mocks.http.mockRejectedValueOnce(notFound).mockResolvedValueOnce({ id: "community-2" }).mockResolvedValueOnce([]);
     const result = await projectConversations(project);
     expect(mocks.http.mock.calls[1][0]).toMatch(/\/communities$/);
     expect(mocks.http.mock.calls[1][1]).toMatchObject({ method: "POST", body: { projectId: "real-project" } });
-    expect(result).toEqual({ communityId: "community-2", conversations: [] });
+    expect(result).toEqual({ community: { id: "community-2" }, conversations: [] });
   });
   it("returns an empty state, without calling the server again, when a non-owner finds no community", async () => {
     mocks.http.mockRejectedValueOnce(notFound);
     const result = await projectConversations({ ...project, role: "MEMBER" });
     expect(mocks.http).toHaveBeenCalledTimes(1);
-    expect(result).toEqual({ communityId: null, conversations: [] });
+    expect(result).toEqual({ community: null, conversations: [] });
   });
   it("does not hide server errors other than a missing community", async () => {
     mocks.http.mockRejectedValueOnce(Object.assign(new Error("boom"), { status: 500 }));

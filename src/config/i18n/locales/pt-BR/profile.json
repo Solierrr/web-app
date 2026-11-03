@@ -94,5 +94,23 @@
     "technicalTeamAvailable": "Disponível",
     "companyDescription": "Apresentação da empresa",
     "descriptionPlaceholder": "Insira a apresentação da empresa aqui"
+  },
+  "ratings": {
+    "title": "Avaliações",
+    "empty": "Ainda sem avaliações.",
+    "average_one": "Nota {{average}} de 5 · {{count}} avaliação",
+    "average_other": "Nota {{average}} de 5 · {{count}} avaliações",
+    "rate": "Avaliar",
+    "edit": "Editar minha avaliação",
+    "delete": "Excluir minha avaliação",
+    "score": "Nota",
+    "stars_one": "{{count}} estrela",
+    "stars_other": "{{count}} estrelas",
+    "comment": "Comentário (opcional)",
+    "save": "Salvar avaliação",
+    "cancel": "Cancelar",
+    "saved": "Avaliação salva",
+    "you": "Você",
+    "someone": "Cliente"
   }
 }

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { ConversationDto, MessageDto } from "./messages.messenger.api";
 import {
   applyPresence,
+  canMutateMessage,
   classifyDestination,
   EMPTY_PRESENCE,
   frameConversationId,
@@ -72,6 +73,13 @@ describe("mergeMessages", () => {
     expect(merged.map((item) => item.sequence)).toEqual([1, 2]);
     expect(merged[1]).toMatchObject({ deleted: true, content: "" });
   });
+  it("keeps the version with the highest changeVersion, whichever order they arrive in", () => {
+    const edited = message(2, { content: "novo", edited: true, changeVersion: 9 });
+    const old = message(2, { content: "antigo", changeVersion: 4 });
+    expect(mergeMessages([edited], [old])[0].content).toBe("novo");
+    expect(mergeMessages([old], [edited])[0].content).toBe("novo");
+    expect(mergeMessages([message(2, { content: "a" })], [message(2, { content: "b" })])[0].content).toBe("b");
+  });
   it("finds the highest known sequence", () => {
     expect(highestSequence([message(2), message(9), message(4)])).toBe(9);
     expect(highestSequence([], 7)).toBe(7);
@@ -121,7 +129,14 @@ describe("payload parsing", () => {
       syncEpoch: "e1",
       syncVersion: 12,
       communityId: "c1",
+      communityStatus: null,
+      managerUserId: null,
     });
+  });
+  it("keeps the manager and the personal state of the list item", () => {
+    expect(
+      toConversationDto({ id: "c", managerUserId: "m1", muted: true, archived: false, effectiveMuted: true, communityStatus: "ARCHIVED" }),
+    ).toMatchObject({ managerUserId: "m1", muted: true, archived: false, effectiveMuted: true, communityStatus: "ARCHIVED" });
   });
   it("rejects payloads without the required fields", () => {
     expect(toConversationDto({ title: "x" })).toBeNull();
@@ -179,5 +194,20 @@ describe("presence", () => {
       { kind: "presence", userId: "b", online: false, epoch: "e1", version: 9 },
     ]);
     expect(presenceEvents(EMPTY_PRESENCE)).toEqual([]);
+  });
+});
+
+describe("canMutateMessage", () => {
+  const now = Date.parse("2026-10-28T12:20:00Z");
+  const own = message(1, { senderId: "me", timestamp: "2026-10-28T12:00:00Z" });
+  it("allows the author to change a message of a human conversation inside the 30 minute window", () => {
+    expect(canMutateMessage(own, "me", "DIRECT", now)).toBe(true);
+    expect(canMutateMessage(own, "me", "GROUP", now)).toBe(true);
+  });
+  it("refuses other authors, deleted messages, the assistant conversation and expired messages", () => {
+    expect(canMutateMessage(own, "other", "DIRECT", now)).toBe(false);
+    expect(canMutateMessage({ ...own, deleted: true }, "me", "DIRECT", now)).toBe(false);
+    expect(canMutateMessage(own, "me", "CHAT_BOT", now)).toBe(false);
+    expect(canMutateMessage(own, "me", "DIRECT", now + 11 * 60_000)).toBe(false);
   });
 });

@@ -15,9 +15,9 @@ function currentUserId(): string {
   return getAuthSession()?.userId ?? "mock-user";
 }
 
-export function publishMockMessage(message: MessageDto): void {
+export function publishMockMessage(message: MessageDto, change: "created" | "edited" | "deleted" = "created"): void {
   emitMockFrame(userTopic(currentUserId(), "events"), {
-    type: "MESSAGE_CREATED",
+    type: `MESSAGE_${change.toUpperCase()}`,
     conversationId: message.conversationId,
     eventId: message.id,
     payload: message,

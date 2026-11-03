@@ -62,10 +62,11 @@ const fake = vi.hoisted(() => {
   return { FakeClient, ReconnectionTimeMode: { LINEAR: 0, EXPONENTIAL: 1 } };
 });
 
-const state = vi.hoisted(() => ({ session: null as AuthSession | null, refresh: vi.fn(), mock: false }));
+const state = vi.hoisted(() => ({ session: null as AuthSession | null, refresh: vi.fn(), mock: false, updates: vi.fn() }));
 
 vi.mock("@stomp/stompjs", () => ({ Client: fake.FakeClient, ReconnectionTimeMode: fake.ReconnectionTimeMode }));
 vi.mock("@/lib/shared/auth/authToken.utils", () => ({ getAuthSession: () => state.session }));
+vi.mock("./messages.messenger.api", () => ({ getMessageUpdates: state.updates }));
 vi.mock("@/features/access/access.service", () => ({ refresh: state.refresh }));
 vi.mock("@/config/mocks/mockMode.utils", () => ({ isAlwaysMockMode: () => state.mock }));
 vi.mock("@/config/logging/logger", () => ({ default: { serviceError: vi.fn(), debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn() } }));
@@ -91,6 +92,15 @@ const message = (sequence: number, extra: Record<string, unknown> = {}) => ({
   ...extra,
 });
 
+const page = (cursor: number, messages: unknown[] = [], extra: Record<string, unknown> = {}) => ({
+  syncEpoch: "epoch-1",
+  cursor,
+  hasMore: false,
+  messages,
+  ...extra,
+});
+const flush = () => vi.advanceTimersByTimeAsync(0);
+
 type Socket = typeof import("./messages.messenger.socket");
 let socket: Socket;
 let windowListeners: [string, EventListenerOrEventListenerObject][] = [];
@@ -115,6 +125,8 @@ describe("messenger socket", () => {
     state.session = session();
     state.mock = false;
     state.refresh.mockReset();
+    state.updates.mockReset();
+    state.updates.mockResolvedValue(page(0));
     windowListeners = [];
     const addListener = window.addEventListener.bind(window);
     vi.spyOn(window, "addEventListener").mockImplementation(
@@ -420,5 +432,75 @@ describe("messenger socket", () => {
     expect(socket.getConnectionState()).toEqual({ status: "connected", attempts: 0 });
     socket.emitMockFrame(EVENTS, { type: "TYPING_STARTED", conversationId: "conv-1", payload: { userId: OTHER_USER_ID } });
     expect(events).toEqual([{ kind: "typing", userId: OTHER_USER_ID, typing: true }]);
+  });
+
+  describe("catch-up after connecting", () => {
+    it("subscribes first and then asks for the starting point, without since, on the first connection", async () => {
+      state.updates.mockResolvedValue(page(40));
+      const { client } = await connect();
+      await flush();
+      expect(state.updates).toHaveBeenCalledTimes(1);
+      expect(state.updates).toHaveBeenCalledWith();
+      expect(client.subscribe.mock.invocationCallOrder[0]).toBeLessThan(state.updates.mock.invocationCallOrder[0]);
+    });
+
+    it("applies what changed since the saved cursor to each conversation, page by page, after a reconnection", async () => {
+      state.updates.mockResolvedValueOnce(page(40));
+      const { events, client } = await connect();
+      const other: ConversationEvent[] = [];
+      socket.subscribeToConversation("conv-2", (event) => other.push(event));
+      await flush();
+      client.drop();
+      state.updates
+        .mockResolvedValueOnce(page(45, [message(3, { edited: true, content: "corrigida", changeVersion: 44 })], { hasMore: true }))
+        .mockResolvedValueOnce(
+          page(50, [message(4, { deleted: true, content: "", changeVersion: 50 }), message(1, { conversationId: "conv-2", changeVersion: 47 })]),
+        );
+      await client.open();
+      await flush();
+      expect(state.updates.mock.calls).toEqual([[], [40], [45]]);
+      expect(events).toEqual([
+        { kind: "message", change: "edited", message: expect.objectContaining({ id: "msg-3", content: "corrigida" }) },
+        { kind: "message", change: "deleted", message: expect.objectContaining({ id: "msg-4", deleted: true }) },
+      ]);
+      expect(other).toEqual([{ kind: "message", change: "created", message: expect.objectContaining({ conversationId: "conv-2" }) }]);
+      client.drop();
+      state.updates.mockResolvedValueOnce(page(50));
+      await client.open();
+      await flush();
+      expect(state.updates).toHaveBeenLastCalledWith(50);
+    });
+
+    it("asks the open conversations and the inbox to reload when the sync epoch changes, and takes a new starting point", async () => {
+      state.updates.mockResolvedValueOnce(page(40));
+      const { events, client } = await connect();
+      await flush();
+      client.drop();
+      const reloads = vi.fn();
+      window.addEventListener("solaria:messenger", reloads);
+      state.updates.mockResolvedValueOnce(page(40, [], { syncEpoch: "epoch-2" })).mockResolvedValueOnce(page(7, [], { syncEpoch: "epoch-2" }));
+      await client.open();
+      await flush();
+      window.removeEventListener("solaria:messenger", reloads);
+      expect(events).toEqual([{ kind: "resync" }]);
+      expect(reloads).toHaveBeenCalledTimes(1);
+      client.drop();
+      state.updates.mockResolvedValueOnce(page(7, [], { syncEpoch: "epoch-2" }));
+      await client.open();
+      await flush();
+      expect(state.updates).toHaveBeenLastCalledWith(7);
+    });
+
+    it("keeps the connection working and tries again on the next one when the catch-up fails", async () => {
+      state.updates.mockRejectedValueOnce(new Error("offline"));
+      const { client } = await connect();
+      await flush();
+      expect(socket.getConnectionState().status).toBe("connected");
+      client.drop();
+      state.updates.mockResolvedValueOnce(page(12));
+      await client.open();
+      await flush();
+      expect(state.updates).toHaveBeenLastCalledWith();
+    });
   });
 });

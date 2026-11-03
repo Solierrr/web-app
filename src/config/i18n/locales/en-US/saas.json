@@ -336,6 +336,40 @@
       "archived": "Project archived"
     },
     "assigneesUnavailable": "Assignee information unavailable",
-    "allTypes": "All types"
+    "allTypes": "All types",
+    "community": {
+      "open": "Community",
+      "title": "Project community",
+      "members": "Community members",
+      "unknown": "Participant",
+      "you": "You",
+      "status": {
+        "ACTIVE": "Active",
+        "ARCHIVED": "Archived"
+      },
+      "roles": {
+        "OWNER": "Owner",
+        "ADMIN": "Admin",
+        "MEMBER": "Member"
+      },
+      "archivedHint": "The community is archived: subgroups are read-only until it is reactivated.",
+      "makeAdmin": "Make {{name}} an admin",
+      "removeAdmin": "Remove {{name}} as admin",
+      "remove": "Remove {{name}}",
+      "removeTitle": "Remove from the community",
+      "removeMessage": "{{name}} loses access to every subgroup of the community.",
+      "leave": "Leave the community",
+      "leaveMessage": "You lose access to every subgroup of the community.",
+      "chooseSuccessor": "Who takes over “{{group}}”?",
+      "add": "Add members",
+      "addConfirm": "Add",
+      "nobodyToAdd": "Everyone on the project is already in the community.",
+      "rejected_one": "1 person could not join the community.",
+      "rejected_other": "{{count}} people could not join the community.",
+      "archive": "Archive community",
+      "archiveMessage": "Subgroups become read-only until the community is reactivated.",
+      "reactivate": "Reactivate community",
+      "reactivateMessage": "Subgroups accept messages again."
+    }
   }
 }

@@ -1,5 +1,7 @@
 import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
-import type { ConversationDto, MessageDto } from "./messages.messenger.api";
+import { HttpResponseError } from "@/lib/shared/http/http.service";
+import { MESSAGE_MUTATION_WINDOW_MS } from "./messages.messenger.realtime.utils";
+import type { ConversationDto, ConversationStateDto, MessageDto, MessageUpdatesDto } from "./messages.messenger.api";
 import { publishMockConversation, publishMockMessage, simulateMockReplies, type MockReply } from "./messages.messenger.realtime.d.mocks";
 
 interface MockMessenger {
@@ -59,6 +61,11 @@ function demoMessenger(): MockMessenger {
     );
   });
   return { conversations, messages };
+}
+
+/** Erro no mesmo formato do `httpJson`, para a interface tratar o modo demonstração como o servidor real. */
+export function mockHttpError(status: number, code: string): Error {
+  return new Error(`mock returned HTTP ${status}`, { cause: new HttpResponseError(status, code) });
 }
 
 export function getMockMessenger(): MockMessenger {
@@ -147,6 +154,83 @@ export function receiveMockMessage(conversationId: string, reply: MockReply): Me
   publishMockMessage(message);
   publishMockConversation(conversation);
   return message;
+}
+
+/** Edita ou apaga a própria mensagem dentro da janela de 30 min, como o servidor, e avisa pelo mesmo caminho ao vivo. */
+export function mutateMockMessage(id: string, change: "edited" | "deleted", content = ""): MessageDto {
+  const state = getMockMessenger();
+  const current = state.messages.find((item) => item.id === id);
+  if (!current) throw mockHttpError(404, "RESOURCE_NOT_FOUND");
+  if (current.senderId !== (getAuthSession()?.userId ?? "mock-user")) throw mockHttpError(403, "UNAUTHORIZED_ACCESS");
+  if (current.deleted && change === "deleted") return current;
+  if (current.deleted || Date.now() - Date.parse(current.timestamp) >= MESSAGE_MUTATION_WINDOW_MS)
+    throw mockHttpError(422, "BUSINESS_RULE_VIOLATION");
+  const changeVersion = Math.max(0, ...state.messages.map((item) => item.changeVersion ?? 0)) + 1;
+  const message: MessageDto = { ...current, ...(change === "edited" ? { content, edited: true } : { content: "", deleted: true }), changeVersion };
+  localStorage.setItem(key(), JSON.stringify({ ...state, messages: state.messages.map((item) => (item.id === id ? message : item)) }));
+  window.dispatchEvent(new Event("solaria:messenger"));
+  publishMockMessage(message, change);
+  return message;
+}
+
+/** Grava (cria ou troca) uma conversa no armazenamento simulado e avisa a lista. */
+export function putMockConversation(conversation: ConversationDto): ConversationDto {
+  const state = getMockMessenger();
+  localStorage.setItem(
+    key(),
+    JSON.stringify({ ...state, conversations: [...state.conversations.filter((item) => item.id !== conversation.id), conversation] }),
+  );
+  window.dispatchEvent(new Event("solaria:messenger"));
+  publishMockConversation(conversation);
+  return conversation;
+}
+
+export function deleteMockConversation(id: string): void {
+  const state = getMockMessenger();
+  localStorage.setItem(
+    key(),
+    JSON.stringify({
+      conversations: state.conversations.filter((item) => item.id !== id),
+      messages: state.messages.filter((item) => item.conversationId !== id),
+    }),
+  );
+  window.dispatchEvent(new Event("solaria:messenger"));
+}
+
+/** Catch-up simulado: o relógio é o maior `changeVersion` guardado; sem `since` só devolve o ponto de partida. */
+export function getMockMessageUpdates(since?: number): MessageUpdatesDto {
+  const messages = getMockMessenger().messages;
+  const cursor = Math.max(0, ...messages.map((item) => item.changeVersion ?? 0));
+  if (since === undefined) return { syncEpoch: "mock", cursor, hasMore: false, messages: [] };
+  return {
+    syncEpoch: "mock",
+    cursor: Math.max(cursor, since),
+    hasMore: false,
+    messages: messages.filter((item) => (item.changeVersion ?? 0) > since),
+  };
+}
+
+/** Silencia/arquiva só para o usuário; a conversa com o assistente não aceita (422, como no servidor). */
+export function updateMockConversationState(id: string, patch: { muted?: boolean; archived?: boolean }): ConversationStateDto {
+  const state = getMockMessenger();
+  const current = getMockConversation(id);
+  if (current.conversationType === "CHAT_BOT") throw mockHttpError(422, "BUSINESS_RULE_VIOLATION");
+  const muted = patch.muted ?? current.muted ?? false;
+  const archived = patch.archived ?? current.archived ?? false;
+  const next: ConversationDto = { ...current, muted, archived, effectiveMuted: muted || archived };
+  localStorage.setItem(key(), JSON.stringify({ ...state, conversations: [...state.conversations.filter((item) => item.id !== id), next] }));
+  window.dispatchEvent(new Event("solaria:messenger"));
+  publishMockConversation(next);
+  return {
+    conversationId: id,
+    syncEpoch: "mock",
+    syncVersion: 0,
+    lastReadSequence: next.lastReadSequence ?? 0,
+    unreadCount: next.unreadCount ?? 0,
+    muted,
+    archived,
+    effectiveMuted: muted || archived,
+  };
 }
 
 export function createMockChatbotConversation(): ConversationDto {

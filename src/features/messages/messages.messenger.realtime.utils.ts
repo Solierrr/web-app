@@ -59,6 +59,11 @@ export function toConversationDto(value: unknown): ConversationDto | null {
     syncEpoch: typeof value.syncEpoch === "string" ? value.syncEpoch : undefined,
     syncVersion: typeof value.syncVersion === "number" ? value.syncVersion : undefined,
     communityId: typeof value.communityId === "string" ? value.communityId : null,
+    communityStatus: value.communityStatus === "ACTIVE" || value.communityStatus === "ARCHIVED" ? value.communityStatus : null,
+    managerUserId: typeof value.managerUserId === "string" ? value.managerUserId : null,
+    muted: typeof value.muted === "boolean" ? value.muted : undefined,
+    archived: typeof value.archived === "boolean" ? value.archived : undefined,
+    effectiveMuted: typeof value.effectiveMuted === "boolean" ? value.effectiveMuted : undefined,
   };
 }
 
@@ -117,10 +122,33 @@ export function parseUserFrame(body: unknown): UserEvent | null {
   return null;
 }
 
-/** Junta mensagens pelo id e ordena por sequência: o histórico REST e os eventos ao vivo nunca duplicam a mesma mensagem. */
+/** Junta mensagens pelo id e ordena por sequência: o histórico REST e os eventos ao vivo nunca duplicam a mesma mensagem. Entre duas cópias vale a de maior `changeVersion`; sem versão, a mais nova. */
 export function mergeMessages(current: MessageDto[], incoming: MessageDto[]): MessageDto[] {
-  return [...new Map([...current, ...incoming].map((message) => [message.id, message])).values()].sort(
-    (left, right) => left.sequence - right.sequence,
+  const byId = new Map<string, MessageDto>();
+  for (const message of [...current, ...incoming]) {
+    const known = byId.get(message.id);
+    if (!known || (message.changeVersion ?? 0) >= (known.changeVersion ?? 0)) byId.set(message.id, message);
+  }
+  return [...byId.values()].sort((left, right) => left.sequence - right.sequence);
+}
+
+/** Janela em que o servidor aceita editar ou excluir a própria mensagem (`app.messages.mutation-window`). */
+export const MESSAGE_MUTATION_WINDOW_MS = 30 * 60_000;
+
+/** Só o autor muda a própria mensagem, em conversa humana e dentro da janela; o servidor revalida e responde 422 fora do prazo. */
+export function canMutateMessage(
+  message: MessageDto,
+  userId: string | undefined,
+  conversationType: ConversationDto["conversationType"] | undefined,
+  now = Date.now(),
+): boolean {
+  return (
+    !!userId &&
+    message.senderId === userId &&
+    !message.deleted &&
+    conversationType !== undefined &&
+    conversationType !== "CHAT_BOT" &&
+    now - Date.parse(message.timestamp) < MESSAGE_MUTATION_WINDOW_MS
   );
 }
 
