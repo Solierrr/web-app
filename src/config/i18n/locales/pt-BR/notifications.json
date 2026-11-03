@@ -20,12 +20,12 @@
     "loadingMore": "Carregando...",
     "actionError": "Não foi possível atualizar a notificação. Tente novamente.",
     "allRead": "Todas as notificações foram marcadas como lidas.",
-    "enablePrompt": "Receba avisos neste dispositivo mesmo com a Solaria fechada.",
+    "enablePrompt": "Receba avisos neste dispositivo mesmo com o Elos fechada.",
     "enable": "Ativar notificações"
   },
   "push": {
     "title": "Notificações neste dispositivo",
-    "description": "Receba avisos de novas mensagens e serviços mesmo com a Solaria fechada. A permissão vale apenas para este navegador.",
+    "description": "Receba avisos de novas mensagens e serviços mesmo com o Elos fechada. A permissão vale apenas para este navegador.",
     "enable": "Ativar notificações",
     "disable": "Desativar notificações",
     "on": "As notificações estão ativadas neste dispositivo.",

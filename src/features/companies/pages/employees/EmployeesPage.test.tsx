@@ -232,7 +232,7 @@ describe("EmployeesPage", () => {
     const link = await screen.findByRole("link", { name: "Enviar por e-mail" });
     const url = new URL(link.getAttribute("href") ?? "");
     expect(url.pathname).toBe("novo@empresa.com");
-    expect(url.searchParams.get("subject")).toBe("Convite para Solaria na Solaria");
+    expect(url.searchParams.get("subject")).toBe("Convite para Solaria no Elos");
     expect(url.searchParams.get("body")).toContain("ABC12345");
   });
 

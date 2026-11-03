@@ -71,7 +71,7 @@
     "deleteOffer": "Unable to remove offer {{id}}"
   },
   "platformAdmin": {
-    "getMyPlatformAdmin": "Unable to check the Solaria administrator status"
+    "getMyPlatformAdmin": "Unable to check the Elos administrator status"
   },
   "professionalOnboarding": {
     "getProfessions": "Unable to load the professions",

@@ -259,7 +259,7 @@ export default function Inbox() {
         </p>
       )}
       {hasList && !conversationId && (
-        <div className="absolute right-4 top-4 z-10 sm:right-6 sm:top-6">
+        <div className="relative z-10 mb-3 flex justify-end @xl/messages:absolute @xl/messages:right-6 @xl/messages:top-6 @xl/messages:mb-0">
           <ConversationActions onNew={openContacts} />
         </div>
       )}

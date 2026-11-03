@@ -176,7 +176,6 @@ export default function CartPage() {
                 />
               </div>
             </SurfaceGroup>
-            <p className="text-center text-operational-muted">{t("fictitious")}</p>
             <PrimaryButton
               type="button"
               variant="soft"

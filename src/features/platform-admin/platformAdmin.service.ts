@@ -13,7 +13,7 @@ export interface PlatformAdmin {
 }
 
 // GET /api/platform-admins/me retorna 204 (corpo vazio) quando o usuário
-// atual não é Admin Solaria — httpJson resolve isso como `undefined`.
+// atual não é Admin Elos — httpJson resolve isso como `undefined`.
 export async function getMyPlatformAdmin(): Promise<PlatformAdmin | null> {
   if (isAlwaysMockMode()) return isMockTestSession(getAuthSession()) ? { id: "mock-test-admin", userId: MOCK_TEST_USER_ID } : null;
   const admin = await httpJson<PlatformAdmin | undefined>(`${API_CORE_URL}/platform-admins/me`, {

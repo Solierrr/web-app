@@ -13,7 +13,7 @@ firebase.initializeApp({
 });
 
 const FIXED_KEYS = ["notificationId", "type", "title", "body"];
-const DEFAULT_TITLE = "Solaria";
+const DEFAULT_TITLE = "Elos";
 const MESSAGE_SOURCE = "solaria-push";
 
 function extras(data) {

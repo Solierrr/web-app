@@ -6,7 +6,7 @@ import OperationalDetails, { DetailSection, DetailField } from "@@/layout/operat
 import { ActiveContextProvider } from "../../../../../.storybook/mocks/ActiveContext";
 function DemoPage() {
   return (
-    <OperationalPage title="Projetos" description="Área de trabalho do Solaria — dados demonstrativos." centered sideBackground>
+    <OperationalPage title="Projetos" description="Área de trabalho do Elos — dados demonstrativos." centered sideBackground>
       <OperationalDetails title="Instalação residencial">
         <DetailSection title="Informações" plain>
           <DetailField label="Local" value="São Paulo / SP" />

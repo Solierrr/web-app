@@ -21,7 +21,6 @@
     "fee": "Platform fee ({{percentage}}%)",
     "total": "Total",
     "paymentMethod": "Payment method",
-    "fictitious": "Fictitious payment: no real money is charged.",
     "pay": "Pay",
     "paid": "Purchase completed.",
     "error": "The operation could not be completed."

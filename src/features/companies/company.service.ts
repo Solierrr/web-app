@@ -278,7 +278,7 @@ export function getCompany(id: string): Promise<Company> {
   );
 }
 
-// Admin Solaria: aprovação/rejeição de empresas fica restrita ao platform admin
+// Admin Elos: aprovação/rejeição de empresas fica restrita ao platform admin
 // no backend (ver RbacAuthorizationService.PLATFORM_ADMIN_ONLY_ENDPOINTS).
 export async function approveCompany(id: string): Promise<Company> {
   if (isAlwaysMockMode()) {

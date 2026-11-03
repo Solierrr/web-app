@@ -74,7 +74,7 @@
     "PUBLIC": "Public",
     "PRIVATE": "Private"
   },
-  "publicationHelp": "The brand stays private until approval by the Solaria administrator.",
+  "publicationHelp": "The brand stays private until approval by the Elos administrator.",
   "sessionExpired": "Your session expired. Sign in again.",
   "permissionDenied": "You do not have permission for this operation.",
   "conflict": "A duplicate or concurrent change was detected. Refresh before trying again.",

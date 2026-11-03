@@ -103,9 +103,9 @@ function AccessBody({
       <div className="flex w-full flex-col items-center justify-center">
         <div className={`flex flex-col w-full ${compact ? "max-w-96" : "max-w-120 max-md:px-8 max-sm:px-4"} gap-6 items-center-safe h-min`}>
           <div className="flex flex-col w-full gap-6">
-            {(heading !== "Solaria" || helperText) && (
+            {(heading !== "Elos" || helperText) && (
               <div className="flex flex-col gap-1 text-center">
-                {heading !== "Solaria" && <h1 className="text-subtitle font-semi-bold leading-tight text-operational-ink">{heading}</h1>}
+                {heading !== "Elos" && <h1 className="text-subtitle font-semi-bold leading-tight text-operational-ink">{heading}</h1>}
                 {helperText && <div className="text-label leading-relaxed text-operational-muted">{helperText}</div>}
               </div>
             )}
