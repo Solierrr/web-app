@@ -6,13 +6,20 @@ import { useTranslation } from "react-i18next";
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
+import { useRequiredParam } from "@/lib/shared/routing/useRequiredParam";
+import { NotFoundPage } from "@/features/error/pages/not-found/NotFound";
 import { useActiveContext } from "@/lib/shared/context/ActiveContext";
 import { listCompanyUnits, type LocalUnit } from "../unit.service";
 
 export default function UnitPage() {
+  const unitId = useRequiredParam("unitId");
+  return unitId ? <UnitDetails unitId={unitId} /> : <NotFoundPage />;
+}
+
+function UnitDetails({ unitId }: { unitId: string }) {
   const { t } = useTranslation("commons", { keyPrefix: "unitsManagement" });
   const { t: tSaas } = useTranslation("saas");
-  const { unitId, lang: parameter } = useParams<{ unitId: string; lang: string }>();
+  const { lang: parameter } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(parameter) ? parameter : DEFAULT;
   const { company } = useActiveContext();
   const [unit, setUnit] = useState<LocalUnit | null>(null);

@@ -6,14 +6,21 @@ import { useTranslation } from "react-i18next";
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
+import { useRequiredParam } from "@/lib/shared/routing/useRequiredParam";
+import { NotFoundPage } from "@/features/error/pages/not-found/NotFound";
 import { useActiveContext } from "@/lib/shared/context/ActiveContext";
 import { getUser } from "@/features/users/user/user.service";
 import { listEmployees, type Employee } from "@/features/companies/company.management.service";
 import Permissions from "@/features/permissions/Permissions";
 
 export default function EmployeePage() {
+  const employeeId = useRequiredParam("employeeId");
+  return employeeId ? <EmployeeDetails employeeId={employeeId} /> : <NotFoundPage />;
+}
+
+function EmployeeDetails({ employeeId }: { employeeId: string }) {
   const { t } = useTranslation("saas");
-  const { employeeId, lang: parameter } = useParams<{ employeeId: string; lang: string }>();
+  const { lang: parameter } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(parameter) ? parameter : DEFAULT;
   const { company, can = () => false } = useActiveContext();
   const [employee, setEmployee] = useState<Employee | null>(null);

@@ -1,6 +1,8 @@
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useRequiredParam } from "@/lib/shared/routing/useRequiredParam";
+import { NotFoundPage } from "@/features/error/pages/not-found/NotFound";
 import LogoLoader from "@@/feedback/logo-loader/LogoLoader";
 import StatusField from "@@/ui/status-field/StatusField";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
@@ -18,7 +20,9 @@ import Review from "@/features/professionals/review/Review";
 import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
 
 export default function RegistrationDetailPage() {
-  const { kind = "", id = "" } = useParams<{ kind: string; id: string }>();
+  const kind = useRequiredParam("kind");
+  const id = useRequiredParam("id");
+  if (!kind || !id) return <NotFoundPage />;
   if (kind === "professional" && !isAlwaysMockMode()) return <Review key={id} id={id} />;
   return <RegistrationDetail key={`${kind}:${id}`} kind={kind} id={id} />;
 }

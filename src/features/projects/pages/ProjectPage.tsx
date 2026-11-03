@@ -1,5 +1,7 @@
 import { useCallback } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useRequiredParam } from "@/lib/shared/routing/useRequiredParam";
+import { NotFoundPage } from "@/features/error/pages/not-found/NotFound";
 import { routePaths } from "@/config/i18n/paths";
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import OperationalDetails, { DetailField, DetailSection } from "@@/layout/operational-page/OperationalDetails";
@@ -20,8 +22,8 @@ import ProjectHistory from "../components/ProjectHistory";
 import ProjectConversations from "../components/ProjectConversations";
 import type { ProjectStatus as Status } from "../projects.d";
 export default function ProjectPage() {
-  const { projectId = "" } = useParams();
-  return <ProjectDetail key={projectId} id={projectId} />;
+  const projectId = useRequiredParam("projectId");
+  return projectId ? <ProjectDetail key={projectId} id={projectId} /> : <NotFoundPage />;
 }
 function ProjectDetail({ id }: { id: string }) {
   const { lang, t, date } = useProjects(),

@@ -1,5 +1,7 @@
 import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useRequiredParam } from "@/lib/shared/routing/useRequiredParam";
+import { NotFoundPage } from "@/features/error/pages/not-found/NotFound";
 import { useEffect, useState } from "react";
 
 import type { SolarPanelAnnouncement } from "@/features/solar-panel/solarPanel.announcement";
@@ -53,15 +55,23 @@ export function SolarPanelAnnouncementPacked({ product }: SolarPanelAnnouncement
   return (
     <main className="mx-auto grid w-full max-w-marketplace-page min-w-0 grid-cols-1 gap-10 px-5 pb-20 pt-10 sm:px-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16 lg:px-18">
       <div className="min-w-0 lg:sticky lg:top-10 lg:self-start">
-        {images.length ? <ProductImages images={images} label={t("sections.productImages")} /> : <ImageSkeleton className="aspect-square! w-full! rounded-surface!" />}
+        {images.length ? (
+          <ProductImages images={images} label={t("sections.productImages")} />
+        ) : (
+          <ImageSkeleton className="aspect-square! w-full! rounded-surface!" />
+        )}
       </div>
       <div className="flex min-w-0 flex-col gap-10">
         <section title={t("general.information")} className="flex flex-col gap-8">
           <div className="flex flex-col gap-3">
             <h1 className="text-title font-bold leading-tight tracking-tight">{product.title}</h1>
             <Link to={routePaths.companyProfile(lang, product.companySlug)} className="flex w-fit items-center gap-2">
-              {product.company.logoUrl && <img src={product.company.logoUrl} alt={product.company.tradeName} className="size-6 rounded-full object-cover" />}
-              <span className="font-medium text-operational-ink underline-offset-4 hover:underline">{t("general.announcedBy", { company: product.company.tradeName })}</span>
+              {product.company.logoUrl && (
+                <img src={product.company.logoUrl} alt={product.company.tradeName} className="size-6 rounded-full object-cover" />
+              )}
+              <span className="font-medium text-operational-ink underline-offset-4 hover:underline">
+                {t("general.announcedBy", { company: product.company.tradeName })}
+              </span>
             </Link>
             {product.serviceRegions.length > 0 && (
               <p className="text-body text-operational-muted">
@@ -74,9 +84,13 @@ export function SolarPanelAnnouncementPacked({ product }: SolarPanelAnnouncement
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-              <span className="text-title font-bold leading-none tracking-tight">{new Intl.NumberFormat(lang, { style: "currency", currency: "BRL" }).format(product.unitPrice)}</span>
+              <span className="text-title font-bold leading-none tracking-tight">
+                {new Intl.NumberFormat(lang, { style: "currency", currency: "BRL" }).format(product.unitPrice)}
+              </span>
               <span className="text-body text-operational-muted">{t("general.perUnit")}</span>
-              {discounted && <span className="rounded-full bg-orange/10 px-3 py-1 text-body font-medium text-orange">-{product.discountPercentage}%</span>}
+              {discounted && (
+                <span className="rounded-full bg-orange/10 px-3 py-1 text-body font-medium text-orange">-{product.discountPercentage}%</span>
+              )}
             </div>
             <p className="text-body text-operational-muted">
               {product.availableUnits} {t("general.units")}
@@ -134,7 +148,13 @@ function SolarPanelAnnouncementSkeleton() {
 }
 
 export default function SolarPanelAnnouncement() {
-  const { companySlug, productSlug, lang: langParam } = useParams<{ companySlug: string; productSlug: string; lang: string }>();
+  const companySlug = useRequiredParam("companySlug");
+  const productSlug = useRequiredParam("productSlug");
+  return companySlug && productSlug ? <SolarPanelAnnouncementResource companySlug={companySlug} productSlug={productSlug} /> : <NotFoundPage />;
+}
+
+function SolarPanelAnnouncementResource({ companySlug, productSlug }: { companySlug: string; productSlug: string }) {
+  const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
   const { t } = useTranslation("announcements", {
     keyPrefix: "solarPanel.errors",
@@ -145,8 +165,6 @@ export default function SolarPanelAnnouncement() {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    if (!companySlug || !productSlug) return;
-
     getSolarPanelBySlug(companySlug, productSlug, lang)
       .then((product) => {
         setProduct(product);
@@ -159,7 +177,7 @@ export default function SolarPanelAnnouncement() {
       });
   }, [companySlug, productSlug, lang]);
 
-  if (!companySlug || !productSlug || error) {
+  if (error) {
     return <p>{t("load")}</p>;
   }
 

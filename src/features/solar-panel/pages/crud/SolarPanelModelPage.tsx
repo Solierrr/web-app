@@ -12,15 +12,22 @@ import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
 import StatusField from "@@/ui/status-field/StatusField";
 import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
+import { useRequiredParam } from "@/lib/shared/routing/useRequiredParam";
+import { NotFoundPage } from "@/features/error/pages/not-found/NotFound";
 import { listSolarPanelModels } from "@/features/solar-panel/solarPanel.service";
 import { SolarPanelModelStatus } from "@/features/solar-panel/solarPanel.enum";
 import type { SolarPanel } from "@/features/solar-panel/solarPanel";
 
 export default function SolarPanelModelPage() {
+  const modelId = useRequiredParam("modelId");
+  return modelId ? <SolarPanelModel modelId={modelId} /> : <NotFoundPage />;
+}
+
+function SolarPanelModel({ modelId }: { modelId: string }) {
   const { t } = useTranslation("crud", { keyPrefix: "solarPanelModel" });
   const { company, can = () => false } = useActiveContext();
   const { t: tSaas } = useTranslation("saas");
-  const { modelId, lang: parameter } = useParams<{ modelId: string; lang: string }>();
+  const { lang: parameter } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(parameter) ? parameter : DEFAULT;
   const [result, setResult] = useState<{ id?: string; model: SolarPanel | null; photos: ModelPhoto[]; error: boolean } | null>(null);
   const loading = !result || result.id !== modelId;
@@ -30,7 +37,7 @@ export default function SolarPanelModelPage() {
   const mainPhoto = photos.find((photo) => photo.id === selectedPhoto) ?? photos[0];
   useEffect(() => {
     let active = true;
-    Promise.all([listSolarPanelModels(), listModelPhotos(modelId ?? "")])
+    Promise.all([listSolarPanelModels(), listModelPhotos(modelId)])
       .then(([items, photos]) => {
         const item = items.find((entry) => entry.id === modelId);
         if (!item) throw new Error("Model not found");

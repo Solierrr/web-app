@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import ProfessionalProfile from "./ProfessionalProfile";
 
@@ -23,8 +23,10 @@ describe("ProfessionalProfile", () => {
   it("uses public contact details when available and shows an honest unavailable state otherwise", async () => {
     mockedGetCatalogTechnicianBySlug.mockResolvedValue({ ...professional, contact: { email: "ana@example.test", number: "+55 (11) 99999-1234" } });
     render(
-      <MemoryRouter>
-        <ProfessionalProfile />
+      <MemoryRouter initialEntries={["/carlos-eduardo-lima"]}>
+        <Routes>
+          <Route path="/:professionalSlug" element={<ProfessionalProfile />} />
+        </Routes>
       </MemoryRouter>,
     );
     fireEvent.click(await screen.findByRole("button", { name: "Entrar em contato" }));
@@ -40,8 +42,10 @@ describe("ProfessionalProfile", () => {
     mockedGetCatalogTechnicianBySlug.mockReturnValue(new Promise(() => {}));
 
     render(
-      <MemoryRouter>
-        <ProfessionalProfile />
+      <MemoryRouter initialEntries={["/carlos-eduardo-lima"]}>
+        <Routes>
+          <Route path="/:professionalSlug" element={<ProfessionalProfile />} />
+        </Routes>
       </MemoryRouter>,
     );
 
@@ -52,8 +56,10 @@ describe("ProfessionalProfile", () => {
     mockedGetCatalogTechnicianBySlug.mockResolvedValue(professional);
 
     render(
-      <MemoryRouter>
-        <ProfessionalProfile />
+      <MemoryRouter initialEntries={["/carlos-eduardo-lima"]}>
+        <Routes>
+          <Route path="/:professionalSlug" element={<ProfessionalProfile />} />
+        </Routes>
       </MemoryRouter>,
     );
 
@@ -66,8 +72,10 @@ describe("ProfessionalProfile", () => {
     mockedGetCatalogTechnicianBySlug.mockRejectedValue(new Error("not found"));
 
     render(
-      <MemoryRouter>
-        <ProfessionalProfile />
+      <MemoryRouter initialEntries={["/carlos-eduardo-lima"]}>
+        <Routes>
+          <Route path="/:professionalSlug" element={<ProfessionalProfile />} />
+        </Routes>
       </MemoryRouter>,
     );
 
@@ -77,7 +85,9 @@ describe("ProfessionalProfile", () => {
     mockedGetCatalogTechnicianBySlug.mockResolvedValue(professional);
     render(
       <MemoryRouter initialEntries={["/pt-BR/profissional/carlos-eduardo-lima#contato"]}>
-        <ProfessionalProfile />
+        <Routes>
+          <Route path="/:lang/profissional/:professionalSlug" element={<ProfessionalProfile />} />
+        </Routes>
       </MemoryRouter>,
     );
     expect(await screen.findByRole("dialog")).toBeInTheDocument();
@@ -93,8 +103,10 @@ describe("ProfessionalProfile", () => {
       registrations: [{ profession: "Engenheiro Eletricista", council: "CREA-MG", number: "123456", expirationDate: "2027-03-01" }],
     });
     render(
-      <MemoryRouter>
-        <ProfessionalProfile />
+      <MemoryRouter initialEntries={["/carlos-eduardo-lima"]}>
+        <Routes>
+          <Route path="/:professionalSlug" element={<ProfessionalProfile />} />
+        </Routes>
       </MemoryRouter>,
     );
     expect(await screen.findByText("CREA-MG 123456")).toBeInTheDocument();
@@ -102,8 +114,10 @@ describe("ProfessionalProfile", () => {
   it("shows the about section and offers to add the professional as a connection", async () => {
     mockedGetCatalogTechnicianBySlug.mockResolvedValue({ ...professional, userId: "user-9", about: "Atendo projetos residenciais." });
     render(
-      <MemoryRouter>
-        <ProfessionalProfile />
+      <MemoryRouter initialEntries={["/carlos-eduardo-lima"]}>
+        <Routes>
+          <Route path="/:professionalSlug" element={<ProfessionalProfile />} />
+        </Routes>
       </MemoryRouter>,
     );
     expect(await screen.findByRole("heading", { name: "Sobre mim" })).toBeInTheDocument();

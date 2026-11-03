@@ -1,6 +1,8 @@
 import OperationalPage from "@@/layout/operational-page/OperationalPage";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useRequiredParam } from "@/lib/shared/routing/useRequiredParam";
+import { NotFoundPage } from "@/features/error/pages/not-found/NotFound";
 import { useTranslation } from "react-i18next";
 
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
@@ -10,7 +12,12 @@ import { getMyCompany } from "@/features/companies/company.service";
 import { httpJson } from "@/lib/shared/http/http.service";
 
 export default function ContactCompany() {
-  const { companyId = "", lang: langParam } = useParams<{ companyId: string; lang: string }>();
+  const companyId = useRequiredParam("companyId");
+  return companyId ? <ContactCompanyResolver companyId={companyId} /> : <NotFoundPage />;
+}
+
+function ContactCompanyResolver({ companyId }: { companyId: string }) {
+  const { lang: langParam } = useParams<{ lang: string }>();
   const lang = isSupportedLanguage(langParam) ? langParam : DEFAULT_LANGUAGE;
   const [searchParams] = useSearchParams();
   const product = searchParams.get("product");
