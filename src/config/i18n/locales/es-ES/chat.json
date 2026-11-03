@@ -261,5 +261,10 @@
     "loading": "Cargando contenido…",
     "locationLink": "Ver ubicación en el mapa",
     "file": "Archivo"
+  },
+  "nps": {
+    "question": "Del 0 al 10, ¿cuánto recomendarías el asistente?",
+    "score": "Nota {{score}}",
+    "thanks": "¡Gracias por tu nota!"
   }
 }

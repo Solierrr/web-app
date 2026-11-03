@@ -67,7 +67,11 @@
     "addCommunityMembers": "Unable to add the members to the community",
     "removeCommunityMember": "Unable to remove the community member",
     "sendAttachment": "Could not send the attachment",
-    "downloadAttachment": "Could not download the attachment"
+    "downloadAttachment": "Could not download the attachment",
+    "listRatings": "Could not load the ratings",
+    "saveRating": "Could not save the rating",
+    "deleteRating": "Could not delete the rating",
+    "sendNps": "Could not send your score"
   },
   "user": {
     "getUserSummary": "Unable to load the participant",

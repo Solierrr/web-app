@@ -67,7 +67,11 @@
     "addCommunityMembers": "Não foi possível adicionar os membros à comunidade",
     "removeCommunityMember": "Não foi possível remover o membro da comunidade",
     "sendAttachment": "Não foi possível enviar o anexo",
-    "downloadAttachment": "Não foi possível baixar o anexo"
+    "downloadAttachment": "Não foi possível baixar o anexo",
+    "listRatings": "Não foi possível carregar as avaliações",
+    "saveRating": "Não foi possível salvar a avaliação",
+    "deleteRating": "Não foi possível excluir a avaliação",
+    "sendNps": "Não foi possível enviar a sua nota"
   },
   "user": {
     "getUserSummary": "Não foi possível carregar o participante",

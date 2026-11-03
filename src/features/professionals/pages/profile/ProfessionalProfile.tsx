@@ -14,6 +14,7 @@ import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
 import { ProfessionalBadges, ProfessionalContactDialog } from "./ProfessionalProfile.reusable";
+import ProfessionalRatings from "@/features/ratings/components/ProfessionalRatings";
 
 function ProfessionalProfilePacked({ professional }: { professional: CatalogTechnician }) {
   const { t: market } = useTranslation("marketplace");
@@ -92,6 +93,7 @@ function ProfessionalProfilePacked({ professional }: { professional: CatalogTech
         </>
       }>
       <ProfileAbout title={tProfile("aboutMe")} text={professional.about} />
+      {professional.userId && <ProfessionalRatings evaluatedId={professional.userId} />}
       {contactOpen && <ProfessionalContactDialog professional={professional} onClose={closeContact} />}
     </ProfileChannel>
   );

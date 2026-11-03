@@ -23,7 +23,9 @@ import {
   getConversationMessages,
   getConversationMessagesSince,
   getUserSummary,
+  hasAnsweredNps,
   markConversationRead,
+  sendNps,
   type ConversationDto,
   type MessageDto,
 } from "@/features/messages/messages.messenger.api";
@@ -38,9 +40,10 @@ import {
 } from "@/features/messages/messages.hooks";
 import ConnectionNotice from "./ConnectionNotice";
 import GroupDetails from "./GroupDetails";
-import { AssistantNotice, AttachmentView, EditBanner, MessageMeta, PendingBubble } from "./Chat.reusable";
+import { AssistantNotice, AttachmentView, EditBanner, MessageMeta, NpsPrompt, PendingBubble } from "./Chat.reusable";
 import { MediaTooLargeError, sendFileAttachment, sendLocationAttachment } from "@/features/messages/messages.messenger.media";
 import Confirmation from "@@/overlay/confirmation/Confirmation";
+import { notify } from "@@/feedback/toast/Toast.utils";
 import { getHttpStatus } from "@/lib/shared/http/http.service";
 
 export default function Chat() {
@@ -379,6 +382,18 @@ export function Conversation({
     );
   }
 
+  const [npsAnswered, setNpsAnswered] = useState(() => hasAnsweredNps(conversationId));
+  function answerNps(score: number) {
+    setNpsAnswered(true);
+    sendNps(conversationId, score).then(
+      () => notify(t("nps.thanks")),
+      (failure: Error) => {
+        setNpsAnswered(false);
+        setError(failure.message);
+      },
+    );
+  }
+
   function handleDraft(value: string) {
     setDraft(value);
     typingPublisher.notify(value);
@@ -530,6 +545,10 @@ export function Conversation({
           </div>
         ))}
         {assistantStatus !== "idle" && outbox.pending.length === 0 && <AssistantNotice status={assistantStatus} onRetry={retryAssistant} />}
+        {kind === "assistant" &&
+          !npsAnswered &&
+          assistantStatus === "idle" &&
+          messages.some((message) => message.messageType === "CHATBOT_TO_USER" || message.role === "assistant") && <NpsPrompt onScore={answerNps} />}
       </div>
       {editing && <EditBanner onCancel={cancelEdit} />}
       {conversable && (

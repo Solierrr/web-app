@@ -67,7 +67,11 @@
     "addCommunityMembers": "No se pudieron añadir los miembros a la comunidad",
     "removeCommunityMember": "No se pudo eliminar al miembro de la comunidad",
     "sendAttachment": "No se pudo enviar el adjunto",
-    "downloadAttachment": "No se pudo descargar el adjunto"
+    "downloadAttachment": "No se pudo descargar el adjunto",
+    "listRatings": "No se pudieron cargar las valoraciones",
+    "saveRating": "No se pudo guardar la valoración",
+    "deleteRating": "No se pudo eliminar la valoración",
+    "sendNps": "No se pudo enviar tu nota"
   },
   "user": {
     "getUserSummary": "No se pudo cargar el participante",
