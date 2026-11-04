@@ -8,11 +8,15 @@ import {
   createMockChatbotConversation,
   sendMockMessage,
   markMockConversationRead,
+  getMockMessageUpdates,
+  mutateMockMessage,
+  updateMockConversationState,
   getMockConnections,
   addMockConnection,
 } from "./messages.messenger.d.mocks";
 import { announceMockPresence } from "./messages.messenger.realtime.d.mocks";
 import { userMocks } from "@/config/mocks/registry";
+import type { AttachmentDto } from "./messages.messenger.media";
 
 const API = `${import.meta.env.VITE_API_MESSENGER?.replace(/\/$/, "")}/messaging`;
 
@@ -27,7 +31,28 @@ export interface ConversationDto {
   syncEpoch?: string;
   syncVersion?: number;
   communityId?: string | null;
-  projectGeneral?: boolean;
+  communityStatus?: "ACTIVE" | "ARCHIVED" | null;
+  managerUserId?: string | null;
+  /** Estado pessoal: vale só para quem pediu e vem no item da lista. */
+  muted?: boolean;
+  archived?: boolean;
+  effectiveMuted?: boolean;
+}
+
+export interface RejectedParticipant {
+  userId: string;
+  reasonCode: string;
+}
+
+export interface ConversationStateDto {
+  conversationId: string;
+  syncEpoch: string;
+  syncVersion: number;
+  lastReadSequence: number;
+  unreadCount: number;
+  muted: boolean;
+  archived: boolean;
+  effectiveMuted: boolean;
 }
 
 export interface MessageDto {
@@ -42,16 +67,27 @@ export interface MessageDto {
   messageType?: "USER_TO_USER" | "USER_TO_GROUP" | "USER_TO_CHATBOT" | "CHATBOT_TO_USER";
   edited?: boolean;
   deleted?: boolean;
+  /** Versão da última mudança da mensagem: entre duas cópias do mesmo id vale a de maior valor. */
+  changeVersion?: number;
+  /** Foto, áudio, vídeo, arquivo ou localização; o arquivo em si é baixado à parte. */
+  attachment?: AttachmentDto | null;
+}
+
+export interface MessageUpdatesDto {
+  syncEpoch: string;
+  cursor: number;
+  hasMore: boolean;
+  messages: MessageDto[];
 }
 
 export const MESSAGE_PAGE_SIZE = 100;
 
-export async function getConversations(): Promise<ConversationDto[]> {
+export async function getConversations(archived = false): Promise<ConversationDto[]> {
   if (isAlwaysMockMode("MESSENGER")) {
     await waitForMockService();
-    return getMockMessenger().conversations;
+    return getMockMessenger().conversations.filter((item) => !!item.archived === archived);
   }
-  return httpJson<ConversationDto[]>(`${API}/conversations/me`, {
+  return httpJson<ConversationDto[]>(`${API}/conversations/me${archived ? "?archived=true" : ""}`, {
     service: "messenger",
     operation: "getConversations",
     errorMessage: i18n.t("services:messenger.getConversations"),
@@ -150,6 +186,61 @@ export async function sendConversationMessage(
       content,
     },
     errorMessage: i18n.t("services:messenger.sendConversationMessage"),
+  });
+}
+
+/** Silencia ou arquiva a conversa só para o próprio usuário (`PATCH /state`, campo ausente = inalterado). */
+export async function updateConversationState(id: string, patch: { muted?: boolean; archived?: boolean }): Promise<ConversationStateDto> {
+  if (isAlwaysMockMode("MESSENGER")) {
+    await waitForMockService();
+    return updateMockConversationState(id, patch);
+  }
+  return httpJson<ConversationStateDto>(`${API}/conversations/${encodeURIComponent(id)}/state`, {
+    service: "messenger",
+    operation: "updateConversationState",
+    method: "PATCH",
+    body: patch,
+    errorMessage: i18n.t("services:messenger.updateConversationState"),
+  });
+}
+
+/** Catch-up: sem `since` devolve só o ponto de partida; com `since`, o estado atual das mensagens que mudaram depois dele. */
+export async function getMessageUpdates(since?: number): Promise<MessageUpdatesDto> {
+  if (isAlwaysMockMode("MESSENGER")) {
+    await waitForMockService();
+    return getMockMessageUpdates(since);
+  }
+  return httpJson<MessageUpdatesDto>(`${API}/updates${since === undefined ? "" : `?since=${since}&limit=${MESSAGE_PAGE_SIZE}`}`, {
+    service: "messenger",
+    operation: "getMessageUpdates",
+    errorMessage: i18n.t("services:messenger.getMessageUpdates"),
+  });
+}
+
+export async function editMessage(id: string, content: string): Promise<MessageDto> {
+  if (isAlwaysMockMode("MESSENGER")) {
+    await waitForMockService();
+    return mutateMockMessage(id, "edited", content);
+  }
+  return httpJson<MessageDto>(`${API}/messages/${encodeURIComponent(id)}`, {
+    service: "messenger",
+    operation: "editMessage",
+    method: "PATCH",
+    body: { content },
+    errorMessage: i18n.t("services:messenger.editMessage"),
+  });
+}
+
+export async function deleteMessage(id: string): Promise<MessageDto> {
+  if (isAlwaysMockMode("MESSENGER")) {
+    await waitForMockService();
+    return mutateMockMessage(id, "deleted");
+  }
+  return httpJson<MessageDto>(`${API}/messages/${encodeURIComponent(id)}`, {
+    service: "messenger",
+    operation: "deleteMessage",
+    method: "DELETE",
+    errorMessage: i18n.t("services:messenger.deleteMessage"),
   });
 }
 

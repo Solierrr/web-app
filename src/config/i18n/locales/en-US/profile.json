@@ -94,5 +94,23 @@
     "technicalTeamAvailable": "Available",
     "companyDescription": "Company introduction",
     "descriptionPlaceholder": "Enter the company introduction here"
+  },
+  "ratings": {
+    "title": "Ratings",
+    "empty": "No ratings yet.",
+    "average_one": "Rated {{average}} of 5 · {{count}} rating",
+    "average_other": "Rated {{average}} of 5 · {{count}} ratings",
+    "rate": "Rate",
+    "edit": "Edit my rating",
+    "delete": "Delete my rating",
+    "score": "Score",
+    "stars_one": "{{count}} star",
+    "stars_other": "{{count}} stars",
+    "comment": "Comment (optional)",
+    "save": "Save rating",
+    "cancel": "Cancel",
+    "saved": "Rating saved",
+    "you": "You",
+    "someone": "Customer"
   }
 }

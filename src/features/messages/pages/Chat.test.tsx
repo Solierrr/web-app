@@ -2,11 +2,13 @@ import { act, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import Chat from "./Chat";
+import { HttpResponseError } from "@/lib/shared/http/http.service";
 import * as api from "@/features/messages/messages.messenger.api";
 import type { ConversationEvent } from "@/features/messages/messages.messenger.realtime";
 import { publishTyping, subscribeToConversation } from "@/features/messages/messages.messenger.socket";
 import { sendAssistantTurn } from "@/features/assistant/assistant.service";
 import { AgentChatError } from "@/features/error/agent-chat/AgentChat.error";
+import { MediaTooLargeError, sendFileAttachment } from "@/features/messages/messages.messenger.media";
 
 const connection = vi.hoisted(() => ({
   state: { status: "connected", attempts: 0 } as { status: string; attempts: number },
@@ -14,6 +16,8 @@ const connection = vi.hoisted(() => ({
 }));
 
 vi.mock("@/features/messages/messages.messenger.api", () => ({
+  deleteMessage: vi.fn(),
+  editMessage: vi.fn(),
   getConversation: vi.fn(),
   getConversationMessages: vi.fn(),
   getConversationMessagesSince: vi.fn(),
@@ -31,7 +35,16 @@ vi.mock("@/features/messages/messages.messenger.socket", () => ({
   getConnectionState: () => connection.state,
 }));
 vi.mock("@/lib/shared/auth/authToken.utils", () => ({ getAuthSession: () => ({ userId: "me" }) }));
+vi.mock("@/features/messages/pages/GroupDetails", () => ({
+  default: ({ conversation }: { conversation: { title: string | null } }) => <p>detalhes de {conversation.title}</p>,
+}));
 vi.mock("@/features/assistant/assistant.service", () => ({ sendAssistantTurn: vi.fn() }));
+vi.mock("@/features/messages/messages.messenger.media", async (original) => ({
+  ...(await original<typeof import("@/features/messages/messages.messenger.media")>()),
+  sendFileAttachment: vi.fn(),
+  sendLocationAttachment: vi.fn(),
+  downloadAttachment: vi.fn(),
+}));
 
 const conversation: api.ConversationDto = {
   id: "conv-1",
@@ -382,5 +395,134 @@ describe("Chat with the assistant", () => {
     type("abc");
     expect(publishTyping).not.toHaveBeenCalled();
     await waitFor(() => expect(api.markConversationRead).toHaveBeenCalledWith("conv-1", 1, "CHAT_BOT"));
+  });
+});
+
+describe("Chat editing and deleting messages", () => {
+  const mine = (extra: Partial<api.MessageDto> = {}) =>
+    message(1, "Preciso de orçamento", { senderId: "me", timestamp: new Date().toISOString(), changeVersion: 1, ...extra });
+  beforeEach(() => {
+    vi.resetAllMocks();
+    listeners.clear();
+    connection.state = { status: "connected", attempts: 0 };
+    vi.mocked(api.getConversation).mockResolvedValue(conversation);
+    vi.mocked(api.getConversationMessagesSince).mockResolvedValue([]);
+    vi.mocked(api.getUserSummary).mockResolvedValue({ username: "Fornecedor", avatar: null });
+    vi.mocked(api.markConversationRead).mockResolvedValue(undefined);
+    vi.mocked(api.getConversationMessages).mockResolvedValue([mine(), message(2, "Resposta do fornecedor")]);
+    vi.mocked(subscribeToConversation).mockImplementation((_id, listener) => {
+      listeners.add(listener);
+      return () => listeners.delete(listener);
+    });
+  });
+
+  it("offers edit and delete only on the own messages that are still inside the window", async () => {
+    vi.mocked(api.getConversationMessages).mockResolvedValue([
+      mine({ id: "old", sequence: 1, timestamp: new Date(Date.now() - 31 * 60_000).toISOString() }),
+      mine({ id: "fresh", sequence: 2, content: "Recente" }),
+      message(3, "Do fornecedor"),
+    ]);
+    renderChat();
+    await screen.findByText("Recente");
+    expect(screen.getAllByRole("button", { name: "Editar mensagem" })).toHaveLength(1);
+    expect(screen.getAllByRole("button", { name: "Excluir mensagem" })).toHaveLength(1);
+  });
+
+  it("edits the text through the composer and shows the edited copy", async () => {
+    vi.mocked(api.editMessage).mockResolvedValue(mine({ content: "Preciso de dois orçamentos", edited: true, changeVersion: 2 }));
+    renderChat();
+    await screen.findByText("Preciso de orçamento");
+    fireEvent.click(screen.getByRole("button", { name: "Editar mensagem" }));
+    expect(screen.getByRole("textbox")).toHaveValue("Preciso de orçamento");
+    type("Preciso de dois orçamentos");
+    fireEvent.click(screen.getByRole("button", { name: "Enviar mensagem" }));
+    expect(await screen.findByText("Preciso de dois orçamentos")).toBeInTheDocument();
+    expect(api.editMessage).toHaveBeenCalledWith("msg-1", "Preciso de dois orçamentos");
+    expect(api.sendConversationMessage).not.toHaveBeenCalled();
+    expect(screen.getByText("editada")).toBeInTheDocument();
+    expect(screen.getByRole("textbox")).toHaveValue("");
+  });
+
+  it("cancels an edit without calling the server", async () => {
+    renderChat();
+    await screen.findByText("Preciso de orçamento");
+    fireEvent.click(screen.getByRole("button", { name: "Editar mensagem" }));
+    fireEvent.click(screen.getByRole("button", { name: "Cancelar edição" }));
+    expect(screen.getByRole("textbox")).toHaveValue("");
+    expect(api.editMessage).not.toHaveBeenCalled();
+  });
+
+  it("says the 30 minute window is over when the server answers 422", async () => {
+    vi.mocked(api.editMessage).mockRejectedValue(new Error("late", { cause: new HttpResponseError(422, "BUSINESS_RULE_VIOLATION") }));
+    renderChat();
+    await screen.findByText("Preciso de orçamento");
+    fireEvent.click(screen.getByRole("button", { name: "Editar mensagem" }));
+    type("Tarde demais");
+    fireEvent.click(screen.getByRole("button", { name: "Enviar mensagem" }));
+    expect(await screen.findByText("O prazo de 30 minutos para alterar esta mensagem acabou.")).toBeInTheDocument();
+  });
+
+  it("deletes after confirmation and shows the deleted placeholder", async () => {
+    vi.mocked(api.deleteMessage).mockResolvedValue(mine({ content: "", deleted: true, changeVersion: 2 }));
+    renderChat();
+    await screen.findByText("Preciso de orçamento");
+    fireEvent.click(screen.getByRole("button", { name: "Excluir mensagem" }));
+    fireEvent.click(await screen.findByRole("button", { name: /confirmar/i }));
+    expect(await screen.findByText("Mensagem apagada")).toBeInTheDocument();
+    expect(api.deleteMessage).toHaveBeenCalledWith("msg-1");
+    expect(screen.queryByText("Preciso de orçamento")).not.toBeInTheDocument();
+  });
+
+  it("applies live edits and deletions made elsewhere", async () => {
+    renderChat();
+    await screen.findByText("Resposta do fornecedor");
+    emit({ kind: "message", change: "edited", message: message(2, "Resposta corrigida", { edited: true, changeVersion: 5 }) });
+    expect(screen.getByText("Resposta corrigida")).toBeInTheDocument();
+    emit({ kind: "message", change: "deleted", message: message(2, "", { deleted: true, changeVersion: 6 }) });
+    expect(screen.getByText("Mensagem apagada")).toBeInTheDocument();
+  });
+
+  it("reloads the open conversation when the server says the sync clock was recreated", async () => {
+    renderChat();
+    await screen.findByText("Resposta do fornecedor");
+    vi.mocked(api.getConversationMessages).mockResolvedValue([mine(), message(2, "Resposta já corrigida", { changeVersion: 9, edited: true })]);
+    emit({ kind: "resync" });
+    expect(await screen.findByText("Resposta já corrigida")).toBeInTheDocument();
+  });
+
+  it("opens the group details only for groups", async () => {
+    vi.mocked(api.getConversation).mockResolvedValue({ ...conversation, conversationType: "GROUP", title: "Equipe", managerUserId: "me" });
+    renderChat();
+    fireEvent.click(await screen.findByRole("button", { name: "Detalhes do grupo" }));
+    expect(screen.getByText("detalhes de Equipe")).toBeInTheDocument();
+  });
+  it("sends an attached file and shows it once the server confirms", async () => {
+    const file = new File(["%PDF"], "laudo.pdf", { type: "application/pdf" });
+    vi.mocked(sendFileAttachment).mockResolvedValue(
+      message(4, "", { senderId: "me", attachment: { type: "FILE", mediaId: "m1", name: "laudo.pdf", mimeType: "application/pdf" } }),
+    );
+    renderChat();
+    const input = await screen.findByTestId("attachment-input");
+    await waitFor(() => expect(screen.getByRole("button", { name: "Anexar arquivo" })).toBeEnabled());
+    fireEvent.change(input, { target: { files: [file] } });
+    expect(await screen.findByRole("button", { name: "Baixar laudo.pdf" })).toBeInTheDocument();
+    expect(vi.mocked(sendFileAttachment).mock.calls[0][1]).toBe(file);
+  });
+
+  it("explains the size limit when the file is too large", async () => {
+    vi.mocked(sendFileAttachment).mockRejectedValue(new MediaTooLargeError(10 * 1024 * 1024));
+    renderChat();
+    const input = await screen.findByTestId("attachment-input");
+    await waitFor(() => expect(screen.getByRole("button", { name: "Anexar arquivo" })).toBeEnabled());
+    fireEvent.change(input, { target: { files: [new File(["x"], "foto.png", { type: "image/png" })] } });
+    expect(await screen.findByRole("alert")).toHaveTextContent("o limite é 10 MB");
+  });
+
+  it("marks expired media as unavailable", async () => {
+    vi.mocked(api.getConversationMessages).mockResolvedValue([
+      message(1, "", { attachment: { type: "IMAGE", mediaId: "m1", expiresAt: "2020-01-01T00:00:00Z" } }),
+    ]);
+    renderChat();
+    expect(await screen.findByText("Mídia indisponível")).toBeInTheDocument();
   });
 });

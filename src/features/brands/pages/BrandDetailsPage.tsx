@@ -10,14 +10,21 @@ import Alert from "@@/feedback/alert/Alert";
 import { useActiveContext } from "@/lib/shared/context/ActiveContext";
 import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
+import { useRequiredParam } from "@/lib/shared/routing/useRequiredParam";
+import { NotFoundPage } from "@/features/error/pages/not-found/NotFound";
 import BrandManager from "../manager/BrandManager";
 import { listBrands } from "../brand.service";
 import type { Brand } from "../brand";
 
 export default function BrandDetailsPage() {
+  const brandId = useRequiredParam("brandId");
+  return brandId ? <BrandDetails brandId={brandId} /> : <NotFoundPage />;
+}
+
+function BrandDetails({ brandId }: { brandId: string }) {
   const { t } = useTranslation("brands");
   const { t: common } = useTranslation("saas");
-  const { brandId, lang: parameter } = useParams();
+  const { lang: parameter } = useParams();
   const lang = isSupportedLanguage(parameter) ? parameter : DEFAULT;
   const { company, can = () => false } = useActiveContext();
   const [params, setParams] = useSearchParams();

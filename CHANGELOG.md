@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.7.0](https://github.com/Solierrr/web-app/compare/v3.6.1...v3.7.0) (2026-11-03)
+
+
+### Features
+
+* complete the messenger integration of the portal ([#147](https://github.com/Solierrr/web-app/issues/147)) ([02b7a78](https://github.com/Solierrr/web-app/commit/02b7a78c18773ed07b604222955662e21bab439b))
+* share the page header and the highlight banner across the marketplace feeds ([#123](https://github.com/Solierrr/web-app/issues/123)) ([ec7236f](https://github.com/Solierrr/web-app/commit/ec7236fa20abd508b6d1f4656cdca52ba3da66e4))
+* validate required route params on resource pages ([#146](https://github.com/Solierrr/web-app/issues/146)) ([4e7696a](https://github.com/Solierrr/web-app/commit/4e7696a2ab6cdb856b3f7739cacda8ee6a32cebd))
+
+
+### Bug Fixes
+
+* keep the chat title clear of the header actions on narrow screens ([#148](https://github.com/Solierrr/web-app/issues/148)) ([41e526a](https://github.com/Solierrr/web-app/commit/41e526a292f9f37240dd6209e203f7e4ce4f5773))
+* polish the product page and give the page a light background ([eda15b2](https://github.com/Solierrr/web-app/commit/eda15b2392e64957cc357ac5c4af18174b967fbe))
+* use the user events channel of the messenger and fix project communities ([#143](https://github.com/Solierrr/web-app/issues/143)) ([1e2b759](https://github.com/Solierrr/web-app/commit/1e2b7599b37ada7d0cc933cce870e45a380eeeb6))
+
 ## [3.6.1](https://github.com/Solierrr/web-app/compare/v3.6.0...v3.6.1) (2026-11-01)
 
 

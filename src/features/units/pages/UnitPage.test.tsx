@@ -75,4 +75,18 @@ describe("UnitPage", () => {
 
     expect(await screen.findByRole("alert")).toBeInTheDocument();
   });
+
+  it("renders the not found page with a return button when the unit parameter is missing", () => {
+    vi.mocked(listCompanyUnits).mockClear();
+    render(
+      <MemoryRouter initialEntries={["/pt-BR/admin/unidades"]}>
+        <Routes>
+          <Route path="/:lang/admin/unidades" element={<UnitPage />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByRole("button", { name: "Voltar ao início" })).toBeInTheDocument();
+    expect(listCompanyUnits).not.toHaveBeenCalled();
+  });
 });

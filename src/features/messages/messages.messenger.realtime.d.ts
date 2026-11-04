@@ -24,7 +24,9 @@ export type ConversationEvent =
   | { kind: "message"; change: "created" | "edited" | "deleted"; message: MessageDto }
   | { kind: "typing"; userId: string; typing: boolean }
   | ({ kind: "presence"; userId: string; online: boolean } & PresenceMarker)
-  | ({ kind: "presenceSnapshot"; users: Record<string, boolean> } & PresenceMarker);
+  | ({ kind: "presenceSnapshot"; users: Record<string, boolean> } & PresenceMarker)
+  /** O relógio de sincronização do servidor foi recriado: recarregar a conversa aberta. */
+  | { kind: "resync" };
 
 export type UserEvent = { kind: "conversationUpdated"; conversation: ConversationDto } | { kind: "conversationRemoved"; id: string };
 

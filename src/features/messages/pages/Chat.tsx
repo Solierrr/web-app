@@ -7,6 +7,8 @@ import Surface from "@@/ui/surface/Surface";
 import ToolbarAction from "@@/ui/button/ToolbarAction";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useRequiredParam } from "@/lib/shared/routing/useRequiredParam";
+import { NotFoundPage } from "@/features/error/pages/not-found/NotFound";
 import { useTranslation } from "react-i18next";
 
 import { DEFAULT as DEFAULT_LANGUAGE, isSupportedLanguage } from "@/config/i18n/browser/languages";
@@ -15,6 +17,8 @@ import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import { sendAssistantTurn } from "@/features/assistant/assistant.service";
 import { getAssistantThread, rememberAssistantThread } from "@/features/messages/messages.assistant.utils";
 import {
+  deleteMessage,
+  editMessage,
   getConversation,
   getConversationMessages,
   getConversationMessagesSince,
@@ -24,7 +28,7 @@ import {
   type MessageDto,
 } from "@/features/messages/messages.messenger.api";
 import { getConnectionState, subscribeToConversation } from "@/features/messages/messages.messenger.socket";
-import { highestSequence, mergeMessages } from "@/features/messages/messages.messenger.realtime.utils";
+import { canMutateMessage, highestSequence, mergeMessages } from "@/features/messages/messages.messenger.realtime.utils";
 import {
   useAssistantStatus,
   useConversationPresence,
@@ -33,11 +37,15 @@ import {
   useTypingPublisher,
 } from "@/features/messages/messages.hooks";
 import ConnectionNotice from "./ConnectionNotice";
-import { AssistantNotice, PendingBubble } from "./Chat.reusable";
+import GroupDetails from "./GroupDetails";
+import { AssistantNotice, AttachmentView, EditBanner, MessageMeta, PendingBubble } from "./Chat.reusable";
+import { MediaTooLargeError, sendFileAttachment, sendLocationAttachment } from "@/features/messages/messages.messenger.media";
+import Confirmation from "@@/overlay/confirmation/Confirmation";
+import { getHttpStatus } from "@/lib/shared/http/http.service";
 
 export default function Chat() {
-  const { conversationId = "" } = useParams<{ conversationId: string }>();
-  return <Conversation key={conversationId} conversationId={conversationId} />;
+  const conversationId = useRequiredParam("conversationId");
+  return conversationId ? <Conversation key={conversationId} conversationId={conversationId} /> : <NotFoundPage />;
 }
 
 export function Conversation({
@@ -47,6 +55,8 @@ export function Conversation({
   displayTitle,
   actions,
   onConversationChange,
+  onLeft,
+  groupCandidates,
 }: {
   conversationId: string;
   embedded?: boolean;
@@ -54,6 +64,10 @@ export function Conversation({
   displayTitle?: string;
   actions?: ReactNode;
   onConversationChange?: (conversationId: string) => void;
+  /** Chamado depois que a pessoa sai do grupo; sem ele, volta para a caixa de entrada. */
+  onLeft?: () => void;
+  /** Quem o gestor pode convidar ao grupo; sem ele valem as conexões (num subgrupo de comunidade, são os membros dela). */
+  groupCandidates?: { id: string; name: string }[];
 }) {
   const navigate = useNavigate();
   const { lang: langParam } = useParams<{ lang: string }>();
@@ -73,6 +87,10 @@ export function Conversation({
   const [error, setError] = useState<string | null>(null);
   const [hasOlder, setHasOlder] = useState(false);
   const [loadingOlder, setLoadingOlder] = useState(false);
+  const [editing, setEditing] = useState<MessageDto | null>(null);
+  const [toDelete, setToDelete] = useState<MessageDto | null>(null);
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const draftBeforeEdit = useRef("");
   const lastSequence = useRef(0);
   const lastMarkedRead = useRef(0);
   const activeConversationId = useRef(conversationId);
@@ -205,6 +223,13 @@ export function Conversation({
       });
 
     const unsubscribe = subscribeToConversation(conversationId, (event) => {
+      if (event.kind === "resync") {
+        if (initialized)
+          void getConversationMessages(conversationId)
+            .then(receive)
+            .catch(() => undefined);
+        return;
+      }
       if (event.kind !== "message") return;
       if (initialized && lastSequence.current > 0 && event.message.sequence > lastSequence.current + 1) void synchronize();
       receive([event.message]);
@@ -266,14 +291,92 @@ export function Conversation({
     }
   }
 
+  function loadParticipantNames(ids: string[]) {
+    const missing = ids.filter((id) => id !== userId && !participantNames[id]);
+    void Promise.allSettled(missing.map(getUserSummary)).then((results) =>
+      setParticipantNames((current) => ({
+        ...current,
+        ...Object.fromEntries(results.flatMap((result, index) => (result.status === "fulfilled" ? [[missing[index], result.value.username]] : []))),
+      })),
+    );
+  }
+  const mutationFailed = (failure: unknown) => setError(t(getHttpStatus(failure) === 422 ? "mutationExpired" : "mutationError"));
+  function startEdit(message: MessageDto) {
+    draftBeforeEdit.current = draft;
+    setError(null);
+    setEditing(message);
+    setDraft(message.content);
+  }
+  function cancelEdit() {
+    setEditing(null);
+    setDraft(draftBeforeEdit.current);
+  }
+  async function saveEdit(target: MessageDto, content: string) {
+    setError(null);
+    try {
+      const updated = content === target.content ? target : await editMessage(target.id, content);
+      setMessages((current) => mergeMessages(current, [updated]));
+      cancelEdit();
+    } catch (failure) {
+      mutationFailed(failure);
+    }
+  }
+  async function confirmDelete(target: MessageDto) {
+    setToDelete(null);
+    setError(null);
+    try {
+      const updated = await deleteMessage(target.id);
+      setMessages((current) => mergeMessages(current, [updated]));
+    } catch (failure) {
+      mutationFailed(failure);
+    }
+  }
+
   function handleSend() {
     const content = draft.trim();
     if (!content || readOnly || !conversation) return;
+    if (editing) {
+      void saveEdit(editing, content);
+      return;
+    }
     typingPublisher.stop();
     setError(null);
     followLatest.current = true;
     setDraft("");
     outbox.send(content);
+  }
+
+  const fileInput = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  /** Envia um anexo direto, fora da fila de texto: a mensagem só aparece depois que o servidor confirma. */
+  async function sendAttachment(send: (current: ConversationDto, clientMessageId: string) => Promise<MessageDto>) {
+    if (readOnly || !conversation || uploading) return;
+    setError(null);
+    setUploading(true);
+    followLatest.current = true;
+    try {
+      const sent = await send(conversation, crypto.randomUUID());
+      setMessages((current) => mergeMessages(current, [sent]));
+    } catch (failure) {
+      setError(
+        failure instanceof MediaTooLargeError ? t("media.tooLarge", { size: failure.limitBytes / (1024 * 1024) }) : (failure as Error).message,
+      );
+    } finally {
+      setUploading(false);
+    }
+  }
+  function attachFile(file: File | undefined) {
+    if (file) void sendAttachment((current, id) => sendFileAttachment(current, file, "", id));
+  }
+  function shareLocation() {
+    if (!navigator.geolocation) return setError(t("media.locationUnavailable"));
+    navigator.geolocation.getCurrentPosition(
+      (position) =>
+        void sendAttachment((current, id) =>
+          sendLocationAttachment(current, { latitude: position.coords.latitude, longitude: position.coords.longitude }, id),
+        ),
+      () => setError(t("media.locationUnavailable")),
+    );
   }
 
   function handleDraft(value: string) {
@@ -328,6 +431,9 @@ export function Conversation({
             label={t("inbox")}
             className={embedded ? "@xl/messages:hidden" : undefined}
           />
+          {conversation?.conversationType === "GROUP" && (
+            <ToolbarAction icon="users" label={t("groupDetails")} onClick={() => setDetailsOpen(true)} />
+          )}
           {actions}
         </div>
       </ChatHeader>
@@ -405,8 +511,16 @@ export function Conversation({
                 own={own}
                 assistant={assistant}
                 endOfGroup={endOfGroup}
-                showAuthor={conversation?.conversationType === "GROUP" && !own && !grouped}
-              />
+                showAuthor={conversation?.conversationType === "GROUP" && !own && !grouped}>
+                {message.attachment && !message.deleted && <AttachmentView attachment={message.attachment} />}
+                {own && !message.deleted && (
+                  <MessageMeta
+                    edited={!!message.edited}
+                    onEdit={!readOnly && canMutateMessage(message, userId, conversation?.conversationType) ? () => startEdit(message) : undefined}
+                    onDelete={!readOnly && canMutateMessage(message, userId, conversation?.conversationType) ? () => setToDelete(message) : undefined}
+                  />
+                )}
+              </MessageBubble>
             </div>
           );
         })}
@@ -417,6 +531,28 @@ export function Conversation({
         ))}
         {assistantStatus !== "idle" && outbox.pending.length === 0 && <AssistantNotice status={assistantStatus} onRetry={retryAssistant} />}
       </div>
+      {editing && <EditBanner onCancel={cancelEdit} />}
+      {conversable && (
+        <div className="mx-auto flex w-full max-w-3xl items-center gap-1 px-1">
+          <ToolbarAction icon="paperclip" label={t("media.attach")} disabled={uploading || loading} onClick={() => fileInput.current?.click()} />
+          <ToolbarAction icon="globe" label={t("media.location")} disabled={uploading || loading} onClick={shareLocation} />
+          {uploading && (
+            <span role="status" className="text-sidebar-group text-operational-muted">
+              {t("media.sending")}
+            </span>
+          )}
+          <input
+            ref={fileInput}
+            type="file"
+            hidden
+            data-testid="attachment-input"
+            onChange={(event) => {
+              attachFile(event.currentTarget.files?.[0]);
+              event.currentTarget.value = "";
+            }}
+          />
+        </div>
+      )}
       <Surface field className="mx-auto w-full max-w-3xl shrink-0" contentClassName="overflow-visible! px-2 py-1">
         <MessageComposer
           assistant
@@ -431,6 +567,33 @@ export function Conversation({
           disabled={readOnly || loading || !conversation}
         />
       </Surface>
+      {detailsOpen && conversation && userId && (
+        <GroupDetails
+          conversation={conversation}
+          userId={userId}
+          names={participantNames}
+          candidates={groupCandidates}
+          onChanged={(next) => {
+            setConversation(next);
+            loadParticipantNames(next.participantIds);
+          }}
+          onLeft={() => {
+            setDetailsOpen(false);
+            if (onLeft) onLeft();
+            else navigate(routePaths.inbox(lang));
+          }}
+          onClose={() => setDetailsOpen(false)}
+        />
+      )}
+      {toDelete && (
+        <Confirmation
+          title={t("deleteMessageTitle")}
+          message={t("deleteMessageMessage")}
+          busy={false}
+          onConfirm={() => void confirmDelete(toDelete)}
+          onCancel={() => setToDelete(null)}
+        />
+      )}
     </section>
   );
   return embedded ? content : <main className="mx-auto flex h-full min-h-0 w-full max-w-operational-page flex-col p-4 sm:px-8">{content}</main>;
