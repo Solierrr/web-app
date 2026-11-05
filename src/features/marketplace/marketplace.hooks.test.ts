@@ -85,3 +85,36 @@ describe("marketplace catalog loading", () => {
     await waitFor(() => expect(result.current.items).toEqual(["b"]));
   });
 });
+
+describe("useMarketplaceCatalog cache", () => {
+  it("shows the cached items at once and replaces them with the fresh ones", async () => {
+    localStorage.setItem("marketplace-cache:companies", JSON.stringify({ savedAt: Date.now(), items: [{ id: "old" }] }));
+    const load = vi.fn().mockResolvedValue([{ id: "new" }]);
+    const { result } = renderHook(() => useMarketplaceCatalog(load, "companies"));
+    expect(result.current.items).toEqual([{ id: "old" }]);
+    await waitFor(() => expect(result.current.items).toEqual([{ id: "new" }]));
+    expect(JSON.parse(localStorage.getItem("marketplace-cache:companies") ?? "{}").items).toEqual([{ id: "new" }]);
+  });
+
+  it("ignores a cache older than a day", () => {
+    localStorage.setItem("marketplace-cache:companies", JSON.stringify({ savedAt: Date.now() - 25 * 60 * 60 * 1000, items: [{ id: "old" }] }));
+    const { result } = renderHook(() => useMarketplaceCatalog(() => new Promise<{ id: string }[]>(() => {}), "companies"));
+    expect(result.current.items).toBeNull();
+  });
+
+  it("keeps the cached items without an error when the refresh fails", async () => {
+    localStorage.setItem("marketplace-cache:technicians", JSON.stringify({ savedAt: Date.now(), items: [{ id: "old" }] }));
+    const load = vi.fn().mockRejectedValue(new Error("offline"));
+    const { result } = renderHook(() => useMarketplaceCatalog(load, "technicians"));
+    await waitFor(() => expect(load).toHaveBeenCalled());
+    expect(result.current.items).toEqual([{ id: "old" }]);
+    expect(result.current.error).toBe(false);
+  });
+
+  it("does not touch the storage without a cache key", async () => {
+    const load = vi.fn().mockResolvedValue([{ id: "a" }]);
+    const { result } = renderHook(() => useMarketplaceCatalog(load));
+    await waitFor(() => expect(result.current.items).toEqual([{ id: "a" }]));
+    expect(localStorage.length).toBe(0);
+  });
+});

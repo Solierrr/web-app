@@ -46,7 +46,7 @@ export default function CatalogFeed({
   const category = kind === "INFRASTRUCTURE" ? "infrastructure" : "solarPanels";
   const view = getFeedView(category, params.get("view"));
   const loadForLanguage = useCallback(() => load(lang), [load, lang]);
-  const { items: loaded, error, retry } = useMarketplaceCatalog(loadForLanguage);
+  const { items: loaded, error, retry } = useMarketplaceCatalog(loadForLanguage, `offers:${kind ?? "all"}:${lang}`);
   const items = useMemo(() => loaded?.filter((item) => !kind || (item.panel.productType ?? "PANEL") === kind) ?? null, [loaded, kind]);
   const [slots] = useState<FeedHighlightFormat[]>(() => shuffle(feedHighlightFormats));
   const all = sortOffers(items ?? [], view);

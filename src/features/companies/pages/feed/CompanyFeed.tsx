@@ -18,7 +18,7 @@ export default function CompanyFeed() {
   const { lang: value } = useParams();
   const lang = isSupportedLanguage(value) ? value : DEFAULT;
   const [params] = useSearchParams();
-  const { items, error, retry } = useMarketplaceCatalog(getCatalogCompanies);
+  const { items, error, retry } = useMarketplaceCatalog(getCatalogCompanies, "companies");
   const filtered = filterCompanies(items ?? [], getFeedView("companies", params.get("view")));
   const start = useRef<HTMLElement>(null);
   const [showTop, setShowTop] = useState(false);

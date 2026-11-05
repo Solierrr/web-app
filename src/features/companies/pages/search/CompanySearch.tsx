@@ -19,7 +19,7 @@ export default function CompanySearch() {
   const { t: search } = useTranslation("search");
   const { lang: value } = useParams();
   const lang = isSupportedLanguage(value) ? value : DEFAULT;
-  const { items, error, retry } = useMarketplaceCatalog(getCatalogCompanies);
+  const { items, error, retry } = useMarketplaceCatalog(getCatalogCompanies, "companies");
   const [query, setQuery] = useMarketplaceQuery();
   const [type, setType] = useState("");
   const filtered = (type ? filterCompanies(items ?? [], type) : (items ?? [])).filter((item) =>

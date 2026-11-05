@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 import "@/config/i18n/internationalization";
-import { vi } from "vitest";
+import { afterEach, vi } from "vitest";
 
 Object.defineProperty(window, "matchMedia", {
   configurable: true,
@@ -46,3 +46,8 @@ for (const name of ["localStorage", "sessionStorage"] as const) {
   const storage = candidates.find((item) => typeof item?.clear === "function") ?? createMemoryStorage();
   Object.defineProperty(globalThis, name, { configurable: true, value: storage });
 }
+
+// O cache do catálogo fica no localStorage; sem limpar, um teste herdaria os itens do anterior.
+afterEach(() => {
+  localStorage.clear();
+});

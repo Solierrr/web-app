@@ -17,7 +17,7 @@ export default function ProfessionalSearch() {
   const { t: search } = useTranslation("search");
   const { lang: value } = useParams();
   const lang = isSupportedLanguage(value) ? value : DEFAULT;
-  const { items, error, retry } = useMarketplaceCatalog(getCatalogTechnicians);
+  const { items, error, retry } = useMarketplaceCatalog(getCatalogTechnicians, "technicians");
   const [query, setQuery] = useMarketplaceQuery();
   const [params, setParams] = useSearchParams();
   const specialty = params.get("specialty") ?? "";

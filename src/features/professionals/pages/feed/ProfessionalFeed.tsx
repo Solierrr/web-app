@@ -25,7 +25,7 @@ export default function ProfessionalFeed() {
   const lang = isSupportedLanguage(value) ? value : DEFAULT;
   const [params] = useSearchParams();
   const view = getFeedView("professionals", params.get("view"));
-  const { items, error, retry } = useMarketplaceCatalog(getCatalogTechnicians);
+  const { items, error, retry } = useMarketplaceCatalog(getCatalogTechnicians, "technicians");
   const [teams, setTeams] = useState<CatalogTeam[] | null>(null);
   const [teamError, setTeamError] = useState(false);
   const [revision, setRevision] = useState(0);

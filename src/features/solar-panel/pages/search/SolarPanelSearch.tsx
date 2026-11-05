@@ -19,7 +19,7 @@ export default function SolarPanelSearch() {
   const { lang: value } = useParams();
   const lang = isSupportedLanguage(value) ? value : DEFAULT;
   const load = useCallback(() => getCatalogSolarPanels(lang), [lang]);
-  const { items, error, retry } = useMarketplaceCatalog(load);
+  const { items, error, retry } = useMarketplaceCatalog(load, `solar-panels:${lang}`);
   const [query, setQuery] = useMarketplaceQuery();
   const [type, setType] = useState("");
   const filtered = (items ?? []).filter(
