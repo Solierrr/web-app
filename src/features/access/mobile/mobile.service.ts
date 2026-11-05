@@ -23,6 +23,7 @@ async function request<T>(transactionId: string, action = "", method = "GET", bo
     headers: { Authorization: `Bearer ${session.accessToken}`, "Content-Type": "application/json" },
     body: body === undefined ? undefined : JSON.stringify(body),
   });
+  if (response.status === 401) throw new MobileFlowError("WEB_SESSION_REQUIRED");
   if (!response.ok) {
     const result = await response.json().catch(() => ({}));
     throw new MobileFlowError(typeof result.code === "string" ? result.code : "UNAVAILABLE");

@@ -7,7 +7,7 @@ import ActionLink from "@@/ui/button/ActionLink";
 import { PrimaryButton, SurfaceButton, WhiteSoftButton } from "@@/ui/button/Button.presets";
 import { DEFAULT, isSupportedLanguage } from "@/config/i18n/browser/languages";
 import { routePaths } from "@/config/i18n/paths";
-import { getAuthSession } from "@/lib/shared/auth/authToken.utils";
+import { clearAuthSession, getAuthSession } from "@/lib/shared/auth/authToken.utils";
 import { logout } from "@/features/access/access.service";
 import { authorizeMobile, cancelMobile, inspectMobile, MobileFlowError, type MobileTransaction } from "./mobile.service";
 
@@ -31,7 +31,12 @@ export default function Mobile() {
     if (!session || signedOut) return;
     let active = true;
     inspectMobile(id).then((result) => { if (active) setTransaction(result); })
-      .catch((failure) => { if (active) setError(failure instanceof MobileFlowError ? failure.code : "UNAVAILABLE"); });
+      .catch((failure) => {
+        if (!active) return;
+        const code = failure instanceof MobileFlowError ? failure.code : "UNAVAILABLE";
+        if (code === "WEB_SESSION_REQUIRED") { clearAuthSession(); setSignedOut(true); return; }
+        setError(code);
+      });
     return () => { active = false; };
   }, [id, session?.accessToken, signedOut]);
 
