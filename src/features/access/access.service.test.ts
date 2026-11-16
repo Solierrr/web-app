@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { refresh } from "./access.service";
+import { login, refresh } from "./access.service";
 import type { AuthSession } from "./access";
 import { httpJson } from "@/lib/shared/http/http.service";
 import { clearAuthSession, getAuthSession, setAuthSession } from "@/lib/shared/auth/authToken.utils";
@@ -15,6 +15,7 @@ const renewed = { ...stored, accessToken: "new-access", refreshToken: "new-refre
 describe("session renewal", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.stubEnv("VITE_AUTH_MOCKS", "DEACTIVATED");
     const values = new Map<string, string>();
     vi.stubGlobal("localStorage", {
       getItem: (key: string) => values.get(key) ?? null,
@@ -24,7 +25,16 @@ describe("session renewal", () => {
     clearAuthSession();
     setAuthSession(stored);
   });
-  afterEach(() => { vi.unstubAllGlobals(); });
+  afterEach(() => { vi.unstubAllGlobals(); vi.unstubAllEnvs(); });
+
+  it("restores after a reload using only the browser cookie", async () => {
+    clearAuthSession();
+    const { refreshToken: unused, ...cookieSession } = renewed; void unused;
+    vi.mocked(httpJson).mockResolvedValueOnce(cookieSession);
+    expect(await refresh()).toEqual(cookieSession);
+    expect(getAuthSession()?.accessToken).toBe("new-access");
+    expect(httpJson).toHaveBeenCalledWith(expect.stringContaining("/auth/browser/refresh"), expect.objectContaining({ credentials: "include", body: {}, headers: { "X-Solaria-Session": "1" } }));
+  });
 
   it("shares one rotating-token request between simultaneous callers", async () => {
     let complete!: (session: AuthSession) => void;
@@ -35,7 +45,8 @@ describe("session renewal", () => {
     complete(renewed);
     expect(await first).toEqual(renewed);
     expect(await second).toEqual(renewed);
-    expect(getAuthSession()?.refreshToken).toBe("new-refresh");
+    expect(getAuthSession()?.refreshToken).toBeUndefined();
+    expect(localStorage.getItem("solaria.authSession")).toBeNull();
   });
 
   it("does not restore a session after logout while renewal is in flight", async () => {
@@ -45,6 +56,14 @@ describe("session renewal", () => {
     clearAuthSession();
     complete(renewed);
     expect(await pending).toBeNull();
+    expect(getAuthSession()).toBeNull();
+  });
+  it("does not apply a late login response after explicit logout", async () => {
+    let complete!: (session: AuthSession) => void;
+    vi.mocked(httpJson).mockImplementationOnce(() => new Promise<AuthSession>(resolve => { complete = resolve; }));
+    const pending = login({ email: stored.email, password: "password" });
+    clearAuthSession(true); complete(renewed);
+    await expect(pending).rejects.toThrow();
     expect(getAuthSession()).toBeNull();
   });
 

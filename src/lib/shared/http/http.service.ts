@@ -31,13 +31,16 @@ interface HttpJsonOptions {
   method?: HttpMethod;
   body?: unknown;
   authenticated?: boolean;
+  credentials?: RequestCredentials;
+  headers?: Record<string, string>;
+  redirect?: RequestRedirect;
 }
 
 export async function httpJson<T>(url: string, options: HttpJsonOptions): Promise<T> {
   const { service, operation, errorMessage, method = "GET", body, authenticated = true } = options;
 
   const accessToken = authenticated ? getAuthSession()?.accessToken : undefined;
-  const headers: Record<string, string> = {};
+  const headers: Record<string, string> = { ...options.headers };
   const multipart = typeof FormData !== "undefined" && body instanceof FormData;
   if (body !== undefined && !multipart) headers["Content-Type"] = "application/json";
   if (accessToken) headers["Authorization"] = `Bearer ${accessToken}`;
@@ -54,6 +57,8 @@ export async function httpJson<T>(url: string, options: HttpJsonOptions): Promis
 
   try {
     response = await fetch(url, {
+      credentials: options.credentials,
+      redirect: options.redirect,
       method,
       headers,
       body: multipart ? (body as FormData) : body === undefined ? undefined : JSON.stringify(body),

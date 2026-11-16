@@ -10,7 +10,7 @@ export interface RegisterCredentials {
 
 export interface AuthSession {
   accessToken: string;
-  refreshToken: string;
+  refreshToken?: string;
   accessTokenExpiresAt: string;
   userId: string;
   email: string;

@@ -1,28 +1,16 @@
 import type { AuthSession } from "@/features/access/access";
-import { isAlwaysMockMode } from "@/config/mocks/mockMode.utils";
-
-const STORAGE_KEY = "solaria.authSession";
+import { authSession } from "./authSession.service";
 
 export function getAuthSession(): AuthSession | null {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) return null;
-
-  try {
-    const session = JSON.parse(raw) as AuthSession;
-    // A session issued by the retired local login cannot authenticate API calls.
-    if (session.isMock && !isAlwaysMockMode("AUTH")) return null;
-    return session;
-  } catch {
-    return null;
-  }
+  return authSession.get();
 }
 
 export function setAuthSession(session: AuthSession): void {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
-  window.dispatchEvent(new Event("solaria:session"));
+  authSession.set(session);
 }
 
-export function clearAuthSession(): void {
-  localStorage.removeItem(STORAGE_KEY);
-  window.dispatchEvent(new Event("solaria:session"));
+export function clearAuthSession(signedOut = false): void {
+  authSession.clear(signedOut);
 }
+export const getAuthSessionVersion = () => authSession.version();
+export const canRestoreAuthSession = () => authSession.canRestore();

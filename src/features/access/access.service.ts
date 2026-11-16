@@ -2,19 +2,30 @@ import i18n from "@/config/i18n/internationalization";
 import type { AuthSession, LoginCredentials, RegisterCredentials, RegisterResult } from "./access";
 
 import { httpJson } from "@/lib/shared/http/http.service";
-import { clearAuthSession, getAuthSession, setAuthSession } from "@/lib/shared/auth/authToken.utils";
+import { canRestoreAuthSession, clearAuthSession, getAuthSession, getAuthSessionVersion, setAuthSession } from "@/lib/shared/auth/authToken.utils";
 import { isAlwaysMockMode, waitForMockService } from "@/config/mocks/mockMode.utils";
 import { createMockSession, createMockTestAccount, MOCK_TEST_EMAIL, MOCK_TEST_USER_ID } from "./access.d.mocks";
 import { getOperationalAccount, saveOperationalAccount, selectContext } from "./access.onboarding.service";
 
 const API = `${import.meta.env.VITE_API_AUTH}/auth`;
 const SERVICE_NAME = "access";
+const BROWSER = `${API}/browser`;
+const browserOptions = { credentials: "include" as const, redirect: "error" as const, headers: { "X-Solaria-Session": "1" } };
+const browserJson = <T>(url: string, options: Parameters<typeof httpJson>[1]) => navigator.locks
+  ? navigator.locks.request("solaria.browser.session", () => httpJson<T>(url, options))
+  : httpJson<T>(url, options);
+function commitSession(session: AuthSession, version: number) {
+  if (getAuthSessionVersion() !== version) throw new Error(i18n.t("services:access.login"));
+  setAuthSession(session);
+  return session;
+}
 
 export async function loginWithMockMicrosoft(): Promise<AuthSession> {
+  const version = getAuthSessionVersion();
   if (!isAlwaysMockMode("AUTH")) throw new Error("Mock login is unavailable");
   await waitForMockService();
   const session = createMockSession(MOCK_TEST_EMAIL, MOCK_TEST_USER_ID);
-  setAuthSession(session);
+  commitSession(session, version);
   const defaults = createMockTestAccount();
   const account = getOperationalAccount();
   saveOperationalAccount({
@@ -34,13 +45,15 @@ export async function loginWithMockMicrosoft(): Promise<AuthSession> {
 }
 
 export async function login(credentials: LoginCredentials): Promise<AuthSession> {
+  const version = getAuthSessionVersion();
   if (isAlwaysMockMode("AUTH")) {
     await waitForMockService();
     const session = createMockSession(credentials.email);
-    setAuthSession(session);
+    commitSession(session, version);
     return session;
   }
-  const session = await httpJson<AuthSession>(`${API}/login`, {
+  const session = await browserJson<AuthSession>(`${BROWSER}/login`, {
+    ...browserOptions,
     service: SERVICE_NAME,
     operation: "login",
     method: "POST",
@@ -48,8 +61,7 @@ export async function login(credentials: LoginCredentials): Promise<AuthSession>
     authenticated: false,
     errorMessage: i18n.t("services:access.login"),
   });
-  setAuthSession(session);
-  return session;
+  return commitSession(session, version);
 }
 
 export async function register(credentials: RegisterCredentials): Promise<RegisterResult> {
@@ -69,7 +81,9 @@ export async function register(credentials: RegisterCredentials): Promise<Regist
 }
 
 export async function loginWithFirebase(idToken: string): Promise<AuthSession> {
-  const session = await httpJson<AuthSession>(`${API}/firebase`, {
+  const version = getAuthSessionVersion();
+  const session = await browserJson<AuthSession>(`${BROWSER}/firebase`, {
+    ...browserOptions,
     service: SERVICE_NAME,
     operation: "loginWithFirebase",
     method: "POST",
@@ -77,12 +91,13 @@ export async function loginWithFirebase(idToken: string): Promise<AuthSession> {
     authenticated: false,
     errorMessage: i18n.t("services:access.loginWithFirebase"),
   });
-  setAuthSession(session);
-  return session;
+  return commitSession(session, version);
 }
 
 export async function linkFirebase(email: string, password: string, idToken: string): Promise<AuthSession> {
-  const session = await httpJson<AuthSession>(`${API}/firebase/link`, {
+  const version = getAuthSessionVersion();
+  const session = await browserJson<AuthSession>(`${BROWSER}/firebase/link`, {
+    ...browserOptions,
     service: SERVICE_NAME,
     operation: "linkFirebase",
     method: "POST",
@@ -90,38 +105,39 @@ export async function linkFirebase(email: string, password: string, idToken: str
     authenticated: false,
     errorMessage: i18n.t("services:access.linkFirebase"),
   });
-  setAuthSession(session);
-  return session;
+  return commitSession(session, version);
 }
 
 let pendingRefresh: Promise<AuthSession | null> | null = null;
 
 export function refresh(): Promise<AuthSession | null> {
+  if (!canRestoreAuthSession() && !getAuthSession()) return Promise.resolve(null);
   if (pendingRefresh) return pendingRefresh;
-  const currentSession = getAuthSession();
-  if (!currentSession) return Promise.resolve(null);
+  const version = getAuthSessionVersion();
+  if (isAlwaysMockMode("AUTH") && !getAuthSession()) return Promise.resolve(null);
 
   const renew = async () => {
     const latest = getAuthSession();
-    if (!latest || latest.refreshToken !== currentSession.refreshToken) return latest;
-    if (isAlwaysMockMode("AUTH") && latest.isMock) {
+    if (getAuthSessionVersion() !== version) return latest;
+    if (isAlwaysMockMode("AUTH") && latest?.isMock) {
       const renewed = createMockSession(latest.email, latest.userId);
       renewed.managedByCompany = latest.managedByCompany;
       setAuthSession(renewed);
       return renewed;
     }
-    const session = await httpJson<AuthSession>(`${API}/refresh`, {
+    const session = await browserJson<AuthSession | null>(`${BROWSER}/refresh`, {
+      ...browserOptions,
       service: SERVICE_NAME,
       operation: "refresh",
       method: "POST",
-      body: { refreshToken: latest.refreshToken },
+      body: {},
       authenticated: false,
       errorMessage: i18n.t("services:access.refresh"),
     });
     // A resposta de uma renovação anterior não deve desfazer logout ou outro login.
-    if (getAuthSession()?.refreshToken !== latest.refreshToken) return getAuthSession();
-    setAuthSession(session);
-    return session;
+    if (getAuthSessionVersion() !== version) return getAuthSession();
+    if (session) setAuthSession(session);
+    return session ?? null;
   };
   // O token é rotativo; serializar também entre abas evita revogar a sessão por reuso.
   pendingRefresh = (navigator.locks ? navigator.locks.request("solaria.auth.refresh", renew) : renew()).finally(() => {
@@ -132,14 +148,17 @@ export function refresh(): Promise<AuthSession | null> {
 
 export async function logout(): Promise<void> {
   if (isAlwaysMockMode("AUTH") && getAuthSession()?.isMock) {
-    clearAuthSession();
+    clearAuthSession(true);
     return;
   }
-  await httpJson<void>(`${API}/sessions/current/logout`, {
+  clearAuthSession(true);
+  await browserJson<void>(`${BROWSER}/logout`, {
+    ...browserOptions,
     service: SERVICE_NAME,
     operation: "logout",
     method: "POST",
+    body: {},
+    authenticated: false,
     errorMessage: i18n.t("services:access.logout"),
   });
-  clearAuthSession();
 }

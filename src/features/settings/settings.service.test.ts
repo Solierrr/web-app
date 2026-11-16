@@ -1,9 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { getPrivacyPreferences, listSessions, revokeSession, savePrivacyPreferences } from "./settings.service";
+import { clearAuthSession, setAuthSession } from "@/lib/shared/auth/authToken.utils";
 
 describe("settings.service", () => {
   beforeEach(() => {
     localStorage.clear();
+    clearAuthSession();
     vi.stubEnv("VITE_MOCKS", "DEACTIVATED");
   });
 
@@ -22,9 +24,9 @@ describe("settings.service", () => {
   });
 
   it("keeps the preferences of each user apart", () => {
-    localStorage.setItem("solaria.authSession", JSON.stringify({ userId: "user-1" }));
+    setAuthSession({ userId: "user-1", email: "user@test.dev", accessToken: "access", accessTokenExpiresAt: "2099-01-01T00:00:00Z" });
     savePrivacyPreferences({ showContact: false, showInSearch: false });
-    localStorage.setItem("solaria.authSession", JSON.stringify({ userId: "user-2" }));
+    setAuthSession({ userId: "user-2", email: "other@test.dev", accessToken: "access", accessTokenExpiresAt: "2099-01-01T00:00:00Z" });
 
     expect(getPrivacyPreferences()).toEqual({ showContact: true, showInSearch: true });
   });
